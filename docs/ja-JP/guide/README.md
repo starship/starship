@@ -125,6 +125,8 @@
 
 ### 入門
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. **Starship** のバイナリをインストール
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### [crates.io](https://crates.io/)からソースをインストール
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### パッケージマネージャー経由でインストール
 
 
-   ##### [ Homebrew ](https://brew.sh/)の場合：
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. 初期化のためのスクリプトをシェルの設定ファイルに追加
+2. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
 
    #### Bash

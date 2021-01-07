@@ -1,4 +1,4 @@
-# Configuration
+# Configurazione
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
@@ -825,7 +825,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## Variabili di ambiente
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -1684,13 +1684,13 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ### Options
 
-| Option              | Default                            | Description                                                                                           |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | The style for the module.                                                                             |
-| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Option              | Default                            | Description                                                                                               |
+| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                                |
+| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                        |
+| `style`             | `"bold green"`                     | The style for the module.                                                                                 |
+| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                             |
+| `not_capable_style` | `bold red`                         | Lo stile per il modulo quando una proprietà chiave in Packages.json non corrisponde alla versione NodeJS. |
 
 ###  Variables
 
@@ -1798,19 +1798,19 @@ The `package` module is shown when the current directory is the repository for a
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
 - **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
 - **maven** - The `maven` package version is extracted from the `pom.xml` present
-- **meson** - The `meson` package version is extracted from the `meson.build` present
+- **meson** - La versione del pacchetto `meson` è estratta dal `meson.build` presente
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
 ### Options
 
-| Option            | Default                            | Description                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
-| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | The style for the module.                                  |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Option            | Default                           | Description                                                |
+| ----------------- | --------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                 |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                      | The style for the module.                                  |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                           | Disables the `package` module.                             |
 
 ### Variables
 
@@ -2151,7 +2151,9 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
 
 ### Options
 
@@ -2335,7 +2337,11 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+::: tip
+
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+
+:::
 
 ### Options
 

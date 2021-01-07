@@ -125,6 +125,8 @@
 
 ### Primeiros passos
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. Instale o binário do **starship**:
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### Código fonte via [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### Instalar via gerenciador de pacotes
 
 
-   ##### Com o [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. Adicione o script de inicialização no arquivo de configuração do seu shell:
+2. Adicione o script de inicialização no arquivo de configuração do seu shell:
 
 
    #### Bash

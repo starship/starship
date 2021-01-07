@@ -125,6 +125,8 @@
 
 ### Démarrage rapide
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. Installer l'exécutable **starship** :
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### Depuis la source sur [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### Installer via le gestionnaire de paquets
 
 
-   ##### Avec [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. Ajouter le script d’initialisation au fichier de configuration de votre shell:
+2. Ajouter le script d’initialisation au fichier de configuration de votre shell:
 
 
    #### Bash

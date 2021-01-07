@@ -125,6 +125,8 @@
 
 ### 开始安装
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. 安装 **starship** 二进制文件：
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### 直接从 [crates.io](https://crates.io/) 获取源代码编译：
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### 通过软件包管理器安装
 
 
-   ##### 使用 [Homebrew](https://brew.sh/)
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. 将初始化脚本添加到您的 shell 的配置文件：
+2. 将初始化脚本添加到您的 shell 的配置文件：
 
 
    #### Bash
@@ -218,7 +213,7 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！你都可以参与贡献 **不论你的技能如何**。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 

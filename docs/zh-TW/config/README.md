@@ -303,16 +303,16 @@ symbol = "🅰 "
 
 ### 選項
 
-| Option               | 預設                                | 說明                                                  |
-| -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `""`                             | 當電池充飽時顯示的符號。                                        |
-| `charging_symbol`    | `""`                             | 當電池正在充電時顯示的符號。                                      |
-| `discharging_symbol` | `""`                             | 當電池正在放電時顯示的符號。                                      |
-| `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
-| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                          |
-| `display`            | [連結](#battery-display)            | Display threshold and style for the module.         |
-| `disabled`           | `false`                           | Disables the `battery` module.                      |
+| Option               | 預設                                | 說明                         |
+| -------------------- | --------------------------------- | -------------------------- |
+| `full_symbol`        | `""`                             | 當電池充飽時顯示的符號。               |
+| `charging_symbol`    | `""`                             | 當電池正在充電時顯示的符號。             |
+| `discharging_symbol` | `""`                             | 當電池正在放電時顯示的符號。             |
+| `unknown_symbol`     | `""`                             | 當電池狀態不明時顯示的符號。             |
+| `empty_symbol`       | `""`                             | 當電池沒電時顯示的符號。               |
+| `format`             | `"[$symbol$percentage]($style) "` | The format for the module. |
+| `display`            | [連結](#battery-display)            | 顯示的門檻與模組的風格。               |
+| `disabled`           | `false`                           | 停用 `battery` 模組。           |
 
 
 ### 範例
@@ -328,7 +328,7 @@ discharging_symbol = "💀"
 
 ### 電池顯示
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. 預設如下：
+`display` 設定是用來定義甚麼時候電池指示會顯示出來 (threshold)，以及它長甚麼樣子 (style)。 如果沒有提供 `display`。 預設如下：
 
 ```toml
 [[battery.display]]
@@ -338,12 +338,12 @@ style = "bold red"
 
 #### 選項
 
-The `display` option is an array of the following table.
+`display` 選項是一個下列表格的陣列。
 
-| Option      | 說明                                              |
-| ----------- | ----------------------------------------------- |
-| `threshold` | The upper bound for the display option.         |
-| `style`     | The style used if the display option is in use. |
+| Option      | 說明          |
+| ----------- | ----------- |
+| `threshold` | 顯示選項的上界。    |
+| `style`     | 顯示選項使用時的風格。 |
 
 #### 範例
 
@@ -362,9 +362,9 @@ style = "bold yellow"
 
 ## 字元
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+`character` 模組在你的文字輸入處旁顯示一個字元 (通常是箭頭)。
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+這個字元會告訴你最後的指令是成功還是失敗。 It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -379,7 +379,7 @@ By default it only changes color. If you also want to change it's shape take a l
 | `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
 | `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
 | `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | Disables the `character` module.                                                 |
+| `disabled`       | `false`             | 停用 `character` 模組。                                                               |
 
 ### Variables
 
@@ -446,27 +446,27 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ## 指令持續時間
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+`cmd_duration` 模組顯示最後一個指令執行所花費的時間。 這個模組只會在指令花費超過兩秒或是有設定 `min_time` 時，超過設定值時出現。
 
-::: warning Do not hook the DEBUG trap in Bash
+::: warning 不要在 Bash 中設置 DEBUG trap
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+如果你在 `bash` 中使用 Starship，不要在執行 `eval $(starship init $0)` 之後設置 `DEBUG` trap，不然這個模組**會**壞掉。
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+想使用類似 preexec 功能的 Bash 使用者可以 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只要在 `eval $(starship init $0)` 之前簡單地定義 `preexec_functions` 與 `precmd_functions` 兩個陣列，然後就可以照常進行。
 
 ### 選項
 
-| Option               | 預設                            | 說明                                                         |
-| -------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`             | `"took [$duration]($style) "` | The format for the module.                                 |
-| `style`              | `"bold yellow"`               | 這個模組的風格。                                                   |
-| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
+| Option               | 預設                            | 說明                                                    |
+| -------------------- | ----------------------------- | ----------------------------------------------------- |
+| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds). |
+| `show_milliseconds`  | `false`                       | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
+| `format`             | `"took [$duration]($style) "` | The format for the module.                            |
+| `style`              | `"bold yellow"`               | 這個模組的風格。                                              |
+| `disabled`           | `false`                       | 停用 `cmd_duration` 模組。                                 |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.    |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds). |
 
 ::: tip
 
@@ -495,7 +495,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。
 
 ::: tip
 
@@ -505,14 +505,14 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### 選項
 
-| Option              | 預設                                     | 說明                                                                                                                                                                                                          |
-| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"`                         | 這個模組的風格。                                                                                                                                                                                                    |
-| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                  |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
+| Option              | 預設                                     | 說明                                                                                              |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | 如果環境變數由所`conda create -p [path]`產生時，環境變數的資料夾需要截斷的數目。 `0` 表示不截斷 也請參考 [`directory`](#directory)模組 |
+| `symbol`            | `"🅒 "`                                 | 環境名稱前使用的符號。                                                                                     |
+| `style`             | `"bold green"`                         | 這個模組的風格。                                                                                        |
+| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                      |
+| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                      |
+| `disabled`          | `false`                                | 停用 `conda` 模組。                                                                                  |
 
 ### Variables
 
@@ -535,7 +535,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 這個模組在下列其中一個條件達成時顯示：
+`crystal` 模組顯示現在所安裝的Crystal版本 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
 - 現在資料夾中含有一個`.cr`檔案
@@ -606,33 +606,33 @@ format = "via [🔰 $version](bold red) "
 
 ## 資料夾
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` 模組顯示到現在資料夾的路徑，並裁減到前三層資料夾。 你的資料夾也會被裁減到你所在的 git 儲存庫的根目錄。
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+如果正在使用 fish 風格的 pwd 選項，將不會隱藏被裁減的資料夾，而是會根據你在選項中設定的數字看到每一層資料夾的縮寫。
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+例如，給定一個右列的路徑 `~/Dev/Nix/nixpkgs/pkgs` 其中 `nixpkgs` 是儲存庫的根目錄，而且該選項被設定為 `1`。 你會看到 `~/D/N/nixpkgs/pkgs`，而在這個設定之前則是 `nixpkgs/pkgs`。
 
 ### 選項
 
-| Option              | 預設                                                 | 說明                                                                               |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                       |
-| `style`             | `"bold cyan"`                                      | 這個模組的風格。                                                                         |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
+| Option              | 預設                                                 | 說明                                                    |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| `truncation_length` | `3`                                                | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                              |
+| `truncate_to_repo`  | `true`                                             | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                             |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                            |
+| `style`             | `"bold cyan"`                                      | 這個模組的風格。                                              |
+| `disabled`          | `false`                                            | 停用 `directory` 模組。                                    |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
 
-| Advanced Option             | 預設     | 說明                                                                                       |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |        | A table of substitutions to be made to the path.                                         |
-| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true` | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Advanced Option             | 預設     | 說明                                               |
+| --------------------------- | ------ | ------------------------------------------------ |
+| `substitutions`             |        | A table of substitutions to be made to the path. |
+| `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。               |
+| `use_logical_path`          | `true` | 顯示 shell (`PWD`) 提供的邏輯路徑，而不是 OS 的路徑。             |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -700,7 +700,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+`dotnet` 模組顯示現在資料夾使用的 .NET Core SDK 的版本。 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
 
 This module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -716,19 +716,19 @@ This module will only be shown in your prompt when one or more of the following 
 
 You'll also need the .NET Core SDK installed in order to use it correctly.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
 ### 選項
 
-| Option      | 預設                                      | 說明                                                       |
-| ----------- | --------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
-| `symbol`    | `"•NET "`                               | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`                                  | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"`                           | 這個模組的風格。                                                 |
-| `disabled`  | `false`                                 | Disables the `dotnet` module.                            |
+| Option      | 預設                                      | 說明                           |
+| ----------- | --------------------------------------- | ---------------------------- |
+| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.   |
+| `symbol`    | `"•NET "`                               | 在顯示 dotnet 版本之前用的符號。         |
+| `heuristic` | `true`                                  | 使用更快速的版本偵測法來保持 starship 的速度。 |
+| `style`     | `"bold blue"`                           | 這個模組的風格。                     |
+| `disabled`  | `false`                                 | 停用 `dotnet` 模組。              |
 
 ### Variables
 
@@ -827,20 +827,20 @@ format = "via [ $version](cyan bold) "
 
 ## 環境變數
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
 
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
 
 ### 選項
 
-| Option     | 預設                             | 說明                                                                           |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Option     | 預設                             | 說明                         |
+| ---------- | ------------------------------ | -------------------------- |
+| `symbol`   |                                | 顯示在變數數值之前的符號。              |
+| `variable` |                                | 要顯示的環境變數。                  |
+| `default`  |                                | 在選擇的變數值沒有定義時，顯示的預設值。       |
+| `format`   | `"with [$env_value]($style) "` | The format for the module. |
+| `disabled` | `false`                        | 停用 `env_var` 模組。           |
 
 ### Variables
 
@@ -959,20 +959,20 @@ asia-northeast1 = "an1"
 
 ## Git 分支
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 模組顯示現在的資料夾中使用中的儲存庫的分支。
 
 ### 選項
 
-| Option               | 預設                               | 說明                                                                                       |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | 這個模組的風格。                                                                                 |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
-| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                             |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
+| Option               | 預設                               | 說明                                                                                   |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name. |
+| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.      |
+| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
+| `style`              | `"bold purple"`                  | 這個模組的風格。                                                                             |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                               |
+| `truncation_symbol`  | `"…"`                            | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                      |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                         |
+| `disabled`           | `false`                          | 停用 `git_branch` 模組。                                                                  |
 
 ### Variables
 
@@ -1034,7 +1034,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 模組會顯示在 git 儲存庫中的資料夾內，以及會在有作業正在進行時顯示，像是：_REBASING_、_BISECTING_ 等等。 如果有進展的資訊 (像是 REBASING 3/10)，也會一併顯示出來。
 
 ### 選項
 
@@ -1049,7 +1049,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | 這個模組的風格。                                                                                |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| `disabled`     | `false`                                                         | 停用 `git_state` 模組。                                                                      |
 
 ### Variables
 
@@ -1074,14 +1074,14 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
 
 ### 選項
 
 | Option       | 預設                                              | 說明                                  |
 | ------------ | ----------------------------------------------- | ----------------------------------- |
 | `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
+| `conflicted` | `"="`                                           | 這個分支有合併衝突。                          |
 | `ahead`      | `"⇡"`                                           | The format of `ahead`               |
 | `behind`     | `"⇣"`                                           | The format of `behind`              |
 | `diverged`   | `"⇕"`                                           | The format of `diverged`            |
@@ -1092,7 +1092,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
 | `deleted`    | `"✘"`                                           | The format of `deleted`             |
 | `style`      | `"bold red"`                                    | 這個模組的風格。                            |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| `disabled`   | `false`                                         | 停用 `git_status` 模組。                 |
 
 ### Variables
 
@@ -1157,7 +1157,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. 這個模組在下列其中一個條件達成時顯示：
+`golang` 模組顯示現在安裝的 Golang 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
@@ -1175,7 +1175,7 @@ The `golang` module shows the currently installed version of Golang. 這個模�
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
 | `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
 | `style`    | `"bold cyan"`                      | 這個模組的風格。                                       |
-| `disabled` | `false`                            | Disables the `golang` module.                  |
+| `disabled` | `false`                            | 停用 `golang` 模組。                                |
 
 ### Variables
 
@@ -1233,17 +1233,17 @@ format = "via [⎈ $version](bold white) "
 
 ## 主機名稱
 
-The `hostname` module shows the system hostname.
+`hostname` 模組顯示系統的主機名稱。
 
 ### 選項
 
-| Option     | 預設                          | 說明                                                                                                                                   |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
-| `style`    | `"bold dimmed green"`       | 這個模組的風格。                                                                                                                             |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Option     | 預設                          | 說明                                                         |
+| ---------- | --------------------------- | ---------------------------------------------------------- |
+| `ssh_only` | `true`                      | 只在連接到一個 SSH session 時顯示主機名稱。                               |
+| `trim_at`  | `"."`                       | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
+| `format`   | `"[$hostname]($style) in "` | The format for the module.                                 |
+| `style`    | `"bold dimmed green"`       | 這個模組的風格。                                                   |
+| `disabled` | `false`                     | 停用 `hostname` 模組。                                          |
 
 ### Variables
 
@@ -1268,7 +1268,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. 這個模組在下列其中一個條件達成時顯示：
+`java` 模組顯示現在安裝的 Java 版本。 這個模組在下列其中一個條件達成時顯示：
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
@@ -1280,7 +1280,7 @@ The `java` module shows the currently installed version of Java. 這個模組在
 | `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
 | `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
 | `style`    | `"red dimmed"`                         | 這個模組的風格。                                        |
-| `disabled` | `false`                                | Disables the `java` module.                     |
+| `disabled` | `false`                                | 停用 `java` 模組。                                   |
 
 ### Variables
 
@@ -1303,17 +1303,17 @@ symbol = "🌟 "
 
 ## 工作
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs` 模組顯示現在正在執行中的工作。 這個模組只會在有背景工作正在執行時顯示。 這個模組會在工作數量超過一個，或者有設定 `threshold` 時且數量超過設定值時，顯示工作的數量。
 
 ### 選項
 
 | Option      | 預設                            | 說明                                               |
 | ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
+| `threshold` | `1`                           | 在超過指定值時顯示工作數量。                                   |
 | `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
 | `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
 | `style`     | `"bold blue"`                 | 這個模組的風格。                                         |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| `disabled`  | `false`                       | 停用 `jobs` 模組。                                    |
 
 ### Variables
 
@@ -1420,7 +1420,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
@@ -1457,15 +1457,15 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Line Break
+## 換行
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 模組將提示字元分成兩行。
 
 ### 選項
 
-| Option     | 預設      | 說明                                                                 |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Option     | 預設      | 說明                            |
+| ---------- | ------- | ----------------------------- |
+| `disabled` | `false` | 停用 `line_break` 模組，讓提示字元變成一行。 |
 
 ### 範例
 
@@ -1513,27 +1513,27 @@ The `lua` module shows the currently installed version of Lua. 這個模組在�
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Memory Usage
+## 記憶體使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
 ### 選項
 
-| Option      | 預設                                            | 說明                                                       |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | 這個模組的風格。                                                 |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Option      | 預設                                            | 說明                         |
+| ----------- | --------------------------------------------- | -------------------------- |
+| `threshold` | `75`                                          | 將記憶體使用量隱藏，除非使用量超過指定值。      |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module. |
+| `symbol`    | `"🐏"`                                         | 顯示在記憶體使用量之前的符號。            |
+| `style`     | `"bold dimmed white"`                         | 這個模組的風格。                   |
+| `disabled`  | `true`                                        | 停用 `memory_usage` 模組。      |
 
 ### Variables
 
@@ -1572,7 +1572,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | 這個模組的風格。                                                                                     |
 | `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`                            | 用來指示分支名稱被縮減的符號。                                                                              |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Variables
@@ -1636,7 +1636,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+`nix_shell` 模組顯示 nix-shell 環境。 這個模組會在 nix-shell 環境中顯示。
 
 ### 選項
 
@@ -1647,7 +1647,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | `style`      | `"bold blue"`                                  | 這個模組的風格。                                              |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+| `disabled`   | `false`                                        | 停用 `nix_shell` 模組。                                    |
 
 ### Variables
 
@@ -1674,11 +1674,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. 這個模組在下列其中一個條件達成時顯示：
+`nodejs` 模組顯示現在安裝的 NodeJS 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `package.json` file
+- 現在資料夾中包含一個 `package.json` 檔案
 - The current directory contains a `.node-version` file
-- The current directory contains a `node_modules` directory
+- 現在資料夾中包含一個 `node_modules` 資料夾
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -1689,7 +1689,7 @@ The `nodejs` module shows the currently installed version of NodeJS. 這個模�
 | `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
 | `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
 | `style`             | `"bold green"`                     | 這個模組的風格。                                                                                              |
-| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
+| `disabled`          | `false`                            | 停用 `nodejs` 模組。                                                                                       |
 | `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
@@ -1785,13 +1785,13 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Package Version
+## 套件版本
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 這個模組目前支援 `npm`、`cargo`、`poetry`、`composer`、`gradle`、`julia`、`mix`, 跟 `helm` 套件
 
-- **npm** – The `npm` package version is extracted from the `package.json` present in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
+- **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
+- **poetry** – `poetry` 套件的版本是從現在資料夾中的 `pyproject.toml` 之中擷取出來的
 - **composer** – The `composer` package version is extracted from the `composer.json` present in the current directory
 - **gradle** – The `gradle` package version is extracted from the `build.gradle` present
 - **julia** - The package version is extracted from the `Project.toml` present
@@ -1804,13 +1804,13 @@ The `package` module is shown when the current directory is the repository for a
 
 ### 選項
 
-| Option            | 預設                                 | 說明                                                         |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
-| `symbol`          | `"📦 "`                             | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | 這個模組的風格。                                                   |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Option            | 預設                                | 說明                                                        |
+| ----------------- | --------------------------------- | --------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                |
+| `symbol`          | `"📦 "`                            | 顯示在套件的版本之前的符號。                                            |
+| `style`           | `"bold 208"`                      | 這個模組的風格。                                                  |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private. |
+| `disabled`        | `false`                           | 停用 `package` 模組。                                          |
 
 ### Variables
 
@@ -1946,13 +1946,13 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- 目前資料夾中有一個 `.python-version` 檔案
+- 目前資料夾中有一個 `requirements.txt` 檔案
+- 目前資料夾中有一個 `pyproject.toml` 檔案
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a `setup.py` file
+- 目前資料夾中有一個 `Pipfile` 檔案
+- 目前資料夾中有一個 `tox.ini` 檔案
+- 現在資料夾中包含一個 `setup.py` 檔案
 - The current directory contains a `__init__.py` file
 - A virtual environment is currently activated
 
@@ -1963,11 +1963,11 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
 | `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                           | 這個模組的風格。                                                                               |
-| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                                        |
+| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 取得 Python 的版本。                                                                |
 | `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
 | `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
 | `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | Disables the `python` module.                                                          |
+| `disabled`           | `false`                                                                   | 停用 `python` 模組。                                                                        |
 
 ::: tip
 
@@ -2008,11 +2008,11 @@ python_binary = "python3"
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
+`ruby` 模組顯示現在安裝的 Ruby 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `Gemfile` file
+- 目前資料夾中有一個 `Gemfile` 檔案
 - The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- 目前資料夾中有一個 `.rb` 檔案
 
 ### 選項
 
@@ -2021,7 +2021,7 @@ The `ruby` module shows the currently installed version of Ruby. 這個模組在
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
 | `style`    | `"bold red"`                       | 這個模組的風格。                                         |
-| `disabled` | `false`                            | Disables the `ruby` module.                      |
+| `disabled` | `false`                            | 停用 `ruby` 模組。                                    |
 
 ### Variables
 
@@ -2044,10 +2044,10 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
+`rust` 模組顯示現在安裝的 Rust 版本。 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- 目前資料夾中有一個 `Cargo.toml` 檔案
+- 現在資料夾中包含一個檔案具有 `.rs` 副檔名
 
 ### 選項
 
@@ -2056,7 +2056,7 @@ The `rust` module shows the currently installed version of Rust. 這個模組在
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
 | `style`    | `"bold red"`                       | 這個模組的風格。                                        |
-| `disabled` | `false`                            | Disables the `rust` module.                     |
+| `disabled` | `false`                            | 停用 `rust` 模組。                                   |
 
 ### Variables
 
@@ -2151,7 +2151,9 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file. :::
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+
+:::
 
 ### 選項
 
@@ -2286,21 +2288,21 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
 :::
 
 ### 選項
 
-| Option            | 預設                      | 說明                                                                                                                                 |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Option            | 預設                      | 說明                                                                                                    |
+| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
+| `use_12hr`        | `false`                 | 啟用 12 小時格式。                                                                                           |
+| `time_format`     | 請看下列                    | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
+| `style`           | `"bold yellow"`         | 這個模組的時間的風格。                                                                                           |
+| `utc_time_offset` | `"local"`               | 設定相對於 UTC 的時差。 Range from -24 &lt; x &lt; 24. 允許使用浮點數來表示 30/45 分鐘時差的時區。                   |
+| `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -2308,7 +2310,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | 變數        | 範例         | 說明                                  |
 | --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
+| 時間        | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
@@ -2326,26 +2328,30 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## 使用者名稱
 
 The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- 目前使用者為 root
+- 目前使用者並非登入時的使用者
+- 使用者透過 SSH session 進行連線
+- 變數 `show_always` 被設為 true
 
-::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+::: tip
+
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+
+:::
 
 ### 選項
 
-| Option        | 預設                      | 說明                                    |
-| ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | The format for the module.            |
-| `show_always` | `false`                 | Always shows the `username` module.   |
-| `disabled`    | `false`                 | Disables the `username` module.       |
+| Option        | 預設                      | 說明                         |
+| ------------- | ----------------------- | -------------------------- |
+| `style_root`  | `"bold red"`            | 使用者為 root 時使用的風格。          |
+| `style_user`  | `"bold yellow"`         | 非 root 使用者時使用的風格。          |
+| `format`      | `"[$user]($style) in "` | The format for the module. |
+| `show_always` | `false`                 | 總是顯示 `username` 模組。        |
+| `disabled`    | `false`                 | 停用 `username` 模組。          |
 
 ### Variables
 
@@ -2437,7 +2443,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
+| `說明`          | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
