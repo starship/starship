@@ -2258,6 +2258,7 @@ The module will be shown only if the exit code is not `0`.
 
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
+
 :::
 
 ### Options
@@ -2451,9 +2452,11 @@ The module will be shown if any of the following conditions are met:
 - The variable `show_always` is set to true
 
 ::: tip
+
 SSH connection is detected by checking environment variables
 `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
 these variables, one workaround is to set one of them with a dummy value.
+
 :::
 
 ### Options
