@@ -2151,7 +2151,9 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration. :::
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+
+:::
 
 ### Options
 
@@ -2282,7 +2284,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Temps
 
-Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2302,7 +2304,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2328,14 +2330,18 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une des ces conditions est remplie :
+The `username` module shows active user's username. Le module est affiché si l'une des ces conditions est remplie :
 
 - L'utilisateur courant est root
 - L'utilisateur courant est différent de celui connecté
 - L'utilisateur est actuellement connecté à une session SSH
 - La variable `show_always` a comme valeur true
 
-::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+::: tip
+
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+
+:::
 
 ### Options
 
@@ -2458,7 +2464,7 @@ The order in which custom modules are shown can be individually set by including
 
 #### Commandes shell personnalisées
 
-`shell` accepte une liste de chaînes non vide, où:
+`shell` accepts a non-empty list of strings, where:
 
 - La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
 - Other following arguments are passed to the shell.
