@@ -28,10 +28,10 @@ starship_preexec() {
 
 # Will be run before the prompt is drawn
 starship_precmd() {
-    local NUM_JOBS
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$?
 
+    local NUM_JOBS
     # Evaluate the number of jobs before running the preseved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf
