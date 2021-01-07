@@ -517,7 +517,7 @@ mod tests {
 
         // Test with non-powershell env variable
         env::set_var("STARSHIP_SHELL", "bash");
-        let context = Context::new_with_dir(clap::ArgMatches::default(), path_with_prefix.clone());
+        let context = Context::new_with_dir(clap::ArgMatches::default(), path_with_prefix);
         assert_eq!(
             context.current_dir,
             Path::new(r"Microsoft.PowerShell.Core\FileSystem::/path")
