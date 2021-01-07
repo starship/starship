@@ -63,6 +63,9 @@ function global:prompt {
     }
 }
 
+# Disable virtualenv prompt, it breaks starship
+$ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
+
 $ENV:STARSHIP_SHELL = "powershell"
 
 # Set up the session key that will be used to store logs
