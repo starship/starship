@@ -213,20 +213,20 @@
 
 ## 🤝 Contribuindo
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
 
 ### Contribuidores de código
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+Este projeto existe graças a todas as pessoas que contribuem. [[Contribuir](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### Contribuidores Financeiros
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Torne-se um contribuidor financeiro e nos ajude a sustentar a nossa comunidade. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 #### Pessoas
 
@@ -234,7 +234,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### Organizações
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Apoie este projeto com sua organização. Seu logotipo aparecerá aqui com um link para o seu site. [[Contribuir](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -249,7 +249,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭 Inspirado por
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação do startship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Um prompt ZSH para astronautas.
 
@@ -259,9 +259,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Ícone de foguete do Starship">
 </p>
 
 ## 📝 Licença
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Todos os direitos reservados © 2019-Presente, [Contribuidores Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este projeto está licenciado pelo [ISC](https://github.com/starship/starship/blob/master/LICENSE).
