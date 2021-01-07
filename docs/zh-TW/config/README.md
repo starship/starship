@@ -2151,7 +2151,9 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。 :::
+這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+
+:::
 
 ### 選項
 
@@ -2282,7 +2284,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## 時間
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2302,7 +2304,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 不然的話，它會被預設為 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2328,14 +2330,18 @@ time_range = "10:00:00-14:00:00"
 
 ## 使用者名稱
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
 - 目前使用者為 root
 - 目前使用者並非登入時的使用者
 - 使用者透過 SSH session 進行連線
 - 變數 `show_always` 被設為 true
 
-::: tip SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value. :::
+::: tip
+
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+
+:::
 
 ### 選項
 
