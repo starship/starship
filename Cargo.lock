@@ -700,9 +700,9 @@ dependencies = [
 
 [[package]]
 name = "notify-rust"
-version = "4.0.0"
+version = "4.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "144acee6a0543dc74893e4b8a33936b5b0a94cc2d4ab024afd0c6daff7afc3c0"
+checksum = "3802a3bc8f0a917013a75ee4a1354c9ec2a4b3f59e61dec69ae0bf753637766e"
 dependencies = [
  "dbus",
  "mac-notification-sys",
