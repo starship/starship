@@ -125,6 +125,8 @@
 
 ### Начало работы
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. Установите двоичный файл **starship**:
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### Из источника на [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### Установить через менеджер пакетов
 
 
-   ##### С [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
+2. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 
 
    #### Bash

@@ -102,7 +102,7 @@
   width="50%"
   align="right" />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -125,6 +125,8 @@
 
 ### Erste Schritte
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. Installiere **starship**:
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### Per Quellcode über [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### Installation mithilfe eines Paket-Managers
 
 
-   ##### Mit [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
+2. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
 
 
    #### Bash
@@ -222,7 +217,7 @@ Wir laden Leute **aller Erfahrungsstufen** herzlich ein mitzumachen! Falls du di
 
 Wenn du eine andere Sprache flüssig sprichts, würden wir uns sehr freuen wenn du helfen würdest die Dokumentation in anderen Sprachen auf dem aktuellsten Stand zu halten. Hier kannst du bei der Übersetzung helfen [Starship Crowdin](https://translate.starship.rs/).
 
-Falls du an Starship mitwirken willst, wirf bitte einen Blick auf den [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Schau auch gerne auf unserem [Discord server](https://discord.gg/8Jzqu3T) vorbei. 👋
+Falls du an Starship mitwirken willst, wirf bitte einen Blick auf den [Leitfaden zum Mitwirken](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Schau auch gerne auf unserem [Discord-Server](https://discord.gg/8Jzqu3T) vorbei. 👋
 
 ### Mitwirkenden
 
@@ -231,7 +226,7 @@ Das Projekt existiert dank aller der, die Mitwirken. [[Mitmachen](https://github
 
 ### Finanzielle Unterstützung
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[Mitmachen](https://opencollective.com/starship/contribute)]
 
 #### Individuals
 
@@ -239,7 +234,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### Organisationen
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Mitmachen](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -254,7 +249,7 @@ Support this project with your organization. Your logo will show up here with a 
 
 ## 💭 Inspiriert durch
 
-Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspiriert haben. 🙏
+Bitte schaue dir diese früheren Projekte an, die dazu beigetragen haben, Starship zu kreieren. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Ein ZSH-Prompt für Astronauten.
 
@@ -264,9 +259,9 @@ Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspirie
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen Icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen-Symbol">
 </p>
 
 ## 📝 Lizenz
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Unter der [ISC](https://github.com/starship/starship/blob/master/LICENSE) Lizens.
+Copyright © 2019-heute [Starship-Mitwirkende](https://github.com/starship/starship/graphs/contributors).<br /> Dieses Projekt ist [ISC](https://github.com/starship/starship/blob/master/LICENSE) lizenziert.

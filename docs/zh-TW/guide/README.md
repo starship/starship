@@ -125,6 +125,8 @@
 
 ### 入門
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. 安裝 **starship** 執行檔：
 
 
@@ -138,17 +140,10 @@
    ```
 
 
-   ##### From source on [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
-
-
    #### Install via Package Manager
 
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +156,7 @@
    scoop install starship
    ```
 
-1. 將初始化腳本 (script) 加入你的 shell 的設定檔：
+2. 將初始化腳本 (script) 加入你的 shell 的設定檔：
 
 
    #### Bash
