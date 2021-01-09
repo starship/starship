@@ -88,11 +88,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             if ((after_dir_num.len() - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
                 let before = truncated_dir_string.replace(&repo_path, "");
-                [
-                    prefix + &before,
-                    root.to_string(),
-                    after_str,
-                ]
+                [prefix + &before, root.to_string(), after_str]
             } else {
                 [
                     "".to_string(),
