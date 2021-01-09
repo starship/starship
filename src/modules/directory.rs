@@ -80,22 +80,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.root {
         Some(repo_root) if !config.truncate_to_repo => {
-            let root_name = repo.root.as_ref()?;
-            let after = current_dir
-                .as_path()
-                .strip_prefix(root_name.as_path())
-                .ok()?;
-            let after_str = after.display().to_string();
+            let repo_path = contract_repo_path(current_dir, repo_root)?;
+            let repo_path_vec: Vec<&str> = repo_path.split('/').collect();
+            let after_str = repo_path.replace(repo_path_vec[0], "");
             let after_dir_num: Vec<&str> = after_str.split('/').collect();
 
-            if (after_dir_num.len() as i64) < config.truncation_length {
-                let root = repo.root.as_ref()?.as_path().file_name()?.to_str()?;
-                let repo_path = contract_repo_path(current_dir, repo_root)?;
+            if ((after_dir_num.len() - 1) as i64) < config.truncation_length {
+                let root = repo_path_vec[0];
                 let before = truncated_dir_string.replace(&repo_path, "");
                 [
                     prefix + &before,
                     root.to_string(),
-                    "/".to_string() + after.to_str()?,
+                    after_str,
                 ]
             } else {
                 [
@@ -950,10 +946,10 @@ mod tests {
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint("above-repo/rocket-controls/src/meters/fuel-gauge")
+            "{}above-repo/{}rocket-controls{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint("/src/meters/fuel-gauge")
         ));
 
         assert_eq!(expected, actual);
@@ -980,11 +976,14 @@ mod tests {
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(format!(
-                "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
+            "{}{}{}rocket-controls{} ",
+            Color::Cyan.bold().prefix(),
+            format!(
+                "{}/above-repo/",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
-            ))
+            ),
+            Color::Red.prefix(),
+            Color::Cyan.paint("/src/meters/fuel-gauge")
         ));
 
         assert_eq!(expected, actual);
@@ -1144,10 +1143,10 @@ mod tests {
             .path(symlink_src_dir)
             .collect();
         let expected = Some(format!(
-            "{} ",
-            Color::Cyan
-                .bold()
-                .paint("above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
+            "{}above-repo/{}rocket-controls-symlink{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint("/src/meters/fuel-gauge")
         ));
 
         assert_eq!(expected, actual);
@@ -1180,11 +1179,14 @@ mod tests {
             .path(symlink_src_dir)
             .collect();
         let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint(format!(
-                "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
+            "{}{}{}rocket-controls-symlink{} ",
+            Color::Cyan.bold().prefix(),
+            format!(
+                "{}/above-repo/",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
-            ))
+            ),
+            Color::Red.prefix(),
+            Color::Cyan.paint("/src/meters/fuel-gauge")
         ));
 
         assert_eq!(expected, actual);
