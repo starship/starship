@@ -14,7 +14,7 @@ pub struct NixShellConfig<'a> {
 
 /* The trailing double spaces in `symbol` are needed to work around issues with
 multiwidth emoji support in some shells. Please do not file a PR to change this
-unless you can show that your changes do not affect this workaround. */
+unless you can show that your changes do not affect this workaround.  */
 impl<'a> RootModuleConfig<'a> for NixShellConfig<'a> {
     fn new() -> Self {
         NixShellConfig {
