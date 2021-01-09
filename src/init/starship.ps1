@@ -20,6 +20,23 @@ function Get-Cwd {
     }
 }
 
+function Fix-Arg ($arg) {
+    # Powershell automatically quotes strings containing whitespace when passing them as arguments to external programs, e.g.
+    #   $a = "foo"
+    #   $b = "bar baz"
+    #   program $a $b
+    #
+    # Results in the following command string:
+    #   program hello "bar baz"
+    #
+    # Unfortunately, it apparently isn't clever enough to escape trailing backslashes as part of the quoting operation, which leads to the string being corrupted, e.g.
+    #   program hello "bar baz\"
+    #
+    # Backslashes inside the quotes apparently don't need to be escaped, only the trailing backslash, otherwise it escapes the closing quote mark.
+    # To work around this, pad the end of the string with an extra space.
+    if ($arg.EndsWith('\')) { "$arg " } else { $arg }
+}
+
 function global:prompt {
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
@@ -27,7 +44,7 @@ function global:prompt {
     $out = $null
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
-    $cwd = (Get-Cwd)    
+    $cwd = (Get-Cwd)
     # Whe start from the premise that the command executed correctly, which covers also the fresh console.
     $lastExitCodeForPrompt = 0
 
@@ -46,9 +63,9 @@ function global:prompt {
 
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
         # & ensures the path is interpreted as something to execute
-        $out = @(&::STARSHIP:: prompt --path=$($cwd.Path) --logical-path=$($cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
+        $out = @(&::STARSHIP:: prompt --path (Fix-Arg $cwd.Path) --logical-path (Fix-Arg $cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
     } else {
-        $out = @(&::STARSHIP:: prompt --path=$($cwd.Path) --logical-path=$($cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs)
+        $out = @(&::STARSHIP:: prompt --path (Fix-Arg $cwd.Path) --logical-path (Fix-Arg $cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs)
     }
     # Restore old output encoding
     [Console]::OutputEncoding = $origOutputEncoding

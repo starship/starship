@@ -54,6 +54,7 @@ impl<'a> Context<'a> {
         // If unavailable, use the current directory or PWD env variable instead.
         let path = arguments
             .value_of("path")
+            .map(|s| s.trim())
             .map(PathBuf::from)
             .unwrap_or_else(|| {
                 env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
@@ -62,7 +63,10 @@ impl<'a> Context<'a> {
                 })
             });
 
-        let logical_path = arguments.value_of("logical_path").map(PathBuf::from);
+        let logical_path = arguments
+            .value_of("logical_path")
+            .map(|s| s.trim())
+            .map(PathBuf::from);
 
         Context::new_with_shell_and_path(arguments, shell, path, logical_path)
     }
