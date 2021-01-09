@@ -206,6 +206,7 @@ $golang\
 $helm\
 $java\
 $julia\
+$kotlin\
 $nim\
 $nodejs\
 $ocaml\
@@ -315,26 +316,17 @@ The module is only visible when the device's battery is below 10%.
 
 ### Options
 
-| Option               | Default                           | Description                                       |
-| -------------------- | --------------------------------- | ------------------------------------------------- |
-| `full_symbol`        | `"•"`                             | The symbol shown when the battery is full.        |
-| `charging_symbol`    | `"⇡"`                             | The symbol shown when the battery is charging.    |
-| `discharging_symbol` | `"⇣"`                             | The symbol shown when the battery is discharging. |
-| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                        |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.       |
-| `disabled`           | `false`                           | Disables the `battery` module.                    |
+| Option               | Default                           | Description                                         |
+| -------------------- | --------------------------------- | --------------------------------------------------- |
+| `full_symbol`        | `""`                             | The symbol shown when the battery is full.          |
+| `charging_symbol`    | `""`                             | The symbol shown when the battery is charging.      |
+| `discharging_symbol` | `""`                             | The symbol shown when the battery is discharging.   |
+| `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
+| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                          |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
+| `disabled`           | `false`                           | Disables the `battery` module.                      |
 
-<details>
-<summary>There are also options for some uncommon battery states.</summary>
-
-| Variable         | Description                                         |
-| ---------------- | --------------------------------------------------- |
-| `unknown_symbol` | The symbol shown when the battery state is unknown. |
-| `empty_symbol`   | The symbol shown when the battery state is empty.   |
-
-Note: Battery indicator will be hidden if the status is `unknown` or `empty` unless you specify the option in the config.
-
-</details>
 
 ### Example
 
@@ -1442,6 +1434,50 @@ The module will be shown if any of the following conditions are met:
 symbol = "∴ "
 ```
 
+## Kotlin
+
+The `kotlin` module shows the currently installed version of Kotlin.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.kt` or a `.kts` file
+
+### Options
+
+| Option          | Default                            | Description                                                                   |
+| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
+| `symbol`        | `"🅺 "`                            | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                      | The style for the module.                                                     |
+| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+
+### Variables
+
+| Variable | Example   | Description                          |
+| -------- | --------- | ------------------------------------ |
+| version  | `v1.4.21` | The version of `kotlin`              |
+| symbol   |           | Mirrors the value of option `symbol` |
+| style\*  |           | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+symbol = "🅺 "
+```
+
+```toml
+# ~/.config/starship.toml
+
+[kotlin]
+# Uses the Kotlin Compiler binary to get the installed version
+kotlin_binary = "kotlinc"
+```
+
 ## Kubernetes
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file.
@@ -1846,6 +1882,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 - **mix** - The `mix` package version is extracted from the `mix.exs` present
 - **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
 - **maven** - The `maven` package version is extracted from the `pom.xml` present
+- **meson** - The `meson` package version is extracted from the `meson.build` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -1854,7 +1891,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 | Option            | Default                            | Description                                                |
 | ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
 | `style`           | `"bold 208"`                       | The style for the module.                                  |
 | `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
@@ -2221,24 +2258,36 @@ The module will be shown only if the exit code is not `0`.
 
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
+
 :::
 
 ### Options
 
-| Option     | Default                     | Description                                            |
-| ---------- | --------------------------- | ------------------------------------------------------ |
-| `format`   | `[$symbol$status]($style) ` | The format of the module                               |
-| `symbol`   | `"✖"`                       | A format string representing the symbol for the status |
-| `style`    | `"bold red"`                | The style for the module.                              |
-| `disabled` | `true`                      | Disables the `status` module.                          |
+| Option                    | Default                     | Description                                            |
+| ------------------------- | --------------------------- | ------------------------------------------------------ |
+| `format`                  | `[$symbol$status]($style) ` | The format of the module                               |
+| `symbol`                  | `"✖"`                       | The symbol displayed on program error                  |
+| `not_executable_symbol`   | `"🚫"`                       | The symbol displayed when file isn't executable        |
+| `not_found_symbol`        | `"🔍"`                       | The symbol displayed when the command can't be found   |
+| `sigint_symbol`           | `"🧱"`                       | The symbol displayed on SIGINT (Ctrl + c)              |
+| `signal_symbol`           | `"⚡"`                       | The symbol displayed on any signal |
+| `style`                   | `"bold red"`                | The style for the module.                              |
+| `recognize_signal_code`   | `true`                      | Enable signal mapping from exit code                   |
+| `map_symbol`              | `false`                     | Enable symbols mapping from exit code                  |
+| `disabled`                | `true`                      | Disables the `status` module.                          |
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| status   | `127`   | The exit code of the last command    |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable                | Example | Description                                                             |
+| ----------------------- | ------- | ----------------------------------------------------------------------- |
+| status                  | `127`   | The exit code of the last command                                       |
+| int                     | `127`   | The exit code of the last command                                       |
+| common_meaning          | `ERROR` | Meaning of the code if not a signal                                     |
+| signal_number           | `9`     | Signal number corresponding to the exit code, only if signalled         |
+| signal_name             | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
+| maybe_int               | `7`     | Contains the exit code number when no meaning has been found            |
+| symbol                  |         | Mirrors the value of option `symbol`                                    |
+| style\*                 |         | Mirrors the value of option `style`                                     |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2250,8 +2299,9 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [status]
 style = "bg:blue"
-symbol = "💣 "
-format = '[\[$symbol$status\]]($style) '
+symbol = "🔴"
+format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+map_symbol = true
 disabled = false
 
 ```
@@ -2402,9 +2452,11 @@ The module will be shown if any of the following conditions are met:
 - The variable `show_always` is set to true
 
 ::: tip
+
 SSH connection is detected by checking environment variables
 `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
 these variables, one workaround is to set one of them with a dummy value.
+
 :::
 
 ### Options

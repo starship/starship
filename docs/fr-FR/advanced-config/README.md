@@ -82,7 +82,7 @@ Les chaînes de style sont une liste de mots, séparés par des espaces. Les mot
 
 où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, même si cela peut changer plus tard. L'ordre des mots dans le string n'a pas d'importance.
 
-Le jeton ` none ` remplace tous les autres jetons d'une string, de sorte que, par exemple, ` fg: red none fg: blue ` créera toujours une string sans style. Il peut devenir une erreur d'utiliser `none` en conjonction avec d'autres jetons dans le futur.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Il peut devenir une erreur d'utiliser `none` en conjonction avec d'autres jetons dans le futur.
 
 Un spécificateur de couleur peut être l'un des éléments suivants :
 

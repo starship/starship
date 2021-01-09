@@ -8,6 +8,7 @@ use crate::config::StarshipConfig;
 use std::fs::File;
 use std::io::Write;
 use toml::map::Map;
+use toml::value::Table;
 use toml::Value;
 
 #[cfg(not(windows))]
@@ -16,20 +17,13 @@ const STD_EDITOR: &str = "vi";
 const STD_EDITOR: &str = "notepad.exe";
 
 pub fn update_configuration(name: &str, value: &str) {
-    let config_path = get_config_path();
-
     let keys: Vec<&str> = name.split('.').collect();
     if keys.len() != 2 {
         log::error!("Please pass in a config key with a '.'");
         process::exit(1);
     }
 
-    let starship_config = StarshipConfig::initialize();
-    let mut config = starship_config
-        .config
-        .expect("Failed to load starship config");
-
-    if let Some(table) = config.as_table_mut() {
+    if let Some(table) = get_configuration().as_table_mut() {
         if !table.contains_key(keys[0]) {
             table.insert(keys[0].to_string(), Value::Table(Map::new()));
         }
@@ -54,12 +48,66 @@ pub fn update_configuration(name: &str, value: &str) {
             table.insert(keys[0].to_string(), Value::Table(updated_values));
         }
 
-        let config_str =
-            toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
-        File::create(&config_path)
-            .and_then(|mut file| file.write_all(config_str.as_ref()))
-            .expect("Error writing starship config");
+        write_configuration(table);
     }
+}
+
+pub fn toggle_configuration(name: &str, key: &str) {
+    if let Some(table) = get_configuration().as_table_mut() {
+        match table.get(name) {
+            Some(v) => {
+                if let Some(values) = v.as_table() {
+                    let mut updated_values = values.clone();
+
+                    let current: bool = match updated_values.get(key) {
+                        Some(v) => match v.as_bool() {
+                            Some(b) => b,
+                            _ => {
+                                log::error!(
+                                    "Given config key '{}' must be in 'boolean' format",
+                                    key
+                                );
+                                process::exit(1);
+                            }
+                        },
+                        _ => {
+                            log::error!("Given config key '{}' must be exist in config file", key);
+                            process::exit(1);
+                        }
+                    };
+
+                    updated_values.insert(key.to_string(), Value::Boolean(!current));
+
+                    table.insert(name.to_string(), Value::Table(updated_values));
+
+                    write_configuration(table);
+                }
+            }
+            _ => {
+                log::error!("Given module '{}' not found in config file", name);
+                process::exit(1);
+            }
+        };
+    }
+}
+
+pub fn get_configuration() -> Value {
+    let starship_config = StarshipConfig::initialize();
+
+    starship_config
+        .config
+        .expect("Failed to load starship config")
+}
+
+pub fn write_configuration(table: &mut Table) {
+    let config_path = get_config_path();
+
+    let config_str =
+        toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
+
+    File::create(&config_path)
+        .and_then(|mut file| file.write_all(config_str.as_ref()))
+        .expect("Error writing starship config");
 }
 
 pub fn edit_configuration() {
@@ -119,7 +167,6 @@ mod tests {
     use super::*;
 
     // This is every possible permutation, 3² = 9.
-
     #[test]
     fn visual_set_editor_set() {
         let actual = get_editor_internal(Some("foo".into()), Some("bar".into()));

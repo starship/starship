@@ -8,9 +8,9 @@
 # data for commands like `slow | slow | fast`, since the timer starts at the start
 # of the "fast" command.
 
-# To solve this, we set a flag `PREEXEC_READY` when the prompt is drawn, and only
-# start the timer if this flag is present. That way, timing is for the entire command,
-# and not just a portion of it.
+# To solve this, we set a flag `STARSHIP_PREEXEC_READY` when the prompt is
+# drawn, and only start the timer if this flag is present. That way, timing is
+# for the entire command, and not just a portion of it.
 
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
@@ -18,8 +18,8 @@ starship_preexec() {
     local PREV_LAST_ARG=$1
 
     # Avoid restarting the timer for commands in the same pipeline
-    if [ "$PREEXEC_READY" = "true" ]; then
-        PREEXEC_READY=false
+    if [ "$STARSHIP_PREEXEC_READY" = "true" ]; then
+        STARSHIP_PREEXEC_READY=false
         STARSHIP_START_TIME=$(::STARSHIP:: time)
     fi
 
@@ -28,10 +28,10 @@ starship_preexec() {
 
 # Will be run before the prompt is drawn
 starship_precmd() {
-    local NUM_JOBS
     # Save the status, because commands in this pipeline will change $?
-    STATUS=$?
+    STARSHIP_CMD_STATUS=$?
 
+    local NUM_JOBS
     # Evaluate the number of jobs before running the preseved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf
@@ -46,18 +46,20 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --status=$STATUS --jobs="$NUM_JOBS")"
+        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --jobs="$NUM_JOBS")"
     fi
-    PREEXEC_READY=true  # Signal that we can safely restart the timer
+    STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-if [[ $preexec_functions ]]; then
-    preexec_functions+=('starship_preexec "$_"')
+if [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+    # bash-preexec needs a single function--wrap the args into a closure and pass
+    starship_preexec_all(){ starship_preexec "$_"; }
+    preexec_functions+=(starship_preexec_all)
     precmd_functions+=(starship_precmd)
 else
     # We want to avoid destroying an existing DEBUG hook. If we detect one, create
