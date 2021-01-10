@@ -20,53 +20,60 @@ function Get-Cwd {
     }
 }
 
-function Fix-Arg ($arg) {
-    # Powershell automatically quotes strings containing whitespace when passing them as arguments to external programs, e.g.
-    #   $a = "foo"
-    #   $b = "bar baz"
-    #   program $a $b
-    #
-    # Results in the following command string:
-    #   program hello "bar baz"
-    #
-    # Unfortunately, it apparently isn't clever enough to escape trailing backslashes as part of the quoting operation, which leads to the string being corrupted, e.g.
-    #   program hello "bar baz\"
-    #
-    # Backslashes inside the quotes apparently don't need to be escaped, only the trailing backslash, otherwise it escapes the closing quote mark.
-    # To work around this, pad the end of the string with an extra space.
-    if ($arg.EndsWith('\')) { "$arg " } else { $arg }
+function Invoke-Native {
+    param($Executable, $Arguments)
+    # Build an arguments string which follows the C++ command-line argument quoting rules
+    # See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
+    $Arguments = $Arguments | ForEach-Object {
+        $_ = $_ -Replace '(\\+)"','$1$1"' # Escape backslash chains immediately preceeding quote marks.
+        $_ = $_ -Replace '(\\+)$','$1$1'  # Escape backslash chains immediately preceeding the end of the string.
+        $_ = $_ -Replace '"','\"'         # Escape internal quote marks.
+        "`"$_`""                          # Quote the argument.
+    }
+    # Use the stop-parsing symbol (--%) to ensure the argument string is passed along unchanged 
+    # See: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-5.1
+    Invoke-Expression "& `"$Executable`" --% $($Arguments -Join ' ')"
 }
 
 function global:prompt {
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
 
-    $out = $null
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
-    $cwd = (Get-Cwd)
-    # Whe start from the premise that the command executed correctly, which covers also the fresh console.
-    $lastExitCodeForPrompt = 0
+    
+    $cwd = Get-Cwd
+    $arguments = @(
+        "prompt"
+        "--path=$($cwd.Path)",
+        "--logical-path=$($cwd.LogicalPath)",
+        "--jobs=$($jobs)"
+    )
 
     # Save old output encoding and set it to UTF-8
     $origOutputEncoding = [Console]::OutputEncoding
     [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    
+    # Whe start from the premise that the command executed correctly, which covers also the fresh console.
+    $lastExitCodeForPrompt = 0
     if ($lastCmd = Get-History -Count 1) {
         # In case we have a False on the Dollar hook, we know there's an error.
         if (-not $origDollarQuestion) {
             # We retrieve the InvocationInfo from the most recent error.
             $lastCmdletError = try { Get-Error |  Where-Object { $_ -ne $null } | Select-Object -expand InvocationInfo } catch { $null }
-            # We check if the las command executed matches the line that caused the last error , in which case we know
+            # We check if the last command executed matches the line that caused the last error, in which case we know
             # it was an internal Powershell command, otherwise, there MUST be an error code.
             $lastExitCodeForPrompt = if ($null -ne $lastCmdletError -and $lastCmd.CommandLine -eq $lastCmdletError.Line) { 1 } else { $origLastExitCode }
         }
-
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
-        # & ensures the path is interpreted as something to execute
-        $out = @(&::STARSHIP:: prompt --path (Fix-Arg $cwd.Path) --logical-path (Fix-Arg $cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs --cmd-duration=$duration)
-    } else {
-        $out = @(&::STARSHIP:: prompt --path (Fix-Arg $cwd.Path) --logical-path (Fix-Arg $cwd.LogicalPath) --status=$lastExitCodeForPrompt --jobs=$jobs)
+        
+        $arguments += "--cmd-duration=$($duration)"
     }
+
+    $arguments += "--status=$($lastExitCodeForPrompt)"
+
+    $out = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+
     # Restore old output encoding
     [Console]::OutputEncoding = $origOutputEncoding
 
