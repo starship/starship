@@ -8,13 +8,13 @@ actionLink: ./guide/
 features:
   - 
     title: Compatibilité avant tout
-    details: Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !
+    details: Fonctionne sur tous les principaux shells et systèmes d'exploitation. Utilisez-le partout !
   - 
     title: Propulsé par Rust
-    details: Profiter de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes le plus rapide et fiable possible.
+    details: Profitez de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes le plus rapide et fiable possible.
   - 
     title: Personnalisable
-    details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre invite de commandes aussi léger ou complet que le vous souhaitez.
+    details: Tous les petits détails sont personnalisables à votre goût, pour rendre votre invite de commandes aussi léger ou complet que le vous souhaitez.
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship : Invite Multi-Shell"
@@ -72,7 +72,7 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    #### Fish
 
-   Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
+   Ajouter ce qui suit à la fin de `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -94,7 +94,7 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    #### Powershell
 
-   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Ajouter ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Habituellement le chemin est `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
