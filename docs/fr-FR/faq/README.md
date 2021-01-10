@@ -12,7 +12,7 @@
 
 ## Comment puis-je obtenir la complétion de commandes comme montré dans le GIF de démo?
 
-Completion support, or autocomplete, is provided by your shell of choice. Dans le cas de la démo, elle a été faite avec [Fish Shell](https://fishshell.com/), qui fournit des complétions par défaut. Si vous utilisez le Shell Z (zsh), vous pouvez jeter un œil à [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+L'aide à la complétion ou autocomplétion, est founi par le shell que vous avez choisi. Dans le cas de la démo, elle a été faite avec [Fish Shell](https://fishshell.com/), qui fournit des complétions par défaut. Si vous utilisez le Shell Z (zsh), vous pouvez jeter un œil à [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
 
