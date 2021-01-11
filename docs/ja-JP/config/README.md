@@ -672,13 +672,13 @@ truncation_symbol = "…/"
 
 ### オプション
 
-| オプション             | デフォルト                              | 説明                                                                                      |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | moduleのフォーマットです。                                                                        |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
-| `style`           | `"blue bold"`                      | モジュールのスタイルです。                                                                           |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | `docker_context`モジュールを無効にします。                                                           |
+| オプション             | デフォルト                              | 説明                                                                                                              |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | moduleのフォーマットです。                                                                                                |
+| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
+| `style`           | `"blue bold"`                      | モジュールのスタイルです。                                                                                                   |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | `docker_context`モジュールを無効にします。                                                                                   |
 
 ### 変数
 
