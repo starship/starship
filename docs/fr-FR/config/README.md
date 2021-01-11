@@ -676,7 +676,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `format`          | `"via [$symbol$context]($style) "` | Format du module.                                                                                               |
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
 | `style`           | `"blue bold"`                      | Le style du module.                                                                                             |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `only_with_files` | `false`                            | Affiché quand il y a un `docker-compose.yml`, `docker-compose.yaml`, ou un `Dockerfile` dans le dossier actuel. |
 | `disabled`        | `true`                             | Désactive le module `docker_context`.                                                                           |
 
 ### Variables
