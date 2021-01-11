@@ -23,8 +23,10 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
-    /// Optional logical_dir is set when the shell's current directory is not a valid file system
-    /// directory. Modules should use current_dir when they expect a valid file system path.
+    /// A logical directory path which should represent the same directory as current_dir,
+    /// though may appear different.
+    /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
+    /// If it is not set, current_dir will be used.
     pub logical_dir: Option<PathBuf>,
 
     /// A struct containing directory contents in a lookup-optimised format.
@@ -50,8 +52,8 @@ impl<'a> Context<'a> {
     pub fn new(arguments: ArgMatches) -> Context {
         let shell = Context::get_shell();
 
-        // Retrieve the "path" flag.
-        // If unavailable, use the current directory or PWD env variable instead.
+        // Retrieve the "current directory".
+        // If the path argument is not set fall back to the PWD env variable or current directory instead.
         let path = arguments
             .value_of("path")
             .map(PathBuf::from)
@@ -62,6 +64,7 @@ impl<'a> Context<'a> {
                 })
             });
 
+        // Retrive the "logical directory" override.
         let logical_path = arguments.value_of("logical_path").map(PathBuf::from);
 
         Context::new_with_shell_and_path(arguments, shell, path, logical_path)

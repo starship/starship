@@ -25,14 +25,17 @@ fn main() {
         .short("p")
         .long("path")
         .value_name("PATH")
-        .help("The path that the prompt should render for")
+        .help("The path that the prompt should render for.")
         .takes_value(true);
 
     let logical_path_arg = Arg::with_name("logical_path")
         .short("P")
         .long("logical-path")
         .value_name("LOGICAL_PATH")
-        .help("The logical/virtual path that the prompt should render for")
+        .help(concat!(
+            "The logical path that the prompt should render for. ",
+            "This path should be a virtual/logical representation of the PATH argument."
+        ))
         .takes_value(true);
 
     let shell_arg = Arg::with_name("shell")

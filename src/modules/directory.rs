@@ -39,15 +39,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    let home_dir = dirs_next::home_dir().unwrap();
+    let home_dir = dirs_next::home_dir().expect("Unable to determine HOME_DIR for user");
     let physical_dir = &context.current_dir;
-    let logical_dir = context.logical_dir.as_ref().unwrap_or(physical_dir);
+    let logical_dir = if config.use_logical_path {
+        context.logical_dir.as_ref().unwrap_or(&context.current_dir)
+    } else {
+        &context.current_dir
+    };
 
     log::debug!("Home dir: {:?}", &home_dir);
     log::debug!("Physical dir: {:?}", &physical_dir);
     log::debug!("Logical dir: {:?}", &logical_dir);
 
-    // Apply repository path or home directory contraction
+    // Attempt repository path contraction (if we are in a git repository)
     let repo = if config.truncate_to_repo {
         context.get_repo().ok()
     } else {
@@ -56,8 +60,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = repo
         .and_then(|r| r.root.as_ref())
         .filter(|root| *root != &home_dir)
-        .and_then(|root| contract_repo_path(&logical_dir, root))
-        .unwrap_or_else(|| contract_path(&logical_dir, &home_dir, HOME_SYMBOL));
+        // NOTE: Always attempt to contract repo paths from the `current_dir` as
+        // `logical_dir` _may_ not be prefixed with the correct physical repository
+        // path and will therefore be impossible to contract.
+        .and_then(|root| contract_repo_path(&physical_dir, root));
+
+    // Otherwise use the logical path, automatically contracting
+    // the home directory if required.
+    let dir_string =
+        dir_string.unwrap_or_else(|| contract_path(&logical_dir, &home_dir, HOME_SYMBOL));
 
     log::debug!("Dir string: {}", dir_string);
 
@@ -1391,6 +1402,31 @@ mod tests {
         let actual = ModuleRenderer::new("directory")
             .path(path)
             .logical_path::<PathBuf>(None)
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn logical_path_defaults_to_path_when_use_logical_path_is_false() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("src/meters/fuel-gauge");
+        fs::create_dir_all(&path)?;
+        let logical_path = Some("Logical:/fuel-gauge");
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("src/meters/fuel-gauge")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = false
+            })
+            .path(path)
+            .logical_path(logical_path)
             .collect();
 
         assert_eq!(expected, actual);
