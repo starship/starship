@@ -319,9 +319,9 @@ dependencies = [
 
 [[package]]
 name = "dbus"
-version = "0.8.4"
+version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5cd9e78c210146a1860f897db03412fd5091fd73100778e43ee255cca252cf32"
+checksum = "3b1334c0161ddfccd239ac81b188d62015b049c986c5cd0b7f9447cf2c54f4a3"
 dependencies = [
  "libc",
  "libdbus-sys",
@@ -700,9 +700,9 @@ dependencies = [
 
 [[package]]
 name = "notify-rust"
-version = "4.1.1"
+version = "4.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e3a4a0e5bb58c15026bdac5d49c67ccab6c287da64af8e938eaa98141e17ed4"
+checksum = "95a3a5dd7b4b415b112ce0fae1988f3e6dee90a96918bf3950b5f2289b19a04b"
 dependencies = [
  "dbus",
  "mac-notification-sys",
