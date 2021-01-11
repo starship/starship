@@ -671,13 +671,13 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### 配置项
 
-| Option            | 默认值                                | 描述                                                                                      |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | 组件格式化模板。                                                                                |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
-| `style`           | `"blue bold"`                      | 此组件的样式。                                                                                 |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+| Option            | 默认值                                | 描述                                                                                                              |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | 组件格式化模板。                                                                                                        |
+| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
+| `style`           | `"blue bold"`                      | 此组件的样式。                                                                                                         |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                                           |
 
 ### Variables
 
