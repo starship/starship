@@ -40,6 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
     let home_dir = dirs_next::home_dir().expect("Unable to determine HOME_DIR for user");
+
     let physical_dir = &context.current_dir;
     let logical_dir = if config.use_logical_path {
         context.logical_dir.as_ref().unwrap_or(&context.current_dir)
@@ -83,7 +84,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&physical_dir, &home_dir, HOME_SYMBOL);
+            let contracted_home_dir = contract_path(&logical_dir, &home_dir, HOME_SYMBOL);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
