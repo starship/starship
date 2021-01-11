@@ -66,12 +66,10 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
-    let version = shadow::version();
-
     let mut app = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
-        .version(version.as_str())
+        .version(shadow::PKG_VERSION)
         // pull the authors from Cargo.toml
         .author(crate_authors!())
         .after_help("https://github.com/starship/starship")
@@ -186,7 +184,10 @@ fn main() {
                 configure::edit_configuration()
             }
         }
-        ("bug-report", Some(_)) => bug_report::create(),
+        ("bug-report", Some(_)) => {
+            println!("{}",shadow::version().trim());
+            bug_report::create()
+        },
         ("time", _) => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
