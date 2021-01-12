@@ -1,5 +1,5 @@
-use crate::utils::exec_cmd;
 use crate::shadow;
+use crate::utils::exec_cmd;
 
 use std::fs;
 use std::path::PathBuf;
@@ -8,7 +8,7 @@ use std::path::PathBuf;
 const GIT_IO_BASE_URL: &str = "https://git.io/";
 
 pub fn create() {
-    println!("{}\n",shadow::version().trim());
+    println!("{}\n", shadow::version().trim());
     let os_info = os_info::get();
 
     let environment = Environment {
@@ -64,11 +64,11 @@ struct Environment {
     starship_config: String,
 }
 
-fn get_pkg_branch_tag() -> &'static str{
-    if !shadow::TAG.is_empty(){
-        return shadow::TAG
+fn get_pkg_branch_tag() -> &'static str {
+    if !shadow::TAG.is_empty() {
+        return shadow::TAG;
     }
-    return shadow::BRANCH
+    shadow::BRANCH
 }
 
 fn make_github_issue_link(environment: Environment) -> String {

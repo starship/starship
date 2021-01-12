@@ -179,9 +179,7 @@ fn main() {
                 configure::edit_configuration()
             }
         }
-        ("bug-report", Some(_)) => {
-            bug_report::create()
-        },
+        ("bug-report", Some(_)) => bug_report::create(),
         ("time", _) => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
