@@ -33,6 +33,8 @@ BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
+SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl i686-unknown-linux-musl x86_64-apple-darwin x86_64-pc-windows-msvc"
+
 info() {
   printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
 }
@@ -250,7 +252,8 @@ is_build_available() {
   local good
   
   good=$(
-    for t in x86_64-unknown-linux-gnu x86_64-unknown-linux-musl i686-unknown-linux-musl x86_64-apple-darwin x86_64-pc-windows-msvc; do
+    IFS=" "
+    for t in $SUPPORTED_TARGETS; do
       if [ "${t}" == "${target}" ]; then
         echo 1
         break
