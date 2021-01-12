@@ -28,10 +28,10 @@ starship_preexec() {
 
 # Will be run before the prompt is drawn
 starship_precmd() {
-    local NUM_JOBS
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$?
 
+    local NUM_JOBS
     # Evaluate the number of jobs before running the preseved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf
@@ -56,8 +56,10 @@ starship_precmd() {
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-if [[ $preexec_functions ]]; then
-    preexec_functions+=('starship_preexec "$_"')
+if [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+    # bash-preexec needs a single function--wrap the args into a closure and pass
+    starship_preexec_all(){ starship_preexec "$_"; }
+    preexec_functions+=(starship_preexec_all)
     precmd_functions+=(starship_precmd)
 else
     # We want to avoid destroying an existing DEBUG hook. If we detect one, create

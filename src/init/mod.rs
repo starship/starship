@@ -1,5 +1,5 @@
 use std::ffi::OsStr;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::{env, io};
 
 /* We use a two-phase init here: the first phase gives a simple command to the
@@ -17,12 +17,62 @@ using whatever mechanism is available in the host shell--this two-phase solution
 has been developed as a compatibility measure with `eval $(starship init X)`
 */
 
-fn path_to_starship() -> io::Result<String> {
-    let current_exe = env::current_exe()?
-        .to_str()
-        .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?
-        .to_string();
-    Ok(current_exe)
+struct StarshipPath {
+    native_path: PathBuf,
+}
+impl StarshipPath {
+    fn init() -> io::Result<Self> {
+        Ok(Self {
+            native_path: env::current_exe()?,
+        })
+    }
+    fn str_path(&self) -> io::Result<&str> {
+        let current_exe = self
+            .native_path
+            .to_str()
+            .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?;
+        Ok(current_exe)
+    }
+    fn sprint(&self) -> io::Result<String> {
+        self.str_path().map(|s| s.replace("\"", "\"'\"'\""))
+    }
+    fn sprint_posix(&self) -> io::Result<String> {
+        // On non-Windows platform, return directly.
+        if cfg!(not(target_os = "windows")) {
+            return self.sprint();
+        }
+        let str_path = self.str_path()?;
+        let res = std::process::Command::new("cygpath.exe")
+            .arg(str_path)
+            .output();
+        let output = match res {
+            Ok(output) => output,
+            Err(e) => {
+                if e.kind() != io::ErrorKind::NotFound {
+                    log::warn!("Failed to convert \"{}\" to unix path:\n{:?}", str_path, e);
+                }
+                // Failed to execute cygpath.exe means there're not inside cygwin evironment,return directly.
+                return self.sprint();
+            }
+        };
+        let res = String::from_utf8(output.stdout);
+        let posix_path = match res {
+            Ok(ref cygpath_path) if output.status.success() => cygpath_path.trim(),
+            Ok(_) => {
+                log::warn!(
+                    "Failed to convert \"{}\" to unix path:\n{}",
+                    str_path,
+                    String::from_utf8_lossy(&output.stderr),
+                );
+                str_path
+            }
+            Err(e) => {
+                log::warn!("Failed to convert \"{}\" to unix path:\n{}", str_path, e);
+                str_path
+            }
+        };
+        Ok(posix_path.replace("\"", "\"'\"'\""))
+    }
 }
 
 /* This prints the setup stub, the short piece of code which sets up the main
@@ -33,7 +83,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
 
     let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
 
-    let starship = path_to_starship()?.replace("\"", "\"'\"'\"");
+    let starship = StarshipPath::init()?;
 
     let setup_stub = match shell_basename {
         Some("bash") => {
@@ -72,25 +122,28 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                 format!(
                     r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ] || ([ "${{BASH_VERSINFO[0]}}" -eq 4 ] && [ "${{BASH_VERSINFO[1]}}" -ge 1 ])
 then
-source <("{}" init bash --print-full-init)
+source <("{0}" init bash --print-full-init)
 else
-source /dev/stdin <<<"$("{}" init bash --print-full-init)"
+source /dev/stdin <<<"$("{0}" init bash --print-full-init)"
 fi"#,
-                    starship, starship
+                    starship.sprint_posix()?
                 )
             };
 
             Some(script)
         }
         Some("zsh") => {
-            let script = format!("source <(\"{}\" init zsh --print-full-init)", starship);
+            let script = format!(
+                "source <(\"{}\" init zsh --print-full-init)",
+                starship.sprint_posix()?
+            );
             Some(script)
         }
         Some("fish") => {
             // Fish does process substitution with pipes and psub instead of bash syntax
             let script = format!(
                 "source (\"{}\" init fish --print-full-init | psub)",
-                starship
+                starship.sprint_posix()?
             );
             Some(script)
         }
@@ -105,12 +158,12 @@ fi"#,
             //             Powershell escapes with ` instead of \ thus `n translates to a newline.
             let script = format!(
                 "Invoke-Expression (@(&\"{}\" init powershell --print-full-init) -join \"`n\")",
-                starship
+                starship.sprint()?
             );
             Some(script)
         }
         Some("ion") => {
-            let script = format!("eval $({} init ion --print-full-init)", starship);
+            let script = format!("eval $({} init ion --print-full-init)", starship.sprint()?);
             Some(script)
         }
         None => {
@@ -143,30 +196,29 @@ fi"#,
 /* This function (called when `--print-full-init` is passed to `starship init`)
 prints out the main initialization script */
 pub fn init_main(shell_name: &str) -> io::Result<()> {
-    let starship_path = path_to_starship()?.replace("\"", "\"'\"'\"");
+    let starship_path = StarshipPath::init()?;
 
-    let setup_script = match shell_name {
-        "bash" => Some(BASH_INIT),
-        "zsh" => Some(ZSH_INIT),
-        "fish" => Some(FISH_INIT),
-        "powershell" => Some(PWSH_INIT),
-        "ion" => Some(ION_INIT),
+    match shell_name {
+        "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
+        "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
+        "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
+        "powershell" => print_script(PWSH_INIT, &starship_path.sprint()?),
+        "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
                  This probably indicates a bug within starship: please open\\n\
                  an issue at https://github.com/starship/starship/issues/new\\n\""
             );
-            None
         }
-    };
-    if let Some(script) = setup_script {
-        // Set up quoting for starship path in case it has spaces.
-        let starship_path_string = format!("\"{}\"", starship_path);
-        let script = script.replace("::STARSHIP::", &starship_path_string);
-        print!("{}", script);
-    };
+    }
     Ok(())
+}
+
+fn print_script(script: &str, path: &str) {
+    let starship_path_string = format!("\"{}\"", path);
+    let script = script.replace("::STARSHIP::", &starship_path_string);
+    print!("{}", script);
 }
 
 /* GENERAL INIT SCRIPT NOTES

@@ -710,13 +710,13 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Option            | Default                            | Description                                                                             |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
-| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                   |
-| `style`           | `"blue bold"`                      | The style for the module.                                                               |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+| Option            | Default                            | Description                                                                                                     |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                                      |
+| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                                           |
+| `style`           | `"blue bold"`                      | The style for the module.                                                                                       |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                                           |
 
 ### Variables
 
@@ -1891,7 +1891,7 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 | Option            | Default                            | Description                                                |
 | ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"via [$symbol$version]($style) "` | The format for the module.                                 |
+| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
 | `style`           | `"bold 208"`                       | The style for the module.                                  |
 | `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
@@ -2258,24 +2258,36 @@ The module will be shown only if the exit code is not `0`.
 
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
+
 :::
 
 ### Options
 
-| Option     | Default                     | Description                                            |
-| ---------- | --------------------------- | ------------------------------------------------------ |
-| `format`   | `[$symbol$status]($style) ` | The format of the module                               |
-| `symbol`   | `"✖"`                       | A format string representing the symbol for the status |
-| `style`    | `"bold red"`                | The style for the module.                              |
-| `disabled` | `true`                      | Disables the `status` module.                          |
+| Option                    | Default                     | Description                                            |
+| ------------------------- | --------------------------- | ------------------------------------------------------ |
+| `format`                  | `[$symbol$status]($style) ` | The format of the module                               |
+| `symbol`                  | `"✖"`                       | The symbol displayed on program error                  |
+| `not_executable_symbol`   | `"🚫"`                       | The symbol displayed when file isn't executable        |
+| `not_found_symbol`        | `"🔍"`                       | The symbol displayed when the command can't be found   |
+| `sigint_symbol`           | `"🧱"`                       | The symbol displayed on SIGINT (Ctrl + c)              |
+| `signal_symbol`           | `"⚡"`                       | The symbol displayed on any signal |
+| `style`                   | `"bold red"`                | The style for the module.                              |
+| `recognize_signal_code`   | `true`                      | Enable signal mapping from exit code                   |
+| `map_symbol`              | `false`                     | Enable symbols mapping from exit code                  |
+| `disabled`                | `true`                      | Disables the `status` module.                          |
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| status   | `127`   | The exit code of the last command    |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable                | Example | Description                                                             |
+| ----------------------- | ------- | ----------------------------------------------------------------------- |
+| status                  | `127`   | The exit code of the last command                                       |
+| int                     | `127`   | The exit code of the last command                                       |
+| common_meaning          | `ERROR` | Meaning of the code if not a signal                                     |
+| signal_number           | `9`     | Signal number corresponding to the exit code, only if signalled         |
+| signal_name             | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
+| maybe_int               | `7`     | Contains the exit code number when no meaning has been found            |
+| symbol                  |         | Mirrors the value of option `symbol`                                    |
+| style\*                 |         | Mirrors the value of option `style`                                     |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2287,8 +2299,9 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [status]
 style = "bg:blue"
-symbol = "💣 "
-format = '[\[$symbol$status\]]($style) '
+symbol = "🔴"
+format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+map_symbol = true
 disabled = false
 
 ```
@@ -2439,9 +2452,11 @@ The module will be shown if any of the following conditions are met:
 - The variable `show_always` is set to true
 
 ::: tip
+
 SSH connection is detected by checking environment variables
 `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up
 these variables, one workaround is to set one of them with a dummy value.
+
 :::
 
 ### Options

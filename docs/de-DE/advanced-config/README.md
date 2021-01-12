@@ -82,7 +82,7 @@ Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben kein
 
 wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe , das kann sich in Zukunft aber ändern. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
 
-`None` überschreibt alle anderen Tokens in einem String, so dass z.B. der string `fg:red none fg:blue` kein Styling anzeigen wird. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
 
 Eine Farbspezifikation kann wie folgt aussehen:
 

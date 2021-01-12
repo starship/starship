@@ -29,11 +29,11 @@ fn main() {
         .takes_value(true);
 
     let shell_arg = Arg::with_name("shell")
-        .value_name("SHELL")
-        .help(
-            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion",
-        )
-        .required(true);
+		.value_name("SHELL")
+		.help(
+			"The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion",
+		)
+		.required(true);
 
     let cmd_duration_arg = Arg::with_name("cmd_duration")
         .short("d")
@@ -118,6 +118,21 @@ fn main() {
                 .arg(Arg::with_name("value").help("Value to place into that key")),
         )
         .subcommand(
+            SubCommand::with_name("toggle")
+                .about("Toggle a given starship module")
+                .arg(
+                    Arg::with_name("name")
+                        .help("The name of the module to be toggled")
+                        .required(true),
+                )
+                .arg(
+                    Arg::with_name("key")
+                        .help("The key of the config to be toggled")
+                        .required(false)
+                        .required_unless("name"),
+                ),
+        )
+        .subcommand(
             SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
             ),
@@ -177,6 +192,15 @@ fn main() {
                 }
             } else {
                 configure::edit_configuration()
+            }
+        }
+        ("toggle", Some(sub_m)) => {
+            if let Some(name) = sub_m.value_of("name") {
+                if let Some(value) = sub_m.value_of("key") {
+                    configure::toggle_configuration(name, value)
+                } else {
+                    configure::toggle_configuration(name, "disabled")
+                }
             }
         }
         ("bug-report", Some(_)) => bug_report::create(),

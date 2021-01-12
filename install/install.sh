@@ -172,6 +172,7 @@ detect_platform() {
 
   case "${platform}" in
     msys_nt*) platform="pc-windows-msvc" ;;
+    cygwin_nt*) platform="pc-windows-msvc";;
     # mingw is Git-Bash
     mingw*) platform="pc-windows-msvc" ;;
     # use the statically compiled musl bins on linux to avoid linking issues.
