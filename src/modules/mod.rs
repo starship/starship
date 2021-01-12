@@ -47,6 +47,7 @@ mod shlvl;
 mod singularity;
 mod status;
 mod swift;
+mod task_warrior;
 mod terraform;
 mod time;
 mod username;
@@ -116,6 +117,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
+            "task_warrior" => task_warrior::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -191,6 +193,7 @@ pub fn description(module: &str) -> &'static str {
         "swift" => "The currently installed version of Swift",
         "shlvl" => "The current value of SHLVL",
         "status" => "The status of the last command",
+        "task_warrior" => "The status of Task Warrior tasks",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
