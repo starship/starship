@@ -41,11 +41,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let home_dir = dirs_next::home_dir().expect("Unable to determine HOME_DIR for user");
 
-    let physical_dir = &context.current_dir;
-    let logical_dir = if config.use_logical_path {
-        context.logical_dir.as_ref().unwrap_or(&context.current_dir)
+    let (physical_dir, logical_dir) = if config.use_logical_path {
+        // Map the configured physical and logical paths directly.
+        // If no logical path is configured, fall back to current_dir.
+        let physical_dir = &context.current_dir;
+        let logical_dir = context.logical_dir.as_ref().unwrap_or(physical_dir);
+        (physical_dir.clone(), logical_dir.clone())
     } else {
-        &context.current_dir
+        // Explicitly canonicalize the current path to expand symlinks.
+        // For the logical path, use a cleaned version of the canonical path.
+        let p = &context.current_dir;
+        let physical_dir = p.canonicalize().unwrap_or_else(|_| p.clone());
+        let logical_dir = canonical_path_cleaned_for_display(&physical_dir);
+        (physical_dir, logical_dir)
     };
 
     log::debug!("Home dir: {:?}", &home_dir);
@@ -61,9 +69,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = repo
         .and_then(|r| r.root.as_ref())
         .filter(|root| *root != &home_dir)
-        // NOTE: Always attempt to contract repo paths from the `current_dir` as
-        // `logical_dir` _may_ not be prefixed with the correct physical repository
-        // path and will therefore be impossible to contract.
+        // NOTE: Always attempt to contract repo paths from the physical dir as
+        // the logical dir _may_ not be be a valid physical disk
+        // path and may be impossible to contract.
         .and_then(|root| contract_repo_path(&physical_dir, root));
 
     // Otherwise use the logical path, automatically contracting
@@ -226,6 +234,27 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
         }
     }
     buf.canonicalize().unwrap_or_else(|_| path.into())
+}
+
+fn canonical_path_cleaned_for_display(path: &PathBuf) -> PathBuf {
+    // On Windows, a canonical path will include the Windows extended-path prefix.
+    // Strip that for display purposes
+    #[cfg(windows)]
+    {
+        path.iter()
+            .enumerate()
+            .map(|(i, segment)| match (i, segment.to_str()) {
+                // Match and strip the Windows extended-path prefix segment if it is there
+                (0, Some(s)) if s.starts_with("\\\\?\\") => std::ffi::OsStr::new(&s[4..]),
+                _ => segment,
+            })
+            .collect::<PathBuf>()
+    }
+    // Under non-windows platforms we don't need to do any cleanup
+    #[cfg(not(windows))]
+    {
+        path.clone()
+    }
 }
 
 /// Perform a list of string substitutions on the path
@@ -1410,24 +1439,125 @@ mod tests {
     }
 
     #[test]
-    fn logical_path_defaults_to_path_when_use_logical_path_is_false() -> io::Result<()> {
+    fn use_logical_path_false_should_ignore_logical_path_argument() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
-        let path = tmp_dir.path().join("src/meters/fuel-gauge");
+        let path = tmp_dir.path().join("a/xxx/yyy");
         fs::create_dir_all(&path)?;
-        let logical_path = Some("Logical:/fuel-gauge");
+        let logical_path = Some("Logical:/c");
 
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("a/xxx/yyy")));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = false
+                truncation_length = 3
+            })
+            .path(path)
+            .logical_path(logical_path) // logical_path should be ignored
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn use_logical_path_false_render_full_canonical_path() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let path = tmp_dir.path().join("a/xxx/yyy");
+        fs::create_dir_all(&path)?;
+
+        let expected_printed_path = path.canonicalize().unwrap().to_slash().expect("slash path");
+        // Under Windows, path canonicalization returns the paths using extended-path prefixes `//?/`
+        // We expect this to be trimmed.
+        #[cfg(windows)]
+        let expected_printed_path = &expected_printed_path[4..];
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint("src/meters/fuel-gauge")
+            Color::Cyan.bold().paint(expected_printed_path)
         ));
 
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
                 use_logical_path = false
+                truncation_length = 0
             })
             .path(path)
-            .logical_path(logical_path)
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn use_logical_path_false_should_expand_symlinks() -> io::Result<()> {
+        #[cfg(not(windows))]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("a/xxx/yyy");
+        fs::create_dir_all(&path)?;
+
+        // Set up a mock symlink
+        let path_actual = tmp_dir.path().join("a/xxx");
+        let path_symlink = tmp_dir.path().join("a/symlink");
+        symlink_dir(&path_actual, &path_symlink).expect("create symlink");
+
+        // Navigate into the symlink path
+        let test_path = tmp_dir.path().join("a/symlink/yyy");
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("a/xxx/yyy") // Expect physical path printed
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = false
+                truncation_length = 3
+            })
+            .path(test_path)
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn use_logical_path_true_should_not_expand_symlinks() -> io::Result<()> {
+        #[cfg(not(windows))]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("a/xxx/yyy");
+        fs::create_dir_all(&path)?;
+
+        // Set up a mock symlink
+        let path_actual = tmp_dir.path().join("a/xxx");
+        let path_symlink = tmp_dir.path().join("a/symlink");
+        symlink_dir(&path_actual, &path_symlink).expect("create symlink");
+
+        // Navigate into the symlink path
+        let test_path = tmp_dir.path().join("a/symlink/yyy");
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("a/symlink/yyy") // Expect symlink path printed
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = true
+                truncation_length = 3
+            })
+            .path(test_path)
             .collect();
 
         assert_eq!(expected, actual);
