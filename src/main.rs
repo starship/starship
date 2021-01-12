@@ -1,8 +1,3 @@
-#[macro_use]
-extern crate shadow_rs;
-
-shadow!(shadow);
-
 use clap::crate_authors;
 use std::io;
 use std::time::SystemTime;
@@ -185,7 +180,6 @@ fn main() {
             }
         }
         ("bug-report", Some(_)) => {
-            println!("{}",shadow::version().trim());
             bug_report::create()
         },
         ("time", _) => {
