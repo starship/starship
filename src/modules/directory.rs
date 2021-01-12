@@ -236,7 +236,8 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
     buf.canonicalize().unwrap_or_else(|_| path.into())
 }
 
-fn canonical_path_cleaned_for_display(path: &PathBuf) -> PathBuf {
+fn canonical_path_cleaned_for_display<P: AsRef<Path>>(path: P) -> PathBuf {
+    let path = path.as_ref();
     // On Windows, a canonical path will include the Windows extended-path prefix.
     // Strip that for display purposes
     #[cfg(windows)]
@@ -253,7 +254,7 @@ fn canonical_path_cleaned_for_display(path: &PathBuf) -> PathBuf {
     // Under non-windows platforms we don't need to do any cleanup
     #[cfg(not(windows))]
     {
-        path.clone()
+        path.to_path_buf()
     }
 }
 
