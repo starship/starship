@@ -4,15 +4,15 @@
 
 ## Những kí tự Nerd Font
 
-Preset này không thay đổi bất kể thứ gì ngoại trừ các kí hiệu sử dụng cho mỗi module. If emojis aren't your thing, this might catch your eye!
+Preset này không thay đổi bất kể thứ gì ngoại trừ các kí hiệu sử dụng cho mỗi module. Nếu các emojis không phải thứ của bạn, cái này có thể thu hút bạn!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Bản chụp màn hình của Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
 ### Yêu cầu
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Một [Nerd Font](https://www.nerdfonts.com/) đã cài đặt và đã cho kích hoạt trong terminal của bạn (ví dụ sử dụng Fira Code Nerd Font)
 
-### Configuration
+### Cấu hình
 
 ```toml
 [aws]
