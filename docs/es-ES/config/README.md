@@ -543,12 +543,12 @@ El módulo `crystal` muestra la versión actual de Crystal. El módulo se muestr
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                   |
-| ---------- | ---------------------------------- | --------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | Símbolo usado antes de la versión de Crystal. |
-| `style`    | `"bold red"`                       | El estilo del módulo.                         |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                        |
-| `disabled` | `false`                            | Desactiva el módulo `crystal`.                |
+| Opción     | Por defecto                          | Descripción                                   |
+| ---------- | ------------------------------------ | --------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | Símbolo usado antes de la versión de Crystal. |
+| `style`    | `"bold red"`                         | El estilo del módulo.                         |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                        |
+| `disabled` | `false`                              | Desactiva el módulo `crystal`.                |
 
 ### Variables
 
