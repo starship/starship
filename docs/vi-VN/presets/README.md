@@ -1,10 +1,10 @@
-# Presets
+# Mẫu thiết lập
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Đây là một bộ sưu tập các cấu hình được gửi tới từ cộng đồng cho Starship. Nếu bạn có một bản preset trước để chia sẻ, xin hãy [gửi một PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) cập nhật tập tin này! 😊
 
-## Nerd Font Symbols
+## Những kí tự Nerd Font
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+Preset này không thay đổi bất kể thứ gì ngoại trừ các kí hiệu sử dụng cho mỗi module. If emojis aren't your thing, this might catch your eye!
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
