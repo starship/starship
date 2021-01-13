@@ -14,11 +14,11 @@ features:
     details: Mang lại tốc độ và độ an toàn tốt nhất của Rust, giúp prompt của bạn thực thi nhanh chóng và đáng tin cậy nhất có thể.
   - 
     title: Khả năng tuỳ biến
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+    details: Mọi chi tiết nhỏ được tuỳ biến theo ý thích của bạn, giúp prompt này nhỏ nhất có thể hoặc phong phú về tính năng như bạn muốn.
+footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Có thể được cài đặt nhanh chóng cho Bash, Fish, ZSH, Ion, và PowerShell.
 ---
 
 <div class="center">
@@ -28,14 +28,14 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Quick Install
+### Cài đặt nhanh chóng
 
 1. Cài đặt **starship** nhị phân:
 
 
    #### Cài đặt phiên bản cuối cùng
 
-   With Shell:
+   Với Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -44,13 +44,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cài đặt thông qua Trình quản lí gói
 
-   With [Homebrew](https://brew.sh/):
+   Với [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Với [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
+   Thêm vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
