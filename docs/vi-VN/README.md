@@ -30,10 +30,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### Quick Install
 
-1. Install the **starship** binary:
+1. Cài đặt **starship** nhị phân:
 
 
-   #### Install Latest Version
+   #### Cài đặt phiên bản cuối cùng
 
    With Shell:
 
@@ -42,7 +42,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
 
-   #### Install via Package Manager
+   #### Cài đặt thông qua Trình quản lí gói
 
    With [Homebrew](https://brew.sh/):
 
@@ -56,7 +56,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
 
 
    #### Bash
