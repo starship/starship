@@ -83,7 +83,7 @@ winapi = { version = "0.3.9", features = [
 nix = "0.19.1"
 
 [dev-dependencies]
-tempfile = "3.1.0"
+tempfile = "3.2.0"
 
 [profile.release]
 codegen-units = 1
