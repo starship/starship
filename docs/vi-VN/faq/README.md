@@ -16,12 +16,12 @@ Hỗ trợ hoàn thiện, hoặc tự động hoàn thiện, được cung cấp
 
 ## Có phải level trên cùng `format` và `<module>.disable` thực hiện cùng một thứ giống nhau?
 
-Vâng, chúng có thể cùng được sử dụng để vô hiệu hoá các module trong prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Vâng, chúng có thể cùng được sử dụng để vô hiệu hoá các module trong prompt. Nếu tất cả bạn những việc bạn làm để vô hiệu hoá các module, `<module>.disabled` là các được ưa thích hơn để thực hiện với những lí do sau:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
-- Newly created modules will be added to the prompt as Starship is updated
+- Các module vô hiệu là ro ràng hơn sót chúng từ level trên cùng `format`
+- Những module mới tạo sẽ được thêm bào prompt khi Starship được cập nhật
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Các tài liệu nói Starship là cross-shell. Tại sao shell ưa thích của tôi không được hỗ trợ?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
