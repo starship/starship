@@ -58,29 +58,29 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-
 
 ## Tại sao tôi không tình thấy một kí hiệu glyph trong prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+Đa số nguyên nhân phổ biến của việc này là cấu hình hệ thống sai. Một số bản phân phối Linux đặc biệt không có hỗ trợ phông chữ ngay lập tức. Bạn cần chắc chắn rằng:
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- Mã ngôn ngữ của bạn được thiết lập là một giá trị UTF-8, giống như `de_DE.UTF-8` or `ja_JP.UTF-8`. Nếu `LO_ALL` không phải là một giá trị UTF-8, [ bạn sẽ cần thay đổi nó](https://www.tecmint.com/set-system-locales-in-linux/).
+- Bạn đã cài đặt phông chữ biểu tượng cảm xúc. Đa số hệ thống đi kèm với một phông biểu tượng cảm xúc mặc định, nhưng một vài (đáng chú ý là Arch Linux) thì không. Bạn có thể thường cài đặt thông qua một trình quản lí gói hệ thống của bạn--[noto emoji](https://www.google.com/get/noto/help/emoji/) là một lựa chọn phổ biến.
+- Bạn đang sử dụng một [Nerd Font](https://www.nerdfonts.com/).
 
-To test your system, run the following commands in a terminal:
+Để kiểm tra hệ thống của bạn, chạy các câu lệnh sau trong một terminal:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+Dòng đầu tiên nên sinh ra một [snake emoji](https://emojipedia.org/snake/), trong khi dòng thứ hai nên sinh ra một [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Nếu một trong hai biểu tượng không hiển thị chính xác, hệ thống của bạn vẫn bị cấu hình sai. Thật không may, việc lấy đúng cấu hình phông chữ đôi khi rất khó. Những người dùng trên Discord có thể giúp đỡ. Nếu cả hai kí hiệu hiển thị đúng, nhưng bạn vẫn không thấy chúng trong starship, [nộp một báo cáo lỗi!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Làm cách nào để tôi gỡ cài đặt Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship thì dễ dàng gỡ cài đặt như cài đặt ngay từ đầu.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Gỡ mọi tập tin trong cấu hình shell của bạn (e.g. `~/.bashrc`) đã sử dụng để khởi tạo Starship.
+1. Xoá tập tin Starship nhị phân.
 
 If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
 
