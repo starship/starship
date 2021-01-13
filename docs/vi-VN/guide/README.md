@@ -109,54 +109,54 @@
 - **Độ phổ biến:** làm việc trên mọi shell, bất kì hệ điều hành nào.
 - **Thông minh:** hiển thị thông tin liên quan dưới một cái nhìn.
 - **Tính năng phong phú:** hỗ trợ tất cả các công cụ yêu thích của bạn.
-- **Easy:** quick to install – start using it in minutes.
+- **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Cài đặt
 
-### Prerequisites
+### Yêu cầu
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Đã cài đặt m [Nerd Font](https://www.nerdfonts.com/) và đã kích hoạt trong giao diện dòng lệnh của bạn (ví dụ, thử [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Getting Started
+### Bắt đầu
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Lưu ý**: do sự gia tăng của các nền tảng khác nhau, chỉ một tập con các nền tảng hỗ trợ được hiển thị bên dưới. Không thể tìm thấy nền tảng phù hợp của bạn? Hãy xem một [hướng dẫn bổ sung cho các nền tảng khác](https://starship.rs/installing/).
 
-1. Install the **starship** binary:
-
-
-   #### Install Latest Version
+1. Cài đặt **starship** nhị phân:
 
 
-   ##### From prebuilt binary, with Shell:
+   #### Cài đặt phiên bản cuối cùng
+
+
+   ##### Từ bản nhịn phân có sẵn, với Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### Cài đặt thông qua Trình quản lí gói
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Ví dụ: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Với [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
 
 
    #### Bash
