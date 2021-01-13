@@ -161,7 +161,7 @@
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Thêm vào cuối tệp tin `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -172,7 +172,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Thêm vào cuối tệp tin `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -183,7 +183,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Thêm vào cuối tệp tin `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -194,7 +194,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Thêm vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -203,7 +203,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Thêm vào cuối tệp tin `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -211,9 +211,9 @@
    eval $(starship init ion)
    ```
 
-## 🤝 Contributing
+## 🤝 Đóng góp
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Chúng tôi luôn luôn tìm kiếm những người đóng góp ở**tất cả các các mức độ về kĩ năng**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
