@@ -23,6 +23,7 @@
 set -euo pipefail
 printf "\n"
 
+BEL="$(tput bel 2>/dev/null || echo '')"
 BOLD="$(tput bold 2>/dev/null || echo '')"
 GREY="$(tput setaf 0 2>/dev/null || echo '')"
 UNDERLINE="$(tput smul 2>/dev/null || echo '')"
@@ -32,6 +33,7 @@ YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
 BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
+LINK=$'\e]8;;'
 
 info() {
   printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
@@ -47,6 +49,12 @@ error() {
 
 complete() {
   printf "%s\n" "${GREEN}✓${NO_COLOR} $*"
+}
+
+url() {
+  local url="$1"
+  local label="${2:-"$url"}"
+  printf "%s" "${LINK}$label${BEL}$url${LINK}${BEL}"
 }
 
 # Gets path to a temporary file, even if
@@ -102,7 +110,8 @@ fetch() {
     info "This is likely due to Starship not yet supporting your configuration." >&2
     info "If you would like to see a build for your configuration," >&2
     info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:" >&2
-    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n" >&2
+    info "${BOLD}${UNDERLINE}$(url "https://github.com/starship/starship/issues/new/")${NO_COLOR}" >&2
+    printf "\n" >&2
     exit $rc
   fi
 }
@@ -321,10 +330,12 @@ while [ "$#" -gt 0 ]; do
 done
 
 if [ "${ARCH}" = "i386" ]; then
-  error "i386 builds are not yet available for Starship\n"
+  error "i386 builds are not yet available for Starship"
+  printf "\n" >&2
   info "If you would like to see a build for your configuration,"
   info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:"
-  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n"
+  info "${BOLD}${UNDERLINE}$(url "https://github.com/starship/starship/issues/new/")${NO_COLOR}"
+  printf "\n"
   exit 1
 fi
 
