@@ -23,40 +23,40 @@ Vâng, chúng có thể cùng được sử dụng để vô hiệu hoá các mo
 
 ## Các tài liệu nói Starship là cross-shell. Tại sao shell ưa thích của tôi không được hỗ trợ?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Cách Starship được xây dựng, nó nên khả thi để thêm hỗ trợ với bất kì shell ảo nào. Starship nhị phân là phi trạng thái và bất khả tri của shell, vì vậy, miễn là shell của bạn hỗ trợ tùy chỉnh nhanh chóng và mở rộng shell, thì Starship có thể được sử dụng.
 
-Here's a small example getting Starship working with bash:
+Đây là một ví dụ nhỏ để Starship là việc với bash:
 
 ```sh
-# Get the status code from the last command executed
+# Lấy mã trạng thái từ câu lệnh cuối đã được thực thi
 STATUS=$?
 
-# Get the number of jobs running.
+# Lấy số lượng job đang chạy.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Thiết lập prompt thành đầu ra của `starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#Command-Duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+[Bản cài đặt Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) xây dựng bên trong Starship phực tạp hơn một chút để cho phép thực hiện các tính năng nâng cao hơn một chứt như [Command Duration module](https://starship.rs/config/#Command-Duration) và chắc chắn rằng Starship là tương thích với cấu hình Bash đã cài đặt trước đó.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Với một danh sách tất cả các cờ đã được chấp nhận bởi `starship prompt`, sử dụng lệnh sau:
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+Prompt sẽ sử dụng nhiều ngữ cảnh được cung câos, nhưng không có cờ nào là "yêu cầu".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Làm thế nào để tôi chạy Starship trên các bản phân phối Linux với các phiên bản cũ của glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Nếu bạn nhận được một lỗi giống như "_version 'GLIBC_2.18' not found (required by starship)_" khi sử dụng prebuilt binary (ví dụ trên CentOS 6 hoặc 7), bạn có thể sử dụng tập tin đã được dịch với `musl` thay vì `glibc`:
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## Tại sao tôi không tình thấy một kí hiệu glyph trong prompt?
 
 The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
 
