@@ -82,11 +82,11 @@ Starship thì dễ dàng gỡ cài đặt như cài đặt ngay từ đầu.
 1. Gỡ mọi tập tin trong cấu hình shell của bạn (e.g. `~/.bashrc`) đã sử dụng để khởi tạo Starship.
 1. Xoá tập tin Starship nhị phân.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Nếu Starship đã được cài đặt bằng việc sử dụng một trình quản lí gói, vui lòng tham khảo tài liệu của chúng để gỡ cài đặt.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+Nếu Starship đã được càu đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
 
 ```sh
-# Locate and delete the starship binary
+# Xác định vị trí và xóa tập tin nhị phân của starship
 rm "$(which starship)"
 ```
