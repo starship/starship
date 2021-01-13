@@ -542,12 +542,12 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 
 ### Opções
 
-| Option     | Padrão                             | Descrição                                                 |
-| ---------- | ---------------------------------- | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                       | O estilo do módulo.                                       |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                |
-| `disabled` | `false`                            | Disables the `crystal` module.                            |
+| Option     | Padrão                               | Descrição                                                 |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                         | O estilo do módulo.                                       |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                |
+| `disabled` | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
