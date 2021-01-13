@@ -1,6 +1,6 @@
-# 🚀 Advanced Installation
+# 🚀 Cài đặt nâng cao
 
-To install starship, you need to do two things:
+Để cài đặt starship, bạn cần làm 2 thứ:
 
 1. Get the **starship** binary onto your computer
 1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
