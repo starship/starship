@@ -213,7 +213,7 @@
 
 ## 🤝 Đóng góp
 
-Chúng tôi luôn luôn tìm kiếm những người đóng góp ở**tất cả các các mức độ về kĩ năng**! Nếu bạn đang tìm kiếm cách dễ dàng để tham gia vào dự án, thử một [good issue đầu tiên](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! Nếu bạn đang tìm kiếm cách dễ dàng để tham gia vào dự án, thử một [good issue đầu tiên](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
 
@@ -221,20 +221,20 @@ Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin h
 
 ### Cộng tác viên
 
-Dự án này tồn tại là nhờ tất cả những cộng tác viên. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+Dự án này tồn tại là nhờ tất cả những cộng tác viên. [[Cộng tác viên](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### Những cộng tác viên về tài chính
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Trở thành một cộng tác viên tài tài về tài chính và giúp chúng ta duy trì cộng đồng của chúng ta. [[Cộng tác viên](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Cá nhân
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### Tổ chức
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Hỗ trợ dự án này với tổ chức của bạn. Biểu tượng của bạn sẽ hiển thị ở đây với một liên kết tới website của bạn. [[Cộng tác viên](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -247,11 +247,11 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspired By
+## Cảm hứng
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Xin hãy xem qua những công việc này trước đây, những thứ đã giúp truyền cảm hứng để tạo ra starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt cho những phi hành gia.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
