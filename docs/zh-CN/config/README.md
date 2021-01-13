@@ -542,12 +542,12 @@ The `crystal` module shows the currently installed version of Crystal. 此组件
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                        |
-| ---------- | ---------------------------------- | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                       | 此组件的样式。                                                   |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                  |
-| `disabled` | `false`                            | Disables the `crystal` module.                            |
+| Option     | 默认值                                  | 描述                                                        |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                         | 此组件的样式。                                                   |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                  |
+| `disabled` | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
