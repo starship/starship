@@ -18,7 +18,7 @@ features:
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Có thể được cài đặt nhanh chóng cho Bash, Fish, ZSH, Ion, và PowerShell.
+description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Có thể được cài đặt nhanh chóng cho Bash, Fish, ZSH, Ion và PowerShell.
 ---
 
 <div class="center">
@@ -61,7 +61,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Bash
 
-   Thêm vào cuối tệp tin `~/.bashrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Fish
 
-   Thêm vào cuối tệp tin `~/.config/fish/config.fish`:
+   Thêm đoạn sau vào cuối tệp tin `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Zsh
 
-   Thêm vào cuối tệp tin `~/.zshrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -108,5 +108,5 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    # ~/.config/ion/initrc
 
-   eval $(starship init ion)
+eval $(starship init ion)
    ```
