@@ -1,4 +1,4 @@
-# Configuration
+# Cấu hình
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
