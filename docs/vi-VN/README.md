@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Nhỏ gọn, cực nhanh và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!
 actionText: Get Started →
 actionLink: ./guide/
 features:
