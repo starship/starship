@@ -102,13 +102,13 @@
   width="50%"
   align="right" />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Nhỏ gọn, cực nhanh và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
+- **Nhanh:** nó có tốc độ nhanh – _thực sự_ nhanh! 🚀
+- **Khả năng tuỳ chỉnh:** cấu hình mọi thứ trên prompt của bạn.
+- **Độ phổ biến:** làm việc trên mọi shell, bất kì hệ điều hành nào.
+- **Thông minh:** hiển thị thông tin liên quan dưới một cái nhìn.
+- **Tính năng phong phú:** hỗ trợ tất cả các công cụ yêu thích của bạn.
 - **Easy:** quick to install – start using it in minutes.
 
 <p align="center">
