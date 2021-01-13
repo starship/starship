@@ -7,7 +7,7 @@ use crate::utils;
 /// Creates a module with the current CMake version
 ///
 /// Will display the CMake version if any of the following criteria are met:
-///     - The current directory contains a `CMakeLists.txt` file
+///     - The current directory contains a `CMakeLists.txt` or `CMakeCache.txt`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_cmake_project = context
         .try_begin_scan()?
@@ -77,7 +77,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeLists.txt"))?.sync_all()?;
         let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("喝 v3.17.3")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("喝 v3.17.3 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -87,7 +87,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeCache.txt"))?.sync_all()?;
         let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("喝 v3.17.3")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("喝 v3.17.3 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
