@@ -12,11 +12,11 @@
 
 ## Làm thế nào tôi có được hoàn thiện câu lệnh như được hiển thị trong demo GIF?
 
-Hỗ trợ hoàn thiện, hoặc tự động hoàn thiện, được cung cấp bởi shell của bạn lựa chọn. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Hỗ trợ hoàn thiện, hoặc tự động hoàn thiện, được cung cấp bởi shell của bạn lựa chọn. Trong trường hợp của demo, demo đã thực hiện với [Fish Shell](https://fishshell.com/), thứ mặc định cung cấp những completion. Nếu bạn sử dụng Z Shell (zsh), tôi muốn gợi ý xem qua [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## Có phải level trên cùng `format` và `<module>.disable` thực hiện cùng một thứ giống nhau?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Vâng, chúng có thể cùng được sử dụng để vô hiệu hoá các module trong prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
