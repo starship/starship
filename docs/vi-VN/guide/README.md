@@ -32,9 +32,9 @@
 <p align="center">
   <a href="https://starship.rs">Website</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">Cài đặt</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Cấu hình</a>
 </p>
 
 <p align="center">
@@ -102,7 +102,7 @@
   width="50%"
   align="right" />
 
-**Nhỏ gọn, cực nhanh và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
+**Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
 
 - **Nhanh:** nó có tốc độ nhanh – _thực sự_ nhanh! 🚀
 - **Khả năng tuỳ chỉnh:** cấu hình mọi thứ trên prompt của bạn.
