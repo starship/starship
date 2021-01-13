@@ -61,7 +61,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Thêm vào cuối tệp tin `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Thêm vào cuối tệp tin `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Thêm vào cuối tệp tin `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -103,7 +103,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Thêm vào cuối tệp tin `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
