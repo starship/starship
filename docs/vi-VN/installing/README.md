@@ -2,44 +2,44 @@
 
 Để cài đặt starship, bạn cần làm 2 thứ:
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. Lấy tệp tin **starship** nhị phân về máy tính của bạn
+1. Nói với shell của bạn để sử dụng tệp tin starship nhị phân như là prompt của nó bằng việc chỉnh sửa những đoạn mã khởi tạo của nó
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Đối với đa số người dùng, các hướng dẫn trên [trang chính](/guide/#🚀-installation) sẽ làm việc tốt. Tuy nhiên, với một vài nền tảng đặc biệt hơn, các hướng dẫn khác nhau là cần thiết.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Có rất nhiều nền tảng bên ngoài, rằng chúng đã không khớp như trong tệp tin README.md, do đó đây là vài hướng dẫn cài đặt cho những nền tảng khác đến từ cộng đồng. Của bạn không có ở đây? Xin hãy thêm nó vào đây nếu bạn tìm ra nó!
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Lấy tệp tin nhị phân
 
-#### Imperatively
+#### Lệnh
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](home-manager)
+#### Khai báo, người dùng đơn, thông qua [home-manager](home-manager)
 
-Add `pkgs.starship` to your `home.packages` in your `home.nix` file, then run
+Thêm `pkgs.starship` vào `home.packages` trong tệp tin `home.nix` của bạn, sau đó chạy
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Khai báo, system-wide, với NixOS
 
-Add `pkgs.starship` to `environment.packages` in your `configuration.nix`, then run
+Thêm `pkgs.starship` vào `environment.packages` trong `configuration.nix` của bạn, sau đó chạy
 
 ```sh
 sudo nixos-rebuild switch
 ```
 
-### Modifying Init Scripts
+### Sửa những đoạn mã khởi tạo
 
-#### With Nix and home-manager, using zsh:
+#### Với Nix và home-manager, sử dụng zsh:
 
-Add the following to `programs.zsh.initExtra` in your `home.nix` file, then run
+Thêm phần sau vào `programs.zsh.initExtra` trong tệp tin `home.nix` của bạn, sau đó chạy
 
 ```sh
 home-manager switch
