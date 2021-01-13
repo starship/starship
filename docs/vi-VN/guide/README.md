@@ -133,7 +133,7 @@
    #### Cài đặt phiên bản cuối cùng
 
 
-   ##### Từ bản nhịn phân có sẵn, với Shell:
+   ##### Từ bản nhị phân có sẵn, với Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -161,7 +161,7 @@
 
    #### Bash
 
-   Thêm vào cuối tệp tin `~/.bashrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -172,7 +172,7 @@
 
    #### Fish
 
-   Thêm vào cuối tệp tin `~/.config/fish/config.fish`:
+   Thêm đoạn sau vào cuối tệp tin `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -183,7 +183,7 @@
 
    #### Zsh
 
-   Thêm vào cuối tệp tin `~/.zshrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -194,7 +194,7 @@
 
    #### PowerShell
 
-   Thêm vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
+   Thêm đoạn sau vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -203,7 +203,7 @@
 
    #### Ion
 
-   Thêm vào cuối tệp tin `~/.config/ion/initrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
