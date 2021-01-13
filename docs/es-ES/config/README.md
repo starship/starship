@@ -2203,7 +2203,7 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `swift` muestra la versión actualmente instalada de Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
@@ -2238,7 +2238,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `terraform` muestra el espacio de trabajo y la versión actual de terraform. Por defecto la versión de terraform no se muestra, ya que esto es lento en las versiones actuales de terraform cuando muchos plugins están en uso. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene una carpeta `.terraform`
 - El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
@@ -2285,7 +2285,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Hora
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+El módulo `time` muestra la hora **local** actual. El valor de configuración de `format` es usado por [`chrono`](https://crates.io/crates/chrono) para controlar cómo se muestra la hora. Echa un vistazo a [los documentos de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver qué opciones están disponibles.
 
 ::: tip
 
@@ -2305,7 +2305,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `disabled`        | `true`                  | Desactiva el módulo `time`.                                                                                                                                                 |
 | `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas                                                |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+Si `use_12hr` es `true`, entonces `time_format` por defecto es `"%r"`. De lo contrario, el valor por defecto es `"%T"`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
 
 ### Variables
 
@@ -2331,7 +2331,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nombre de usuario
 
-The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `username` muestra el nombre de usuario activo. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El usuario actual es root
 - El usuario actual no es el mismo que el que está conectado
@@ -2376,7 +2376,7 @@ show_always = true
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `zig` muestra la versión instalada de Zig. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `.zig`
 
@@ -2410,9 +2410,9 @@ symbol = "⚡️ "
 
 ## Comandos personalizados
 
-The `custom` modules show the output of some arbitrary commands.
+Los módulos `personalizados` muestran la salida de algunos comandos arbitrarios.
 
-These modules will be shown if any of the following conditions are met:
+Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo cuyo nombre está en `files`
 - El directorio actual contiene un directorio cuyo nombre está en `directories`
@@ -2421,19 +2421,19 @@ These modules will be shown if any of the following conditions are met:
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+Múltiples módulos personalizados pueden definirse usando una `.`.
 
 :::
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+El orden en el que se muestran los módulos personalizados se puede establecer individualmente incluyendo `${custom.foo}` en el `format` de nivel superior (ya que incluye un punto, necesita usar `${...}`). Por defecto, el módulo `custom` simplemente mostrará todos los módulos personalizados en el orden en que fueron definidos.
 
 :::
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+[El issue #1252](https://github.com/starship/starship/discussions/1252) contiene ejemplos de módulos personalizados. Si tiene un ejemplo interesante no cubierto allí, no dude en compartirlo allí!
 
 :::
 
@@ -2465,30 +2465,30 @@ The order in which custom modules are shown can be individually set by including
 
 #### Comando personalizado de shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` acepta una lista no vacía de cadenas, donde:
 
 - La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
 - Otros argumentos siguientes son pasados al shell.
 
-If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+Si no está activado, se retornará a STARSHIP_SHELL y luego a "sh" en Linux, y "cmd /C" en Windows.
 
-The `command` will be passed in on stdin.
+El `comando` será pasado en stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Si no se da el `shell` o solo contiene un elemento y Starship detecta PowerShell los siguientes argumentos se añadirán automáticamente: `-NoProfile -Command -`. Este comportamiento puede evitarse pasando explícitamente argumentos al intérprete, p.ej.
 
 ```toml
 shell = ["pwsh", "-Command", "-"]
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: advertencia Asegúrate de que tu configuración personalizada de shell salga con éxito
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Si establece un comando personalizado, asegúrese de que el Shell por defecto usado por starship ejecutará correctamente el comando con una salida elgante (a través de la opción `shell`).
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Por ejemplo, PowerShell requiere el parámetro `-Command` para ejecutar una sola línea. Omitir este parámetro puede arrojar a starchip a un bucle recursivo donde el shell podría intentar cargar un entorno de perfil completo con starship en sí misma y volver a ejecutar el comando personalizado, entrando en un bucle infinito.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Se recomiendan parámetros similares a `-NoProfile` en PowerShell para otros shells para evitar tiempo extra de carga de un perfil personalizado en cada invocación de starship.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. Por favor, [abre un issue](https://github.com/starship/starship/issues/new/choose) con los detalles del intérprete de comandos y la configuración de Starship si te encuentras en tal escenario.
 
 :::
 
