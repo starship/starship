@@ -109,9 +109,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     repo: &'a Repo,
-    ahead_behind: OnceCell<Result<(usize, usize), git2::Error>>,
-    repo_status: OnceCell<Result<RepoStatus, git2::Error>>,
-    stashed_count: OnceCell<Result<usize, git2::Error>>,
+    ahead_behind: OnceCell<Option<Result<(usize, usize), git2::Error>>>,
+    repo_status: OnceCell<Option<Result<RepoStatus, git2::Error>>>,
+    stashed_count: OnceCell<Option<Result<usize, git2::Error>>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -131,23 +131,22 @@ impl<'a> GitStatusInfo<'a> {
             .unwrap_or_else(|| String::from("master"))
     }
 
-    fn get_repository(&self) -> Result<Repository, git2::Error> {
+    fn get_repository(&self) -> Option<Repository> {
         // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
         // but git treats "master" as the default branch name
-        let repo_root = self
-            .repo
-            .root
-            .as_ref()
-            .ok_or_else(|| git2::Error::from_str("No Repo"))?;
-        Repository::open(repo_root)
+        let repo_root = self.repo.root.as_ref()?;
+        Repository::open(repo_root).ok()
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
-        let result = self.ahead_behind.get_or_init(|| {
-            let repo = self.get_repository()?;
-            let branch_name = self.get_branch_name();
-            get_ahead_behind(&repo, &branch_name)
-        });
+        let result = self
+            .ahead_behind
+            .get_or_init(|| {
+                let repo = self.get_repository()?;
+                let branch_name = self.get_branch_name();
+                Some(get_ahead_behind(&repo, &branch_name))
+            })
+            .as_ref()?;
 
         match result {
             Ok(ahead_behind) => Some(*ahead_behind),
@@ -159,10 +158,13 @@ impl<'a> GitStatusInfo<'a> {
     }
 
     pub fn get_repo_status(&self) -> Option<RepoStatus> {
-        let result = self.repo_status.get_or_init(|| {
-            let mut repo = self.get_repository()?;
-            get_repo_status(&mut repo)
-        });
+        let result = self
+            .repo_status
+            .get_or_init(|| {
+                let mut repo = self.get_repository()?;
+                Some(get_repo_status(&mut repo))
+            })
+            .as_ref()?;
 
         match result {
             Ok(repo_status) => Some(*repo_status),
@@ -175,10 +177,13 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_stashed(&self) -> Option<usize> {
         {
-            let result = self.stashed_count.get_or_init(|| {
-                let mut repo = self.get_repository()?;
-                get_stashed_count(&mut repo)
-            });
+            let result = self
+                .stashed_count
+                .get_or_init(|| {
+                    let mut repo = self.get_repository()?;
+                    Some(get_stashed_count(&mut repo))
+                })
+                .as_ref()?;
 
             match result {
                 Ok(stashed_count) => Some(*stashed_count),
