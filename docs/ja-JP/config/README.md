@@ -29,7 +29,7 @@ export STARSHIP_CONFIG=~/.starship
 
 PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
 
-```ps1
+```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
@@ -43,7 +43,7 @@ export STARSHIP_CACHE=~/.starship/cache
 
 PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
 
-```ps1
+```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
