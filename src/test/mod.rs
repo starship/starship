@@ -25,7 +25,7 @@ impl<'a> ModuleRenderer<'a> {
             clap::ArgMatches::default(),
             Shell::Unknown,
             PathBuf::new(),
-            None,
+            PathBuf::new(),
         );
         context.config = StarshipConfig { config: None };
 
@@ -37,14 +37,15 @@ impl<'a> ModuleRenderer<'a> {
         T: Into<PathBuf>,
     {
         self.context.current_dir = path.into();
+        self.context.logical_dir = self.context.current_dir.clone();
         self
     }
 
-    pub fn logical_path<T>(mut self, path: Option<T>) -> Self
+    pub fn logical_path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,
     {
-        self.context.logical_dir = path.map(Into::into);
+        self.context.logical_dir = path.into();
         self
     }
 

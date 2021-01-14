@@ -344,7 +344,7 @@ mod tests {
             Default::default(),
             Shell::Unknown,
             dir.path().into(),
-            None,
+            dir.path().into(),
         );
 
         assert_eq!(
@@ -363,7 +363,7 @@ mod tests {
             Default::default(),
             Shell::Unknown,
             dir.path().into(),
-            None,
+            dir.path().into(),
         );
 
         assert_eq!(
@@ -382,7 +382,7 @@ mod tests {
             Default::default(),
             Shell::Unknown,
             dir.path().into(),
-            None,
+            dir.path().into(),
         );
 
         assert_eq!(

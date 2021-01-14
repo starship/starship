@@ -31,34 +31,21 @@ const HOME_SYMBOL: &str = "~";
 ///
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
-///
-/// **Logical vs Physical directory paths**
-/// The `logical_dir` is always displayed in preference over the `physical_dir`, if it is provided.
-/// The "read only" flag is always displayed based on the `physical_dir`.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
     let home_dir = dirs_next::home_dir().expect("Unable to determine HOME_DIR for user");
-
-    let (physical_dir, logical_dir) = if config.use_logical_path {
-        // Map the configured physical and logical paths directly.
-        // If no logical path is configured, fall back to current_dir.
-        let physical_dir = &context.current_dir;
-        let logical_dir = context.logical_dir.as_ref().unwrap_or(physical_dir);
-        (physical_dir.clone(), logical_dir.clone())
+    let physical_dir = &context.current_dir;
+    let display_dir = if config.use_logical_path {
+        &context.logical_dir
     } else {
-        // Explicitly canonicalize the current path to expand symlinks.
-        // For the logical path, use a cleaned version of the canonical path.
-        let p = &context.current_dir;
-        let physical_dir = p.canonicalize().unwrap_or_else(|_| p.clone());
-        let logical_dir = p.clone();
-        (physical_dir, logical_dir)
+        &context.current_dir
     };
 
     log::debug!("Home dir: {:?}", &home_dir);
     log::debug!("Physical dir: {:?}", &physical_dir);
-    log::debug!("Logical dir: {:?}", &logical_dir);
+    log::debug!("Display dir: {:?}", &display_dir);
 
     // Attempt repository path contraction (if we are in a git repository)
     let repo = if config.truncate_to_repo {
@@ -77,9 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Otherwise use the logical path, automatically contracting
     // the home directory if required.
     let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(&logical_dir, &home_dir, HOME_SYMBOL));
-
-    log::debug!("Dir string: {}", dir_string);
+        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, HOME_SYMBOL));
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -95,7 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&logical_dir, &home_dir, HOME_SYMBOL);
+            let contracted_home_dir = contract_path(&display_dir, &home_dir, HOME_SYMBOL);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
@@ -1398,11 +1383,11 @@ mod tests {
     }
 
     #[test]
-    fn logical_path_overrides_path() -> io::Result<()> {
+    fn use_logical_path_true_should_render_logical_dir_path() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let path = tmp_dir.path().join("src/meters/fuel-gauge");
         fs::create_dir_all(&path)?;
-        let logical_path = Some("Logical:/fuel-gauge");
+        let logical_path = "Logical:/fuel-gauge";
 
         let expected = Some(format!(
             "{} ",
@@ -1410,6 +1395,11 @@ mod tests {
         ));
 
         let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = true
+                truncation_length = 3
+            })
             .path(path)
             .logical_path(logical_path)
             .collect();
@@ -1419,33 +1409,16 @@ mod tests {
     }
 
     #[test]
-    fn logical_path_defaults_to_path() -> io::Result<()> {
+    fn use_logical_path_false_should_render_current_dir_path() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let path = tmp_dir.path().join("src/meters/fuel-gauge");
         fs::create_dir_all(&path)?;
+        let logical_path = "Logical:/fuel-gauge";
 
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
         ));
-
-        let actual = ModuleRenderer::new("directory")
-            .path(path)
-            .logical_path::<PathBuf>(None)
-            .collect();
-
-        assert_eq!(expected, actual);
-        tmp_dir.close()
-    }
-
-    #[test]
-    fn use_logical_path_false_should_ignore_logical_path_argument() -> io::Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let path = tmp_dir.path().join("a/xxx/yyy");
-        fs::create_dir_all(&path)?;
-        let logical_path = Some("Logical:/c");
-
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("a/xxx/yyy")));
 
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1462,19 +1435,15 @@ mod tests {
     }
 
     #[test]
-    fn use_logical_path_false_render_full_canonical_path() -> io::Result<()> {
-        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
-        let path = tmp_dir.path().join("a/xxx/yyy");
-        fs::create_dir_all(&path)?;
+    #[cfg(windows)]
+    fn windows_trims_extended_path_prefix() {
+        // Under Windows, path canonicalization returns the paths using extended-path prefixes `\\?\`
+        // We expect this prefix to be trimmed before being rendered.
+        let sys32_path = Path::new(r"\\?\C:\Windows\System32");
 
-        let expected_printed_path = path.canonicalize().unwrap().to_slash().expect("slash path");
-        // Under Windows, path canonicalization returns the paths using extended-path prefixes `//?/`
-        // We expect this to be trimmed.
-        #[cfg(windows)]
-        let expected_printed_path = &expected_printed_path[4..];
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(expected_printed_path)
+            Color::Cyan.bold().paint("C:/Windows/System32")
         ));
 
         let actual = ModuleRenderer::new("directory")
@@ -1483,84 +1452,35 @@ mod tests {
                 use_logical_path = false
                 truncation_length = 0
             })
-            .path(path)
+            .path(sys32_path)
             .collect();
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 
     #[test]
-    fn use_logical_path_false_should_expand_symlinks() -> io::Result<()> {
-        #[cfg(not(windows))]
-        use std::os::unix::fs::symlink as symlink_dir;
-        #[cfg(windows)]
-        use std::os::windows::fs::symlink_dir;
+    #[cfg(windows)]
+    fn windows_trims_extended_unc_path_prefix() {
+        // Under Windows, path canonicalization returns UNC paths using extended-path prefixes `\\?\UNC\`
+        // We expect this prefix to be trimmed before being rendered.
+        let unc_path = Path::new(r"\\?\UNC\server\share\a\b\c");
 
-        let tmp_dir = TempDir::new()?;
-        let path = tmp_dir.path().join("a/xxx/yyy");
-        fs::create_dir_all(&path)?;
-
-        // Set up a mock symlink
-        let path_actual = tmp_dir.path().join("a/xxx");
-        let path_symlink = tmp_dir.path().join("a/symlink");
-        symlink_dir(&path_actual, &path_symlink).expect("create symlink");
-
-        // Navigate into the symlink path
-        let test_path = tmp_dir.path().join("a/symlink/yyy");
-
+        // NOTE: path-slash doesn't convert slashes which are part of path prefixes under Windows,
+        // which is why the first part of this string still includes backslashes
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint("a/xxx/yyy") // Expect physical path printed
+            Color::Cyan.bold().paint(r"\\server\share/a/b/c")
         ));
 
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
                 use_logical_path = false
-                truncation_length = 3
+                truncation_length = 0
             })
-            .path(test_path)
+            .path(unc_path)
             .collect();
 
         assert_eq!(expected, actual);
-        tmp_dir.close()
-    }
-
-    #[test]
-    fn use_logical_path_true_should_not_expand_symlinks() -> io::Result<()> {
-        #[cfg(not(windows))]
-        use std::os::unix::fs::symlink as symlink_dir;
-        #[cfg(windows)]
-        use std::os::windows::fs::symlink_dir;
-
-        let tmp_dir = TempDir::new()?;
-        let path = tmp_dir.path().join("a/xxx/yyy");
-        fs::create_dir_all(&path)?;
-
-        // Set up a mock symlink
-        let path_actual = tmp_dir.path().join("a/xxx");
-        let path_symlink = tmp_dir.path().join("a/symlink");
-        symlink_dir(&path_actual, &path_symlink).expect("create symlink");
-
-        // Navigate into the symlink path
-        let test_path = tmp_dir.path().join("a/symlink/yyy");
-
-        let expected = Some(format!(
-            "{} ",
-            Color::Cyan.bold().paint("a/symlink/yyy") // Expect symlink path printed
-        ));
-
-        let actual = ModuleRenderer::new("directory")
-            .config(toml::toml! {
-                [directory]
-                use_logical_path = true
-                truncation_length = 3
-            })
-            .path(test_path)
-            .collect();
-
-        assert_eq!(expected, actual);
-        tmp_dir.close()
     }
 }
