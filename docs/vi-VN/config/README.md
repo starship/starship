@@ -1,27 +1,27 @@
 # Cấu hình
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Để bắt đầu cấu hình starship, tạo tập tin sau: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Tất cả cấu hình của starship đã xong trong tập tin này: [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Don't print a new line at the start of the prompt
+# Không in dòng mới tại điểm bắt đầu của prompt
 add_newline = false
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Thay thế kí hiệu "❯" trong prompt với "➜"
+[character]                            # Tên module chúng ta đang cấu hình là "character"
+success_symbol = "[➜](bold green)"     # "success_symbol" được thiết lập là "➜" với màu "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Vô hiệu hoá module, ẩn nó từ prompt hoàn chỉnh
 [package]
 disabled = true
 ```
 
-You can change default `starship.toml` file location with `STARSHIP_CONFIG` environment variable:
+Bạn có thể thay đổi đường dẫn mặc định của tệp tin `starship.toml` quan biến môi trường `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship
