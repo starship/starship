@@ -49,35 +49,35 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 ### Thuật ngữ
 
-**Module**: Một thành phần trong prompt, thông tin lấy được dựa trên thông tin ngữ cảnh từ hệ điều hành của bạn. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Module**: Một thành phần trong prompt, thông tin lấy được dựa trên thông tin ngữ cảnh từ hệ điều hành của bạn. Cho ví dụ, module "nodejs" cho biết phiên bản của NodeJS, cái hiện tại được cài đặt trên máy tính của bạn, nếu đường dẫn hiện tại của bạn là một dự án NodeJS.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+**Variable**: Các thành phần con nhỏ hơn chứa thông tin cung cấp bởi module. Cho ví dụ, biến "version" trong "nodejs" module chứa phiên bản hiện tại của NodeJS.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Bằng việc quy ước, đa số các module có một tiền tố của terminal mặc định (ví dụ `via` trong "nodejs") và một khoảng trắng như là một hậu tố.
 
-### Format Strings
+### Định dạng các chuỗi
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Định dạng các chuỗi là định dạng một module với việc in ra tất cả các biến của nó. Đa số các module có một cái bắt đầu gọi là `format`, cái đó cấu hình việc hiển thị định dạng của module. Bạn có thể sử dụng các văn bản, các biến và các nhóm văn bản trong một định dạng chuỗi.
 
-#### Variable
+#### Biến
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Một biến chứa một kí hiệu `$` theo sau bởi tên biến. Tên của một biến chỉ chứa các kí tự, các số và `_`.
 
-For example:
+Ví dụ:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` là một đính dạng chuỗi với một biến đặt tên là `version`.
+- `$git_branch$git_commit` là một định dạng chuỗi với hai biến named `git_branch` và `git_commit`.
+- `$git_branch $git_commit` có hai biến phân cách bằng một khoảng trắng.
 
-#### Text Group
+#### Nhóm văn bản
 
-A text group is made up of two different parts.
+Một nhóm văn bản được tạo nên bởi hai phần khác nhau.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Phần đầu tiên, cái được bao bọc trong một `[]`, là một [định dạng chuỗi](#format-strings). Bạn có thể thêm các văn bản, các biến, hoặc thậm chí các nhóm văn bản lồng nhau vào trong nó.
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
-For example:
+Ví dụ:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Ví dụ:
 
 - `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
