@@ -37,7 +37,7 @@ toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.16.0"
 serde_json = "1.0.61"
 rayon = "1.5.0"
-log = { version = "0.4.11", features = ["std"] }
+log = { version = "0.4.13", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 battery = { version = "0.7.8", optional = true }
@@ -60,7 +60,7 @@ unicode-width = "0.1.8"
 term_size = "0.3.2"
 quick-xml = "0.20.0"
 rand = "0.8.1"
-serde = { version = "1.0.118", features = ["derive"] }
+serde = { version = "1.0.119", features = ["derive"] }
 indexmap = "1.6.1"
 notify-rust = { version = "4.2.2", optional = true }
 semver = "0.11.0"
@@ -89,7 +89,7 @@ nix = "0.19.1"
 shadow-rs = "0.5"
 
 [dev-dependencies]
-tempfile = "3.1.0"
+tempfile = "3.2.0"
 
 [profile.release]
 codegen-units = 1

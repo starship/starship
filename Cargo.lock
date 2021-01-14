@@ -604,9 +604,9 @@ checksum = "8dd5a6d5999d9907cda8ed67bbd137d3af8085216c2ac62de5be860bd41f304a"
 
 [[package]]
 name = "log"
-version = "0.4.11"
+version = "0.4.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fabed175da42fed1fa0746b0ea71f412aa9d35e76e95e59b192c64b9dc2bf8b"
+checksum = "fcf3805d4480bb5b86070dcfeb9e2cb2ebc148adb753c5cca5f884d1d65a42b2"
 dependencies = [
  "cfg-if 0.1.10",
 ]
@@ -893,7 +893,7 @@ dependencies = [
  "pest_meta",
  "proc-macro2",
  "quote 1.0.8",
- "syn 1.0.57",
+ "syn 1.0.58",
 ]
 
 [[package]]
@@ -1065,13 +1065,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "41cc0f7e4d5d4544e8861606a285bb08d3e70712ccc7d2b84d7c0ccfaf4b05ce"
 
 [[package]]
+name = "redox_syscall"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "05ec8ca9416c5ea37062b502703cd7fcb207736bc294f6e0cf367ac6fc234570"
+dependencies = [
+ "bitflags 1.2.1",
+]
+
+[[package]]
 name = "redox_users"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de0737333e7a9502c789a36d7c7fa6092a49895d4faa31ca5df163857ded2e9d"
 dependencies = [
  "getrandom 0.1.16",
- "redox_syscall",
+ "redox_syscall 0.1.57",
  "rust-argon2",
 ]
 
@@ -1189,22 +1198,22 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.118"
+version = "1.0.119"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06c64263859d87aa2eb554587e2d23183398d617427327cf2b3d0ed8c69e4800"
+checksum = "9bdd36f49e35b61d49efd8aa7fc068fd295961fd2286d0b2ee9a4c7a14e99cc3"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.118"
+version = "1.0.119"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c84d3526699cd55261af4b941e4e725444df67aa4f9e6a3564f18030d12672df"
+checksum = "552954ce79a059ddd5fd68c271592374bd15cab2274970380c000118aeffe1cd"
 dependencies = [
  "proc-macro2",
  "quote 1.0.8",
- "syn 1.0.57",
+ "syn 1.0.58",
 ]
 
 [[package]]
@@ -1311,7 +1320,7 @@ version = "0.1.2"
 dependencies = [
  "proc-macro2",
  "quote 1.0.8",
- "syn 1.0.57",
+ "syn 1.0.58",
 ]
 
 [[package]]
@@ -1349,9 +1358,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.57"
+version = "1.0.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4211ce9909eb971f111059df92c45640aad50a619cf55cd76476be803c4c68e6"
+checksum = "cc60a3d73ea6594cd712d830cc1f0390fd71542d8c8cd24e70cc54cdfd5e05d5"
 dependencies = [
  "proc-macro2",
  "quote 1.0.8",
@@ -1379,14 +1388,14 @@ dependencies = [
 
 [[package]]
 name = "tempfile"
-version = "3.1.0"
+version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a6e24d9338a0a5be79593e2fa15a648add6138caa803e2d5bc782c371732ca9"
+checksum = "dac1c663cfc93810f88aed9b8941d48cabf856a1b111c29a40439018d870eb22"
 dependencies = [
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "libc",
- "rand 0.7.3",
- "redox_syscall",
+ "rand 0.8.1",
+ "redox_syscall 0.2.4",
  "remove_dir_all",
  "winapi",
 ]
@@ -1427,7 +1436,7 @@ checksum = "9be73a2caec27583d0046ef3796c3794f868a5bc813db689eed00c7631275cd1"
 dependencies = [
  "proc-macro2",
  "quote 1.0.8",
- "syn 1.0.57",
+ "syn 1.0.58",
 ]
 
 [[package]]

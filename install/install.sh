@@ -33,6 +33,8 @@ BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
+SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl i686-unknown-linux-musl x86_64-apple-darwin x86_64-pc-windows-msvc"
+
 info() {
   printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
 }
@@ -192,7 +194,7 @@ detect_arch() {
 
   # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
   if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
-    arch=i386
+    arch=i686
   fi
 
   echo "${arch}"
@@ -239,6 +241,34 @@ check_bin_dir() {
 
   if [ "${good}" != "1" ]; then
     warn "Bin directory ${bin_dir} is not in your \$PATH"
+  fi
+}
+
+is_build_available() {
+  local arch="$1"
+  local platform="$2"
+
+  local target="${arch}-${platform}"
+  local good
+  
+  good=$(
+    IFS=" "
+    for t in $SUPPORTED_TARGETS; do
+      if [ "${t}" == "${target}" ]; then
+        echo 1
+        break
+      fi
+    done
+  )
+
+  if [ "${good}" != "1" ]; then
+    error "${arch} builds for ${platform} are not yet available for Starship"
+    printf "\n" >&2
+    info "If you would like to see a build for your configuration,"
+    info "please create an issue requesting a build for ${MAGENTA}${target}${NO_COLOR}:"
+    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+    printf "\n"
+    exit 1
   fi
 }
 
@@ -320,13 +350,7 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-if [ "${ARCH}" = "i386" ]; then
-  error "i386 builds are not yet available for Starship\n"
-  info "If you would like to see a build for your configuration,"
-  info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:"
-  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n"
-  exit 1
-fi
+is_build_available "${ARCH}" "${PLATFORM}"
 
 printf "  %s\n" "${UNDERLINE}Configuration${NO_COLOR}"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
