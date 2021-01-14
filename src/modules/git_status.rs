@@ -1,4 +1,5 @@
 use git2::{Repository, Status};
+use once_cell::sync::OnceCell;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -6,7 +7,7 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
 
@@ -108,18 +109,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     repo: &'a Repo,
-    ahead_behind: RwLock<Option<Result<(usize, usize), git2::Error>>>,
-    repo_status: RwLock<Option<Result<RepoStatus, git2::Error>>>,
-    stashed_count: RwLock<Option<Result<usize, git2::Error>>>,
+    ahead_behind: OnceCell<Result<(usize, usize), git2::Error>>,
+    repo_status: OnceCell<Result<RepoStatus, git2::Error>>,
+    stashed_count: OnceCell<Result<usize, git2::Error>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
     pub fn load(repo: &'a Repo) -> Self {
         Self {
             repo,
-            ahead_behind: RwLock::new(None),
-            repo_status: RwLock::new(None),
-            stashed_count: RwLock::new(None),
+            ahead_behind: OnceCell::new(),
+            repo_status: OnceCell::new(),
+            stashed_count: OnceCell::new(),
         }
     }
 
@@ -130,89 +131,56 @@ impl<'a> GitStatusInfo<'a> {
             .unwrap_or_else(|| String::from("master"))
     }
 
-    fn get_repository(&self) -> Option<Repository> {
+    fn get_repository(&self) -> Result<Repository, git2::Error> {
         // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
         // but git treats "master" as the default branch name
-        let repo_root = self.repo.root.as_ref()?;
-        Repository::open(repo_root).ok()
+        let repo_root = self
+            .repo
+            .root
+            .as_ref()
+            .ok_or_else(|| git2::Error::from_str("No Repo"))?;
+        Repository::open(repo_root)
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
-        {
-            let data = self.ahead_behind.read().unwrap();
-            if let Some(result) = data.as_ref() {
-                return match result.as_ref() {
-                    Ok(ahead_behind) => Some(*ahead_behind),
-                    Err(error) => {
-                        log::debug!("get_ahead_behind: {}", error);
-                        None
-                    }
-                };
-            };
-        }
-
-        {
-            let mut data = self.ahead_behind.write().unwrap();
+        let result = self.ahead_behind.get_or_init(|| {
             let repo = self.get_repository()?;
             let branch_name = self.get_branch_name();
-            *data = Some(get_ahead_behind(&repo, &branch_name));
-            match data.as_ref().unwrap() {
-                Ok(ahead_behind) => Some(*ahead_behind),
-                Err(error) => {
-                    log::debug!("get_ahead_behind: {}", error);
-                    None
-                }
+            get_ahead_behind(&repo, &branch_name)
+        });
+
+        match result {
+            Ok(ahead_behind) => Some(*ahead_behind),
+            Err(error) => {
+                log::debug!("get_ahead_behind: {}", error);
+                None
             }
         }
     }
 
     pub fn get_repo_status(&self) -> Option<RepoStatus> {
-        {
-            let data = self.repo_status.read().unwrap();
-            if let Some(result) = data.as_ref() {
-                return match result.as_ref() {
-                    Ok(repo_status) => Some(*repo_status),
-                    Err(error) => {
-                        log::debug!("get_repo_status: {}", error);
-                        None
-                    }
-                };
-            };
-        }
-
-        {
-            let mut data = self.repo_status.write().unwrap();
+        let result = self.repo_status.get_or_init(|| {
             let mut repo = self.get_repository()?;
-            *data = Some(get_repo_status(&mut repo));
-            match data.as_ref().unwrap() {
-                Ok(repo_status) => Some(*repo_status),
-                Err(error) => {
-                    log::debug!(" get_repo_status: {}", error);
-                    None
-                }
+            get_repo_status(&mut repo)
+        });
+
+        match result {
+            Ok(repo_status) => Some(*repo_status),
+            Err(error) => {
+                log::debug!("get_repo_status: {}", error);
+                None
             }
         }
     }
 
     pub fn get_stashed(&self) -> Option<usize> {
         {
-            let data = self.stashed_count.read().unwrap();
-            if let Some(result) = data.as_ref() {
-                return match result.as_ref() {
-                    Ok(stashed_count) => Some(*stashed_count),
-                    Err(error) => {
-                        log::debug!("get_stashed_count: {}", error);
-                        None
-                    }
-                };
-            };
-        }
+            let result = self.stashed_count.get_or_init(|| {
+                let mut repo = self.get_repository()?;
+                get_stashed_count(&mut repo)
+            });
 
-        {
-            let mut data = self.stashed_count.write().unwrap();
-            let mut repo = self.get_repository()?;
-            *data = Some(get_stashed_count(&mut repo));
-            match data.as_ref().unwrap() {
+            match result {
                 Ok(stashed_count) => Some(*stashed_count),
                 Err(error) => {
                     log::debug!("get_stashed_count: {}", error);
