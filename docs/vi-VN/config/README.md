@@ -27,7 +27,7 @@ Bạn có thể thay đổi đường dẫn mặc định của tệp tin `stars
 export STARSHIP_CONFIG=~/.starship
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Tương đương trong PowerShell (Windows) sẽ được thêm dòng này vào `$PROFILE` của bạn:
 
 ```ps1
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
@@ -35,21 +35,21 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Mặc định, starship logs các cảnh báo và các lỗi trong một tập tin tên là `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, nơi đó khoá của phiên làm việc tương ứng với thực thể terminal của bạn. Cái này, tuy nhiên có thể được thay đổi bằng cách sử dụng biến môi trường `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Tương đương trong PowerShell (Windows) sẽ được thêm dòng này vào `$PROFILE` của bạn:
 
 ```ps1
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-### Terminology
+### Thuật ngữ
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Module**: Một thành phần trong prompt, thông tin lấy được dựa trên thông tin ngữ cảnh từ hệ điều hành của bạn. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
 
