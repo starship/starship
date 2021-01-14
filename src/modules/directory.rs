@@ -2,6 +2,7 @@
 use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
+use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
 use path_slash::PathExt;
 use std::iter::FromIterator;
@@ -171,23 +172,27 @@ fn is_readonly_dir(path: &Path) -> bool {
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
-    if !full_path.starts_with(top_level_path) {
+    if !full_path.normalised_starts_with(top_level_path) {
         return full_path.to_slash().unwrap();
     }
 
-    if full_path == top_level_path {
+    if full_path.normalised_equals(top_level_path) {
         return top_level_replacement.to_string();
     }
+
+    // Because we've done a normalised path comparison above
+    // we can safely ignore the Prefix components when doing this
+    // strip_prefix operation.
+    let sub_path = full_path
+        .without_prefix()
+        .strip_prefix(top_level_path.without_prefix())
+        .expect("strip path prefix");
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = full_path
-            .strip_prefix(top_level_path)
-            .unwrap()
-            .to_slash()
-            .unwrap()
+        path = sub_path.to_slash().expect("slash path")
     )
 }
 
