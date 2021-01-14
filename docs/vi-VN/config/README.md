@@ -90,9 +90,9 @@ Ví dụ:
 - `"fg:green bg:blue"` thiết lập chữ màu xanh lá cây trên nền màu xanh nước biển
 - `"bg:blue fg:bright-green"` thiết lập chữ màu xanh lá cây sáng trên nền màu canh nước biển
 - `"bold fg:27"` thiết lập chữ đậm với [màu ANSI](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"underline bg:#bf5700"` thiết lập chữ gạch chân trên một nền màu da cam
+- `"bold italic fg:purple"` thiết lập chữa nghiêng đậm có màu tím
+- `""` vô hiệu hoá tất cả các kiểu
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
