@@ -75,21 +75,21 @@ Một nhóm văn bản được tạo nên bởi hai phần khác nhau.
 
 Phần đầu tiên, cái được bao bọc trong một `[]`, là một [định dạng chuỗi](#format-strings). Bạn có thể thêm các văn bản, các biến, hoặc thậm chí các nhóm văn bản lồng nhau vào trong nó.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+Phần thứ hai, cái được bao bọc trong một `()`, là một [chuỗi kiểu](#style-strings). Cái này có thể được sử dụng để quy định kiểu của phần đầu tiên.
 
 Ví dụ:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` sẽ in một chuỗi `on` với chữ đậm tô màu đỏ.
+- `[⬢ $version](bold green)` sẽ in một kí hiệu `⬢` theo sao bởi nội dung của biến `version`, với chữ đậm tô màu xanh lá cây.
+- `[a [b](red) c](green)` sẽ in `a b c` với `b` màu đỏ, `a` và `c` màu xanh lá cây.
 
-#### Style Strings
+#### Các chuỗi kiểu
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Đa số các module trong starship cho phép bạn cấu hình kiểu hiển thị của chúng. This is done with an entry (thường được gọi là `kiểu`) cái là một cuỗi cấu hình đặc biệt. Đây là vài ví dụ của các chuỗi kiểu cũng với những gì chúng làm. Cú pháp chi tiết đầy đủ, tham khảo [hướng dẫn cấu hình nâng cao](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"fg:green bg:blue"` thiết lập chữ màu xanh lá cây trên nền màu xanh nước biển
+- `"bg:blue fg:bright-green"` thiết lập chữ màu xanh lá cây sáng trên nền màu canh nước biển
+- `"bold fg:27"` thiết lập chữ đậm với [màu ANSI](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` sets underlined text on a burnt orange background
 - `"bold italic fg:purple"` sets bold italic purple text
 - `""` explicitly disables all styling
