@@ -196,7 +196,7 @@
 
    Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете проверить местоположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
 
-   ```sh
+   ```powershell
    Invoke-Expression (&starship init powershell)
    ```
 
