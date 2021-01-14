@@ -52,7 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // For the logical path, use a cleaned version of the canonical path.
         let p = &context.current_dir;
         let physical_dir = p.canonicalize().unwrap_or_else(|_| p.clone());
-        let logical_dir = canonical_path_cleaned_for_display(&physical_dir);
+        let logical_dir = p.clone();
         (physical_dir, logical_dir)
     };
 
@@ -80,6 +80,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         dir_string.unwrap_or_else(|| contract_path(&logical_dir, &home_dir, HOME_SYMBOL));
 
     log::debug!("Dir string: {}", dir_string);
+
+    #[cfg(windows)]
+    let dir_string = remove_extended_path_prefix(dir_string);
 
     // Apply path substitutions
     let dir_string = substitute_path(dir_string, &config.substitutions);
@@ -138,6 +141,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+#[cfg(windows)]
+fn remove_extended_path_prefix(path: String) -> String {
+    fn try_trim_prefix<'a>(s: &'a str, prefix: &str) -> Option<&'a str> {
+        if !s.starts_with(prefix) {
+            return None;
+        }
+        Some(&s[prefix.len()..])
+    }
+    // Trim any Windows extended-path prefix from the display path
+    if let Some(unc) = try_trim_prefix(&path, r"\\?\UNC\") {
+        return format!(r"\\{}", unc);
+    }
+    if let Some(p) = try_trim_prefix(&path, r"\\?\") {
+        return p.to_string();
+    }
+    path
 }
 
 fn is_truncated(path: &str) -> bool {
@@ -234,28 +255,6 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
         }
     }
     buf.canonicalize().unwrap_or_else(|_| path.into())
-}
-
-fn canonical_path_cleaned_for_display<P: AsRef<Path>>(path: P) -> PathBuf {
-    let path = path.as_ref();
-    // On Windows, a canonical path will include the Windows extended-path prefix.
-    // Strip that for display purposes
-    #[cfg(windows)]
-    {
-        path.iter()
-            .enumerate()
-            .map(|(i, segment)| match (i, segment.to_str()) {
-                // Match and strip the Windows extended-path prefix segment if it is there
-                (0, Some(s)) if s.starts_with("\\\\?\\") => std::ffi::OsStr::new(&s[4..]),
-                _ => segment,
-            })
-            .collect::<PathBuf>()
-    }
-    // Under non-windows platforms we don't need to do any cleanup
-    #[cfg(not(windows))]
-    {
-        path.to_path_buf()
-    }
 }
 
 /// Perform a list of string substitutions on the path
