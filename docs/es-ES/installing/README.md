@@ -1,9 +1,9 @@
-# 🚀 Advanced Installation
+# 🚀 Instalación avanzada
 
-To install starship, you need to do two things:
+Para instalar Starship, necesitas hacer dos cosas:
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. Consigue el binario de **Starship** en tu ordenador
+1. Decirle a tu shell que use el binario de Starship como su prompt modificando sus guiones de inicio
 
 For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
 
