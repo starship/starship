@@ -237,28 +237,28 @@ Khi sử dụng [aws-vault](https://github.com/99designs/aws-vault) profile đư
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | Định dạng cho module.                                           |
-| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current AWS profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the AWS name. |
-| `style`          | `"bold yellow"`                                  | The style for the module.                                       |
-| `disabled`       | `false`                                          | Disables the `AWS` module.                                      |
+| Tuỳ chọn         | Mặc định                                         | Mô tả                                                |
+| ---------------- | ------------------------------------------------ | ---------------------------------------------------- |
+| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | Định dạng cho module.                                |
+| `symbol`         | `"☁️ "`                                          | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại. |
+| `region_aliases` |                                                  | Bảng của các region alias để hiển thị ngoài tên AWS. |
+| `style`          | `"bold yellow"`                                  | Kiểu cho module.                                     |
+| `disabled`       | `false`                                          | Vô hiệu `AWS` module.                                |
 
-### Variables
+### Các biến
 
-| Variable  | Example          | Mô tả                                |
-| --------- | ---------------- | ------------------------------------ |
-| region    | `ap-northeast-1` | The current AWS region               |
-| profile   | `astronauts`     | The current AWS profile              |
-| symbol    |                  | Mirrors the value of option `symbol` |
-| style\* |                  | Mirrors the value of option `style`  |
+| Biến      | Ví dụ            | Mô tả                            |
+| --------- | ---------------- | -------------------------------- |
+| region    | `ap-northeast-1` | Region AWS hiện tại              |
+| profile   | `astronauts`     | Profile AWS hiện tại             |
+| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |                  | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Examples
+### Các vị dụ
 
-#### Display everything
+#### Hiển thị mọi thứ
 
 ```toml
 # ~/.config/starship.toml
@@ -272,7 +272,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-#### Display region
+#### Hiển thị region
 
 ```toml
 # ~/.config/starship.toml
@@ -286,7 +286,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-#### Display profile
+#### Hiển thị profile
 
 ```toml
 # ~/.config/starship.toml
@@ -297,7 +297,7 @@ style = "bold blue"
 symbol = "🅰 "
 ```
 
-## Battery
+## Pin
 
 The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
@@ -315,7 +315,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
 
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -345,7 +345,7 @@ The `display` option is an array of the following table.
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
 
-#### Example
+#### Ví dụ
 
 ```toml
 [[battery.display]]  # "bold red" style when capacity is between 0% and 10%
@@ -381,13 +381,13 @@ By default it only changes color. If you also want to change it's shape take a l
 | `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
 | `disabled`       | `false`             | Disables the `character` module.                                                 |
 
-### Variables
+### Các biến
 
-| Variable | Example | Mô tả                                                                 |
-| -------- | ------- | --------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Biến   | Ví dụ | Mô tả                                                                 |
+| ------ | ----- | --------------------------------------------------------------------- |
+| symbol |       | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
-### Examples
+### Các vị dụ
 
 #### With custom error shape
 
@@ -431,18 +431,18 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 | ---------- | ---------------------------------- | -------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                        |
 | `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | The style for the module.                    |
+| `style`    | `"bold blue"`                      | Kiểu cho module.                             |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v3.17.3` | The version of cmake                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v3.17.3` | The version of cmake             |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ## Command Duration
 
@@ -463,7 +463,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
 | `format`             | `"took [$duration]($style) "` | Định dạng cho module.                                      |
-| `style`              | `"bold yellow"`               | The style for the module.                                  |
+| `style`              | `"bold yellow"`               | Kiểu cho module.                                           |
 | `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
 | `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
 | `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
@@ -474,16 +474,16 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 :::
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                   |
+| Biến      | Ví dụ    | Mô tả                                   |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Mirrors the value of option `style`     |
+| style\* |          | Giá trị ghi đè của `style`              |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -509,22 +509,22 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"`                         | The style for the module.                                                                                                                                                                                   |
+| `style`             | `"bold green"`                         | Kiểu cho module.                                                                                                                                                                                            |
 | `format`            | `"via [$symbol$environment]($style) "` | Định dạng cho module.                                                                                                                                                                                       |
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
 | `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
-### Variables
+### Các biến
 
-| Variable    | Example      | Mô tả                                |
-| ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current conda environment        |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
+| Biến        | Ví dụ        | Mô tả                            |
+| ----------- | ------------ | -------------------------------- |
+| environment | `astronauts` | The current conda environment    |
+| symbol      |              | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\*   |              | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -545,21 +545,21 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 | Tuỳ chọn   | Mặc định                             | Mô tả                                                     |
 | ---------- | ------------------------------------ | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                         | The style for the module.                                 |
+| `style`    | `"bold red"`                         | Kiểu cho module.                                          |
 | `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                     |
 | `disabled` | `false`                              | Disables the `crystal` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.32.1` | The version of `crystal`             |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v0.32.1` | The version of `crystal`         |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -582,20 +582,20 @@ The `dart` module shows the currently installed version of Dart. The module will
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | The style for the module.                       |
+| `style`    | `"bold blue"`                      | Kiểu cho module.                                |
 | `disabled` | `false`                            | Disables the `dart` module.                     |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.8.4` | The version of `dart`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v2.8.4` | The version of `dart`            |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -619,7 +619,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Định dạng cho module.                                                            |
-| `style`             | `"bold cyan"`                                      | The style for the module.                                                        |
+| `style`             | `"bold cyan"`                                      | Kiểu cho module.                                                                 |
 | `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
@@ -646,16 +646,16 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Variables
+### Các biến
 
-| Variable  | Example               | Mô tả                               |
-| --------- | --------------------- | ----------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path          |
-| style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
+| Biến      | Ví dụ                 | Mô tả                      |
+| --------- | --------------------- | -------------------------- |
+| path      | `"D:/Projects"`       | The current directory path |
+| style\* | `"black bold dimmed"` | Giá trị ghi đè của `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -675,21 +675,21 @@ The `docker_context` module shows the currently active [Docker context](https://
 | ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"via [$symbol$context]($style) "` | Định dạng cho module.                                                                                           |
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
-| `style`           | `"blue bold"`                      | The style for the module.                                                                                       |
+| `style`           | `"blue bold"`                      | Kiểu cho module.                                                                                                |
 | `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
 | `disabled`        | `true`                             | Disables the `docker_context` module.                                                                           |
 
-### Variables
+### Các biến
 
-| Variable  | Example        | Mô tả                                |
-| --------- | -------------- | ------------------------------------ |
-| context   | `test_context` | The current docker context           |
-| symbol    |                | Mirrors the value of option `symbol` |
-| style\* |                | Mirrors the value of option `style`  |
+| Biến      | Ví dụ          | Mô tả                            |
+| --------- | -------------- | -------------------------------- |
+| context   | `test_context` | The current docker context       |
+| symbol    |                | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |                | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -727,21 +727,21 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | Định dạng cho module.                                    |
 | `symbol`    | `"•NET "`                               | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`                                  | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"`                           | The style for the module.                                |
+| `style`     | `"bold blue"`                           | Kiểu cho module.                                         |
 | `disabled`  | `false`                                 | Disables the `dotnet` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example          | Mô tả                                                              |
+| Biến      | Ví dụ            | Mô tả                                                              |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Mirrors the value of option `symbol`                               |
-| style\* |                  | Mirrors the value of option `style`                                |
+| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol`                                   |
+| style\* |                  | Giá trị ghi đè của `style`                                         |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -763,22 +763,22 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 | Tuỳ chọn   | Mặc định                                                  | Mô tả                                                           |
 | ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | The style for the module.                                       |
+| `style`    | `"bold purple"`                                           | Kiểu cho module.                                                |
 | `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
 | `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
 
-### Variables
+### Các biến
 
-| Variable    | Example | Mô tả                                |
-| ----------- | ------- | ------------------------------------ |
-| version     | `v1.10` | The version of `elixir`              |
-| otp_version |         | The otp version of `elixir`          |
-| symbol      |         | Mirrors the value of option `symbol` |
-| style\*   |         | Mirrors the value of option `style`  |
+| Biến        | Ví dụ   | Mô tả                            |
+| ----------- | ------- | -------------------------------- |
+| version     | `v1.10` | The version of `elixir`          |
+| otp_version |         | The otp version of `elixir`      |
+| symbol      |         | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\*   |         | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -803,20 +803,20 @@ The `elm` module shows the currently installed version of Elm. The module will b
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | The style for the module.                       |
+| `style`    | `"cyan bold"`                      | Kiểu cho module.                                |
 | `disabled` | `false`                            | Disables the `elm` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.19.1` | The version of `elm`                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v0.19.1` | The version of `elm`             |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -842,17 +842,17 @@ The `env_var` module displays the current value of a selected environment variab
 | `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
-### Variables
+### Các biến
 
-| Variable  | Example                                     | Mô tả                                      |
+| Biến      | Ví dụ                                       | Mô tả                                      |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| symbol    |                                             | Giá trị ghi đè tuỳ chọn `symbol`           |
+| style\* | `black bold dimmed`                         | Giá trị ghi đè của `style`                 |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -874,21 +874,21 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 | Tuỳ chọn   | Mặc định                           | Mô tả                                                    |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
 | `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | The style for the module.                                |
+| `style`    | `"bold red"`                       | Kiểu cho module.                                         |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                    |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v22.1.3` | The version of `erlang`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v22.1.3` | The version of `erlang`          |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -908,23 +908,23 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | Định dạng cho module.                                           |
 | `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | The style for the module.                                       |
+| `style`          | `"bold blue"`                                    | Kiểu cho module.                                                |
 | `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
 
-### Variables
+### Các biến
 
-| Variable  | Example           | Mô tả                                                              |
+| Biến      | Ví dụ             | Mô tả                                                              |
 | --------- | ----------------- | ------------------------------------------------------------------ |
 | region    | `us-central1`     | The current GCP region                                             |
 | account   | `foo@example.com` | The current GCP profile                                            |
 | project   |                   | The current GCP project                                            |
 | active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | Mirrors the value of option `symbol`                               |
-| style\* |                   | Mirrors the value of option `style`                                |
+| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`                                   |
+| style\* |                   | Giá trị ghi đè của `style`                                         |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Examples
+### Các vị dụ
 
 #### Display account and project
 
@@ -968,25 +968,25 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
 | `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Use `"$branch"` to refer to the current branch name.               |
 | `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | The style for the module.                                                                |
+| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                         |
 | `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
 | `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                             |
 | `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
-### Variables
+### Các biến
 
-| Variable      | Example  | Mô tả                                                                                                |
+| Biến          | Ví dụ    | Mô tả                                                                                                |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
 | remote_name   | `origin` | The remote name.                                                                                     |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
-| symbol        |          | Mirrors the value of option `symbol`                                                                 |
-| style\*     |          | Mirrors the value of option `style`                                                                  |
+| symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                     |
+| style\*     |          | Giá trị ghi đè của `style`                                                                           |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1007,22 +1007,22 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
 | `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                 |
-| `style`              | `"bold green"`                                         | The style for the module.                             |
+| `style`              | `"bold green"`                                         | Kiểu cho module.                                      |
 | `only_detached`      | `true`                                                 | Only show git commit hash when in detached HEAD state |
 | `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.     |
 | `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                   |
 | `disabled`           | `false`                                                | Disables the `git_commit` module.                     |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                               |
-| --------- | --------- | ----------------------------------- |
-| hash      | `b703eb3` | The current git commit hash         |
-| style\* |           | Mirrors the value of option `style` |
+| Biến      | Ví dụ     | Mô tả                       |
+| --------- | --------- | --------------------------- |
+| hash      | `b703eb3` | The current git commit hash |
+| style\* |           | Giá trị ghi đè của `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1047,22 +1047,22 @@ The `git_state` module will show in directories which are part of a git reposito
 | `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
+| `style`        | `"bold yellow"`                                                 | Kiểu cho module.                                                                        |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Định dạng cho module.                                                                   |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
-### Variables
+### Các biến
 
-| Variable         | Example    | Mô tả                               |
-| ---------------- | ---------- | ----------------------------------- |
-| state            | `REBASING` | The current state of the repo       |
-| progress_current | `1`        | The current operation progress      |
-| progress_total   | `2`        | The total operation progress        |
-| style\*        |            | Mirrors the value of option `style` |
+| Biến             | Ví dụ      | Mô tả                          |
+| ---------------- | ---------- | ------------------------------ |
+| state            | `REBASING` | The current state of the repo  |
+| progress_current | `1`        | The current operation progress |
+| progress_total   | `2`        | The total operation progress   |
+| style\*        |            | Giá trị ghi đè của `style`     |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1091,14 +1091,14 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `staged`     | `"+"`                                           | The format of `staged`              |
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
 | `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold red"`                                    | The style for the module.           |
+| `style`      | `"bold red"`                                    | Kiểu cho module.                    |
 | `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
-### Variables
+### Các biến
 
 The following variables can be used in `format`:
 
-| Variable       | Mô tả                                                                                         |
+| Biến           | Mô tả                                                                                         |
 | -------------- | --------------------------------------------------------------------------------------------- |
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
 | `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
@@ -1109,24 +1109,24 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*      | Mirrors the value of option `style`                                                           |
+| style\*      | Giá trị ghi đè của `style`                                                                    |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 The following variables can be used in `diverged`:
 
-| Variable       | Mô tả                                          |
+| Biến           | Mô tả                                          |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Mô tả                    |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Biến    | Mô tả                    |
+| ------- | ------------------------ |
+| `count` | Show the number of files |
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1174,20 +1174,20 @@ The `golang` module shows the currently installed version of Golang. The module 
 | ---------- | ---------------------------------- | ---------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                          |
 | `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | The style for the module.                      |
+| `style`    | `"bold cyan"`                      | Kiểu cho module.                               |
 | `disabled` | `false`                            | Disables the `golang` module.                  |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.12.1` | The version of `go`                  |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v1.12.1` | The version of `go`              |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1209,20 +1209,20 @@ The `helm` module shows the currently installed version of Helm. The module will
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
 | `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | The style for the module.                        |
+| `style`    | `"bold white"`                     | Kiểu cho module.                                 |
 | `disabled` | `false`                            | Disables the `helm` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v3.1.1` | The version of `helm`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v3.1.1` | The version of `helm`            |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1242,19 +1242,19 @@ The `hostname` module shows the system hostname.
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
-| `style`    | `"bold dimmed green"`       | The style for the module.                                                                                                            |
+| `style`    | `"bold dimmed green"`       | Kiểu cho module.                                                                                                                     |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example | Mô tả                                |
-| --------- | ------- | ------------------------------------ |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Biến      | Ví dụ | Mô tả                            |
+| --------- | ----- | -------------------------------- |
+| symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |       | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1279,20 +1279,20 @@ The `java` module shows the currently installed version of Java. The module will
 | ---------- | -------------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [${symbol}${version}]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | The style for the module.                       |
+| `style`    | `"red dimmed"`                         | Kiểu cho module.                                |
 | `disabled` | `false`                                | Disables the `java` module.                     |
 
-### Variables
+### Các biến
 
-| Variable  | Example | Mô tả                                |
-| --------- | ------- | ------------------------------------ |
-| version   | `v14`   | The version of `java`                |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Biến      | Ví dụ | Mô tả                            |
+| --------- | ----- | -------------------------------- |
+| version   | `v14` | The version of `java`            |
+| symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |       | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1312,20 +1312,20 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | `threshold` | `1`                           | Show number of jobs if exceeded.                 |
 | `format`    | `"[$symbol$number]($style) "` | Định dạng cho module.                            |
 | `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | The style for the module.                        |
+| `style`     | `"bold blue"`                 | Kiểu cho module.                                 |
 | `disabled`  | `false`                       | Disables the `jobs` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example | Mô tả                                |
-| --------- | ------- | ------------------------------------ |
-| number    | `1`     | The number of jobs                   |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Biến      | Ví dụ | Mô tả                            |
+| --------- | ----- | -------------------------------- |
+| number    | `1`   | The number of jobs               |
+| symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |       | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1349,20 +1349,20 @@ The `julia` module shows the currently installed version of Julia. The module wi
 | ---------- | ---------------------------------- | ------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                             |
 | `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | The style for the module.                         |
+| `style`    | `"bold purple"`                    | Kiểu cho module.                                  |
 | `disabled` | `false`                            | Disables the `julia` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.4.0` | The version of `julia`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v1.4.0` | The version of `julia`           |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1383,21 +1383,21 @@ The `kotlin` module shows the currently installed version of Kotlin. The module 
 | --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
 | `format`        | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                         |
 | `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | The style for the module.                                                     |
+| `style`         | `"bold blue"`                      | Kiểu cho module.                                                              |
 | `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
 | `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.4.21` | The version of `kotlin`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v1.4.21` | The version of `kotlin`          |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1430,22 +1430,22 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Định dạng cho module.                                                 |
-| `style`           | `"cyan bold"`                                        | The style for the module.                                             |
+| `style`           | `"cyan bold"`                                        | Kiểu cho module.                                                      |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
 | `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
-### Variables
+### Các biến
 
-| Variable  | Example              | Mô tả                                    |
+| Biến      | Ví dụ                | Mô tả                                    |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-cluster`   | The current kubernetes context           |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Mirrors the value of option `symbol`     |
-| style\* |                      | Mirrors the value of option `style`      |
+| symbol    |                      | Giá trị ghi đè tuỳ chọn `symbol`         |
+| style\* |                      | Giá trị ghi đè của `style`               |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1467,7 +1467,7 @@ The `line_break` module separates the prompt into two lines.
 | ---------- | -------- | ------------------------------------------------------------------ |
 | `disabled` | `false`  | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1490,21 +1490,21 @@ The `lua` module shows the currently installed version of Lua. The module will b
 | ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
 | `format`     | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                      |
 | `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                      | The style for the module.                                                  |
+| `style`      | `"bold blue"`                      | Kiểu cho module.                                                           |
 | `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`   | `false`                            | Disables the `lua` module.                                                 |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.4.0` | The version of `lua`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v5.4.0` | The version of `lua`             |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1532,23 +1532,23 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | Định dạng cho module.                                    |
 | `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | The style for the module.                                |
+| `style`     | `"bold dimmed white"`                         | Kiểu cho module.                                         |
 | `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
 
-### Variables
+### Các biến
 
-| Variable         | Example       | Mô tả                                                              |
+| Biến             | Ví dụ         | Mô tả                                                              |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol           | `🐏`           | Mirrors the value of option `symbol`                               |
-| style\*        |               | Mirrors the value of option `style`                                |
+| symbol           | `🐏`           | Giá trị ghi đè tuỳ chọn `symbol`                                   |
+| style\*        |               | Giá trị ghi đè của `style`                                         |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1569,23 +1569,23 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | Tuỳ chọn            | Mặc định                         | Mô tả                                                                                        |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `"bold purple"`                  | The style for the module.                                                                    |
+| `style`             | `"bold purple"`                  | Kiểu cho module.                                                                             |
 | `format`            | `"on [$symbol$branch]($style) "` | Định dạng cho module.                                                                        |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| branch    | `master` | The active mercurial branch          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| branch    | `master` | The active mercurial branch      |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1611,20 +1611,20 @@ The `nim` module shows the currently installed version of Nim. The module will b
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
 | `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | The style for the module.                             |
+| `style`    | `"bold yellow"`                    | Kiểu cho module.                                      |
 | `disabled` | `false`                            | Disables the `nim` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.2.0` | The version of `nimc`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v1.2.0` | The version of `nimc`            |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1644,23 +1644,23 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | Định dạng cho module.                                 |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                  | The style for the module.                             |
+| `style`      | `"bold blue"`                                  | Kiểu cho module.                                      |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
 | `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example | Mô tả                                |
-| --------- | ------- | ------------------------------------ |
-| state     | `pure`  | The state of the nix-shell           |
-| name      | `lorri` | The name of the nix-shell            |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Biến      | Ví dụ   | Mô tả                            |
+| --------- | ------- | -------------------------------- |
+| state     | `pure`  | The state of the nix-shell       |
+| name      | `lorri` | The name of the nix-shell        |
+| symbol    |         | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |         | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1688,21 +1688,21 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                                                 |
 | `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | The style for the module.                                                                             |
+| `style`             | `"bold green"`                     | Kiểu cho module.                                                                                      |
 | `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
-| Variable  | Example    | Mô tả                                |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v13.12.0` | The version of `node`                |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Biến      | Ví dụ      | Mô tả                            |
+| --------- | ---------- | -------------------------------- |
+| version   | `v13.12.0` | The version of `node`            |
+| symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |            | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1728,20 +1728,20 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 | ---------- | ---------------------------------- | ------------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
 | `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | The style for the module.                               |
+| `style`    | `"bold yellow"`                    | Kiểu cho module.                                        |
 | `disabled` | `false`                            | Disables the `ocaml` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v4.10.0` | The version of `ocaml`               |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v4.10.0` | The version of `ocaml`           |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1760,21 +1760,21 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Định dạng cho module.                                          |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `"bold yellow"`                                     | The style for the module.                                      |
+| `style`    | `"bold yellow"`                                     | Kiểu cho module.                                               |
 | `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
 
-### Variables
+### Các biến
 
-| Variable  | Example | Mô tả                                |
-| --------- | ------- | ------------------------------------ |
-| cloud     | `corp`  | The current OpenStack cloud          |
-| project   | `dev`   | The current OpenStack project        |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Biến      | Ví dụ  | Mô tả                            |
+| --------- | ------ | -------------------------------- |
+| cloud     | `corp` | The current OpenStack cloud      |
+| project   | `dev`  | The current OpenStack project    |
+| symbol    |        | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |        | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1808,21 +1808,21 @@ The `package` module is shown when the current directory is the repository for a
 | ----------------- | --------------------------------- | ---------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | Định dạng cho module.                                      |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                      | The style for the module.                                  |
+| `style`           | `"bold 208"`                      | Kiểu cho module.                                           |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`                           | Disables the `package` module.                             |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of your package          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v1.0.0` | The version of your package      |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1847,18 +1847,18 @@ The `perl` module shows the currently installed version of Perl. The module will
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | The style for the module.                             |
+| `style`    | `"bold 149"`                       | Kiểu cho module.                                      |
 | `disabled` | `false`                            | Disables the `perl` module.                           |
 
-### Variables
+### Các biến
 
-| Variable  | Example   | Mô tả                                |
-| --------- | --------- | ------------------------------------ |
-| version   | `v5.26.1` | The version of `perl`                |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Biến      | Ví dụ     | Mô tả                            |
+| --------- | --------- | -------------------------------- |
+| version   | `v5.26.1` | The version of `perl`            |
+| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |           | Giá trị ghi đè của `style`       |
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1881,20 +1881,20 @@ The `php` module shows the currently installed version of PHP. The module will b
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                 |
 | `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                       | The style for the module.                             |
+| `style`    | `"147 bold"`                       | Kiểu cho module.                                      |
 | `disabled` | `false`                            | Disables the `php` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v7.3.8` | The version of `php`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v7.3.8` | The version of `php`             |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1916,20 +1916,20 @@ The `purescript` module shows the currently installed version of PureScript vers
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                        |
 | `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | The style for the module.                                    |
+| `style`    | `"bold white"`                     | Kiểu cho module.                                             |
 | `disabled` | `false`                            | Disables the `purescript` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `0.13.5` | The version of `purescript`          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `0.13.5` | The version of `purescript`      |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -1962,7 +1962,7 @@ The module will be shown if any of the following conditions are met:
 | -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | Định dạng cho module.                                                                  |
 | `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                           | The style for the module.                                                              |
+| `style`              | `"yellow bold"`                                                           | Kiểu cho module.                                                                       |
 | `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
 | `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
@@ -1977,18 +1977,18 @@ The default values and order for `python_binary` was chosen to first identify th
 
 :::
 
-### Variables
+### Các biến
 
-| Variable     | Example         | Mô tả                                      |
+| Biến         | Ví dụ           | Mô tả                                      |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
-| style        | `"yellow bold"` | Mirrors the value of option `style`        |
+| symbol       | `"🐍 "`          | Giá trị ghi đè tuỳ chọn `symbol`           |
+| style        | `"yellow bold"` | Giá trị ghi đè của `style`                 |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2020,20 +2020,20 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | The style for the module.                        |
+| `style`    | `"bold red"`                       | Kiểu cho module.                                 |
 | `disabled` | `false`                            | Disables the `ruby` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `ruby`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`            |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2055,20 +2055,20 @@ The `rust` module shows the currently installed version of Rust. The module will
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | The style for the module.                       |
+| `style`    | `"bold red"`                       | Kiểu cho module.                                |
 | `disabled` | `false`                            | Disables the `rust` module.                     |
 
-### Variables
+### Các biến
 
-| Variable  | Example           | Mô tả                                |
-| --------- | ----------------- | ------------------------------------ |
-| version   | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol    |                   | Mirrors the value of option `symbol` |
-| style\* |                   | Mirrors the value of option `style`  |
+| Biến      | Ví dụ             | Mô tả                            |
+| --------- | ----------------- | -------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`           |
+| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |                   | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2089,20 +2089,20 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 | `format`    | `"[$symbol$shlvl]($style) "` | Định dạng cho module.                                       |
 | `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | The style for the module.                                   |
+| `style`     | `"bold yellow"`              | Kiểu cho module.                                            |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                |
 
-### Variables
+### Các biến
 
-| Variable  | Example | Mô tả                                |
-| --------- | ------- | ------------------------------------ |
-| shlvl     | `3`     | The current value of SHLVL           |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Biến      | Ví dụ | Mô tả                            |
+| --------- | ----- | -------------------------------- |
+| shlvl     | `3`   | The current value of SHLVL       |
+| symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |       | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2123,20 +2123,20 @@ The `singularity` module shows the current singularity image, if inside a contai
 | ---------- | -------------------------------- | ------------------------------------------------ |
 | `format`   | `'[$symbol\[$env\]]($style) '` | Định dạng cho module.                            |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | The style for the module.                        |
+| `style`    | `"bold dimmed blue"`             | Kiểu cho module.                                 |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
-### Variables
+### Các biến
 
-| Variable  | Example      | Mô tả                                |
-| --------- | ------------ | ------------------------------------ |
-| env       | `centos.img` | The current singularity image        |
-| symbol    |              | Mirrors the value of option `symbol` |
-| style\* |              | Mirrors the value of option `style`  |
+| Biến      | Ví dụ        | Mô tả                            |
+| --------- | ------------ | -------------------------------- |
+| env       | `centos.img` | The current singularity image    |
+| symbol    |              | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |              | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2165,14 +2165,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `not_found_symbol`      | `"🔍"`                      | The symbol displayed when the command can't be found |
 | `sigint_symbol`         | `"🧱"`                      | The symbol displayed on SIGINT (Ctrl + c)            |
 | `signal_symbol`         | `"⚡"`                      | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`               | The style for the module.                            |
+| `style`                 | `"bold red"`               | Kiểu cho module.                                     |
 | `recognize_signal_code` | `true`                     | Enable signal mapping from exit code                 |
 | `map_symbol`            | `false`                    | Enable symbols mapping from exit code                |
 | `disabled`              | `true`                     | Disables the `status` module.                        |
 
-### Variables
+### Các biến
 
-| Variable       | Example | Mô tả                                                                |
+| Biến           | Ví dụ   | Mô tả                                                                |
 | -------------- | ------- | -------------------------------------------------------------------- |
 | status         | `127`   | The exit code of the last command                                    |
 | int            | `127`   | The exit code of the last command                                    |
@@ -2180,12 +2180,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | Mirrors the value of option `symbol`                                 |
-| style\*      |         | Mirrors the value of option `style`                                  |
+| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                     |
+| style\*      |         | Giá trị ghi đè của `style`                                           |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 
@@ -2213,20 +2213,20 @@ The `swift` module shows the currently installed version of Swift. The module wi
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
 | `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | The style for the module.                        |
+| `style`    | `"bold 202"`                       | Kiểu cho module.                                 |
 | `disabled` | `false`                            | Disables the `swift` module.                     |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.2.4` | The version of `swift`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v5.2.4` | The version of `swift`           |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2248,21 +2248,21 @@ The `terraform` module shows the currently selected terraform workspace and vers
 | ---------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | The style for the module.                             |
+| `style`    | `"bold 105"`                         | Kiểu cho module.                                      |
 | `disabled` | `false`                              | Disables the `terraform` module.                      |
 
-### Variables
+### Các biến
 
-| Variable  | Example    | Mô tả                                |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Biến      | Ví dụ      | Mô tả                            |
+| --------- | ---------- | -------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`       |
+| workspace | `default`  | The current terraform workspace  |
+| symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |            | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 #### With Version
 
@@ -2306,16 +2306,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### Các biến
 
-| Variable  | Example    | Mô tả                               |
-| --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
-| style\* |            | Mirrors the value of option `style` |
+| Biến      | Ví dụ      | Mô tả                      |
+| --------- | ---------- | -------------------------- |
+| time      | `13:08:10` | The current time.          |
+| style\* |            | Giá trị ghi đè của `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2353,14 +2353,14 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `show_always` | `false`                 | Always shows the `username` module.   |
 | `disabled`    | `false`                 | Disables the `username` module.       |
 
-### Variables
+### Các biến
 
-| Variable | Example      | Mô tả                                                                                       |
-| -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
+| Biến    | Ví dụ        | Mô tả                                                                                       |
+| ------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style` | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`  | `"matchai"`  | The currently logged-in user ID.                                                            |
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2384,21 +2384,21 @@ The `zig` module shows the currently installed version of Zig. The module will b
 | Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | The style for the module.                             |
+| `style`    | `"bold yellow"`                    | Kiểu cho module.                                      |
 | `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                 |
 | `disabled` | `false`                            | Disables the `zig` module.                            |
 
-### Variables
+### Các biến
 
-| Variable  | Example  | Mô tả                                |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.6.0` | The version of `zig`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v0.6.0` | The version of `zig`             |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2448,19 +2448,19 @@ The order in which custom modules are shown can be individually set by including
 | `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
 | `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | The style for the module.                                                                                                  |
+| `style`       | `"bold green"`                | Kiểu cho module.                                                                                                           |
 | `format`      | `"[$symbol$output]($style) "` | Định dạng cho module.                                                                                                      |
 | `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
 
-### Variables
+### Các biến
 
-| Variable  | Mô tả                                  |
+| Biến      | Mô tả                                  |
 | --------- | -------------------------------------- |
 | output    | The output of shell command in `shell` |
-| symbol    | Mirrors the value of option `symbol`   |
-| style\* | Mirrors the value of option `style`    |
+| symbol    | Giá trị ghi đè tuỳ chọn `symbol`       |
+| style\* | Giá trị ghi đè của `style`             |
 
-\*: This variable can only be used as a part of a style string
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 #### Custom command shell
 
@@ -2491,7 +2491,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 
 :::
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
