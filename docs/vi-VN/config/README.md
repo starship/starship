@@ -362,11 +362,11 @@ style = "bold yellow"
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Module `character` cho biết một kí tự (thường là một mũi tên) bên cạnh nơi văn bản được nhập trong terminal của bạn.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất bại. Nó có thể làm điều này bằng hai cách:
 
-- changing color (`red`/`green`)
+- thay đổi màu(`đỏ`/`xanh lá`)
 - changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
