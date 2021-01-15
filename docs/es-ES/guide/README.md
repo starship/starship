@@ -125,7 +125,7 @@
 
 ### Comenzar
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Nota**: debido a la proliferación de diferentes plataformas, solo un subconjunto de plataformas soportadas se muestra a continuación. ¿No puedes ver el tuyo? Echa un vistazo a las [instrucciones adicionales de la plataforma](https://starship.rs/installing/).
 
 1. Instala el binario de **Starship**:
 
@@ -143,7 +143,7 @@
    #### Instalar con un gestor de paquetes
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Ejemplo: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
