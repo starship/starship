@@ -21,7 +21,7 @@ Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistem
 - Deshabilitar módulos es más explícito que omitirlos del nivel superior `format`
 - Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
-## The docs say Starship is cross-shell. ¿Por qué no es compatible mi shell preferido?
+## La documentación dice que Starship es "cross-shell". ¿Por qué no es compatible mi shell preferido?
 
 Por la forma en que Starshp está construído, debería ser posible añadir soporte para prácticamente cualquier intérprete de comandos. El binario de Starship es sin estado y agnóstico, por lo que mientras que tu intérprete de comandos se pueda ampliar y soporte la personalización del símbolo del sistema, puede utilizar Starship.
 
