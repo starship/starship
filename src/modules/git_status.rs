@@ -138,7 +138,7 @@ impl<'a> GitStatusInfo<'a> {
         Repository::open(repo_root).ok()
     }
 
-    pub fn get_ahead_behind<'b>(&'b self) -> &'b Option<(usize, usize)> {
+    pub fn get_ahead_behind(&self) -> &Option<(usize, usize)> {
         self.ahead_behind.get_or_init(|| {
             let repo = self.get_repository()?;
             let branch_name = self.get_branch_name();
@@ -153,7 +153,7 @@ impl<'a> GitStatusInfo<'a> {
         })
     }
 
-    pub fn get_repo_status<'b>(&'b self) -> &'b Option<RepoStatus> {
+    pub fn get_repo_status(&self) -> &Option<RepoStatus> {
         self.repo_status.get_or_init(|| {
             let mut repo = self.get_repository()?;
 
@@ -167,7 +167,7 @@ impl<'a> GitStatusInfo<'a> {
         })
     }
 
-    pub fn get_stashed<'b>(&'b self) -> &'b Option<usize> {
+    pub fn get_stashed(&self) -> &Option<usize> {
         self.stashed_count.get_or_init(|| {
             let mut repo = self.get_repository()?;
 
