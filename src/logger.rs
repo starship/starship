@@ -18,7 +18,7 @@ pub struct StarshipLogger {
 }
 
 impl StarshipLogger {
-    fn new() -> Self {
+    pub fn new() -> Self {
         let log_dir = env::var_os("STARSHIP_CACHE")
             .map(PathBuf::from)
             .unwrap_or_else(|| {
@@ -53,6 +53,17 @@ impl StarshipLogger {
                 })
                 .unwrap_or_else(|_| Level::Warn),
         }
+    }
+
+    /// Override the minimum log level
+    pub fn set_log_level(&mut self, level: log::Level) {
+        self.log_level = level;
+    }
+
+    /// Override the log level path
+    /// This won't change anything if a log file was already opened
+    pub fn set_log_file_path(&mut self, path: PathBuf) {
+        self.log_file_path = path;
     }
 }
 
