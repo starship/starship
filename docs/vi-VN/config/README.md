@@ -379,7 +379,7 @@ Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi 
 | `success_symbol` | `"[❯](bold green)"` | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thành công. |
 | `error_symbol`   | `"[❯](bold red)"`   | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thất bại.   |
 | `vicmd_symbol`   | `"[❮](bold green)"` | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu shell trong chế độ vim normal.   |
-| `disabled`       | `false`             | Disables the `character` module.                                                     |
+| `disabled`       | `false`             | Vô hiệu module `character`.                                                          |
 
 ### Các biến
 
@@ -389,7 +389,7 @@ Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi 
 
 ### Các vị dụ
 
-#### With custom error shape
+#### Có tuỳ chỉnh hình dạng lỗi
 
 ```toml
 # ~/.config/starship.toml
@@ -399,7 +399,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### Không có tuỳ chỉnh hình dạng lỗi
 
 ```toml
 # ~/.config/starship.toml
@@ -409,7 +409,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### With custom vim shape
+#### Có tuỳ chỉnh hình dạng vim
 
 ```toml
 # ~/.config/starship.toml
@@ -420,25 +420,25 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+Module `cmake` cho biết phiên bản Cmake hiện tại được cài đặt nếu mọi điều kiện sau được thoả mãn:
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
+- Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                        |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                        |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | Kiểu cho module.                             |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                      |
+| ---------- | ---------------------------------- | ------------------------------------------ |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                      |
+| `symbol`   | `"喝 "`                             | Kí hiệu sử dụng trước phiên bản của cmake. |
+| `style`    | `"bold blue"`                      | Kiểu cho module.                           |
+| `disabled` | `false`                            | Vô hiệu module `cmake`.                    |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v3.17.3` | The version of cmake             |
+| version   | `v3.17.3` | Phiên bản của cmake              |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
@@ -446,11 +446,11 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ## Command Duration
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Module `cmd_duration`. cho biết câu lệnh cuối cùng thực thi trong bao lâu. Module sẽ được hiện chỉ khi câu lệnh lấy nhiều hơn 2 giây, hoặc giá trị cấu hình `min_time`, nếu nó tồn tại.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: cảnh báo Không thể hook DEBUG trap trong Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Nếu bạn đang chạy Starship trong `bash`, không thể hook `DEBUG` trap sau khi chạy `eval $(starship init $0)`, hoặc module này **sẽ** ngắt.
 
 :::
 
