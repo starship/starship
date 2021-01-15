@@ -570,10 +570,10 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. The module will be shown if any of the following conditions are met:
+Module `dart` cho biết phiên bản của Dart đã cài đặt. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
+- Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
+- Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
 - The current directory contains a `pubspec.yaml` or `pubspec.lock` file
 
 ### Các tuỳ chọn
