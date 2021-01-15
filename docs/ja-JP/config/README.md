@@ -374,13 +374,13 @@ style = "bold yellow"
 
 ### オプション
 
-| オプション            | デフォルト               | 説明                                                                               |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
-| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
-| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
-| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | `character`モジュールを無効にします。                                                         |
+| オプション            | デフォルト               | 説明                                           |
+| ---------------- | ------------------- | -------------------------------------------- |
+| `format`         | `"$symbol"`         | テキスト入力の前に使用される書式文字列。                         |
+| `success_symbol` | `"[❯](bold green)"` | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。         |
+| `error_symbol`   | `"[❯](bold red)"`   | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。         |
+| `vicmd_symbol`   | `"[❮](bold green)"` | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。 |
+| `disabled`       | `false`             | `character`モジュールを無効にします。                     |
 
 ### 変数
 
