@@ -547,13 +547,13 @@ Module `crystal` cho biết phiên bản hiện tại của Crystal được đ�
 | `symbol`   | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
 | `style`    | `"bold red"`                         | Kiểu cho module.                                      |
 | `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled` | `false`                              | Disables the `crystal` module.                        |
+| `disabled` | `false`                              | Vô hiệu hoá module `crystal`.                         |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v0.32.1` | The version of `crystal`         |
+| version   | `v0.32.1` | Phiên bản của `crystal`          |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
