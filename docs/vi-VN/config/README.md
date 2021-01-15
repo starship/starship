@@ -168,12 +168,12 @@ add_newline = false
 
 ### Định dạng prompt mặc định
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+Mặc định `format` được sử dụng để định nghĩa định dạng của prompt, nếu rỗng hoặc không `format` được cung cấp. Mặc định như sau:
 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Cái đó tương đương với
 format = """
 $username\
 $hostname\
@@ -231,15 +231,15 @@ $character"""
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file.
+`aws` module cho biết region và profile hiện tại của AWS. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+Khi sử dụng [aws-vault](https://github.com/99designs/aws-vault) profile được đọc từ biến môt trường `AWS_VAULT`.
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
 | ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module.                                      |
+| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | Định dạng cho module.                                           |
 | `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current AWS profile.      |
 | `region_aliases` |                                                  | Table of region aliases to display in addition to the AWS name. |
 | `style`          | `"bold yellow"`                                  | The style for the module.                                       |
@@ -310,7 +310,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `discharging_symbol` | `""`                             | The symbol shown when the battery is discharging.   |
 | `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
 | `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
-| `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                          |
+| `format`             | `"[$symbol$percentage]($style) "` | Định dạng cho module.                               |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
 
@@ -328,7 +328,7 @@ discharging_symbol = "💀"
 
 ### Battery Display
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. Mặc định như sau:
 
 ```toml
 [[battery.display]]
@@ -429,7 +429,7 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                        |
 | ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                        |
 | `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
 | `style`    | `"bold blue"`                      | The style for the module.                    |
 | `disabled` | `false`                            | Disables the `cmake` module.                 |
@@ -462,7 +462,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | -------------------- | ----------------------------- | ---------------------------------------------------------- |
 | `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`             | `"took [$duration]($style) "` | The format for the module.                                 |
+| `format`             | `"took [$duration]($style) "` | Định dạng cho module.                                      |
 | `style`              | `"bold yellow"`               | The style for the module.                                  |
 | `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
 | `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
@@ -510,7 +510,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
 | `style`             | `"bold green"`                         | The style for the module.                                                                                                                                                                                   |
-| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                  |
+| `format`            | `"via [$symbol$environment]($style) "` | Định dạng cho module.                                                                                                                                                                                       |
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
 | `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
@@ -546,7 +546,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 | ---------- | ------------------------------------ | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
 | `style`    | `"bold red"`                         | The style for the module.                                 |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                     |
 | `disabled` | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
@@ -580,7 +580,7 @@ The `dart` module shows the currently installed version of Dart. The module will
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
 | `style`    | `"bold blue"`                      | The style for the module.                       |
 | `disabled` | `false`                            | Disables the `dart` module.                     |
@@ -618,7 +618,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                       |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Định dạng cho module.                                                            |
 | `style`             | `"bold cyan"`                                      | The style for the module.                                                        |
 | `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
@@ -673,7 +673,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 | Tuỳ chọn          | Mặc định                           | Mô tả                                                                                                           |
 | ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                                      |
+| `format`          | `"via [$symbol$context]($style) "` | Định dạng cho module.                                                                                           |
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
 | `style`           | `"blue bold"`                      | The style for the module.                                                                                       |
 | `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
@@ -724,7 +724,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | Tuỳ chọn    | Mặc định                                | Mô tả                                                    |
 | ----------- | --------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
+| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | Định dạng cho module.                                    |
 | `symbol`    | `"•NET "`                               | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`                                  | Use faster version detection to keep starship snappy.    |
 | `style`     | `"bold blue"`                           | The style for the module.                                |
@@ -801,7 +801,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
 | `style`    | `"cyan bold"`                      | The style for the module.                       |
 | `disabled` | `false`                            | Disables the `elm` module.                      |
@@ -839,7 +839,7 @@ The `env_var` module displays the current value of a selected environment variab
 | `symbol`   |                                | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
@@ -875,7 +875,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
 | `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | The style for the module.                                |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                    |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
 
 ### Variables
@@ -905,7 +905,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 | Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
 | ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | Định dạng cho module.                                           |
 | `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
 | `style`          | `"bold blue"`                                    | The style for the module.                                       |
@@ -966,7 +966,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | Tuỳ chọn             | Mặc định                         | Mô tả                                                                                    |
 | -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
+| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Use `"$branch"` to refer to the current branch name.               |
 | `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
 | `style`              | `"bold purple"`                  | The style for the module.                                                                |
 | `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
@@ -1006,7 +1006,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | Tuỳ chọn             | Mặc định                                               | Mô tả                                                 |
 | -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
 | `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                            |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                 |
 | `style`              | `"bold green"`                                         | The style for the module.                             |
 | `only_detached`      | `true`                                                 | Only show git commit hash when in detached HEAD state |
 | `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.     |
@@ -1048,7 +1048,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | The style for the module.                                                               |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Định dạng cho module.                                                                   |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
 ### Variables
@@ -1172,7 +1172,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                          |
 | ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                          |
 | `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
 | `style`    | `"bold cyan"`                      | The style for the module.                      |
 | `disabled` | `false`                            | Disables the `golang` module.                  |
@@ -1207,7 +1207,7 @@ The `helm` module shows the currently installed version of Helm. The module will
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                            |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
 | `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
 | `style`    | `"bold white"`                     | The style for the module.                        |
 | `disabled` | `false`                            | Disables the `helm` module.                      |
@@ -1241,7 +1241,7 @@ The `hostname` module shows the system hostname.
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
+| `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
 | `style`    | `"bold dimmed green"`       | The style for the module.                                                                                                            |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
@@ -1277,7 +1277,7 @@ The `java` module shows the currently installed version of Java. The module will
 
 | Tuỳ chọn   | Mặc định                               | Mô tả                                           |
 | ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
+| `format`   | `"via [${symbol}${version}]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
 | `style`    | `"red dimmed"`                         | The style for the module.                       |
 | `disabled` | `false`                                | Disables the `java` module.                     |
@@ -1310,7 +1310,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 | Tuỳ chọn    | Mặc định                      | Mô tả                                            |
 | ----------- | ----------------------------- | ------------------------------------------------ |
 | `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
+| `format`    | `"[$symbol$number]($style) "` | Định dạng cho module.                            |
 | `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
 | `style`     | `"bold blue"`                 | The style for the module.                        |
 | `disabled`  | `false`                       | Disables the `jobs` module.                      |
@@ -1347,7 +1347,7 @@ The `julia` module shows the currently installed version of Julia. The module wi
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                             |
 | ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                             |
 | `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
 | `style`    | `"bold purple"`                    | The style for the module.                         |
 | `disabled` | `false`                            | Disables the `julia` module.                      |
@@ -1381,7 +1381,7 @@ The `kotlin` module shows the currently installed version of Kotlin. The module 
 
 | Tuỳ chọn        | Mặc định                           | Mô tả                                                                         |
 | --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
+| `format`        | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                         |
 | `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
 | `style`         | `"bold blue"`                      | The style for the module.                                                     |
 | `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
@@ -1429,7 +1429,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Tuỳ chọn          | Mặc định                                             | Mô tả                                                                 |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Định dạng cho module.                                                 |
 | `style`           | `"cyan bold"`                                        | The style for the module.                                             |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
 | `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
@@ -1488,7 +1488,7 @@ The `lua` module shows the currently installed version of Lua. The module will b
 
 | Tuỳ chọn     | Mặc định                           | Mô tả                                                                      |
 | ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | The format for the module.                                                 |
+| `format`     | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                      |
 | `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
 | `style`      | `"bold blue"`                      | The style for the module.                                                  |
 | `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
@@ -1530,7 +1530,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Tuỳ chọn    | Mặc định                                      | Mô tả                                                    |
 | ----------- | --------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
+| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | Định dạng cho module.                                    |
 | `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
 | `style`     | `"bold dimmed white"`                         | The style for the module.                                |
 | `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
@@ -1570,7 +1570,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                    |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
+| `format`            | `"on [$symbol$branch]($style) "` | Định dạng cho module.                                                                        |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
@@ -1642,7 +1642,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 | Tuỳ chọn     | Mặc định                                       | Mô tả                                                 |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | Định dạng cho module.                                 |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
 | `style`      | `"bold blue"`                                  | The style for the module.                             |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
@@ -1686,7 +1686,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 | Tuỳ chọn            | Mặc định                           | Mô tả                                                                                                 |
 | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
+| `format`            | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                                                 |
 | `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
 | `style`             | `"bold green"`                     | The style for the module.                                                                             |
 | `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
@@ -1758,7 +1758,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 | Tuỳ chọn   | Mặc định                                            | Mô tả                                                          |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | The format for the module.                                     |
+| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Định dạng cho module.                                          |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | The style for the module.                                      |
 | `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
@@ -1806,7 +1806,7 @@ The `package` module is shown when the current directory is the repository for a
 
 | Tuỳ chọn          | Mặc định                          | Mô tả                                                      |
 | ----------------- | --------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                 |
+| `format`          | `"is [$symbol$version]($style) "` | Định dạng cho module.                                      |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
 | `style`           | `"bold 208"`                      | The style for the module.                                  |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
@@ -1879,7 +1879,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                 |
 | `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
 | `style`    | `"147 bold"`                       | The style for the module.                             |
 | `disabled` | `false`                            | Disables the `php` module.                            |
@@ -1914,7 +1914,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                                        |
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                        |
 | `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
 | `style`    | `"bold white"`                     | The style for the module.                                    |
 | `disabled` | `false`                            | Disables the `purescript` module.                            |
@@ -1960,7 +1960,7 @@ The module will be shown if any of the following conditions are met:
 
 | Tuỳ chọn             | Mặc định                                                                  | Mô tả                                                                                  |
 | -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
+| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | Định dạng cho module.                                                                  |
 | `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                           | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                                        |
@@ -2018,7 +2018,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                            |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
 | `style`    | `"bold red"`                       | The style for the module.                        |
 | `disabled` | `false`                            | Disables the `ruby` module.                      |
@@ -2053,7 +2053,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
 | `style`    | `"bold red"`                       | The style for the module.                       |
 | `disabled` | `false`                            | Disables the `rust` module.                     |
@@ -2086,7 +2086,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 | Tuỳ chọn    | Mặc định                     | Mô tả                                                       |
 | ----------- | ---------------------------- | ----------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                  |
+| `format`    | `"[$symbol$shlvl]($style) "` | Định dạng cho module.                                       |
 | `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
 | `style`     | `"bold yellow"`              | The style for the module.                                   |
@@ -2121,7 +2121,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 | Tuỳ chọn   | Mặc định                         | Mô tả                                            |
 | ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
+| `format`   | `'[$symbol\[$env\]]($style) '` | Định dạng cho module.                            |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
 | `style`    | `"bold dimmed blue"`             | The style for the module.                        |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
@@ -2211,7 +2211,7 @@ The `swift` module shows the currently installed version of Swift. The module wi
 
 | Tuỳ chọn   | Mặc định                           | Mô tả                                            |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
 | `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
 | `style`    | `"bold 202"`                       | The style for the module.                        |
 | `disabled` | `false`                            | Disables the `swift` module.                     |
@@ -2349,7 +2349,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | ------------- | ----------------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | The format for the module.            |
+| `format`      | `"[$user]($style) in "` | Định dạng cho module.                 |
 | `show_always` | `false`                 | Always shows the `username` module.   |
 | `disabled`    | `false`                 | Disables the `username` module.       |
 
@@ -2385,7 +2385,7 @@ The `zig` module shows the currently installed version of Zig. The module will b
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"`                    | The style for the module.                             |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
+| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                 |
 | `disabled` | `false`                            | Disables the `zig` module.                            |
 
 ### Variables
@@ -2449,7 +2449,7 @@ The order in which custom modules are shown can be individually set by including
 | `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
 | `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
 | `style`       | `"bold green"`                | The style for the module.                                                                                                  |
-| `format`      | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
+| `format`      | `"[$symbol$output]($style) "` | Định dạng cho module.                                                                                                      |
 | `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
 
 ### Variables
