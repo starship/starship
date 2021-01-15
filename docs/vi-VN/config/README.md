@@ -108,7 +108,7 @@ Ví dụ:
 
 #### Các kí tự Escapable
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+Các kí hiệu sau có các sử dụng đặc biệt trong một định dạng chuỗi. Nếu bạn muốn in các kí tự sau, bạn phải đặt trước chúng kí tự backslash (`\`).
 
 - \$
 - \\
@@ -117,20 +117,20 @@ The following symbols have special usage in a format string. If you want to prin
 - (
 - )
 
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Lưu ý rằng `toml` có [cú pháp escape riêng của nó](https://github.com/toml-lang/toml#user-content-string). Nó được khuyến nghị để sử dụng một literal string (`''`) trong cấu hình của bạn. Nếu bạn muốn sử dụng một kí tự cơ bản (`""`), chú ý đặt backslash `\` trước nó.
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+Ví dụ, khi bạn muốn in một kí hiệu `$` trên một dòng mới, các cấu hình sau cho `định dạng` tương đương:
 
 ```toml
-# with basic string
+# với chuỗi cơ bản
 format = "\n\\$"
 
-# with multiline basic string
+# với chuỗi cơ bản trong nhiều dòng
 format = """
 
 \\$"""
 
-# with literal string
+# với chuỗi đặc biệt
 format = '''
 
 \$'''
@@ -138,35 +138,35 @@ format = '''
 
 ## Prompt
 
-This is the list of prompt-wide configuration options.
+Cái này là danh sách các tuỳ chọn cho cấu hình prompt-wide.
 
-### Options
+### Các tuỳ chọn
 
-| Option         | Default                        | Description                                           |
-| -------------- | ------------------------------ | ----------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
-| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| Tuỳ chọn       | Mặc định                       | Mô tả                                                                    |
+| -------------- | ------------------------------ | ------------------------------------------------------------------------ |
+| `format`       | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                           |
+| `scan_timeout` | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds). |
+| `add_newline`  | `true`                         | Thêm một dòng mới trước khi bắt đầu một prompt.                          |
 
-### Example
+### Ví dụ
 
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Sử dụng định dạng custom
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Chờ 10 milliseconds để starship kiểm tra các tập tin trong đường dẫn hiện tại.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Vô hiệu hoá dòng mới tại điểm bắt đầu của prompt
 add_newline = false
 ```
 
-### Default Prompt Format
+### Định dạng prompt mặc định
 
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
@@ -237,7 +237,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 ### Options
 
-| Option           | Default                                          | Description                                                     |
+| Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
 | ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module.                                      |
 | `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current AWS profile.      |
@@ -247,7 +247,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 ### Variables
 
-| Variable  | Example          | Description                          |
+| Variable  | Example          | Mô tả                                |
 | --------- | ---------------- | ------------------------------------ |
 | region    | `ap-northeast-1` | The current AWS region               |
 | profile   | `astronauts`     | The current AWS profile              |
@@ -303,7 +303,7 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Options
 
-| Option               | Default                           | Description                                         |
+| Tuỳ chọn             | Mặc định                          | Mô tả                                               |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
 | `full_symbol`        | `""`                             | The symbol shown when the battery is full.          |
 | `charging_symbol`    | `""`                             | The symbol shown when the battery is charging.      |
@@ -340,7 +340,7 @@ style = "bold red"
 
 The `display` option is an array of the following table.
 
-| Option      | Description                                     |
+| Tuỳ chọn    | Mô tả                                           |
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
@@ -373,7 +373,7 @@ By default it only changes color. If you also want to change it's shape take a l
 
 ### Options
 
-| Option           | Default             | Description                                                                      |
+| Tuỳ chọn         | Mặc định            | Mô tả                                                                            |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------- |
 | `format`         | `"$symbol "`        | The format string used before the text input.                                    |
 | `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
@@ -383,7 +383,7 @@ By default it only changes color. If you also want to change it's shape take a l
 
 ### Variables
 
-| Variable | Example | Description                                                           |
+| Variable | Example | Mô tả                                                                 |
 | -------- | ------- | --------------------------------------------------------------------- |
 | symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
@@ -427,7 +427,7 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Options
 
-| Option     | Default                            | Description                                  |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                        |
 | ---------- | ---------------------------------- | -------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
 | `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
@@ -436,7 +436,7 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v3.17.3` | The version of cmake                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -458,7 +458,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Options
 
-| Option               | Default                       | Description                                                |
+| Tuỳ chọn             | Mặc định                      | Mô tả                                                      |
 | -------------------- | ----------------------------- | ---------------------------------------------------------- |
 | `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
@@ -476,7 +476,7 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 ### Variables
 
-| Variable  | Example  | Description                             |
+| Variable  | Example  | Mô tả                                   |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
@@ -505,7 +505,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Options
 
-| Option              | Default                                | Description                                                                                                                                                                                                 |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                                                                                                                                                                                       |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
@@ -516,7 +516,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Variables
 
-| Variable    | Example      | Description                          |
+| Variable    | Example      | Mô tả                                |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current conda environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -542,7 +542,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 
 ### Options
 
-| Option     | Default                              | Description                                               |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                     |
 | ---------- | ------------------------------------ | --------------------------------------------------------- |
 | `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
 | `style`    | `"bold red"`                         | The style for the module.                                 |
@@ -551,7 +551,7 @@ The `crystal` module shows the currently installed version of Crystal. The modul
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -578,7 +578,7 @@ The `dart` module shows the currently installed version of Dart. The module will
 
 ### Options
 
-| Option     | Default                            | Description                                     |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
@@ -587,7 +587,7 @@ The `dart` module shows the currently installed version of Dart. The module will
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -614,7 +614,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Options
 
-| Option              | Default                                            | Description                                                                      |
+| Tuỳ chọn            | Mặc định                                           | Mô tả                                                                            |
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -628,11 +628,11 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Advanced Option             | Mặc định | Mô tả                                                                                    |
+| --------------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `substitutions`             |          | A table of substitutions to be made to the path.                                         |
+| `fish_style_pwd_dir_length` | `0`      | The number of characters to use when applying fish shell pwd path logic.                 |
+| `use_logical_path`          | `true`   | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -648,7 +648,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Variable  | Example               | Description                         |
+| Variable  | Example               | Mô tả                               |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `"D:/Projects"`       | The current directory path          |
 | style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
@@ -671,7 +671,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Options
 
-| Option            | Default                            | Description                                                                                                     |
+| Tuỳ chọn          | Mặc định                           | Mô tả                                                                                                           |
 | ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                                      |
 | `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
@@ -681,7 +681,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Variable  | Example        | Description                          |
+| Variable  | Example        | Mô tả                                |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | symbol    |                | Mirrors the value of option `symbol` |
@@ -722,7 +722,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Options
 
-| Option      | Default                                 | Description                                              |
+| Tuỳ chọn    | Mặc định                                | Mô tả                                                    |
 | ----------- | --------------------------------------- | -------------------------------------------------------- |
 | `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                               |
 | `symbol`    | `"•NET "`                               | The symbol used before displaying the version of dotnet. |
@@ -732,7 +732,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Variable  | Example          | Description                                                        |
+| Variable  | Example          | Mô tả                                                              |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
@@ -760,7 +760,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Options
 
-| Option     | Default                                                   | Description                                                     |
+| Tuỳ chọn   | Mặc định                                                  | Mô tả                                                           |
 | ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
 | `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
 | `style`    | `"bold purple"`                                           | The style for the module.                                       |
@@ -769,7 +769,7 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Variables
 
-| Variable    | Example | Description                          |
+| Variable    | Example | Mô tả                                |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -799,7 +799,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 
 ### Options
 
-| Option     | Default                            | Description                                     |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
@@ -808,7 +808,7 @@ The `elm` module shows the currently installed version of Elm. The module will b
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -834,7 +834,7 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Options
 
-| Option     | Default                        | Description                                                                  |
+| Tuỳ chọn   | Mặc định                       | Mô tả                                                                        |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   |                                | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
@@ -844,7 +844,7 @@ The `env_var` module displays the current value of a selected environment variab
 
 ### Variables
 
-| Variable  | Example                                     | Description                                |
+| Variable  | Example                                     | Mô tả                                      |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
@@ -871,7 +871,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 
 ### Options
 
-| Option     | Default                            | Description                                              |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                    |
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
 | `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | The style for the module.                                |
@@ -880,7 +880,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -903,7 +903,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Options
 
-| Option           | Default                                          | Description                                                     |
+| Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
 | ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
 | `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
@@ -913,7 +913,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Variables
 
-| Variable  | Example           | Description                                                        |
+| Variable  | Example           | Mô tả                                                              |
 | --------- | ----------------- | ------------------------------------------------------------------ |
 | region    | `us-central1`     | The current GCP region                                             |
 | account   | `foo@example.com` | The current GCP profile                                            |
@@ -963,7 +963,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option               | Default                          | Description                                                                              |
+| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                    |
 | -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
 | `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
@@ -976,7 +976,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Example  | Description                                                                                          |
+| Variable      | Example  | Mô tả                                                                                                |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
 | remote_name   | `origin` | The remote name.                                                                                     |
@@ -1003,7 +1003,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Options
 
-| Option               | Default                                                | Description                                           |
+| Tuỳ chọn             | Mặc định                                               | Mô tả                                                 |
 | -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
 | `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                            |
@@ -1015,7 +1015,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | Example   | Description                         |
+| Variable  | Example   | Mô tả                               |
 | --------- | --------- | ----------------------------------- |
 | hash      | `b703eb3` | The current git commit hash         |
 | style\* |           | Mirrors the value of option `style` |
@@ -1038,7 +1038,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Options
 
-| Option         | Default                                                         | Description                                                                             |
+| Tuỳ chọn       | Mặc định                                                        | Mô tả                                                                                   |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
@@ -1053,7 +1053,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Variable         | Example    | Description                         |
+| Variable         | Example    | Mô tả                               |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -1078,7 +1078,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Option       | Default                                         | Description                         |
+| Tuỳ chọn     | Mặc định                                        | Mô tả                               |
 | ------------ | ----------------------------------------------- | ----------------------------------- |
 | `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
 | `conflicted` | `"="`                                           | This branch has merge conflicts.    |
@@ -1098,7 +1098,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                   |
+| Variable       | Mô tả                                                                                         |
 | -------------- | --------------------------------------------------------------------------------------------- |
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
 | `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
@@ -1115,14 +1115,14 @@ The following variables can be used in `format`:
 
 The following variables can be used in `diverged`:
 
-| Variable       | Description                                    |
+| Variable       | Mô tả                                          |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Description              |
+| Variable | Mô tả                    |
 | -------- | ------------------------ |
 | `count`  | Show the number of files |
 
@@ -1170,7 +1170,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 ### Options
 
-| Option     | Default                            | Description                                    |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                          |
 | ---------- | ---------------------------------- | ---------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
 | `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
@@ -1179,7 +1179,7 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.12.1` | The version of `go`                  |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1205,7 +1205,7 @@ The `helm` module shows the currently installed version of Helm. The module will
 
 ### Options
 
-| Option     | Default                            | Description                                      |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                            |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
@@ -1214,7 +1214,7 @@ The `helm` module shows the currently installed version of Helm. The module will
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1237,7 +1237,7 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Option     | Default                     | Description                                                                                                                          |
+| Tuỳ chọn   | Mặc định                    | Mô tả                                                                                                                                |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
@@ -1247,7 +1247,7 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Mô tả                                |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
@@ -1275,7 +1275,7 @@ The `java` module shows the currently installed version of Java. The module will
 
 ### Options
 
-| Option     | Default                                | Description                                     |
+| Tuỳ chọn   | Mặc định                               | Mô tả                                           |
 | ---------- | -------------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
 | `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
@@ -1284,7 +1284,7 @@ The `java` module shows the currently installed version of Java. The module will
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Mô tả                                |
 | --------- | ------- | ------------------------------------ |
 | version   | `v14`   | The version of `java`                |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -1307,7 +1307,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Options
 
-| Option      | Default                       | Description                                      |
+| Tuỳ chọn    | Mặc định                      | Mô tả                                            |
 | ----------- | ----------------------------- | ------------------------------------------------ |
 | `threshold` | `1`                           | Show number of jobs if exceeded.                 |
 | `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
@@ -1317,7 +1317,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Mô tả                                |
 | --------- | ------- | ------------------------------------ |
 | number    | `1`     | The number of jobs                   |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -1345,7 +1345,7 @@ The `julia` module shows the currently installed version of Julia. The module wi
 
 ### Options
 
-| Option     | Default                            | Description                                       |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                             |
 | ---------- | ---------------------------------- | ------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
 | `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
@@ -1354,7 +1354,7 @@ The `julia` module shows the currently installed version of Julia. The module wi
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1379,7 +1379,7 @@ The `kotlin` module shows the currently installed version of Kotlin. The module 
 
 ### Options
 
-| Option          | Default                            | Description                                                                   |
+| Tuỳ chọn        | Mặc định                           | Mô tả                                                                         |
 | --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
 | `format`        | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
 | `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
@@ -1389,7 +1389,7 @@ The `kotlin` module shows the currently installed version of Kotlin. The module 
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1426,7 +1426,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option            | Default                                              | Description                                                           |
+| Tuỳ chọn          | Mặc định                                             | Mô tả                                                                 |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
@@ -1436,7 +1436,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Example              | Description                              |
+| Variable  | Example              | Mô tả                                    |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-cluster`   | The current kubernetes context           |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -1463,9 +1463,9 @@ The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Default | Description                                                        |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Tuỳ chọn   | Mặc định | Mô tả                                                              |
+| ---------- | -------- | ------------------------------------------------------------------ |
+| `disabled` | `false`  | Disables the `line_break` module, making the prompt a single line. |
 
 ### Example
 
@@ -1486,7 +1486,7 @@ The `lua` module shows the currently installed version of Lua. The module will b
 
 ### Options
 
-| Option       | Default                            | Description                                                                |
+| Tuỳ chọn     | Mặc định                           | Mô tả                                                                      |
 | ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
 | `format`     | `"via [$symbol$version]($style) "` | The format for the module.                                                 |
 | `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
@@ -1496,7 +1496,7 @@ The `lua` module shows the currently installed version of Lua. The module will b
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1527,7 +1527,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option      | Default                                       | Description                                              |
+| Tuỳ chọn    | Mặc định                                      | Mô tả                                                    |
 | ----------- | --------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
@@ -1537,7 +1537,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable         | Example       | Description                                                        |
+| Variable         | Example       | Mô tả                                                              |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -1566,7 +1566,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Options
 
-| Option              | Default                          | Description                                                                                  |
+| Tuỳ chọn            | Mặc định                         | Mô tả                                                                                        |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                    |
@@ -1577,7 +1577,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | branch    | `master` | The active mercurial branch          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1607,7 +1607,7 @@ The `nim` module shows the currently installed version of Nim. The module will b
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
 | `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
@@ -1616,7 +1616,7 @@ The `nim` module shows the currently installed version of Nim. The module will b
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1640,7 +1640,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Options
 
-| Option       | Default                                        | Description                                           |
+| Tuỳ chọn     | Mặc định                                       | Mô tả                                                 |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
@@ -1651,7 +1651,7 @@ The `nix_shell` module shows the nix-shell environment. The module will be shown
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Mô tả                                |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
@@ -1684,7 +1684,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ### Options
 
-| Option              | Default                            | Description                                                                                           |
+| Tuỳ chọn            | Mặc định                           | Mô tả                                                                                                 |
 | ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$version]($style) "` | The format for the module.                                                                            |
 | `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
@@ -1694,7 +1694,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ###  Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | Example    | Mô tả                                |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v13.12.0` | The version of `node`                |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -1724,7 +1724,7 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 
 ### Options
 
-| Option     | Default                            | Description                                             |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                   |
 | ---------- | ---------------------------------- | ------------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
 | `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
@@ -1733,7 +1733,7 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v4.10.0` | The version of `ocaml`               |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1756,7 +1756,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Options
 
-| Option     | Default                                             | Description                                                    |
+| Tuỳ chọn   | Mặc định                                            | Mô tả                                                          |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | The format for the module.                                     |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
@@ -1765,7 +1765,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Mô tả                                |
 | --------- | ------- | ------------------------------------ |
 | cloud     | `corp`  | The current OpenStack cloud          |
 | project   | `dev`   | The current OpenStack project        |
@@ -1804,7 +1804,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Options
 
-| Option            | Default                           | Description                                                |
+| Tuỳ chọn          | Mặc định                          | Mô tả                                                      |
 | ----------------- | --------------------------------- | ---------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                 |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
@@ -1814,7 +1814,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1843,7 +1843,7 @@ The `perl` module shows the currently installed version of Perl. The module will
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
 | `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
@@ -1852,7 +1852,7 @@ The `perl` module shows the currently installed version of Perl. The module will
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Mô tả                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1877,7 +1877,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
 | `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
@@ -1886,7 +1886,7 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1912,7 +1912,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Options
 
-| Option     | Default                            | Description                                                  |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                        |
 | ---------- | ---------------------------------- | ------------------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
 | `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
@@ -1921,7 +1921,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1958,7 +1958,7 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                                   | Description                                                                            |
+| Tuỳ chọn             | Mặc định                                                                  | Mô tả                                                                                  |
 | -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
 | `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
@@ -1979,7 +1979,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Example         | Description                                |
+| Variable     | Example         | Mô tả                                      |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
 | symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
@@ -2016,7 +2016,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 ### Options
 
-| Option     | Default                            | Description                                      |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                            |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
@@ -2025,7 +2025,7 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `ruby`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2051,7 +2051,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### Options
 
-| Option     | Default                            | Description                                     |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                           |
 | ---------- | ---------------------------------- | ----------------------------------------------- |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
 | `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
@@ -2060,7 +2060,7 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### Variables
 
-| Variable  | Example           | Description                          |
+| Variable  | Example           | Mô tả                                |
 | --------- | ----------------- | ------------------------------------ |
 | version   | `v1.43.0-nightly` | The version of `rustc`               |
 | symbol    |                   | Mirrors the value of option `symbol` |
@@ -2083,7 +2083,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### Options
 
-| Option      | Default                      | Description                                                 |
+| Tuỳ chọn    | Mặc định                     | Mô tả                                                       |
 | ----------- | ---------------------------- | ----------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                          |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                  |
@@ -2094,7 +2094,7 @@ The `shlvl` module shows the current SHLVL ("shell level") environment variable,
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Mô tả                                |
 | --------- | ------- | ------------------------------------ |
 | shlvl     | `3`     | The current value of SHLVL           |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -2119,7 +2119,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Options
 
-| Option     | Default                          | Description                                      |
+| Tuỳ chọn   | Mặc định                         | Mô tả                                            |
 | ---------- | -------------------------------- | ------------------------------------------------ |
 | `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
@@ -2128,7 +2128,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 ### Variables
 
-| Variable  | Example      | Description                          |
+| Variable  | Example      | Mô tả                                |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current singularity image        |
 | symbol    |              | Mirrors the value of option `symbol` |
@@ -2157,7 +2157,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option                  | Default                    | Description                                          |
+| Tuỳ chọn                | Mặc định                   | Mô tả                                                |
 | ----------------------- | -------------------------- | ---------------------------------------------------- |
 | `format`                | `[$symbol$status]($style)` | The format of the module                             |
 | `symbol`                | `"✖"`                      | The symbol displayed on program error                |
@@ -2172,7 +2172,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable       | Example | Description                                                          |
+| Variable       | Example | Mô tả                                                                |
 | -------------- | ------- | -------------------------------------------------------------------- |
 | status         | `127`   | The exit code of the last command                                    |
 | int            | `127`   | The exit code of the last command                                    |
@@ -2209,7 +2209,7 @@ The `swift` module shows the currently installed version of Swift. The module wi
 
 ### Options
 
-| Option     | Default                            | Description                                      |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                            |
 | ---------- | ---------------------------------- | ------------------------------------------------ |
 | `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
 | `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
@@ -2218,7 +2218,7 @@ The `swift` module shows the currently installed version of Swift. The module wi
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2244,7 +2244,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Options
 
-| Option     | Default                              | Description                                           |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
 | ---------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
@@ -2253,7 +2253,7 @@ The `terraform` module shows the currently selected terraform workspace and vers
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | Example    | Mô tả                                |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `terraform`           |
 | workspace | `default`  | The current terraform workspace      |
@@ -2294,7 +2294,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option            | Default                 | Description                                                                                                                        |
+| Tuỳ chọn          | Mặc định                | Mô tả                                                                                                                              |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
@@ -2308,7 +2308,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 ### Variables
 
-| Variable  | Example    | Description                         |
+| Variable  | Example    | Mô tả                               |
 | --------- | ---------- | ----------------------------------- |
 | time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
@@ -2345,7 +2345,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Default                 | Description                           |
+| Tuỳ chọn      | Mặc định                | Mô tả                                 |
 | ------------- | ----------------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
@@ -2355,7 +2355,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Variable | Example      | Description                                                                                 |
+| Variable | Example      | Mô tả                                                                                       |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
@@ -2381,7 +2381,7 @@ The `zig` module shows the currently installed version of Zig. The module will b
 
 ### Options
 
-| Option     | Default                            | Description                                           |
+| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
 | ---------- | ---------------------------------- | ----------------------------------------------------- |
 | `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
 | `style`    | `"bold yellow"`                    | The style for the module.                             |
@@ -2390,7 +2390,7 @@ The `zig` module shows the currently installed version of Zig. The module will b
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Mô tả                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2438,7 +2438,7 @@ The order in which custom modules are shown can be individually set by including
 
 ### Options
 
-| Option        | Default                       | Description                                                                                                                |
+| Tuỳ chọn      | Mặc định                      | Mô tả                                                                                                                      |
 | ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
@@ -2454,7 +2454,7 @@ The order in which custom modules are shown can be individually set by including
 
 ### Variables
 
-| Variable  | Description                            |
+| Variable  | Mô tả                                  |
 | --------- | -------------------------------------- |
 | output    | The output of shell command in `shell` |
 | symbol    | Mirrors the value of option `symbol`   |
