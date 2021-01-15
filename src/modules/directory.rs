@@ -319,22 +319,42 @@ mod tests {
     }
 
     #[test]
-    fn contract_repo_directory() {
-        let full_path = Path::new("/Users/astronaut/dev/rocket-controls/src");
-        let repo_root = Path::new("/Users/astronaut/dev/rocket-controls");
+    fn contract_repo_directory() -> io::Result<()> {
+        let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
+        let repo_dir = tmp_dir.path().join("dev").join("rocket-controls");
+        let src_dir = repo_dir.join("src");
+        fs::create_dir_all(&src_dir)?;
+        init_repo(&repo_dir)?;
 
-        let output = contract_path(full_path, repo_root, "rocket-controls");
-        assert_eq!(output, "rocket-controls/src");
+        let src_variations = [src_dir.clone(), src_dir.canonicalize().unwrap()];
+        let repo_variations = [repo_dir.clone(), repo_dir.canonicalize().unwrap()];
+        for src_dir in &src_variations {
+            for repo_dir in &repo_variations {
+                let output = contract_repo_path(&src_dir, &repo_dir);
+                assert_eq!(output, Some("rocket-controls/src".to_string()));
+            }
+        }
+
+        tmp_dir.close()
     }
 
     #[test]
-    #[cfg(target_os = "windows")]
+    #[cfg(windows)]
     fn contract_windows_style_home_directory() {
-        let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
-        let home = Path::new("C:\\Users\\astronaut");
+        let path_variations = [
+            r"\\?\C:\Users\astronaut\schematics\rocket",
+            r"C:\Users\astronaut\schematics\rocket",
+        ];
+        let home_path_variations = [r"\\?\C:\Users\astronaut", r"C:\Users\astronaut"];
+        for path in &path_variations {
+            for home_path in &home_path_variations {
+                let path = Path::new(path);
+                let home_path = Path::new(home_path);
 
-        let output = contract_path(full_path, home, "~");
-        assert_eq!(output, "~/schematics/rocket");
+                let output = contract_path(path, home_path, "~");
+                assert_eq!(output, "~/schematics/rocket");
+            }
+        }
     }
 
     #[test]
