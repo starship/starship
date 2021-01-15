@@ -507,20 +507,20 @@ Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể 
 
 | Tuỳ chọn            | Mặc định                               | Mô tả                                                                                                                                                                                                       |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
+| `truncation_length` | `1`                                    | Số lượng đường dẫn của biến môi trường nên được cắt bớt, nếu biến môi trường được tạo thông qua via `conda create -p [path]`. `0` nghĩa là không cắt bớt. Cũng thấy trong module [`directory`](#directory). |
+| `symbol`            | `"🅒 "`                                 | Kí hiệu sử dụng trước tên biến môi trường.                                                                                                                                                                  |
 | `style`             | `"bold green"`                         | Kiểu cho module.                                                                                                                                                                                            |
 | `format`            | `"via [$symbol$environment]($style) "` | Định dạng cho module.                                                                                                                                                                                       |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
+| `ignore_base`       | `true`                                 | Bỏ qua biến môi trường `base` khi đã kích hoạt.                                                                                                                                                             |
+| `disabled`          | `false`                                | Vô hiệu module `conda`.                                                                                                                                                                                     |
 
 ### Các biến
 
-| Biến        | Ví dụ        | Mô tả                            |
-| ----------- | ------------ | -------------------------------- |
-| environment | `astronauts` | The current conda environment    |
-| symbol      |              | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\*   |              | Giá trị ghi đè của `style`       |
+| Biến        | Ví dụ        | Mô tả                              |
+| ----------- | ------------ | ---------------------------------- |
+| environment | `astronauts` | Biến môi trường hiện tại của conda |
+| symbol      |              | Giá trị ghi đè tuỳ chọn `symbol`   |
+| style\*   |              | Giá trị ghi đè của `style`         |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -535,19 +535,19 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. The module will be shown if any of the following conditions are met:
+Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Module sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `shard.yml` file
-- The current directory contains a `.cr` file
+- Đường dẫn hiện tại chứa một tập tin `shard.yml`
+- Đường dẫn hiện tại chứa một tập tin `.cr`
 
-### Các tuỳ chọn
+### Options
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                     |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                         | Kiểu cho module.                                          |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                     |
-| `disabled` | `false`                              | Disables the `crystal` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
+| `style`    | `"bold red"`                         | Kiểu cho module.                                      |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `disabled` | `false`                              | Disables the `crystal` module.                        |
 
 ### Các biến
 
