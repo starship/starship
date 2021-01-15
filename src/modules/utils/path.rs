@@ -76,8 +76,9 @@ impl PathExt for Path {
 mod test {
     use super::*;
 
+    #[cfg(windows)]
     #[test]
-    fn normalised_equals() {
+    fn windows_normalised_equals() {
         fn test_equals(a: &Path, b: &Path) {
             assert!(a.normalised_equals(&b));
             assert!(b.normalised_equals(&a));
@@ -108,8 +109,21 @@ mod test {
         test_equals(&device_ns, &device_ns);
     }
 
+    #[cfg(not(windows))]
     #[test]
-    fn normalised_equals_differing_prefixes() {
+    fn nix_normalised_equals() {
+        let path_a = Path::new("/a/b/c/d");
+        let path_b = Path::new("/a/b/c/d");
+        assert!(path_a.normalised_equals(&path_b));
+        assert!(path_b.normalised_equals(&path_a));
+
+        let path_c = Path::new("/a/b");
+        assert!(!path_a.normalised_equals(&path_c));
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn windows_normalised_equals_differing_prefixes() {
         fn test_not_equals(a: &Path, b: &Path) {
             assert!(!a.normalised_equals(&b));
             assert!(!b.normalised_equals(&a));
@@ -131,8 +145,21 @@ mod test {
         test_not_equals(&no_prefix, &verbatim);
     }
 
+    #[cfg(not(windows))]
     #[test]
-    fn normalised_starts_with() {
+    fn nix_normalised_equals_differing_prefixes() {
+        // Windows path prefixes are not parsed on *nix
+        let path_a = Path::new(r"\\?\UNC\server\share\a\b\c\d");
+        let path_b = Path::new(r"\\server\share\a\b\c\d");
+        assert!(!path_a.normalised_equals(&path_b));
+        assert!(!path_b.normalised_equals(&path_a));
+
+        assert!(path_a.normalised_equals(&path_a));
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn windows_normalised_starts_with() {
         fn test_starts_with(a: &Path, b: &Path) {
             assert!(a.normalised_starts_with(&b));
             assert!(!b.normalised_starts_with(&a));
@@ -170,8 +197,18 @@ mod test {
         test_starts_with(&no_prefix_a, &no_prefix_b);
     }
 
+    #[cfg(not(windows))]
     #[test]
-    fn normalised_starts_with_differing_prefixes() {
+    fn nix_normalised_starts_with() {
+        let path_a = Path::new("/a/b/c/d");
+        let path_b = Path::new("/a/b");
+        assert!(path_a.normalised_starts_with(&path_b));
+        assert!(!path_b.normalised_starts_with(&path_a));
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn windows_normalised_starts_with_differing_prefixes() {
         fn test_not_starts_with(a: &Path, b: &Path) {
             assert!(!a.normalised_starts_with(&b));
             assert!(!b.normalised_starts_with(&a));
@@ -193,8 +230,21 @@ mod test {
         test_not_starts_with(&verbatim_disk, &no_prefix);
     }
 
+    #[cfg(not(windows))]
     #[test]
-    fn without_prefix() {
+    fn nix_normalised_starts_with_differing_prefixes() {
+        // Windows path prefixes are not parsed on *nix
+        let path_a = Path::new(r"\\?\UNC\server\share\a\b\c\d");
+        let path_b = Path::new(r"\\server\share\a\b");
+        assert!(!path_a.normalised_starts_with(&path_b));
+        assert!(!path_b.normalised_starts_with(&path_a));
+
+        assert!(path_a.normalised_starts_with(&path_a));
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn windows_without_prefix() {
         // UNC paths
         assert_eq!(
             Path::new(r"\\?\UNC\server\share\sub\path").without_prefix(),
@@ -221,6 +271,45 @@ mod test {
         assert_eq!(
             Path::new(r"\\.\COM42\sub\path").without_prefix(),
             Path::new(r"\sub\path")
+        );
+        // No prefix
+        assert_eq!(
+            Path::new(r"\cat_pics\sub\path").without_prefix(),
+            Path::new(r"\cat_pics\sub\path")
+        );
+    }
+
+    #[cfg(not(windows))]
+    #[test]
+    fn nix_without_prefix() {
+        // Windows path prefixes are not parsed on *nix
+
+        // UNC paths
+        assert_eq!(
+            Path::new(r"\\?\UNC\server\share\sub\path").without_prefix(),
+            Path::new(r"\\?\UNC\server\share\sub\path")
+        );
+        assert_eq!(
+            Path::new(r"\\server\share\sub\path").without_prefix(),
+            Path::new(r"\\server\share\sub\path")
+        );
+        // Disk paths
+        assert_eq!(
+            Path::new(r"\\?\C:\sub\path").without_prefix(),
+            Path::new(r"\\?\C:\sub\path")
+        );
+        assert_eq!(
+            Path::new(r"C:\sub\path").without_prefix(),
+            Path::new(r"C:\sub\path")
+        );
+        // Other paths
+        assert_eq!(
+            Path::new(r"\\?\cat_pics\sub\path").without_prefix(),
+            Path::new(r"\\?\cat_pics\sub\path")
+        );
+        assert_eq!(
+            Path::new(r"\\.\COM42\sub\path").without_prefix(),
+            Path::new(r"\\.\COM42\sub\path")
         );
         // No prefix
         assert_eq!(
