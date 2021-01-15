@@ -454,32 +454,32 @@ Nếu bạn đang chạy Starship trong `bash`, không thể hook `DEBUG` trap s
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Người dùng Bash, những người cần chức năng giống preexec có thể sử dụng [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Đơn giản là định nghĩa các mảng `preexec_functions` và `precmd_functions` trước khi chạy `eval $(starship init $0)`, và sau đó thực thi như bình thường.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                      | Mô tả                                                      |
-| -------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`             | `"took [$duration]($style) "` | Định dạng cho module.                                      |
-| `style`              | `"bold yellow"`               | Kiểu cho module.                                           |
-| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
+| Tuỳ chọn             | Mặc định                      | Mô tả                                                                  |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Khoảng thời gian ngắn nhất để hiện thời gian (tính bằng milliseconds). |
+| `show_milliseconds`  | `false`                       | Hiện milliseconds.                                                     |
+| `format`             | `"took [$duration]($style) "` | Định dạng cho module.                                                  |
+| `style`              | `"bold yellow"`               | Kiểu cho module.                                                       |
+| `disabled`           | `false`                       | Vô hiệu module `cmd_duration`.                                         |
+| `show_notifications` | `false`                       | Hiện thông báo desktop khi câu lệnh hoàn thành.                        |
+| `min_time_to_notify` | `45_000`                      | Khoảng thời gian ngắn nhất để thông báo (tính bằng milliseconds).      |
 
-::: tip
+::: thử thuật
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+Hiện thông báo desktop yêu cầu starship được built với sự hỗ trợ của `rust-notify`. Bạn kiểm tra nếu starship hỗ trợ các thông báo bằng cách chạy `STARSHIP_LOG=debug starship module cmd_duration -d 60000` khi `show_notifications` được thiết lập là `true`.
 
 :::
 
 ### Các biến
 
-| Biến      | Ví dụ    | Mô tả                                   |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Giá trị ghi đè của `style`              |
+| Biến      | Ví dụ    | Mô tả                                 |
+| --------- | -------- | ------------------------------------- |
+| duration  | `16m40s` | Thời gian nó lấy để thực thi câu lệnh |
+| style\* |          | Giá trị ghi đè của `style`            |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -495,11 +495,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Module `conda` cho biết môi trường conda hiện tại, nếu `$CONDA_DEFAULT_ENV` được thiết lập.
 
-::: tip
+::: thủ thuật
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể muốn chạy `conda config --set changeps1 False`.
 
 :::
 
