@@ -52,7 +52,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Módulo**: un componente en el promt que provee información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
 
-**Variable**: Smaller sub-components that contain information provided by the module. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
+**Variable**: subcomponentes más pequeños que contienen información proporcionada por el módulo. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
 
 Por convención, la mayoría de los módulos tienen un prefijo del color predeterminado de la terminal (por ejemplo, `vía` en "nodejs") y un espacio vacío como sufijo.
 
@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Equivalente a 
 format = """
 $username\
 $hostname\
@@ -421,7 +421,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+El módulo `cmake` muestra la versión instalada de CMake si se cumple alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
@@ -459,15 +459,15 @@ Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el 
 
 ### Opciones
 
-| Opción               | Por defecto                   | Descripción                                                           |
-| -------------------- | ----------------------------- | --------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos) |
-| `show_milliseconds`  | `false`                       | Muestra la duración con precisión en milisegundos.                    |
-| `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                |
-| `style`              | `"bold yellow"`               | El estilo del módulo.                                                 |
-| `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                   |
-| `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.   |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                 |
+| Opción               | Por defecto                   | Descripción                                                            |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos)  |
+| `show_milliseconds`  | `false`                       | Muestra la duración con precisión en milisegundos.                     |
+| `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                 |
+| `style`              | `"bold yellow"`               | El estilo del módulo.                                                  |
+| `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                    |
+| `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.    |
+| `min_time_to_notify` | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos). |
 
 ::: tip
 
@@ -672,13 +672,13 @@ El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/
 
 ### Opciones
 
-| Opción            | Por defecto                        | Descripción                                                                                                     |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                                          |
-| `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                                        |
-| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                                           |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Desactiva el módulo `docker_context`.                                                                           |
+| Opción            | Por defecto                        | Descripción                                                                                                   |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                                        |
+| `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                                      |
+| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                                         |
+| `only_with_files` | `false`                            | Mostrar solo cuando hay un `docker-compose.yml`, `docker-compose.yaml`o `Dockerfile` en el directorio actual. |
+| `disabled`        | `true`                             | Desactiva el módulo `docker_context`.                                                                         |
 
 ### Variables
 
@@ -980,8 +980,8 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | Variable      | Ejemplo  | Descripción                                                                                                   |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
 | branch        | `master` | El nombre de la rama actual, regresa a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached HEAD). |
-| remote_name   | `origin` | The remote name.                                                                                              |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                              |
+| remote_name   | `origin` | El nombre remoto.                                                                                             |
+| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                              |
 | symbol        |          | Refleja el valor de la opción `symbol`                                                                        |
 | style\*     |          | Refleja el valor de la opción `style`                                                                         |
 
@@ -1374,25 +1374,25 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `kotlin` muestra la versión instalada de Kotlin. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `.kt` or a `.kts` file
+- El directorio actual contiene un archivo `.kt` o `.kts`
 
 ### Opciones
 
-| Opción          | Por defecto                        | Descripción                                                                   |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | El formato del módulo.                                                        |
-| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | El estilo del módulo.                                                         |
-| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+| Opción          | Por defecto                        | Descripción                                                             |
+| --------------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| `format`        | `"via [$symbol$version]($style) "` | El formato del módulo.                                                  |
+| `symbol`        | `"🅺 "`                             | Una cadena de formato que representa el símbolo de Kotlin.              |
+| `style`         | `"bold blue"`                      | El estilo del módulo.                                                   |
+| `kotlin_binary` | `"kotlin"`                         | Configura el binario kotlin que Starship ejecuta al obtener la versión. |
+| `disabled`      | `false`                            | Deshabilita el módulo `kotlin`.                                         |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                |
+| version   | `v1.4.21` | La versión de `kotlin`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1411,7 +1411,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# Utiliza el binario del Compilador de Kotlin para obtener la versión instalada
 kotlin_binary = "kotlinc"
 ```
 
