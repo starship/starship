@@ -17,8 +17,8 @@ pub struct StarshipLogger {
     log_level: Level,
 }
 
-impl StarshipLogger {
-    pub fn new() -> Self {
+impl Default for StarshipLogger {
+    fn default() -> Self {
         let log_dir = env::var_os("STARSHIP_CACHE")
             .map(PathBuf::from)
             .unwrap_or_else(|| {
@@ -54,7 +54,9 @@ impl StarshipLogger {
                 .unwrap_or_else(|_| Level::Warn),
         }
     }
+}
 
+impl StarshipLogger {
     /// Override the minimum log level
     pub fn set_log_level(&mut self, level: log::Level) {
         self.log_level = level;
@@ -130,6 +132,6 @@ impl log::Log for StarshipLogger {
 }
 
 pub fn init() {
-    log::set_boxed_logger(Box::new(StarshipLogger::new())).unwrap();
+    log::set_boxed_logger(Box::new(StarshipLogger::default())).unwrap();
     log::set_max_level(LevelFilter::Trace);
 }

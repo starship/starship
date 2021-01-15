@@ -15,7 +15,7 @@ static GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bund
 static HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
 static LOGGER: Lazy<()> = Lazy::new(|| {
-    let mut logger = StarshipLogger::new();
+    let mut logger = StarshipLogger::default();
 
     // Don't log to files during tests
     let nul = if cfg!(windows) { "nul" } else { "/dev/null" };
