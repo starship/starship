@@ -12,7 +12,7 @@
 
 ## ¿Cómo obtengo el autocompletado del comando como se muestra en el GIF?
 
-Completion support, or autocomplete, is provided by your shell of choice. En el caso de la demo, la demo se realizó con [Fish Shell](https://fishshell.com/), que proporciona el completado por defecto. Si usas Z Shell (zsh), te sugeriría echar un vistazo a [zsh-autosuggeries,](https://github.com/zsh-users/zsh-autosuggestions).
+El soporte de terminación, o autocompletado, es proporcionado por su shell de elección. En el caso de la demo, la demo se realizó con [Fish Shell](https://fishshell.com/), que proporciona el completado por defecto. Si usas Z Shell (zsh), te sugeriría echar un vistazo a [zsh-autosuggeries,](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
 
@@ -21,7 +21,7 @@ Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistem
 - Deshabilitar módulos es más explícito que omitirlos del nivel superior `format`
 - Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## The docs say Starship is cross-shell. ¿Por qué no es compatible mi shell preferido?
 
 Por la forma en que Starshp está construído, debería ser posible añadir soporte para prácticamente cualquier intérprete de comandos. El binario de Starship es sin estado y agnóstico, por lo que mientras que tu intérprete de comandos se pueda ampliar y soporte la personalización del símbolo del sistema, puede utilizar Starship.
 
