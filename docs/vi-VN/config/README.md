@@ -297,17 +297,17 @@ style = "bold blue"
 symbol = "🅰 "
 ```
 
-## Pin
+## Battery
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+`battery` module cho biết cách sạc pin của thiết bị là gì và tình trạng sạc hiện tại của nó. Module chỉ được nhìn thấy khi pin của thiết bị dưới 10%.
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn             | Mặc định                          | Mô tả                                               |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `""`                             | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `""`                             | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `""`                             | The symbol shown when the battery is discharging.   |
+| `full_symbol`        | `""`                             | Kí hiệu cho biết khi pin đầy.                       |
+| `charging_symbol`    | `""`                             | Kí hiệu cho biết khi ping đang sạc.                 |
+| `discharging_symbol` | `""`                             | Kí hiệu cho biết khi pin đang không sạc.            |
 | `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
 | `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
 | `format`             | `"[$symbol$percentage]($style) "` | Định dạng cho module.                               |
