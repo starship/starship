@@ -1799,7 +1799,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - **mix** - La versión del paquete `mix` se extrae del `mix.exs` presente
 - **helm** - La versión del gráfico `helm` se extrae del `Chart.yaml` presente
 - **maven** - La versión del paquete `maven` es extraída del `pom.xml` presente
-- **meson** - The `meson` package version is extracted from the `meson.build` present
+- **meson** - La versión del paquete `meson` es extraída del `meson.build` presente
 
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
 
@@ -2084,14 +2084,14 @@ El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                                 |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Mostrar umbral.                                             |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                      |
-| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                 |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                                       |
-| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                |
+| Opción      | Por defecto                  | Descripción                                                    |
+| ----------- | ---------------------------- | -------------------------------------------------------------- |
+| `threshold` | `2`                          | Mostrar umbral.                                                |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                         |
+| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                    |
+| `repeat`    | `false`                      | Causa `symbol` a ser repetido por la cantidad actual de SHLVL. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                          |
+| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                   |
 
 ### Variables
 
@@ -2158,31 +2158,31 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                  | Por defecto                | Descripción                                          |
-| ----------------------- | -------------------------- | ---------------------------------------------------- |
-| `format`                | `[$symbol$status]($style)` | El formato del módulo                                |
-| `symbol`                | `"✖"`                      | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                      | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                      | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                      | The symbol displayed on SIGINT (Ctrl + c)            |
-| `signal_symbol`         | `"⚡"`                      | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`               | El estilo del módulo.                                |
-| `recognize_signal_code` | `true`                     | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                    | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                     | Desactiva el módulo `status`.                        |
+| Opción                  | Por defecto                | Descripción                                            |
+| ----------------------- | -------------------------- | ------------------------------------------------------ |
+| `format`                | `[$symbol$status]($style)` | El formato del módulo                                  |
+| `symbol`                | `"✖"`                      | El símbolo mostrado en error del programa              |
+| `not_executable_symbol` | `"🚫"`                      | El símbolo mostrado cuando el archivo no es ejecutable |
+| `not_found_symbol`      | `"🔍"`                      | El símbolo mostrado cuando no se encuentra el comando  |
+| `sigint_symbol`         | `"🧱"`                      | El símbolo mostrado en SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                      | El símbolo mostrado en cualquier señal                 |
+| `style`                 | `"bold red"`               | El estilo del módulo.                                  |
+| `recognize_signal_code` | `true`                     | Activar mapeo de señales desde el código de salida     |
+| `map_symbol`            | `false`                    | Activar mapeo de símbolos desde el código de salida    |
+| `disabled`              | `true`                     | Desactiva el módulo `status`.                          |
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                          |
-| -------------- | ------- | -------------------------------------------------------------------- |
-| status         | `127`   | El código de salida del último comando                               |
-| int            | `127`   | El código de salida del último comando                               |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                  |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | Refleja el valor de la opción `symbol`                               |
-| style\*      |         | Refleja el valor de la opción `style`                                |
+| Variable       | Ejemplo | Descripción                                                                          |
+| -------------- | ------- | ------------------------------------------------------------------------------------ |
+| status         | `127`   | El código de salida del último comando                                               |
+| int            | `127`   | El código de salida del último comando                                               |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                           |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada         |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada      |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado |
+| symbol         |         | Refleja el valor de la opción `symbol`                                               |
+| style\*      |         | Refleja el valor de la opción `style`                                                |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2340,7 +2340,7 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se muestra
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION`, `SSH_CLIENT`, y `SSH_TTY`. Si su host SSH no configura estas variables, una solución es establecer una de ellas con un valor tonto.
 
 :::
 
