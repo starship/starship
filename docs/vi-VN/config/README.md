@@ -94,19 +94,19 @@ Ví dụ:
 - `"bold italic fg:purple"` thiết lập chữa nghiêng đậm có màu tím
 - `""` vô hiệu hoá tất cả các kiểu
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Lưu ý rằng những style trông như thế nào sẽ được điều khiển bởi giả lập terminal của bạn. Ví dụ, một vài giả lập terminal sẽ làm sáng những màu thay vì làm đậm chữ, và một vài theme màu sử dụng cũng các giá trị cho các màu thường và màu sáng. Tương tự, để có được chữ nghiêng, terminal của bạn phải hỗ trợ các kiểu chữ nghiêng.
 
-#### Conditional Format Strings
+#### Điều kiện định dạng chuỗi
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Một điều kiện định dạng chuỗi bọc trong `(` và `)` sẽ không render nếu tất cả các biến bên trong là rỗng.
 
 Ví dụ:
 
-- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- `(@$region)` sẽ không hiển thị gì nếu biến `region` là `None`, ngược lại `@` theo sao bởi giá trị của region.
+- `(một vài văn bản)` sẽ không hiển thị thứ gì khi không có những biến bọc trong các dấu ngoặc.
+- Khi `$all` là một shortcut cho `\[$a$b\]`, `($all)` sẽ không hiển thị chỉ khi `$a` và `$b` đều là `None`. Cái này làm việc giống như `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Các kí tự Escapable
 
 The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
