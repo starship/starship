@@ -109,9 +109,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     repo: &'a Repo,
-    ahead_behind: OnceCell<Option<Result<(usize, usize), git2::Error>>>,
-    repo_status: OnceCell<Option<Result<RepoStatus, git2::Error>>>,
-    stashed_count: OnceCell<Option<Result<usize, git2::Error>>>,
+    ahead_behind: OnceCell<Option<(usize, usize)>>,
+    repo_status: OnceCell<Option<RepoStatus>>,
+    stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -138,61 +138,47 @@ impl<'a> GitStatusInfo<'a> {
         Repository::open(repo_root).ok()
     }
 
-    pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
-        let result = self
-            .ahead_behind
-            .get_or_init(|| {
-                let repo = self.get_repository()?;
-                let branch_name = self.get_branch_name();
-                Some(get_ahead_behind(&repo, &branch_name))
-            })
-            .as_ref()?;
+    pub fn get_ahead_behind<'b>(&'b self) -> &'b Option<(usize, usize)> {
+        self.ahead_behind.get_or_init(|| {
+            let repo = self.get_repository()?;
+            let branch_name = self.get_branch_name();
 
-        match result {
-            Ok(ahead_behind) => Some(*ahead_behind),
-            Err(error) => {
-                log::debug!("get_ahead_behind: {}", error);
-                None
+            match get_ahead_behind(&repo, &branch_name) {
+                Ok(ahead_behind) => Some(ahead_behind),
+                Err(error) => {
+                    log::debug!("get_ahead_behind: {}", error);
+                    None
+                }
             }
-        }
+        })
     }
 
-    pub fn get_repo_status(&self) -> Option<RepoStatus> {
-        let result = self
-            .repo_status
-            .get_or_init(|| {
-                let mut repo = self.get_repository()?;
-                Some(get_repo_status(&mut repo))
-            })
-            .as_ref()?;
+    pub fn get_repo_status<'b>(&'b self) -> &'b Option<RepoStatus> {
+        self.repo_status.get_or_init(|| {
+            let mut repo = self.get_repository()?;
 
-        match result {
-            Ok(repo_status) => Some(*repo_status),
-            Err(error) => {
-                log::debug!("get_repo_status: {}", error);
-                None
+            match get_repo_status(&mut repo) {
+                Ok(repo_status) => Some(repo_status),
+                Err(error) => {
+                    log::debug!("get_repo_status: {}", error);
+                    None
+                }
             }
-        }
+        })
     }
 
-    pub fn get_stashed(&self) -> Option<usize> {
-        {
-            let result = self
-                .stashed_count
-                .get_or_init(|| {
-                    let mut repo = self.get_repository()?;
-                    Some(get_stashed_count(&mut repo))
-                })
-                .as_ref()?;
+    pub fn get_stashed<'b>(&'b self) -> &'b Option<usize> {
+        self.stashed_count.get_or_init(|| {
+            let mut repo = self.get_repository()?;
 
-            match result {
-                Ok(stashed_count) => Some(*stashed_count),
+            match get_stashed_count(&mut repo) {
+                Ok(stashed_count) => Some(stashed_count),
                 Err(error) => {
                     log::debug!("get_stashed_count: {}", error);
                     None
                 }
             }
-        }
+        })
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
