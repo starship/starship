@@ -64,7 +64,7 @@ jobs:
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
           
-          # TODO: switch to acOS-latest once it reaches 11.0
+          # TODO: switch to macOS-latest once it reaches 11.0
           - target: aarch64-apple-darwin
             os: macos-11.0
             name: starship-aarch64-apple-darwin.tar.gz
