@@ -8,7 +8,7 @@ use regex::Regex;
 use semver::Version;
 use semver::VersionReq;
 use serde_json as json;
-use std::path::PathBuf;
+use std::path::Path;
 
 /// Creates a module with the current Node.js version
 ///
@@ -73,7 +73,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_engines_version(base_dir: &PathBuf) -> Option<String> {
+fn get_engines_version(base_dir: &Path) -> Option<String> {
     let json_str = utils::read_file(base_dir.join("package.json")).ok()?;
     let package_json: json::Value = json::from_str(&json_str).ok()?;
     let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
