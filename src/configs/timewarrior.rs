@@ -6,6 +6,7 @@ pub struct TimewarriorConfig<'a> {
     pub symbol: &'a str,
     pub symbol_style: &'a str,
     pub tags_style: &'a str,
+    pub max_tag_count: i64,
     pub show_tags: bool,
     pub disabled: bool,
 }
@@ -16,7 +17,8 @@ impl<'a> RootModuleConfig<'a> for TimewarriorConfig<'a> {
             symbol: "",
             symbol_style: "white",
             tags_style: "white",
-            show_tags: true,
+            max_tag_count: 3,
+            show_tags: false,
             disabled: true,
         }
     }

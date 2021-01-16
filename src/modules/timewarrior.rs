@@ -17,7 +17,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let format = String::from("[$symbol]($symbol_style)");
+    let mut format = String::from("[$symbol]($symbol_style) ");
+    if config.show_tags {
+        format.push_str("[$tags]($tag_style) ");
+    }
 
     let parsed = StringFormatter::new(&format).and_then(|formatter| {
         formatter
@@ -27,6 +30,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "symbol_style" => Some(Ok(config.symbol_style)),
+                "tags_style" => Some(Ok(config.tags_style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "tags" => Some(Ok(timewarrior_tags(config.max_tag_count))),
                 _ => None,
             })
             .parse(None)
@@ -35,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `timewarrior`:\n{}", error);
+            log::warn!("{}", error);
             return None;
         }
     });
@@ -55,7 +63,43 @@ fn timewarrior_installed() -> bool {
 
 fn is_timewarrior_active() -> bool {
     match utils::exec_cmd("timew", &["get", "dom.active"]) {
-        Some(result) => result.stdout.starts_with('1'),
+        Some(result) => result.stdout.trim().starts_with('1'),
         None => false,
     }
+}
+
+fn timewarrior_tags(count: i64) -> String {
+    match utils::exec_cmd("timew", &["get", "dom.active.tag.count"]) {
+        Some(result) => {
+            let stdout = match result.stdout.trim().parse::<i64>() {
+                Ok(result) => result,
+                Err(error) => {
+                    log::warn!("{}", error);
+                    1 // Every entry should have at least 1 tag
+                }
+            };
+            get_tags(std::cmp::min(count, stdout))
+        },
+        None => String::new(),
+    }
+}
+
+fn get_tags(count: i64) -> String {
+    let mut tags: Vec<String> = Vec::new();
+    for n in 1..=count {
+        if n > 1 {
+            tags.push(String::from(", "));
+        }
+
+        let tag = match utils::exec_cmd("timew", &["get", format!("dom.active.tag.{}", n).as_str()] ) {
+            Some(result) => String::from(result.stdout.trim()),
+            None => String::new(),
+        };
+
+        if !tag.is_empty() {
+            tags.push(tag);
+        }
+    };
+
+    tags.into_iter().collect()
 }
