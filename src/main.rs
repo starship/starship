@@ -1,6 +1,6 @@
 use clap::{crate_authors, crate_version};
-use std::io;
 use std::time::SystemTime;
+use std::{io, process};
 
 use clap::{App, AppSettings, Arg, Shell, SubCommand};
 use rand::distributions::Alphanumeric;
@@ -186,9 +186,14 @@ fn main() {
             }
         }
         ("config", Some(sub_m)) => {
-            if let Some(name) = sub_m.value_of("name") {
-                if let Some(value) = sub_m.value_of("value") {
-                    configure::update_configuration(name, value)
+            if let Some(mut name) = sub_m.value_of("name").map(|x| x.split('.')) {
+                if let [Some(value), Some(key1), Some(key2)] =
+                    [sub_m.value_of("value"), name.next(), name.next()]
+                {
+                    configure::update_configuration(key1, key2, value)
+                } else {
+                    log::error!("Please pass in a config key with a '.'");
+                    process::exit(1);
                 }
             } else {
                 configure::edit_configuration()

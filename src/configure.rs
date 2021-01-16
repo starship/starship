@@ -16,36 +16,30 @@ const STD_EDITOR: &str = "vi";
 #[cfg(windows)]
 const STD_EDITOR: &str = "notepad.exe";
 
-pub fn update_configuration(name: &str, value: &str) {
-    let keys: Vec<&str> = name.split('.').collect();
-    if keys.len() != 2 {
-        log::error!("Please pass in a config key with a '.'");
-        process::exit(1);
-    }
-
+pub fn update_configuration(key1: &str, key2: &str, value: &str) {
     if let Some(table) = get_configuration().as_table_mut() {
-        if !table.contains_key(keys[0]) {
-            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+        if !table.contains_key(key1) {
+            table.insert(key1.to_string(), Value::Table(Map::new()));
         }
 
-        if let Some(values) = table.get(keys[0]).unwrap().as_table() {
+        if let Some(values) = table.get(key1).unwrap().as_table() {
             let mut updated_values = values.clone();
 
             if value.parse::<bool>().is_ok() {
                 updated_values.insert(
-                    keys[1].to_string(),
+                    key2.to_string(),
                     Value::Boolean(value.parse::<bool>().unwrap()),
                 );
             } else if value.parse::<i64>().is_ok() {
                 updated_values.insert(
-                    keys[1].to_string(),
+                    key2.to_string(),
                     Value::Integer(value.parse::<i64>().unwrap()),
                 );
             } else {
-                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+                updated_values.insert(key2.to_string(), Value::String(value.to_string()));
             }
 
-            table.insert(keys[0].to_string(), Value::Table(updated_values));
+            table.insert(key1.to_string(), Value::Table(updated_values));
         }
 
         write_configuration(table);
