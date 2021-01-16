@@ -39,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let current_dir = &get_current_dir(&context, &config);
 
-    let home_dir = dirs_next::home_dir().unwrap();
+    let home_dir = context.get_home().unwrap();
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
@@ -486,18 +486,10 @@ mod tests {
     #[cfg(not(target_os = "windows"))]
     mod linux {
         use super::*;
-        use std::sync::atomic::{AtomicBool, Ordering};
-
-        // As tests are run in parallel we have to keep a lock on which of the
-        // two tests are currently running as they both modify `HOME` which can
-        // override the other value resulting in inconsistent runs which is why
-        // we only run one of these tests at once.
-        static LOCK: AtomicBool = AtomicBool::new(false);
 
         #[test]
         #[ignore]
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
-            while LOCK.swap(true, Ordering::Acquire) {}
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
             let src_dir = repo_dir.join("src/meters/fuel-gauge");
@@ -506,19 +498,13 @@ mod tests {
             init_repo(&repo_dir)?;
             symlink(&src_dir, &symlink_dir)?;
 
-            // We can't mock `HOME` since dirs-next uses it which does not care about our mocking
-            let previous_home = home_dir().unwrap();
-
-            std::env::set_var("HOME", tmp_dir.path());
-
-            let actual = ModuleRenderer::new("directory").path(symlink_dir).collect();
+            let actual = ModuleRenderer::new("directory")
+                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .path(symlink_dir)
+                .collect();
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge")));
 
-            std::env::set_var("HOME", previous_home.as_path());
-
             assert_eq!(expected, actual);
-
-            LOCK.store(false, Ordering::Release);
 
             tmp_dir.close()
         }
@@ -526,16 +512,10 @@ mod tests {
         #[test]
         #[ignore]
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
-            while LOCK.swap(true, Ordering::Acquire) {}
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
             fs::create_dir_all(&dir)?;
             init_repo(&tmp_dir.path())?;
-
-            // We can't mock `HOME` since dirs-next uses it which does not care about our mocking
-            let previous_home = home_dir().unwrap();
-
-            std::env::set_var("HOME", tmp_dir.path());
 
             let actual = ModuleRenderer::new("directory")
                 .config(toml::toml! {
@@ -545,14 +525,11 @@ mod tests {
                     truncation_length = 5
                 })
                 .path(dir)
+                .env("HOME", tmp_dir.path().to_str().unwrap())
                 .collect();
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
 
-            std::env::set_var("HOME", previous_home.as_path());
-
             assert_eq!(expected, actual);
-
-            LOCK.store(false, Ordering::Release);
 
             tmp_dir.close()
         }
