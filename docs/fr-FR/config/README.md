@@ -427,12 +427,12 @@ Le module `cmake` affiche la version actuellement installée de CMake si l'une d
 
 ### Options
 
-| Option     | Défaut                             | Description                                   |
-| ---------- | ---------------------------------- | --------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                             |
-| `symbol`   | `"喝 "`                             | Le symbole utilisé avant la version de cmake. |
-| `style`    | `"bold blue"`                      | Le style du module.                           |
-| `disabled` | `false`                            | Désactive le module `cmake`.                  |
+| Option     | Défaut                               | Description                                   |
+| ---------- | ------------------------------------ | --------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                             |
+| `symbol`   | `"喝 "`                               | Le symbole utilisé avant la version de cmake. |
+| `style`    | `"bold blue"`                        | Le style du module.                           |
+| `disabled` | `false`                              | Désactive le module `cmake`.                  |
 
 ### Variables
 
