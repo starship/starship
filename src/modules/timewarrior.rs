@@ -55,7 +55,7 @@ fn timewarrior_installed() -> bool {
 
 fn is_timewarrior_active() -> bool {
     match utils::exec_cmd("timew", &["get", "dom.active"]) {
-        Some(result) => return result.stdout.starts_with("1"),
+        Some(result) => result.stdout.starts_with('1'),
         None => false,
     }
 }
