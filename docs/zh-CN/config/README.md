@@ -427,12 +427,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                           |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                     |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | 此组件的样式。                                      |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Option     | 默认值                                  | 描述                                           |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                     |
+| `symbol`   | `"喝 "`                               | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                        | 此组件的样式。                                      |
+| `disabled` | `false`                              | Disables the `cmake` module.                 |
 
 ### Variables
 
