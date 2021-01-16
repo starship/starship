@@ -1,8 +1,8 @@
-use std::{collections::HashMap, path::Path};
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind};
 use std::path::PathBuf;
 use std::str::FromStr;
+use std::{collections::HashMap, path::Path};
 
 use super::{Context, Module, RootModuleConfig};
 
