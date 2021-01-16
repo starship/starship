@@ -91,6 +91,7 @@ impl<'a> Context<'a> {
         }
     }
 
+    // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
     pub fn get_home(&self) -> Option<PathBuf> {
         if cfg!(test) {
             return self.get_env("HOME").map(PathBuf::from).or_else(home_dir);
