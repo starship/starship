@@ -77,7 +77,7 @@ mod tests {
     #[test]
     fn test_format_php_version() {
         let input = "7.3.8";
-        assert_eq!(format_php_version(input), Some("v7.3.8".to_string()));
+        assert_eq!(format_php_version(input), "v7.3.8".to_string());
     }
 
     #[test]
