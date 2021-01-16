@@ -1,5 +1,5 @@
 use git2::RepositoryState;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::git_state::GitStateConfig;
@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// During a git operation it will show: REBASING, BISECTING, MERGING, etc.
 fn get_state_description<'a>(
     state: RepositoryState,
-    root: &'a std::path::PathBuf,
+    root: &'a Path,
     config: &GitStateConfig<'a>,
 ) -> Option<StateDescription<'a>> {
     match state {
@@ -104,7 +104,7 @@ fn get_state_description<'a>(
     }
 }
 
-fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescription<'a> {
+fn describe_rebase<'a>(root: &'a Path, rebase_config: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
      *  interactive rebases. So, instead, we'll poke a few of the .git files

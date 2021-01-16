@@ -59,7 +59,7 @@ open = "1.4.0"
 unicode-width = "0.1.8"
 term_size = "0.3.2"
 quick-xml = "0.20.0"
-rand = "0.8.1"
+rand = "0.8.2"
 serde = { version = "1.0.119", features = ["derive"] }
 indexmap = "1.6.1"
 notify-rust = { version = "4.2.2", optional = true }

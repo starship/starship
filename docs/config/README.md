@@ -29,7 +29,7 @@ export STARSHIP_CONFIG=~/.starship
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
-```ps1
+```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
@@ -44,7 +44,7 @@ export STARSHIP_CACHE=~/.starship/cache
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
-```ps1
+```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
@@ -444,12 +444,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Options
 
-| Option     | Default                            | Description                                  |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | The style for the module.                    |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Option     | Default                              | Description                                  |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                   |
+| `symbol`   | `"喝 "`                              | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                        | The style for the module.                    |
+| `disabled` | `false`                              | Disables the `cmake` module.                 |
 
 ### Variables
 
