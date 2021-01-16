@@ -14,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
         Insert,
-    };
+    }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
     // TODO: extend config to more modes
 
