@@ -427,12 +427,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Опции
 
-| Параметр   | По умолчанию                       | Описание                                     |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Формат модуля.                               |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | Стиль модуля.                                |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Параметр   | По умолчанию                         | Описание                                     |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                               |
+| `symbol`   | `"喝 "`                               | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                        | Стиль модуля.                                |
+| `disabled` | `false`                              | Disables the `cmake` module.                 |
 
 ### Переменные
 
