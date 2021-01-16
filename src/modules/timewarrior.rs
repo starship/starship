@@ -79,7 +79,7 @@ fn timewarrior_tags(count: i64) -> String {
                 }
             };
             get_tags(std::cmp::min(count, stdout))
-        },
+        }
         None => String::new(),
     }
 }
@@ -91,7 +91,8 @@ fn get_tags(count: i64) -> String {
             tags.push(String::from(", "));
         }
 
-        let tag = match utils::exec_cmd("timew", &["get", format!("dom.active.tag.{}", n).as_str()] ) {
+        let tag = match utils::exec_cmd("timew", &["get", format!("dom.active.tag.{}", n).as_str()])
+        {
             Some(result) => String::from(result.stdout.trim()),
             None => String::new(),
         };
@@ -99,7 +100,7 @@ fn get_tags(count: i64) -> String {
         if !tag.is_empty() {
             tags.push(tag);
         }
-    };
+    }
 
     tags.into_iter().collect()
 }
