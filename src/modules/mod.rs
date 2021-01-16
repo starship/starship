@@ -49,6 +49,7 @@ mod status;
 mod swift;
 mod terraform;
 mod time;
+mod timewarrior;
 mod username;
 mod utils;
 mod zig;
@@ -118,6 +119,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "status" => status::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
+            "timewarrior" => timewarrior::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
             "zig" => zig::module(context),
@@ -193,6 +195,7 @@ pub fn description(module: &str) -> &'static str {
         "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
+        "timewarrior" => "The status of Timewarrior",
         "username" => "The active user's username",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",

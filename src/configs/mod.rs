@@ -49,6 +49,7 @@ pub mod status;
 pub mod swift;
 pub mod terraform;
 pub mod time;
+pub mod timewarrior;
 pub mod username;
 pub mod zig;
 
