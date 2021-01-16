@@ -427,12 +427,12 @@ Module `cmake` cho biết phiên bản Cmake hiện tại được cài đặt n
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                      |
-| ---------- | ---------------------------------- | ------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                      |
-| `symbol`   | `"喝 "`                             | Kí hiệu sử dụng trước phiên bản của cmake. |
-| `style`    | `"bold blue"`                      | Kiểu cho module.                           |
-| `disabled` | `false`                            | Vô hiệu module `cmake`.                    |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                      |
+| ---------- | ------------------------------------ | ------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                      |
+| `symbol`   | `"喝 "`                               | Kí hiệu sử dụng trước phiên bản của cmake. |
+| `style`    | `"bold blue"`                        | Kiểu cho module.                           |
+| `disabled` | `false`                              | Vô hiệu module `cmake`.                    |
 
 ### Các biến
 
