@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn timewarrior_installed() -> bool {
     match std::env::var("TIMEWARRIORDB") {
-        Ok(val)  => Path::new(&val).exists(),
+        Ok(val) => Path::new(&val).exists(),
         Err(_) => {
             let home_dir = dirs_next::home_dir().unwrap();
             Path::new(&home_dir).join(".timewarrior").exists()
