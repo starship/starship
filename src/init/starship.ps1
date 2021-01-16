@@ -1,41 +1,56 @@
 #!/usr/bin/env pwsh
 
-function Get-Cwd {
-    $cwd = Get-Location
-    $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
-    return @{
-        # Resolve the actual/physical path
-        # NOTE: ProviderPath is only a physical filesystem path for the "FileSystem" provider
-        # E.g. `Dev:\` -> `C:\Users\Joe Bloggs\Dev\`
-        Path = $cwd.ProviderPath;
-        # Resolve the provider-logical path 
-        # NOTE: Attempt to trim any "provider prefix" from the path string.
-        # E.g. `Microsoft.PowerShell.Core\FileSystem::Dev:\` -> `Dev:\`
-        LogicalPath =
-            if ($cwd.Path.StartsWith($provider_prefix)) {
-                $cwd.Path.Substring($provider_prefix.Length)
-            } else {
-                $cwd.Path
-            };
-    }
-}
-
-function Invoke-Native {
-    param($Executable, $Arguments)
-    # Build an arguments string which follows the C++ command-line argument quoting rules
-    # See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
-    $Arguments = $Arguments | ForEach-Object {
-        $_ = $_ -Replace '(\\+)"','$1$1"' # Escape backslash chains immediately preceeding quote marks.
-        $_ = $_ -Replace '(\\+)$','$1$1'  # Escape backslash chains immediately preceeding the end of the string.
-        $_ = $_ -Replace '"','\"'         # Escape internal quote marks.
-        "`"$_`""                          # Quote the argument.
-    }
-    # Use the stop-parsing symbol (--%) to ensure the argument string is passed along unchanged 
-    # See: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing?view=powershell-5.1
-    Invoke-Expression "& `"$Executable`" --% $($Arguments -Join ' ')"
-}
-
 function global:prompt {
+        
+    function Get-Cwd {
+        $cwd = Get-Location
+        $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
+        return @{
+            # Resolve the actual/physical path
+            # NOTE: ProviderPath is only a physical filesystem path for the "FileSystem" provider
+            # E.g. `Dev:\` -> `C:\Users\Joe Bloggs\Dev\`
+            Path = $cwd.ProviderPath;
+            # Resolve the provider-logical path 
+            # NOTE: Attempt to trim any "provider prefix" from the path string.
+            # E.g. `Microsoft.PowerShell.Core\FileSystem::Dev:\` -> `Dev:\`
+            LogicalPath =
+                if ($cwd.Path.StartsWith($provider_prefix)) {
+                    $cwd.Path.Substring($provider_prefix.Length)
+                } else {
+                    $cwd.Path
+                };
+        }
+    }
+
+    function Invoke-Native {
+        param($Executable, $Arguments)
+        $startInfo = [System.Diagnostics.ProcessStartInfo]::new($Executable);
+        $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8;
+        $startInfo.RedirectStandardOutput = $true;
+        $startInfo.CreateNoWindow = $true;
+        $startInfo.UseShellExecute = $false;
+        if ($startInfo.ArgumentList.Add) {
+            # PowerShell 6+ uses .NET 5+ and supports the ArgumentList property
+            # which bypasses the need for manually escaping the argument list into
+            # a command string.
+            foreach ($arg in $Arguments) {
+                $startInfo.ArgumentList.Add($arg);
+            }
+        }
+        else {
+            # Build an arguments string which follows the C++ command-line argument quoting rules
+            # See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
+            $escaped = $Arguments | ForEach-Object {
+                $_ = $_ -Replace '(\\+)"','$1$1"'; # Escape backslash chains immediately preceeding quote marks.
+                $_ = $_ -Replace '(\\+)$','$1$1;'  # Escape backslash chains immediately preceeding the end of the string.
+                $_ = $_ -Replace '"','\"';         # Escape quote marks.
+                "`"$_`""                           # Quote the argument.
+            }
+            $startInfo.Arguments = $escaped -Join ' ';
+        }
+        [System.Diagnostics.Process]::Start($startInfo).StandardOutput.ReadToEnd();
+    }
+
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
 
@@ -49,10 +64,6 @@ function global:prompt {
         "--logical-path=$($cwd.LogicalPath)",
         "--jobs=$($jobs)"
     )
-
-    # Save old output encoding and set it to UTF-8
-    $origOutputEncoding = [Console]::OutputEncoding
-    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     
     # Whe start from the premise that the command executed correctly, which covers also the fresh console.
     $lastExitCodeForPrompt = 0
@@ -72,14 +83,8 @@ function global:prompt {
 
     $arguments += "--status=$($lastExitCodeForPrompt)"
 
-    $out = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
-
-    # Restore old output encoding
-    [Console]::OutputEncoding = $origOutputEncoding
-
-    # Convert stdout (array of lines) to expected return type string
-    # `n is an escaped newline
-    $out -join "`n"
+    # Invoke Starship
+    Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
 
     # Propagate the original $LASTEXITCODE from before the prompt function was invoked.
     $global:LASTEXITCODE = $origLastExitCode
@@ -102,6 +107,7 @@ function global:prompt {
             Write-Error '' -ErrorAction 'Ignore'
         }
     }
+
 }
 
 # Disable virtualenv prompt, it breaks starship
