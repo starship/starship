@@ -428,12 +428,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                           |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                             |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | モジュールのスタイルです。                                |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| オプション      | デフォルト                                | 説明                                           |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                             |
+| `symbol`   | `"喝 "`                               | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                        | モジュールのスタイルです。                                |
+| `disabled` | `false`                              | Disables the `cmake` module.                 |
 
 ### 変数
 
