@@ -88,7 +88,7 @@ impl PathExt for Path {
     fn normalised_starts_with(&self, other: &Path) -> bool {
         self.starts_with(other)
     }
-    
+
     #[inline]
     fn normalised_equals(&self, other: &Path) -> bool {
         self == other
