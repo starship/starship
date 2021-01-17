@@ -1,40 +1,4 @@
-use std::ffi::OsStr;
-use std::path::{Component, Path, Prefix};
-
-#[derive(Debug, PartialEq, Eq)]
-enum NormalizedPrefix<'a> {
-    // No prefix, e.g. `\cat_pics` or `/cat_pics`
-    None,
-    /// Simple verbatim prefix, e.g. `\\?\cat_pics`.
-    Verbatim(&'a OsStr),
-    /// Device namespace prefix, e.g. `\\.\COM42`.
-    DeviceNS(&'a OsStr),
-    /// Prefix using Windows' _**U**niform **N**aming **C**onvention_, e.g. `\\server\share` or `\\?\UNC\server\share`
-    UNC(&'a OsStr, &'a OsStr),
-    /// Windows disk/drive prefix e.g. `C:` or `\\?\C:`
-    Disk(u8),
-}
-
-/// Normalise Verbatim and Non-Verbatim path prefixes into a comparable structure.
-/// NOTE: "Verbatim" paths are the rust std library's name for Windows extended-path prefixed paths.
-fn normalize_prefix(prefix: Prefix) -> NormalizedPrefix {
-    match prefix {
-        Prefix::Verbatim(segment) => NormalizedPrefix::Verbatim(segment),
-        Prefix::VerbatimUNC(server, share) => NormalizedPrefix::UNC(server, share),
-        Prefix::VerbatimDisk(disk) => NormalizedPrefix::Disk(disk),
-        Prefix::DeviceNS(device) => NormalizedPrefix::DeviceNS(device),
-        Prefix::UNC(server, share) => NormalizedPrefix::UNC(server, share),
-        Prefix::Disk(disk) => NormalizedPrefix::Disk(disk),
-    }
-}
-
-fn normalize_path(path: &Path) -> (NormalizedPrefix, &std::path::Path) {
-    let mut components = path.components();
-    match components.next() {
-        Some(Component::Prefix(prefix)) => (normalize_prefix(prefix.kind()), &components.as_path()),
-        _ => (NormalizedPrefix::None, path),
-    }
-}
+use std::path::Path;
 
 pub trait PathExt {
     /// Compare this path with another path, ignoring
@@ -43,7 +7,7 @@ pub trait PathExt {
     /// Determine if this path starts wit with another path fragment, ignoring
     /// the differences between Verbatim and Non-Verbatim paths.
     fn normalised_starts_with(&self, other: &Path) -> bool;
-    /// Strips the path Prefix component from the Path
+    /// Strips the path Prefix component from the Path, if there is one
     /// E.g. `\\?\path\foo` => `\foo`
     /// E.g. `\\?\C:\foo` => `\foo`
     /// E.g. `\\?\UNC\server\share\foo` => `\foo`
@@ -51,34 +15,98 @@ pub trait PathExt {
     fn without_prefix(&self) -> &Path;
 }
 
+#[cfg(windows)]
+mod normalize {
+    use std::ffi::OsStr;
+    use std::path::{Component, Path, Prefix};
+
+    #[derive(Debug, PartialEq, Eq)]
+    pub enum NormalizedPrefix<'a> {
+        // No prefix, e.g. `\cat_pics` or `/cat_pics`
+        None,
+        /// Simple verbatim prefix, e.g. `\\?\cat_pics`.
+        Verbatim(&'a OsStr),
+        /// Device namespace prefix, e.g. `\\.\COM42`.
+        DeviceNS(&'a OsStr),
+        /// Prefix using Windows' _**U**niform **N**aming **C**onvention_, e.g. `\\server\share` or `\\?\UNC\server\share`
+        UNC(&'a OsStr, &'a OsStr),
+        /// Windows disk/drive prefix e.g. `C:` or `\\?\C:`
+        Disk(u8),
+    }
+
+    /// Normalise Verbatim and Non-Verbatim path prefixes into a comparable structure.
+    /// NOTE: "Verbatim" paths are the rust std library's name for Windows extended-path prefixed paths.
+    #[cfg(windows)]
+    fn normalize_prefix(prefix: Prefix) -> NormalizedPrefix {
+        match prefix {
+            Prefix::Verbatim(segment) => NormalizedPrefix::Verbatim(segment),
+            Prefix::VerbatimUNC(server, share) => NormalizedPrefix::UNC(server, share),
+            Prefix::VerbatimDisk(disk) => NormalizedPrefix::Disk(disk),
+            Prefix::DeviceNS(device) => NormalizedPrefix::DeviceNS(device),
+            Prefix::UNC(server, share) => NormalizedPrefix::UNC(server, share),
+            Prefix::Disk(disk) => NormalizedPrefix::Disk(disk),
+        }
+    }
+
+    #[cfg(windows)]
+    pub fn normalize_path(path: &Path) -> (NormalizedPrefix, &Path) {
+        let mut components = path.components();
+        if let Some(Component::Prefix(prefix)) = components.next() {
+            return (normalize_prefix(prefix.kind()), &components.as_path());
+        }
+        (NormalizedPrefix::None, path)
+    }
+}
+
+#[cfg(windows)]
 impl PathExt for Path {
     fn normalised_starts_with(&self, other: &Path) -> bool {
         // Do a structured comparison of two paths (normalising differences between path prefixes)
-        let (a_prefix, a_path) = normalize_path(self);
-        let (b_prefix, b_path) = normalize_path(other);
+        let (a_prefix, a_path) = normalize::normalize_path(self);
+        let (b_prefix, b_path) = normalize::normalize_path(other);
         a_prefix == b_prefix && a_path.starts_with(b_path)
     }
 
     fn normalised_equals(&self, other: &Path) -> bool {
         // Do a structured comparison of two paths (normalising differences between path prefixes)
-        let (a_prefix, a_path) = normalize_path(self);
-        let (b_prefix, b_path) = normalize_path(other);
+        let (a_prefix, a_path) = normalize::normalize_path(self);
+        let (b_prefix, b_path) = normalize::normalize_path(other);
         a_prefix == b_prefix && a_path == b_path
     }
 
     fn without_prefix(&self) -> &Path {
-        let (_, path) = normalize_path(self);
+        let (_, path) = normalize::normalize_path(self);
         &path
     }
 }
 
+// NOTE: Windows path prefixes are only parsed on Windows.
+// On other platforms, we can fall back to the non-normalized versions of these routines.
+#[cfg(not(windows))]
+impl PathExt for Path {
+    #[inline]
+    fn normalised_starts_with(&self, other: &Path) -> bool {
+        self.starts_with(other)
+    }
+    
+    #[inline]
+    fn normalised_equals(&self, other: &Path) -> bool {
+        self == other
+    }
+
+    #[inline]
+    fn without_prefix(&self) -> &Path {
+        self
+    }
+}
+
 #[cfg(test)]
-mod test {
+#[cfg(windows)]
+mod windows {
     use super::*;
 
-    #[cfg(windows)]
     #[test]
-    fn windows_normalised_equals() {
+    fn normalised_equals() {
         fn test_equals(a: &Path, b: &Path) {
             assert!(a.normalised_equals(&b));
             assert!(b.normalised_equals(&a));
@@ -109,21 +137,8 @@ mod test {
         test_equals(&device_ns, &device_ns);
     }
 
-    #[cfg(not(windows))]
     #[test]
-    fn nix_normalised_equals() {
-        let path_a = Path::new("/a/b/c/d");
-        let path_b = Path::new("/a/b/c/d");
-        assert!(path_a.normalised_equals(&path_b));
-        assert!(path_b.normalised_equals(&path_a));
-
-        let path_c = Path::new("/a/b");
-        assert!(!path_a.normalised_equals(&path_c));
-    }
-
-    #[cfg(windows)]
-    #[test]
-    fn windows_normalised_equals_differing_prefixes() {
+    fn normalised_equals_differing_prefixes() {
         fn test_not_equals(a: &Path, b: &Path) {
             assert!(!a.normalised_equals(&b));
             assert!(!b.normalised_equals(&a));
@@ -145,21 +160,8 @@ mod test {
         test_not_equals(&no_prefix, &verbatim);
     }
 
-    #[cfg(not(windows))]
     #[test]
-    fn nix_normalised_equals_differing_prefixes() {
-        // Windows path prefixes are not parsed on *nix
-        let path_a = Path::new(r"\\?\UNC\server\share\a\b\c\d");
-        let path_b = Path::new(r"\\server\share\a\b\c\d");
-        assert!(!path_a.normalised_equals(&path_b));
-        assert!(!path_b.normalised_equals(&path_a));
-
-        assert!(path_a.normalised_equals(&path_a));
-    }
-
-    #[cfg(windows)]
-    #[test]
-    fn windows_normalised_starts_with() {
+    fn normalised_starts_with() {
         fn test_starts_with(a: &Path, b: &Path) {
             assert!(a.normalised_starts_with(&b));
             assert!(!b.normalised_starts_with(&a));
@@ -197,18 +199,8 @@ mod test {
         test_starts_with(&no_prefix_a, &no_prefix_b);
     }
 
-    #[cfg(not(windows))]
     #[test]
-    fn nix_normalised_starts_with() {
-        let path_a = Path::new("/a/b/c/d");
-        let path_b = Path::new("/a/b");
-        assert!(path_a.normalised_starts_with(&path_b));
-        assert!(!path_b.normalised_starts_with(&path_a));
-    }
-
-    #[cfg(windows)]
-    #[test]
-    fn windows_normalised_starts_with_differing_prefixes() {
+    fn normalised_starts_with_differing_prefixes() {
         fn test_not_starts_with(a: &Path, b: &Path) {
             assert!(!a.normalised_starts_with(&b));
             assert!(!b.normalised_starts_with(&a));
@@ -230,21 +222,8 @@ mod test {
         test_not_starts_with(&verbatim_disk, &no_prefix);
     }
 
-    #[cfg(not(windows))]
     #[test]
-    fn nix_normalised_starts_with_differing_prefixes() {
-        // Windows path prefixes are not parsed on *nix
-        let path_a = Path::new(r"\\?\UNC\server\share\a\b\c\d");
-        let path_b = Path::new(r"\\server\share\a\b");
-        assert!(!path_a.normalised_starts_with(&path_b));
-        assert!(!path_b.normalised_starts_with(&path_a));
-
-        assert!(path_a.normalised_starts_with(&path_a));
-    }
-
-    #[cfg(windows)]
-    #[test]
-    fn windows_without_prefix() {
+    fn without_prefix() {
         // UNC paths
         assert_eq!(
             Path::new(r"\\?\UNC\server\share\sub\path").without_prefix(),
@@ -278,10 +257,56 @@ mod test {
             Path::new(r"\cat_pics\sub\path")
         );
     }
+}
 
-    #[cfg(not(windows))]
+#[cfg(test)]
+#[cfg(not(windows))]
+mod nix {
+    use super::*;
+
     #[test]
-    fn nix_without_prefix() {
+    fn normalised_equals() {
+        let path_a = Path::new("/a/b/c/d");
+        let path_b = Path::new("/a/b/c/d");
+        assert!(path_a.normalised_equals(&path_b));
+        assert!(path_b.normalised_equals(&path_a));
+
+        let path_c = Path::new("/a/b");
+        assert!(!path_a.normalised_equals(&path_c));
+    }
+
+    #[test]
+    fn normalised_equals_differing_prefixes() {
+        // Windows path prefixes are not parsed on *nix
+        let path_a = Path::new(r"\\?\UNC\server\share\a\b\c\d");
+        let path_b = Path::new(r"\\server\share\a\b\c\d");
+        assert!(!path_a.normalised_equals(&path_b));
+        assert!(!path_b.normalised_equals(&path_a));
+
+        assert!(path_a.normalised_equals(&path_a));
+    }
+
+    #[test]
+    fn normalised_starts_with() {
+        let path_a = Path::new("/a/b/c/d");
+        let path_b = Path::new("/a/b");
+        assert!(path_a.normalised_starts_with(&path_b));
+        assert!(!path_b.normalised_starts_with(&path_a));
+    }
+
+    #[test]
+    fn normalised_starts_with_differing_prefixes() {
+        // Windows path prefixes are not parsed on *nix
+        let path_a = Path::new(r"\\?\UNC\server\share\a\b\c\d");
+        let path_b = Path::new(r"\\server\share\a\b");
+        assert!(!path_a.normalised_starts_with(&path_b));
+        assert!(!path_b.normalised_starts_with(&path_a));
+
+        assert!(path_a.normalised_starts_with(&path_a));
+    }
+
+    #[test]
+    fn without_prefix() {
         // Windows path prefixes are not parsed on *nix
 
         // UNC paths
