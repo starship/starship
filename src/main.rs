@@ -1,4 +1,4 @@
-use clap::crate_authors;
+use clap::{crate_authors, crate_version};
 use std::io;
 use std::time::SystemTime;
 
@@ -29,11 +29,11 @@ fn main() {
         .takes_value(true);
 
     let shell_arg = Arg::with_name("shell")
-		.value_name("SHELL")
-		.help(
-			"The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion",
-		)
-		.required(true);
+        .value_name("SHELL")
+        .help(
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion",
+        )
+        .required(true);
 
     let cmd_duration_arg = Arg::with_name("cmd_duration")
         .short("d")
@@ -64,7 +64,7 @@ fn main() {
     let mut app = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
-        .version(shadow::PKG_VERSION)
+        .version(crate_version!())
         // pull the authors from Cargo.toml
         .author(crate_authors!())
         .after_help("https://github.com/starship/starship")
