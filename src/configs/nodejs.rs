@@ -14,7 +14,7 @@ pub struct NodejsConfig<'a> {
 impl<'a> RootModuleConfig<'a> for NodejsConfig<'a> {
     fn new() -> Self {
         NodejsConfig {
-            format: "via [$symbol$version]($style) ",
+            format: "via [$symbol($version )]($style)",
             symbol: "⬢ ",
             style: "bold green",
             disabled: false,
