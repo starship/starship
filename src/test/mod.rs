@@ -1,5 +1,7 @@
 use crate::config::StarshipConfig;
 use crate::context::{Context, Shell};
+use crate::logger::StarshipLogger;
+use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
 use std::path::PathBuf;
@@ -12,6 +14,21 @@ static FIXTURE_DIR: Lazy<PathBuf> =
 static GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bundle"));
 static HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
+static LOGGER: Lazy<()> = Lazy::new(|| {
+    let mut logger = StarshipLogger::default();
+
+    // Don't log to files during tests
+    let nul = if cfg!(windows) { "nul" } else { "/dev/null" };
+    let nul = PathBuf::from(nul);
+
+    // Maxmimum log level
+    log::set_max_level(LevelFilter::Trace);
+    logger.set_log_level(Level::Trace);
+    logger.set_log_file_path(nul);
+
+    log::set_boxed_logger(Box::new(logger)).unwrap();
+});
+
 /// Render a specific starship module by name
 pub struct ModuleRenderer<'a> {
     name: &'a str,
@@ -21,6 +38,9 @@ pub struct ModuleRenderer<'a> {
 impl<'a> ModuleRenderer<'a> {
     /// Creates a new ModuleRenderer
     pub fn new(name: &'a str) -> Self {
+        // Start logger
+        Lazy::force(&LOGGER);
+
         let mut context = Context::new_with_shell_and_path(
             clap::ArgMatches::default(),
             Shell::Unknown,

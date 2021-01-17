@@ -87,7 +87,7 @@ jobs:
         with:
           command: build
           args: --release --features tls-vendored --target ${{ matrix.target }}
-          use-cross: contains(matrix.target, 'linux')
+          use-cross: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'

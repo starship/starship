@@ -29,7 +29,7 @@ export STARSHIP_CONFIG=~/.starship
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
-```ps1
+```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
@@ -44,7 +44,7 @@ export STARSHIP_CACHE=~/.starship/cache
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
-```ps1
+```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
@@ -444,12 +444,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Options
 
-| Option     | Default                            | Description                                  |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                   |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | The style for the module.                    |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Option     | Default                              | Description                                  |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                   |
+| `symbol`   | `"喝 "`                              | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                        | The style for the module.                    |
+| `disabled` | `false`                              | Disables the `cmake` module.                 |
 
 ### Variables
 
@@ -567,12 +567,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                               |
-| ---------- | ---------------------------------- | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                            | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                       | The style for the module.                                 |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                |
-| `disabled` | `false`                            | Disables the `crystal` module.                            |
+| Option     | Default                              | Description                                               |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                              | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                         | The style for the module.                                 |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                |
+| `disabled` | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
@@ -710,13 +710,13 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Option            | Default                            | Description                                                                             |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                              |
-| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                   |
-| `style`           | `"blue bold"`                      | The style for the module.                                                               |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+| Option            | Default                            | Description                                                                                                     |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                                      |
+| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                                           |
+| `style`           | `"blue bold"`                      | The style for the module.                                                                                       |
+| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `disabled`        | `true`                             | Disables the `docker_context` module.                                                                           |
 
 ### Variables
 

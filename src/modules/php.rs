@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         _ => None,
                     })
                     .map(|variable| match variable {
-                        "version" => format_php_version(&php_cmd_output.stdout).map(Ok),
+                        "version" => Some(Ok(format_php_version(&php_cmd_output.stdout))),
                         _ => None,
                     })
                     .parse(None)
@@ -62,11 +62,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
-fn format_php_version(php_version: &str) -> Option<String> {
-    let mut formatted_version = String::with_capacity(php_version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(php_version);
-    Some(formatted_version)
+fn format_php_version(php_version: &str) -> String {
+    format!("v{}", php_version)
 }
 
 #[cfg(test)]
@@ -80,7 +77,7 @@ mod tests {
     #[test]
     fn test_format_php_version() {
         let input = "7.3.8";
-        assert_eq!(format_php_version(input), Some("v7.3.8".to_string()));
+        assert_eq!(format_php_version(input), "v7.3.8".to_string());
     }
 
     #[test]

@@ -299,7 +299,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
             fn parse_failed<T>() -> Option<T> {
                 log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
                 None
-            };
+            }
             let latest_sdk = sdks_output
                 .stdout
                 .lines()
