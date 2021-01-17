@@ -100,8 +100,8 @@ mod tests {
         File::create(dir.path().join("Package.swift"))?.sync_all()?;
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(202).bold().paint("🐦 v5.2.2")
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -113,8 +113,8 @@ mod tests {
         File::create(dir.path().join("main.swift"))?.sync_all()?;
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(202).bold().paint("🐦 v5.2.2")
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
