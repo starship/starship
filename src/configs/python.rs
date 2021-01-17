@@ -21,7 +21,7 @@ impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
             pyenv_prefix: "pyenv ",
             python_binary: VecOr(vec!["python", "python3", "python2"]),
             scan_for_pyfiles: true,
-            format: "via [${symbol}${pyenv_prefix}${version}( \\($virtualenv\\))]($style) ",
+            format: "via [${symbol}${pyenv_prefix}${version} (\\($virtualenv\\))]($style)",
             style: "yellow bold",
             symbol: "🐍 ",
             disabled: false,

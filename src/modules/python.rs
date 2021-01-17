@@ -324,7 +324,7 @@ mod tests {
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
+            "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
         ));
 
@@ -342,7 +342,7 @@ mod tests {
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
+            "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
         ));
 
@@ -369,7 +369,7 @@ prompt = 'foo'
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
+            "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (foo)")
         ));
 
@@ -388,7 +388,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v2.7.17")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v2.7.17 ")));
         assert_eq!(expected, actual);
     }
 
@@ -403,7 +403,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
     }
 
@@ -421,7 +421,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
     }
 
@@ -438,8 +438,8 @@ prompt = 'foo'
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 test_pyenv system")
+            "via {}",
+            Color::Yellow.bold().paint("🐍 test_pyenv system ")
         ));
         assert_eq!(expected, actual);
     }
