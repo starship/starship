@@ -5,7 +5,6 @@ use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
-use std::iter::FromIterator;
 
 use crate::config::parse_style_string;
 use crate::segment::Segment;
@@ -65,31 +64,26 @@ impl<'a> StringFormatter<'a> {
     ///
     /// This method will throw an Error when the given format string fails to parse.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
-        parse(format)
-            .map(|format| {
-                // Cache all variables
-                let variables = VariableMapType::from_iter(
-                    format
-                        .get_variables()
-                        .into_iter()
-                        .map(|key| (key.to_string(), None))
-                        .collect::<Vec<(String, Option<_>)>>(),
-                );
-                let style_variables = StyleVariableMapType::from_iter(
-                    format
-                        .get_style_variables()
-                        .into_iter()
-                        .map(|key| (key.to_string(), None))
-                        .collect::<Vec<(String, Option<_>)>>(),
-                );
-                (format, variables, style_variables)
-            })
-            .map(|(format, variables, style_variables)| Self {
-                format,
-                variables,
-                style_variables,
-            })
-            .map_err(StringFormatterError::Parse)
+        let format = parse(format).map_err(StringFormatterError::Parse)?;
+
+        // Cache all variables
+        let variables = format
+            .get_variables()
+            .into_iter()
+            .map(|key| (key.to_string(), None))
+            .collect::<VariableMapType>();
+
+        let style_variables = format
+            .get_style_variables()
+            .into_iter()
+            .map(|key| (key.to_string(), None))
+            .collect::<StyleVariableMapType>();
+
+        Ok(Self {
+            format,
+            variables,
+            style_variables,
+        })
     }
 
     /// Maps variable name to its value
