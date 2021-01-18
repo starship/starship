@@ -38,7 +38,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
-    let nodejs_version = Lazy::new(|| utils::exec_cmd("node", &["--version"]).map(|cmd| cmd.stdout));
+    let nodejs_version =
+        Lazy::new(|| utils::exec_cmd("node", &["--version"]).map(|cmd| cmd.stdout));
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -48,7 +49,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map_style(|variable| match variable {
                 "style" => {
                     let engines_version = get_engines_version(&context.current_dir);
-                    let in_engines_range = check_engines_version(nodejs_version.deref().as_ref()?, engines_version);
+                    let in_engines_range =
+                        check_engines_version(nodejs_version.deref().as_ref()?, engines_version);
                     if in_engines_range {
                         Some(Ok(config.style))
                     } else {
