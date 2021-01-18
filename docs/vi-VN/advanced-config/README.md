@@ -21,21 +21,21 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Để chạy một hàm tuỳ biến trước khi một câu lệnh chạy, bạn có thể sử dụng cơ chế [`DEBUG` trap](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuy nhiên, bạn **phải** đặt bẫy tín hiệu DEBUG *trước* khởi tạo Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Để chạy một hàm tuỳ biến trước khi một câu lệnh chạy, bạn có thể sử dụng cơ chế bẫy [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuy nhiên, bạn **phải** đặt bẫy tín hiệu DEBUG *trước* khởi tạo Starship! Starship có thể giữ giá trị của DEBUG trap, nhưng nếu trap được ghi đè sau khi starship khởi động, một vài chức năng sẽ không hoạt động.
 
 ```bash
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # Bẫy DEBUG *trước khi* starship chạy
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Thay đổi tiêu đề của sổ
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Một vào prompts sẽ tự động thay đổi tiêu đề cửa sổ cho bạn (ví dụ phản ánh thư mục hiện hành của bạn). Fish thậm chí là nó một cách mặc định. Starship không làm điều này, nhưng nó khá đơn giản để thêm điều này vào chức năng cho `bash` hoặc `zsh`.
 
-First, define a window title change function (identical in bash and zsh):
+Đầu tiên, định nghĩa một hàm thay đổi tiêu đề cửa sổ (giống hệt trong bash và zsh):
 
 ```bash
 function set_win_title(){
@@ -43,21 +43,21 @@ function set_win_title(){
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+Bạn có thể tuỳ biến để tuỳ biến tiêu đề này (`$USER`, `$HOSTNAME`, và `$PWD` là những lựa chọn phổ biến).
 
-In `bash`, set this function to be the precmd starship function:
+Trong `bash`, thiết lập hàm này thành hàm precmd của starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+Trong `zsh`, thêm cái này vào mảng `precmd_functions`:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Nếu bạn thích thành quả, thêm những giòng này vào tập tin cấu hình shell của bạn (`~/.bashrc` or `~/.zshrc`) để cấu hình nó vĩnh viễn.
 
 For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
