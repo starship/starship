@@ -4,10 +4,12 @@ use crate::configs::nodejs::NodejsConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+use once_cell::sync::Lazy;
 use regex::Regex;
 use semver::Version;
 use semver::VersionReq;
 use serde_json as json;
+use std::ops::Deref;
 use std::path::Path;
 
 /// Creates a module with the current Node.js version
@@ -36,9 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
-    let nodejs_version = utils::exec_cmd("node", &["--version"])?.stdout;
-    let engines_version = get_engines_version(&context.current_dir);
-    let in_engines_range = check_engines_version(&nodejs_version, engines_version);
+    let nodejs_version = Lazy::new(|| utils::exec_cmd("node", &["--version"]).map(|cmd| cmd.stdout));
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -47,6 +47,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "style" => {
+                    let engines_version = get_engines_version(&context.current_dir);
+                    let in_engines_range = check_engines_version(nodejs_version.deref().as_ref()?, engines_version);
                     if in_engines_range {
                         Some(Ok(config.style))
                     } else {
@@ -56,7 +58,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(nodejs_version.trim())),
+                "version" => nodejs_version
+                    .deref()
+                    .as_ref()
+                    .map(|version| version.trim())
+                    .map(Ok),
                 _ => None,
             })
             .parse(None)
