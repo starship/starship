@@ -1,18 +1,18 @@
 # Cấu hình nâng cao
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Trang này chi tiết một vài cấu hình kĩ thuật nâng cao hơn được sử dụng trong starship.
 
-::: warning
+::: cảnh báo
 
-The configurations in this section are subject to change in future releases of Starship.
+Các cấu hình trong phần này có thể thay đổi trong các bản phát hành Starship trong tương lai.
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Tuỳ biến pre-prompt và pre-execution Commands trong Bash
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash không có một preexec/precmd framwork chính thống giống như các shells khác. Bởi vì điều này, nó là khó để cung cấp các hook cho việc tuỳ biến được đầy đủ trong `bash`. Tuy nhiên, Starship cung cấp cho bạn khả năng hạn chế để chèn các chức năng của riêng bạn vào trong thủ tục prompt-rendering:
 
-- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
+- Để chạy một hàm tuỳ biến trước khi prompt được vẽ ra, định nghĩa một hàm mới và sau đó gán tên của nó tới `starship_precmd_user_func`. Ví dụ, để vẽ một tên lửa trước prompt, bạn sẽ làm
 
 ```bash
 function blastoff(){
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Để chạy một hàm tuỳ biến trước khi một câu lệnh chạy, bạn có thể sử dụng cơ chế [`DEBUG` trap](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuy nhiên, bạn **phải** đặt bẫy tín hiệu DEBUG *trước* khởi tạo Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
