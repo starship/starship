@@ -59,7 +59,7 @@ precmd_functions+=(set_win_title)
 
 Nếu bạn thích thành quả, thêm những giòng này vào tập tin cấu hình shell của bạn (`~/.bashrc` or `~/.zshrc`) để cấu hình nó vĩnh viễn.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Ví dụ, nếu bạn muốn hiển thị đường dẫn hiện tại của bạn trong tiêu đề tab terminal, thêm snippet sau vào `~/.bashrc` hoặc `~/.zshrc` của bạn:
 
 ```bash
 function set_win_title(){
@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Style Strings
+## Các chuỗi kiểu
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Style strings are a list of words, separated by whitespace. Các từ là không phân biệt hoa thường (ví dụ. `bold` và `Bold` là hai chuỗi tương đương). Mỗi từ có thể là một trong các từ sau:
 
   - `bold`
   - `underline`
@@ -80,13 +80,13 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+`<color>` là một nơi quy định màu (được bàn luận ở phía dưới). `fg:<color>` và `<color>` hiện tại thực hiện công việc như nhau, tuy nhiên, điều này có thể thay đổi trong tương lai. Thứ tự các từ trong chuỗi là không quan trọng.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+Từ mã `none` ghi đè tất cả các từ mã khác trong chuỗi nếu nó không là một phần của `bg:` specifier, vậy nên `fg:red none fg:blue` sẽ vẫn tạo một chuỗi mà không có kiểu. `bg:none`  thiết lập màu nền do đó `fg:red bg:none` là tương đương với `red` hoặc `fg:red` và `bg:green fg:red bg:none` cũng tương đương với `fg:red` hoặc `red`. Nó có thể trở thành một lỗi để sử dụng `none` trong việc kết hợp với các từ mã khác trong tương lai.
 
-A color specifier can be one of the following:
+Một quy định màu có thể là một trong các thứ sau:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - Một tròn các màu chuẩn của terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
  - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
