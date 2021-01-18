@@ -40,7 +40,7 @@ log = { version = "0.4.13", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 battery = { version = "0.7.8", optional = true }
-path-slash = "0.1.3"
+path-slash = "0.1.4"
 unicode-segmentation = "1.7.1"
 gethostname = "0.2.1"
 once_cell = "1.5.2"
