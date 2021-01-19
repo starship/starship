@@ -176,7 +176,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.java"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -186,7 +186,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.class"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -196,7 +196,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -206,7 +206,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("test.jar"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -216,7 +216,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("pom.xml"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -226,7 +226,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle.kts"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -236,7 +236,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle.kts"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -246,7 +246,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".java-version"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.dimmed().paint("☕ v13.0.2")));
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
