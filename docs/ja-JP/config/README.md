@@ -2211,12 +2211,12 @@ The `swift` module shows the currently installed version of Swift. 次の条件�
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                 |
-| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | モジュールのスタイルです。                                    |
-| `disabled` | `false`                            | Disables the `swift` module.                     |
+| オプション      | デフォルト                                | 説明                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                 |
+| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                         | モジュールのスタイルです。                                    |
+| `disabled` | `false`                              | Disables the `swift` module.                     |
 
 ### 変数
 
