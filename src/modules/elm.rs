@@ -24,9 +24,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
-    let module_version = Some(format!("v{}", elm_version.trim()))?;
-
     let mut module = context.new_module("elm");
     let config: ElmConfig = ElmConfig::try_load(module.config);
 
@@ -41,7 +38,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&module_version)),
+                "version" => {
+                    let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
+                    let module_version = Some(format!("v{}", elm_version.trim()))?;
+                    Some(Ok(module_version))
+                },
                 _ => None,
             })
             .parse(None)
