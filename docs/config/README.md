@@ -1410,7 +1410,7 @@ The module will be shown if any of the following conditions are met:
 
 | Option     | Default                            | Description                                       |
 | ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
+| `format`   | `"via [$symbol$version ]($style)"` | The format for the module.                        |
 | `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
 | `style`    | `"bold purple"`                    | The style for the module.                         |
 | `disabled` | `false`                            | Disables the `julia` module.                      |
