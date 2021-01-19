@@ -22,8 +22,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let dart_version = utils::exec_cmd("dart", &["--version"])?.stderr;
-
     let mut module = context.new_module("dart");
     let config: DartConfig = DartConfig::try_load(module.config);
 
@@ -38,7 +36,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => parse_dart_version(&dart_version).map(Ok),
+                "version" => {
+                    let dart_version = utils::exec_cmd("dart", &["--version"])?.stderr;
+                    parse_dart_version(&dart_version).map(Ok)
+                },
                 _ => None,
             })
             .parse(None)
