@@ -926,7 +926,7 @@ The module will be shown if any of the following conditions are met:
 | ---------- | ---------------------------------- | -------------------------------------------------------- |
 | `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
 | `style`    | `"bold red"`                       | The style for the module.                                |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
+| `format`   | `"via [$symbol$version ]($style)"` | The format for the module.                               |
 | `disabled` | `false`                            | Disables the `erlang` module.                            |
 
 ### Variables
