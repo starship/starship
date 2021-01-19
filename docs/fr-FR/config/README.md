@@ -2209,12 +2209,12 @@ The `swift` module shows the currently installed version of Swift. Le module est
 
 ### Options
 
-| Option     | Défaut                             | Description                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                |
-| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | Le style du module.                              |
-| `disabled` | `false`                            | Disables the `swift` module.                     |
+| Option     | Défaut                               | Description                                      |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                                |
+| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                         | Le style du module.                              |
+| `disabled` | `false`                              | Disables the `swift` module.                     |
 
 ### Variables
 
