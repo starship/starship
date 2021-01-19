@@ -2209,12 +2209,12 @@ The `swift` module shows the currently installed version of Swift. 此组件将�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                         |
-| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | 此组件的样式。                                          |
-| `disabled` | `false`                            | Disables the `swift` module.                     |
+| Option     | 默认值                                  | 描述                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
+| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                         | 此组件的样式。                                          |
+| `disabled` | `false`                              | Disables the `swift` module.                     |
 
 ### Variables
 
