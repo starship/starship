@@ -32,8 +32,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let java_version = get_java_version(context)?;
-
     let mut module = context.new_module("java");
     let config: JavaConfig = JavaConfig::try_load(module.config);
 
@@ -48,7 +46,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&java_version)),
+                "version" => {
+                    let java_version = get_java_version(context)?;
+                    Some(Ok(java_version))
+                }
                 _ => None,
             })
             .parse(None)
