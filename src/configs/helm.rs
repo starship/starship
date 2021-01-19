@@ -13,7 +13,7 @@ pub struct HelmConfig<'a> {
 impl<'a> RootModuleConfig<'a> for HelmConfig<'a> {
     fn new() -> Self {
         HelmConfig {
-            format: "via [$symbol$version]($style) ",
+            format: "via [$symbol$version ]($style)",
             symbol: "⎈ ",
             style: "bold white",
             disabled: false,
