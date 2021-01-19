@@ -100,7 +100,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("helm").path(dir.path()).collect();
 
-        let expected = Some(format!("via {} ", Color::White.bold().paint("⎈ v3.1.1")));
+        let expected = Some(format!("via {}", Color::White.bold().paint("⎈ v3.1.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -112,7 +112,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("helm").path(dir.path()).collect();
 
-        let expected = Some(format!("via {} ", Color::White.bold().paint("⎈ v3.1.1")));
+        let expected = Some(format!("via {}", Color::White.bold().paint("⎈ v3.1.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
