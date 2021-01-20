@@ -1,6 +1,5 @@
 use ansi_term::Style;
 use pest::error::Error as PestError;
-use rayon::prelude::*;
 use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
@@ -106,7 +105,7 @@ impl<'a> StringFormatter<'a> {
         M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(|var| VariableValue::Plain(var.into())));
@@ -166,7 +165,7 @@ impl<'a> StringFormatter<'a> {
         M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
     {
         self.variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(VariableValue::Styled));
@@ -183,7 +182,7 @@ impl<'a> StringFormatter<'a> {
         M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
     {
         self.style_variables
-            .par_iter_mut()
+            .iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
                 *value = mapper(key).map(|var| var.map(|var| var.into()));

@@ -1,6 +1,5 @@
 use ansi_term::ANSIStrings;
 use clap::ArgMatches;
-use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
@@ -54,7 +53,7 @@ pub fn get_prompt(context: Context) -> String {
         // Make $all display all modules
         if module == "all" {
             Some(Ok(PROMPT_ORDER
-                .par_iter()
+                .iter()
                 .flat_map(|module| {
                     handle_module(module, &context, &modules)
                         .into_iter()
