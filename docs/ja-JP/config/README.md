@@ -723,13 +723,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### オプション
 
-| オプション       | デフォルト                                   | 説明                                   |
-| ----------- | --------------------------------------- | ------------------------------------ |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | moduleのフォーマットです。                     |
-| `symbol`    | `•NET "`                                | dotnetのバージョンを表示する前に使用される記号です。        |
-| `heuristic` | `true`                                  | より高速なバージョン検出を使用して、starshipの動作を維持します。 |
-| `style`     | `"bold blue"`                           | モジュールのスタイルです。                        |
-| `disabled`  | `false`                                 | `dotnet`モジュールを無効にします。                |
+| オプション       | デフォルト                                     | 説明                                   |
+| ----------- | ----------------------------------------- | ------------------------------------ |
+| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | moduleのフォーマットです。                     |
+| `symbol`    | `•NET "`                                  | dotnetのバージョンを表示する前に使用される記号です。        |
+| `heuristic` | `true`                                    | より高速なバージョン検出を使用して、starshipの動作を維持します。 |
+| `style`     | `"bold blue"`                             | モジュールのスタイルです。                        |
+| `disabled`  | `false`                                   | `dotnet`モジュールを無効にします。                |
 
 ### 変数
 
@@ -800,12 +800,12 @@ symbol = "🔮 "
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                |
-| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | モジュールのスタイルです。                                   |
-| `disabled` | `false`                            | `elm`モジュールを無効にします。                              |
+| オプション      | デフォルト                                | 説明                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                |
+| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                        | モジュールのスタイルです。                                   |
+| `disabled` | `false`                              | `elm`モジュールを無効にします。                              |
 
 ### 変数
 
@@ -872,12 +872,12 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 次の�
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                       |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | モジュールのスタイルです。                                            |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                         |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| オプション      | デフォルト                                | 説明                                                       |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                         | モジュールのスタイルです。                                            |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                         |
+| `disabled` | `false`                              | Disables the `erlang` module.                            |
 
 ### 変数
 
@@ -1171,12 +1171,12 @@ behind = "⇣${count}"
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                             |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                               |
-| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | モジュールのスタイルです。                                  |
-| `disabled` | `false`                            | `golang`モジュールを無効にします。                          |
+| オプション      | デフォルト                                | 説明                                             |
+| ---------- | ------------------------------------ | ---------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                               |
+| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                        | モジュールのスタイルです。                                  |
+| `disabled` | `false`                              | `golang`モジュールを無効にします。                          |
 
 ### 変数
 
@@ -1206,12 +1206,12 @@ The `helm` module shows the currently installed version of Helm. 次の条件の
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                 |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | モジュールのスタイルです。                                    |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| オプション      | デフォルト                                | 説明                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                 |
+| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                       | モジュールのスタイルです。                                    |
+| `disabled` | `false`                              | Disables the `helm` module.                      |
 
 ### 変数
 
@@ -1346,12 +1346,12 @@ threshold = 4
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                  |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | モジュールのスタイルです。                                     |
-| `disabled` | `false`                            | `julia`モジュールを無効にします。                              |
+| オプション      | デフォルト                                | 説明                                                |
+| ---------- | ------------------------------------ | ------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                  |
+| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                      | モジュールのスタイルです。                                     |
+| `disabled` | `false`                              | `julia`モジュールを無効にします。                              |
 
 ### 変数
 
@@ -1609,12 +1609,12 @@ The `nim` module shows the currently installed version of Nim. 次の条件の�
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
-| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | モジュールのスタイルです。                                         |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| オプション      | デフォルト                                | 説明                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                      | モジュールのスタイルです。                                         |
+| `disabled` | `false`                              | Disables the `nim` module.                            |
 
 ### 変数
 
@@ -1960,16 +1960,16 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### オプション
 
-| オプション                | デフォルト                                                                     | 説明                                                                                     |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | moduleのフォーマットです。                                                                       |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                           | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                   | pyenvを使用してPythonバージョンを取得します                                                            |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | `python`モジュールを無効にします。                                                                  |
+| オプション                | デフォルト                                                                      | 説明                                                                                     |
+| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | moduleのフォーマットです。                                                                       |
+| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                            | モジュールのスタイルです。                                                                          |
+| `pyenv_version_name` | `false`                                                                    | pyenvを使用してPythonバージョンを取得します                                                            |
+| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                    | `python`モジュールを無効にします。                                                                  |
 
 ::: tip
 
@@ -2018,12 +2018,12 @@ python_binary = "python3"
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                 |
-| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | モジュールのスタイルです。                                    |
-| `disabled` | `false`                            | `ruby`モジュールを無効にします。                              |
+| オプション      | デフォルト                                | 説明                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                 |
+| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                         | モジュールのスタイルです。                                    |
+| `disabled` | `false`                              | `ruby`モジュールを無効にします。                              |
 
 ### 変数
 
@@ -2053,12 +2053,12 @@ symbol = "🔺 "
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                |
-| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | モジュールのスタイルです。                                   |
-| `disabled` | `false`                            | `rust`モジュールを無効にします。                             |
+| オプション      | デフォルト                                | 説明                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                |
+| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                         | モジュールのスタイルです。                                   |
+| `disabled` | `false`                              | `rust`モジュールを無効にします。                             |
 
 ### 変数
 
