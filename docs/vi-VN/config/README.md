@@ -722,13 +722,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn    | Mặc định                                | Mô tả                                                    |
-| ----------- | --------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | Định dạng cho module.                                    |
-| `symbol`    | `"•NET "`                               | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`                                  | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"`                           | Kiểu cho module.                                         |
-| `disabled`  | `false`                                 | Disables the `dotnet` module.                            |
+| Tuỳ chọn    | Mặc định                                  | Mô tả                                                    |
+| ----------- | ----------------------------------------- | -------------------------------------------------------- |
+| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | Định dạng cho module.                                    |
+| `symbol`    | `"•NET "`                                 | The symbol used before displaying the version of dotnet. |
+| `heuristic` | `true`                                    | Use faster version detection to keep starship snappy.    |
+| `style`     | `"bold blue"`                             | Kiểu cho module.                                         |
+| `disabled`  | `false`                                   | Disables the `dotnet` module.                            |
 
 ### Các biến
 
@@ -799,12 +799,12 @@ The `elm` module shows the currently installed version of Elm. The module will b
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
-| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | Kiểu cho module.                                |
-| `disabled` | `false`                            | Disables the `elm` module.                      |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
+| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                        | Kiểu cho module.                                |
+| `disabled` | `false`                              | Disables the `elm` module.                      |
 
 ### Các biến
 
@@ -871,12 +871,12 @@ The `erlang` module shows the currently installed version of Erlang/OTP. The mod
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                    |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | Kiểu cho module.                                         |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                    |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                    |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                         | Kiểu cho module.                                         |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                    |
+| `disabled` | `false`                              | Disables the `erlang` module.                            |
 
 ### Các biến
 
@@ -1170,12 +1170,12 @@ The `golang` module shows the currently installed version of Golang. The module 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                          |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                          |
-| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | Kiểu cho module.                               |
-| `disabled` | `false`                            | Disables the `golang` module.                  |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                          |
+| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                        | Kiểu cho module.                               |
+| `disabled` | `false`                              | Disables the `golang` module.                  |
 
 ### Các biến
 
@@ -1205,12 +1205,12 @@ The `helm` module shows the currently installed version of Helm. The module will
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | Kiểu cho module.                                 |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                            |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                            |
+| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                       | Kiểu cho module.                                 |
+| `disabled` | `false`                              | Disables the `helm` module.                      |
 
 ### Các biến
 
@@ -1345,12 +1345,12 @@ The `julia` module shows the currently installed version of Julia. The module wi
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                             |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | Kiểu cho module.                                  |
-| `disabled` | `false`                            | Disables the `julia` module.                      |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                             |
+| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                      | Kiểu cho module.                                  |
+| `disabled` | `false`                              | Disables the `julia` module.                      |
 
 ### Các biến
 
@@ -1607,12 +1607,12 @@ The `nim` module shows the currently installed version of Nim. The module will b
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
-| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | Kiểu cho module.                                      |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                      | Kiểu cho module.                                      |
+| `disabled` | `false`                              | Disables the `nim` module.                            |
 
 ### Các biến
 
@@ -1958,16 +1958,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                                                  | Mô tả                                                                                  |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | Định dạng cho module.                                                                  |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                           | Kiểu cho module.                                                                       |
-| `pyenv_version_name` | `false`                                                                   | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | Disables the `python` module.                                                          |
+| Tuỳ chọn             | Mặc định                                                                   | Mô tả                                                                                  |
+| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | Định dạng cho module.                                                                  |
+| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                            | Kiểu cho module.                                                                       |
+| `pyenv_version_name` | `false`                                                                    | Use pyenv to get Python version                                                        |
+| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                    | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2016,12 +2016,12 @@ The `ruby` module shows the currently installed version of Ruby. The module will
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                            |
-| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | Kiểu cho module.                                 |
-| `disabled` | `false`                            | Disables the `ruby` module.                      |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                            |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                            |
+| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                         | Kiểu cho module.                                 |
+| `disabled` | `false`                              | Disables the `ruby` module.                      |
 
 ### Các biến
 
@@ -2051,12 +2051,12 @@ The `rust` module shows the currently installed version of Rust. The module will
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
-| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | Kiểu cho module.                                |
-| `disabled` | `false`                            | Disables the `rust` module.                     |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
+| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                         | Kiểu cho module.                                |
+| `disabled` | `false`                              | Disables the `rust` module.                     |
 
 ### Các biến
 
