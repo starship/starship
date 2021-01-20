@@ -61,7 +61,7 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
-    let long_version = shadow::version();
+    let long_version = shadow::clap_version();
     let mut app = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
