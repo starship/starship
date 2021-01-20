@@ -578,12 +578,12 @@ Module `dart` cho biết phiên bản của Dart đã cài đặt. Module cho s�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                           |
-| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | Kiểu cho module.                                |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
+| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                        | Kiểu cho module.                                |
+| `disabled` | `false`                              | Disables the `dart` module.                     |
 
 ### Các biến
 
@@ -760,12 +760,12 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                                                  | Mô tả                                                           |
-| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | Kiểu cho module.                                                |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
-| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
+| Tuỳ chọn   | Mặc định                                                    | Mô tả                                                           |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | Kiểu cho module.                                                |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### Các biến
 
@@ -1275,12 +1275,12 @@ The `java` module shows the currently installed version of Java. The module will
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                               | Mô tả                                           |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | Định dạng cho module.                           |
-| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | Kiểu cho module.                                |
-| `disabled` | `false`                                | Disables the `java` module.                     |
+| Tuỳ chọn   | Mặc định                                 | Mô tả                                           |
+| ---------- | ---------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | Định dạng cho module.                           |
+| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                           | Kiểu cho module.                                |
+| `disabled` | `false`                                  | Disables the `java` module.                     |
 
 ### Các biến
 
@@ -1684,13 +1684,13 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                           | Mô tả                                                                                                 |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                                                 |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | Kiểu cho module.                                                                                      |
-| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                 |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                       | Kiểu cho module.                                                                                      |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
@@ -2438,19 +2438,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn      | Mặc định                      | Mô tả                                                                                                                      |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | Kiểu cho module.                                                                                                           |
-| `format`      | `"[$symbol$output]($style) "` | Định dạng cho module.                                                                                                      |
-| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+| Tuỳ chọn      | Mặc định                        | Mô tả                                                                                                                      |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | Kiểu cho module.                                                                                                           |
+| `format`      | `"[$symbol($output )]($style)"` | Định dạng cho module.                                                                                                      |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Các biến
 
