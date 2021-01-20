@@ -14,7 +14,7 @@ pub struct DotnetConfig<'a> {
 impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
     fn new() -> Self {
         DotnetConfig {
-            format: "[$symbol$version (🎯 $tfm )]($style)",
+            format: "[$symbol($version )(🎯 $tfm )]($style)",
             symbol: "•NET ",
             style: "blue bold",
             heuristic: true,
