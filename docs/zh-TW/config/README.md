@@ -722,13 +722,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 選項
 
-| Option      | 預設                                      | 說明                           |
-| ----------- | --------------------------------------- | ---------------------------- |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.   |
-| `symbol`    | `"•NET "`                               | 在顯示 dotnet 版本之前用的符號。         |
-| `heuristic` | `true`                                  | 使用更快速的版本偵測法來保持 starship 的速度。 |
-| `style`     | `"bold blue"`                           | 這個模組的風格。                     |
-| `disabled`  | `false`                                 | 停用 `dotnet` 模組。              |
+| Option      | 預設                                        | 說明                           |
+| ----------- | ----------------------------------------- | ---------------------------- |
+| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | The format for the module.   |
+| `symbol`    | `"•NET "`                                 | 在顯示 dotnet 版本之前用的符號。         |
+| `heuristic` | `true`                                    | 使用更快速的版本偵測法來保持 starship 的速度。 |
+| `style`     | `"bold blue"`                             | 這個模組的風格。                     |
+| `disabled`  | `false`                                   | 停用 `dotnet` 模組。              |
 
 ### Variables
 
@@ -799,12 +799,12 @@ The `elm` module shows the currently installed version of Elm. 這個模組在�
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
-| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | 這個模組的風格。                                        |
-| `disabled` | `false`                            | Disables the `elm` module.                      |
+| Option     | 預設                                   | 說明                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                        | 這個模組的風格。                                        |
+| `disabled` | `false`                              | Disables the `elm` module.                      |
 
 ### Variables
 
@@ -871,12 +871,12 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 這個�
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                                       |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | 這個模組的風格。                                                 |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| Option     | 預設                                   | 說明                                                       |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                         | 這個模組的風格。                                                 |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                               |
+| `disabled` | `false`                              | Disables the `erlang` module.                            |
 
 ### Variables
 
@@ -1170,12 +1170,12 @@ behind = "⇣${count}"
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                             |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
-| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | 這個模組的風格。                                       |
-| `disabled` | `false`                            | 停用 `golang` 模組。                                |
+| Option     | 預設                                   | 說明                                             |
+| ---------- | ------------------------------------ | ---------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                     |
+| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                        | 這個模組的風格。                                       |
+| `disabled` | `false`                              | 停用 `golang` 模組。                                |
 
 ### Variables
 
@@ -1205,12 +1205,12 @@ The `helm` module shows the currently installed version of Helm. 這個模組在
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | 這個模組的風格。                                         |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| Option     | 預設                                   | 說明                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                       | 這個模組的風格。                                         |
+| `disabled` | `false`                              | Disables the `helm` module.                      |
 
 ### Variables
 
@@ -1345,12 +1345,12 @@ The `julia` module shows the currently installed version of Julia. 這個模組�
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                                |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | 這個模組的風格。                                          |
-| `disabled` | `false`                            | Disables the `julia` module.                      |
+| Option     | 預設                                   | 說明                                                |
+| ---------- | ------------------------------------ | ------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                        |
+| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                      | 這個模組的風格。                                          |
+| `disabled` | `false`                              | Disables the `julia` module.                      |
 
 ### Variables
 
@@ -1607,12 +1607,12 @@ The `nim` module shows the currently installed version of Nim. 這個模組在�
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
-| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | 這個模組的風格。                                              |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| Option     | 預設                                   | 說明                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                      | 這個模組的風格。                                              |
+| `disabled` | `false`                              | Disables the `nim` module.                            |
 
 ### Variables
 
@@ -1958,16 +1958,16 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ### 選項
 
-| Option               | 預設                                                                        | 說明                                                                                     |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                           | 這個模組的風格。                                                                               |
-| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 取得 Python 的版本。                                                                |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | 停用 `python` 模組。                                                                        |
+| Option               | 預設                                                                         | 說明                                                                                     |
+| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                            | 這個模組的風格。                                                                               |
+| `pyenv_version_name` | `false`                                                                    | 使用 pyenv 取得 Python 的版本。                                                                |
+| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                    | 停用 `python` 模組。                                                                        |
 
 ::: tip
 
@@ -2016,12 +2016,12 @@ python_binary = "python3"
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
-| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | 這個模組的風格。                                         |
-| `disabled` | `false`                            | 停用 `ruby` 模組。                                    |
+| Option     | 預設                                   | 說明                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                         | 這個模組的風格。                                         |
+| `disabled` | `false`                              | 停用 `ruby` 模組。                                    |
 
 ### Variables
 
@@ -2051,12 +2051,12 @@ symbol = "🔺 "
 
 ### 選項
 
-| Option     | 預設                                 | 說明                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
-| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | 這個模組的風格。                                        |
-| `disabled` | `false`                            | 停用 `rust` 模組。                                   |
+| Option     | 預設                                   | 說明                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                         | 這個模組的風格。                                        |
+| `disabled` | `false`                              | 停用 `rust` 模組。                                   |
 
 ### Variables
 
