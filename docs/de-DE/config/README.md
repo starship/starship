@@ -722,13 +722,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Optionen
 
-| Option      | Standardwert                            | Beschreibung                                                       |
-| ----------- | --------------------------------------- | ------------------------------------------------------------------ |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | The format for the module.                                         |
-| `symbol`    | `"•NET "`                               | Symbol das vor der dotnet-Version angezeigt wird.                  |
-| `heuristic` | `true`                                  | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
-| `style`     | `"bold blue"`                           | Stil für dieses Modul.                                             |
-| `disabled`  | `false`                                 | Deaktiviert das `dotnet`-Modul.                                    |
+| Option      | Standardwert                              | Beschreibung                                                       |
+| ----------- | ----------------------------------------- | ------------------------------------------------------------------ |
+| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | The format for the module.                                         |
+| `symbol`    | `"•NET "`                                 | Symbol das vor der dotnet-Version angezeigt wird.                  |
+| `heuristic` | `true`                                    | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
+| `style`     | `"bold blue"`                             | Stil für dieses Modul.                                             |
+| `disabled`  | `false`                                   | Deaktiviert das `dotnet`-Modul.                                    |
 
 ### Variables
 
@@ -799,12 +799,12 @@ The `elm` module shows the currently installed version of Elm. Das Modul wird ge
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
-| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | Stil für dieses Modul.                          |
-| `disabled` | `false`                            | Disables the `elm` module.                      |
+| Option     | Standardwert                         | Beschreibung                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                        | Stil für dieses Modul.                          |
+| `disabled` | `false`                              | Disables the `elm` module.                      |
 
 ### Variables
 
@@ -871,12 +871,12 @@ The `erlang` module shows the currently installed version of Erlang/OTP. Das Mod
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                             |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | Stil für dieses Modul.                                   |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                               |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| Option     | Standardwert                         | Beschreibung                                             |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                         | Stil für dieses Modul.                                   |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                               |
+| `disabled` | `false`                              | Disables the `erlang` module.                            |
 
 ### Variables
 
@@ -1170,12 +1170,12 @@ Das `golang`-Modul zeigt die aktuell installierte Version von Golang. Das Modul 
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                   |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                     |
-| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | Stil für dieses Modul.                         |
-| `disabled` | `false`                            | Deaktiviert das `golang`-Modul.                |
+| Option     | Standardwert                         | Beschreibung                                   |
+| ---------- | ------------------------------------ | ---------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                     |
+| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                        | Stil für dieses Modul.                         |
+| `disabled` | `false`                              | Deaktiviert das `golang`-Modul.                |
 
 ### Variables
 
@@ -1205,12 +1205,12 @@ The `helm` module shows the currently installed version of Helm. Das Modul wird 
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                     |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | Stil für dieses Modul.                           |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| Option     | Standardwert                         | Beschreibung                                     |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                       | Stil für dieses Modul.                           |
+| `disabled` | `false`                              | Disables the `helm` module.                      |
 
 ### Variables
 
@@ -1345,12 +1345,12 @@ The `julia` module shows the currently installed version of Julia. Das Modul wir
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                        |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | Stil für dieses Modul.                            |
-| `disabled` | `false`                            | Disables the `julia` module.                      |
+| Option     | Standardwert                         | Beschreibung                                      |
+| ---------- | ------------------------------------ | ------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                        |
+| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                      | Stil für dieses Modul.                            |
+| `disabled` | `false`                              | Disables the `julia` module.                      |
 
 ### Variables
 
@@ -1607,12 +1607,12 @@ The `nim` module shows the currently installed version of Nim. Das Modul wird ge
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                          |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
-| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | Stil für dieses Modul.                                |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| Option     | Standardwert                         | Beschreibung                                          |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                      | Stil für dieses Modul.                                |
+| `disabled` | `false`                              | Disables the `nim` module.                            |
 
 ### Variables
 
@@ -1958,16 +1958,16 @@ Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 ### Optionen
 
-| Option               | Standardwert                                                              | Beschreibung                                                                           |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | The format for the module.                                                             |
-| `symbol`             | `"🐍 "`                                                                    | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                           | Stil für dieses Modul.                                                                 |
-| `pyenv_version_name` | `false`                                                                   | Verwende `pyenv` um die Python-Versionzu beziehen.                                     |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                    | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | Deaktiviert das `python`-Modul.                                                        |
+| Option               | Standardwert                                                               | Beschreibung                                                                           |
+| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                            | Stil für dieses Modul.                                                                 |
+| `pyenv_version_name` | `false`                                                                    | Verwende `pyenv` um die Python-Versionzu beziehen.                                     |
+| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
+| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                    | Deaktiviert das `python`-Modul.                                                        |
 
 ::: Tipp
 
@@ -2016,12 +2016,12 @@ Das `ruby` Modul zeigt die derzeit installierte Version von Ruby an. Das Modul w
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                     |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                       |
-| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | Stil für dieses Modul.                           |
-| `disabled` | `false`                            | Deaktiviert das `ruby`-Modul.                    |
+| Option     | Standardwert                         | Beschreibung                                     |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                         | Stil für dieses Modul.                           |
+| `disabled` | `false`                              | Deaktiviert das `ruby`-Modul.                    |
 
 ### Variables
 
@@ -2051,12 +2051,12 @@ Das `rust` Modul zeigt die derzeit installierte Version von Rust an. Das Modul w
 
 ### Optionen
 
-| Option     | Standardwert                       | Beschreibung                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
-| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | Stil für dieses Modul.                          |
-| `disabled` | `false`                            | Deaktiviert das `rust`-Modul.                   |
+| Option     | Standardwert                         | Beschreibung                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                         | Stil für dieses Modul.                          |
+| `disabled` | `false`                              | Deaktiviert das `rust`-Modul.                   |
 
 ### Variables
 
