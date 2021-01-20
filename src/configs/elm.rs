@@ -13,7 +13,7 @@ pub struct ElmConfig<'a> {
 impl<'a> RootModuleConfig<'a> for ElmConfig<'a> {
     fn new() -> Self {
         ElmConfig {
-            format: "via [$symbol$version ]($style)",
+            format: "via [$symbol($version )]($style)",
             symbol: "🌳 ",
             style: "cyan bold",
             disabled: false,
