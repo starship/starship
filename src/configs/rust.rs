@@ -13,7 +13,7 @@ pub struct RustConfig<'a> {
 impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
     fn new() -> Self {
         RustConfig {
-            format: "via [$symbol$version]($style) ",
+            format: "via [$symbol($version )]($style)",
             symbol: "🦀 ",
             style: "bold red",
             disabled: false,
