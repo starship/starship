@@ -29,7 +29,7 @@ pub struct CustomConfig<'a> {
 impl<'a> RootModuleConfig<'a> for CustomConfig<'a> {
     fn new() -> Self {
         CustomConfig {
-            format: "[$symbol$output]($style) ",
+            format: "[$symbol($output )]($style)",
             symbol: "",
             command: "",
             when: None,
