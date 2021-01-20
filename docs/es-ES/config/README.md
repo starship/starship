@@ -579,12 +579,12 @@ El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
-| `symbol`   | `"🎯 "`                             | Una cadena de formato que representa el símbolo de Dart |
-| `style`    | `"bold blue"`                      | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Desactiva el módulo `dart`.                             |
+| Opción     | Por defecto                          | Descripción                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `symbol`   | `"🎯 "`                               | Una cadena de formato que representa el símbolo de Dart |
+| `style`    | `"bold blue"`                        | El estilo del módulo.                                   |
+| `disabled` | `false`                              | Desactiva el módulo `dart`.                             |
 
 ### Variables
 
@@ -761,12 +761,12 @@ El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/
 
 ### Opciones
 
-| Opción     | Por defecto                                               | Descripción                                                    |
-| ---------- | --------------------------------------------------------- | -------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | El estilo del módulo.                                          |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | El formato para el módulo elixir.                              |
-| `disabled` | `false`                                                   | Desactiva el módulo `elixir`.                                  |
+| Opción     | Por defecto                                                 | Descripción                                                    |
+| ---------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | El estilo del módulo.                                          |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | El formato para el módulo elixir.                              |
+| `disabled` | `false`                                                     | Desactiva el módulo `elixir`.                                  |
 
 ### Variables
 
@@ -1276,12 +1276,12 @@ El módulo `java` muestra la versión actualmente instalada de Java. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                            | Descripción                                             |
-| ---------- | -------------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | El formato del módulo.                                  |
-| `symbol`   | `"☕ "`                                 | Una cadena de formato que representa el símbolo de Java |
-| `style`    | `"red dimmed"`                         | El estilo del módulo.                                   |
-| `disabled` | `false`                                | Desactiva el módulo `java`.                             |
+| Opción     | Por defecto                              | Descripción                                             |
+| ---------- | ---------------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | El formato del módulo.                                  |
+| `symbol`   | `"☕ "`                                   | Una cadena de formato que representa el símbolo de Java |
+| `style`    | `"red dimmed"`                           | El estilo del módulo.                                   |
+| `disabled` | `false`                                  | Desactiva el módulo `java`.                             |
 
 ### Variables
 
@@ -1685,13 +1685,13 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. El módulo se muest
 
 ### Opciones
 
-| Opción              | Por defecto                        | Descripción                                                                                                     |
-| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | El formato del módulo.                                                                                          |
-| `symbol`            | `"⬢ "`                             | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
-| `style`             | `"bold green"`                     | El estilo del módulo.                                                                                           |
-| `disabled`          | `false`                            | Desactiva el módulo `nodejs`.                                                                                   |
-| `not_capable_style` | `bold red`                         | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |
+| Opción              | Por defecto                          | Descripción                                                                                                     |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                          |
+| `symbol`            | `"⬢ "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
+| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                           |
+| `disabled`          | `false`                              | Desactiva el módulo `nodejs`.                                                                                   |
+| `not_capable_style` | `bold red`                           | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |
 
 ###  Variables
 
@@ -2439,19 +2439,19 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 
 ### Opciones
 
-| Opción        | Por defecto                   | Descripción                                                                                                                         |
-| ------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                    |
-| `when`        |                               | Comando de shell usado como condición para mostrar el módulo. El módulo se mostrará si el comando devuelve un código de estado `0`. |
-| `shell`       |                               | [Ver abajo](#custom-command-shell)                                                                                                  |
-| `description` | `"<custom module>"`     | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                            |
-| `files`       | `[]`                          | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                             |
-| `directories` | `[]`                          | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                  |
-| `extensions`  | `[]`                          | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                          |
-| `symbol`      | `""`                          | El símbolo usado antes de mostrar la salida del comando.                                                                            |
-| `style`       | `"bold green"`                | El estilo del módulo.                                                                                                               |
-| `format`      | `"[$symbol$output]($style) "` | El formato del módulo.                                                                                                              |
-| `disabled`    | `false`                       | Desactiva este módulo `custom`.                                                                                                     |
+| Opción        | Por defecto                     | Descripción                                                                                                                         |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                    |
+| `when`        |                                 | Comando de shell usado como condición para mostrar el módulo. El módulo se mostrará si el comando devuelve un código de estado `0`. |
+| `shell`       |                                 | [Ver abajo](#custom-command-shell)                                                                                                  |
+| `description` | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                            |
+| `files`       | `[]`                            | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                             |
+| `directories` | `[]`                            | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                  |
+| `extensions`  | `[]`                            | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                          |
+| `symbol`      | `""`                            | El símbolo usado antes de mostrar la salida del comando.                                                                            |
+| `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                               |
+| `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                              |
+| `disabled`    | `false`                         | Desactiva este módulo `custom`.                                                                                                     |
 
 ### Variables
 
