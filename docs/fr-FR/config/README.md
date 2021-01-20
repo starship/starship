@@ -578,12 +578,12 @@ Le module `dart` affiche la version courante installée de Dart. Le module est a
 
 ### Options
 
-| Option     | Défaut                             | Description                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Format du module.                                        |
-| `symbol`   | `"🎯 "`                             | Une chaîne de caractères représentant le symbole de Dart |
-| `style`    | `"bold blue"`                      | Le style du module.                                      |
-| `disabled` | `false`                            | Désactive le module `dart`.                              |
+| Option     | Défaut                               | Description                                              |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                                        |
+| `symbol`   | `"🎯 "`                               | Une chaîne de caractères représentant le symbole de Dart |
+| `style`    | `"bold blue"`                        | Le style du module.                                      |
+| `disabled` | `false`                              | Désactive le module `dart`.                              |
 
 ### Variables
 
@@ -760,12 +760,12 @@ Le module `elixir` affiche la version actuellement installé d'Elixir et Erlang/
 
 ### Options
 
-| Option     | Défaut                                                    | Description                                                     |
-| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | Le style du module.                                             |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
-| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
+| Option     | Défaut                                                      | Description                                                     |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | Le style du module.                                             |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -1275,12 +1275,12 @@ The `java` module shows the currently installed version of Java. Le module est a
 
 ### Options
 
-| Option     | Défaut                                 | Description                                     |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | Format du module.                               |
-| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | Le style du module.                             |
-| `disabled` | `false`                                | Disables the `java` module.                     |
+| Option     | Défaut                                   | Description                                     |
+| ---------- | ---------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | Format du module.                               |
+| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                           | Le style du module.                             |
+| `disabled` | `false`                                  | Disables the `java` module.                     |
 
 ### Variables
 
@@ -1684,13 +1684,13 @@ The `nodejs` module shows the currently installed version of NodeJS. Le module e
 
 ### Options
 
-| Option              | Défaut                             | Description                                                                                           |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | Format du module.                                                                                     |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | Le style du module.                                                                                   |
-| `disabled`          | `false`                            | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Option              | Défaut                               | Description                                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                                     |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                       | Le style du module.                                                                                   |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
@@ -2438,19 +2438,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Options
 
-| Option        | Défaut                        | Description                                                                                                                |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | Le style du module.                                                                                                        |
-| `format`      | `"[$symbol$output]($style) "` | Format du module.                                                                                                          |
-| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+| Option        | Défaut                          | Description                                                                                                                |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | Le style du module.                                                                                                        |
+| `format`      | `"[$symbol($output )]($style)"` | Format du module.                                                                                                          |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Variables
 
