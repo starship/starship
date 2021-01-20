@@ -1334,12 +1334,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                                | Description                                     |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | The format for the module.                      |
-| `symbol`   | `"☕ "`                                | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | The style for the module.                       |
-| `disabled` | `false`                                | Disables the `java` module.                     |
+| Option     | Default                                  | Description                                     |
+| ---------- | ---------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | The format for the module.                      |
+| `symbol`   | `"☕ "`                                  | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                           | The style for the module.                       |
+| `disabled` | `false`                                  | Disables the `java` module.                     |
 
 ### Variables
 
