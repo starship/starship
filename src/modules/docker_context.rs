@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let docker_config = PathBuf::from(
         &context
             .get_env_os("DOCKER_CONFIG")
-            .unwrap_or(dirs_next::home_dir()?.join(".docker").into_os_string()),
+            .unwrap_or(context.get_home()?.join(".docker").into_os_string()),
     )
     .join("config.json");
 

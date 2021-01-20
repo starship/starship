@@ -14,7 +14,7 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: &str) -> Option<Pro
     // 1st = $PWD/clouds.yaml, 2nd = $HOME/.config/openstack/clouds.yaml, 3rd = /etc/openstack/clouds.yaml
     let config = [
         context.get_env("PWD").map(|pwd| pwd + "/clouds.yaml"),
-        dirs_next::home_dir().map(|home| {
+        context.get_home().map(|home| {
             home.join(".config/openstack/clouds.yaml")
                 .display()
                 .to_string()

@@ -82,7 +82,7 @@ fn get_config_dir(context: &Context) -> Option<PathBuf> {
         .get_env("CLOUDSDK_CONFIG")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
-            let mut home = dirs_next::home_dir()?;
+            let mut home = context.get_home()?;
             home.push(".config/gcloud");
             Some(home)
         })?;
