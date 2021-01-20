@@ -808,12 +808,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                                                 | Description                                                     |
-| ---------- | ------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                 | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                         | The style for the module.                                       |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
-| `disabled` | `false`                                                 | Disables the `elixir` module.                                   |
+| Option     | Default                                                   | Description                                                     |
+| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                   | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                           | The style for the module.                                       |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
 
 ### Variables
 
