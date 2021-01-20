@@ -578,12 +578,12 @@ The `dart` module shows the currently installed version of Dart. Модуль б
 
 ### Опции
 
-| Параметр   | По умолчанию                       | Описание                                        |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Формат модуля.                                  |
-| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | Стиль модуля.                                   |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| Параметр   | По умолчанию                         | Описание                                        |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
+| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                        | Стиль модуля.                                   |
+| `disabled` | `false`                              | Disables the `dart` module.                     |
 
 ### Переменные
 
@@ -760,12 +760,12 @@ heuristic = false
 
 ### Опции
 
-| Параметр   | По умолчанию                                              | Описание                                                      |
-| ---------- | --------------------------------------------------------- | ------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | Символ, используемый перед отображением версии Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | Стиль модуля.                                                 |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                             |
-| `disabled` | `false`                                                   | Отключает модуль `elixir`.                                    |
+| Параметр   | По умолчанию                                                | Описание                                                      |
+| ---------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | Символ, используемый перед отображением версии Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | Стиль модуля.                                                 |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                             |
+| `disabled` | `false`                                                     | Отключает модуль `elixir`.                                    |
 
 ### Переменные
 
@@ -1275,12 +1275,12 @@ disabled = false
 
 ### Опции
 
-| Параметр   | По умолчанию                           | Описание                                        |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | Формат модуля.                                  |
-| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | Стиль модуля.                                   |
-| `disabled` | `false`                                | Отключает модуль `java`.                        |
+| Параметр   | По умолчанию                             | Описание                                        |
+| ---------- | ---------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | Формат модуля.                                  |
+| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                           | Стиль модуля.                                   |
+| `disabled` | `false`                                  | Отключает модуль `java`.                        |
 
 ### Переменные
 
@@ -1684,13 +1684,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### Опции
 
-| Параметр            | По умолчанию                       | Описание                                                                                              |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | Формат модуля.                                                                                        |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | Стиль модуля.                                                                                         |
-| `disabled`          | `false`                            | Отключает модуль `nodejs`.                                                                            |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Параметр            | По умолчанию                         | Описание                                                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                                        |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                       | Стиль модуля.                                                                                         |
+| `disabled`          | `false`                              | Отключает модуль `nodejs`.                                                                            |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
@@ -2438,19 +2438,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Опции
 
-| Параметр      | По умолчанию                  | Описание                                                                                                                   |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `описание`    | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | Стиль модуля.                                                                                                              |
-| `format`      | `"[$symbol$output]($style) "` | Формат модуля.                                                                                                             |
-| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+| Параметр      | По умолчанию                    | Описание                                                                                                                   |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `описание`    | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | Стиль модуля.                                                                                                              |
+| `format`      | `"[$symbol($output )]($style)"` | Формат модуля.                                                                                                             |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Переменные
 
