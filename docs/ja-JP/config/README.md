@@ -579,12 +579,12 @@ The `dart` module shows the currently installed version of Dart. 次の条件の
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                |
-| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | モジュールのスタイルです。                                   |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| オプション      | デフォルト                                | 説明                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                |
+| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                        | モジュールのスタイルです。                                   |
+| `disabled` | `false`                              | Disables the `dart` module.                     |
 
 ### 変数
 
@@ -761,12 +761,12 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### オプション
 
-| オプション      | デフォルト                                                     | 説明                                                              |
-| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | モジュールのスタイルです。                                                   |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
-| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
+| オプション      | デフォルト                                                       | 説明                                                              |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | モジュールのスタイルです。                                                   |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### 変数
 
@@ -1276,12 +1276,12 @@ disabled = false
 
 ### オプション
 
-| オプション      | デフォルト                                  | 説明                                              |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | moduleのフォーマットです。                                |
-| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | モジュールのスタイルです。                                   |
-| `disabled` | `false`                                | `java`モジュールを無効にします。                             |
+| オプション      | デフォルト                                    | 説明                                              |
+| ---------- | ---------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | moduleのフォーマットです。                                |
+| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                           | モジュールのスタイルです。                                   |
+| `disabled` | `false`                                  | `java`モジュールを無効にします。                             |
 
 ### 変数
 
@@ -1686,13 +1686,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### オプション
 
-| オプション               | デフォルト                              | 説明                                                                                                    |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                                                                      |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | モジュールのスタイルです。                                                                                         |
-| `disabled`          | `false`                            | `nodejs`モジュールを無効にします。                                                                                 |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| オプション               | デフォルト                                | 説明                                                                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                                                      |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                       | モジュールのスタイルです。                                                                                         |
+| `disabled`          | `false`                              | `nodejs`モジュールを無効にします。                                                                                 |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
@@ -2440,19 +2440,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### オプション
 
-| オプション         | デフォルト                         | 説明                                                                                                                         |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [この表の下を参照してください](#custom-command-shell)                                                                                    |
-| `説明`          | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | モジュールのスタイルです。                                                                                                              |
-| `format`      | `"[$symbol$output]($style) "` | moduleのフォーマットです。                                                                                                           |
-| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+| オプション         | デフォルト                           | 説明                                                                                                                         |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                    |
+| `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | モジュールのスタイルです。                                                                                                              |
+| `format`      | `"[$symbol($output )]($style)"` | moduleのフォーマットです。                                                                                                           |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### 変数
 
