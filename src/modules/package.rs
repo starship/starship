@@ -757,7 +757,7 @@ end";
     }
 
     fn create_project_dir() -> io::Result<TempDir> {
-        Ok(tempfile::tempdir()?)
+        tempfile::tempdir()
     }
 
     fn fill_config(

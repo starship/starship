@@ -231,7 +231,7 @@ pub struct DirContents {
 
 impl DirContents {
     #[cfg(test)]
-    fn from_path(base: &PathBuf) -> Result<Self, std::io::Error> {
+    fn from_path(base: &Path) -> Result<Self, std::io::Error> {
         Self::from_path_with_timeout(base, Duration::from_secs(30))
     }
 
@@ -448,7 +448,7 @@ mod tests {
     #[test]
     fn test_scan_dir() -> Result<(), Box<dyn std::error::Error>> {
         let empty = testdir(&[])?;
-        let empty_dc = DirContents::from_path(&PathBuf::from(empty.path()))?;
+        let empty_dc = DirContents::from_path(empty.path())?;
 
         assert_eq!(
             ScanDir {
@@ -463,7 +463,7 @@ mod tests {
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
-        let rust_dc = DirContents::from_path(&PathBuf::from(rust.path()))?;
+        let rust_dc = DirContents::from_path(rust.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &rust_dc,
@@ -477,7 +477,7 @@ mod tests {
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
-        let java_dc = DirContents::from_path(&PathBuf::from(java.path()))?;
+        let java_dc = DirContents::from_path(java.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &java_dc,
@@ -491,7 +491,7 @@ mod tests {
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
-        let node_dc = DirContents::from_path(&PathBuf::from(node.path()))?;
+        let node_dc = DirContents::from_path(node.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &node_dc,
