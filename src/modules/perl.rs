@@ -44,7 +44,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let perl_version = utils::exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?.stdout;
+                    let perl_version =
+                        utils::exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?.stdout;
                     Some(Ok(format!("v{}", perl_version)))
                 }
                 _ => None,
