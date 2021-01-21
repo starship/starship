@@ -1380,13 +1380,13 @@ El módulo `kotlin` muestra la versión instalada de Kotlin. El módulo se muest
 
 ### Opciones
 
-| Opción          | Por defecto                        | Descripción                                                             |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | El formato del módulo.                                                  |
-| `symbol`        | `"🅺 "`                             | Una cadena de formato que representa el símbolo de Kotlin.              |
-| `style`         | `"bold blue"`                      | El estilo del módulo.                                                   |
-| `kotlin_binary` | `"kotlin"`                         | Configura el binario kotlin que Starship ejecuta al obtener la versión. |
-| `disabled`      | `false`                            | Deshabilita el módulo `kotlin`.                                         |
+| Opción          | Por defecto                          | Descripción                                                             |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------- |
+| `format`        | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                  |
+| `symbol`        | `"🅺 "`                               | Una cadena de formato que representa el símbolo de Kotlin.              |
+| `style`         | `"bold blue"`                        | El estilo del módulo.                                                   |
+| `kotlin_binary` | `"kotlin"`                           | Configura el binario kotlin que Starship ejecuta al obtener la versión. |
+| `disabled`      | `false`                              | Deshabilita el módulo `kotlin`.                                         |
 
 ### Variables
 
