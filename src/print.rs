@@ -1,8 +1,11 @@
+use crate::utils::parallel_map;
 use ansi_term::ANSIStrings;
 use clap::ArgMatches;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
+
 use std::io::{self, Write};
+use std::sync::Arc;
 use std::time::Duration;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
@@ -15,14 +18,17 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 
+use async_std::task::block_on;
+
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
-    write!(handle, "{}", get_prompt(context)).unwrap();
+    write!(handle, "{}", block_on(get_prompt(context))).unwrap();
 }
 
-pub fn get_prompt(context: Context) -> String {
+pub async fn get_prompt(context: Context<'_>) -> String {
+    let context = Arc::new(context);
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
@@ -48,29 +54,44 @@ pub fn get_prompt(context: Context) -> String {
         buf.push('>');
         return buf;
     };
-    let modules = formatter.get_variables();
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules
-        if module == "all" {
-            Some(Ok(PROMPT_ORDER
-                .iter()
-                .flat_map(|module| {
-                    handle_module(module, &context, &modules)
+    let modules = Arc::new(formatter.get_variables());
+    let formatter = formatter
+        .map_variables_to_segments(|module| {
+            let context = Arc::clone(&context);
+            let modules = Arc::clone(&modules);
+            let module = module.to_string();
+            async move {
+                // Make $all display all modules
+                if module == "all" {
+                    let segment_batches = parallel_map(PROMPT_ORDER, |module| {
+                        let context = Arc::clone(&context);
+                        let modules = Arc::clone(&modules);
+                        async move {
+                            handle_module(&module, &context, &modules)
+                                .await
+                                .into_iter()
+                                .flat_map(|m| m.segments.into_iter())
+                                .collect::<Vec<Segment>>()
+                        }
+                    })
+                    .await;
+                    Some(Ok(segment_batches
+                        .into_iter()
+                        .flat_map(|v| v.into_iter())
+                        .collect()))
+                } else if context.is_module_disabled_in_config(&module) {
+                    None
+                } else {
+                    // Get segments from module
+                    Some(Ok(handle_module(&module, &context, &modules)
+                        .await
                         .into_iter()
                         .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(&module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, &context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
+                        .collect::<Vec<Segment>>()))
+                }
+            }
+        })
+        .await;
 
     // Creates a root module and prints it.
     let mut root_module = Module::new("Starship Root", "The root module", None);
@@ -103,7 +124,7 @@ pub fn module(module_name: &str, args: ArgMatches) {
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    modules::handle(module_name, &context).map(|m| m.to_string())
+    block_on(async { modules::handle(module_name, &context).await }).map(|m| m.to_string())
 }
 
 pub fn timings(args: ArgMatches) {
@@ -117,7 +138,7 @@ pub fn timings(args: ArgMatches) {
         duration_len: usize,
     }
 
-    let mut modules = compute_modules(&context)
+    let mut modules = block_on(compute_modules(&context))
         .iter()
         .filter(|module| !module.is_empty() || module.duration.as_millis() > 0)
         .map(|module| ModuleTiming {
@@ -164,7 +185,7 @@ pub fn explain(args: ArgMatches) {
 
     static DONT_PRINT: &[&str] = &["line_break"];
 
-    let modules = compute_modules(&context)
+    let modules = block_on(compute_modules(&context))
         .into_iter()
         .filter(|module| !DONT_PRINT.contains(&module.get_name().as_str()))
         // this contains empty modules which should not print
@@ -247,7 +268,7 @@ pub fn explain(args: ArgMatches) {
     }
 }
 
-fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
+async fn compute_modules<'a>(context: &'a Context<'a>) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
     let config = context.config.get_root_config();
@@ -263,11 +284,11 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
             for module in PROMPT_ORDER.iter() {
-                let modules = handle_module(module, &context, &modules);
+                let modules = handle_module(module, &context, &modules).await;
                 prompt_order.extend(modules.into_iter());
             }
         } else {
-            let modules = handle_module(module, &context, &modules);
+            let modules = handle_module(module, &context, &modules).await;
             prompt_order.extend(modules.into_iter());
         }
     }
@@ -275,9 +296,9 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     prompt_order
 }
 
-fn handle_module<'a>(
+async fn handle_module<'a>(
     module: &str,
-    context: &'a Context,
+    context: &'a Context<'a>,
     module_list: &BTreeSet<String>,
 ) -> Vec<Module<'a>> {
     struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
@@ -293,7 +314,7 @@ fn handle_module<'a>(
     if ALL_MODULES.contains(&module) {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, &context));
+            modules.extend(modules::handle(module, &context).await);
         }
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set

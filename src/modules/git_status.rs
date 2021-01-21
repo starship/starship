@@ -1,3 +1,4 @@
+use core::future::ready;
 use git2::{Repository, Status};
 use once_cell::sync::OnceCell;
 
@@ -33,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+        let fut = formatter
             .map_meta(|variable, _| match variable {
                 "all_status" => Some(ALL_STATUS_FORMAT),
                 _ => None,
@@ -85,9 +86,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }),
                     _ => None,
                 };
-                segments.map(Ok)
-            })
-            .parse(None)
+                ready(segments.map(Ok))
+            });
+
+        let formatter = async_std::task::block_on(fut);
+        formatter.parse(None)
     });
 
     module.set_segments(match parsed {

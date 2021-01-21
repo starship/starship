@@ -63,7 +63,7 @@ use crate::context::{Context, Shell};
 use crate::module::Module;
 use std::time::Instant;
 
-pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
+pub async fn handle<'a>(module: &str, context: &'a Context<'a>) -> Option<Module<'a>> {
     let start: Instant = Instant::now();
 
     let mut m: Option<Module> = {

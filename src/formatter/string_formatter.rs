@@ -4,6 +4,7 @@ use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
+use std::future::Future;
 
 use crate::config::parse_style_string;
 use crate::segment::Segment;
@@ -160,16 +161,16 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to an array of segments
     ///
     /// See `StringFormatter::map` for description on the parameters.
-    pub fn map_variables_to_segments<M>(mut self, mapper: M) -> Self
+    pub async fn map_variables_to_segments<M, Fut>(mut self, mapper: M) -> StringFormatter<'a>
     where
-        M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
+        M: Fn(&str) -> Fut,
+        Fut: Future<Output = Option<Result<Vec<Segment>, StringFormatterError>>>,
     {
-        self.variables
-            .iter_mut()
-            .filter(|(_, value)| value.is_none())
-            .for_each(|(key, value)| {
-                *value = mapper(key).map(|var| var.map(VariableValue::Styled));
-            });
+        for (key, value) in self.variables.iter_mut() {
+            if value.is_none() {
+                *value = mapper(key).await.map(|var| var.map(VariableValue::Styled));
+            }
+        }
         self
     }
 
@@ -373,6 +374,7 @@ fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a
 mod tests {
     use super::*;
     use ansi_term::Color;
+    use std::future::ready;
 
     // match_next(result: IterMut<Segment>, value, style)
     macro_rules! match_next {
@@ -500,14 +502,17 @@ mod tests {
 
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
-            .map_variables_to_segments(|variable| match variable {
-                "var" => Some(Ok(vec![
-                    Segment::new(None, "styless"),
-                    Segment::new(styled_style, "styled"),
-                    Segment::new(styled_no_modifier_style, "styled_no_modifier"),
-                ])),
-                _ => None,
+            .map_variables_to_segments(|variable| {
+                ready(match variable {
+                    "var" => Some(Ok(vec![
+                        Segment::new(None, "styless"),
+                        Segment::new(styled_style, "styled"),
+                        Segment::new(styled_no_modifier_style, "styled_no_modifier"),
+                    ])),
+                    _ => None,
+                })
             });
+        let formatter = async_std::task::block_on(formatter);
         let result = formatter.parse(None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "styless", var_style);

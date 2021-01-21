@@ -1,5 +1,6 @@
 use process_control::{ChildExt, Timeout};
 use std::fs::File;
+use std::future::Future;
 use std::io::{Read, Result};
 use std::path::Path;
 use std::process::{Command, Stdio};
@@ -333,6 +334,19 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
             None
         }
     }
+}
+
+pub async fn parallel_map<I, F, U, T, Fut>(items: I, f: F) -> Vec<U>
+where
+    I: IntoIterator<Item = T>,
+    F: Fn(T) -> Fut,
+    Fut: Future<Output = U>,
+{
+    let mut v = vec![];
+    for x in items {
+        v.push(f(x).await);
+    }
+    v
 }
 
 #[cfg(test)]
