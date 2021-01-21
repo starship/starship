@@ -1486,13 +1486,13 @@ The `lua` module shows the currently installed version of Lua. Le module est aff
 
 ### Options
 
-| Option       | Défaut                             | Description                                                                |
-| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | Format du module.                                                          |
-| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                      | Le style du module.                                                        |
-| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+| Option       | Défaut                               | Description                                                                |
+| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol($version )]($style)"` | Format du module.                                                          |
+| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `style`      | `"bold blue"`                        | Le style du module.                                                        |
+| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
 
 ### Variables
 
