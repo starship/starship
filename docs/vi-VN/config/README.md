@@ -1486,13 +1486,13 @@ The `lua` module shows the currently installed version of Lua. The module will b
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                           | Mô tả                                                                      |
-| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                      |
-| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                      | Kiểu cho module.                                                           |
-| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+| Tuỳ chọn     | Mặc định                             | Mô tả                                                                      |
+| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                      |
+| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `style`      | `"bold blue"`                        | Kiểu cho module.                                                           |
+| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
 
 ### Các biến
 
