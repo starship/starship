@@ -282,7 +282,7 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         }
     };
 
-    match process.with_output_timeout(time_limit).wait() {
+    match process.with_output_timeout(time_limit).terminating().wait() {
         Ok(Some(output)) => {
             let stdout_string = String::from_utf8(output.stdout).unwrap();
             let stderr_string = String::from_utf8(output.stderr).unwrap();
