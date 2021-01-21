@@ -559,9 +559,9 @@ checksum = "830d08ce1d1d941e6b30645f1a0eb5643013d835ce3779a5fc208261dbe10f55"
 
 [[package]]
 name = "libc"
-version = "0.2.81"
+version = "0.2.82"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1482821306169ec4d07f6aca392a4681f66c75c9918aa49641a2595db64053cb"
+checksum = "89203f3fba0a3795506acaad8ebce3c80c0af93f994d5a1d7a0b1eeb23271929"
 
 [[package]]
 name = "libdbus-sys"
@@ -929,6 +929,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "process_control"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9cac0d971172c65b01208ef9567f52892fc89b1c4530c50e997c6f29da7ee961"
+dependencies = [
+ "crossbeam-channel",
+ "libc",
+ "winapi",
+]
+
+[[package]]
 name = "quick-xml"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1281,6 +1292,7 @@ dependencies = [
  "path-slash",
  "pest",
  "pest_derive",
+ "process_control",
  "quick-xml",
  "rand 0.8.2",
  "rayon",
