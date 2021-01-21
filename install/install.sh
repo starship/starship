@@ -33,7 +33,11 @@ BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
-SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl i686-unknown-linux-musl x86_64-apple-darwin x86_64-pc-windows-msvc"
+SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
+                  i686-unknown-linux-musl aarch64-unknown-linux-musl \
+                  arm-unknown-linux-musleabihf x86_64-apple-darwin \
+                  aarch64-apple-darwin x86_64-pc-windows-msvc \
+                  i686-pc-windows-msvc"
 
 info() {
   printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
@@ -192,13 +196,33 @@ detect_arch() {
   local arch
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
+  case "${arch}" in
+    armv*) arch="arm" ;;
+    arm64) arch="aarch64" ;;
+  esac
+
   # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
   if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
     arch=i686
+  elif [ "${arch}" = "aarch64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+    arch=arm
   fi
 
   echo "${arch}"
 }
+
+detect_target() {
+  local arch="$1"
+  local platform="$2"
+  local target="$arch-$platform"
+
+  if [ "${target}" = "arm-unknown-linux-musl" ]; then
+    target="${target}eabihf"
+  fi
+
+  echo "${target}"
+}
+
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
@@ -247,8 +271,8 @@ check_bin_dir() {
 is_build_available() {
   local arch="$1"
   local platform="$2"
+  local target="$3"
 
-  local target="${arch}-${platform}"
   local good
   
   good=$(
@@ -350,7 +374,9 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-is_build_available "${ARCH}" "${PLATFORM}"
+TARGET="$(detect_target "${ARCH}" "${PLATFORM}")"
+
+is_build_available "${ARCH}" "${PLATFORM}" "${TARGET}"
 
 printf "  %s\n" "${UNDERLINE}Configuration${NO_COLOR}"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
@@ -372,7 +398,7 @@ if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
   EXT=zip
 fi
 
-URL="${BASE_URL}/latest/download/starship-${ARCH}-${PLATFORM}.${EXT}"
+URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"

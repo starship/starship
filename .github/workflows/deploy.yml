@@ -52,13 +52,30 @@ jobs:
             os: ubuntu-latest
             name: starship-i686-unknown-linux-musl.tar.gz
 
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-aarch64-unknown-linux-musl.tar.gz
+
+          - target: arm-unknown-linux-musleabihf
+            os: ubuntu-latest
+            name: starship-arm-unknown-linux-musleabihf.tar.gz
+
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
+          
+          # TODO: switch to macOS-latest once it reaches 11.0
+          - target: aarch64-apple-darwin
+            os: macos-11.0
+            name: starship-aarch64-apple-darwin.tar.gz
 
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             name: starship-x86_64-pc-windows-msvc.zip
+          
+          - target: i686-pc-windows-msvc
+            os: windows-latest
+            name: starship-i686-pc-windows-msvc.zip
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -101,7 +118,8 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip starship
+          # TODO: investigate better cross platform stripping
+          strip starship || true
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
