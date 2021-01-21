@@ -27,7 +27,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("lua");
     let config = LuaConfig::try_load(module.config);
-    let lua_version = format_lua_version(&get_lua_version(&config.lua_binary)?)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -39,7 +38,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&lua_version)),
+                "version" => {
+                    let lua_version = format_lua_version(&get_lua_version(&config.lua_binary)?)?;
+                    Some(Ok(lua_version))
+                }
                 _ => None,
             })
             .parse(None)
