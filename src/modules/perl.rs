@@ -29,8 +29,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let perl_version = utils::exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?.stdout;
-
     let mut module = context.new_module("perl");
     let config: PerlConfig = PerlConfig::try_load(module.config);
 
@@ -45,7 +43,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(format!("v{}", &perl_version))),
+                "version" => {
+                    let perl_version = utils::exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?.stdout;
+                    Some(Ok(format!("v{}", perl_version)))
+                }
                 _ => None,
             })
             .parse(None)
