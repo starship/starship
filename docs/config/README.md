@@ -1799,12 +1799,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                            | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | The style for the module.                               |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Option     | Default                              | Description                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                              | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | The style for the module.                               |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### Variables
 
