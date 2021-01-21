@@ -20,8 +20,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
-
     let mut module = context.new_module("purescript");
     let config: PureScriptConfig = PureScriptConfig::try_load(module.config);
 
@@ -36,7 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(format!("v{}", purs_version.trim()))),
+                "version" => {
+                    let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
+                    Some(Ok(format!("v{}", purs_version.trim())))
+                }
                 _ => None,
             })
             .parse(None)
