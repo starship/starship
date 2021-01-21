@@ -60,7 +60,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-
 fn format_php_version(php_version: &str) -> String {
     format!("v{}", php_version)
 }
@@ -98,8 +97,8 @@ mod tests {
         let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -113,8 +112,8 @@ mod tests {
         let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -128,8 +127,8 @@ mod tests {
         let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
