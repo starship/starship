@@ -23,7 +23,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("kotlin");
     let config = KotlinConfig::try_load(module.config);
-    let kotlin_version = format_kotlin_version(&get_kotlin_version(&config.kotlin_binary)?)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -35,7 +34,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&kotlin_version)),
+                "version" => {
+                    let kotlin_version =
+                        format_kotlin_version(&get_kotlin_version(&config.kotlin_binary)?)?;
+                    Some(Ok(kotlin_version))
+                }
                 _ => None,
             })
             .parse(None)
