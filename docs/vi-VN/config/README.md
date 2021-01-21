@@ -1379,13 +1379,13 @@ The `kotlin` module shows the currently installed version of Kotlin. The module 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn        | Mặc định                           | Mô tả                                                                         |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | Định dạng cho module.                                                         |
-| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | Kiểu cho module.                                                              |
-| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+| Tuỳ chọn        | Mặc định                             | Mô tả                                                                         |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
+| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                        | Kiểu cho module.                                                              |
+| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Các biến
 
