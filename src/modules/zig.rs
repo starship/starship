@@ -79,7 +79,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.zig"))?.sync_all()?;
         let actual = ModuleRenderer::new("zig").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("↯ v0.6.0")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("↯ v0.6.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
