@@ -1379,13 +1379,13 @@ The `kotlin` module shows the currently installed version of Kotlin. Le module e
 
 ### Options
 
-| Option          | Défaut                             | Description                                                                   |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | Format du module.                                                             |
-| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | Le style du module.                                                           |
-| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+| Option          | Défaut                               | Description                                                                   |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol($version )]($style)"` | Format du module.                                                             |
+| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                        | Le style du module.                                                           |
+| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Variables
 
