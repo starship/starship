@@ -1877,12 +1877,12 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 ### Opções
 
-| Option     | Padrão                             | Descrição                                             |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
-| `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                       | O estilo do módulo.                                   |
-| `disabled` | `false`                            | Disables the `php` module.                            |
+| Option     | Padrão                               | Descrição                                             |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                         | O estilo do módulo.                                   |
+| `disabled` | `false`                              | Disables the `php` module.                            |
 
 ### Variables
 
@@ -1912,12 +1912,12 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Opções
 
-| Option     | Padrão                             | Descrição                                                    |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | O estilo do módulo.                                          |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Option     | Padrão                               | Descrição                                                    |
+| ---------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                       | O estilo do módulo.                                          |
+| `disabled` | `false`                              | Disables the `purescript` module.                            |
 
 ### Variables
 
