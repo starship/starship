@@ -20,46 +20,44 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    match utils::exec_cmd(
-        "php",
-        &[
-            "-nr",
-            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
-        ],
-    ) {
-        Some(php_cmd_output) => {
-            let mut module = context.new_module("php");
-            let config: PhpConfig = PhpConfig::try_load(module.config);
+    let mut module = context.new_module("php");
+    let config: PhpConfig = PhpConfig::try_load(module.config);
 
-            let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-                formatter
-                    .map_meta(|variable, _| match variable {
-                        "symbol" => Some(config.symbol),
-                        _ => None,
-                    })
-                    .map_style(|variable| match variable {
-                        "style" => Some(Ok(config.style)),
-                        _ => None,
-                    })
-                    .map(|variable| match variable {
-                        "version" => Some(Ok(format_php_version(&php_cmd_output.stdout))),
-                        _ => None,
-                    })
-                    .parse(None)
-            });
-
-            module.set_segments(match parsed {
-                Ok(segments) => segments,
-                Err(error) => {
-                    log::warn!("Error in module `php`:\n{}", error);
-                    return None;
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "version" => {
+                    let php_cmd_output = utils::exec_cmd(
+                        "php",
+                        &[
+                            "-nr",
+                            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
+                        ],
+                    )?;
+                    Some(Ok(format_php_version(&php_cmd_output.stdout)))
                 }
-            });
+                _ => None,
+            })
+            .parse(None)
+    });
 
-            Some(module)
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `php`:\n{}", error);
+            return None;
         }
-        None => None,
-    }
+    });
+
+    Some(module)
 }
 
 fn format_php_version(php_version: &str) -> String {
@@ -99,8 +97,8 @@ mod tests {
         let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -114,8 +112,8 @@ mod tests {
         let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -129,8 +127,8 @@ mod tests {
         let actual = ModuleRenderer::new("php").path(dir.path()).collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8")
+            "via {}",
+            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
