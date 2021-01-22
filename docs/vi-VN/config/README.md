@@ -1877,12 +1877,12 @@ The `php` module shows the currently installed version of PHP. The module will b
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                 |
-| `symbol`   | `"🐘 "`                             | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                       | Kiểu cho module.                                      |
-| `disabled` | `false`                            | Disables the `php` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `symbol`   | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                         | Kiểu cho module.                                      |
+| `disabled` | `false`                              | Disables the `php` module.                            |
 
 ### Các biến
 
@@ -1912,12 +1912,12 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                        |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                        |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | Kiểu cho module.                                             |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                        |
+| ---------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                        |
+| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                       | Kiểu cho module.                                             |
+| `disabled` | `false`                              | Disables the `purescript` module.                            |
 
 ### Các biến
 
