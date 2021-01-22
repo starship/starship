@@ -1724,12 +1724,12 @@ The `ocaml` module shows the currently installed version of OCaml. 此组件将�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | 此组件的样式。                                                 |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Option     | 默认值                                  | 描述                                                      |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | 此组件的样式。                                                 |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### Variables
 
@@ -1843,12 +1843,12 @@ The `perl` module shows the currently installed version of Perl. 此组件将在
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | 此组件的样式。                                               |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| Option     | 默认值                                  | 描述                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                         | 此组件的样式。                                               |
+| `disabled` | `false`                              | Disables the `perl` module.                           |
 
 ### Variables
 
@@ -2381,12 +2381,12 @@ The `zig` module shows the currently installed version of Zig. 此组件将在�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | 此组件的样式。                                               |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                              |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| Option     | 默认值                                  | 描述                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | 此组件的样式。                                               |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                              |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### Variables
 
