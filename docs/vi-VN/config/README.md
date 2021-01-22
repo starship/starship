@@ -1724,12 +1724,12 @@ The `ocaml` module shows the currently installed version of OCaml. The module wi
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                   |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | Kiểu cho module.                                        |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                   |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | Kiểu cho module.                                        |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### Các biến
 
@@ -1843,12 +1843,12 @@ The `perl` module shows the currently installed version of Perl. The module will
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | Kiểu cho module.                                      |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                         | Kiểu cho module.                                      |
+| `disabled` | `false`                              | Disables the `perl` module.                           |
 
 ### Các biến
 
@@ -2381,12 +2381,12 @@ The `zig` module shows the currently installed version of Zig. The module will b
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                           | Mô tả                                                 |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | Kiểu cho module.                                      |
-| `format`   | `"via [$symbol$version]($style) "` | Định dạng cho module.                                 |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | Kiểu cho module.                                      |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### Các biến
 
