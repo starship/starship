@@ -1263,6 +1263,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "shadow-rs"
+version = "0.5.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bb054640a4d209cbfcc56fa1d9f4a229d4aef3f9da130e7f5698aba36db1c6ce"
+dependencies = [
+ "chrono",
+ "git2",
+]
+
+[[package]]
 name = "shell-words"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1301,6 +1311,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
+ "shadow-rs",
  "shell-words",
  "starship_module_config_derive",
  "sys-info",
