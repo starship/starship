@@ -604,12 +604,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                      |
-| `symbol`   | `"🎯 "`                            | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | The style for the module.                       |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| Option     | Default                              | Description                                     |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🎯 "`                              | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                        | The style for the module.                       |
+| `disabled` | `false`                              | Disables the `dart` module.                     |
 
 ### Variables
 
@@ -808,12 +808,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                                                 | Description                                                     |
-| ---------- | ------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                 | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                         | The style for the module.                                       |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
-| `disabled` | `false`                                                 | Disables the `elixir` module.                                   |
+| Option     | Default                                                   | Description                                                     |
+| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                   | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                           | The style for the module.                                       |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -1443,13 +1443,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option          | Default                            | Description                                                                   |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
-| `symbol`        | `"🅺 "`                            | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | The style for the module.                                                     |
-| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+| Option          | Default                              | Description                                                                   |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
+| `symbol`        | `"🅺 "`                              | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                        | The style for the module.                                                     |
+| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Variables
 
@@ -1555,13 +1555,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option       | Default                            | Description                                                                   |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | The format for the module.                                                    |
-| `symbol`     | `"🌙 "`                            | A format string representing the symbol of Lua.                               |
-| `style`      | `"bold blue"`                      | The style for the module.                                                     |
-| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version.    |
-| `disabled`   | `false`                            | Disables the `lua` module.                                                    |
+| Option       | Default                              | Description                                                                   |
+| ------------ | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
+| `symbol`     | `"🌙 "`                              | A format string representing the symbol of Lua.                               |
+| `style`      | `"bold blue"`                        | The style for the module.                                                     |
+| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.    |
+| `disabled`   | `false`                              | Disables the `lua` module.                                                    |
 
 ### Variables
 
@@ -1760,7 +1760,7 @@ The module will be shown if any of the following conditions are met:
 
 | Option     | Default                            | Description                                        |
 | ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                         |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                         |
 | `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
 | `style`    | `"bold green"`                     | The style for the module.                          |
 | `disabled` | `false`                            | Disables the `nodejs` module.                      |
@@ -2559,18 +2559,18 @@ If you have an interesting example not covered there, feel free to share it ther
 ### Options
 
 | Option        | Default                       | Description                                                                                                                |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`           | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | The style for the module.                                                                                                  |
-| `format`      | `"[$symbol$output]($style) "` | The format for the module.                                                                                                 |
-| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`             | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | The style for the module.                                                                                                  |
+| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Variables
 

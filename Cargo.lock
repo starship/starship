@@ -469,9 +469,9 @@ dependencies = [
 
 [[package]]
 name = "git2"
-version = "0.13.15"
+version = "0.13.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44f267c9da8a4de3c615b59e23606c75f164f84896e97f4dd6c15a4294de4359"
+checksum = "f28f83eecb0de4d4afb74aef4874963739d6d167752a7a5ba156e56b27a4ede7"
 dependencies = [
  "bitflags 1.2.1",
  "libc",
@@ -559,9 +559,9 @@ checksum = "830d08ce1d1d941e6b30645f1a0eb5643013d835ce3779a5fc208261dbe10f55"
 
 [[package]]
 name = "libc"
-version = "0.2.81"
+version = "0.2.82"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1482821306169ec4d07f6aca392a4681f66c75c9918aa49641a2595db64053cb"
+checksum = "89203f3fba0a3795506acaad8ebce3c80c0af93f994d5a1d7a0b1eeb23271929"
 
 [[package]]
 name = "libdbus-sys"
@@ -574,9 +574,9 @@ dependencies = [
 
 [[package]]
 name = "libgit2-sys"
-version = "0.12.17+1.1.0"
+version = "0.12.18+1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f4ebdf65ca745126df8824688637aa0535a88900b83362d8ca63893bcf4e8841"
+checksum = "3da6a42da88fc37ee1ecda212ffa254c25713532980005d5f7c0b0fbe7e6e885"
 dependencies = [
  "cc",
  "libc",
@@ -926,6 +926,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1e0704ee1a7e00d7bb417d0770ea303c1bccbabf0ef1667dae92b5967f5f8a71"
 dependencies = [
  "unicode-xid 0.2.1",
+]
+
+[[package]]
+name = "process_control"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9cac0d971172c65b01208ef9567f52892fc89b1c4530c50e997c6f29da7ee961"
+dependencies = [
+ "crossbeam-channel",
+ "libc",
+ "winapi",
 ]
 
 [[package]]
@@ -1291,6 +1302,7 @@ dependencies = [
  "path-slash",
  "pest",
  "pest_derive",
+ "process_control",
  "quick-xml",
  "rand 0.8.2",
  "rayon",
