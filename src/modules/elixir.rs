@@ -4,7 +4,9 @@ use crate::configs::elixir::ElixirConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+use once_cell::sync::Lazy;
 use regex::Regex;
+use std::ops::Deref;
 const ELIXIR_VERSION_PATTERN: &str = "\
 Erlang/OTP (?P<otp>\\d+)[^\\n]+
 
@@ -21,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let (otp_version, elixir_version) = get_elixir_version()?;
+    let versions = Lazy::new(get_elixir_version);
 
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
@@ -36,8 +38,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&elixir_version)),
-                "otp_version" => Some(Ok(&otp_version)),
+                "version" => versions
+                    .deref()
+                    .as_ref()
+                    .map(|(_, elixir_version)| elixir_version)
+                    .map(Ok),
+                "otp_version" => versions
+                    .deref()
+                    .as_ref()
+                    .map(|(otp_version, _)| otp_version)
+                    .map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -110,8 +120,8 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
         File::create(dir.path().join("mix.exs"))?.sync_all()?;
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Purple.bold().paint("💧 1.10 (OTP 22)")
+            "via {}",
+            Color::Purple.bold().paint("💧 1.10 (OTP 22) ")
         ));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 

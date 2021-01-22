@@ -13,7 +13,7 @@ pub struct GoConfig<'a> {
 impl<'a> RootModuleConfig<'a> for GoConfig<'a> {
     fn new() -> Self {
         GoConfig {
-            format: "via [$symbol$version]($style) ",
+            format: "via [$symbol($version )]($style)",
             symbol: "🐹 ",
             style: "bold cyan",
             disabled: false,

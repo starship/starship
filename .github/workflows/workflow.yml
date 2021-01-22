@@ -140,7 +140,7 @@ jobs:
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
         if: matrix.os == 'macOS-latest'
-        run: pip3 install mercurial
+        run: brew install mercurial
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test

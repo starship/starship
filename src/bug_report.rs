@@ -254,10 +254,10 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn test_get_config_path() {
-        env::set_var("HOME", "/test/home");
-
         let config_path = get_config_path("bash");
-        assert_eq!("/test/home/.bashrc", config_path.unwrap().to_str().unwrap());
-        env::remove_var("HOME");
+        assert_eq!(
+            dirs_next::home_dir().unwrap().join(".bashrc"),
+            config_path.unwrap()
+        );
     }
 }

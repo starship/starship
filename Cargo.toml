@@ -59,11 +59,12 @@ unicode-width = "0.1.8"
 term_size = "0.3.2"
 quick-xml = "0.20.0"
 rand = "0.8.2"
-serde = { version = "1.0.119", features = ["derive"] }
+serde = { version = "1.0.120", features = ["derive"] }
 indexmap = "1.6.1"
 notify-rust = { version = "4.2.2", optional = true }
 semver = "0.11.0"
 which = "4.0.2"
+process_control = { version = "3.0.0", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.16.1", optional = true, default-features = false, features = ["tls", "form"] }

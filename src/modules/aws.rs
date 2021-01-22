@@ -17,7 +17,7 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
         .get_env("AWS_CONFIG_FILE")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
-            let mut home = dirs_next::home_dir()?;
+            let mut home = context.get_home()?;
             home.push(".aws/config");
             Some(home)
         })?;

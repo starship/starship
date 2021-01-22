@@ -3,6 +3,7 @@ use crate::module::Module;
 
 use crate::modules;
 use clap::ArgMatches;
+use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
@@ -109,6 +110,15 @@ impl<'a> Context<'a> {
             shell,
             env: HashMap::new(),
         }
+    }
+
+    // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
+    pub fn get_home(&self) -> Option<PathBuf> {
+        if cfg!(test) {
+            return self.get_env("HOME").map(PathBuf::from).or_else(home_dir);
+        }
+
+        home_dir()
     }
 
     // Retrives a environment variable from the os or from a table if in testing mode
