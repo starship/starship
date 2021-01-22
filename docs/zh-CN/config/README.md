@@ -1877,12 +1877,12 @@ format = "via [🦪 $version]($style) "
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                      |
-| ---------- | ---------------------------------- | ----------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                |
-| `symbol`   | `"🐘 "`                             | 这个字段的内容会显示在当前 PHP 版本之前。 |
-| `style`    | `"147 bold"`                       | 此组件的样式。                 |
-| `disabled` | `false`                            | 禁用 `php` 组件。            |
+| Option     | 默认值                                  | 描述                      |
+| ---------- | ------------------------------------ | ----------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                |
+| `symbol`   | `"🐘 "`                               | 这个字段的内容会显示在当前 PHP 版本之前。 |
+| `style`    | `"147 bold"`                         | 此组件的样式。                 |
+| `disabled` | `false`                              | 禁用 `php` 组件。            |
 
 ### Variables
 
@@ -1912,12 +1912,12 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                           |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                     |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | 此组件的样式。                                                      |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Option     | 默认值                                  | 描述                                                           |
+| ---------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                     |
+| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                       | 此组件的样式。                                                      |
+| `disabled` | `false`                              | Disables the `purescript` module.                            |
 
 ### Variables
 
