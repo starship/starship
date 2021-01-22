@@ -1724,12 +1724,12 @@ The `ocaml` module shows the currently installed version of OCaml. Модуль 
 
 ### Опции
 
-| Параметр   | По умолчанию                       | Описание                                                |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | Стиль модуля.                                           |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Параметр   | По умолчанию                         | Описание                                                |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | Стиль модуля.                                           |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### Переменные
 
@@ -1843,12 +1843,12 @@ The `perl` module shows the currently installed version of Perl. Модуль б
 
 ### Опции
 
-| Параметр   | По умолчанию                       | Описание                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | Стиль модуля.                                         |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| Параметр   | По умолчанию                         | Описание                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                         | Стиль модуля.                                         |
+| `disabled` | `false`                              | Disables the `perl` module.                           |
 
 ### Переменные
 
@@ -2381,12 +2381,12 @@ The `zig` module shows the currently installed version of Zig. Модуль бу
 
 ### Опции
 
-| Параметр   | По умолчанию                       | Описание                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | Стиль модуля.                                         |
-| `format`   | `"via [$symbol$version]($style) "` | Формат модуля.                                        |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| Параметр   | По умолчанию                         | Описание                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | Стиль модуля.                                         |
+| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                        |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### Переменные
 
