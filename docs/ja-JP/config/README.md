@@ -1726,12 +1726,12 @@ The `ocaml` module shows the currently installed version of OCaml. 次の条件�
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | モジュールのスタイルです。                                           |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| オプション      | デフォルト                                | 説明                                                      |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | モジュールのスタイルです。                                           |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### 変数
 
@@ -1845,12 +1845,12 @@ The `perl` module shows the currently installed version of Perl. 次の条件の
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | モジュールのスタイルです。                                         |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| オプション      | デフォルト                                | 説明                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                         | モジュールのスタイルです。                                         |
+| `disabled` | `false`                              | Disables the `perl` module.                           |
 
 ### 変数
 
@@ -2383,12 +2383,12 @@ The `zig` module shows the currently installed version of Zig. 次の条件の�
 
 ### オプション
 
-| オプション      | デフォルト                              | 説明                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | モジュールのスタイルです。                                         |
-| `format`   | `"via [$symbol$version]($style) "` | moduleのフォーマットです。                                      |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| オプション      | デフォルト                                | 説明                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | モジュールのスタイルです。                                         |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                      |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### 変数
 
