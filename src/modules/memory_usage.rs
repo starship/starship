@@ -1,11 +1,12 @@
 use byte_unit::{Byte, ByteUnit};
 
+use super::utils::mem_info::MemoryInfo;
 use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
 
-fn format_kib(n_kib: u64) -> String {
+fn format_kib(n_kib: usize) -> String {
     let byte = Byte::from_unit(n_kib as f64, ByteUnit::KiB).unwrap_or_else(|_| Byte::from_bytes(0));
     let mut display_bytes = byte.get_appropriate_unit(true).format(0);
     display_bytes.retain(|c| c != ' ');
@@ -16,7 +17,7 @@ fn format_pct(pct_number: f64, pct_sign: &str) -> String {
     format!("{:.0}{}", pct_number, pct_sign)
 }
 
-fn format_usage_total(usage: u64, total: u64) -> String {
+fn format_usage_total(usage: usize, total: usize) -> String {
     format!("{}/{}", format_kib(usage), format_kib(total))
 }
 
@@ -38,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let system = match sys_info::mem_info() {
+    let system = match MemoryInfo::new() {
         Ok(info) => info,
         Err(err) => {
             log::warn!("Unable to access memory usage information:\n{}", err);
@@ -47,10 +48,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // avail includes reclaimable memory, but isn't supported on all platforms
-    let avail_memory_kib = match system.avail {
-        0 => system.free,
-        _ => system.avail,
-    };
+    let avail_memory_kib = system.avail.or(system.free).unwrap();
+
     let used_memory_kib = system.total - avail_memory_kib;
     let total_memory_kib = system.total;
     let ram_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
