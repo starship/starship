@@ -2237,7 +2237,15 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich und die Version an. Standardmäßig wird die Terraform-Version nicht angezeigt, da dies bei aktuellen Versionen von Terraform langsam ist, wenn viele Plugins verwendet werden. If you still want to enable it, [follow the example shown below](#with-version). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `terraform` module shows the currently selected terraform workspace and version.
+
+::: Tipp
+
+By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+
+:::
+
+Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
 - Current directory contains a file with the `.tf` or `.hcl` extensions
@@ -2284,7 +2292,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Zeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: Tipp
 
@@ -2304,7 +2312,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                        |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Andernfalls ist es standardmäßig `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2330,7 +2338,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `username` module shows active user's username. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
