@@ -2345,8 +2345,14 @@ format = "via [🏎  $version](red bold)"
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version.
-By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
+
+::: tip
+
+By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use.
 If you still want to enable it, [follow the example shown below](#with-version).
+
+:::
+
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
