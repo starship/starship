@@ -656,6 +656,8 @@ it would have been `nixpkgs/pkgs`.
 | `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
+| `home_symbol_enable`  | `true`                                           | Enable to use a symbol when the path is home instead of "~"                      |
+| `home_symbol`       | `"🏠"`                                             | The symbols indicating home directory.                                           |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>

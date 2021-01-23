@@ -80,6 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let displayed_path = prefix + &truncated_dir_string;
     let lock_symbol = String::from(config.read_only);
+    let home_symbol = String::from(config.home_symbol);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -89,7 +90,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&displayed_path)),
+                "path" => {
+                    if config.show_home_symbol && &displayed_path == HOME_SYMBOL {
+                        Some(Ok(&home_symbol))
+                    } else {
+                        Some(Ok(&displayed_path))
+                    }
+                }
                 "read_only" => {
                     if is_readonly_dir(&context.current_dir) {
                         Some(Ok(&lock_symbol))
@@ -549,15 +556,46 @@ mod tests {
     }
 
     #[test]
-    fn home_directory() -> io::Result<()> {
+    fn home_directory_without_home_symbol() -> io::Result<()> {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .config(toml::toml! { // Necessary if homedir is a git repo
                 [directory]
                 truncate_to_repo = false
+                show_home_symbol = false
             })
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+    #[test]
+    fn home_directory_with_default_home_symbol() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap())
+            .config(toml::toml! {
+                [directory]
+                show_home_symbol = true
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🏠")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn home_directory_with_custom_home_symbol() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap())
+            .config(toml::toml! {
+                [directory]
+                show_home_symbol = true
+                home_symbol = "🚀"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
 
         assert_eq!(expected, actual);
         Ok(())
