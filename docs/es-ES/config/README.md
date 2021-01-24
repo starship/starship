@@ -625,6 +625,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.              |
 | `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                     |
 | `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. ej: "…/"                          |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                          |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
