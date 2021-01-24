@@ -35,7 +35,10 @@ impl MemoryInfo {
     }
 }
 
-#[cfg(all(test, any(target_os = "windows", target_os = "linux", target_os = "macos")))]
+#[cfg(all(
+    test,
+    any(target_os = "windows", target_os = "linux", target_os = "macos")
+))]
 mod tests {
     use super::*;
     #[test]
