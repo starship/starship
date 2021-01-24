@@ -27,7 +27,7 @@ pub struct MemoryInfo {
 
 #[cfg(not(any(target_os = "windows", target_os = "linux", target_os = "macos")))]
 impl MemoryInfo {
-    fn new() -> Result<Self, ()> {
+    pub fn new() -> std::io::Result<Self> {
         Err(std::io::Error::new(
             std::io::ErrorKind::Other,
             "Your OS does not support the memory_usage module",
@@ -35,7 +35,7 @@ impl MemoryInfo {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, any(target_os = "windows", target_os = "linux", target_os = "macos")))]
 mod tests {
     use super::*;
     #[test]
