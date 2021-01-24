@@ -624,6 +624,7 @@ format = "via [🔰 $version](bold red) "
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                 |
 
 <details>
 <summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
