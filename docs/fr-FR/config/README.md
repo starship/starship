@@ -624,6 +624,7 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 | `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                  |
 | `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                 |
 | `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                  |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                 |
 
 <details>
 <summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
