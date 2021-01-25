@@ -1,10 +1,12 @@
+use crate::utils::parallel_map;
 use ansi_term::Style;
+use futures::StreamExt;
 use pest::error::Error as PestError;
 use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
-use std::future::Future;
+use std::future::{ready, Future};
 
 use crate::config::parse_style_string;
 use crate::segment::Segment;
@@ -164,13 +166,27 @@ impl<'a> StringFormatter<'a> {
     pub async fn map_variables_to_segments<M, Fut>(mut self, mapper: M) -> StringFormatter<'a>
     where
         M: Fn(&str) -> Fut,
-        Fut: Future<Output = Option<Result<Vec<Segment>, StringFormatterError>>>,
+        Fut: Future<Output = Option<Result<Vec<Segment>, StringFormatterError>>> + Send + 'static,
     {
-        for (key, value) in self.variables.iter_mut() {
-            if value.is_none() {
-                *value = mapper(key).await.map(|var| var.map(VariableValue::Styled));
+        let empty_vars = self
+            .variables
+            .iter()
+            .filter(|(_, value)| value.is_none())
+            .map(|(key, _)| key.clone())
+            .collect::<Vec<_>>();
+
+        parallel_map(empty_vars, |key| {
+            let fut = mapper(&key);
+            async move { (key, fut.await) }
+        })
+        .for_each(|(k, v)| {
+            if let Some(var) = v {
+                self.variables
+                    .insert(k, Some(var.map(VariableValue::Styled)));
             }
-        }
+            ready(())
+        })
+        .await;
         self
     }
 

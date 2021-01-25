@@ -1,5 +1,6 @@
 use process_control::{ChildExt, Timeout};
 use std::fs::File;
+use futures::stream::{self, Stream, StreamExt};
 use std::future::Future;
 use std::io::{Read, Result};
 use std::path::Path;
@@ -336,17 +337,25 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
     }
 }
 
-pub async fn parallel_map<I, F, U, T, Fut>(items: I, f: F) -> Vec<U>
+// Bespoke code, inspired by the parallel-stream crate.
+// TODO: replace this with parallel-stream (or similar) when possible.
+// At the time of writing parallel-stream 2.1.2 only works with an old
+// version of async_std, and is missing several features.
+pub fn parallel_map<I, M, T, Fut, U>(items: I, map: M) -> impl Stream<Item = U>
 where
     I: IntoIterator<Item = T>,
-    F: Fn(T) -> Fut,
-    Fut: Future<Output = U>,
+    M: Fn(T) -> Fut,
+    Fut: Future<Output = U> + Send + 'static,
+    U: Send + 'static,
+    T: Send + 'static,
 {
-    let mut v = vec![];
-    for x in items {
-        v.push(f(x).await);
-    }
-    v
+    let handles = items
+        .into_iter()
+        .map(|x| async_std::task::spawn(map(x)))
+        .collect::<Vec<_>>();
+
+    let count = handles.len();
+    stream::iter(handles).buffered(count).boxed()
 }
 
 #[cfg(test)]

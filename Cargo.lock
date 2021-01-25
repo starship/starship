@@ -1687,6 +1687,7 @@ dependencies = [
  "chrono",
  "clap",
  "dirs-next",
+ "futures",
  "gethostname",
  "git2",
  "indexmap",

@@ -1,6 +1,7 @@
 use crate::utils::parallel_map;
 use ansi_term::ANSIStrings;
 use clap::ArgMatches;
+use futures::stream;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 
@@ -19,15 +20,16 @@ use crate::modules;
 use crate::segment::Segment;
 
 use async_std::task::block_on;
+use futures::StreamExt;
 
-pub fn prompt(args: ArgMatches) {
+pub fn prompt(args: ArgMatches<'static>) {
     let context = Context::new(args);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
     write!(handle, "{}", block_on(get_prompt(context))).unwrap();
 }
 
-pub async fn get_prompt(context: Context<'_>) -> String {
+pub async fn get_prompt(context: Context<'static>) -> String {
     let context = Arc::new(context);
     let config = context.config.get_root_config();
     let mut buf = String::new();
@@ -63,7 +65,7 @@ pub async fn get_prompt(context: Context<'_>) -> String {
             async move {
                 // Make $all display all modules
                 if module == "all" {
-                    let segment_batches = parallel_map(PROMPT_ORDER, |module| {
+                    let segments: Vec<Segment> = parallel_map(PROMPT_ORDER, |module| {
                         let context = Arc::clone(&context);
                         let modules = Arc::clone(&modules);
                         async move {
@@ -74,11 +76,10 @@ pub async fn get_prompt(context: Context<'_>) -> String {
                                 .collect::<Vec<Segment>>()
                         }
                     })
+                    .flat_map(stream::iter)
+                    .collect()
                     .await;
-                    Some(Ok(segment_batches
-                        .into_iter()
-                        .flat_map(|v| v.into_iter())
-                        .collect()))
+                    Some(Ok(segments))
                 } else if context.is_module_disabled_in_config(&module) {
                     None
                 } else {
