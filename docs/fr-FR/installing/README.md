@@ -11,35 +11,35 @@ Il y a tellement de plates-formes, qu'il aurait été déraisonnable de les fair
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Obtention du binaire
 
-#### Imperatively
+#### Impératif
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](home-manager)
+#### Déclaration, utilisateur unique, via [home-manager](home-manager)
 
-Add `pkgs.starship` to your `home.packages` in your `home.nix` file, then run
+Ajoutez `pkgs.starship` à votre `home.packages` dans votre fichier `home.nix` puis exécutez
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Déclaration, au niveau du système, avec NixOS
 
-Add `pkgs.starship` to `environment.packages` in your `configuration.nix`, then run
+Ajoutez `pkgs.starship` à `environment.packages` dans votre `configuration.nix`, puis exécutez
 
 ```sh
 sudo nixos-rebuild switch
 ```
 
-### Modifying Init Scripts
+### Modification des scripts d'initialisation
 
-#### With Nix and home-manager, using zsh:
+#### Avec Nix et home manager, en utilisant zsh :
 
-Add the following to `programs.zsh.initExtra` in your `home.nix` file, then run
+Ajoutez les éléments suivants à `programs.zsh.initExtra` dans votre fichier `home.nix` puis exécuter
 
 ```sh
 home-manager switch
