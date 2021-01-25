@@ -930,9 +930,9 @@ dependencies = [
 
 [[package]]
 name = "process_control"
-version = "3.0.0"
+version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9cac0d971172c65b01208ef9567f52892fc89b1c4530c50e997c6f29da7ee961"
+checksum = "72770c250bec5862264169dc3a2f7baa46ff6fa52f72d793e15904c5aa3adb7f"
 dependencies = [
  "crossbeam-channel",
  "libc",

@@ -67,7 +67,7 @@ semver = "0.11.0"
 which = "4.0.2"
 shadow-rs = "0.5.23"
 
-process_control = { version = "3.0.0", features = ["crossbeam-channel"] }
+process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.16.1", optional = true, default-features = false, features = ["tls", "form"] }
