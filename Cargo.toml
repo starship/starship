@@ -86,8 +86,7 @@ features = [
   "securitybaseapi",
   "winuser",
 ]
-
-[target.'cfg(target_os = "macos")'.dependencies]
+[target.'cfg(any(target_os = "macos", target_os = "freebsd"))'.dependencies]
 libc = "0.2.82"
 
 [target.'cfg(not(windows))'.dependencies]
@@ -96,7 +95,7 @@ nix = "0.20.0"
 [build-dependencies]
 shadow-rs = "0.5.25"
  
-[target.'cfg(target_os = "macos")'.build-dependencies]
+[target.'cfg(any(target_os = "macos", target_os = "freebsd"))'.build-dependencies]
 bindgen = "0.56.0"
 
 [dev-dependencies]
