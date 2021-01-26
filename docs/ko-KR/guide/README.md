@@ -123,14 +123,14 @@
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Getting Started
+### 시작하기
 
 **Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
-1. Install the **starship** binary:
+1. **starship** 바이러니 설치:
 
 
-   #### Install Latest Version
+   #### 최근 버전 설치
 
 
    ##### From prebuilt binary, with Shell:
@@ -143,7 +143,7 @@
    #### Install via Package Manager
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### 예제: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
