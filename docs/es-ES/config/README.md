@@ -678,8 +678,8 @@ El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/
 | `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                                        |
 | `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                                      |
 | `style`           | `"blue bold"`                      | El estilo del módulo.                                                                                         |
-| `only_with_files` | `false`                            | Mostrar solo cuando hay un `docker-compose.yml`, `docker-compose.yaml`o `Dockerfile` en el directorio actual. |
-| `disabled`        | `true`                             | Desactiva el módulo `docker_context`.                                                                         |
+| `only_with_files` | `true`                             | Mostrar solo cuando hay un `docker-compose.yml`, `docker-compose.yaml`o `Dockerfile` en el directorio actual. |
+| `disabled`        | `false`                            | Desactiva el módulo `docker_context`.                                                                         |
 
 ### Variables
 
@@ -2159,18 +2159,18 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                  | Por defecto                | Descripción                                            |
-| ----------------------- | -------------------------- | ------------------------------------------------------ |
-| `format`                | `[$symbol$status]($style)` | El formato del módulo                                  |
-| `symbol`                | `"✖"`                      | El símbolo mostrado en error del programa              |
-| `not_executable_symbol` | `"🚫"`                      | El símbolo mostrado cuando el archivo no es ejecutable |
-| `not_found_symbol`      | `"🔍"`                      | El símbolo mostrado cuando no se encuentra el comando  |
-| `sigint_symbol`         | `"🧱"`                      | El símbolo mostrado en SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                      | El símbolo mostrado en cualquier señal                 |
-| `style`                 | `"bold red"`               | El estilo del módulo.                                  |
-| `recognize_signal_code` | `true`                     | Activar mapeo de señales desde el código de salida     |
-| `map_symbol`            | `false`                    | Activar mapeo de símbolos desde el código de salida    |
-| `disabled`              | `true`                     | Desactiva el módulo `status`.                          |
+| Opción                  | Por defecto                   | Descripción                                            |
+| ----------------------- | ----------------------------- | ------------------------------------------------------ |
+| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                  |
+| `symbol`                | `"✖"`                         | El símbolo mostrado en error del programa              |
+| `not_executable_symbol` | `"🚫"`                         | El símbolo mostrado cuando el archivo no es ejecutable |
+| `not_found_symbol`      | `"🔍"`                         | El símbolo mostrado cuando no se encuentra el comando  |
+| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
+| `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
+| `recognize_signal_code` | `true`                        | Activar mapeo de señales desde el código de salida     |
+| `map_symbol`            | `false`                       | Activar mapeo de símbolos desde el código de salida    |
+| `disabled`              | `true`                        | Desactiva el módulo `status`.                          |
 
 ### Variables
 
