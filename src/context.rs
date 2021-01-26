@@ -8,6 +8,7 @@ use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
+use std::convert::TryFrom;
 use std::env;
 use std::ffi::OsString;
 use std::fs;
@@ -194,6 +195,15 @@ impl<'a> Context<'a> {
         let disabled = Some(config).and_then(|table| table.as_table()?.get("disabled")?.as_bool());
 
         Some(disabled == Some(true))
+    }
+
+    /// Return the timeout duration specified for this module, or None if none was given
+    pub fn module_timeout(&self, name: &str) -> Option<Duration> {
+        let config = self.config.get_module_config(name)?;
+
+        let int = config.as_table()?.get("timeout")?.as_integer()?;
+
+        u64::try_from(int).map(Duration::from_millis).ok()
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
