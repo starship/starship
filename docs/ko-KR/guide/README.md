@@ -226,7 +226,7 @@ This project exists thanks to all the people who contribute. [[기여](https://g
 
 ### Financial Contributors
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[기여](https://opencollective.com/starship/contribute)]
 
 #### Individuals
 
@@ -234,7 +234,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### 조직
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[기여](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
