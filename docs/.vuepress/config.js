@@ -39,6 +39,11 @@ module.exports = {
       lang: "zh-TW",
       title: "Starship",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+    },
+    "/vi-VN/": {
+      lang: "vi-VN",
+      title: "Starship",
+      description: "Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!"
     }
   },
   // prettier-ignore
@@ -228,6 +233,25 @@ module.exports = {
           ["/zh-CN/advanced-config/", "高级配置"],
           ["/zh-CN/faq/", "常见问题"],
           ["/zh-CN/presets/", "社区配置分享"]
+        ]
+      },
+      "/vi-VN/": {
+        // text for the language dropdown
+        selectText: "Ngôn ngữ",
+        // label for this locale in the language dropdown
+        label: "Tiếng Việt",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Chỉnh sửa trang này trên GitHub",
+        // Custom navbar values
+        nav: [{ text: "Cấu hình", link: "/vi-VN/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/vi-VN/",
+          ["/vi-VN/guide/", "Hướng dẫn"],
+          ["/vi-VN/config/", "Cấu hình"],
+          ["/vi-VN/advanced-config/", "Cấu hình nâng cao"],
+          ["/vi-VN/faq/", "Các hỏi thường gặp"],
+          ["/vi-VN/presets/", "Mẫu thiết lập"]
         ]
       }
     }
