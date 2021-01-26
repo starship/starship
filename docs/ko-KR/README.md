@@ -30,10 +30,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### Quick Install
 
-1. Install the **starship** binary:
+1. **starship** 바이러니 설치:
 
 
-   #### Install Latest Version
+   #### 최근 버전 설치
 
    With Shell:
 

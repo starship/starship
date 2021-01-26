@@ -30,7 +30,7 @@ export STARSHIP_CONFIG=~/.starship
 
 El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
 
-```ps1
+```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
@@ -44,7 +44,7 @@ export STARSHIP_CACHE=~/.starship/cache
 
 El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
 
-```ps1
+```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
@@ -52,7 +52,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Módulo**: un componente en el promt que provee información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
 
-**Variable**: Smaller sub-components that contain information provided by the module. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
+**Variable**: subcomponentes más pequeños que contienen información proporcionada por el módulo. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
 
 Por convención, la mayoría de los módulos tienen un prefijo del color predeterminado de la terminal (por ejemplo, `vía` en "nodejs") y un espacio vacío como sufijo.
 
@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Equivalente a 
 format = """
 $username\
 $hostname\
@@ -421,19 +421,19 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+El módulo `cmake` muestra la versión instalada de CMake si se cumple alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                    |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                         |
-| `symbol`   | `"喝 "`                             | El símbolo usado antes de la versión de cmake. |
-| `style`    | `"bold blue"`                      | El estilo del módulo.                          |
-| `disabled` | `false`                            | Desactiva el módulo `cmake`.                   |
+| Opción     | Por defecto                          | Descripción                                    |
+| ---------- | ------------------------------------ | ---------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                         |
+| `symbol`   | `"喝 "`                               | El símbolo usado antes de la versión de cmake. |
+| `style`    | `"bold blue"`                        | El estilo del módulo.                          |
+| `disabled` | `false`                              | Desactiva el módulo `cmake`.                   |
 
 ### Variables
 
@@ -459,15 +459,15 @@ Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el 
 
 ### Opciones
 
-| Opción               | Por defecto                   | Descripción                                                           |
-| -------------------- | ----------------------------- | --------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos) |
-| `show_milliseconds`  | `false`                       | Muestra la duración con precisión en milisegundos.                    |
-| `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                |
-| `style`              | `"bold yellow"`               | El estilo del módulo.                                                 |
-| `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                   |
-| `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.   |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                 |
+| Opción               | Por defecto                   | Descripción                                                            |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos)  |
+| `show_milliseconds`  | `false`                       | Muestra la duración con precisión en milisegundos.                     |
+| `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                 |
+| `style`              | `"bold yellow"`               | El estilo del módulo.                                                  |
+| `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                    |
+| `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.    |
+| `min_time_to_notify` | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos). |
 
 ::: tip
 
@@ -543,12 +543,12 @@ El módulo `crystal` muestra la versión actual de Crystal. El módulo se muestr
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                   |
-| ---------- | ---------------------------------- | --------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | Símbolo usado antes de la versión de Crystal. |
-| `style`    | `"bold red"`                       | El estilo del módulo.                         |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                        |
-| `disabled` | `false`                            | Desactiva el módulo `crystal`.                |
+| Opción     | Por defecto                          | Descripción                                   |
+| ---------- | ------------------------------------ | --------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | Símbolo usado antes de la versión de Crystal. |
+| `style`    | `"bold red"`                         | El estilo del módulo.                         |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                        |
+| `disabled` | `false`                              | Desactiva el módulo `crystal`.                |
 
 ### Variables
 
@@ -579,12 +579,12 @@ El módulo `dart` muestra la versión actualmente instalada de Dart. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
-| `symbol`   | `"🎯 "`                             | Una cadena de formato que representa el símbolo de Dart |
-| `style`    | `"bold blue"`                      | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Desactiva el módulo `dart`.                             |
+| Opción     | Por defecto                          | Descripción                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `symbol`   | `"🎯 "`                               | Una cadena de formato que representa el símbolo de Dart |
+| `style`    | `"bold blue"`                        | El estilo del módulo.                                   |
+| `disabled` | `false`                              | Desactiva el módulo `dart`.                             |
 
 ### Variables
 
@@ -625,6 +625,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.              |
 | `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                     |
 | `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. ej: "…/"                          |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                          |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
@@ -672,13 +673,13 @@ El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/
 
 ### Opciones
 
-| Opción            | Por defecto                        | Descripción                                                                                        |
-| ----------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                             |
-| `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                           |
-| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                              |
-| `only_with_files` | `false`                            | Solo lo muestra cuando hay un archivo `docker-compose.yml` o `Dockerfile` en el directorio actual. |
-| `disabled`        | `true`                             | Desactiva el módulo `docker_context`.                                                              |
+| Opción            | Por defecto                        | Descripción                                                                                                   |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                                        |
+| `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                                      |
+| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                                         |
+| `only_with_files` | `true`                             | Mostrar solo cuando hay un `docker-compose.yml`, `docker-compose.yaml`o `Dockerfile` en el directorio actual. |
+| `disabled`        | `false`                            | Desactiva el módulo `docker_context`.                                                                         |
 
 ### Variables
 
@@ -723,13 +724,13 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 ### Opciones
 
-| Opción      | Por defecto                             | Descripción                                                               |
-| ----------- | --------------------------------------- | ------------------------------------------------------------------------- |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | El formato del módulo.                                                    |
-| `symbol`    | `"•NET "`                               | Símbolo usado antes de mostrar la versión de .NET                         |
-| `heuristic` | `true`                                  | Usa una detección de versiones más rápida para mantener a starship veloz. |
-| `style`     | `"bold blue"`                           | El estilo del módulo.                                                     |
-| `disabled`  | `false`                                 | Deshabilita el módulo `dotnet`.                                           |
+| Opción      | Por defecto                               | Descripción                                                               |
+| ----------- | ----------------------------------------- | ------------------------------------------------------------------------- |
+| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | El formato del módulo.                                                    |
+| `symbol`    | `"•NET "`                                 | Símbolo usado antes de mostrar la versión de .NET                         |
+| `heuristic` | `true`                                    | Usa una detección de versiones más rápida para mantener a starship veloz. |
+| `style`     | `"bold blue"`                             | El estilo del módulo.                                                     |
+| `disabled`  | `false`                                   | Deshabilita el módulo `dotnet`.                                           |
 
 ### Variables
 
@@ -761,12 +762,12 @@ El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/
 
 ### Opciones
 
-| Opción     | Por defecto                                               | Descripción                                                    |
-| ---------- | --------------------------------------------------------- | -------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | El estilo del módulo.                                          |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | El formato para el módulo elixir.                              |
-| `disabled` | `false`                                                   | Desactiva el módulo `elixir`.                                  |
+| Opción     | Por defecto                                                 | Descripción                                                    |
+| ---------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | El estilo del módulo.                                          |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | El formato para el módulo elixir.                              |
+| `disabled` | `false`                                                     | Desactiva el módulo `elixir`.                                  |
 
 ### Variables
 
@@ -800,12 +801,12 @@ El módulo `elm` muestra la versión actualmente instalada de Elm. El módulo se
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
-| `symbol`   | `"🌳 "`                             | Una cadena de formato que representa el símbolo de Elm. |
-| `style`    | `"cyan bold"`                      | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Desactiva el módulo `elm`.                              |
+| Opción     | Por defecto                          | Descripción                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `symbol`   | `"🌳 "`                               | Una cadena de formato que representa el símbolo de Elm. |
+| `style`    | `"cyan bold"`                        | El estilo del módulo.                                   |
+| `disabled` | `false`                              | Desactiva el módulo `elm`.                              |
 
 ### Variables
 
@@ -872,12 +873,12 @@ El módulo `erlang` muestra la versión instalada de Erlang/OTP. El módulo se m
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `symbol`   | `" "`                             | El símbolo usado antes de mostrar la versión de Erlang. |
-| `style`    | `"bold red"`                       | El estilo del módulo.                                   |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
-| `disabled` | `false`                            | Desactiva el módulo `erlang`.                           |
+| Opción     | Por defecto                          | Descripción                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `symbol`   | `" "`                               | El símbolo usado antes de mostrar la versión de Erlang. |
+| `style`    | `"bold red"`                         | El estilo del módulo.                                   |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `disabled` | `false`                              | Desactiva el módulo `erlang`.                           |
 
 ### Variables
 
@@ -980,8 +981,8 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | Variable      | Ejemplo  | Descripción                                                                                                   |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
 | branch        | `master` | El nombre de la rama actual, regresa a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached HEAD). |
-| remote_name   | `origin` | The remote name.                                                                                              |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                              |
+| remote_name   | `origin` | El nombre remoto.                                                                                             |
+| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                              |
 | symbol        |          | Refleja el valor de la opción `symbol`                                                                        |
 | style\*     |          | Refleja el valor de la opción `style`                                                                         |
 
@@ -1171,12 +1172,12 @@ El módulo `golang` muestra la versión actualmente instalada de Golang. El mód
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                 |
-| `symbol`   | `"🐹 "`                             | Una cadena de formato que representa el símbolo de Go. |
-| `style`    | `"bold cyan"`                      | El estilo del módulo.                                  |
-| `disabled` | `false`                            | Desactiva el módulo de `golang`.                       |
+| Opción     | Por defecto                          | Descripción                                            |
+| ---------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                 |
+| `symbol`   | `"🐹 "`                               | Una cadena de formato que representa el símbolo de Go. |
+| `style`    | `"bold cyan"`                        | El estilo del módulo.                                  |
+| `disabled` | `false`                              | Desactiva el módulo de `golang`.                       |
 
 ### Variables
 
@@ -1206,12 +1207,12 @@ El módulo `helm` muestra la versión instalada de Helm. El módulo se muestra s
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
-| `symbol`   | `"⎈ "`                             | Una cadena de formato que representa el símbolo de Helm. |
-| `style`    | `"bold white"`                     | El estilo del módulo.                                    |
-| `disabled` | `false`                            | Desactiva el módulo `helm`.                              |
+| Opción     | Por defecto                          | Descripción                                              |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `symbol`   | `"⎈ "`                               | Una cadena de formato que representa el símbolo de Helm. |
+| `style`    | `"bold white"`                       | El estilo del módulo.                                    |
+| `disabled` | `false`                              | Desactiva el módulo `helm`.                              |
 
 ### Variables
 
@@ -1276,12 +1277,12 @@ El módulo `java` muestra la versión actualmente instalada de Java. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                            | Descripción                                             |
-| ---------- | -------------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | El formato del módulo.                                  |
-| `symbol`   | `"☕ "`                                 | Una cadena de formato que representa el símbolo de Java |
-| `style`    | `"red dimmed"`                         | El estilo del módulo.                                   |
-| `disabled` | `false`                                | Desactiva el módulo `java`.                             |
+| Opción     | Por defecto                              | Descripción                                             |
+| ---------- | ---------------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | El formato del módulo.                                  |
+| `symbol`   | `"☕ "`                                   | Una cadena de formato que representa el símbolo de Java |
+| `style`    | `"red dimmed"`                           | El estilo del módulo.                                   |
+| `disabled` | `false`                                  | Desactiva el módulo `java`.                             |
 
 ### Variables
 
@@ -1346,12 +1347,12 @@ El módulo `Julia` muestra la versión actualmente instalada de Julia. El módul
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                               |
-| ---------- | ---------------------------------- | --------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                    |
-| `symbol`   | `"ஃ "`                             | Una cadena de formato que representa el símbolo de Julia. |
-| `style`    | `"bold purple"`                    | El estilo del módulo.                                     |
-| `disabled` | `false`                            | Desactiva el módulo `julia`.                              |
+| Opción     | Por defecto                          | Descripción                                               |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                    |
+| `symbol`   | `"ஃ "`                               | Una cadena de formato que representa el símbolo de Julia. |
+| `style`    | `"bold purple"`                      | El estilo del módulo.                                     |
+| `disabled` | `false`                              | Desactiva el módulo `julia`.                              |
 
 ### Variables
 
@@ -1374,25 +1375,25 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `kotlin` muestra la versión instalada de Kotlin. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `.kt` or a `.kts` file
+- El directorio actual contiene un archivo `.kt` o `.kts`
 
 ### Opciones
 
-| Opción          | Por defecto                        | Descripción                                                                   |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | El formato del módulo.                                                        |
-| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | El estilo del módulo.                                                         |
-| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+| Opción          | Por defecto                          | Descripción                                                             |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------- |
+| `format`        | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                  |
+| `symbol`        | `"🅺 "`                               | Una cadena de formato que representa el símbolo de Kotlin.              |
+| `style`         | `"bold blue"`                        | El estilo del módulo.                                                   |
+| `kotlin_binary` | `"kotlin"`                           | Configura el binario kotlin que Starship ejecuta al obtener la versión. |
+| `disabled`      | `false`                              | Deshabilita el módulo `kotlin`.                                         |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                |
+| version   | `v1.4.21` | La versión de `kotlin`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1411,7 +1412,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# Utiliza el binario del Compilador de Kotlin para obtener la versión instalada
 kotlin_binary = "kotlinc"
 ```
 
@@ -1487,13 +1488,13 @@ El módulo `lua` muestra la versión instalada de Lua. El módulo se muestra si 
 
 ### Opciones
 
-| Opción       | Por defecto                        | Descripción                                                             |
-| ------------ | ---------------------------------- | ----------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | El formato del módulo.                                                  |
-| `symbol`     | `"🌙 "`                             | Una cadena de formato que representa el símbolo de Lua.                 |
-| `style`      | `"bold blue"`                      | El estilo del módulo.                                                   |
-| `lua_binary` | `"lua"`                            | Configura el binario de lua que Starship ejecuta al obtener la versión. |
-| `disabled`   | `false`                            | Desactiva el módulo `lua`.                                              |
+| Opción       | Por defecto                          | Descripción                                                             |
+| ------------ | ------------------------------------ | ----------------------------------------------------------------------- |
+| `format`     | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                  |
+| `symbol`     | `"🌙 "`                               | Una cadena de formato que representa el símbolo de Lua.                 |
+| `style`      | `"bold blue"`                        | El estilo del módulo.                                                   |
+| `lua_binary` | `"lua"`                              | Configura el binario de lua que Starship ejecuta al obtener la versión. |
+| `disabled`   | `false`                              | Desactiva el módulo `lua`.                                              |
 
 ### Variables
 
@@ -1608,12 +1609,12 @@ El módulo `nim` muestra la versión instalada de Nim. El módulo se muestra si 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                          |
-| ---------- | ---------------------------------- | ---------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo                                |
-| `symbol`   | `"👑 "`                             | El símbolo usado antes de mostrar la versión de Nim. |
-| `style`    | `"bold yellow"`                    | El estilo del módulo.                                |
-| `disabled` | `false`                            | Desactiva el módulo `nim`.                           |
+| Opción     | Por defecto                          | Descripción                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo                                |
+| `symbol`   | `"👑 "`                               | El símbolo usado antes de mostrar la versión de Nim. |
+| `style`    | `"bold yellow"`                      | El estilo del módulo.                                |
+| `disabled` | `false`                              | Desactiva el módulo `nim`.                           |
 
 ### Variables
 
@@ -1685,13 +1686,13 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. El módulo se muest
 
 ### Opciones
 
-| Opción              | Por defecto                        | Descripción                                                                                                     |
-| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | El formato del módulo.                                                                                          |
-| `symbol`            | `"⬢ "`                             | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
-| `style`             | `"bold green"`                     | El estilo del módulo.                                                                                           |
-| `disabled`          | `false`                            | Desactiva el módulo `nodejs`.                                                                                   |
-| `not_capable_style` | `bold red`                         | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |
+| Opción              | Por defecto                          | Descripción                                                                                                     |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                          |
+| `symbol`            | `"⬢ "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
+| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                           |
+| `disabled`          | `false`                              | Desactiva el módulo `nodejs`.                                                                                   |
+| `not_capable_style` | `bold red`                           | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |
 
 ###  Variables
 
@@ -1725,12 +1726,12 @@ El módulo `ocaml` muestra la versión actualmente instalada de OCaml. El módul
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                            |
-| ---------- | ---------------------------------- | ------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | La cadena de formato para el módulo.                   |
-| `symbol`   | `"🐫 "`                             | El símbolo usado antes de mostrar la versión de OCaml. |
-| `style`    | `"bold yellow"`                    | El estilo del módulo.                                  |
-| `disabled` | `false`                            | Desactiva el módulo `ocaml`.                           |
+| Opción     | Por defecto                          | Descripción                                            |
+| ---------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | La cadena de formato para el módulo.                   |
+| `symbol`   | `"🐫 "`                               | El símbolo usado antes de mostrar la versión de OCaml. |
+| `style`    | `"bold yellow"`                      | El estilo del módulo.                                  |
+| `disabled` | `false`                              | Desactiva el módulo `ocaml`.                           |
 
 ### Variables
 
@@ -1799,7 +1800,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - **mix** - La versión del paquete `mix` se extrae del `mix.exs` presente
 - **helm** - La versión del gráfico `helm` se extrae del `Chart.yaml` presente
 - **maven** - La versión del paquete `maven` es extraída del `pom.xml` presente
-- **meson** - The `meson` package version is extracted from the `meson.build` present
+- **meson** - La versión del paquete `meson` es extraída del `meson.build` presente
 
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
 
@@ -1844,12 +1845,12 @@ El módulo `perl` muestra la versión actualmente instalada de Perl. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                          |
-| ---------- | ---------------------------------- | ---------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | La cadena de formato para el módulo.                 |
-| `symbol`   | `"🐪 "`                             | El símbolo usado antes de mostrar la versión de Perl |
-| `style`    | `"bold 149"`                       | El estilo del módulo.                                |
-| `disabled` | `false`                            | Desactiva el módulo `perl`.                          |
+| Opción     | Por defecto                          | Descripción                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | La cadena de formato para el módulo.                 |
+| `symbol`   | `"🐪 "`                               | El símbolo usado antes de mostrar la versión de Perl |
+| `style`    | `"bold 149"`                         | El estilo del módulo.                                |
+| `disabled` | `false`                              | Desactiva el módulo `perl`.                          |
 
 ### Variables
 
@@ -1878,12 +1879,12 @@ El módulo `php` muestra la versión instalada de PHP. El módulo se muestra si 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                          |
-| ---------- | ---------------------------------- | ---------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                               |
-| `symbol`   | `"🐘 "`                             | El símbolo usado antes de mostrar la versión de PHP. |
-| `style`    | `"147 bold"`                       | El estilo del módulo.                                |
-| `disabled` | `false`                            | Desactiva el módulo `php`.                           |
+| Opción     | Por defecto                          | Descripción                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
+| `symbol`   | `"🐘 "`                               | El símbolo usado antes de mostrar la versión de PHP. |
+| `style`    | `"147 bold"`                         | El estilo del módulo.                                |
+| `disabled` | `false`                              | Desactiva el módulo `php`.                           |
 
 ### Variables
 
@@ -1913,12 +1914,12 @@ El módulo `purescript` muestra la versión actualmente instalada de PureScript.
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                                 |
-| ---------- | ---------------------------------- | ----------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                      |
-| `symbol`   | `"<=> "`                     | El símbolo usado antes de mostrar la versión de PureScript. |
-| `style`    | `"bold white"`                     | El estilo del módulo.                                       |
-| `disabled` | `false`                            | Deshabilita el módulo `purescript`.                         |
+| Opción     | Por defecto                          | Descripción                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
+| `symbol`   | `"<=> "`                       | El símbolo usado antes de mostrar la versión de PureScript. |
+| `style`    | `"bold white"`                       | El estilo del módulo.                                       |
+| `disabled` | `false`                              | Deshabilita el módulo `purescript`.                         |
 
 ### Variables
 
@@ -1959,16 +1960,16 @@ El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 ### Opciones
 
-| Opción               | Por defecto                                                               | Descripción                                                                           |
-| -------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | El formato del módulo.                                                                |
-| `symbol`             | `"🐍 "`                                                                    | Una cadena de formato que representa el símbolo de Python                             |
-| `style`              | `"yellow bold"`                                                           | El estilo del módulo.                                                                 |
-| `pyenv_version_name` | `false`                                                                   | Usar pyenv para obtener la versión de Python                                          |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv      |
-| `scan_for_pyfiles`   | `true`                                                                    | Si es falso, los archivos Python en el directorio actual no mostrarán este módulo.    |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configura los binarios de python que Starship debería ejecutar al obtener la versión. |
-| `disabled`           | `false`                                                                   | Desactiva el módulo `python`.                                                         |
+| Opción               | Por defecto                                                                | Descripción                                                                           |
+| -------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | El formato del módulo.                                                                |
+| `symbol`             | `"🐍 "`                                                                     | Una cadena de formato que representa el símbolo de Python                             |
+| `style`              | `"yellow bold"`                                                            | El estilo del módulo.                                                                 |
+| `pyenv_version_name` | `false`                                                                    | Usar pyenv para obtener la versión de Python                                          |
+| `pyenv_prefix`       | `pyenv`                                                                    | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv      |
+| `scan_for_pyfiles`   | `true`                                                                     | Si es falso, los archivos Python en el directorio actual no mostrarán este módulo.    |
+| `python_binary`      | `["python", "python3, "python2"]`                                          | Configura los binarios de python que Starship debería ejecutar al obtener la versión. |
+| `disabled`           | `false`                                                                    | Desactiva el módulo `python`.                                                         |
 
 ::: tip
 
@@ -2017,12 +2018,12 @@ El módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
-| `symbol`   | `"💎 "`                             | Una cadena de formato que representa el símbolo de Ruby. |
-| `style`    | `"bold red"`                       | El estilo del módulo.                                    |
-| `disabled` | `false`                            | Desactiva el módulo `ruby`.                              |
+| Opción     | Por defecto                          | Descripción                                              |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `symbol`   | `"💎 "`                               | Una cadena de formato que representa el símbolo de Ruby. |
+| `style`    | `"bold red"`                         | El estilo del módulo.                                    |
+| `disabled` | `false`                              | Desactiva el módulo `ruby`.                              |
 
 ### Variables
 
@@ -2052,12 +2053,12 @@ El módulo `rust` muestra la versión instalada de Rust. El módulo se muestra s
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                  |
-| `symbol`   | `"🦀 "`                             | Una cadena de formato que representa el símbolo de Rust |
-| `style`    | `"bold red"`                       | El estilo del módulo.                                   |
-| `disabled` | `false`                            | Desactiva el módulo `rust`.                             |
+| Opción     | Por defecto                          | Descripción                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `symbol`   | `"🦀 "`                               | Una cadena de formato que representa el símbolo de Rust |
+| `style`    | `"bold red"`                         | El estilo del módulo.                                   |
+| `disabled` | `false`                              | Desactiva el módulo `rust`.                             |
 
 ### Variables
 
@@ -2084,14 +2085,14 @@ El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                                 |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Mostrar umbral.                                             |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                      |
-| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                 |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                                       |
-| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                |
+| Opción      | Por defecto                  | Descripción                                                    |
+| ----------- | ---------------------------- | -------------------------------------------------------------- |
+| `threshold` | `2`                          | Mostrar umbral.                                                |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                         |
+| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                    |
+| `repeat`    | `false`                      | Causa `symbol` a ser repetido por la cantidad actual de SHLVL. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                          |
+| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                   |
 
 ### Variables
 
@@ -2158,31 +2159,31 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                  | Por defecto                | Descripción                                          |
-| ----------------------- | -------------------------- | ---------------------------------------------------- |
-| `format`                | `[$symbol$status]($style)` | El formato del módulo                                |
-| `symbol`                | `"✖"`                      | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                      | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                      | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                      | The symbol displayed on SIGINT (Ctrl + c)            |
-| `signal_symbol`         | `"⚡"`                      | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`               | El estilo del módulo.                                |
-| `recognize_signal_code` | `true`                     | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                    | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                     | Desactiva el módulo `status`.                        |
+| Opción                  | Por defecto                   | Descripción                                            |
+| ----------------------- | ----------------------------- | ------------------------------------------------------ |
+| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                  |
+| `symbol`                | `"✖"`                         | El símbolo mostrado en error del programa              |
+| `not_executable_symbol` | `"🚫"`                         | El símbolo mostrado cuando el archivo no es ejecutable |
+| `not_found_symbol`      | `"🔍"`                         | El símbolo mostrado cuando no se encuentra el comando  |
+| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
+| `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
+| `recognize_signal_code` | `true`                        | Activar mapeo de señales desde el código de salida     |
+| `map_symbol`            | `false`                       | Activar mapeo de símbolos desde el código de salida    |
+| `disabled`              | `true`                        | Desactiva el módulo `status`.                          |
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                          |
-| -------------- | ------- | -------------------------------------------------------------------- |
-| status         | `127`   | El código de salida del último comando                               |
-| int            | `127`   | El código de salida del último comando                               |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                  |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | Refleja el valor de la opción `symbol`                               |
-| style\*      |         | Refleja el valor de la opción `style`                                |
+| Variable       | Ejemplo | Descripción                                                                          |
+| -------------- | ------- | ------------------------------------------------------------------------------------ |
+| status         | `127`   | El código de salida del último comando                                               |
+| int            | `127`   | El código de salida del último comando                                               |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                           |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada         |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada      |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado |
+| symbol         |         | Refleja el valor de la opción `symbol`                                               |
+| style\*      |         | Refleja el valor de la opción `style`                                                |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2203,19 +2204,19 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `swift` muestra la versión actualmente instalada de Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                                   |
-| `symbol`   | `"🐦 "`                             | Una cadena de formato que representa el símbolo de Swift |
-| `style`    | `"bold 202"`                       | El estilo del módulo.                                    |
-| `disabled` | `false`                            | Desactiva el módulo `swift`.                             |
+| Opción     | Por defecto                          | Descripción                                              |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `symbol`   | `"🐦 "`                               | Una cadena de formato que representa el símbolo de Swift |
+| `style`    | `"bold 202"`                         | El estilo del módulo.                                    |
+| `disabled` | `false`                              | Desactiva el módulo `swift`.                             |
 
 ### Variables
 
@@ -2238,7 +2239,15 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `terraform` module shows the currently selected terraform workspace and version.
+
+::: tip
+
+By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+
+:::
+
+El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene una carpeta `.terraform`
 - El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
@@ -2382,12 +2391,12 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 
 ### Opciones
 
-| Opción     | Por defecto                        | Descripción                                          |
-| ---------- | ---------------------------------- | ---------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | El símbolo usado antes de mostrar la versión de Zig. |
-| `style`    | `"bold yellow"`                    | El estilo del módulo.                                |
-| `format`   | `"via [$symbol$version]($style) "` | El formato del módulo.                               |
-| `disabled` | `false`                            | Desactiva el módulo `zig`.                           |
+| Opción     | Por defecto                          | Descripción                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | El símbolo usado antes de mostrar la versión de Zig. |
+| `style`    | `"bold yellow"`                      | El estilo del módulo.                                |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
+| `disabled` | `false`                              | Desactiva el módulo `zig`.                           |
 
 ### Variables
 
@@ -2439,19 +2448,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Opciones
 
-| Opción        | Por defecto                   | Descripción                                                                                                                         |
-| ------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                    |
-| `when`        |                               | Comando de shell usado como condición para mostrar el módulo. El módulo se mostrará si el comando devuelve un código de estado `0`. |
-| `shell`       |                               | [Ver abajo](#custom-command-shell)                                                                                                  |
-| `description` | `"<custom module>"`     | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                            |
-| `files`       | `[]`                          | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                             |
-| `directories` | `[]`                          | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                  |
-| `extensions`  | `[]`                          | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                          |
-| `symbol`      | `""`                          | El símbolo usado antes de mostrar la salida del comando.                                                                            |
-| `style`       | `"bold green"`                | El estilo del módulo.                                                                                                               |
-| `format`      | `"[$symbol$output]($style) "` | El formato del módulo.                                                                                                              |
-| `disabled`    | `false`                       | Desactiva este módulo `custom`.                                                                                                     |
+| Opción        | Por defecto                     | Descripción                                                                                                                         |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                    |
+| `when`        |                                 | Comando de shell usado como condición para mostrar el módulo. El módulo se mostrará si el comando devuelve un código de estado `0`. |
+| `shell`       |                                 | [Ver abajo](#custom-command-shell)                                                                                                  |
+| `description` | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                            |
+| `files`       | `[]`                            | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                             |
+| `directories` | `[]`                            | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                  |
+| `extensions`  | `[]`                            | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                          |
+| `symbol`      | `""`                            | El símbolo usado antes de mostrar la salida del comando.                                                                            |
+| `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                               |
+| `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                              |
+| `disabled`    | `false`                         | Desactiva este módulo `custom`.                                                                                                     |
 
 ### Variables
 
