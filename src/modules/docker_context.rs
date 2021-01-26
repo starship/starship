@@ -86,13 +86,15 @@ mod tests {
     use std::io::{self, Write};
 
     #[test]
-    #[ignore]
     fn only_trigger_when_docker_config_exists() -> io::Result<()> {
-        let actual = ModuleRenderer::new("docker_context").collect();
+        let cfg_dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .collect();
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
+        cfg_dir.close()
     }
 
     #[test]
