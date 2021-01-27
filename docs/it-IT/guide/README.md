@@ -92,6 +92,13 @@
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
       alt="Francese" /></a>
+  &nbsp;
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt" /></a>
 </p>
 
 <h1></h1>
