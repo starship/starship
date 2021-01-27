@@ -76,6 +76,10 @@ jobs:
           - target: i686-pc-windows-msvc
             os: windows-latest
             name: starship-i686-pc-windows-msvc.zip
+          
+          - target: aarch64-pc-windows-msvc
+            os: windows-latest
+            name: starship-aarch64-pc-windows-msvc.zip
 
     runs-on: ${{ matrix.os }}
     steps:

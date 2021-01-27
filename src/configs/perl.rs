@@ -15,7 +15,7 @@ impl<'a> RootModuleConfig<'a> for PerlConfig<'a> {
         PerlConfig {
             symbol: "🐪 ",
             style: "149 bold",
-            format: "via [$symbol$version]($style) ",
+            format: "via [$symbol($version )]($style)",
             disabled: false,
         }
     }

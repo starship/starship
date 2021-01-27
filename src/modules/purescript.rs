@@ -20,8 +20,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
-
     let mut module = context.new_module("purescript");
     let config: PureScriptConfig = PureScriptConfig::try_load(module.config);
 
@@ -36,7 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(format!("v{}", purs_version.trim()))),
+                "version" => {
+                    let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
+                    Some(Ok(format!("v{}", purs_version.trim())))
+                }
                 _ => None,
             })
             .parse(None)
@@ -75,7 +76,7 @@ mod tests {
         File::create(dir.path().join("Main.purs"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
+        let expected = Some(format!("via {}", Color::White.bold().paint("<=> v0.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -86,7 +87,7 @@ mod tests {
         File::create(dir.path().join("spago.dhall"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::White.bold().paint("<=> v0.13.5")));
+        let expected = Some(format!("via {}", Color::White.bold().paint("<=> v0.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

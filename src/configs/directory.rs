@@ -16,6 +16,7 @@ pub struct DirectoryConfig<'a> {
     pub read_only: &'a str,
     pub read_only_style: &'a str,
     pub truncation_symbol: &'a str,
+    pub home_symbol: &'a str,
 }
 
 impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
@@ -32,6 +33,7 @@ impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
             read_only: "🔒",
             read_only_style: "red",
             truncation_symbol: "",
+            home_symbol: "~",
         }
     }
 }

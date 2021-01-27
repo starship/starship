@@ -1,3 +1,8 @@
+#[macro_use]
+extern crate shadow_rs;
+
+shadow!(shadow);
+
 // Lib is present to allow for benchmarking
 pub mod bug_report;
 pub mod config;

@@ -656,6 +656,7 @@ it would have been `nixpkgs/pkgs`.
 | `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                           |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -715,8 +716,8 @@ The `docker_context` module shows the currently active
 | `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                                      |
 | `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                                           |
 | `style`           | `"blue bold"`                      | The style for the module.                                                                                       |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                                           |
+| `only_with_files` | `true`                             | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `disabled`        | `false`                            | Disables the `docker_context` module.                                                                           |
 
 ### Variables
 
@@ -1799,12 +1800,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                            | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | The style for the module.                               |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Option     | Default                              | Description                                             |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                              | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | The style for the module.                               |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### Variables
 
@@ -1929,12 +1930,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                            | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | The style for the module.                             |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| Option     | Default                              | Description                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                              | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                         | The style for the module.                             |
+| `disabled` | `false`                              | Disables the `perl` module.                           |
 
 ### Variables
 
@@ -1964,12 +1965,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
-| `symbol`   | `"🐘 "`                            | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                       | The style for the module.                             |
-| `disabled` | `false`                            | Disables the `php` module.                            |
+| Option     | Default                              | Description                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                              | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                         | The style for the module.                             |
+| `disabled` | `false`                              | Disables the `php` module.                            |
 
 ### Variables
 
@@ -2000,12 +2001,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                                  |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                                   |
-| `symbol`   | `"<=> "`                           | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | The style for the module.                                    |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Option     | Default                              | Description                                                  |
+| ---------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                             | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                       | The style for the module.                                    |
+| `disabled` | `false`                              | Disables the `purescript` module.                            |
 
 ### Variables
 
@@ -2265,7 +2266,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Option                    | Default                     | Description                                            |
 | ------------------------- | --------------------------- | ------------------------------------------------------ |
-| `format`                  | `[$symbol$status]($style) ` | The format of the module                               |
+| `format`                  | `"[$symbol$status]($style) "` | The format of the module                               |
 | `symbol`                  | `"✖"`                       | The symbol displayed on program error                  |
 | `not_executable_symbol`   | `"🚫"`                       | The symbol displayed when file isn't executable        |
 | `not_found_symbol`        | `"🔍"`                       | The symbol displayed when the command can't be found   |
@@ -2345,8 +2346,14 @@ format = "via [🏎  $version](red bold)"
 ## Terraform
 
 The `terraform` module shows the currently selected terraform workspace and version.
-By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use.
+
+::: tip
+
+By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use.
 If you still want to enable it, [follow the example shown below](#with-version).
+
+:::
+
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
@@ -2498,12 +2505,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | The style for the module.                             |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module.                            |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| Option     | Default                              | Description                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | The style for the module.                             |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### Variables
 

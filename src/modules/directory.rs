@@ -16,15 +16,13 @@ use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
 
-const HOME_SYMBOL: &str = "~";
-
 /// Creates a module with the current logical or physical directory
 ///
 /// Will perform path contraction, substitution, and truncation.
 ///
 /// **Contraction**
 /// - Paths beginning with the home directory or with a git repo right inside
-///   the home directory will be contracted to `~`
+///   the home directory will be contracted to `~`, or the set HOME_SYMBOL
 /// - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Substitution**
@@ -36,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
+    let home_symbol = String::from(config.home_symbol);
     let home_dir = context
         .get_home()
         .expect("Unable to determine HOME_DIR for user");
@@ -67,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Otherwise use the logical path, automatically contracting
     // the home directory if required.
     let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, HOME_SYMBOL));
+        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -78,12 +77,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Truncate the dir string to the maximum number of path components
     let dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    let prefix = if is_truncated(&dir_string) {
+    let prefix = if is_truncated(&dir_string, &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&display_dir, &home_dir, HOME_SYMBOL);
+            let contracted_home_dir = contract_path(&display_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
@@ -149,8 +148,8 @@ fn remove_extended_path_prefix(path: String) -> String {
     path
 }
 
-fn is_truncated(path: &str) -> bool {
-    !(path.starts_with(HOME_SYMBOL)
+fn is_truncated(path: &str, home_symbol: &str) -> bool {
+    !(path.starts_with(&home_symbol)
         || PathBuf::from(path).has_root()
         || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
 }
@@ -530,15 +529,41 @@ mod tests {
     }
 
     #[test]
-    fn home_directory() -> io::Result<()> {
+    fn home_directory_default_home_symbol() -> io::Result<()> {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
-            .config(toml::toml! { // Necessary if homedir is a git repo
-                [directory]
-                truncate_to_repo = false
-            })
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn home_directory_custom_home_symbol() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap())
+            .config(toml::toml! {
+                [directory]
+                home_symbol = "🚀"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn home_directory_custom_home_symbol_subdirectories() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap().join("path/subpath"))
+            .config(toml::toml! {
+                [directory]
+                home_symbol = "🚀"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀/path/subpath")));
 
         assert_eq!(expected, actual);
         Ok(())
