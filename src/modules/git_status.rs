@@ -1,4 +1,3 @@
-use core::future::ready;
 use git2::{Repository, Status};
 use once_cell::sync::OnceCell;
 
@@ -6,8 +5,10 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
+use crate::formatter::string_formatter::StringFormatterError;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
+use std::future::ready;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -26,88 +27,94 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `+` — A new file has been added to the staging area
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let repo = context.get_repo().ok()?;
-    let info = Arc::new(GitStatusInfo::load(repo));
-
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
+    let repo = Arc::clone(context.get_repo().ok()?);
     let mut module = context.new_module("git_status");
-    let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
+    let config = module.config.cloned();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        let fut = formatter
-            .map_meta(|variable, _| match variable {
-                "all_status" => Some(ALL_STATUS_FORMAT),
-                _ => None,
-            })
-            .map_style(|variable: &str| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map_variables_to_segments(|variable: &str| {
-                let info = Arc::clone(&info);
-                let segments = match variable {
-                    "stashed" => info.get_stashed().and_then(|count| {
-                        format_count(config.stashed, "git_status.stashed", count)
-                    }),
-                    "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
-                        if ahead > 0 && behind > 0 {
-                            format_text(config.diverged, "git_status.diverged", |variable| {
-                                match variable {
-                                    "ahead_count" => Some(ahead.to_string()),
-                                    "behind_count" => Some(behind.to_string()),
-                                    _ => None,
-                                }
-                            })
-                        } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead, "git_status.ahead", ahead)
-                        } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind, "git_status.behind", behind)
-                        } else {
-                            None
-                        }
-                    }),
-                    "conflicted" => info.get_conflicted().and_then(|count| {
-                        format_count(config.conflicted, "git_status.conflicted", count)
-                    }),
-                    "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted, "git_status.deleted", count)
-                    }),
-                    "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed, "git_status.renamed", count)
-                    }),
-                    "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified, "git_status.modified", count)
-                    }),
-                    "staged" => info
-                        .get_staged()
-                        .and_then(|count| format_count(config.staged, "git_status.staged", count)),
-                    "untracked" => info.get_untracked().and_then(|count| {
-                        format_count(config.untracked, "git_status.untracked", count)
-                    }),
-                    _ => None,
-                };
-                ready(segments.map(Ok))
-            });
+    let parsed = async_std::task::spawn(async move {
+        let config = GitStatusConfig::try_load(config.as_ref());
+        let info = GitStatusInfo::load(&repo);
+        compute_segments(&config, &info).await
+    })
+    .await;
 
-        let formatter = async_std::task::block_on(fut);
-        formatter.parse(None)
-    });
-
-    module.set_segments(match parsed {
-        Ok(segments) => {
-            if segments.is_empty() {
-                return None;
-            } else {
-                segments
-            }
-        }
+    let segments = match parsed {
+        Ok(segments) => segments,
         Err(error) => {
             log::warn!("Error in module `git_status`:\n{}", error);
             return None;
         }
-    });
+    };
 
-    Some(module)
+    if segments.is_empty() {
+        None
+    } else {
+        module.set_segments(segments);
+        Some(module)
+    }
+}
+
+async fn compute_segments(
+    config: &GitStatusConfig<'_>,
+    info: &GitStatusInfo<'_>,
+) -> Result<Vec<Segment>, StringFormatterError> {
+    let formatter = StringFormatter::new(config.format)?;
+    formatter
+        .map_meta(|variable, _| match variable {
+            "all_status" => Some(ALL_STATUS_FORMAT),
+            _ => None,
+        })
+        .map_style(|variable: &str| match variable {
+            "style" => Some(Ok(config.style)),
+            _ => None,
+        })
+        .map_variables_to_segments(|variable: &str| {
+            let segments = match variable {
+                "stashed" => info
+                    .get_stashed()
+                    .and_then(|count| format_count(config.stashed, "git_status.stashed", count)),
+                "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
+                    if ahead > 0 && behind > 0 {
+                        format_text(config.diverged, "git_status.diverged", |variable| {
+                            match variable {
+                                "ahead_count" => Some(ahead.to_string()),
+                                "behind_count" => Some(behind.to_string()),
+                                _ => None,
+                            }
+                        })
+                    } else if ahead > 0 && behind == 0 {
+                        format_count(config.ahead, "git_status.ahead", ahead)
+                    } else if behind > 0 && ahead == 0 {
+                        format_count(config.behind, "git_status.behind", behind)
+                    } else {
+                        None
+                    }
+                }),
+                "conflicted" => info.get_conflicted().and_then(|count| {
+                    format_count(config.conflicted, "git_status.conflicted", count)
+                }),
+                "deleted" => info
+                    .get_deleted()
+                    .and_then(|count| format_count(config.deleted, "git_status.deleted", count)),
+                "renamed" => info
+                    .get_renamed()
+                    .and_then(|count| format_count(config.renamed, "git_status.renamed", count)),
+                "modified" => info
+                    .get_modified()
+                    .and_then(|count| format_count(config.modified, "git_status.modified", count)),
+                "staged" => info
+                    .get_staged()
+                    .and_then(|count| format_count(config.staged, "git_status.staged", count)),
+                "untracked" => info.get_untracked().and_then(|count| {
+                    format_count(config.untracked, "git_status.untracked", count)
+                }),
+                _ => None,
+            };
+            ready(segments.map(Ok))
+        })
+        .await
+        .parse(None)
 }
 
 struct GitStatusInfo<'a> {

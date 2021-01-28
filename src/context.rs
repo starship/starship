@@ -1,6 +1,7 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
 use crate::utils::{exec_cmd, CommandOutput};
+use std::sync::Arc;
 
 use crate::modules;
 use clap::ArgMatches;
@@ -38,7 +39,7 @@ pub struct Context<'a> {
     pub properties: HashMap<&'a str, String>,
 
     /// Private field to store Git information for modules who need it
-    repo: OnceCell<Repo>,
+    repo: OnceCell<Arc<Repo>>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
@@ -218,9 +219,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
+    pub fn get_repo(&self) -> Result<&Arc<Repo>, std::io::Error> {
         self.repo
-            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
+            .get_or_try_init(|| -> Result<Arc<Repo>, std::io::Error> {
                 let repository = if env::var("GIT_DIR").is_ok() {
                     Repository::open_from_env().ok()
                 } else {
@@ -236,12 +237,12 @@ impl<'a> Context<'a> {
                 let remote = repository
                     .as_ref()
                     .and_then(|repo| get_remote_repository_info(repo));
-                Ok(Repo {
+                Ok(Arc::new(Repo {
                     branch,
                     root,
                     state,
                     remote,
-                })
+                }))
             })
     }
 
