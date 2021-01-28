@@ -23,7 +23,6 @@
 #     Override the base URL used for downloading releases
 
 set -eu
-set -o pipefail 2>/dev/null || true
 printf '\n'
 
 BOLD="$(tput bold 2>/dev/null || printf '')"
