@@ -104,3 +104,27 @@ fn get_tags(count: i64) -> String {
 
     tags.into_iter().collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test::ModuleRenderer;
+    use std::io;
+
+    #[test]
+    fn disabled_by_default() -> io::Result<()> {
+        let expected = None;
+
+        let actual = ModuleRenderer::new("timewarrior").collect();
+        assert_eq!(expected, actual);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_timewarrior_tags() {
+        let expected = String::from("Timewarrior, test, tags");
+        let actual = timewarrior_tags(3);
+        assert_eq!(expected, actual);
+    }
+}
