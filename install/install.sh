@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env sh
+
+# shellcheck disable=SC2039
 
 # Options
 #
@@ -20,18 +22,19 @@
 #   -B, --base-url
 #     Override the base URL used for downloading releases
 
-set -euo pipefail
-printf "\n"
+set -eu
+set -o pipefail 2>/dev/null || true
+printf '\n'
 
-BOLD="$(tput bold 2>/dev/null || echo '')"
-GREY="$(tput setaf 0 2>/dev/null || echo '')"
-UNDERLINE="$(tput smul 2>/dev/null || echo '')"
-RED="$(tput setaf 1 2>/dev/null || echo '')"
-GREEN="$(tput setaf 2 2>/dev/null || echo '')"
-YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
-BLUE="$(tput setaf 4 2>/dev/null || echo '')"
-MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
-NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
+BOLD="$(tput bold 2>/dev/null || printf '')"
+GREY="$(tput setaf 0 2>/dev/null || printf '')"
+UNDERLINE="$(tput smul 2>/dev/null || printf '')"
+RED="$(tput setaf 1 2>/dev/null || printf '')"
+GREEN="$(tput setaf 2 2>/dev/null || printf '')"
+YELLOW="$(tput setaf 3 2>/dev/null || printf '')"
+BLUE="$(tput setaf 4 2>/dev/null || printf '')"
+MAGENTA="$(tput setaf 5 2>/dev/null || printf '')"
+NO_COLOR="$(tput sgr0 2>/dev/null || printf '')"
 
 SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   i686-unknown-linux-musl aarch64-unknown-linux-musl \
@@ -41,19 +44,19 @@ SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   x86_64-unknown-freebsd"
 
 info() {
-  printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
+  printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
 }
 
 warn() {
-  printf "%s\n" "${YELLOW}! $*${NO_COLOR}"
+  printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
 }
 
 error() {
-  printf "%s\n" "${RED}x $*${NO_COLOR}" >&2
+  printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
 }
 
-complete() {
-  printf "%s\n" "${GREEN}✓${NO_COLOR} $*"
+completed() {
+  printf '%s\n' "${GREEN}✓${NO_COLOR} $*"
 }
 
 # Gets path to a temporary file, even if
@@ -82,17 +85,17 @@ test_writeable() {
 }
 
 fetch() {
-  local command
+  local fetch_cmd
   if hash curl 2>/dev/null; then
     set +e
-    command="curl --silent --fail --location $1"
+    fetch_cmd="curl --silent --fail --location $1"
     curl --silent --fail --location "$1"
     rc=$?
     set -e
   else
     if hash wget 2>/dev/null; then
       set +e
-      command="wget -O- -q $1"
+      fetch_cmd="wget -O- -q $1"
       wget -O- -q "$1"
       rc=$?
       set -e
@@ -104,12 +107,12 @@ fetch() {
 
   if [ $rc -ne 0 ]; then
     printf "\n" >&2
-    error "Command failed (exit code $rc): ${BLUE}${command}${NO_COLOR}"
+    error "Command failed (exit code $rc): ${BLUE}${fetch_cmd}${NO_COLOR}"
     printf "\n" >&2
     info "This is likely due to Starship not yet supporting your configuration." >&2
     info "If you would like to see a build for your configuration," >&2
     info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:" >&2
-    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n" >&2
+    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}" >&2
     exit $rc
   fi
 }
@@ -189,7 +192,7 @@ detect_platform() {
     freebsd) platform="unknown-freebsd" ;;
   esac
 
-  echo "${platform}"
+  printf '%s\n' "${platform}"
 }
 
 # Currently supporting:
@@ -212,7 +215,7 @@ detect_arch() {
     arch=arm
   fi
 
-  echo "${arch}"
+  printf '%s' "${arch}"
 }
 
 detect_target() {
@@ -224,7 +227,7 @@ detect_target() {
     target="${target}eabihf"
   fi
 
-  echo "${target}"
+  printf '%s' "${target}"
 }
 
 
@@ -261,7 +264,7 @@ check_bin_dir() {
     IFS=:
     for path in $PATH; do
       if [ "${path}" = "${bin_dir}" ]; then
-        echo 1
+        printf 1
         break
       fi
     done
@@ -278,12 +281,12 @@ is_build_available() {
   local target="$3"
 
   local good
-  
+
   good=$(
     IFS=" "
     for t in $SUPPORTED_TARGETS; do
-      if [ "${t}" == "${target}" ]; then
-        echo 1
+      if [ "${t}" = "${target}" ]; then
+        printf 1
         break
       fi
     done
@@ -395,7 +398,7 @@ else
   VERBOSE=
 fi
 
-echo
+printf '\n'
 
 EXT=tar.gz
 if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
@@ -408,9 +411,9 @@ confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}
 check_bin_dir "${BIN_DIR}"
 
 install
-complete "Starship installed"
+completed "Starship installed"
 
-echo
+printf '\n'
 info "Please follow the steps for your shell to complete the installation:
 
   ${BOLD}${UNDERLINE}Bash${NO_COLOR}
