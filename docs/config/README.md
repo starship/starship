@@ -2454,14 +2454,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 :::
 
 ### Options
-| Option           | Default | Description                            |
-| ---------------- | ------- | -------------------------------------- |
-| `symbol`         | ``     | Displayed symbol                       |
-| `symbol_style`   | `white` | Displayed symbol style.                |
-| `tags_style`     | `white` | The style for the displayed tags.      |
-| `max_tags_count` | `3`     | The amount of tags displayed.          |
-| `show_tags`      | `false` | Controls if tags are displayed or not. |
-| `disabled`       | `true`  | Disables the `timewarrior` module.     |
+| Option           | Default   | Description                            |
+| ---------------- | --------- | -------------------------------------- |
+| `symbol`         | `""`     | Displayed symbol                       |
+| `symbol_style`   | `"white"` | Displayed symbol style.                |
+| `tags_style`     | `"white"` | The style for the displayed tags.      |
+| `max_tags_count` | `3`       | The amount of tags displayed.          |
+| `show_tags`      | `false`   | Controls if tags are displayed or not. |
+| `disabled`       | `true`    | Disables the `timewarrior` module.     |
 
 
 ## Username
