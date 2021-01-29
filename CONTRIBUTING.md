@@ -20,7 +20,7 @@ If you spot anywhere that we could trim some time or reduce the prompt's workloa
 
 ## Architecture
 
-The project begins in [`main.rs`](src/main.rs), where the appropriate `print::` method is called based on which arguments are given to [clap](https://crates.io/crates/clap). When printing the full prompt, we use [rayon](https://crates.io/crates/rayon) to parallelize the computation of modules.
+The project begins in [`main.rs`](src/main.rs), where the appropriate `print::` method is called based on which arguments are given to [clap](https://crates.io/crates/clap). When printing the full prompt, we use [async_std](https://crates.io/crates/async_std) to parallelize the computation of modules and time out operations that take too long.
 
 Any styling that is applied to a module is inherited by its segments. Module prefixes and suffixes by default don't have any styling applied to them.
 
@@ -39,7 +39,7 @@ use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
 
 
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
    // Here `my_env_var` will be either the contents of the var or the function
    // will exit if the variable is not set.
    let my_env_var = context.get_env("MY_VAR")?;
@@ -59,10 +59,10 @@ use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
 
 
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
    // Here `output` will be either the stdout of the called command or the function
    // will exit if the called program was not installed or could not be run.
-   let output = context.exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
+   let output = context.exec_cmd("my_command", &["first_arg", "second_arg"]).await?.stdout;
 
    // Then you can happily use the output
 }
