@@ -1,4 +1,4 @@
-commit_message: 'docs(i18n): new Crowdin updates'
+pull_request_title: 'docs(i18n): new Crowdin updates'
 files:
   - source: /docs/**/*.md
     ignore:
