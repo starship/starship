@@ -1,16 +1,18 @@
 use super::MemoryInfo;
 use super::{get_page_size, get_phys_pages, sysctl_by_name_wrapper, sysctl_wrapper};
+use libc::{c_int, c_uint, dev_t};
 use std::io::Result;
 
-mod bindings {
-    #![allow(non_upper_case_globals)]
-    #![allow(non_camel_case_types)]
-    #![allow(non_snake_case)]
+const XSWDEV_VERSION: u32 = 2;
 
-    include!(concat!(env!("OUT_DIR"), "/starship-bindings.rs"));
+#[repr(C)]
+struct xswdev {
+    xsw_version: c_uint,
+    xsw_dev: dev_t,
+    xsw_flags: c_int,
+    xsw_nblks: c_int,
+    xsw_used: c_int,
 }
-
-use bindings::{xswdev, XSWDEV_VERSION};
 
 fn get_swap_info() -> Result<(u64, u64)> {
     let n_swap_devices: i32 = sysctl_by_name_wrapper("vm.nswapdev")?;
@@ -34,10 +36,8 @@ fn get_swap_info() -> Result<(u64, u64)> {
         let swap_info: xswdev = sysctl_wrapper(mib)?;
 
         if swap_info.xsw_version != XSWDEV_VERSION {
-            return Err(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "XSW version mismatch. Please recompile starship for your FreeBSD version.",
-            ));
+            log::info!("XSW version mismatch. Starship does not support swap information for your FreeBSD version.");
+            return Ok((0, 0));
         }
 
         swap_free += (swap_info.xsw_nblks - swap_info.xsw_used) as u64;
