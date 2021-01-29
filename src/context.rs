@@ -54,6 +54,9 @@ pub struct Context<'a> {
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
+
+    /// Timeout for returning the prompt
+    pub prompt_timeout: Duration,
 }
 
 impl<'a> Context<'a> {
@@ -112,6 +115,7 @@ impl<'a> Context<'a> {
         let logical_dir = logical_path;
 
         let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
+        let prompt_timeout = Duration::from_millis(config.get_root_config().prompt_timeout);
 
         Context {
             config,
@@ -126,6 +130,7 @@ impl<'a> Context<'a> {
             #[cfg(test)]
             cmd: HashMap::new(),
             cmd_timeout,
+            prompt_timeout,
         }
     }
 

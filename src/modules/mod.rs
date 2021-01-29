@@ -63,7 +63,11 @@ use crate::context::{Context, Shell};
 use crate::module::Module;
 use std::time::Instant;
 
-pub async fn handle<'a>(module: &str, context: &'a Context<'a>) -> Option<Module<'a>> {
+pub async fn handle<'a>(
+    module: &str,
+    context: &'a Context<'a>,
+    enforce_timeout: bool,
+) -> Option<Module<'a>> {
     let start: Instant = Instant::now();
 
     let async_mod = async {
@@ -132,8 +136,14 @@ pub async fn handle<'a>(module: &str, context: &'a Context<'a>) -> Option<Module
         }
     };
 
-    let mut m = if let Some(dur) = context.module_timeout(module) {
-        async_std::future::timeout(dur, async_mod).await.ok()?
+    let mut m = if enforce_timeout {
+        let time_limit = context
+            .module_timeout(module)
+            .unwrap_or(context.prompt_timeout);
+
+        async_std::future::timeout(time_limit, async_mod)
+            .await
+            .ok()?
     } else {
         async_mod.await
     };

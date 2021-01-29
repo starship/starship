@@ -69,7 +69,7 @@ pub async fn get_prompt(context: Context<'static>) -> String {
                         let context = Arc::clone(&context);
                         let modules = Arc::clone(&modules);
                         async move {
-                            handle_module(&module, &context, &modules)
+                            handle_module(&module, &context, &modules, true)
                                 .await
                                 .into_iter()
                                 .flat_map(|m| m.segments.into_iter())
@@ -84,7 +84,7 @@ pub async fn get_prompt(context: Context<'static>) -> String {
                     None
                 } else {
                     // Get segments from module
-                    Some(Ok(handle_module(&module, &context, &modules)
+                    Some(Ok(handle_module(&module, &context, &modules, true)
                         .await
                         .into_iter()
                         .flat_map(|module| module.segments)
@@ -125,7 +125,7 @@ pub fn module(module_name: &str, args: ArgMatches) {
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    block_on(async { modules::handle(module_name, &context).await }).map(|m| m.to_string())
+    block_on(modules::handle(module_name, &context, false)).map(|m| m.to_string())
 }
 
 pub fn timings(args: ArgMatches) {
@@ -137,19 +137,33 @@ pub fn timings(args: ArgMatches) {
         value: String,
         duration: Duration,
         duration_len: usize,
+        timeout_overrun: String,
     }
 
     let mut modules = block_on(compute_modules(&context))
         .iter()
         .filter(|module| !module.is_empty() || module.duration.as_millis() > 0)
-        .map(|module| ModuleTiming {
-            name: String::from(module.get_name().as_str()),
-            name_len: better_width(module.get_name().as_str()),
-            value: ansi_term::ANSIStrings(&module.ansi_strings())
-                .to_string()
-                .replace('\n', "\\n"),
-            duration: module.duration,
-            duration_len: better_width(format_duration(&module.duration).as_str()),
+        .map(|module| {
+            let timeout = context
+                .module_timeout(module.get_name())
+                .unwrap_or(context.prompt_timeout);
+
+            let timeout_overrun = if module.duration > timeout {
+                format!(" (>{})", format_duration(&timeout))
+            } else {
+                "".into()
+            };
+
+            ModuleTiming {
+                name: String::from(module.get_name().as_str()),
+                name_len: better_width(module.get_name().as_str()),
+                value: ansi_term::ANSIStrings(&module.ansi_strings())
+                    .to_string()
+                    .replace('\n', "\\n"),
+                duration: module.duration,
+                duration_len: better_width(format_duration(&module.duration).as_str()),
+                timeout_overrun,
+            }
         })
         .collect::<Vec<ModuleTiming>>();
 
@@ -157,19 +171,26 @@ pub fn timings(args: ArgMatches) {
 
     let max_name_width = modules.iter().map(|i| i.name_len).max().unwrap_or(0);
     let max_duration_width = modules.iter().map(|i| i.duration_len).max().unwrap_or(0);
+    let max_timeout_overrun = modules
+        .iter()
+        .map(|i| i.timeout_overrun.len())
+        .max()
+        .unwrap_or(0);
 
     println!("\n Here are the timings of modules in your prompt (>=1ms or output):");
 
     // for now we do not expect a wrap around at the end... famous last words
-    // Overall a line looks like this: " {module name}  -  {duration}  -  {module value}".
+    // Overall a line looks like this: " {module name}  -  {duration} {overrun}  -  {module value}".
     for timing in &modules {
         println!(
-            " {}{}  -  {}{}  -   {}",
+            " {}{}  -  {}{}{}{}  -   {}",
             timing.name,
             " ".repeat(max_name_width - (timing.name_len)),
             " ".repeat(max_duration_width - (timing.duration_len)),
             format_duration(&timing.duration),
-            timing.value
+            " ".repeat(max_timeout_overrun - (timing.timeout_overrun.len())),
+            ansi_term::Color::Red.paint(&timing.timeout_overrun),
+            timing.value,
         );
     }
 }
@@ -285,11 +306,11 @@ async fn compute_modules<'a>(context: &'a Context<'a>) -> Vec<Module<'a>> {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
             for module in PROMPT_ORDER.iter() {
-                let modules = handle_module(module, &context, &modules).await;
+                let modules = handle_module(module, &context, &modules, false).await;
                 prompt_order.extend(modules.into_iter());
             }
         } else {
-            let modules = handle_module(module, &context, &modules).await;
+            let modules = handle_module(module, &context, &modules, false).await;
             prompt_order.extend(modules.into_iter());
         }
     }
@@ -301,6 +322,7 @@ async fn handle_module<'a>(
     module: &str,
     context: &'a Context<'a>,
     module_list: &BTreeSet<String>,
+    enforce_timeout: bool,
 ) -> Vec<Module<'a>> {
     struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
 
@@ -315,7 +337,7 @@ async fn handle_module<'a>(
     if ALL_MODULES.contains(&module) {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, &context).await);
+            modules.extend(modules::handle(module, &context, enforce_timeout).await);
         }
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set
