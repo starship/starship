@@ -108,5 +108,5 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    # ~/.config/ion/initrc
 
-eval $(starship init ion)
+eval $(starship init ion)   
    ```
