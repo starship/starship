@@ -82,6 +82,7 @@ jobs:
             name: starship-aarch64-pc-windows-msvc.zip
 
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2
