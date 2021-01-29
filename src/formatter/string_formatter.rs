@@ -116,6 +116,30 @@ impl<'a> StringFormatter<'a> {
         self
     }
 
+    /// Asynchronous version of `Self::map`
+    pub async fn async_map<T, M, Fut>(mut self, mapper: M) -> StringFormatter<'a>
+    where
+        T: Into<Cow<'a, str>> + 'a,
+        M: Fn(String) -> Fut,
+        Fut: Future<Output = Option<Result<T, StringFormatterError>>> + Send + 'a,
+    {
+        let empty_vars = self
+            .variables
+            .iter()
+            .filter(|(_, value)| value.is_none())
+            .map(|(key, _)| key.clone())
+            .collect::<Vec<_>>();
+
+        for key in empty_vars {
+            if let Some(var) = mapper(key.clone()).await {
+                self.variables
+                    .insert(key, Some(var.map(|var| VariableValue::Plain(var.into()))));
+            }
+        }
+
+        self
+    }
+
     /// Maps a meta-variable to a format string containing other variables.
     ///
     /// This function should be called **before** other map methods so that variables found in

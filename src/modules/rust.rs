@@ -1,6 +1,6 @@
+use async_process::{Command, Output};
 use std::fs;
 use std::path::Path;
-use std::process::{Command, Output};
 
 use serde::Deserialize;
 
@@ -10,7 +10,7 @@ use crate::configs::rust::RustConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Rust version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("rust");
     let config = RustConfig::try_load(module.config);
 
@@ -25,8 +25,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -35,14 +35,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                // This may result in multiple calls to `get_module_version` when a user have
-                // multiple `$version` variables defined in `format`.
-                "version" => get_module_version(context).map(Ok),
-                _ => None,
+            .async_map(|variable| async move {
+                match variable.as_str() {
+                    // This may result in multiple calls to `get_module_version` when a user have
+                    // multiple `$version` variables defined in `format`.
+                    "version" => get_module_version(context).await.map(Ok),
+                    _ => None,
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -55,7 +59,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_module_version(context: &Context) -> Option<String> {
+async fn get_toolchain(context: &Context<'_>) -> Option<String> {
     // `$CARGO_HOME/bin/rustc(.exe) --version` may attempt installing a rustup toolchain.
     // https://github.com/starship/starship/issues/417
     //
@@ -72,22 +76,31 @@ fn get_module_version(context: &Context) -> Option<String> {
     // - `rustup show`
     // - `rustup show active-toolchain`
     // - `rustup which`
-    let module_version = if let Some(toolchain) = env_rustup_toolchain(context)
-        .or_else(|| execute_rustup_override_list(&context.current_dir))
-        .or_else(|| find_rust_toolchain_file(&context))
-    {
-        match execute_rustup_run_rustc_version(&toolchain) {
+    if let Some(tool) = env_rustup_toolchain(context) {
+        Some(tool)
+    } else if let Some(tool) = execute_rustup_override_list(&context.current_dir).await {
+        Some(tool)
+    } else if let Some(tool) = find_rust_toolchain_file(&context) {
+        Some(tool)
+    } else {
+        None
+    }
+}
+
+async fn get_module_version(context: &Context<'_>) -> Option<String> {
+    let module_version = if let Some(toolchain) = get_toolchain(context).await {
+        match execute_rustup_run_rustc_version(&toolchain).await {
             RustupRunRustcVersionOutcome::RustcVersion(stdout) => format_rustc_version(stdout),
             RustupRunRustcVersionOutcome::ToolchainName(toolchain) => toolchain,
             RustupRunRustcVersionOutcome::RustupNotWorking => {
                 // If `rustup` is not in `$PATH` or cannot be executed for other reasons, we can
                 // safely execute `rustc --version`.
-                format_rustc_version(execute_rustc_version()?)
+                format_rustc_version(execute_rustc_version().await?)
             }
             RustupRunRustcVersionOutcome::Err => return None,
         }
     } else {
-        format_rustc_version(execute_rustc_version()?)
+        format_rustc_version(execute_rustc_version().await?)
     };
 
     Some(module_version)
@@ -98,10 +111,11 @@ fn env_rustup_toolchain(context: &Context) -> Option<String> {
     Some(val.trim().to_owned())
 }
 
-fn execute_rustup_override_list(cwd: &Path) -> Option<String> {
+async fn execute_rustup_override_list(cwd: &Path) -> Option<String> {
     let Output { stdout, .. } = Command::new("rustup")
         .args(&["override", "list"])
         .output()
+        .await
         .ok()?;
     let stdout = String::from_utf8(stdout).ok()?;
     extract_toolchain_from_rustup_override_list(&stdout, cwd)
@@ -172,10 +186,11 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     }
 }
 
-fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
+async fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
     Command::new("rustup")
         .args(&["run", toolchain, "rustc", "--version"])
         .output()
+        .await
         .map(extract_toolchain_from_rustup_run_rustc_version)
         .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
 }
@@ -196,8 +211,8 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
     RustupRunRustcVersionOutcome::Err
 }
 
-fn execute_rustc_version() -> Option<String> {
-    match Command::new("rustc").arg("--version").output() {
+async fn execute_rustc_version() -> Option<String> {
+    match Command::new("rustc").arg("--version").output().await {
         Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
         Err(_) => None,
     }
