@@ -81,6 +81,10 @@ jobs:
             os: windows-latest
             name: starship-aarch64-pc-windows-msvc.zip
 
+          - target: x86_64-unknown-freebsd
+            os: ubuntu-latest
+            name: starship-x86_64-unknown-freebsd.tar.gz
+
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout

@@ -37,7 +37,8 @@ SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   i686-unknown-linux-musl aarch64-unknown-linux-musl \
                   arm-unknown-linux-musleabihf x86_64-apple-darwin \
                   aarch64-apple-darwin x86_64-pc-windows-msvc \
-                  i686-pc-windows-msvc aarch64-pc-windows-msvc"
+                  i686-pc-windows-msvc aarch64-pc-windows-msvc \
+                  x86_64-unknown-freebsd"
 
 info() {
   printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
@@ -172,6 +173,7 @@ install() {
 #   - darwin
 #   - linux
 #   - linux_musl (Alpine)
+#   - freebsd
 detect_platform() {
   local platform
   platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
@@ -184,6 +186,7 @@ detect_platform() {
     # use the statically compiled musl bins on linux to avoid linking issues.
     linux) platform="unknown-linux-musl" ;;
     darwin) platform="apple-darwin" ;;
+    freebsd) platform="unknown-freebsd" ;;
   esac
 
   echo "${platform}"
@@ -197,6 +200,7 @@ detect_arch() {
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
   case "${arch}" in
+    amd64) arch="x86_64" ;;
     armv*) arch="arm" ;;
     arm64) arch="aarch64" ;;
   esac
