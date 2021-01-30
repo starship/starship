@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Equivalente a 
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -210,6 +210,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -2239,11 +2240,11 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+El módulo `terraform` muestra el espacio de trabajo y la versión actual de terraform.
 
 ::: tip
 
-By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version).
 
 :::
 
@@ -2294,7 +2295,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Hora
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+El módulo `time` muestra la hora **local** actual. El valor de configuración de `format` es usado por la caja de [`chrono`](https://crates.io/crates/chrono) para controlar cómo se muestra la hora. Echa un vistazo a [los documentos de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver qué opciones están disponibles.
 
 ::: tip
 
@@ -2314,7 +2315,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `disabled`        | `true`                  | Desactiva el módulo `time`.                                                                                                                                                 |
 | `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas                                                |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+Si `use_12hr` es `true`, entonces `time_format` por defecto `"%r"`. De lo contrario, el valor por defecto es `"%T"`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
 
 ### Variables
 
@@ -2340,7 +2341,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nombre de usuario
 
-The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `username` muestra el nombre de usuario activo. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El usuario actual es root
 - El usuario actual no es el mismo que el que está conectado
@@ -2349,7 +2350,7 @@ The `username` module shows active user's username. El módulo se muestra si alg
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION`, `SSH_CLIENT`, y `SSH_TTY`. Si su host SSH no configura estas variables, una solución es establecer una de ellas con un valor tonto.
 
 :::
 
@@ -2383,26 +2384,60 @@ disabled = false
 show_always = true
 ```
 
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+
+- The current directory contains a `Vagrantfile` file
+
+### Opciones
+
+| Opción     | Por defecto                          | Descripción                                         |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                              |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | El estilo del módulo.                               |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Variables
+
+| Variable  | Ejemplo          | Descripción                            |
+| --------- | ---------------- | -------------------------------------- |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| symbol    |                  | Refleja el valor de la opción `symbol` |
+| style\* |                  | Refleja el valor de la opción `style`  |
+
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
+```
+
 ## Zig
 
 The `zig` module shows the currently installed version of Zig. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El directorio actual contiene un archivo `.zig`
+- The current directory contains a `.zig` file
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                          |
-| ---------- | ------------------------------------ | ---------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | El símbolo usado antes de mostrar la versión de Zig. |
-| `style`    | `"bold yellow"`                      | El estilo del módulo.                                |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
-| `disabled` | `false`                              | Desactiva el módulo `zig`.                           |
+| Opción     | Por defecto                          | Descripción                                           |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | El estilo del módulo.                                 |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | La versión de `zig`                    |
+| version   | `v0.6.0` | The version of `zig`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2417,16 +2452,16 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 symbol = "⚡️ "
 ```
 
-## Comandos personalizados
+## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
 
 These modules will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un archivo cuyo nombre está en `files`
-- El directorio actual contiene un directorio cuyo nombre está en `directories`
-- El directorio actual contiene un archivo cuya extensión está en `extensions`
-- El comando `when` devuelve 0
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
 
 ::: tip
 
@@ -2448,27 +2483,27 @@ The order in which custom modules are shown can be individually set by including
 
 ### Opciones
 
-| Opción        | Por defecto                     | Descripción                                                                                                                         |
-| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                    |
-| `when`        |                                 | Comando de shell usado como condición para mostrar el módulo. El módulo se mostrará si el comando devuelve un código de estado `0`. |
-| `shell`       |                                 | [Ver abajo](#custom-command-shell)                                                                                                  |
-| `description` | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                            |
-| `files`       | `[]`                            | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                             |
-| `directories` | `[]`                            | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                  |
-| `extensions`  | `[]`                            | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                          |
-| `symbol`      | `""`                            | El símbolo usado antes de mostrar la salida del comando.                                                                            |
-| `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                               |
-| `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                              |
-| `disabled`    | `false`                         | Desactiva este módulo `custom`.                                                                                                     |
+| Opción        | Por defecto                     | Descripción                                                                                                                |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                      |
+| `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                     |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Variables
 
-| Variable  | Descripción                               |
-| --------- | ----------------------------------------- |
-| output    | La salida del comando de shell en `shell` |
-| symbol    | Refleja el valor de la opción `symbol`    |
-| style\* | Refleja el valor de la opción `style`     |
+| Variable  | Descripción                            |
+| --------- | -------------------------------------- |
+| output    | The output of shell command in `shell` |
+| symbol    | Refleja el valor de la opción `symbol` |
+| style\* | Refleja el valor de la opción `style`  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2476,8 +2511,8 @@ The order in which custom modules are shown can be individually set by including
 
 `shell` accepts a non-empty list of strings, where:
 
-- La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
-- Otros argumentos siguientes son pasados al shell.
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
@@ -2507,8 +2542,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # muestra la salida del comando
-files = ["foo"]       # se pueden especificar filtros
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
