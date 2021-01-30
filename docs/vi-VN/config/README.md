@@ -173,7 +173,7 @@ Mặc định `format` được sử dụng để định nghĩa định dạng 
 ```toml
 format = "$all"
 
-# Cái đó tương đương với
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -2382,6 +2383,40 @@ disabled = false
 show_always = true
 ```
 
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+
+- The current directory contains a `Vagrantfile` file
+
+### Các tuỳ chọn
+
+| Tuỳ chọn   | Mặc định                             | Mô tả                                               |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | Kiểu cho module.                                    |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Các biến
+
+| Biến      | Ví dụ            | Mô tả                            |
+| --------- | ---------------- | -------------------------------- |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`         |
+| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |                  | Giá trị ghi đè của `style`       |
+
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
+```
+
 ## Zig
 
 The `zig` module shows the currently installed version of Zig. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
@@ -2452,7 +2487,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `mô tả`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
