@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -2382,6 +2383,40 @@ disabled = false
 show_always = true
 ```
 
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a `Vagrantfile` file
+
+### Opções
+
+| Option     | Padrão                               | Descrição                                           |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                          |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | O estilo do módulo.                                 |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Variables
+
+| Variável  | Exemplo          | Descrição                            |
+| --------- | ---------------- | ------------------------------------ |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
+| symbol    |                  | Mirrors the value of option `symbol` |
+| style\* |                  | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
+```
+
 ## Zig
 
 The `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
@@ -2452,7 +2487,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `descrição`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
