@@ -112,6 +112,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    # ~/.elvish/rc.elv
 
-   eval $(starship init evlish)
+   eval (starship init elvish)
    ```
 
