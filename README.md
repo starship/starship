@@ -232,7 +232,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ```sh
    # ~/.elvish/rc.elv
 
-   eval $(starship init elvish)
+   eval (starship init elvish)
    ```
 
 ## 🤝 Contributing
