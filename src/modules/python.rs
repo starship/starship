@@ -313,7 +313,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -331,7 +331,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -358,7 +358,7 @@ prompt = 'foo'
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (foo)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
         ));
 
         assert_eq!(actual, expected);

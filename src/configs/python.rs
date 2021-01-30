@@ -22,7 +22,7 @@ impl<'a> Default for PythonConfig<'a> {
             pyenv_version_name: false,
             pyenv_prefix: "pyenv ",
             python_binary: VecOr(vec!["python", "python3", "python2"]),
-            format: "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\))]($style)",
+            format: "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
             style: "yellow bold",
             symbol: "🐍 ",
             disabled: false,
