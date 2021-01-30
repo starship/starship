@@ -168,6 +168,10 @@ Target: x86_64-apple-darwin19.4.0\n",
             ),
             stderr: String::default(),
         }),
+        "vagrant --version" => Some(CommandOutput {
+            stdout: String::from("Vagrant 2.2.10\n"),
+            stderr: String::default(),
+        }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0\n"),
             stderr: String::default(),

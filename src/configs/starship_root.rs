@@ -51,6 +51,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "rust",
     "swift",
     "terraform",
+    "vagrant",
     "zig",
     // ↑ Toolchain version modules ↑
     "nix_shell",
