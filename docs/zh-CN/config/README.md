@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -2238,7 +2239,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+`terraform` 组件显示当前选定的 terraform 工作区和版本。
 
 ::: tip
 
@@ -2293,7 +2294,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
 ::: tip
 
@@ -2313,7 +2314,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `disabled`        | `true`                  | 禁用 `time` 组件。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默认值为 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2339,7 +2340,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. 此组件将在符合以下任意条件之一时显示：
+`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件之一时显示：
 
 - 当前用户是 root
 - 当前用户与登录用户不相同
@@ -2380,6 +2381,40 @@ style_root = "black bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a `Vagrantfile` file
+
+### 配置项
+
+| Option     | 默认值                                  | 描述                                                  |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                            |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | 此组件的样式。                                             |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Variables
+
+| 字段        | 示例               | 描述                       |
+| --------- | ---------------- | ------------------------ |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant` |
+| symbol    |                  | `symbol`对应值              |
+| style\* |                  | `style`对应值               |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
 ```
 
 ## Zig
@@ -2452,7 +2487,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `描述`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
