@@ -72,7 +72,7 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
         None => context.current_dir.join(".terraform"),
     };
     match utils::read_file(datadir.join("environment")) {
-        Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
+        Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_owned()),
         Ok(s) => Some(s),
         _ => None,
     }
@@ -106,7 +106,7 @@ mod tests {
         let input = "Terraform v0.12.14";
         assert_eq!(
             format_terraform_version(input),
-            Some("v0.12.14 ".to_string())
+            Some("v0.12.14 ".to_owned())
         );
     }
 
@@ -115,7 +115,7 @@ mod tests {
         let input = "Terraform v0.12.14-rc1";
         assert_eq!(
             format_terraform_version(input),
-            Some("v0.12.14-rc1 ".to_string())
+            Some("v0.12.14-rc1 ".to_owned())
         );
     }
 
@@ -124,7 +124,7 @@ mod tests {
         let input = "Terraform v0.12.14-dev (cca89f74)";
         assert_eq!(
             format_terraform_version(input),
-            Some("v0.12.14-dev (cca89f74) ".to_string())
+            Some("v0.12.14-dev (cca89f74) ".to_owned())
         );
     }
 
@@ -138,7 +138,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
 ";
         assert_eq!(
             format_terraform_version(input),
-            Some("v0.12.13 ".to_string())
+            Some("v0.12.13 ".to_owned())
         );
     }
 

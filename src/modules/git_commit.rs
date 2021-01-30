@@ -158,7 +158,7 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_hash))
-                .to_string()
+                .to_owned()
         ));
 
         assert_eq!(expected, actual);
@@ -191,7 +191,7 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_hash))
-                .to_string()
+                .to_owned()
         ));
 
         assert_eq!(expected, actual);
@@ -238,7 +238,7 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_hash))
-                .to_string()
+                .to_owned()
         ));
 
         assert_eq!(expected, actual);
@@ -281,7 +281,7 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
+                .to_owned()
         ));
 
         assert_eq!(expected, actual);
@@ -333,7 +333,7 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
+                .to_owned()
         ));
 
         assert_eq!(expected, actual);
@@ -405,7 +405,7 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
+                .to_owned()
         ));
 
         assert_eq!(expected, actual);

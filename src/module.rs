@@ -88,8 +88,8 @@ impl<'a> Module<'a> {
     pub fn new(name: &str, desc: &str, config: Option<&'a toml::Value>) -> Module<'a> {
         Module {
             config,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.to_owned(),
+            description: desc.to_owned(),
             segments: Vec::new(),
             duration: Duration::default(),
         }
@@ -174,8 +174,8 @@ mod tests {
         let desc = "This is a unit test";
         let module = Module {
             config: None,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.to_owned(),
+            description: desc.to_owned(),
             segments: Vec::new(),
             duration: Duration::default(),
         };
@@ -189,8 +189,8 @@ mod tests {
         let desc = "This is a unit test";
         let module = Module {
             config: None,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.to_owned(),
+            description: desc.to_owned(),
             segments: vec![Segment::new(None, "")],
             duration: Duration::default(),
         };
@@ -204,8 +204,8 @@ mod tests {
         let desc = "This is a unit test";
         let module = Module {
             config: None,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.to_owned(),
+            description: desc.to_owned(),
             segments: vec![Segment::new(None, "\n")],
             duration: Duration::default(),
         };
@@ -219,8 +219,8 @@ mod tests {
         let desc = "This is a unit test";
         let module = Module {
             config: None,
-            name: name.to_string(),
-            description: desc.to_string(),
+            name: name.to_owned(),
+            description: desc.to_owned(),
             segments: vec![Segment::new(None, " ")],
             duration: Duration::default(),
         };

@@ -25,7 +25,7 @@ pub fn update_configuration(name: &str, value: &str) {
 
     if let Some(table) = get_configuration().as_table_mut() {
         if !table.contains_key(keys[0]) {
-            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+            table.insert(keys[0].to_owned(), Value::Table(Map::new()));
         }
 
         if let Some(values) = table.get(keys[0]).unwrap().as_table() {
@@ -33,19 +33,19 @@ pub fn update_configuration(name: &str, value: &str) {
 
             if value.parse::<bool>().is_ok() {
                 updated_values.insert(
-                    keys[1].to_string(),
+                    keys[1].to_owned(),
                     Value::Boolean(value.parse::<bool>().unwrap()),
                 );
             } else if value.parse::<i64>().is_ok() {
                 updated_values.insert(
-                    keys[1].to_string(),
+                    keys[1].to_owned(),
                     Value::Integer(value.parse::<i64>().unwrap()),
                 );
             } else {
-                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
+                updated_values.insert(keys[1].to_owned(), Value::String(value.to_owned()));
             }
 
-            table.insert(keys[0].to_string(), Value::Table(updated_values));
+            table.insert(keys[0].to_owned(), Value::Table(updated_values));
         }
 
         write_configuration(table);
@@ -76,9 +76,9 @@ pub fn toggle_configuration(name: &str, key: &str) {
                         }
                     };
 
-                    updated_values.insert(key.to_string(), Value::Boolean(!current));
+                    updated_values.insert(key.to_owned(), Value::Boolean(!current));
 
-                    table.insert(name.to_string(), Value::Table(updated_values));
+                    table.insert(name.to_owned(), Value::Table(updated_values));
 
                     write_configuration(table);
                 }

@@ -77,7 +77,7 @@ mod tests {
     #[test]
     fn test_parse_dart_version() {
         let input = "Dart VM version: 2.8.4 (stable)";
-        assert_eq!(parse_dart_version(input), Some("v2.8.4".to_string()));
+        assert_eq!(parse_dart_version(input), Some("v2.8.4".to_owned()));
     }
 
     #[test]

@@ -162,7 +162,7 @@ mod tests {
         let kotlin_input = "Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)";
         assert_eq!(
             format_kotlin_version(kotlin_input),
-            Some("v1.4.21".to_string())
+            Some("v1.4.21".to_owned())
         );
     }
 
@@ -171,7 +171,7 @@ mod tests {
         let kotlin_input = "info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)";
         assert_eq!(
             format_kotlin_version(kotlin_input),
-            Some("v1.4.21".to_string())
+            Some("v1.4.21".to_owned())
         );
     }
 }

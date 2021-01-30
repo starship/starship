@@ -77,7 +77,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_hg_branch_name(ctx: &Context) -> String {
     std::fs::read_to_string(ctx.current_dir.join(".hg").join("branch"))
         .map(|s| s.trim().into())
-        .unwrap_or_else(|_| "default".to_string())
+        .unwrap_or_else(|_| "default".to_owned())
 }
 
 fn get_hg_current_bookmark(ctx: &Context) -> Option<String> {

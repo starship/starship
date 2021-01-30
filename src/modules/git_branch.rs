@@ -243,8 +243,8 @@ mod tests {
             "",
             format!(
                 "branch: {} {} ",
-                Color::Blue.bold().paint("1337_hello_world").to_string(),
-                Color::Red.paint("THE COLORS").to_string()
+                Color::Blue.bold().paint("1337_hello_world").to_owned(),
+                Color::Red.paint("THE COLORS").to_owned()
             ),
         )
     }
@@ -258,10 +258,7 @@ mod tests {
             symbol = "git: "
             style = "green"
         "#,
-            format!(
-                "git: {}",
-                Color::Green.paint("1337_hello_world").to_string(),
-            ),
+            format!("git: {}", Color::Green.paint("1337_hello_world").to_owned(),),
         )
     }
 

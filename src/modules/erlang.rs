@@ -62,7 +62,7 @@ fn get_erlang_version() -> Option<String> {
              io:format(\"~s\",[Content]),\
              halt(0)."
         ]
-    )?.stdout.trim().to_string())
+    )?.stdout.trim().to_owned())
 }
 
 #[cfg(test)]

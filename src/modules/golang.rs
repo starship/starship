@@ -198,6 +198,6 @@ mod tests {
     #[test]
     fn test_format_go_version() {
         let input = "go version go1.12 darwin/amd64";
-        assert_eq!(format_go_version(input), Some("v1.12".to_string()));
+        assert_eq!(format_go_version(input), Some("v1.12".to_owned()));
     }
 }

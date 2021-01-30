@@ -24,7 +24,7 @@ fn get_gcloud_account_from_config(current_config: &Path) -> Option<Account> {
         .take_while(|line| !line.starts_with('['))
         .find(|line| line.starts_with("account"))?;
     let account = account_line.split('=').nth(1)?.trim();
-    Some(account.to_string())
+    Some(account.to_owned())
 }
 
 fn get_gcloud_project_from_config(current_config: &Path) -> Option<Project> {
@@ -37,7 +37,7 @@ fn get_gcloud_project_from_config(current_config: &Path) -> Option<Project> {
         .take_while(|line| !line.starts_with('['))
         .find(|line| line.starts_with("project"))?;
     let project = project_line.split('=').nth(1)?.trim();
-    Some(project.to_string())
+    Some(project.to_owned())
 }
 
 fn get_gcloud_region_from_config(current_config: &Path) -> Option<Region> {
@@ -50,7 +50,7 @@ fn get_gcloud_region_from_config(current_config: &Path) -> Option<Region> {
         .take_while(|line| !line.starts_with('['))
         .find(|line| line.starts_with("region"))?;
     let region = region_line.split('=').nth(1)?.trim();
-    Some(region.to_string())
+    Some(region.to_owned())
 }
 
 fn get_active_config(context: &Context, config_root: &Path) -> Option<String> {
@@ -91,8 +91,8 @@ fn get_config_dir(context: &Context) -> Option<PathBuf> {
 
 fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     match aliases.get(&region) {
-        None => region.to_string(),
-        Some(alias) => (*alias).to_string(),
+        None => region.to_owned(),
+        Some(alias) => (*alias).to_owned(),
     }
 }
 

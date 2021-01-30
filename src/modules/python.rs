@@ -61,13 +61,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let version = get_python_version(&config)?;
-                    Some(Ok(version.trim().to_string()))
+                    Some(Ok(version.trim().to_owned()))
                 }
                 "virtualenv" => {
                     let virtual_env = get_python_virtual_env(context);
-                    virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
+                    virtual_env.as_ref().map(|e| Ok(e.trim().to_owned()))
                 }
-                "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
+                "pyenv_prefix" => Some(Ok(pyenv_prefix.to_owned())),
                 _ => None,
             })
             .parse(None)

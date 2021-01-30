@@ -121,7 +121,7 @@ mod tests {
     fn test_format_helm_version() {
         let helm_2 = "Client: v2.16.9+g8ad7037";
         let helm_3 = "v3.1.1+ggit afe7058";
-        assert_eq!(format_helm_version(helm_2), Some("v2.16.9".to_string()));
-        assert_eq!(format_helm_version(helm_3), Some("v3.1.1".to_string()));
+        assert_eq!(format_helm_version(helm_2), Some("v2.16.9".to_owned()));
+        assert_eq!(format_helm_version(helm_3), Some("v3.1.1".to_owned()));
     }
 }

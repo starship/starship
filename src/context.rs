@@ -103,7 +103,7 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
         if cfg!(test) {
-            self.env.get(key.as_ref()).map(|val| val.to_string())
+            self.env.get(key.as_ref()).map(|val| val.to_owned())
         } else {
             env::var(key.as_ref()).ok()
         }

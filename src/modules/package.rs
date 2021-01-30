@@ -199,7 +199,7 @@ fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String
 }
 
 fn format_version(version: &str) -> String {
-    let cleaned = version.replace('"', "").trim().to_string();
+    let cleaned = version.replace('"', "").trim().to_owned();
     if cleaned.starts_with('v') {
         cleaned
     } else {

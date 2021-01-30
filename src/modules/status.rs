@@ -222,7 +222,7 @@ mod tests {
         ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = name.map(|n| n.to_string());
+            let expected = name.map(|n| n.to_owned());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -251,7 +251,7 @@ mod tests {
         ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = name.map(|n| n.to_string());
+            let expected = name.map(|n| n.to_owned());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]

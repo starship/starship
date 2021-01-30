@@ -130,7 +130,7 @@ fn get_current_dir(context: &Context, config: &DirectoryConfig) -> PathBuf {
                     if let Some(no_prefix) =
                         x.strip_prefix(r"Microsoft.PowerShell.Core\FileSystem::")
                     {
-                        x = no_prefix.to_string();
+                        x = no_prefix.to_owned();
                     }
                 }
                 Some(PathBuf::from(x))
@@ -176,7 +176,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     }
 
     if full_path == top_level_path {
-        return top_level_replacement.to_string();
+        return top_level_replacement.to_owned();
     }
 
     format!(
@@ -210,7 +210,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         let repo_name = components[components.len() - i - 1].as_os_str().to_str()?;
 
         if i == 0 {
-            return Some(repo_name.to_string());
+            return Some(repo_name.to_owned());
         }
 
         let path = PathBuf::from_iter(&components[components.len() - i..]);
@@ -279,8 +279,8 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
         .map(|word| -> String {
             let chars = UnicodeSegmentation::graphemes(word, true).collect::<Vec<&str>>();
             match word {
-                "" => "".to_string(),
-                _ if chars.len() <= pwd_dir_length => word.to_string(),
+                "" => "".to_owned(),
+                _ if chars.len() <= pwd_dir_length => word.to_owned(),
                 _ if word.starts_with('.') => chars[..=pwd_dir_length].join(""),
                 _ => chars[..pwd_dir_length].join(""),
             }
@@ -366,24 +366,24 @@ mod tests {
     fn substitute_prefix_and_middle() {
         let full_path = "/absolute/path/foo/bar/baz";
         let mut substitutions = IndexMap::new();
-        substitutions.insert("/absolute/path".to_string(), "");
-        substitutions.insert("/bar/".to_string(), "/");
+        substitutions.insert("/absolute/path".to_owned(), "");
+        substitutions.insert("/bar/".to_owned(), "/");
 
-        let output = substitute_path(full_path.to_string(), &substitutions);
+        let output = substitute_path(full_path.to_owned(), &substitutions);
         assert_eq!(output, "/foo/baz");
     }
 
     #[test]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
-        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        let output = to_fish_style(1, path.to_owned(), "engines/booster/rocket");
         assert_eq!(output, "~/s/");
     }
 
     #[test]
     fn fish_style_with_user_home_contracted_path_and_dot_dir() {
         let path = "~/.starship/engines/booster/rocket";
-        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        let output = to_fish_style(1, path.to_owned(), "engines/booster/rocket");
         assert_eq!(output, "~/.s/");
     }
 
@@ -391,7 +391,7 @@ mod tests {
     fn fish_style_with_no_contracted_path() {
         // `truncation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(1, path.to_string(), "repo/but_nested");
+        let output = to_fish_style(1, path.to_owned(), "repo/but_nested");
         assert_eq!(output, "/a/P/n/i/");
     }
 
@@ -399,21 +399,21 @@ mod tests {
     fn fish_style_with_pwd_dir_len_no_contracted_path() {
         // `truncation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(2, path.to_string(), "repo/but_nested");
+        let output = to_fish_style(2, path.to_owned(), "repo/but_nested");
         assert_eq!(output, "/ab/Pa/no/in/");
     }
 
     #[test]
     fn fish_style_with_duplicate_directories() {
         let path = "~/starship/tmp/C++/C++/C++";
-        let output = to_fish_style(1, path.to_string(), "C++");
+        let output = to_fish_style(1, path.to_owned(), "C++");
         assert_eq!(output, "~/s/t/C/C/");
     }
 
     #[test]
     fn fish_style_with_unicode() {
         let path = "~/starship/tmp/目录/a̐éö̲/目录";
-        let output = to_fish_style(1, path.to_string(), "目录");
+        let output = to_fish_style(1, path.to_owned(), "目录");
         assert_eq!(output, "~/s/t/目/a̐/");
     }
 

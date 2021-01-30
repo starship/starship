@@ -128,17 +128,17 @@ mod tests {
     fn test_format_ruby_version() -> io::Result<()> {
         assert_eq!(
             format_ruby_version("ruby 2.1.10p492 (2016-04-01 revision 54464) [x86_64-darwin19.0]"),
-            Some("v2.1.10".to_string())
+            Some("v2.1.10".to_owned())
         );
         assert_eq!(
             format_ruby_version("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]"),
-            Some("v2.5.1".to_string())
+            Some("v2.5.1".to_owned())
         );
         assert_eq!(
             format_ruby_version(
                 "ruby 2.7.0p0 (2019-12-25 revision 647ee6f091) [x86_64-linux-musl]"
             ),
-            Some("v2.7.0".to_string())
+            Some("v2.7.0".to_owned())
         );
 
         Ok(())

@@ -23,7 +23,7 @@ fn get_kube_context(filename: path::PathBuf) -> Option<String> {
     if current_ctx.is_empty() {
         return None;
     }
-    Some(current_ctx.to_string())
+    Some(current_ctx.to_owned())
 }
 
 fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let kube_cfg = context
         .get_env("KUBECONFIG")
-        .unwrap_or(default_config_file.to_str()?.to_string());
+        .unwrap_or(default_config_file.to_str()?.to_owned());
 
     let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
 

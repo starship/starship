@@ -127,6 +127,6 @@ mod tests {
     #[test]
     fn test_format_julia_version() {
         let input = "julia version 1.4.0";
-        assert_eq!(format_julia_version(input), Some("v1.4.0".to_string()));
+        assert_eq!(format_julia_version(input), Some("v1.4.0".to_owned()));
     }
 }

@@ -64,7 +64,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                     if trimmed.is_empty() {
                         None
                     } else {
-                        Some(Ok(trimmed.to_string()))
+                        Some(Ok(trimmed.to_owned()))
                     }
                 }
                 _ => None,

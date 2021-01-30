@@ -144,22 +144,22 @@ fn get_shell_info() -> ShellInfo {
     let shell = std::env::var("STARSHIP_SHELL");
     if shell.is_err() {
         return ShellInfo {
-            name: UNKNOWN_SHELL.to_string(),
-            version: UNKNOWN_VERSION.to_string(),
-            config: UNKNOWN_CONFIG.to_string(),
+            name: UNKNOWN_SHELL.to_owned(),
+            version: UNKNOWN_VERSION.to_owned(),
+            config: UNKNOWN_CONFIG.to_owned(),
         };
     }
 
     let shell = shell.unwrap();
 
     let version = exec_cmd(&shell, &["--version"])
-        .map(|output| output.stdout.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
+        .map(|output| output.stdout.trim().to_owned())
+        .unwrap_or_else(|| UNKNOWN_VERSION.to_owned());
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .map(|config| config.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string());
+        .map(|config| config.trim().to_owned())
+        .unwrap_or_else(|| UNKNOWN_CONFIG.to_owned());
 
     ShellInfo {
         name: shell,
@@ -177,11 +177,11 @@ struct TerminalInfo {
 fn get_terminal_info() -> TerminalInfo {
     let terminal = std::env::var("TERM_PROGRAM")
         .or_else(|_| std::env::var("LC_TERMINAL"))
-        .unwrap_or_else(|_| UNKNOWN_TERMINAL.to_string());
+        .unwrap_or_else(|_| UNKNOWN_TERMINAL.to_owned());
 
     let version = std::env::var("TERM_PROGRAM_VERSION")
         .or_else(|_| std::env::var("LC_TERMINAL_VERSION"))
-        .unwrap_or_else(|_| UNKNOWN_VERSION.to_string());
+        .unwrap_or_else(|_| UNKNOWN_VERSION.to_owned());
 
     TerminalInfo {
         name: terminal,
@@ -220,7 +220,7 @@ fn get_starship_config() -> String {
             })
         })
         .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+        .unwrap_or_else(|| UNKNOWN_CONFIG.to_owned())
 }
 
 #[cfg(test)]
@@ -234,15 +234,15 @@ mod tests {
             os_type: os_info::Type::Linux,
             os_version: os_info::Version::Semantic(1, 2, 3),
             shell_info: ShellInfo {
-                name: "test_shell".to_string(),
-                version: "2.3.4".to_string(),
-                config: "No config".to_string(),
+                name: "test_shell".to_owned(),
+                version: "2.3.4".to_owned(),
+                config: "No config".to_owned(),
             },
             terminal_info: TerminalInfo {
-                name: "test_terminal".to_string(),
-                version: "5.6.7".to_string(),
+                name: "test_terminal".to_owned(),
+                version: "5.6.7".to_owned(),
             },
-            starship_config: "No Starship config".to_string(),
+            starship_config: "No Starship config".to_owned(),
         };
 
         let link = make_github_issue_link(environment);

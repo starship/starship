@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let module_number = if num_of_jobs > config.threshold {
         num_of_jobs.to_string()
     } else {
-        "".to_string()
+        "".to_owned()
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {

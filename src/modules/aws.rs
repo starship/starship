@@ -43,7 +43,7 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
     let region = region_line.split('=').nth(1)?;
     let region = region.trim();
 
-    Some(region.to_string())
+    Some(region.to_owned())
 }
 
 fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
@@ -68,7 +68,7 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
 fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     match aliases.get(&region) {
         None => region,
-        Some(alias) => (*alias).to_string(),
+        Some(alias) => (*alias).to_owned(),
     }
 }
 

@@ -156,13 +156,13 @@ mod tests {
     #[test]
     fn test_format_lua_version() {
         let lua_input = "Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio";
-        assert_eq!(format_lua_version(lua_input), Some("v5.4.0".to_string()));
+        assert_eq!(format_lua_version(lua_input), Some("v5.4.0".to_owned()));
 
         let luajit_input =
             "LuaJIT 2.1.0-beta3 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/";
         assert_eq!(
             format_lua_version(luajit_input),
-            Some("v2.1.0-beta3".to_string())
+            Some("v2.1.0-beta3".to_owned())
         );
     }
 }

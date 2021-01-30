@@ -349,7 +349,7 @@ fn better_width(s: &str) -> usize {
 pub fn format_duration(duration: &Duration) -> String {
     let milis = duration.as_millis();
     if milis == 0 {
-        "<1ms".to_string()
+        "<1ms".to_owned()
     } else {
         format!("{:?}ms", &milis)
     }
