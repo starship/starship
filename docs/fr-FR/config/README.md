@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -2293,7 +2294,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Temps
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
 
 ::: tip
 
@@ -2313,7 +2314,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2339,7 +2340,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-The `username` module shows active user's username. Le module est affiché si l'une des ces conditions est remplie :
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une des ces conditions est remplie :
 
 - L'utilisateur courant est root
 - L'utilisateur courant est différent de celui connecté
@@ -2380,6 +2381,40 @@ style_root = "black bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. Le module est affiché si l'une des ces conditions est remplie :
+
+- The current directory contains a `Vagrantfile` file
+
+### Options
+
+| Option     | Défaut                               | Description                                         |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                                   |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | Le style du module.                                 |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Variables
+
+| Variable  | Exemple          | Description                            |
+| --------- | ---------------- | -------------------------------------- |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| symbol    |                  | Reflète la valeur de l'option `symbol` |
+| style\* |                  | Reflète la valeur de l'option `style`  |
+
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
 ```
 
 ## Zig
@@ -2475,7 +2510,7 @@ The order in which custom modules are shown can be individually set by including
 
 `shell` accepts a non-empty list of strings, where:
 
-- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
+- The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
