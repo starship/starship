@@ -2320,10 +2320,6 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
-::: warning
-This module is not supported on elvish shell.
-:::
-
 ### Options
 
 | Option     | Default                              | Description                                      |
