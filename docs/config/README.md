@@ -2267,6 +2267,10 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
+::: warning
+This module is not supported on elvish shell.
+:::
+
 ### Options
 
 | Option                    | Default                     | Description                                            |
