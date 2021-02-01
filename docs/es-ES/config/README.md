@@ -2244,7 +2244,7 @@ El módulo `terraform` muestra el espacio de trabajo y la versión actual de ter
 
 ::: tip
 
-By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version).
+Por defecto no se mostrara la versión actual de terraform, ya que esto es lento en las versiones actuales de terraform cuando muchos plugins están en uso. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version).
 
 :::
 
@@ -2426,12 +2426,12 @@ The `zig` module shows the currently installed version of Zig. El módulo se mue
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | El estilo del módulo.                                 |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Opción     | Por defecto                          | Descripción                                          |
+| ---------- | ------------------------------------ | ---------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | El símbolo usado antes de mostrar la versión de Zig. |
+| `style`    | `"bold yellow"`                      | El estilo del módulo.                                |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
+| `disabled` | `false`                              | Disables the `zig` module.                           |
 
 ### Variables
 
@@ -2456,7 +2456,7 @@ symbol = "⚡️ "
 
 The `custom` modules show the output of some arbitrary commands.
 
-These modules will be shown if any of the following conditions are met:
+Estos módulos se mostrarán si se cumple alguna de las siguientes condiciones:
 
 - The current directory contains a file whose name is in `files`
 - The current directory contains a directory whose name is in `directories`
@@ -2477,25 +2477,25 @@ The order in which custom modules are shown can be individually set by including
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. ¡Si tienes un ejemplo interesante no cubierto, siéntete libre de compartirlo ahí!
 
 :::
 
 ### Opciones
 
-| Opción        | Por defecto                     | Descripción                                                                                                                |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                      |
-| `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                     |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| Opción        | Por defecto                     | Descripción                                                                                                                         |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                       |
+| `when`        |                                 | Un comando de shell usado como condición para mostrar el modulo. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [Ver a continuación](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                        |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                               |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                         |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                          |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                               |
+| `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                               |
+| `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                              |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                      |
 
 ### Variables
 
