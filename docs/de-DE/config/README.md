@@ -1602,7 +1602,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `nim.cfg` file
+- Das aktuelle Verzeichnis enthält eine `nim.cfg`-Datei
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1678,7 +1678,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `package.json` file
+- Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - The current directory contains a `.node-version` file
 - Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1873,7 +1873,7 @@ format = "via [🦪 $version]($style) "
 
 Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `composer.json` file
+- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
 - The current directory contains a `.php-version` file
 - Das aktuelle Verzeichnis enthält eine `.php`-Datei
 
@@ -1909,7 +1909,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `spago.dhall` file
+- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
 - The current directory contains a \*.purs files
 
 ### Optionen
@@ -1949,8 +1949,8 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
+- Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
@@ -2482,19 +2482,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Optionen
 
-| Option        | Standardwert                    | Beschreibung                                                                                                               |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                  | Stil für dieses Modul.                                                                                                     |
-| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| Option         | Standardwert                    | Beschreibung                                                                                                               |
+| -------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`      |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`         |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`        |                                 | [See below](#custom-command-shell)                                                                                         |
+| `beschreibung` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`        | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories`  | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`   | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`       | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`        | `"bold green"`                  | Stil für dieses Modul.                                                                                                     |
+| `format`       | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
+| `disabled`     | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Variables
 
