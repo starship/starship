@@ -218,6 +218,17 @@
    eval $(starship init ion)
    ```
 
+
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
 ## 🤝 貢献
 
 私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
