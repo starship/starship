@@ -1602,7 +1602,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `nim.cfg` file
+- Đường dẫn hiện tại chứa một tập tin `nim.cfg`
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1678,7 +1678,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of NodeJS. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `package.json` file
+- Đường dẫn hiện tại chứa một tập tin `package.json`
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1873,7 +1873,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `composer.json` file
+- Đường dẫn hiện tại chứa một tập tin `composer.json`
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1909,7 +1909,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `spago.dhall` file
+- Đường dẫn hiện tại chứa một tập tin `spago.dhall`
 - The current directory contains a \*.purs files
 
 ### Các tuỳ chọn
@@ -1949,8 +1949,8 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- Đường dẫn hiện tại chứa một tập tin `requirements.txt`
+- Đường dẫn hiện tại chứa một tập tin `pyproject.toml`
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - Đường dẫn hiện tại chứa một tập tin `tox.ini`
@@ -2487,7 +2487,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `mô tả`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
