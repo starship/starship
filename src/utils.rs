@@ -277,6 +277,7 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         .args(args)
         .stderr(Stdio::piped())
         .stdout(Stdio::piped())
+        .stdin(Stdio::null())
         .spawn()
     {
         Ok(process) => process,
