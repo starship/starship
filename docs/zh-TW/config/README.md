@@ -1602,7 +1602,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `nim.cfg` file
+- 現在資料夾中包含一個 `nim.cfg` 檔案
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1873,7 +1873,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `composer.json` file
+- 現在資料夾中包含一個 `composer.json` 檔案
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1909,7 +1909,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `spago.dhall` file
+- 現在資料夾中包含一個 `spago.dhall` 檔案
 - The current directory contains a \*.purs files
 
 ### 選項
@@ -2487,7 +2487,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `說明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
