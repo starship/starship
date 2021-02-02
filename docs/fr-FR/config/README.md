@@ -1602,7 +1602,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a `nim.cfg` file
+- Le répertoire courant contient un fichier `nim.cfg`
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1678,7 +1678,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of NodeJS. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a `package.json` file
+- Le répertoire courant contient un fichier `package.json`
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1873,7 +1873,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. Le module est affiché si l'une des ces conditions est remplie :
 
-- The current directory contains a `composer.json` file
+- Le répertoire courant contient un fichier `composer.json`
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1949,8 +1949,8 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- Le répertoire courant contient un fichier `requirements.txt`
+- Le répertoire courant contient un fichier `pyproject.toml`
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - Le répertoire courant contient un fichier `tox.ini`
@@ -2508,9 +2508,9 @@ The order in which custom modules are shown can be individually set by including
 
 #### Commandes shell personnalisées
 
-`shell` accepts a non-empty list of strings, where:
+`shell` accepte une liste de chaînes non vide, où:
 
-- The first string is the path to the shell to use to execute the command.
+- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
