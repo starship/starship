@@ -388,6 +388,10 @@ can do this in two ways:
 
 By default it only changes color. If you also want to change it's shape take a
 look at [this example](#with-custom-error-shape).
+ 
+::: warning
+`error_symbol` is not supported on elvish shell.
+:::
 
 ### Options
 
@@ -2261,6 +2265,10 @@ The module will be shown only if the exit code is not `0`.
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
+:::
+
+::: warning
+This module is not supported on elvish shell.
 :::
 
 ### Options
