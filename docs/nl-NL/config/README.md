@@ -372,6 +372,8 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
+::: warning `error_symbol` is not supported on elvish shell. :::
+
 ### Options
 
 | Option           | Default             | Description                                                                      |
@@ -2157,6 +2159,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
+::: warning This module is not supported on elvish shell. :::
+
 ### Options
 
 | Option                  | Default                       | Description                                          |
@@ -2196,7 +2200,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
