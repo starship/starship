@@ -6,35 +6,17 @@ use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
-/// Creates a module with the current Python version
-///
-/// Will display the Python version if any of the following criteria are met:
-///     - Current directory contains a `.python-version` file
-///     - Current directory contains a `requirements.txt` file
-///     - Current directory contains a `pyproject.toml` file
-///     - Current directory contains a file with the `.py` extension
-///     - Current directory contains a `Pipfile` file
-///     - Current directory contains a `tox.ini` file
+/// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("python");
     let config: PythonConfig = PythonConfig::try_load(module.config);
 
-    let is_py_project = {
-        let base = context.try_begin_scan()?.set_files(&[
-            "requirements.txt",
-            ".python-version",
-            "pyproject.toml",
-            "Pipfile",
-            "tox.ini",
-            "setup.py",
-            "__init__.py",
-        ]);
-        if config.scan_for_pyfiles {
-            base.set_extensions(&["py"]).is_match()
-        } else {
-            base.is_match()
-        }
-    };
+    let is_py_project = context
+        .try_begin_scan()?
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
+        .is_match();
 
     let is_venv = context.get_env("VIRTUAL_ENV").is_some();
 
@@ -265,7 +247,7 @@ mod tests {
         let expected = None;
         let config = toml::toml! {
             [python]
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
         let actual = ModuleRenderer::new("python")
             .path(dir.path())
@@ -283,7 +265,7 @@ mod tests {
         let config = toml::toml! {
             [python]
             python_binary = "python2"
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
 
         check_python2_renders(&dir, Some(config));
@@ -291,7 +273,7 @@ mod tests {
         let config_python3 = toml::toml! {
             [python]
             python_binary = "python3"
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
 
         check_python3_renders(&dir, Some(config_python3));
@@ -300,14 +282,14 @@ mod tests {
             [python]
             pyenv_version_name = true
             pyenv_prefix = "test_pyenv "
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
         check_pyenv_renders(&dir, Some(config_pyenv));
 
         let config_multi = toml::toml! {
             [python]
             python_binary = ["python", "python3"]
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
         check_multiple_binaries_renders(&dir, Some(config_multi));
 
