@@ -372,6 +372,8 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
+::: warning `error_symbol` is not supported on elvish shell. :::
+
 ### Opções
 
 | Option           | Padrão              | Descrição                                                                        |
@@ -449,7 +451,7 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Não utilize o DEBUG-trap no Bash
+::: warning Do not hook the DEBUG trap in Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
@@ -2157,6 +2159,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
+::: warning This module is not supported on elvish shell. :::
+
 ### Opções
 
 | Option                  | Padrão                        | Descrição                                            |
@@ -2196,7 +2200,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
