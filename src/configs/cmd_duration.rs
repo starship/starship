@@ -11,6 +11,7 @@ pub struct CmdDurationConfig<'a> {
     pub disabled: bool,
     pub show_notifications: bool,
     pub min_time_to_notify: i64,
+    pub notify_display_time: u64,
 }
 
 impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
@@ -23,6 +24,7 @@ impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
             disabled: false,
             show_notifications: false,
             min_time_to_notify: 45_000,
+            notify_display_time: 750,
         }
     }
 }

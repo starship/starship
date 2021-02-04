@@ -101,6 +101,7 @@ fn undistract_me<'a, 'b>(
 ) -> Module<'a> {
     use ansi_term::{unstyle, ANSIStrings};
     use notify_rust::{Notification, Timeout};
+    use std::convert::TryFrom;
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
         let body = format!(
@@ -108,15 +109,19 @@ fn undistract_me<'a, 'b>(
             unstyle(&ANSIStrings(&module.ansi_strings()))
         );
 
-        let mut notification = Notification::new();
-        notification
-            .summary("Command finished")
-            .body(&body)
-            .icon("utilities-terminal")
-            .timeout(Timeout::Milliseconds(750));
+        if let Ok(display_time) = u32::try_from(config.notify_display_time) {
+            let mut notification = Notification::new();
+            notification
+                .summary("Command finished")
+                .body(&body)
+                .icon("utilities-terminal")
+                .timeout(Timeout::Milliseconds(display_time));
 
-        if let Err(err) = notification.show() {
-            log::trace!("Cannot show notification: {}", err);
+            if let Err(err) = notification.show() {
+                log::trace!("Cannot show notification: {}", err);
+            }
+        } else {
+            log::trace!("Notification display time size error");
         }
     }
 
