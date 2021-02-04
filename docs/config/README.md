@@ -495,6 +495,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
 | `show_notifications`| `false`                       | Show desktop notifications when command completes.         |
 | `min_time_to_notify`| `45_000`                      | Shortest duration for notification (in milliseconds).      |
+| `notify_display_time` | `750`                       | Time to display a notification (in milliseconds). This value is not always respected by the notification server.      |
 
 ::: tip
 
