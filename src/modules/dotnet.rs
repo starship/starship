@@ -299,7 +299,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
             fn parse_failed<T>() -> Option<T> {
                 log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
                 None
-            };
+            }
             let latest_sdk = sdks_output
                 .stdout
                 .lines()
@@ -376,7 +376,7 @@ mod tests {
         touch_path(&workspace, "Directory.Build.props", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -387,7 +387,7 @@ mod tests {
         touch_path(&workspace, "Directory.Build.targets", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -398,7 +398,7 @@ mod tests {
         touch_path(&workspace, "Packages.props", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -409,7 +409,7 @@ mod tests {
         touch_path(&workspace, "solution.sln", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -422,8 +422,8 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!(
-                "{} ",
-                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0")
+                "{}",
+                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0 ")
             )),
         )?;
         workspace.close()
@@ -435,7 +435,7 @@ mod tests {
         touch_path(&workspace, "project.fsproj", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -446,7 +446,7 @@ mod tests {
         touch_path(&workspace, "project.xproj", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -457,7 +457,7 @@ mod tests {
         touch_path(&workspace, "project.json", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v3.1.103"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
         )?;
         workspace.close()
     }
@@ -469,7 +469,7 @@ mod tests {
         touch_path(&workspace, "global.json", Some(&global_json))?;
         expect_output(
             &workspace.path(),
-            Some(format!("{} ", Color::Blue.bold().paint("•NET v1.2.3"))),
+            Some(format!("{}", Color::Blue.bold().paint("•NET v1.2.3 "))),
         )?;
         workspace.close()
     }
@@ -484,8 +484,8 @@ mod tests {
         expect_output(
             &workspace.path().join("project"),
             Some(format!(
-                "{} ",
-                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0")
+                "{}",
+                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0 ")
             )),
         )?;
         workspace.close()
@@ -505,8 +505,8 @@ mod tests {
         expect_output(
             &workspace.path().join("deep/path/to/project"),
             Some(format!(
-                "{} ",
-                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0")
+                "{}",
+                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0 ")
             )),
         )?;
         workspace.close()
@@ -520,8 +520,8 @@ mod tests {
         expect_output(
             workspace.path(),
             Some(format!(
-                "{} ",
-                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0")
+                "{}",
+                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0 ")
             )),
         )?;
         workspace.close()
@@ -535,10 +535,10 @@ mod tests {
         expect_output(
             workspace.path(),
             Some(format!(
-                "{} ",
+                "{}",
                 Color::Blue
                     .bold()
-                    .paint("•NET v3.1.103 🎯 netstandard2.0;net461")
+                    .paint("•NET v3.1.103 🎯 netstandard2.0;net461 ")
             )),
         )?;
         workspace.close()

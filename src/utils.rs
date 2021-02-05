@@ -1,8 +1,9 @@
+use process_control::{ChildExt, Timeout};
 use std::fs::File;
 use std::io::{Read, Result};
 use std::path::Path;
-use std::process::Command;
-use std::time::Instant;
+use std::process::{Command, Stdio};
+use std::time::{Duration, Instant};
 
 use crate::context::Shell;
 
@@ -167,6 +168,10 @@ Target: x86_64-apple-darwin19.4.0\n",
             ),
             stderr: String::default(),
         }),
+        "vagrant --version" => Some(CommandOutput {
+            stdout: String::from("Vagrant 2.2.10\n"),
+            stderr: String::default(),
+        }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0\n"),
             stderr: String::default(),
@@ -258,15 +263,32 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             log::trace!("Using {:?} as {:?}", full_path, cmd);
             full_path
         }
-        Err(e) => {
-            log::trace!("Unable to find {:?} in PATH, {:?}", cmd, e);
+        Err(error) => {
+            log::trace!("Unable to find {:?} in PATH, {:?}", cmd, error);
             return None;
         }
     };
 
+    let time_limit = Duration::from_millis(500);
+
     let start = Instant::now();
-    match Command::new(full_path).args(args).output() {
-        Ok(output) => {
+
+    let process = match Command::new(full_path)
+        .args(args)
+        .stderr(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stdin(Stdio::null())
+        .spawn()
+    {
+        Ok(process) => process,
+        Err(error) => {
+            log::info!("Unable to run {:?}, {:?}", cmd, error);
+            return None;
+        }
+    };
+
+    match process.with_output_timeout(time_limit).terminating().wait() {
+        Ok(Some(output)) => {
             let stdout_string = String::from_utf8(output.stdout).unwrap();
             let stderr_string = String::from_utf8(output.stderr).unwrap();
 
@@ -287,6 +309,10 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
                 stderr: stderr_string,
             })
         }
+        Ok(None) => {
+            log::warn!("Executing command {:?} timed out", cmd);
+            None
+        }
         Err(error) => {
             log::info!("Executing command {:?} failed by: {:?}", cmd, error);
             None
@@ -295,7 +321,6 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 }
 
 #[cfg(test)]
-#[cfg(not(windows))] // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
 mod tests {
     use super::*;
 
@@ -310,7 +335,11 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows some of these tests assume a Unix-like
+    // environment.
+
     #[test]
+    #[cfg(not(windows))]
     fn exec_no_output() {
         let result = internal_exec_cmd("true", &[]);
         let expected = Some(CommandOutput {
@@ -322,6 +351,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_stdout() {
         let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
         let expected = Some(CommandOutput {
@@ -333,6 +363,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_stderr() {
         let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
         let expected = Some(CommandOutput {
@@ -344,6 +375,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_both() {
         let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
         let expected = Some(CommandOutput {
@@ -355,8 +387,18 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_non_zero_exit_code() {
         let result = internal_exec_cmd("false", &[]);
+        let expected = None;
+
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    #[cfg(not(windows))]
+    fn exec_slow_command() {
+        let result = internal_exec_cmd("sleep", &["500"]);
         let expected = None;
 
         assert_eq!(result, expected)

@@ -20,8 +20,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let crystal_version = utils::exec_cmd("crystal", &["--version"])?.stdout;
-
     let mut module = context.new_module("crystal");
     let config: CrystalConfig = CrystalConfig::try_load(module.config);
 
@@ -36,7 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_crystal_version(&crystal_version).map(Ok),
+                "version" => format_crystal_version(
+                    utils::exec_cmd("crystal", &["--version"])?.stdout.as_str(),
+                )
+                .map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -89,7 +90,7 @@ mod tests {
         File::create(dir.path().join("shard.yml"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.35.1")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🔮 v0.35.1 ")));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -101,7 +102,7 @@ mod tests {
         File::create(dir.path().join("main.cr"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Red.bold().paint("🔮 v0.35.1")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🔮 v0.35.1 ")));
         assert_eq!(expected, actual);
 
         dir.close()

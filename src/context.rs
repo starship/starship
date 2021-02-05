@@ -3,6 +3,7 @@ use crate::module::Module;
 
 use crate::modules;
 use clap::ArgMatches;
+use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
@@ -88,6 +89,15 @@ impl<'a> Context<'a> {
             shell,
             env: HashMap::new(),
         }
+    }
+
+    // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
+    pub fn get_home(&self) -> Option<PathBuf> {
+        if cfg!(test) {
+            return self.get_env("HOME").map(PathBuf::from).or_else(home_dir);
+        }
+
+        home_dir()
     }
 
     // Retrives a environment variable from the os or from a table if in testing mode
@@ -198,6 +208,7 @@ impl<'a> Context<'a> {
             "ion" => Shell::Ion,
             "powershell" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
+            "elvish" => Shell::Elvish,
             _ => Shell::Unknown,
         }
     }
@@ -221,11 +232,11 @@ pub struct DirContents {
 
 impl DirContents {
     #[cfg(test)]
-    fn from_path(base: &PathBuf) -> Result<Self, std::io::Error> {
+    fn from_path(base: &Path) -> Result<Self, std::io::Error> {
         Self::from_path_with_timeout(base, Duration::from_secs(30))
     }
 
-    fn from_path_with_timeout(base: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
+    fn from_path_with_timeout(base: &Path, timeout: Duration) -> Result<Self, std::io::Error> {
         let start = Instant::now();
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
@@ -416,6 +427,7 @@ pub enum Shell {
     Ion,
     PowerShell,
     Zsh,
+    Elvish,
     Unknown,
 }
 
@@ -438,7 +450,7 @@ mod tests {
     #[test]
     fn test_scan_dir() -> Result<(), Box<dyn std::error::Error>> {
         let empty = testdir(&[])?;
-        let empty_dc = DirContents::from_path(&PathBuf::from(empty.path()))?;
+        let empty_dc = DirContents::from_path(empty.path())?;
 
         assert_eq!(
             ScanDir {
@@ -453,7 +465,7 @@ mod tests {
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
-        let rust_dc = DirContents::from_path(&PathBuf::from(rust.path()))?;
+        let rust_dc = DirContents::from_path(rust.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &rust_dc,
@@ -467,7 +479,7 @@ mod tests {
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
-        let java_dc = DirContents::from_path(&PathBuf::from(java.path()))?;
+        let java_dc = DirContents::from_path(java.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &java_dc,
@@ -481,7 +493,7 @@ mod tests {
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
-        let node_dc = DirContents::from_path(&PathBuf::from(node.path()))?;
+        let node_dc = DirContents::from_path(node.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &node_dc,

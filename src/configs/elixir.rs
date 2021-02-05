@@ -13,7 +13,7 @@ pub struct ElixirConfig<'a> {
 impl<'a> RootModuleConfig<'a> for ElixirConfig<'a> {
     fn new() -> Self {
         ElixirConfig {
-            format: "via [$symbol$version \\(OTP $otp_version\\)]($style) ",
+            format: "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
             symbol: "💧 ",
             style: "bold purple",
             disabled: false,

@@ -40,19 +40,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     if !is_py_project && !is_venv {
         return None;
-    }
-
-    let python_version = if config.pyenv_version_name {
-        utils::exec_cmd("pyenv", &["version-name"])?.stdout
-    } else {
-        let version = config
-            .python_binary
-            .0
-            .iter()
-            .find_map(|binary| get_python_version(binary))?;
-        format_python_version(&version)
     };
-    let virtual_env = get_python_virtual_env(context);
+
     let pyenv_prefix = if config.pyenv_version_name {
         config.pyenv_prefix
     } else {
@@ -70,9 +59,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(python_version.trim())),
-                "virtualenv" => virtual_env.as_ref().map(|e| Ok(e.trim())),
-                "pyenv_prefix" => Some(Ok(pyenv_prefix)),
+                "version" => {
+                    let version = get_python_version(&config)?;
+                    Some(Ok(version.trim().to_string()))
+                }
+                "virtualenv" => {
+                    let virtual_env = get_python_virtual_env(context);
+                    virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
+                }
+                "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
                 _ => None,
             })
             .parse(None)
@@ -89,17 +84,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_python_version(python_binary: &str) -> Option<String> {
-    match utils::exec_cmd(python_binary, &["--version"]) {
-        Some(output) => {
-            if output.stdout.is_empty() {
-                Some(output.stderr)
-            } else {
-                Some(output.stdout)
+fn get_python_version(config: &PythonConfig) -> Option<String> {
+    if config.pyenv_version_name {
+        return Some(utils::exec_cmd("pyenv", &["version-name"])?.stdout);
+    };
+    let version = config.python_binary.0.iter().find_map(|binary| {
+        match utils::exec_cmd(binary, &["--version"]) {
+            Some(output) => {
+                if output.stdout.is_empty() {
+                    Some(output.stderr)
+                } else {
+                    Some(output.stdout)
+                }
             }
+            None => None,
         }
-        None => None,
-    }
+    })?;
+    Some(format_python_version(&version))
 }
 
 fn format_python_version(python_stdout: &str) -> String {
@@ -323,7 +324,7 @@ mod tests {
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
+            "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
         ));
 
@@ -341,7 +342,7 @@ mod tests {
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
+            "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
         ));
 
@@ -368,7 +369,7 @@ prompt = 'foo'
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
+            "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (foo)")
         ));
 
@@ -387,7 +388,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v2.7.17")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v2.7.17 ")));
         assert_eq!(expected, actual);
     }
 
@@ -402,7 +403,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
     }
 
@@ -420,7 +421,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
     }
 
@@ -437,8 +438,8 @@ prompt = 'foo'
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 test_pyenv system")
+            "via {}",
+            Color::Yellow.bold().paint("🐍 test_pyenv system ")
         ));
         assert_eq!(expected, actual);
     }

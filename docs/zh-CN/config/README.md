@@ -29,7 +29,7 @@ export STARSHIP_CONFIG=~/.starship
 
 在 PowerShell (Windows) 中，在 `$PROFILE` 中添加下面的代码行能达到同样的效果：
 
-```ps1
+```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship"
 ```
 
@@ -43,7 +43,7 @@ export STARSHIP_CACHE=~/.starship/cache
 
 在 PowerShell (Windows) 中，在 `$PROFILE` 中添加下面的代码行能达到同样的效果：
 
-```ps1
+```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
@@ -427,12 +427,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                           |
-| ---------- | ---------------------------------- | -------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                     |
-| `symbol`   | `"喝 "`                             | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                      | 此组件的样式。                                      |
-| `disabled` | `false`                            | Disables the `cmake` module.                 |
+| Option     | 默认值                                  | 描述                                           |
+| ---------- | ------------------------------------ | -------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                     |
+| `symbol`   | `"喝 "`                               | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                        | 此组件的样式。                                      |
+| `disabled` | `false`                              | Disables the `cmake` module.                 |
 
 ### Variables
 
@@ -542,12 +542,12 @@ The `crystal` module shows the currently installed version of Crystal. 此组件
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                        |
-| ---------- | ---------------------------------- | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                             | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                       | 此组件的样式。                                                   |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                  |
-| `disabled` | `false`                            | Disables the `crystal` module.                            |
+| Option     | 默认值                                  | 描述                                                        |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                         | 此组件的样式。                                                   |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                  |
+| `disabled` | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
@@ -578,12 +578,12 @@ The `dart` module shows the currently installed version of Dart. 此组件将在
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                        |
-| `symbol`   | `"🎯 "`                             | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                      | 此组件的样式。                                         |
-| `disabled` | `false`                            | Disables the `dart` module.                     |
+| Option     | 默认值                                  | 描述                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
+| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                        | 此组件的样式。                                         |
+| `disabled` | `false`                              | Disables the `dart` module.                     |
 
 ### Variables
 
@@ -624,6 +624,7 @@ format = "via [🔰 $version](bold red) "
 | `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                 |
 
 <details>
 <summary>此组件有几个高级配置选项来控制当前目录路径的显示方式。</summary>
@@ -671,13 +672,13 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### 配置项
 
-| Option            | 默认值                                | 描述                                                                                      |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | 组件格式化模板。                                                                                |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                   |
-| `style`           | `"blue bold"`                      | 此组件的样式。                                                                                 |
-| `only_with_files` | `false`                            | Only show when there's a `docker-compose.yml` or `Dockerfile` in the current directory. |
-| `disabled`        | `true`                             | Disables the `docker_context` module.                                                   |
+| Option            | 默认值                                | 描述                                                                                                              |
+| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"via [$symbol$context]($style) "` | 组件格式化模板。                                                                                                        |
+| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
+| `style`           | `"blue bold"`                      | 此组件的样式。                                                                                                         |
+| `only_with_files` | `true`                             | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
+| `disabled`        | `false`                            | Disables the `docker_context` module.                                                                           |
 
 ### Variables
 
@@ -722,13 +723,13 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 配置项
 
-| Option      | 默认值                                     | 描述                             |
-| ----------- | --------------------------------------- | ------------------------------ |
-| `format`    | `"[$symbol$version( 🎯 $tfm)]($style) "` | 组件格式化模板。                       |
-| `symbol`    | `"•NET "`                               | 这个字段的内容会显示在当前 .NET 版本之前。       |
-| `heuristic` | `true`                                  | 使用更快的版本探测机制以保证 starship 的运行速度。 |
-| `style`     | `"bold blue"`                           | 此组件的样式。                        |
-| `disabled`  | `false`                                 | 禁用 `dotnet` 组件。                |
+| Option      | 默认值                                       | 描述                             |
+| ----------- | ----------------------------------------- | ------------------------------ |
+| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | 组件格式化模板。                       |
+| `symbol`    | `"•NET "`                                 | 这个字段的内容会显示在当前 .NET 版本之前。       |
+| `heuristic` | `true`                                    | 使用更快的版本探测机制以保证 starship 的运行速度。 |
+| `style`     | `"bold blue"`                             | 此组件的样式。                        |
+| `disabled`  | `false`                                   | 禁用 `dotnet` 组件。                |
 
 ### Variables
 
@@ -760,12 +761,12 @@ The `elixir` module shows the currently installed version of Elixir and Erlang/O
 
 ### 配置项
 
-| Option     | 默认值                                                       | 描述                                                              |
-| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | 此组件的样式。                                                         |
-| `format`   | `'via [$symbol$version \(OTP $otp_version\)]($style) '` | The format for the module elixir.                               |
-| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
+| Option     | 默认值                                                         | 描述                                                              |
+| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `style`    | `"bold purple"`                                             | 此组件的样式。                                                         |
+| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -799,12 +800,12 @@ The `elm` module shows the currently installed version of Elm. 此组件将在�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                        |
-| `symbol`   | `"🌳 "`                             | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                      | 此组件的样式。                                         |
-| `disabled` | `false`                            | Disables the `elm` module.                      |
+| Option     | 默认值                                  | 描述                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
+| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                        | 此组件的样式。                                         |
+| `disabled` | `false`                              | Disables the `elm` module.                      |
 
 ### Variables
 
@@ -871,12 +872,12 @@ The `erlang` module shows the currently installed version of Erlang/OTP. 此组�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                       |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | 此组件的样式。                                                  |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                 |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| Option     | 默认值                                  | 描述                                                       |
+| ---------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`    | `"bold red"`                         | 此组件的样式。                                                  |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                 |
+| `disabled` | `false`                              | Disables the `erlang` module.                            |
 
 ### Variables
 
@@ -1170,12 +1171,12 @@ behind = "⇣${count}"
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                             |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                       |
-| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | 此组件的样式。                                        |
-| `disabled` | `false`                            | 禁用 `golang` 组件。                                |
+| Option     | 默认值                                  | 描述                                             |
+| ---------- | ------------------------------------ | ---------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                       |
+| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                        | 此组件的样式。                                        |
+| `disabled` | `false`                              | 禁用 `golang` 组件。                                |
 
 ### Variables
 
@@ -1205,12 +1206,12 @@ The `helm` module shows the currently installed version of Helm. 此组件将在
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                         |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | 此组件的样式。                                          |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| Option     | 默认值                                  | 描述                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
+| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                       | 此组件的样式。                                          |
+| `disabled` | `false`                              | Disables the `helm` module.                      |
 
 ### Variables
 
@@ -1275,12 +1276,12 @@ disabled = false
 
 ### 配置项
 
-| Option     | 默认值                                    | 描述                                              |
-| ---------- | -------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}${version}]($style) "` | 组件格式化模板。                                        |
-| `symbol`   | `"☕ "`                                 | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                         | 此组件的样式。                                         |
-| `disabled` | `false`                                | 禁用 `java` 组件。                                   |
+| Option     | 默认值                                      | 描述                                              |
+| ---------- | ---------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(${version} )]($style)"` | 组件格式化模板。                                        |
+| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                           | 此组件的样式。                                         |
+| `disabled` | `false`                                  | 禁用 `java` 组件。                                   |
 
 ### Variables
 
@@ -1345,12 +1346,12 @@ The `julia` module shows the currently installed version of Julia. 此组件将�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                          |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | 此组件的样式。                                           |
-| `disabled` | `false`                            | Disables the `julia` module.                      |
+| Option     | 默认值                                  | 描述                                                |
+| ---------- | ------------------------------------ | ------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                          |
+| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                      | 此组件的样式。                                           |
+| `disabled` | `false`                              | Disables the `julia` module.                      |
 
 ### Variables
 
@@ -1379,13 +1380,13 @@ The `kotlin` module shows the currently installed version of Kotlin. 此组件�
 
 ### 配置项
 
-| Option          | 默认值                                | 描述                                                                            |
-| --------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                                      |
-| `symbol`        | `"🅺 "`                             | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                      | 此组件的样式。                                                                       |
-| `kotlin_binary` | `"kotlin"`                         | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                            | Disables the `kotlin` module.                                                 |
+| Option          | 默认值                                  | 描述                                                                            |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                      |
+| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                        | 此组件的样式。                                                                       |
+| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Variables
 
@@ -1486,13 +1487,13 @@ The `lua` module shows the currently installed version of Lua. 此组件将在�
 
 ### 配置项
 
-| Option       | 默认值                                | 描述                                                                         |
-| ------------ | ---------------------------------- | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                                   |
-| `symbol`     | `"🌙 "`                             | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                      | 此组件的样式。                                                                    |
-| `lua_binary` | `"lua"`                            | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                            | Disables the `lua` module.                                                 |
+| Option       | 默认值                                  | 描述                                                                         |
+| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                   |
+| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `style`      | `"bold blue"`                        | 此组件的样式。                                                                    |
+| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
 
 ### Variables
 
@@ -1607,12 +1608,12 @@ The `nim` module shows the currently installed version of Nim. 此组件将在�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format for the module                             |
-| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | 此组件的样式。                                               |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| Option     | 默认值                                  | 描述                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                      | 此组件的样式。                                               |
+| `disabled` | `false`                              | Disables the `nim` module.                            |
 
 ### Variables
 
@@ -1684,13 +1685,13 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### 配置项
 
-| Option              | 默认值                                | 描述                                                                                                    |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                                                              |
-| `symbol`            | `"⬢ "`                             | A format string representing the symbol of NodeJS.                                                    |
-| `style`             | `"bold green"`                     | 此组件的样式。                                                                                               |
-| `disabled`          | `false`                            | 禁用 `nodejs` 组件。                                                                                       |
-| `not_capable_style` | `bold red`                         | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Option              | 默认值                                  | 描述                                                                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                                              |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `style`             | `"bold green"`                       | 此组件的样式。                                                                                               |
+| `disabled`          | `false`                              | 禁用 `nodejs` 组件。                                                                                       |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
 
@@ -1724,12 +1725,12 @@ The `ocaml` module shows the currently installed version of OCaml. 此组件将�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                             | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                    | 此组件的样式。                                                 |
-| `disabled` | `false`                            | Disables the `ocaml` module.                            |
+| Option     | 默认值                                  | 描述                                                      |
+| ---------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                      | 此组件的样式。                                                 |
+| `disabled` | `false`                              | Disables the `ocaml` module.                            |
 
 ### Variables
 
@@ -1843,12 +1844,12 @@ The `perl` module shows the currently installed version of Perl. 此组件将在
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                             | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                       | 此组件的样式。                                               |
-| `disabled` | `false`                            | Disables the `perl` module.                           |
+| Option     | 默认值                                  | 描述                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                         | 此组件的样式。                                               |
+| `disabled` | `false`                              | Disables the `perl` module.                           |
 
 ### Variables
 
@@ -1877,12 +1878,12 @@ format = "via [🦪 $version]($style) "
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                      |
-| ---------- | ---------------------------------- | ----------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                |
-| `symbol`   | `"🐘 "`                             | 这个字段的内容会显示在当前 PHP 版本之前。 |
-| `style`    | `"147 bold"`                       | 此组件的样式。                 |
-| `disabled` | `false`                            | 禁用 `php` 组件。            |
+| Option     | 默认值                                  | 描述                      |
+| ---------- | ------------------------------------ | ----------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                |
+| `symbol`   | `"🐘 "`                               | 这个字段的内容会显示在当前 PHP 版本之前。 |
+| `style`    | `"147 bold"`                         | 此组件的样式。                 |
+| `disabled` | `false`                              | 禁用 `php` 组件。            |
 
 ### Variables
 
@@ -1912,12 +1913,12 @@ The `purescript` module shows the currently installed version of PureScript vers
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                           |
-| ---------- | ---------------------------------- | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                                     |
-| `symbol`   | `"<=> "`                     | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                     | 此组件的样式。                                                      |
-| `disabled` | `false`                            | Disables the `purescript` module.                            |
+| Option     | 默认值                                  | 描述                                                           |
+| ---------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                     |
+| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                       | 此组件的样式。                                                      |
+| `disabled` | `false`                              | Disables the `purescript` module.                            |
 
 ### Variables
 
@@ -1958,16 +1959,16 @@ format = "via [$symbol$version](bold white)"
 
 ### 配置项
 
-| Option               | 默认值                                                                       | 描述                                                                                     |
-| -------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}${version}( \($virtualenv\))]($style) '` | 组件格式化模板。                                                                               |
-| `symbol`             | `"🐍 "`                                                                    | 用于表示Python的格式化字符串。                                                                     |
-| `style`              | `"yellow bold"`                                                           | 此组件的样式。                                                                                |
-| `pyenv_version_name` | `false`                                                                   | 使用 pyenv 获取 Python 版本                                                                  |
-| `pyenv_prefix`       | `pyenv`                                                                   | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                    | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。                                                  |
-| `python_binary`      | `["python", "python3, "python2"]`                                         | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                   | 禁用 `python` 组件。                                                                        |
+| Option               | 默认值                                                                        | 描述                                                                                     |
+| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | 组件格式化模板。                                                                               |
+| `symbol`             | `"🐍 "`                                                                     | 用于表示Python的格式化字符串。                                                                     |
+| `style`              | `"yellow bold"`                                                            | 此组件的样式。                                                                                |
+| `pyenv_version_name` | `false`                                                                    | 使用 pyenv 获取 Python 版本                                                                  |
+| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
+| `scan_for_pyfiles`   | `true`                                                                     | 如果设置为false, 在本目录下的Python文件将不会在本组件中显示。                                                  |
+| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
+| `disabled`           | `false`                                                                    | 禁用 `python` 组件。                                                                        |
 
 ::: tip
 
@@ -2016,12 +2017,12 @@ python_binary = "python3"
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                         |
-| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | 此组件的样式。                                          |
-| `disabled` | `false`                            | 禁用 `ruby` 组件。                                    |
+| Option     | 默认值                                  | 描述                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
+| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                         | 此组件的样式。                                          |
+| `disabled` | `false`                              | 禁用 `ruby` 组件。                                    |
 
 ### Variables
 
@@ -2051,12 +2052,12 @@ symbol = "🔺 "
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                              |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                        |
-| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | 此组件的样式。                                         |
-| `disabled` | `false`                            | 禁用 `rust` 组件。                                   |
+| Option     | 默认值                                  | 描述                                              |
+| ---------- | ------------------------------------ | ----------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
+| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                         | 此组件的样式。                                         |
+| `disabled` | `false`                              | 禁用 `rust` 组件。                                   |
 
 ### Variables
 
@@ -2157,18 +2158,18 @@ The `status` module displays the exit code of the previous command. The module w
 
 ### 配置项
 
-| Option                  | 默认值                        | 描述                                                   |
-| ----------------------- | -------------------------- | ---------------------------------------------------- |
-| `format`                | `[$symbol$status]($style)` | The format of the module                             |
-| `symbol`                | `"✖"`                      | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                      | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                      | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                      | The symbol displayed on SIGINT (Ctrl + c)            |
-| `signal_symbol`         | `"⚡"`                      | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`               | 此组件的样式。                                              |
-| `recognize_signal_code` | `true`                     | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                    | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                     | Disables the `status` module.                        |
+| Option                  | 默认值                           | 描述                                                   |
+| ----------------------- | ----------------------------- | ---------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "` | The format of the module                             |
+| `symbol`                | `"✖"`                         | The symbol displayed on program error                |
+| `not_executable_symbol` | `"🚫"`                         | The symbol displayed when file isn't executable      |
+| `not_found_symbol`      | `"🔍"`                         | The symbol displayed when the command can't be found |
+| `sigint_symbol`         | `"🧱"`                         | The symbol displayed on SIGINT (Ctrl + c)            |
+| `signal_symbol`         | `"⚡"`                         | The symbol displayed on any signal                   |
+| `style`                 | `"bold red"`                  | 此组件的样式。                                              |
+| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                 |
+| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                |
+| `disabled`              | `true`                        | Disables the `status` module.                        |
 
 ### Variables
 
@@ -2209,12 +2210,12 @@ The `swift` module shows the currently installed version of Swift. 此组件将�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                               |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                         |
-| `symbol`   | `"🐦 "`                             | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                       | 此组件的样式。                                          |
-| `disabled` | `false`                            | Disables the `swift` module.                     |
+| Option     | 默认值                                  | 描述                                               |
+| ---------- | ------------------------------------ | ------------------------------------------------ |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
+| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                         | 此组件的样式。                                          |
+| `disabled` | `false`                              | Disables the `swift` module.                     |
 
 ### Variables
 
@@ -2237,7 +2238,15 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version. By default the terraform version is not shown, since this is slow on current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version). 此组件将在符合以下任意条件之一时显示：
+The `terraform` module shows the currently selected terraform workspace and version.
+
+::: tip
+
+By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+
+:::
+
+此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `.terraform` 目录
 - Current directory contains a file with the `.tf` or `.hcl` extensions
@@ -2381,12 +2390,12 @@ The `zig` module shows the currently installed version of Zig. 此组件将在�
 
 ### 配置项
 
-| Option     | 默认值                                | 描述                                                    |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                             | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                    | 此组件的样式。                                               |
-| `format`   | `"via [$symbol$version]($style) "` | 组件格式化模板。                                              |
-| `disabled` | `false`                            | Disables the `zig` module.                            |
+| Option     | 默认值                                  | 描述                                                    |
+| ---------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                      | 此组件的样式。                                               |
+| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                              |
+| `disabled` | `false`                              | Disables the `zig` module.                            |
 
 ### Variables
 
@@ -2438,19 +2447,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### 配置项
 
-| Option        | 默认值                           | 描述                                                                                                                         |
-| ------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                               | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                               | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                               | [See below](#custom-command-shell)                                                                                         |
-| `描述`          | `"<custom module>"`     | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                          | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                          | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                          | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                          | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                | 此组件的样式。                                                                                                                    |
-| `format`      | `"[$symbol$output]($style) "` | 组件格式化模板。                                                                                                                   |
-| `disabled`    | `false`                       | Disables this `custom` module.                                                                                             |
+| Option        | 默认值                             | 描述                                                                                                                         |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `描述`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | 此组件的样式。                                                                                                                    |
+| `format`      | `"[$symbol($output )]($style)"` | 组件格式化模板。                                                                                                                   |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Variables
 

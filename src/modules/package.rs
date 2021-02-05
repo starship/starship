@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
@@ -172,7 +172,7 @@ fn extract_meson_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<String> {
+fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
@@ -757,7 +757,7 @@ end";
     }
 
     fn create_project_dir() -> io::Result<TempDir> {
-        Ok(tempfile::tempdir()?)
+        tempfile::tempdir()
     }
 
     fn fill_config(

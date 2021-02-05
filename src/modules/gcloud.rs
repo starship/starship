@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind};
 use std::path::PathBuf;
 use std::str::FromStr;
+use std::{collections::HashMap, path::Path};
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -14,7 +14,7 @@ type Project = String;
 type Region = String;
 type Active = String;
 
-fn get_gcloud_account_from_config(current_config: &PathBuf) -> Option<Account> {
+fn get_gcloud_account_from_config(current_config: &Path) -> Option<Account> {
     let file = File::open(&current_config).ok()?;
     let reader = BufReader::new(file);
     let lines = reader.lines().filter_map(Result::ok);
@@ -27,7 +27,7 @@ fn get_gcloud_account_from_config(current_config: &PathBuf) -> Option<Account> {
     Some(account.to_string())
 }
 
-fn get_gcloud_project_from_config(current_config: &PathBuf) -> Option<Project> {
+fn get_gcloud_project_from_config(current_config: &Path) -> Option<Project> {
     let file = File::open(&current_config).ok()?;
     let reader = BufReader::new(file);
     let lines = reader.lines().filter_map(Result::ok);
@@ -40,7 +40,7 @@ fn get_gcloud_project_from_config(current_config: &PathBuf) -> Option<Project> {
     Some(project.to_string())
 }
 
-fn get_gcloud_region_from_config(current_config: &PathBuf) -> Option<Region> {
+fn get_gcloud_region_from_config(current_config: &Path) -> Option<Region> {
     let file = File::open(&current_config).ok()?;
     let reader = BufReader::new(file);
     let lines = reader.lines().filter_map(Result::ok);
@@ -53,7 +53,7 @@ fn get_gcloud_region_from_config(current_config: &PathBuf) -> Option<Region> {
     Some(region.to_string())
 }
 
-fn get_active_config(context: &Context, config_root: &PathBuf) -> Option<String> {
+fn get_active_config(context: &Context, config_root: &Path) -> Option<String> {
     let config_name = context.get_env("CLOUDSDK_ACTIVE_CONFIG_NAME").or_else(|| {
         let path = config_root.join("active_config");
         let file = File::open(&path).ok()?;
@@ -82,7 +82,7 @@ fn get_config_dir(context: &Context) -> Option<PathBuf> {
         .get_env("CLOUDSDK_CONFIG")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
-            let mut home = dirs_next::home_dir()?;
+            let mut home = context.get_home()?;
             home.push(".config/gcloud");
             Some(home)
         })?;

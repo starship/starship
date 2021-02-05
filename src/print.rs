@@ -273,33 +273,30 @@ fn handle_module<'a>(
         }
     }
 
-    let mut modules: Vec<Option<Module>> = Vec::new();
+    let mut modules: Vec<Module> = Vec::new();
 
     if ALL_MODULES.contains(&module) {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
-            modules.push(modules::handle(module, &context));
+            modules.extend(modules::handle(module, &context));
         }
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set
         if let Some(custom_modules) = context.config.get_custom_modules() {
-            let custom_modules = custom_modules
-                .iter()
-                .map(|(custom_module, config)| {
-                    if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                        modules::custom::module(custom_module, &context)
-                    } else {
-                        None
-                    }
-                })
-                .collect::<Vec<Option<Module<'a>>>>();
-            modules.extend(custom_modules)
+            let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
+                if should_add_implicit_custom_module(custom_module, config, &module_list) {
+                    modules::custom::module(custom_module, &context)
+                } else {
+                    None
+                }
+            });
+            modules.extend(custom_modules);
         }
     } else if let Some(module) = module.strip_prefix("custom.") {
         // Write out a custom module if it isn't disabled (and it exists...)
         match context.is_custom_module_disabled_in_config(&module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.push(modules::custom::module(&module, &context)),
+            Some(false) => modules.extend(modules::custom::module(&module, &context)),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
@@ -320,7 +317,7 @@ fn handle_module<'a>(
         );
     }
 
-    modules.into_iter().flatten().collect()
+    modules
 }
 
 fn should_add_implicit_custom_module(

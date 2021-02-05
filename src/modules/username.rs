@@ -21,10 +21,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let username = context.get_env(USERNAME_ENV_VAR)?;
     let logname = context.get_env("LOGNAME");
 
-    let user_uid = get_uid();
+    let is_root = if cfg!(not(target_os = "windows")) {
+        let user_uid = get_uid();
+        user_uid == ROOT_UID
+    } else {
+        false
+    };
 
     let is_not_login = logname.is_some() && username != logname.unwrap();
-    let is_root = user_uid == ROOT_UID;
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);

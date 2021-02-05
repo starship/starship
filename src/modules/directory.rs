@@ -16,8 +16,6 @@ use crate::configs::directory::DirectoryConfig;
 use crate::context::Shell;
 use crate::formatter::StringFormatter;
 
-const HOME_SYMBOL: &str = "~";
-
 /// Creates a module with the current directory
 ///
 /// Will perform path contraction, substitution, and truncation.
@@ -25,7 +23,7 @@ const HOME_SYMBOL: &str = "~";
 /// **Contraction**
 ///
 /// - Paths beginning with the home directory or with a git repo right inside
-///   the home directory will be contracted to `~`
+///   the home directory will be contracted to `~`, or the set HOME_SYMBOL
 /// - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Substitution**
@@ -39,7 +37,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let current_dir = &get_current_dir(&context, &config);
 
-    let home_dir = dirs_next::home_dir().unwrap();
+    let home_dir = context.get_home().unwrap();
+    let home_symbol = String::from(config.home_symbol);
+
     log::debug!("Current directory: {:?}", current_dir);
 
     let repo = &context.get_repo().ok()?;
@@ -48,10 +48,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             log::debug!("Repo root: {:?}", repo_root);
             // Contract the path to the git repo root
             contract_repo_path(current_dir, repo_root)
-                .unwrap_or_else(|| contract_path(current_dir, &home_dir, HOME_SYMBOL))
+                .unwrap_or_else(|| contract_path(current_dir, &home_dir, &home_symbol))
         }
         // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, HOME_SYMBOL),
+        _ => contract_path(current_dir, &home_dir, &home_symbol),
     };
     log::debug!("Dir string: {}", dir_string);
 
@@ -60,12 +60,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Truncate the dir string to the maximum number of path components
     let truncated_dir_string = truncate(substituted_dir, config.truncation_length as usize);
 
-    let prefix = if is_truncated(&truncated_dir_string) {
+    let prefix = if is_truncated(&truncated_dir_string, &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&current_dir, &home_dir, HOME_SYMBOL);
+            let contracted_home_dir = contract_path(&current_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
@@ -146,8 +146,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn is_truncated(path: &str) -> bool {
-    !(path.starts_with(HOME_SYMBOL)
+fn is_truncated(path: &str, home_symbol: &str) -> bool {
+    !(path.starts_with(&home_symbol)
         || PathBuf::from(path).has_root()
         || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
 }
@@ -519,18 +519,10 @@ mod tests {
     #[cfg(not(target_os = "windows"))]
     mod linux {
         use super::*;
-        use std::sync::atomic::{AtomicBool, Ordering};
-
-        // As tests are run in parallel we have to keep a lock on which of the
-        // two tests are currently running as they both modify `HOME` which can
-        // override the other value resulting in inconsistent runs which is why
-        // we only run one of these tests at once.
-        static LOCK: AtomicBool = AtomicBool::new(false);
 
         #[test]
         #[ignore]
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
-            while LOCK.swap(true, Ordering::Acquire) {}
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
             let src_dir = repo_dir.join("src/meters/fuel-gauge");
@@ -539,19 +531,13 @@ mod tests {
             init_repo(&repo_dir)?;
             symlink(&src_dir, &symlink_dir)?;
 
-            // We can't mock `HOME` since dirs-next uses it which does not care about our mocking
-            let previous_home = home_dir().unwrap();
-
-            std::env::set_var("HOME", tmp_dir.path());
-
-            let actual = ModuleRenderer::new("directory").path(symlink_dir).collect();
+            let actual = ModuleRenderer::new("directory")
+                .env("HOME", tmp_dir.path().to_str().unwrap())
+                .path(symlink_dir)
+                .collect();
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge")));
 
-            std::env::set_var("HOME", previous_home.as_path());
-
             assert_eq!(expected, actual);
-
-            LOCK.store(false, Ordering::Release);
 
             tmp_dir.close()
         }
@@ -559,16 +545,10 @@ mod tests {
         #[test]
         #[ignore]
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
-            while LOCK.swap(true, Ordering::Acquire) {}
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
             fs::create_dir_all(&dir)?;
             init_repo(&tmp_dir.path())?;
-
-            // We can't mock `HOME` since dirs-next uses it which does not care about our mocking
-            let previous_home = home_dir().unwrap();
-
-            std::env::set_var("HOME", tmp_dir.path());
 
             let actual = ModuleRenderer::new("directory")
                 .config(toml::toml! {
@@ -578,14 +558,11 @@ mod tests {
                     truncation_length = 5
                 })
                 .path(dir)
+                .env("HOME", tmp_dir.path().to_str().unwrap())
                 .collect();
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
 
-            std::env::set_var("HOME", previous_home.as_path());
-
             assert_eq!(expected, actual);
-
-            LOCK.store(false, Ordering::Release);
 
             tmp_dir.close()
         }
@@ -605,15 +582,41 @@ mod tests {
     }
 
     #[test]
-    fn home_directory() -> io::Result<()> {
+    fn home_directory_default_home_symbol() -> io::Result<()> {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
-            .config(toml::toml! { // Necessary if homedir is a git repo
-                [directory]
-                truncate_to_repo = false
-            })
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn home_directory_custom_home_symbol() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap())
+            .config(toml::toml! {
+                [directory]
+                home_symbol = "🚀"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn home_directory_custom_home_symbol_subdirectories() -> io::Result<()> {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap().join("path/subpath"))
+            .config(toml::toml! {
+                [directory]
+                home_symbol = "🚀"
+            })
+            .collect();
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀/path/subpath")));
 
         assert_eq!(expected, actual);
         Ok(())

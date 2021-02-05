@@ -19,8 +19,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let swift_version = utils::exec_cmd("swift", &["--version"])?.stdout;
-
     let mut module = context.new_module("swift");
     let config: SwiftConfig = SwiftConfig::try_load(module.config);
 
@@ -35,7 +33,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => parse_swift_version(&swift_version).map(Ok),
+                "version" => {
+                    let swift_version = utils::exec_cmd("swift", &["--version"])?.stdout;
+                    parse_swift_version(&swift_version).map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -99,8 +100,8 @@ mod tests {
         File::create(dir.path().join("Package.swift"))?.sync_all()?;
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(202).bold().paint("🐦 v5.2.2")
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -112,8 +113,8 @@ mod tests {
         File::create(dir.path().join("main.swift"))?.sync_all()?;
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
         let expected = Some(format!(
-            "via {} ",
-            Color::Fixed(202).bold().paint("🐦 v5.2.2")
+            "via {}",
+            Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
         ));
         assert_eq!(expected, actual);
         dir.close()

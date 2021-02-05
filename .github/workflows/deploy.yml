@@ -52,15 +52,42 @@ jobs:
             os: ubuntu-latest
             name: starship-i686-unknown-linux-musl.tar.gz
 
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-aarch64-unknown-linux-musl.tar.gz
+
+          - target: arm-unknown-linux-musleabihf
+            os: ubuntu-latest
+            name: starship-arm-unknown-linux-musleabihf.tar.gz
+
           - target: x86_64-apple-darwin
             os: macOS-latest
             name: starship-x86_64-apple-darwin.tar.gz
+
+          # TODO: Enable once macos-11.0 pools are publicly available
+          # https://github.com/actions/virtual-environments/issues/2486
+          # - target: aarch64-apple-darwin
+          #   os: macos-11.0
+          #   name: starship-aarch64-apple-darwin.tar.gz
 
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             name: starship-x86_64-pc-windows-msvc.zip
 
+          - target: i686-pc-windows-msvc
+            os: windows-latest
+            name: starship-i686-pc-windows-msvc.zip
+
+          - target: aarch64-pc-windows-msvc
+            os: windows-latest
+            name: starship-aarch64-pc-windows-msvc.zip
+
+          - target: x86_64-unknown-freebsd
+            os: ubuntu-latest
+            name: starship-x86_64-unknown-freebsd.tar.gz
+
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2
@@ -87,7 +114,7 @@ jobs:
         with:
           command: build
           args: --release --features tls-vendored --target ${{ matrix.target }}
-          use-cross: contains(matrix.target, 'linux')
+          use-cross: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -101,7 +128,8 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip starship
+          # TODO: investigate better cross platform stripping
+          strip starship || true
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
@@ -125,7 +153,7 @@ jobs:
       - name: Setup | Go
         uses: actions/setup-go@v2
         with:
-          go-version: "^1.13.1"
+          go-version: "^1.15.7"
 
       - name: Setup | Artifacts
         uses: actions/download-artifact@v2
@@ -135,7 +163,7 @@ jobs:
 
       - name: Setup | Release notes
         run: |
-          go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+          GO111MODULE=on go get github.com/git-chglog/git-chglog/cmd/git-chglog@0.9.1
           git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
 
       - name: Build | Publish

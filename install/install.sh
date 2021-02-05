@@ -33,6 +33,13 @@ BLUE="$(tput setaf 4 2>/dev/null || echo '')"
 MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
 NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
 
+SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
+                  i686-unknown-linux-musl aarch64-unknown-linux-musl \
+                  arm-unknown-linux-musleabihf x86_64-apple-darwin \
+                  aarch64-apple-darwin x86_64-pc-windows-msvc \
+                  i686-pc-windows-msvc aarch64-pc-windows-msvc \
+                  x86_64-unknown-freebsd"
+
 info() {
   printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
 }
@@ -166,17 +173,20 @@ install() {
 #   - darwin
 #   - linux
 #   - linux_musl (Alpine)
+#   - freebsd
 detect_platform() {
   local platform
   platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
   case "${platform}" in
     msys_nt*) platform="pc-windows-msvc" ;;
+    cygwin_nt*) platform="pc-windows-msvc";;
     # mingw is Git-Bash
     mingw*) platform="pc-windows-msvc" ;;
     # use the statically compiled musl bins on linux to avoid linking issues.
     linux) platform="unknown-linux-musl" ;;
     darwin) platform="apple-darwin" ;;
+    freebsd) platform="unknown-freebsd" ;;
   esac
 
   echo "${platform}"
@@ -189,13 +199,34 @@ detect_arch() {
   local arch
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
+  case "${arch}" in
+    amd64) arch="x86_64" ;;
+    armv*) arch="arm" ;;
+    arm64) arch="aarch64" ;;
+  esac
+
   # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
-  if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
-    arch=i386
+  if [ "${arch}" = "x86_64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+    arch=i686
+  elif [ "${arch}" = "aarch64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+    arch=arm
   fi
 
   echo "${arch}"
 }
+
+detect_target() {
+  local arch="$1"
+  local platform="$2"
+  local target="$arch-$platform"
+
+  if [ "${target}" = "arm-unknown-linux-musl" ]; then
+    target="${target}eabihf"
+  fi
+
+  echo "${target}"
+}
+
 
 confirm() {
   if [ -z "${FORCE-}" ]; then
@@ -238,6 +269,34 @@ check_bin_dir() {
 
   if [ "${good}" != "1" ]; then
     warn "Bin directory ${bin_dir} is not in your \$PATH"
+  fi
+}
+
+is_build_available() {
+  local arch="$1"
+  local platform="$2"
+  local target="$3"
+
+  local good
+  
+  good=$(
+    IFS=" "
+    for t in $SUPPORTED_TARGETS; do
+      if [ "${t}" == "${target}" ]; then
+        echo 1
+        break
+      fi
+    done
+  )
+
+  if [ "${good}" != "1" ]; then
+    error "${arch} builds for ${platform} are not yet available for Starship"
+    printf "\n" >&2
+    info "If you would like to see a build for your configuration,"
+    info "please create an issue requesting a build for ${MAGENTA}${target}${NO_COLOR}:"
+    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+    printf "\n"
+    exit 1
   fi
 }
 
@@ -319,13 +378,9 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-if [ "${ARCH}" = "i386" ]; then
-  error "i386 builds are not yet available for Starship\n"
-  info "If you would like to see a build for your configuration,"
-  info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:"
-  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n"
-  exit 1
-fi
+TARGET="$(detect_target "${ARCH}" "${PLATFORM}")"
+
+is_build_available "${ARCH}" "${PLATFORM}" "${TARGET}"
 
 printf "  %s\n" "${UNDERLINE}Configuration${NO_COLOR}"
 info "${BOLD}Bin directory${NO_COLOR}: ${GREEN}${BIN_DIR}${NO_COLOR}"
@@ -347,7 +402,7 @@ if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
   EXT=zip
 fi
 
-URL="${BASE_URL}/latest/download/starship-${ARCH}-${PLATFORM}.${EXT}"
+URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"

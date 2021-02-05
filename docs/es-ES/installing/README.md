@@ -1,46 +1,46 @@
-# 🚀 Advanced Installation
+# 🚀 Instalación avanzada
 
-To install starship, you need to do two things:
+Para instalar Starship, necesitas hacer dos cosas:
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. Consigue el binario de **Starship** en tu ordenador
+1. Decirle a tu shell que use el binario de Starship como su prompt modificando sus guiones de inicio
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Para la mayoría de los usuarios, las instrucciones en [la página principal](/guide/#🚀-installation) funcionarán genial. Sin embargo, para algunas plataformas más especializadas, se necesitan diferentes instrucciones.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Hay tantas plataformas ahí fuera que no cabían en el README.md principal, así que aquí están algunas instrucciones de instalación para otras plataformas de la comunidad. ¿No está usted aquí? ¡Por favor, añádelo aquí si lo encuentras!
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Obtener el binario
 
-#### Imperatively
+#### Imperativamente
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](home-manager)
+#### Declarativo, usuario único, a través de [home-manager](home-manager)
 
-Add `pkgs.starship` to your `home.packages` in your `home.nix` file, then run
+Añade `pkgs.starship` a tu `home.packages` en tu archivo `home.nix` y luego ejecuta
 
 ```sh
-home-manager switch
+interruptor home-manager
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Declarativo, en todo el sistema, con NixOS
 
-Add `pkgs.starship` to `environment.packages` in your `configuration.nix`, then run
+Añade `pkgs.starship` a `environment.packages` en tu `configuration.nix`, luego ejecuta
 
 ```sh
 sudo nixos-rebuild switch
 ```
 
-### Modifying Init Scripts
+### Modificando guiones Init
 
-#### With Nix and home-manager, using zsh:
+#### Con Nix y home-manager, usando zsh:
 
-Add the following to `programs.zsh.initExtra` in your `home.nix` file, then run
+Añade lo siguiente a `programs.zsh.initExtra` en tu archivo `home.nix` y luego ejecutar
 
 ```sh
-home-manager switch
+interruptor home-manager
 ```

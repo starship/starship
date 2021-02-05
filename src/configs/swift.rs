@@ -13,7 +13,7 @@ pub struct SwiftConfig<'a> {
 impl<'a> RootModuleConfig<'a> for SwiftConfig<'a> {
     fn new() -> Self {
         SwiftConfig {
-            format: "via [$symbol$version]($style) ",
+            format: "via [$symbol($version )]($style)",
             symbol: "🐦 ",
             style: "bold 202",
             disabled: false,

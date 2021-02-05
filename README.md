@@ -105,6 +105,14 @@
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
       alt="Français"
   /></a>
+  &nbsp;
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt"
+  /></a>
 </p>
 
 <h1></h1>
@@ -202,7 +210,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
-   ```sh
+   ```powershell
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -214,6 +222,17 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported.
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
    ```
 
 ## 🤝 Contributing
