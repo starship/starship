@@ -68,6 +68,10 @@ fn extract_package_version(file_contents: &str, display_private: bool) -> Option
     };
 
     let formatted_version = format_version(raw_version);
+    if formatted_version.ends_with("-semantically-released") {
+        return Some("semantic".to_string());
+    };
+
     Some(formatted_version)
 }
 
@@ -340,6 +344,21 @@ mod tests {
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), Some(starship_config))?;
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_package_version_with_semantic_version() -> io::Result<()> {
+        let config_name = "package.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.0.0-semantically-released"
+        })
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("semantic"), None)?;
         project_dir.close()
     }
 
