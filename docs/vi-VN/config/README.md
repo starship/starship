@@ -80,7 +80,7 @@ Phần thứ hai, cái được bao bọc trong một `()`, là một [chuỗi k
 Ví dụ:
 
 - `[on](red bold)` sẽ in một chuỗi `on` với chữ đậm tô màu đỏ.
-- `[⬢ $version](bold green)` sẽ in một kí hiệu `⬢` theo sao bởi nội dung của biến `version`, với chữ đậm tô màu xanh lá cây.
+- `[🐢 $version](bold green)` sẽ in một kí hiệu `🐢` theo sao bởi nội dung của biến `version`, với chữ đậm tô màu xanh lá cây.
 - `[a [b](red) c](green)` sẽ in `a b c` với `b` màu đỏ, `a` và `c` màu xanh lá cây.
 
 #### Các chuỗi kiểu
@@ -1688,7 +1688,7 @@ The `nodejs` module shows the currently installed version of NodeJS. Module cho 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                                                 |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                 |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `"🐢 "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `style`             | `"bold green"`                       | Kiểu cho module.                                                                                      |
 | `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |

@@ -15,7 +15,7 @@ impl<'a> RootModuleConfig<'a> for NodejsConfig<'a> {
     fn new() -> Self {
         NodejsConfig {
             format: "via [$symbol($version )]($style)",
-            symbol: "⬢ ",
+            symbol: "🐢 ",
             style: "bold green",
             disabled: false,
             not_capable_style: "bold red",

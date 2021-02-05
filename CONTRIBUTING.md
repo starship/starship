@@ -10,7 +10,7 @@ If you have any questions that aren't addressed in this document, please don't h
 
 - **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the `nodejs` module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
 
-- **Segment**: Smaller sub-components that compose a module. For example, the `symbol` segment in the `nodejs` module contains the character that is shown before the version number (`⬢` by default).
+- **Segment**: Smaller sub-components that compose a module. For example, the `symbol` segment in the `nodejs` module contains the character that is shown before the version number (`🐢` by default).
 
 ## Philosophy
 

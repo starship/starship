@@ -80,7 +80,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
+- `[🐢 $version](bold green)` will print a symbol `🐢` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### Stile delle Stringhe
@@ -1688,7 +1688,7 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | Option              | Default                              | Description                                                                                               |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                                |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                        |
+| `symbol`            | `"🐢 "`                               | A format string representing the symbol of NodeJS.                                                        |
 | `style`             | `"bold green"`                       | The style for the module.                                                                                 |
 | `disabled`          | `false`                              | Disables the `nodejs` module.                                                                             |
 | `not_capable_style` | `bold red`                           | Lo stile per il modulo quando una proprietà chiave in Packages.json non corrisponde alla versione NodeJS. |

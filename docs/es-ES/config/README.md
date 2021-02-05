@@ -81,7 +81,7 @@ En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#
 Por ejemplo:
 
 - `[en](bold red)` imprimirá una cadena `en` con texto en negrita color rojo.
-- `[⬢ $version](bold green)` imprimirá un símbolo `⬢` seguido por el contenido de la variable `version`, con texto en negrita color verde.
+- `[🐢 $version](bold green)` imprimirá un símbolo `🐢` seguido por el contenido de la variable `version`, con texto en negrita color verde.
 - `[a [b](red) c](green)` imprimirá `a b c` con `b` en rojo, `a` y `c` en verde.
 
 #### Cadenas de estilo
@@ -1689,7 +1689,7 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. El módulo se muest
 | Opción              | Por defecto                          | Descripción                                                                                                     |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                          |
-| `symbol`            | `"⬢ "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
+| `symbol`            | `"🐢 "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
 | `style`             | `"bold green"`                       | El estilo del módulo.                                                                                           |
 | `disabled`          | `false`                              | Desactiva el módulo `nodejs`.                                                                                   |
 | `not_capable_style` | `bold red`                           | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |

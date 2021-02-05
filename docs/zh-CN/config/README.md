@@ -80,7 +80,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
+- `[🐢 $version](bold green)` will print a symbol `🐢` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### 样式设定
@@ -1688,7 +1688,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | Option              | 默认值                                  | 描述                                                                                                    |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                                              |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `"🐢 "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `style`             | `"bold green"`                       | 此组件的样式。                                                                                               |
 | `disabled`          | `false`                              | 禁用 `nodejs` 组件。                                                                                       |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |

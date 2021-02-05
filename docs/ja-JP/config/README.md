@@ -80,7 +80,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 例：
 
 - `[on](red bold)` は文字列 `on` に太字のテキストを赤色で表示します。
-- `[⬢ $version](bold green)` はシンボル `⬢` の後に変数 `バージョン`の内容を表示します 緑色の太字を付けています
+- `[🐢 $version](bold green)` はシンボル `🐢` の後に変数 `バージョン`の内容を表示します 緑色の太字を付けています
 - `[a [b](red) c](green)` は  `a b c` を  `b` だけ赤色に表示し、 `a` と `c`  を緑色に表示します。
 
 #### スタイルの設定
@@ -1690,7 +1690,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | オプション               | デフォルト                                | 説明                                                                                                    |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                                                      |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `"🐢 "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `style`             | `"bold green"`                       | モジュールのスタイルです。                                                                                         |
 | `disabled`          | `false`                              | `nodejs`モジュールを無効にします。                                                                                 |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
