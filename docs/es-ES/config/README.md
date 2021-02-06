@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Que es equivalente a
 format = """
 $username\
 $hostname\
@@ -373,7 +373,7 @@ El carácter te dirá si el último comando funcionó o no. Se puede hacer de do
 
 Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: advertencia `error_symbol` no es compatible con elvish shell. :::
 
 ### Opciones
 
