@@ -115,7 +115,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
    ::: advertencia Solo se admite Elvish v0.15 o superior. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
