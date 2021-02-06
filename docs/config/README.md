@@ -2343,7 +2343,7 @@ format = "via [🏎  $version](red bold)"
 ```
 
 ## Task Warrior
-The `Task Warrior` module shows the current started task in the Task Warrior and a symbol indicating if there are due tasks.
+The `task_warrior` module shows the current started task in the Task Warrior and a symbol indicating if there are due tasks.
 The module is only shown when there's a `.task` folder in the home directory.
 Symbol priority: `overdue` > `today` > `week`, meaning when there's an overdue task has higher priority and is shown even if there's a task due today. Only one symbol is displayed.
 
