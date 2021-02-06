@@ -210,6 +210,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -371,6 +372,8 @@ style = "bold yellow"
 - プロンプトの表示の変更 (`❯`/`✖`)
 
 デフォルトでは、色だけが変更されます。 If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+
+::: warning `error_symbol` is not supported on elvish shell. :::
 
 ### オプション
 
@@ -1603,7 +1606,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `nim.cfg` file
+- カレントディレクトリに`nim.cfg`ファイルが含まれている
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1874,7 +1877,7 @@ format = "via [🦪 $version]($style) "
 
 `php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `composer.json` file
+- カレントディレクトリに`composer.json`ファイルが含まれている
 - The current directory contains a `.php-version` file
 - カレントディレクトリに`.php`の拡張子のファイルが含まれている
 
@@ -1910,7 +1913,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `spago.dhall` file
+- カレントディレクトリに`spago.dhall`ファイルが含まれている
 - The current directory contains a \*.purs files
 
 ### オプション
@@ -2158,6 +2161,8 @@ The `status` module displays the exit code of the previous command. The module w
 
 :::
 
+::: warning This module is not supported on elvish shell. :::
+
 ### オプション
 
 | オプション                   | デフォルト                         | 説明                                                   |
@@ -2197,7 +2202,7 @@ The `status` module displays the exit code of the previous command. The module w
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
@@ -2240,7 +2245,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+`terraform`モジュールには、現在選択されているterraformワークスペースとバージョンが表示されます。
 
 ::: tip
 
@@ -2295,7 +2300,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip
 
@@ -2315,7 +2320,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
@@ -2341,7 +2346,7 @@ time_range = "10:00:00-14:00:00"
 
 ## ユーザー名
 
-The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -2382,6 +2387,40 @@ style_root = "black bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. 次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `Vagrantfile` file
+
+### オプション
+
+| オプション      | デフォルト                                | 説明                                                  |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                    |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | モジュールのスタイルです。                                       |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### 変数
+
+| 変数        | 設定例              | 説明                       |
+| --------- | ---------------- | ------------------------ |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant` |
+| symbol    |                  | オプション `記号` の値をミラーする      |
+| style\* |                  | オプション `style` の値をミラーする   |
+
+\*: この変数はスタイル文字列の一部としてのみ使用できます
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
 ```
 
 ## Zig

@@ -92,6 +92,13 @@
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
       alt="Français" /></a>
+  &nbsp;
+  <a 
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt" /></a>
 </p>
 
 <h1></h1>
@@ -209,6 +216,17 @@
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
    ```
 
 ## 🤝 Mitwirken

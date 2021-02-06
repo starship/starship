@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -370,6 +371,8 @@ Das Zeichen zeigt an ob der letzte Befehl erfolgreich war, oder einen Fehler erz
 - changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+
+::: warning `error_symbol` is not supported on elvish shell. :::
 
 ### Optionen
 
@@ -1601,7 +1604,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `nim.cfg` file
+- Das aktuelle Verzeichnis enthält eine `nim.cfg`-Datei
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1677,7 +1680,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 Das `nodejs`-Modul zeigt die aktuell installierte Version von NodeJS. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `package.json` file
+- Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - The current directory contains a `.node-version` file
 - Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1872,7 +1875,7 @@ format = "via [🦪 $version]($style) "
 
 Das `php`-Modul zeigt die aktuell installierte Version von PHP. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `composer.json` file
+- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
 - The current directory contains a `.php-version` file
 - Das aktuelle Verzeichnis enthält eine `.php`-Datei
 
@@ -1908,7 +1911,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
-- The current directory contains a `spago.dhall` file
+- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
 - The current directory contains a \*.purs files
 
 ### Optionen
@@ -1948,8 +1951,8 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
+- Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
 - Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
@@ -2156,6 +2159,8 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 :::
 
+::: warning This module is not supported on elvish shell. :::
+
 ### Optionen
 
 | Option                  | Standardwert                  | Beschreibung                                         |
@@ -2195,7 +2200,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
@@ -2238,7 +2243,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+Das `Terraform` Modul zeigt den aktuell ausgewählten terraform Arbeitsbereich und die Version an.
 
 ::: Tipp
 
@@ -2293,7 +2298,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Zeit
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
 
 ::: Tipp
 
@@ -2313,7 +2318,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                        |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Andernfalls ist es standardmäßig `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2339,7 +2344,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
@@ -2380,6 +2385,40 @@ style_root = "black bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+
+- The current directory contains a `Vagrantfile` file
+
+### Optionen
+
+| Option     | Standardwert                         | Beschreibung                                        |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                          |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | Stil für dieses Modul.                              |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Variables
+
+| Variable  | Beispiel         | Beschreibung                         |
+| --------- | ---------------- | ------------------------------------ |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
+| symbol    |                  | Mirrors the value of option `symbol` |
+| style\* |                  | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
 ```
 
 ## Zig

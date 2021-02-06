@@ -110,3 +110,16 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
    eval $(starship init ion)
    ```
+
+   #### Elvish
+
+   ::: advertencia Solo se admite Elvish v0.15 o superior. :::
+
+   Añade el siguiente código al final de `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+

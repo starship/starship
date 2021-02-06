@@ -108,5 +108,18 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    # ~/.config/ion/initrc
 
-eval $(starship init ion)
+eval $(starship init ion)   
    ```
+
+   #### Elvish
+
+   ::: warning Only elvish v0.15 or higher is supported. :::
+
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+

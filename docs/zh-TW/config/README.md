@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -370,6 +371,8 @@ style = "bold yellow"
 - changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+
+::: warning `error_symbol` is not supported on elvish shell. :::
 
 ### 選項
 
@@ -1601,7 +1604,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `nim.cfg` file
+- 現在資料夾中包含一個 `nim.cfg` 檔案
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1872,7 +1875,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `composer.json` file
+- 現在資料夾中包含一個 `composer.json` 檔案
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1908,7 +1911,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. 這個模組在下列其中一個條件達成時顯示：
 
-- The current directory contains a `spago.dhall` file
+- 現在資料夾中包含一個 `spago.dhall` 檔案
 - The current directory contains a \*.purs files
 
 ### 選項
@@ -2156,6 +2159,8 @@ The `status` module displays the exit code of the previous command. The module w
 
 :::
 
+::: warning This module is not supported on elvish shell. :::
+
 ### 選項
 
 | Option                  | 預設                            | 說明                                                   |
@@ -2195,7 +2200,7 @@ The `status` module displays the exit code of the previous command. The module w
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
@@ -2380,6 +2385,40 @@ style_root = "black bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. 這個模組在下列其中一個條件達成時顯示：
+
+- The current directory contains a `Vagrantfile` file
+
+### 選項
+
+| Option     | 預設                                   | 說明                                                  |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                          |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | 這個模組的風格。                                            |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Variables
+
+| 變數        | 範例               | 說明                                   |
+| --------- | ---------------- | ------------------------------------ |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
+| symbol    |                  | Mirrors the value of option `symbol` |
+| style\* |                  | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
 ```
 
 ## Zig
