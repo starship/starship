@@ -2160,7 +2160,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: advertencia Este módulo no es compatible con el shell Elvish. :::
 
 ### Opciones
 
@@ -2390,24 +2390,24 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `vagrant` muestra la versión instalada de Vagrant. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current directory contains a `Vagrantfile` file
+- El directorio actual contiene un archivo `Vagrantfile`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                         |
-| ---------- | ------------------------------------ | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                              |
-| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `style`    | `"cyan bold"`                        | El estilo del módulo.                               |
-| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+| Opción     | Por defecto                          | Descripción                                                 |
+| ---------- | ------------------------------------ | ----------------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
+| `symbol`   | `"⍱ "`                               | Una cadena de formato que representa el símbolo de Vagrant. |
+| `style`    | `"cyan bold"`                        | El estilo del módulo.                                       |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                              |
 
 ### Variables
 
 | Variable  | Ejemplo          | Descripción                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| version   | `Vagrant 2.2.10` | La versión de `Vagrant`                |
 | symbol    |                  | Refleja el valor de la opción `symbol` |
 | style\* |                  | Refleja el valor de la opción `style`  |
 
