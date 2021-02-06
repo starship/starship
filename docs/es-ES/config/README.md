@@ -2401,7 +2401,7 @@ El módulo `vagrant` muestra la versión instalada de Vagrant. El módulo se mue
 | `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
 | `symbol`   | `"⍱ "`                               | Una cadena de formato que representa el símbolo de Vagrant. |
 | `style`    | `"cyan bold"`                        | El estilo del módulo.                                       |
-| `disabled` | `false`                              | Disables the `Vagrant` module.                              |
+| `disabled` | `false`                              | Deshabilita el módulo `Vagrant`.                            |
 
 ### Variables
 
