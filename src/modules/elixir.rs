@@ -3,16 +3,16 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::elixir::ElixirConfig;
 use crate::formatter::StringFormatter;
 
-use once_cell::sync::Lazy;
+use futures::future::FutureExt;
 use regex::Regex;
-use std::ops::Deref;
+
 const ELIXIR_VERSION_PATTERN: &str = "\
 Erlang/OTP (?P<otp>\\d+)[^\\n]+
 
 Elixir (?P<elixir>\\d[.\\d]+).*";
 
 /// Create a module with the current Elixir version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
 
@@ -27,10 +27,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let versions = Lazy::new(|| get_elixir_version(context));
+    let versions = get_elixir_version(context).shared();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -39,21 +39,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => versions
-                    .deref()
-                    .as_ref()
-                    .map(|(_, elixir_version)| elixir_version)
-                    .map(Ok),
-                "otp_version" => versions
-                    .deref()
-                    .as_ref()
-                    .map(|(otp_version, _)| otp_version)
-                    .map(Ok),
-                _ => None,
+            .async_map(|variable| {
+                let versions = versions.clone();
+                async move {
+                    match variable.as_str() {
+                        "version" => versions
+                            .await
+                            .as_ref()
+                            .map(|(_, elixir_version)| elixir_version.to_owned())
+                            .map(Ok),
+                        "otp_version" => versions
+                            .await
+                            .as_ref()
+                            .map(|(otp_version, _)| otp_version.to_owned())
+                            .map(Ok),
+                        _ => None,
+                    }
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -66,8 +73,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_elixir_version(context: &Context) -> Option<(String, String)> {
-    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
+async fn get_elixir_version<'a>(context: &'a Context<'a>) -> Option<(String, String)> {
+    let output = context
+        .async_exec_cmd("elixir", &["--version"])
+        .await?
+        .stdout;
 
     parse_elixir_version(&output)
 }

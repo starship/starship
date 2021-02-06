@@ -280,16 +280,27 @@ impl<'a> Context<'a> {
     #[inline]
     pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         #[cfg(test)]
-        {
-            let command = match args.len() {
-                0 => cmd.to_owned(),
-                _ => format!("{} {}", cmd, args.join(" ")),
-            };
-            if let Some(output) = self.cmd.get(command.as_str()) {
-                return output.clone();
-            }
+        if let Some(out) = self.try_cmd_mock(cmd, args) {
+            return out;
         }
         exec_cmd(cmd, args, self.cmd_timeout)
+    }
+
+    pub async fn async_exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+        #[cfg(test)]
+        if let Some(out) = self.try_cmd_mock(cmd, args) {
+            return out;
+        }
+        crate::utils::async_exec_cmd(cmd, args).await
+    }
+
+    #[cfg(test)]
+    fn try_cmd_mock(&self, cmd: &str, args: &[&str]) -> Option<Option<CommandOutput>> {
+        let command = match args.len() {
+            0 => cmd.to_owned(),
+            _ => format!("{} {}", cmd, args.join(" ")),
+        };
+        self.cmd.get(command.as_str()).cloned()
     }
 }
 
