@@ -373,7 +373,7 @@ El carácter te dirá si el último comando funcionó o no. Se puede hacer de do
 
 Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
-::: advertencia `error_symbol` no es compatible con elvish shell. :::
+::: advertencia `error_symbol` no es compatible con el intérprete de comandos Elvish. :::
 
 ### Opciones
 
@@ -2160,7 +2160,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: advertencia Este módulo no es compatible con el shell Elvish. :::
+::: advertencia Este módulo no es compatible con el intérprete de comandos Elvish. :::
 
 ### Opciones
 
