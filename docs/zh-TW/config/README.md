@@ -1948,30 +1948,32 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-這個模組在下列其中一個條件達成時顯示：
+By default the module will be shown if any of the following conditions are met:
 
 - 目前資料夾中有一個 `.python-version` 檔案
-- 目前資料夾中有一個 `requirements.txt` 檔案
-- 目前資料夾中有一個 `pyproject.toml` 檔案
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- 目前資料夾中有一個 `Pipfile` 檔案
-- 目前資料夾中有一個 `tox.ini` 檔案
-- 現在資料夾中包含一個 `setup.py` 檔案
+- The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
 ### 選項
 
-| Option               | 預設                                                                         | 說明                                                                                     |
-| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | The format for the module.                                                             |
-| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                            | 這個模組的風格。                                                                               |
-| `pyenv_version_name` | `false`                                                                    | 使用 pyenv 取得 Python 的版本。                                                                |
-| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                    | 停用 `python` 模組。                                                                        |
+| Option               | 預設                                                                                                           | 說明                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                                                              | 這個模組的風格。                                                                               |
+| `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 取得 Python 的版本。                                                                |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2008,6 +2010,14 @@ pyenv_version_name = true
 [python]
 # Only use the `python3` binary to get the version.
 python_binary = "python3"
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Don't trigger for files with the py extension
+detect_extensions = []
 ```
 
 ## Ruby
