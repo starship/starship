@@ -1950,30 +1950,32 @@ format = "via [$symbol$version](bold white)"
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`.python-version`ファイルが含まれている
-- カレントディレクトリに`requirements.txt`ファイルが含まれている
-- カレントディレクトリに`pyproject.toml`ファイルが含まれている
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- カレントディレクトリに`Pipfile`ファイルが含まれている
-- カレントディレクトリに`tox.ini`ファイルが含まれている
-- カレントディレクトリに`setup.py`ファイルが含まれている
+- The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
 - 仮想環境がアクティブである
 
 ### オプション
 
-| オプション                | デフォルト                                                                      | 説明                                                                                     |
-| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | moduleのフォーマットです。                                                                       |
-| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                            | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                    | pyenvを使用してPythonバージョンを取得します                                                            |
-| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                    | `python`モジュールを無効にします。                                                                  |
+| オプション                | デフォルト                                                                                                        | 説明                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | moduleのフォーマットです。                                                                       |
+| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                                                              | モジュールのスタイルです。                                                                          |
+| `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2010,6 +2012,14 @@ pyenv_version_name = true
 [python]
 # Only use the `python3` binary to get the version.
 python_binary = "python3"
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Don't trigger for files with the py extension
+detect_extensions = []
 ```
 
 ## Ruby
