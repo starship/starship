@@ -1953,12 +1953,12 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 - El directorio actual contiene un archivo `.python-version`
 - El directorio actual contiene un archivo `Pipfile`
-- The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
+- El directorio actual contiene un archivo `__init__.py`
+- El directorio actual contiene un archivo `pyproject.toml`
+- El directorio actual contiene un archivo `requirements.txt`
+- El directorio actual contiene un archivo `setup.py`
+- El directorio actual contiene un archivo `tox.ini`
+- El directorio actual contiene un archivo con la extensión `.py`.
 - Un entorno virtual está activado actualmente
 
 ### Opciones
