@@ -633,11 +633,11 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
-| Opciones avanzadas          | Por defecto | Descripción                                                                                                                                                            |
-| --------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |             | Una tabla de sustituciones que se deben hacer a la ruta.                                                                                                               |
-| `fish_style_pwd_dir_length` | `0`         | El número de caracteres a usar al aplicar la lógica de ruta pwd de la shell de fish.                                                                                   |
-| `use_logical_path`          | `true`      | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| Opciones avanzadas          | Por defecto | Descripción                                                                                                                                                                                                 |
+| --------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |             | Una tabla de sustituciones que se deben hacer a la ruta.                                                                                                                                                    |
+| `fish_style_pwd_dir_length` | `0`         | El número de caracteres a usar al aplicar la lógica de ruta pwd de la shell de fish.                                                                                                                        |
+| `use_logical_path`          | `true`      | Si `true` renderiza la ruta lógica originada desde el shell a través de `PWD` o `--logical-path`. Si `false` en su lugar renderiza la ruta física del sistema de archivos con enlaces simbólicos resueltos. |
 
 `substitutions` permite definir reemplazos arbitrarios para cadenas literales que ocurren en la ruta, por ejemplo prefijos largos de red o directorios de desarrollo (p. ej. Java). Ten en cuenta que esto desactivará el estilo PWD de fish.
 
@@ -1949,10 +1949,10 @@ El módulo `python` muestra la versión actualmente instalada de Python y el act
 
 Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
-By default the module will be shown if any of the following conditions are met:
+Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.python-version`
-- The current directory contains a `Pipfile` file
+- El directorio actual contiene un archivo `Pipfile`
 - The current directory contains a `__init__.py` file
 - The current directory contains a `pyproject.toml` file
 - The current directory contains a `requirements.txt` file
@@ -1963,18 +1963,18 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Opciones
 
-| Opción               | Por defecto                                                                                                  | Descripción                                                                            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | El formato del módulo.                                                                 |
-| `symbol`             | `"🐍 "`                                                                                                       | Una cadena de formato que representa el símbolo de Python                              |
-| `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                  |
-| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                           |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv       |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| Opción               | Por defecto                                                                                                  | Descripción                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | El formato del módulo.                                                                |
+| `symbol`             | `"🐍 "`                                                                                                       | Una cadena de formato que representa el símbolo de Python                             |
+| `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                 |
+| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                          |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv      |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configura los binarios de python que Starship debería ejecutar al obtener la versión. |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Qué extensiones deben activar este módulo                                             |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                      |
+| `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                |
+| `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                       |
 
 ::: tip
 
@@ -2017,7 +2017,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# No se dispara con archivos con extensión py
 detect_extensions = []
 ```
 
@@ -2556,8 +2556,8 @@ La detección automática de shells y la adición adecuada de parámetros están
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters
+command = "echo foo"  # muestra la salida del comando
+files = ["foo"]       # se pueden especificar filtros
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
