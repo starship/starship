@@ -66,7 +66,7 @@ fn format_julia_version(julia_stdout: &str) -> Option<String> {
         .split_whitespace()
         .next()?;
 
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -127,6 +127,6 @@ mod tests {
     #[test]
     fn test_format_julia_version() {
         let input = "julia version 1.4.0";
-        assert_eq!(format_julia_version(input), Some("v1.4.0".to_string()));
+        assert_eq!(format_julia_version(input), Some("1.4.0".to_string()));
     }
 }

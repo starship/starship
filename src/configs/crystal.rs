@@ -13,7 +13,7 @@ pub struct CrystalConfig<'a> {
 impl<'a> RootModuleConfig<'a> for CrystalConfig<'a> {
     fn new() -> Self {
         CrystalConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "🔮 ",
             style: "bold red",
             disabled: false,

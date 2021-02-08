@@ -235,10 +235,7 @@ fn get_pinned_sdk_version(json: &str) -> Option<Version> {
                     let version = sdk.get("version")?;
                     match version {
                         JValue::String(version_string) => {
-                            let mut buffer = String::with_capacity(version_string.len() + 1);
-                            buffer.push('v');
-                            buffer.push_str(version_string);
-                            Some(Version(buffer))
+                            Some(Version(version_string.to_string()))
                         }
                         _ => None,
                     }
@@ -290,7 +287,7 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
 
 fn get_version_from_cli() -> Option<Version> {
     let version_output = utils::exec_cmd("dotnet", &["--version"])?;
-    Some(Version(format!("v{}", version_output.stdout.trim())))
+    Some(Version(version_output.stdout.trim().to_string()))
 }
 
 fn get_latest_sdk_from_cli() -> Option<Version> {
@@ -310,10 +307,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
             let take_until = latest_sdk.find('[').or_else(parse_failed)? - 1;
             if take_until > 1 {
                 let version = &latest_sdk[..take_until];
-                let mut buffer = String::with_capacity(version.len() + 1);
-                buffer.push('v');
-                buffer.push_str(version);
-                Some(Version(buffer))
+                Some(Version(version.to_string()))
             } else {
                 parse_failed()
             }
@@ -621,7 +615,7 @@ mod tests {
     "#;
 
         let version = get_pinned_sdk_version(json_text).unwrap();
-        assert_eq!("v1.2.3", version.0);
+        assert_eq!("1.2.3", version.0);
     }
 
     #[test]

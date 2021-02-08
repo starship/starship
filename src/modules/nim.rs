@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => utils::exec_cmd("nim", &["--version"])
                     .map(|command_output| command_output.stdout)
                     .and_then(|nim_version_output| {
-                        Some(format!("v{}", parse_nim_version(&nim_version_output)?))
+                        Some(parse_nim_version(&nim_version_output)?.to_string())
                     })
                     .map(Ok),
                 _ => None,

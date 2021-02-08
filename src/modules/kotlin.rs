@@ -77,7 +77,7 @@ fn format_kotlin_version(kotlin_stdout: &str) -> Option<String> {
     let re = Regex::new(KOTLIN_VERSION_PATTERN).ok()?;
     let captures = re.captures(kotlin_stdout)?;
     let version = &captures["version"];
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -162,7 +162,7 @@ mod tests {
         let kotlin_input = "Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)";
         assert_eq!(
             format_kotlin_version(kotlin_input),
-            Some("v1.4.21".to_string())
+            Some("1.4.21".to_string())
         );
     }
 
@@ -171,7 +171,7 @@ mod tests {
         let kotlin_input = "info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)";
         assert_eq!(
             format_kotlin_version(kotlin_input),
-            Some("v1.4.21".to_string())
+            Some("1.4.21".to_string())
         );
     }
 }

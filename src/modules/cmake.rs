@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn format_cmake_version(cmake_version: &str) -> Option<String> {
     let version = cmake_version.split_whitespace().nth(2)?;
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]

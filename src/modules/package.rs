@@ -199,12 +199,7 @@ fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String
 }
 
 fn format_version(version: &str) -> String {
-    let cleaned = version.replace('"', "").trim().to_string();
-    if cleaned.starts_with('v') {
-        cleaned
-    } else {
-        format!("v{}", cleaned)
-    }
+    version.replace('"', "").trim().trim_start_matches('v').to_string()
 }
 
 #[cfg(test)]
@@ -219,17 +214,17 @@ mod tests {
 
     #[test]
     fn test_format_version() {
-        assert_eq!(format_version("0.1.0"), "v0.1.0");
-        assert_eq!(format_version(" 0.1.0 "), "v0.1.0");
-        assert_eq!(format_version("0.1.0 "), "v0.1.0");
-        assert_eq!(format_version(" 0.1.0"), "v0.1.0");
-        assert_eq!(format_version("\"0.1.0\""), "v0.1.0");
+        assert_eq!(format_version("0.1.0"), "0.1.0");
+        assert_eq!(format_version(" 0.1.0 "), "0.1.0");
+        assert_eq!(format_version("0.1.0 "), "0.1.0");
+        assert_eq!(format_version(" 0.1.0"), "0.1.0");
+        assert_eq!(format_version("\"0.1.0\""), "0.1.0");
 
-        assert_eq!(format_version("v0.1.0"), "v0.1.0");
-        assert_eq!(format_version(" v0.1.0 "), "v0.1.0");
-        assert_eq!(format_version(" v0.1.0"), "v0.1.0");
-        assert_eq!(format_version("v0.1.0 "), "v0.1.0");
-        assert_eq!(format_version("\"v0.1.0\""), "v0.1.0");
+        assert_eq!(format_version("v0.1.0"), "0.1.0");
+        assert_eq!(format_version(" v0.1.0 "), "0.1.0");
+        assert_eq!(format_version(" v0.1.0"), "0.1.0");
+        assert_eq!(format_version("v0.1.0 "), "0.1.0");
+        assert_eq!(format_version("\"v0.1.0\""), "0.1.0");
     }
 
     #[test]
@@ -668,7 +663,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None)?;
+        expect_output(&project_dir, Some("v0.3.20-SNAPSHOT"), None)?;
         project_dir.close()
     }
 

@@ -40,7 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
-                    let module_version = Some(format!("v{}", elm_version.trim()))?;
+                    let module_version = elm_version.trim().to_string();
                     Some(Ok(module_version))
                 }
                 _ => None,

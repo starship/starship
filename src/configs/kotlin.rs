@@ -14,7 +14,7 @@ pub struct KotlinConfig<'a> {
 impl<'a> RootModuleConfig<'a> for KotlinConfig<'a> {
     fn new() -> Self {
         KotlinConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "🅺 ",
             style: "bold blue",
             kotlin_binary: "kotlin",

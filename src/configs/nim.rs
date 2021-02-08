@@ -13,7 +13,7 @@ pub struct NimConfig<'a> {
 impl<'a> RootModuleConfig<'a> for NimConfig<'a> {
     fn new() -> Self {
         NimConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "👑 ",
             style: "yellow bold",
             disabled: false,

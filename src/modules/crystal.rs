@@ -61,10 +61,7 @@ fn format_crystal_version(crystal_version: &str) -> Option<String> {
         // return "0.35.1"
         .nth(1)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    Some(version.to_string())
 }
 
 #[cfg(test)]

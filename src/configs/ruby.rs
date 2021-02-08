@@ -13,7 +13,7 @@ pub struct RubyConfig<'a> {
 impl<'a> RootModuleConfig<'a> for RubyConfig<'a> {
     fn new() -> Self {
         RubyConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "💎 ",
             style: "bold red",
             disabled: false,

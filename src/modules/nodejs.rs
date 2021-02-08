@@ -64,6 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .deref()
                     .as_ref()
                     .map(|version| version.trim())
+                    .map(|version| version.trim_start_matches('v'))
                     .map(Ok),
                 _ => None,
             })

@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         utils::exec_cmd("ocaml", &["-vnum"])?.stdout
                     };
-                    Some(Ok(format!("v{}", &ocaml_version.trim())))
+                    Some(Ok(ocaml_version.trim().to_string()))
                 }
                 _ => None,
             })

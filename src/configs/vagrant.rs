@@ -13,7 +13,7 @@ pub struct VagrantConfig<'a> {
 impl<'a> RootModuleConfig<'a> for VagrantConfig<'a> {
     fn new() -> Self {
         VagrantConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "⍱ ",
             style: "cyan bold",
             disabled: false,

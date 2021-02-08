@@ -13,7 +13,7 @@ pub struct PureScriptConfig<'a> {
 impl<'a> RootModuleConfig<'a> for PureScriptConfig<'a> {
     fn new() -> Self {
         PureScriptConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "<=> ",
             style: "bold white",
             disabled: false,

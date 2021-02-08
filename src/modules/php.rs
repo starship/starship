@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
                         ],
                     )?;
-                    Some(Ok(format_php_version(&php_cmd_output.stdout)))
+                    Some(Ok(php_cmd_output.stdout))
                 }
                 _ => None,
             })
@@ -60,23 +60,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_php_version(php_version: &str) -> String {
-    format!("v{}", php_version)
-}
-
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_format_php_version() {
-        let input = "7.3.8";
-        assert_eq!(format_php_version(input), "v7.3.8".to_string());
-    }
 
     #[test]
     fn folder_without_php_files() -> io::Result<()> {

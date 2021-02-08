@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
-                    Some(Ok(format!("v{}", purs_version.trim())))
+                    Some(Ok(purs_version.trim().to_string()))
                 }
                 _ => None,
             })

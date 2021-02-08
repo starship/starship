@@ -60,10 +60,7 @@ fn format_vagrant_version(vagrant_stdout: &str) -> Option<String> {
         // return "2.2.10"
         .nth(1)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -100,6 +97,6 @@ mod tests {
     #[test]
     fn test_format_vagrant_version() {
         let vagrant = "Vagrant 2.2.10\n";
-        assert_eq!(format_vagrant_version(vagrant), Some("v2.2.10".to_string()));
+        assert_eq!(format_vagrant_version(vagrant), Some("2.2.10".to_string()));
     }
 }

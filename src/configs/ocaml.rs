@@ -13,7 +13,7 @@ pub struct OCamlConfig<'a> {
 impl<'a> RootModuleConfig<'a> for OCamlConfig<'a> {
     fn new() -> Self {
         OCamlConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "🐫 ",
             style: "bold yellow",
             disabled: false,

@@ -13,7 +13,7 @@ pub struct DartConfig<'a> {
 impl<'a> RootModuleConfig<'a> for DartConfig<'a> {
     fn new() -> Self {
         DartConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "🎯 ",
             style: "bold blue",
             disabled: false,

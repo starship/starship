@@ -14,7 +14,7 @@ pub struct LuaConfig<'a> {
 impl<'a> RootModuleConfig<'a> for LuaConfig<'a> {
     fn new() -> Self {
         LuaConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "🌙 ",
             style: "bold blue",
             lua_binary: "lua",

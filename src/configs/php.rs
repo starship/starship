@@ -15,7 +15,7 @@ impl<'a> RootModuleConfig<'a> for PhpConfig<'a> {
         PhpConfig {
             symbol: "🐘 ",
             style: "147 bold",
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             disabled: false,
         }
     }

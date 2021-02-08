@@ -13,7 +13,7 @@ pub struct JuliaConfig<'a> {
 impl<'a> RootModuleConfig<'a> for JuliaConfig<'a> {
     fn new() -> Self {
         JuliaConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol(v$version )]($style)",
             symbol: "ஃ ",
             style: "bold purple",
             disabled: false,

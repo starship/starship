@@ -14,7 +14,7 @@ pub struct PackageConfig<'a> {
 impl<'a> RootModuleConfig<'a> for PackageConfig<'a> {
     fn new() -> Self {
         PackageConfig {
-            format: "is [$symbol$version]($style) ",
+            format: "is [${symbol}v${version}](${style}) ",
             symbol: "📦 ",
             style: "208 bold",
             display_private: false,

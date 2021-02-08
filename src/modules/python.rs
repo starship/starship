@@ -45,6 +45,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let version = get_python_version(&config)?;
                     Some(Ok(version.trim().to_string()))
                 }
+                "pyenv_version" => {
+                    let pyenv_version = get_pyenv_version(&config)?;
+                    Some(Ok(pyenv_version.trim().to_string()))
+                }
                 "virtualenv" => {
                     let virtual_env = get_python_virtual_env(context);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
@@ -68,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_python_version(config: &PythonConfig) -> Option<String> {
     if config.pyenv_version_name {
-        return Some(utils::exec_cmd("pyenv", &["version-name"])?.stdout);
+        return None;
     };
     let version = config.python_binary.0.iter().find_map(|binary| {
         match utils::exec_cmd(binary, &["--version"]) {
@@ -85,14 +89,20 @@ fn get_python_version(config: &PythonConfig) -> Option<String> {
     Some(format_python_version(&version))
 }
 
+fn get_pyenv_version(config: &PythonConfig) -> Option<String> {
+    if config.pyenv_version_name {
+        return Some(utils::exec_cmd("pyenv", &["version-name"])?.stdout);
+    } else {
+        return None;
+    };
+}
+
 fn format_python_version(python_stdout: &str) -> String {
-    format!(
-        "v{}",
-        python_stdout
-            .trim_start_matches("Python ")
-            .trim_end_matches(":: Anaconda, Inc.")
-            .trim()
-    )
+    python_stdout
+        .trim_start_matches("Python ")
+        .trim_end_matches(":: Anaconda, Inc.")
+        .trim()
+        .to_string()
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
@@ -124,13 +134,13 @@ mod tests {
     #[test]
     fn test_format_python_version() {
         let input = "Python 3.7.2";
-        assert_eq!(format_python_version(input), "v3.7.2");
+        assert_eq!(format_python_version(input), "3.7.2");
     }
 
     #[test]
     fn test_format_python_version_anaconda() {
         let input = "Python 3.6.10 :: Anaconda, Inc.";
-        assert_eq!(format_python_version(input), "v3.6.10");
+        assert_eq!(format_python_version(input), "3.6.10");
     }
 
     #[test]

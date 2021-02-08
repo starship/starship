@@ -449,12 +449,12 @@ The `cmake` module shows the currently installed version of CMake if any of the 
 
 ### Options
 
-| Option     | Default                              | Description                                  |
-| ---------- | ------------------------------------ | -------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                   |
-| `symbol`   | `"喝 "`                              | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                        | The style for the module.                    |
-| `disabled` | `false`                              | Disables the `cmake` module.                 |
+| Option     | Default                               | Description                                  |
+| ---------- | ------------------------------------- | -------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                   |
+| `symbol`   | `"喝 "`                               | The symbol used before the version of cmake. |
+| `style`    | `"bold blue"`                         | The style for the module.                    |
+| `disabled` | `false`                               | Disables the `cmake` module.                 |
 
 ### Variables
 
@@ -572,12 +572,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                               |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                              | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                         | The style for the module.                                 |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                |
-| `disabled` | `false`                              | Disables the `crystal` module.                            |
+| Option     | Default                               | Description                                               |
+| ---------- | ------------------------------------- | --------------------------------------------------------- |
+| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
+| `style`    | `"bold red"`                          | The style for the module.                                 |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                                |
+| `disabled` | `false`                               | Disables the `crystal` module.                            |
 
 ### Variables
 
@@ -609,12 +609,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                     |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`   | `"🎯 "`                              | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                        | The style for the module.                       |
-| `disabled` | `false`                              | Disables the `dart` module.                     |
+| Option     | Default                               | Description                                     |
+| ---------- | ------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
+| `style`    | `"bold blue"`                         | The style for the module.                       |
+| `disabled` | `false`                               | Disables the `dart` module.                     |
 
 ### Variables
 
@@ -777,7 +777,7 @@ when there is a csproj file in the current directory.
 
 | Option      | Default                                   | Description                                              |
 | ----------- | ----------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"`  | The format for the module.                               |
+| `format`    | `"[$symbol(v$version )(🎯 $tfm )]($style)"` | The format for the module.                               |
 | `symbol`    | `"•NET "`                                 | The symbol used before displaying the version of dotnet. |
 | `heuristic` | `true`                                    | Use faster version detection to keep starship snappy.    |
 | `style`     | `"bold blue"`                             | The style for the module.                                |
@@ -854,12 +854,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                     |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`   | `"🌳 "`                              | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | The style for the module.                       |
-| `disabled` | `false`                              | Disables the `elm` module.                      |
+| Option     | Default                               | Description                                     |
+| ---------- | ------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
+| `style`    | `"cyan bold"`                         | The style for the module.                       |
+| `disabled` | `false`                               | Disables the `elm` module.                      |
 
 ### Variables
 
@@ -1233,12 +1233,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                    |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                     |
-| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | The style for the module.                      |
-| `disabled` | `false`                            | Disables the `golang` module.                  |
+| Option     | Default                             | Description                                    |
+| ---------- | ----------------------------------- | ---------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                     |
+| `symbol`   | `"🐹 "`                             | A format string representing the symbol of Go. |
+| `style`    | `"bold cyan"`                       | The style for the module.                      |
+| `disabled` | `false`                             | Disables the `golang` module.                  |
 
 ### Variables
 
@@ -1269,12 +1269,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`   | `"⎈ "`                             | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                     | The style for the module.                        |
-| `disabled` | `false`                            | Disables the `helm` module.                      |
+| Option     | Default                             | Description                                      |
+| ---------- | ----------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"⎈ "`                              | A format string representing the symbol of Helm. |
+| `style`    | `"bold white"`                      | The style for the module.                        |
+| `disabled` | `false`                             | Disables the `helm` module.                      |
 
 ### Variables
 
@@ -1340,12 +1340,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                                  | Description                                     |
-| ---------- | ---------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}(${version} )]($style)"` | The format for the module.                      |
-| `symbol`   | `"☕ "`                                  | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                           | The style for the module.                       |
-| `disabled` | `false`                                  | Disables the `java` module.                     |
+| Option     | Default                                   | Description                                     |
+| ---------- | ----------------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [${symbol}(v${version} )]($style)"` | The format for the module.                      |
+| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
+| `style`    | `"red dimmed"`                            | The style for the module.                       |
+| `disabled` | `false`                                   | Disables the `java` module.                     |
 
 ### Variables
 
@@ -1414,12 +1414,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                       |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                        |
-| `symbol`   | `"ஃ "`                             | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                    | The style for the module.                         |
-| `disabled` | `false`                            | Disables the `julia` module.                      |
+| Option     | Default                             | Description                                       |
+| ---------- | ----------------------------------- | ------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                        |
+| `symbol`   | `"ஃ "`                              | A format string representing the symbol of Julia. |
+| `style`    | `"bold purple"`                     | The style for the module.                         |
+| `disabled` | `false`                             | Disables the `julia` module.                      |
 
 ### Variables
 
@@ -1449,13 +1449,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option          | Default                              | Description                                                                   |
-| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
-| `symbol`        | `"🅺 "`                              | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                        | The style for the module.                                                     |
-| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
+| Option          | Default                               | Description                                                                   |
+| --------------- | ------------------------------------- | ----------------------------------------------------------------------------- |
+| `format`        | `"via [$symbol(v$version )]($style)"` | The format for the module.                                                    |
+| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`         | `"bold blue"`                         | The style for the module.                                                     |
+| `kotlin_binary` | `"kotlin"`                            | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`      | `false`                               | Disables the `kotlin` module.                                                 |
 
 ### Variables
 
@@ -1561,13 +1561,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option       | Default                              | Description                                                                   |
-| ------------ | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
-| `symbol`     | `"🌙 "`                              | A format string representing the symbol of Lua.                               |
-| `style`      | `"bold blue"`                        | The style for the module.                                                     |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.    |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                    |
+| Option       | Default                               | Description                                                                   |
+| ------------ | ------------------------------------- | ----------------------------------------------------------------------------- |
+| `format`     | `"via [$symbol(v$version )]($style)"` | The format for the module.                                                    |
+| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                               |
+| `style`      | `"bold blue"`                         | The style for the module.                                                     |
+| `lua_binary` | `"lua"`                               | Configures the lua binary that Starship executes when getting the version.    |
+| `disabled`   | `false`                               | Disables the `lua` module.                                                    |
 
 ### Variables
 
@@ -1685,12 +1685,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                           |
-| ---------- | ---------------------------------- | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
-| `symbol`   | `"👑 "`                            | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                    | The style for the module.                             |
-| `disabled` | `false`                            | Disables the `nim` module.                            |
+| Option     | Default                             | Description                                           |
+| ---------- | ----------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module                             |
+| `symbol`   | `"👑 "`                             | The symbol used before displaying the version of Nim. |
+| `style`    | `"bold yellow"`                     | The style for the module.                             |
+| `disabled` | `false`                             | Disables the `nim` module.                            |
 
 ### Variables
 
@@ -1764,12 +1764,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                        |
-| ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                         |
-| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
-| `style`    | `"bold green"`                     | The style for the module.                          |
-| `disabled` | `false`                            | Disables the `nodejs` module.                      |
+| Option     | Default                             | Description                                        |
+| ---------- | ----------------------------------- | -------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                         |
+| `symbol`   | `"⬢ "`                              | A format string representing the symbol of NodeJS. |
+| `style`    | `"bold green"`                      | The style for the module.                          |
+| `disabled` | `false`                             | Disables the `nodejs` module.                      |
 | `not_capable_style` | `bold red` | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ### Variables
@@ -1805,12 +1805,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                             |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                              | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                      | The style for the module.                               |
-| `disabled` | `false`                              | Disables the `ocaml` module.                            |
+| Option     | Default                               | Description                                             |
+| ---------- | ------------------------------------- | ------------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format string for the module.                       |
+| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
+| `style`    | `"bold yellow"`                       | The style for the module.                               |
+| `disabled` | `false`                               | Disables the `ocaml` module.                            |
 
 ### Variables
 
@@ -1895,13 +1895,13 @@ package, and shows its current version. The module currently supports `npm`, `ca
 
 ### Options
 
-| Option            | Default                            | Description                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | The style for the module.                                  |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Option            | Default                                   | Description                                                |
+| ----------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"is [${symbol}v${version}](${style}) "`  | The format for the module.                                 |
+| `symbol`          | `"📦 "`                                   | The symbol used before displaying the version the package. |
+| `style`           | `"bold 208"`                              | The style for the module.                                  |
+| `display_private` | `false`                                   | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                                   | Disables the `package` module.                             |
 
 ### Variables
 
@@ -1935,12 +1935,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                              | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                         | The style for the module.                             |
-| `disabled` | `false`                              | Disables the `perl` module.                           |
+| Option     | Default                               | Description                                           |
+| ---------- | ------------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format string for the module.                     |
+| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
+| `style`    | `"bold 149"`                          | The style for the module.                             |
+| `disabled` | `false`                               | Disables the `perl` module.                           |
 
 ### Variables
 
@@ -1970,12 +1970,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
-| `symbol`   | `"🐘 "`                              | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                         | The style for the module.                             |
-| `disabled` | `false`                              | Disables the `php` module.                            |
+| Option     | Default                               | Description                                           |
+| ---------- | ------------------------------------- | ----------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                            |
+| `symbol`   | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
+| `style`    | `"147 bold"`                          | The style for the module.                             |
+| `disabled` | `false`                               | Disables the `php` module.                            |
 
 ### Variables
 
@@ -2006,12 +2006,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                                  |
-| ---------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                   |
-| `symbol`   | `"<=> "`                             | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                       | The style for the module.                                    |
-| `disabled` | `false`                              | Disables the `purescript` module.                            |
+| Option     | Default                               | Description                                                  |
+| ---------- | ------------------------------------- | ------------------------------------------------------------ |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                                   |
+| `symbol`   | `"<=> "`                              | The symbol used before displaying the version of PureScript. |
+| `style`    | `"bold white"`                        | The style for the module.                                    |
+| `disabled` | `false`                               | Disables the `purescript` module.                            |
 
 ### Variables
 
@@ -2054,18 +2054,18 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                                                                      | Description                                                                            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                     | The format for the module.                                                             |
-| `symbol`             | `"🐍 "`                                                                                                      | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv `                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| Option               | Default                                                                                                       | Description                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${pyenv_version} )(v${version} )(\($virtualenv\))]($style)'`                  | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                                                               | The style for the module.                                                              |
+| `pyenv_version_name` | `false`                                                                                                       | Use pyenv to get Python version                                                        |
+| `pyenv_prefix`       | `pyenv `                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                             | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `[".py"]`                                                                                                     | Which extensions should trigger this moudle                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]`  | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                          | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                       | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2087,13 +2087,14 @@ Python version 2, see example below.
 
 ### Variables
 
-| Variable     | Example         | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`         | Mirrors the value of option `symbol`       |
-| style        | `"yellow bold"` | Mirrors the value of option `style`        |
-| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | The current `virtualenv` name              |
+| Variable      | Example         | Description                                |
+| ------------- | --------------- | ------------------------------------------ |
+| version       | `"3.8.1"`       | The version of `python`                    |
+| symbol        | `"🐍 "`         | Mirrors the value of option `symbol`       |
+| style         | `"yellow bold"` | Mirrors the value of option `style`        |
+| pyenv_prefix  | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
+| pyenv_version | `"system"`      | The version of `python` from `pyenv`       |
+| virtualenv    | `"venv"`        | The current `virtualenv` name              |
 
 
 ### Example
@@ -2133,12 +2134,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`   | `"💎 "`                            | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | The style for the module.                        |
-| `disabled` | `false`                            | Disables the `ruby` module.                      |
+| Option     | Default                             | Description                                      |
+| ---------- | ----------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"💎 "`                             | A format string representing the symbol of Ruby. |
+| `style`    | `"bold red"`                        | The style for the module.                        |
+| `disabled` | `false`                             | Disables the `ruby` module.                      |
 
 ### Variables
 
@@ -2169,12 +2170,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`   | `"🦀 "`                            | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | The style for the module.                       |
-| `disabled` | `false`                            | Disables the `rust` module.                     |
+| Option     | Default                             | Description                                     |
+| ---------- | ----------------------------------- | ----------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                      |
+| `symbol`   | `"🦀 "`                             | A format string representing the symbol of Rust |
+| `style`    | `"bold red"`                        | The style for the module.                       |
+| `disabled` | `false`                             | Disables the `rust` module.                     |
 
 ### Variables
 
@@ -2336,12 +2337,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                      |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`   | `"🐦 "`                              | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | The style for the module.                        |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Option     | Default                               | Description                                      |
+| ---------- | ------------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                       |
+| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `style`    | `"bold 202"`                          | The style for the module.                        |
+| `disabled` | `false`                               | Disables the `swift` module.                     |
 
 ### Variables
 
@@ -2524,12 +2525,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                         |
-| ---------- | ---------------------------------- | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                          |
-| `symbol`   | `"⍱ "`                             | A format string representing the symbol of Vagrant. |
-| `style`    | `"cyan bold"`                      | The style for the module.                           |
-| `disabled` | `false`                            | Disables the `Vagrant` module.                      |
+| Option     | Default                             | Description                                         |
+| ---------- | ----------------------------------- | --------------------------------------------------- |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                          |
+| `symbol`   | `"⍱ "`                              | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                       | The style for the module.                           |
+| `disabled` | `false`                             | Disables the `Vagrant` module.                      |
 
 ### Variables
 
@@ -2559,12 +2560,12 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | The style for the module.                             |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Option     | Default                               | Description                                           |
+| ---------- | ------------------------------------- | ----------------------------------------------------- |
+| `symbol`   | `"↯ "`                                | The symbol used before displaying the version of Zig. |
+| `style`    | `"bold yellow"`                       | The style for the module.                             |
+| `format`   | `"via [$symbol(v$version )]($style)"` | The format for the module.                            |
+| `disabled` | `false`                               | Disables the `zig` module.                            |
 
 ### Variables
 
