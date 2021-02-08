@@ -2,6 +2,7 @@
 use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
+use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
 use path_slash::PathExt;
 use std::iter::FromIterator;
@@ -13,15 +14,13 @@ use super::{Context, Module};
 use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
-use crate::context::Shell;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the current directory
+/// Creates a module with the current logical or physical directory
 ///
 /// Will perform path contraction, substitution, and truncation.
 ///
 /// **Contraction**
-///
 /// - Paths beginning with the home directory or with a git repo right inside
 ///   the home directory will be contracted to `~`, or the set HOME_SYMBOL
 /// - Paths containing a git repo will contract to begin at the repo root
@@ -35,41 +34,59 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    let current_dir = &get_current_dir(&context, &config);
-
-    let home_dir = context.get_home().unwrap();
     let home_symbol = String::from(config.home_symbol);
-
-    log::debug!("Current directory: {:?}", current_dir);
-
-    let repo = &context.get_repo().ok()?;
-    let dir_string = match &repo.root {
-        Some(repo_root) if config.truncate_to_repo && (repo_root != &home_dir) => {
-            log::debug!("Repo root: {:?}", repo_root);
-            // Contract the path to the git repo root
-            contract_repo_path(current_dir, repo_root)
-                .unwrap_or_else(|| contract_path(current_dir, &home_dir, &home_symbol))
-        }
-        // Contract the path to the home directory
-        _ => contract_path(current_dir, &home_dir, &home_symbol),
+    let home_dir = context
+        .get_home()
+        .expect("Unable to determine HOME_DIR for user");
+    let physical_dir = &context.current_dir;
+    let display_dir = if config.use_logical_path {
+        &context.logical_dir
+    } else {
+        &context.current_dir
     };
-    log::debug!("Dir string: {}", dir_string);
 
-    let substituted_dir = substitute_path(dir_string, &config.substitutions);
+    log::debug!("Home dir: {:?}", &home_dir);
+    log::debug!("Physical dir: {:?}", &physical_dir);
+    log::debug!("Display dir: {:?}", &display_dir);
+
+    // Attempt repository path contraction (if we are in a git repository)
+    let repo = if config.truncate_to_repo {
+        context.get_repo().ok()
+    } else {
+        None
+    };
+    let dir_string = repo
+        .and_then(|r| r.root.as_ref())
+        .filter(|root| *root != &home_dir)
+        // NOTE: Always attempt to contract repo paths from the physical dir as
+        // the logical dir _may_ not be be a valid physical disk
+        // path and may be impossible to contract.
+        .and_then(|root| contract_repo_path(&physical_dir, root));
+
+    // Otherwise use the logical path, automatically contracting
+    // the home directory if required.
+    let dir_string =
+        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
+
+    #[cfg(windows)]
+    let dir_string = remove_extended_path_prefix(dir_string);
+
+    // Apply path substitutions
+    let dir_string = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let truncated_dir_string = truncate(substituted_dir, config.truncation_length as usize);
+    let dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    let prefix = if is_truncated(&truncated_dir_string, &home_symbol) {
+    let prefix = if is_truncated(&dir_string, &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&current_dir, &home_dir, &home_symbol);
+            let contracted_home_dir = contract_path(&display_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
-                &truncated_dir_string,
+                &dir_string,
             )
         } else {
             String::from(config.truncation_symbol)
@@ -78,7 +95,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = prefix + &truncated_dir_string;
+    let displayed_path = prefix + &dir_string;
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -91,7 +108,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "path" => Some(Ok(&displayed_path)),
                 "read_only" => {
-                    if is_readonly_dir(&context.current_dir) {
+                    if is_readonly_dir(&physical_dir) {
                         Some(Ok(&lock_symbol))
                     } else {
                         None
@@ -113,43 +130,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+#[cfg(windows)]
+fn remove_extended_path_prefix(path: String) -> String {
+    fn try_trim_prefix<'a>(s: &'a str, prefix: &str) -> Option<&'a str> {
+        if !s.starts_with(prefix) {
+            return None;
+        }
+        Some(&s[prefix.len()..])
+    }
+    // Trim any Windows extended-path prefix from the display path
+    if let Some(unc) = try_trim_prefix(&path, r"\\?\UNC\") {
+        return format!(r"\\{}", unc);
+    }
+    if let Some(p) = try_trim_prefix(&path, r"\\?\") {
+        return p.to_string();
+    }
+    path
+}
+
 fn is_truncated(path: &str, home_symbol: &str) -> bool {
     !(path.starts_with(&home_symbol)
         || PathBuf::from(path).has_root()
         || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
-}
-
-fn get_current_dir(context: &Context, config: &DirectoryConfig) -> PathBuf {
-    // Using environment PWD is the standard approach for determining logical path
-    // If this is None for any reason, we fall back to reading the os-provided path
-    let physical_current_dir = if config.use_logical_path {
-        match context.get_env("PWD") {
-            Some(mut x) => {
-                // Prevent Powershell from prepending "Microsoft.PowerShell.Core\FileSystem::" to some paths
-                if cfg!(windows) && context.shell == Shell::PowerShell {
-                    if let Some(no_prefix) =
-                        x.strip_prefix(r"Microsoft.PowerShell.Core\FileSystem::")
-                    {
-                        x = no_prefix.to_string();
-                    }
-                }
-                Some(PathBuf::from(x))
-            }
-            None => {
-                log::debug!("Error getting PWD environment variable!");
-                None
-            }
-        }
-    } else {
-        match std::env::current_dir() {
-            Ok(x) => Some(x),
-            Err(e) => {
-                log::debug!("Error getting physical current directory: {}", e);
-                None
-            }
-        }
-    };
-    physical_current_dir.unwrap_or_else(|| PathBuf::from(&context.current_dir))
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
@@ -171,23 +173,27 @@ fn is_readonly_dir(path: &Path) -> bool {
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
-    if !full_path.starts_with(top_level_path) {
+    if !full_path.normalised_starts_with(top_level_path) {
         return full_path.to_slash().unwrap();
     }
 
-    if full_path == top_level_path {
+    if full_path.normalised_equals(top_level_path) {
         return top_level_replacement.to_string();
     }
+
+    // Because we've done a normalised path comparison above
+    // we can safely ignore the Prefix components when doing this
+    // strip_prefix operation.
+    let sub_path = full_path
+        .without_prefix()
+        .strip_prefix(top_level_path.without_prefix())
+        .expect("strip path prefix");
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = full_path
-            .strip_prefix(top_level_path)
-            .unwrap()
-            .to_slash()
-            .unwrap()
+        path = sub_path.to_slash().expect("slash path")
     )
 }
 
@@ -314,22 +320,42 @@ mod tests {
     }
 
     #[test]
-    fn contract_repo_directory() {
-        let full_path = Path::new("/Users/astronaut/dev/rocket-controls/src");
-        let repo_root = Path::new("/Users/astronaut/dev/rocket-controls");
+    fn contract_repo_directory() -> io::Result<()> {
+        let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
+        let repo_dir = tmp_dir.path().join("dev").join("rocket-controls");
+        let src_dir = repo_dir.join("src");
+        fs::create_dir_all(&src_dir)?;
+        init_repo(&repo_dir)?;
 
-        let output = contract_path(full_path, repo_root, "rocket-controls");
-        assert_eq!(output, "rocket-controls/src");
+        let src_variations = [src_dir.clone(), src_dir.canonicalize().unwrap()];
+        let repo_variations = [repo_dir.clone(), repo_dir.canonicalize().unwrap()];
+        for src_dir in &src_variations {
+            for repo_dir in &repo_variations {
+                let output = contract_repo_path(&src_dir, &repo_dir);
+                assert_eq!(output, Some("rocket-controls/src".to_string()));
+            }
+        }
+
+        tmp_dir.close()
     }
 
     #[test]
-    #[cfg(target_os = "windows")]
+    #[cfg(windows)]
     fn contract_windows_style_home_directory() {
-        let full_path = Path::new("C:\\Users\\astronaut\\schematics\\rocket");
-        let home = Path::new("C:\\Users\\astronaut");
+        let path_variations = [
+            r"\\?\C:\Users\astronaut\schematics\rocket",
+            r"C:\Users\astronaut\schematics\rocket",
+        ];
+        let home_path_variations = [r"\\?\C:\Users\astronaut", r"C:\Users\astronaut"];
+        for path in &path_variations {
+            for home_path in &home_path_variations {
+                let path = Path::new(path);
+                let home_path = Path::new(home_path);
 
-        let output = contract_path(full_path, home, "~");
-        assert_eq!(output, "~/schematics/rocket");
+                let output = contract_path(path, home_path, "~");
+                assert_eq!(output, "~/schematics/rocket");
+            }
+        }
     }
 
     #[test]
@@ -435,52 +461,6 @@ mod tests {
             .to_string_lossy()
             .to_string();
         Ok((dir, path))
-    }
-
-    #[test]
-    fn windows_strip_prefix() {
-        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
-        let without_prefix = r"/path";
-
-        let actual = ModuleRenderer::new("directory")
-            // use a different physical path here as a sentinel value
-            .path("/")
-            .env("PWD", with_prefix)
-            .shell(Shell::PowerShell)
-            .config(toml::toml! {
-                [directory]
-                format = "$path"
-                truncation_length = 100
-            })
-            .collect()
-            .unwrap();
-        let expected = if cfg!(windows) {
-            without_prefix
-        } else {
-            with_prefix
-        };
-        let expected = Path::new(expected).to_slash().unwrap();
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn windows_strip_prefix_no_pwsh() {
-        let with_prefix = r"Microsoft.PowerShell.Core\FileSystem::/path";
-
-        let actual = ModuleRenderer::new("directory")
-            // use a different physical path here as a sentinel value
-            .path("/")
-            .env("PWD", with_prefix)
-            .shell(Shell::Bash)
-            .config(toml::toml! {
-                [directory]
-                format = "$path"
-                truncation_length = 100
-            })
-            .collect()
-            .unwrap();
-        let expected = Path::new(with_prefix).to_slash().unwrap();
-        assert_eq!(actual, expected);
     }
 
     #[cfg(not(target_os = "windows"))]
@@ -1429,5 +1409,107 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
         assert_eq!(expected, actual);
         Ok(())
+    }
+
+    #[test]
+    fn use_logical_path_true_should_render_logical_dir_path() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("src/meters/fuel-gauge");
+        fs::create_dir_all(&path)?;
+        let logical_path = "Logical:/fuel-gauge";
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("Logical:/fuel-gauge")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = true
+                truncation_length = 3
+            })
+            .path(path)
+            .logical_path(logical_path)
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn use_logical_path_false_should_render_current_dir_path() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let path = tmp_dir.path().join("src/meters/fuel-gauge");
+        fs::create_dir_all(&path)?;
+        let logical_path = "Logical:/fuel-gauge";
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("src/meters/fuel-gauge")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = false
+                truncation_length = 3
+            })
+            .path(path)
+            .logical_path(logical_path) // logical_path should be ignored
+            .collect();
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[cfg(windows)]
+    fn windows_trims_extended_path_prefix() {
+        // Under Windows, path canonicalization returns the paths using extended-path prefixes `\\?\`
+        // We expect this prefix to be trimmed before being rendered.
+        let sys32_path = Path::new(r"\\?\C:\Windows\System32");
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint("C:/Windows/System32")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = false
+                truncation_length = 0
+            })
+            .path(sys32_path)
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[cfg(windows)]
+    fn windows_trims_extended_unc_path_prefix() {
+        // Under Windows, path canonicalization returns UNC paths using extended-path prefixes `\\?\UNC\`
+        // We expect this prefix to be trimmed before being rendered.
+        let unc_path = Path::new(r"\\?\UNC\server\share\a\b\c");
+
+        // NOTE: path-slash doesn't convert slashes which are part of path prefixes under Windows,
+        // which is why the first part of this string still includes backslashes
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(r"\\server\share/a/b/c")
+        ));
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                use_logical_path = false
+                truncation_length = 0
+            })
+            .path(unc_path)
+            .collect();
+
+        assert_eq!(expected, actual);
     }
 }

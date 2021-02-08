@@ -24,6 +24,11 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
+    /// A logical directory path which should represent the same directory as current_dir,
+    /// though may appear different.
+    /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
+    pub logical_dir: PathBuf,
+
     /// A struct containing directory contents in a lookup-optimised format.
     dir_contents: OnceCell<DirContents>,
 
@@ -42,27 +47,41 @@ pub struct Context<'a> {
 
 impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
-    /// for it.
+    /// for it. "logical-path" is used when a shell allows the "current working directory"
+    /// to be something other than a file system path (like powershell provider specific paths).
     pub fn new(arguments: ArgMatches) -> Context {
-        // Retrieve the "path" flag. If unavailable, use the current directory instead.
+        let shell = Context::get_shell();
+
+        // Retrieve the "current directory".
+        // If the path argument is not set fall back to the OS current directory.
         let path = arguments
             .value_of("path")
-            .map(From::from)
+            .map(PathBuf::from)
+            .unwrap_or_else(|| env::current_dir().expect("Unable to identify current directory"));
+
+        // Retrive the "logical directory".
+        // If the path argument is not set fall back to the PWD env variable set by many shells
+        // or to the other path.
+        let logical_path = arguments
+            .value_of("logical_path")
+            .map(PathBuf::from)
             .unwrap_or_else(|| {
                 env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
                     log::debug!("Unable to get path from $PWD: {}", err);
-                    env::current_dir().expect("Unable to identify current directory. Error")
+                    path.clone()
                 })
             });
 
-        Context::new_with_dir(arguments, path)
+        Context::new_with_shell_and_path(arguments, shell, path, logical_path)
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
-    where
-        T: Into<PathBuf>,
-    {
+    pub fn new_with_shell_and_path(
+        arguments: ArgMatches,
+        shell: Shell,
+        path: PathBuf,
+        logical_path: PathBuf,
+    ) -> Context {
         let config = StarshipConfig::initialize();
 
         // Unwrap the clap arguments into a simple hashtable
@@ -75,15 +94,17 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // TODO: Currently gets the physical directory. Get the logical directory.
-        let current_dir = Context::expand_tilde(dir.into());
-
-        let shell = Context::get_shell();
+        // Canonicalize the current path to resolve symlinks, etc.
+        // NOTE: On Windows this converts the path to extended-path syntax.
+        let current_dir = Context::expand_tilde(path);
+        let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
+        let logical_dir = logical_path;
 
         Context {
             config,
             properties,
             current_dir,
+            logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
@@ -434,6 +455,7 @@ pub enum Shell {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io;
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
         let dir = tempfile::tempdir()?;
@@ -507,5 +529,84 @@ mod tests {
         node.close()?;
 
         Ok(())
+    }
+
+    #[test]
+    fn context_constructor_should_canonicalize_current_dir() -> io::Result<()> {
+        #[cfg(not(windows))]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let tmp_dir = tempfile::TempDir::new()?;
+        let path = tmp_dir.path().join("a/xxx/yyy");
+        fs::create_dir_all(&path)?;
+
+        // Set up a mock symlink
+        let path_actual = tmp_dir.path().join("a/xxx");
+        let path_symlink = tmp_dir.path().join("a/symlink");
+        symlink_dir(&path_actual, &path_symlink).expect("create symlink");
+
+        // Mock navigation into the symlink path
+        let test_path = path_symlink.join("yyy");
+        let context = Context::new_with_shell_and_path(
+            ArgMatches::default(),
+            Shell::Unknown,
+            test_path.clone(),
+            test_path.clone(),
+        );
+
+        assert_ne!(context.current_dir, context.logical_dir);
+
+        let expected_current_dir = path_actual
+            .join("yyy")
+            .canonicalize()
+            .expect("canonicalize");
+        assert_eq!(expected_current_dir, context.current_dir);
+
+        let expected_logical_dir = test_path;
+        assert_eq!(expected_logical_dir, context.logical_dir);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn context_constructor_should_fail_gracefully_when_canonicalization_fails() {
+        // Mock navigation to a directory which does not exist on disk
+        let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            ArgMatches::default(),
+            Shell::Unknown,
+            test_path.clone(),
+            test_path.clone(),
+        );
+
+        let expected_current_dir = &test_path;
+        assert_eq!(expected_current_dir, &context.current_dir);
+
+        let expected_logical_dir = &test_path;
+        assert_eq!(expected_logical_dir, &context.logical_dir);
+    }
+
+    #[test]
+    fn context_constructor_should_fall_back_to_tilde_replacement_when_canonicalization_fails() {
+        use dirs_next::home_dir;
+
+        // Mock navigation to a directory which does not exist on disk
+        let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            ArgMatches::default(),
+            Shell::Unknown,
+            test_path.clone(),
+            test_path.clone(),
+        );
+
+        let expected_current_dir = home_dir()
+            .expect("home_dir")
+            .join("path_which_does_not_exist");
+        assert_eq!(expected_current_dir, context.current_dir);
+
+        let expected_logical_dir = test_path;
+        assert_eq!(expected_logical_dir, context.logical_dir);
     }
 }

@@ -41,8 +41,12 @@ impl<'a> ModuleRenderer<'a> {
         // Start logger
         Lazy::force(&LOGGER);
 
-        let mut context = Context::new_with_dir(clap::ArgMatches::default(), PathBuf::new());
-        context.shell = Shell::Unknown;
+        let mut context = Context::new_with_shell_and_path(
+            clap::ArgMatches::default(),
+            Shell::Unknown,
+            PathBuf::new(),
+            PathBuf::new(),
+        );
         context.config = StarshipConfig { config: None };
 
         Self { name, context }
@@ -53,6 +57,15 @@ impl<'a> ModuleRenderer<'a> {
         T: Into<PathBuf>,
     {
         self.context.current_dir = path.into();
+        self.context.logical_dir = self.context.current_dir.clone();
+        self
+    }
+
+    pub fn logical_path<T>(mut self, path: T) -> Self
+    where
+        T: Into<PathBuf>,
+    {
+        self.context.logical_dir = path.into();
         self
     }
 
