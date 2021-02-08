@@ -3,8 +3,6 @@ use crate::formatter::StringFormatter;
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::utils;
-
 use regex::Regex;
 const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
 
@@ -72,7 +70,7 @@ fn get_java_version(context: &Context) -> Option<String> {
         None => String::from("java"),
     };
 
-    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let output = context.exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
     let java_version = if output.stdout.is_empty() {
         output.stderr
     } else {

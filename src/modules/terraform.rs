@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_terraform_version(
-                    &utils::exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                    &context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
                 )
                 .map(Ok),
                 "workspace" => get_terraform_workspace(context).map(Ok),

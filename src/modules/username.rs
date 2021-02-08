@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 const ROOT_UID: Option<u32> = Some(0);
 #[cfg(not(target_os = "windows"))]
@@ -22,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let logname = context.get_env("LOGNAME");
 
     let is_root = if cfg!(not(target_os = "windows")) {
-        let user_uid = get_uid();
+        let user_uid = get_uid(context);
         user_uid == ROOT_UID
     } else {
         false
@@ -72,8 +71,9 @@ fn is_ssh_connection(context: &Context) -> bool {
     ssh_env.iter().any(|env| context.get_env(env).is_some())
 }
 
-fn get_uid() -> Option<u32> {
-    utils::exec_cmd("id", &["-u"])?
+fn get_uid(context: &Context) -> Option<u32> {
+    context
+        .exec_cmd("id", &["-u"])?
         .stdout
         .trim()
         .parse::<u32>()

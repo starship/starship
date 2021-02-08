@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current OCaml version
 ///
@@ -46,9 +45,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         .is_match();
 
                     let ocaml_version = if is_esy_project {
-                        utils::exec_cmd("esy", &["ocaml", "-vnum"])?.stdout
+                        context.exec_cmd("esy", &["ocaml", "-vnum"])?.stdout
                     } else {
-                        utils::exec_cmd("ocaml", &["-vnum"])?.stdout
+                        context.exec_cmd("ocaml", &["-vnum"])?.stdout
                     };
                     Some(Ok(format!("v{}", &ocaml_version.trim())))
                 }

@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Dart version
 ///
@@ -37,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let dart_version = utils::exec_cmd("dart", &["--version"])?.stderr;
+                    let dart_version = context.exec_cmd("dart", &["--version"])?.stderr;
                     parse_dart_version(&dart_version).map(Ok)
                 }
                 _ => None,

@@ -38,8 +38,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
-    let nodejs_version =
-        Lazy::new(|| utils::exec_cmd("node", &["--version"]).map(|cmd| cmd.stdout));
+    let nodejs_version = Lazy::new(|| {
+        context
+            .exec_cmd("node", &["--version"])
+            .map(|cmd| cmd.stdout)
+    });
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {

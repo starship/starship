@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Crystal version
 ///
@@ -35,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_crystal_version(
-                    utils::exec_cmd("crystal", &["--version"])?.stdout.as_str(),
+                    context.exec_cmd("crystal", &["--version"])?.stdout.as_str(),
                 )
                 .map(Ok),
                 _ => None,

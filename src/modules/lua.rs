@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 use regex::Regex;
 const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+[a-z\\-]*[1-9]*)[^\\s]*";
@@ -39,7 +38,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let lua_version = format_lua_version(&get_lua_version(&config.lua_binary)?)?;
+                    let lua_version =
+                        format_lua_version(&get_lua_version(context, &config.lua_binary)?)?;
                     Some(Ok(lua_version))
                 }
                 _ => None,
@@ -58,8 +58,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_lua_version(lua_binary: &str) -> Option<String> {
-    match utils::exec_cmd(lua_binary, &["-v"]) {
+fn get_lua_version(context: &Context, lua_binary: &str) -> Option<String> {
+    match context.exec_cmd(lua_binary, &["-v"]) {
         Some(output) => {
             if output.stdout.is_empty() {
                 Some(output.stderr)

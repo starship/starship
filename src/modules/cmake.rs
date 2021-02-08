@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::cmake::CMakeConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current CMake version
 ///
@@ -31,7 +30,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => utils::exec_cmd("cmake", &["--version"])
+                "version" => context
+                    .exec_cmd("cmake", &["--version"])
                     .map(|output| format_cmake_version(&output.stdout))
                     .flatten()
                     .map(Ok),

@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nim::NimConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Nim version
 ///
@@ -34,7 +33,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => utils::exec_cmd("nim", &["--version"])
+                "version" => context
+                    .exec_cmd("nim", &["--version"])
                     .map(|command_output| command_output.stdout)
                     .and_then(|nim_version_output| {
                         Some(format!("v{}", parse_nim_version(&nim_version_output)?))

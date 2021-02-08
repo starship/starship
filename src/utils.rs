@@ -30,12 +30,12 @@ impl PartialEq for CommandOutput {
 
 /// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    internal_exec_cmd(&cmd, &args)
+pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
+    internal_exec_cmd(&cmd, &args, time_limit)
 }
 
 #[cfg(test)]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     let command = match args.len() {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
@@ -202,7 +202,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args),
+        _ => internal_exec_cmd(&cmd, &args, time_limit),
     }
 }
 
@@ -255,7 +255,7 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
-fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
 
     let full_path = match which::which(cmd) {
@@ -268,8 +268,6 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             return None;
         }
     };
-
-    let time_limit = Duration::from_millis(500);
 
     let start = Instant::now();
 
@@ -310,7 +308,8 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             })
         }
         Ok(None) => {
-            log::warn!("Executing command {:?} timed out", cmd);
+            log::warn!("Executing command {:?} timed out.", cmd);
+            log::warn!("You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.");
             None
         }
         Err(error) => {

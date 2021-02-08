@@ -66,9 +66,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let version = if enable_heuristic {
                         let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
-                        estimate_dotnet_version(&dotnet_files, &context.current_dir, repo_root)
+                        estimate_dotnet_version(
+                            context,
+                            &dotnet_files,
+                            &context.current_dir,
+                            repo_root,
+                        )
                     } else {
-                        get_version_from_cli()
+                        get_version_from_cli(context)
                     };
                     version.map(|v| Ok(v.0))
                 }
@@ -136,6 +141,7 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
 }
 
 fn estimate_dotnet_version(
+    context: &Context,
     files: &[DotNetFile],
     current_dir: &Path,
     repo_root: Option<&Path>,
@@ -150,17 +156,18 @@ fn estimate_dotnet_version(
 
     match relevant_file.file_type {
         FileType::GlobalJson => get_pinned_sdk_version_from_file(relevant_file.path.as_path())
-            .or_else(get_latest_sdk_from_cli),
+            .or_else(|| get_latest_sdk_from_cli(context)),
         FileType::SolutionFile => {
             // With this heuristic, we'll assume that a "global.json" won't
             // be found in any directory above the solution file.
-            get_latest_sdk_from_cli()
+            get_latest_sdk_from_cli(context)
         }
         _ => {
             // If we see a dotnet project, we'll check a small number of neighboring
             // directories to see if we can find a global.json. Otherwise, assume the
             // latest SDK is in use.
-            try_find_nearby_global_json(current_dir, repo_root).or_else(get_latest_sdk_from_cli)
+            try_find_nearby_global_json(current_dir, repo_root)
+                .or_else(|| get_latest_sdk_from_cli(context))
         }
     }
 }
@@ -288,13 +295,13 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
     Some(value?.to_str()?.to_ascii_lowercase())
 }
 
-fn get_version_from_cli() -> Option<Version> {
-    let version_output = utils::exec_cmd("dotnet", &["--version"])?;
+fn get_version_from_cli(context: &Context) -> Option<Version> {
+    let version_output = context.exec_cmd("dotnet", &["--version"])?;
     Some(Version(format!("v{}", version_output.stdout.trim())))
 }
 
-fn get_latest_sdk_from_cli() -> Option<Version> {
-    match utils::exec_cmd("dotnet", &["--list-sdks"]) {
+fn get_latest_sdk_from_cli(context: &Context) -> Option<Version> {
+    match context.exec_cmd("dotnet", &["--list-sdks"]) {
         Some(sdks_output) => {
             fn parse_failed<T>() -> Option<T> {
                 log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
@@ -325,7 +332,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
                 "Received a non-success exit code from `dotnet --list-sdks`. \
                  Falling back to `dotnet --version`.",
             );
-            get_version_from_cli()
+            get_version_from_cli(context)
         }
     }
 }

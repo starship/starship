@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current PHP version
 ///
@@ -35,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let php_cmd_output = utils::exec_cmd(
+                    let php_cmd_output = context.exec_cmd(
                         "php",
                         &[
                             "-nr",

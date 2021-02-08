@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::ruby::RubyConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Ruby version
 ///
@@ -34,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    format_ruby_version(&utils::exec_cmd("ruby", &["-v"])?.stdout.as_str()).map(Ok)
+                    format_ruby_version(&context.exec_cmd("ruby", &["-v"])?.stdout.as_str()).map(Ok)
                 }
                 _ => None,
             })
