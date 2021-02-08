@@ -2,9 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
-const ROOT_UID: Option<u32> = Some(0);
 #[cfg(not(target_os = "windows"))]
 const USERNAME_ENV_VAR: &str = "USER";
 
@@ -21,13 +19,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let username = context.get_env(USERNAME_ENV_VAR)?;
     let logname = context.get_env("LOGNAME");
 
-    let is_root = if cfg!(not(target_os = "windows")) {
-        let user_uid = get_uid();
-        user_uid == ROOT_UID
-    } else {
-        false
-    };
-
+    let is_root = is_root_user();
     let is_not_login = logname.is_some() && username != logname.unwrap();
 
     let mut module = context.new_module("username");
@@ -67,17 +59,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
+#[cfg(target_os = "windows")]
+fn is_root_user() -> bool {
+    false
+}
+
+#[cfg(not(target_os = "windows"))]
+fn is_root_user() -> bool {
+    let user_uid = nix::unistd::geteuid();
+    user_uid == nix::unistd::ROOT
+}
+
 fn is_ssh_connection(context: &Context) -> bool {
     let ssh_env = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
     ssh_env.iter().any(|env| context.get_env(env).is_some())
-}
-
-fn get_uid() -> Option<u32> {
-    utils::exec_cmd("id", &["-u"])?
-        .stdout
-        .trim()
-        .parse::<u32>()
-        .ok()
 }
 
 #[cfg(test)]
