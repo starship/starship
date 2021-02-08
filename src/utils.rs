@@ -325,7 +325,7 @@ mod tests {
 
     #[test]
     fn exec_mocked_command() {
-        let result = exec_cmd("dummy_command", &[]);
+        let result = exec_cmd("dummy_command", &[], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -340,7 +340,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_no_output() {
-        let result = internal_exec_cmd("true", &[]);
+        let result = internal_exec_cmd("true", &[], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -352,7 +352,8 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
+        let result =
+            internal_exec_cmd("/bin/sh", &["-c", "echo hello"], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from(""),
@@ -364,7 +365,11 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_output_stderr() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
+        let result = internal_exec_cmd(
+            "/bin/sh",
+            &["-c", "echo hello >&2"],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from("hello\n"),
@@ -376,7 +381,11 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_output_both() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
+        let result = internal_exec_cmd(
+            "/bin/sh",
+            &["-c", "echo hello; echo world >&2"],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from("world\n"),
@@ -388,7 +397,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_non_zero_exit_code() {
-        let result = internal_exec_cmd("false", &[]);
+        let result = internal_exec_cmd("false", &[], Duration::from_millis(500));
         let expected = None;
 
         assert_eq!(result, expected)
@@ -397,7 +406,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_slow_command() {
-        let result = internal_exec_cmd("sleep", &["500"]);
+        let result = internal_exec_cmd("sleep", &["500"], Duration::from_millis(500));
         let expected = None;
 
         assert_eq!(result, expected)
