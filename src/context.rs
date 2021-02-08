@@ -245,6 +245,7 @@ impl<'a> Context<'a> {
         self.properties.get("cmd_duration")?.parse::<u128>().ok()
     }
 
+    /// Execute a command and return the output on stdout and stderr if successful
     pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         exec_cmd(cmd, args, self.cmd_timeout)
     }
