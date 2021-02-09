@@ -173,7 +173,7 @@ Mặc định `format` được sử dụng để định nghĩa định dạng 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Tương đương với
 format = """
 $username\
 $hostname\
@@ -372,7 +372,7 @@ Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất b
 
 Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi hình dạng, tham khảo [ví dụ này](#with-custom-error-shape).
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: warning `error_symbol` không được hỗ trợ trên elvish shell. :::
 
 ### Các tuỳ chọn
 
@@ -577,7 +577,7 @@ Module `dart` cho biết phiên bản của Dart đã cài đặt. Module cho s�
 
 - Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
 - Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- Đường dẫn hiện tại chứa một tập tin `pubspec.yaml` hoặc `pubspec.lock`
 
 ### Các tuỳ chọn
 
