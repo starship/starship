@@ -60,7 +60,7 @@ use crate::formatter::StringFormatter;
 
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-   // Here `my_env_var` will be either the stdout of the called command or the function
+   // Here `output` will be either the stdout of the called command or the function
    // will exit if the called program was not installed or could not be run.
    let output = context.exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
 
