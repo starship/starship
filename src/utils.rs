@@ -226,6 +226,8 @@ pub fn wrap_seq_for_shell(
     const BASH_END: &str = "\u{5c}\u{5d}"; // \]
     const ZSH_BEG: &str = "\u{25}\u{7b}"; // %{
     const ZSH_END: &str = "\u{25}\u{7d}"; // %}
+    const TCSH_BEG: &str = "\u{25}\u{7b}"; // %{
+    const TCSH_END: &str = "\u{25}\u{7d}"; // %}
 
     // ANSI escape codes cannot be nested, so we can keep track of whether we're
     // in an escape or not with a single boolean variable
@@ -238,6 +240,7 @@ pub fn wrap_seq_for_shell(
                 match shell {
                     Shell::Bash => format!("{}{}", BASH_BEG, escape_begin),
                     Shell::Zsh => format!("{}{}", ZSH_BEG, escape_begin),
+                    Shell::Tcsh => format!("{}{}", TCSH_BEG, escape_begin),
                     _ => x.to_string(),
                 }
             } else if x == escape_end && escaped {
@@ -245,6 +248,7 @@ pub fn wrap_seq_for_shell(
                 match shell {
                     Shell::Bash => format!("{}{}", escape_end, BASH_END),
                     Shell::Zsh => format!("{}{}", escape_end, ZSH_END),
+                    Shell::Tcsh => format!("{}{}", escape_end, TCSH_END),
                     _ => x.to_string(),
                 }
             } else {

@@ -173,6 +173,13 @@ fi"#,
             );
             Some(script)
         }
+        Some("tcsh") => {
+            let script = format!(
+                r#"eval "`({} init tcsh --print-full-init)`""#,
+                starship.sprint_posix()?
+            );
+            Some(script)
+        }
         None => {
             println!(
                 "Invalid shell name provided: {}\\n\
@@ -212,6 +219,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint()?),
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
+        "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -255,3 +263,5 @@ const PWSH_INIT: &str = include_str!("starship.ps1");
 const ION_INIT: &str = include_str!("starship.ion");
 
 const ELVISH_INIT: &str = include_str!("starship.elv");
+
+const TCSH_INIT: &str = include_str!("starship.tcsh");

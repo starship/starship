@@ -144,6 +144,7 @@ impl<'a> Module<'a> {
         match shell {
             Shell::Bash => ansi_strings_modified(ansi_strings, shell),
             Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
+            Shell::Tcsh => ansi_strings_modified(ansi_strings, shell),
             _ => ansi_strings,
         }
     }

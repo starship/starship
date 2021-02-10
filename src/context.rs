@@ -251,6 +251,7 @@ impl<'a> Context<'a> {
             "powershell" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
+            "tcsh" => Shell::Tcsh,
             _ => Shell::Unknown,
         }
     }
@@ -486,6 +487,7 @@ pub enum Shell {
     PowerShell,
     Zsh,
     Elvish,
+    Tcsh,
     Unknown,
 }
 

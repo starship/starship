@@ -87,6 +87,13 @@ pub fn get_prompt(context: Context) -> String {
     }
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
 
+    // escape \n and ! characters for tcsh
+    if let Shell::Tcsh = context.shell {
+        buf = buf.replace('!', "\\!");
+        // space is required before newline
+        buf = buf.replace('\n', " \\n");
+    }
+
     buf
 }
 
