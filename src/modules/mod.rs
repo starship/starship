@@ -125,7 +125,7 @@ pub async fn handle<'a>(
             "status" => status::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
-            "crystal" => crystal::module(context),
+            "crystal" => crystal::module(context).await,
             "username" => username::module(context),
             "vagrant" => vagrant::module(context),
             "zig" => zig::module(context),

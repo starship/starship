@@ -4,7 +4,7 @@ use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Crystal version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("crystal");
     let config: CrystalConfig = CrystalConfig::try_load(module.config);
 
@@ -19,8 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -29,15 +29,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => format_crystal_version(
-                    context.exec_cmd("crystal", &["--version"])?.stdout.as_str(),
-                )
-                .map(Ok),
-                _ => None,
+            .async_map(|variable| {
+                let context = &context;
+                async move {
+                    match variable.as_str() {
+                        "version" => context
+                            .async_exec_cmd("crystal", &["--version"])
+                            .await
+                            .and_then(|ver| format_crystal_version(&ver.stdout))
+                            .map(Ok),
+                        _ => None,
+                    }
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
