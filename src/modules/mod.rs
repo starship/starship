@@ -108,7 +108,7 @@ pub async fn handle<'a>(
             "memory_usage" => memory_usage::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
-            "nodejs" => nodejs::module(context),
+            "nodejs" => nodejs::module(context).await,
             "ocaml" => ocaml::module(context),
             "openstack" => openstack::module(context),
             "package" => package::module(context),

@@ -19,6 +19,11 @@ pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
     Ok(data)
 }
 
+#[inline(always)]
+pub async fn async_read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
+    async_std::fs::read_to_string(file_name.as_ref()).await
+}
+
 #[derive(Debug, Clone)]
 pub struct CommandOutput {
     pub stdout: String,

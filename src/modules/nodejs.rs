@@ -1,19 +1,18 @@
 use super::{Context, Module, RootModuleConfig};
+use std::path::Path;
 
 use crate::configs::nodejs::NodejsConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
-use once_cell::sync::Lazy;
+use futures::future::FutureExt;
 use regex::Regex;
 use semver::Version;
 use semver::VersionReq;
 use serde_json as json;
-use std::ops::Deref;
-use std::path::Path;
 
 /// Creates a module with the current Node.js version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
     let is_js_project = context
@@ -32,40 +31,61 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let nodejs_version = Lazy::new(|| {
+    let nodejs_version = async {
         context
-            .exec_cmd("node", &["--version"])
+            .async_exec_cmd("node", &["--version"])
+            .await
             .map(|cmd| cmd.stdout)
-    });
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    }
+    .shared();
+
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
             })
-            .map_style(|variable| match variable {
-                "style" => {
-                    let engines_version = get_engines_version(&context.current_dir);
-                    let in_engines_range =
-                        check_engines_version(nodejs_version.deref().as_ref()?, engines_version);
-                    if in_engines_range {
-                        Some(Ok(config.style))
-                    } else {
-                        Some(Ok(config.not_capable_style))
+            .async_map_style(|variable| {
+                // bind the config name to a reference, so the async move block
+                // takes ownership of `variable`, but only references `config`
+                let config = &config;
+                let nodejs_version = nodejs_version.clone();
+                async move {
+                    match variable.as_ref() {
+                        "style" => {
+                            let engines_version = get_engines_version(&context.current_dir).await;
+                            let in_engines_range = check_engines_version(
+                                nodejs_version.await.as_ref()?,
+                                engines_version,
+                            );
+                            if in_engines_range {
+                                Some(Ok(config.style))
+                            } else {
+                                Some(Ok(config.not_capable_style))
+                            }
+                        }
+                        _ => None,
                     }
                 }
-                _ => None,
             })
-            .map(|variable| match variable {
-                "version" => nodejs_version
-                    .deref()
-                    .as_ref()
-                    .map(|version| version.trim())
-                    .map(Ok),
-                _ => None,
+            .await
+            .async_map(|variable| {
+                let nodejs_version = nodejs_version.clone();
+                async move {
+                    match variable.as_ref() {
+                        "version" => nodejs_version
+                            .await
+                            .as_ref()
+                            .map(|version| version.trim().to_owned())
+                            .map(Ok),
+                        _ => None,
+                    }
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -78,8 +98,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_engines_version(base_dir: &Path) -> Option<String> {
-    let json_str = utils::read_file(base_dir.join("package.json")).ok()?;
+async fn get_engines_version(base_dir: &Path) -> Option<String> {
+    let json_str = utils::async_read_file(base_dir.join("package.json"))
+        .await
+        .ok()?;
     let package_json: json::Value = json::from_str(&json_str).ok()?;
     let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
     Some(raw_version.to_string())
