@@ -79,33 +79,30 @@ fn is_ssh_connection(context: &Context) -> bool {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     // TODO: Add tests for if root user (UID == 0)
     // Requires mocking
 
     #[test]
-    fn no_env_variables() -> io::Result<()> {
+    fn no_env_variables() {
         let actual = ModuleRenderer::new("username").collect();
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn no_logname_env_variable() -> io::Result<()> {
+    fn no_logname_env_variable() {
         let actual = ModuleRenderer::new("username")
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .collect();
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn logname_equals_user() -> io::Result<()> {
+    fn logname_equals_user() {
         let actual = ModuleRenderer::new("username")
             .env("LOGNAME", "astronaut")
             .env(super::USERNAME_ENV_VAR, "astronaut")
@@ -113,11 +110,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn ssh_wo_username() -> io::Result<()> {
+    fn ssh_wo_username() {
         // SSH connection w/o username
         let actual = ModuleRenderer::new("username")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
@@ -125,11 +121,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn current_user_not_logname() -> io::Result<()> {
+    fn current_user_not_logname() {
         let actual = ModuleRenderer::new("username")
             .env("LOGNAME", "astronaut")
             .env(super::USERNAME_ENV_VAR, "cosmonaut")
@@ -137,11 +132,10 @@ mod tests {
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("cosmonaut")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn ssh_connection() -> io::Result<()> {
+    fn ssh_connection() {
         let actual = ModuleRenderer::new("username")
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
@@ -149,11 +143,10 @@ mod tests {
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn ssh_connection_tty() -> io::Result<()> {
+    fn ssh_connection_tty() {
         let actual = ModuleRenderer::new("username")
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_TTY", "/dev/pts/0")
@@ -161,11 +154,10 @@ mod tests {
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn ssh_connection_client() -> io::Result<()> {
+    fn ssh_connection_client() {
         let actual = ModuleRenderer::new("username")
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_CLIENT", "192.168.0.101 39323 22")
@@ -173,11 +165,10 @@ mod tests {
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn show_always() -> io::Result<()> {
+    fn show_always() {
         let actual = ModuleRenderer::new("username")
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .config(toml::toml! {
@@ -188,6 +179,5 @@ mod tests {
         let expected = Some(format!("{} in ", Color::Yellow.bold().paint("astronaut")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

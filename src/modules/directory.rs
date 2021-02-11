@@ -515,7 +515,7 @@ mod tests {
         }
 
         #[test]
-        fn directory_in_root() -> io::Result<()> {
+        fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
                 "{}{} ",
@@ -524,23 +524,21 @@ mod tests {
             ));
 
             assert_eq!(expected, actual);
-            Ok(())
         }
     }
 
     #[test]
-    fn home_directory_default_home_symbol() -> io::Result<()> {
+    fn home_directory_default_home_symbol() {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn home_directory_custom_home_symbol() -> io::Result<()> {
+    fn home_directory_custom_home_symbol() {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .config(toml::toml! {
@@ -551,11 +549,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn home_directory_custom_home_symbol_subdirectories() -> io::Result<()> {
+    fn home_directory_custom_home_symbol_subdirectories() {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap().join("path/subpath"))
             .config(toml::toml! {
@@ -566,11 +563,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀/path/subpath")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn substituted_truncated_path() -> io::Result<()> {
+    fn substituted_truncated_path() {
         let actual = ModuleRenderer::new("directory")
             .path("/some/long/network/path/workspace/a/b/c/dev")
             .config(toml::toml! {
@@ -587,11 +583,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn substitution_order() -> io::Result<()> {
+    fn substitution_order() {
         let actual = ModuleRenderer::new("directory")
             .path("/path/to/sub")
             .config(toml::toml! {
@@ -603,11 +598,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/correct/order")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn strange_substitution() -> io::Result<()> {
+    fn strange_substitution() {
         let strange_sub = "/\\/;,!";
         let actual = ModuleRenderer::new("directory")
             .path("/foo/bar/regular/path")
@@ -627,7 +621,6 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -690,7 +683,7 @@ mod tests {
     }
 
     #[test]
-    fn root_directory() -> io::Result<()> {
+    fn root_directory() {
         let actual = ModuleRenderer::new("directory").path("/").collect();
         #[cfg(not(target_os = "windows"))]
         let expected = Some(format!(
@@ -702,7 +695,6 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -1234,7 +1226,7 @@ mod tests {
     }
 
     #[test]
-    fn truncation_symbol_truncated_root() -> io::Result<()> {
+    fn truncation_symbol_truncated_root() {
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
@@ -1248,11 +1240,10 @@ mod tests {
             Color::Cyan.bold().paint("…/four/element/path")
         ));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn truncation_symbol_not_truncated_root() -> io::Result<()> {
+    fn truncation_symbol_not_truncated_root() {
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
@@ -1266,7 +1257,6 @@ mod tests {
             Color::Cyan.bold().paint("/a/four/element/path")
         ));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -1362,7 +1352,7 @@ mod tests {
 
     #[test]
     #[cfg(target_os = "windows")]
-    fn truncation_symbol_windows_root_not_truncated() -> io::Result<()> {
+    fn truncation_symbol_windows_root_not_truncated() {
         let dir = Path::new("C:\\temp");
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1374,12 +1364,11 @@ mod tests {
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("C:/temp")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
     #[cfg(target_os = "windows")]
-    fn truncation_symbol_windows_root_truncated() -> io::Result<()> {
+    fn truncation_symbol_windows_root_truncated() {
         let dir = Path::new("C:\\temp");
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1391,12 +1380,11 @@ mod tests {
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/temp")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
     #[cfg(target_os = "windows")]
-    fn truncation_symbol_windows_root_truncated_backslash() -> io::Result<()> {
+    fn truncation_symbol_windows_root_truncated_backslash() {
         let dir = Path::new("C:\\temp");
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1408,7 +1396,6 @@ mod tests {
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]

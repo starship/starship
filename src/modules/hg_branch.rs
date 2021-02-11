@@ -143,7 +143,7 @@ mod tests {
                 truncation_length = 14
             }),
             &[Expect::Empty],
-        )?;
+        );
         tempdir.close()
     }
 
@@ -161,7 +161,7 @@ mod tests {
             tempdir.path(),
             None,
             &[Expect::BranchName(&"default"), Expect::NoTruncation],
-        )?;
+        );
         tempdir.close()
     }
 
@@ -169,7 +169,7 @@ mod tests {
     #[ignore]
     fn test_hg_get_branch_autodisabled() -> io::Result<()> {
         let tempdir = tempfile::tempdir()?;
-        expect_hg_branch_with_config(tempdir.path(), None, &[Expect::Empty])?;
+        expect_hg_branch_with_config(tempdir.path(), None, &[Expect::Empty]);
         tempdir.close()
     }
 
@@ -183,7 +183,7 @@ mod tests {
             &repo_dir,
             None,
             &[Expect::BranchName(&"bookmark-101"), Expect::NoTruncation],
-        )?;
+        );
         tempdir.close()
     }
 
@@ -211,7 +211,7 @@ mod tests {
                 disabled = false
             }),
             &[Expect::BranchName(&"branch-name-10")],
-        )?;
+        );
         tempdir.close()
     }
 
@@ -245,7 +245,7 @@ mod tests {
                 Expect::Symbol(&"B"),
                 Expect::TruncationSymbol(&"%"),
             ],
-        )?;
+        );
         tempdir.close()
     }
 
@@ -278,7 +278,7 @@ mod tests {
                 Expect::Style(Color::Blue.underline()),
                 Expect::TruncationSymbol(&""),
             ],
-        )?;
+        );
         tempdir.close()
     }
 
@@ -286,7 +286,7 @@ mod tests {
         repo_dir: &Path,
         config: Option<toml::Value>,
         expectations: &[Expect],
-    ) -> io::Result<()> {
+    ) {
         let actual = ModuleRenderer::new("hg_branch")
             .path(repo_dir.to_str().unwrap())
             .config(config.unwrap_or_else(|| {
@@ -306,7 +306,7 @@ mod tests {
             match expect {
                 Expect::Empty => {
                     assert_eq!(None, actual);
-                    return Ok(());
+                    return;
                 }
                 Expect::Symbol(symbol) => {
                     expect_symbol = symbol;
@@ -332,7 +332,6 @@ mod tests {
             )),
         ));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     fn run_hg(args: &[&str], repo_dir: &Path) -> io::Result<()> {

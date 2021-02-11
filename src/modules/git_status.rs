@@ -354,6 +354,7 @@ mod tests {
         std::thread::sleep(std::time::Duration::from_millis(500));
     }
 
+    #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
             "{} ",
