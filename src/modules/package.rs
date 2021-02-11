@@ -244,7 +244,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -259,7 +259,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -273,7 +273,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -288,7 +288,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -303,7 +303,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -319,7 +319,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -339,7 +339,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), Some(starship_config))?;
+        expect_output(&project_dir, Some("v0.1.0"), Some(starship_config));
         project_dir.close()
     }
 
@@ -355,7 +355,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -370,7 +370,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -389,7 +389,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -408,7 +408,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -427,7 +427,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0-rc1"), None)?;
+        expect_output(&project_dir, Some("v0.1.0-rc1"), None);
         project_dir.close()
     }
 
@@ -445,7 +445,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -478,7 +478,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v1.2.3"), None)?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
 
@@ -489,7 +489,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v3.2.1"), None)?;
+        expect_output(&project_dir, Some("v3.2.1"), None);
         project_dir.close()
     }
 
@@ -505,7 +505,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v1.0.0-alpha.3"), None)?;
+        expect_output(&project_dir, Some("v1.0.0-alpha.3"), None);
         project_dir.close()
     }
 
@@ -521,7 +521,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None)?;
+        expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None);
         project_dir.close()
     }
 
@@ -536,7 +536,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.2.0"), None)?;
+        expect_output(&project_dir, Some("v0.2.0"), None);
         project_dir.close()
     }
 
@@ -551,7 +551,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -565,7 +565,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -580,7 +580,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -594,7 +594,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -668,7 +668,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None)?;
+        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None);
         project_dir.close()
     }
 
@@ -692,7 +692,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -709,7 +709,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -730,7 +730,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -741,7 +741,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -752,7 +752,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -770,11 +770,7 @@ end";
         file.sync_all()
     }
 
-    fn expect_output(
-        project_dir: &TempDir,
-        contains: Option<&str>,
-        config: Option<toml::Value>,
-    ) -> io::Result<()> {
+    fn expect_output(project_dir: &TempDir, contains: Option<&str>, config: Option<toml::Value>) {
         let starship_config = config.unwrap_or(toml::toml! {
             [package]
             disabled = false
@@ -795,7 +791,5 @@ end";
         } else {
             assert_eq!(actual, None);
         }
-
-        Ok(())
     }
 }

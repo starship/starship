@@ -155,7 +155,6 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use chrono::offset::TimeZone;
-    use std::io;
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
@@ -470,7 +469,7 @@ mod tests {
     }
 
     #[test]
-    fn config_enabled() -> io::Result<()> {
+    fn config_enabled() {
         let actual = ModuleRenderer::new("time")
             .config(toml::toml! {
                 [time]
@@ -480,20 +479,18 @@ mod tests {
 
         // We can't test what it actually is...but we can assert that it is something
         assert!(actual.is_some());
-        Ok(())
     }
 
     #[test]
-    fn config_blank() -> io::Result<()> {
+    fn config_blank() {
         let actual = ModuleRenderer::new("time").collect();
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_check_prefix_and_suffix() -> io::Result<()> {
+    fn config_check_prefix_and_suffix() {
         let actual = ModuleRenderer::new("time")
             .config(toml::toml! {
                 [time]
@@ -512,6 +509,5 @@ mod tests {
 
         assert!(actual.starts_with(&col_prefix));
         assert!(actual.ends_with(&col_suffix));
-        Ok(())
     }
 }

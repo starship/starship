@@ -366,7 +366,7 @@ mod tests {
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
         let workspace = create_workspace(false)?;
-        expect_output(&workspace.path(), None)?;
+        expect_output(&workspace.path(), None);
         workspace.close()
     }
 
@@ -377,7 +377,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -388,7 +388,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -399,7 +399,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -410,7 +410,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -425,7 +425,7 @@ mod tests {
                 "{}",
                 Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0 ")
             )),
-        )?;
+        );
         workspace.close()
     }
 
@@ -436,7 +436,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -447,7 +447,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -458,7 +458,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -470,7 +470,7 @@ mod tests {
         expect_output(
             &workspace.path(),
             Some(format!("{}", Color::Blue.bold().paint("•NET v1.2.3 "))),
-        )?;
+        );
         workspace.close()
     }
 
@@ -487,7 +487,7 @@ mod tests {
                 "{}",
                 Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0 ")
             )),
-        )?;
+        );
         workspace.close()
     }
 
@@ -508,7 +508,7 @@ mod tests {
                 "{}",
                 Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0 ")
             )),
-        )?;
+        );
         workspace.close()
     }
 
@@ -523,7 +523,7 @@ mod tests {
                 "{}",
                 Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0 ")
             )),
-        )?;
+        );
         workspace.close()
     }
 
@@ -540,7 +540,7 @@ mod tests {
                     .bold()
                     .paint("•NET v3.1.103 🎯 netstandard2.0;net461 ")
             )),
-        )?;
+        );
         workspace.close()
     }
 
@@ -602,12 +602,10 @@ mod tests {
             .replace("TFM_VALUE", tfm)
     }
 
-    fn expect_output(dir: &Path, expected: Option<String>) -> io::Result<()> {
+    fn expect_output(dir: &Path, expected: Option<String>) {
         let actual = ModuleRenderer::new("dotnet").path(dir).collect();
 
         assert_eq!(actual, expected);
-
-        Ok(())
     }
 
     #[test]

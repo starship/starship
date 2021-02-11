@@ -64,7 +64,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use ansi_term::{Color, Style};
-    use std::io;
 
     use crate::test::ModuleRenderer;
 
@@ -76,7 +75,7 @@ mod tests {
     }
 
     #[test]
-    fn empty_config() -> io::Result<()> {
+    fn empty_config() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -86,11 +85,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn enabled() -> io::Result<()> {
+    fn enabled() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -101,11 +99,10 @@ mod tests {
         let expected = Some(format!("{} ", style().paint("↕️  2")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn no_level() -> io::Result<()> {
+    fn no_level() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -115,11 +112,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn enabled_config_level_1() -> io::Result<()> {
+    fn enabled_config_level_1() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -130,11 +126,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn lower_threshold() -> io::Result<()> {
+    fn lower_threshold() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -146,11 +141,10 @@ mod tests {
         let expected = Some(format!("{} ", style().paint("↕️  1")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn higher_threshold() -> io::Result<()> {
+    fn higher_threshold() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -162,11 +156,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn custom_style() -> io::Result<()> {
+    fn custom_style() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -178,11 +171,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Red.underline().paint("↕️  2")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn custom_symbol() -> io::Result<()> {
+    fn custom_symbol() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -194,11 +186,10 @@ mod tests {
         let expected = Some(format!("{} ", style().paint("shlvl is 2")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn formatting() -> io::Result<()> {
+    fn formatting() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -210,11 +201,10 @@ mod tests {
         let expected = Some(format!("↕️   going down {} GOING UP ", style().paint("2")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn repeat() -> io::Result<()> {
+    fn repeat() {
         let actual = ModuleRenderer::new("shlvl")
             .config(toml::toml! {
                 [shlvl]
@@ -228,6 +218,5 @@ mod tests {
         let expected = Some(format!("{} ", style().paint("~~~>")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

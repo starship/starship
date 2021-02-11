@@ -125,7 +125,7 @@ mod tests {
     }
 
     #[test]
-    fn test_format_ruby_version() -> io::Result<()> {
+    fn test_format_ruby_version() {
         assert_eq!(
             format_ruby_version("ruby 2.1.10p492 (2016-04-01 revision 54464) [x86_64-darwin19.0]"),
             Some("v2.1.10".to_string())
@@ -140,7 +140,5 @@ mod tests {
             ),
             Some("v2.7.0".to_string())
         );
-
-        Ok(())
     }
 }
