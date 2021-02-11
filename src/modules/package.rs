@@ -13,13 +13,13 @@ use serde_json as json;
 /// Creates a module with the current package version
 ///
 /// Will display if a version is defined for your Node.js or Rust project (if one exists)
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
-    let module_version = get_package_version(&context.current_dir, &config)?;
+    let module_version = get_package_version(&context.current_dir, &config).await?;
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -32,8 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => Some(Ok(&module_version)),
                 _ => None,
             })
-            .parse(None)
-    });
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -172,26 +173,28 @@ fn extract_meson_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
-    if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
+async fn get_package_version<'a>(base_dir: &Path, config: &'a PackageConfig<'a>) -> Option<String> {
+    use utils::async_read_file as load;
+
+    if let Ok(cargo_toml) = load(base_dir.join("Cargo.toml")).await {
         extract_cargo_version(&cargo_toml)
-    } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
+    } else if let Ok(package_json) = load(base_dir.join("package.json")).await {
         extract_package_version(&package_json, config.display_private)
-    } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
+    } else if let Ok(poetry_toml) = load(base_dir.join("pyproject.toml")).await {
         extract_poetry_version(&poetry_toml)
-    } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
+    } else if let Ok(composer_json) = load(base_dir.join("composer.json")).await {
         extract_composer_version(&composer_json)
-    } else if let Ok(build_gradle) = utils::read_file(base_dir.join("build.gradle")) {
+    } else if let Ok(build_gradle) = load(base_dir.join("build.gradle")).await {
         extract_gradle_version(&build_gradle)
-    } else if let Ok(project_toml) = utils::read_file(base_dir.join("Project.toml")) {
+    } else if let Ok(project_toml) = load(base_dir.join("Project.toml")).await {
         extract_project_version(&project_toml)
-    } else if let Ok(mix_file) = utils::read_file(base_dir.join("mix.exs")) {
+    } else if let Ok(mix_file) = load(base_dir.join("mix.exs")).await {
         extract_mix_version(&mix_file)
-    } else if let Ok(chart_file) = utils::read_file(base_dir.join("Chart.yaml")) {
+    } else if let Ok(chart_file) = load(base_dir.join("Chart.yaml")).await {
         extract_helm_package_version(&chart_file)
-    } else if let Ok(pom_file) = utils::read_file(base_dir.join("pom.xml")) {
+    } else if let Ok(pom_file) = load(base_dir.join("pom.xml")).await {
         extract_maven_version(&pom_file)
-    } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
+    } else if let Ok(meson_build) = load(base_dir.join("meson.build")).await {
         extract_meson_version(&meson_build)
     } else {
         None

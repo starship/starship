@@ -111,7 +111,7 @@ pub async fn handle<'a>(
             "nodejs" => nodejs::module(context).await,
             "ocaml" => ocaml::module(context),
             "openstack" => openstack::module(context),
-            "package" => package::module(context),
+            "package" => package::module(context).await,
             "perl" => perl::module(context),
             "php" => php::module(context),
             "purescript" => purescript::module(context),
