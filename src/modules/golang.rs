@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::go::GoConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Go version
 ///
@@ -48,7 +47,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    format_go_version(&utils::exec_cmd("go", &["version"])?.stdout.as_str()).map(Ok)
+                    format_go_version(&context.exec_cmd("go", &["version"])?.stdout.as_str())
+                        .map(Ok)
                 }
                 _ => None,
             })

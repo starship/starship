@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::swift::SwiftConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Swift version
 ///
@@ -34,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let swift_version = utils::exec_cmd("swift", &["--version"])?.stdout;
+                    let swift_version = context.exec_cmd("swift", &["--version"])?.stdout;
                     parse_swift_version(&swift_version).map(Ok)
                 }
                 _ => None,

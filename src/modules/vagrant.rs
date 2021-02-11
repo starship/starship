@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::vagrant::VagrantConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Vagrant version
 ///
@@ -32,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_vagrant_version(
-                    &utils::exec_cmd("vagrant", &["--version"])?.stdout.as_str(),
+                    &context.exec_cmd("vagrant", &["--version"])?.stdout.as_str(),
                 )
                 .map(Ok),
                 _ => None,

@@ -30,12 +30,12 @@ impl PartialEq for CommandOutput {
 
 /// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    internal_exec_cmd(&cmd, &args)
+pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
+    internal_exec_cmd(&cmd, &args, time_limit)
 }
 
 #[cfg(test)]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     let command = match args.len() {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
@@ -202,7 +202,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args),
+        _ => internal_exec_cmd(&cmd, &args, time_limit),
     }
 }
 
@@ -255,7 +255,7 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
-fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
 
     let full_path = match which::which(cmd) {
@@ -268,8 +268,6 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             return None;
         }
     };
-
-    let time_limit = Duration::from_millis(500);
 
     let start = Instant::now();
 
@@ -310,7 +308,8 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
             })
         }
         Ok(None) => {
-            log::warn!("Executing command {:?} timed out", cmd);
+            log::warn!("Executing command {:?} timed out.", cmd);
+            log::warn!("You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.");
             None
         }
         Err(error) => {
@@ -326,7 +325,7 @@ mod tests {
 
     #[test]
     fn exec_mocked_command() {
-        let result = exec_cmd("dummy_command", &[]);
+        let result = exec_cmd("dummy_command", &[], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -341,7 +340,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_no_output() {
-        let result = internal_exec_cmd("true", &[]);
+        let result = internal_exec_cmd("true", &[], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -353,7 +352,8 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
+        let result =
+            internal_exec_cmd("/bin/sh", &["-c", "echo hello"], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from(""),
@@ -365,7 +365,11 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_output_stderr() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
+        let result = internal_exec_cmd(
+            "/bin/sh",
+            &["-c", "echo hello >&2"],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from("hello\n"),
@@ -377,7 +381,11 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_output_both() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
+        let result = internal_exec_cmd(
+            "/bin/sh",
+            &["-c", "echo hello; echo world >&2"],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from("world\n"),
@@ -389,7 +397,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_non_zero_exit_code() {
-        let result = internal_exec_cmd("false", &[]);
+        let result = internal_exec_cmd("false", &[], Duration::from_millis(500));
         let expected = None;
 
         assert_eq!(result, expected)
@@ -398,7 +406,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_slow_command() {
-        let result = internal_exec_cmd("sleep", &["500"]);
+        let result = internal_exec_cmd("sleep", &["500"], Duration::from_millis(500));
         let expected = None;
 
         assert_eq!(result, expected)

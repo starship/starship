@@ -1,5 +1,6 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
+use crate::utils::{exec_cmd, CommandOutput};
 
 use crate::modules;
 use clap::ArgMatches;
@@ -43,6 +44,9 @@ pub struct Context<'a> {
 
     /// A HashMap of environment variable mocks
     pub env: HashMap<&'a str, String>,
+
+    /// Timeout for the execution of commands
+    cmd_timeout: Duration,
 }
 
 impl<'a> Context<'a> {
@@ -100,6 +104,8 @@ impl<'a> Context<'a> {
         let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
         let logical_dir = logical_path;
 
+        let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
+
         Context {
             config,
             properties,
@@ -109,6 +115,7 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             env: HashMap::new(),
+            cmd_timeout,
         }
     }
 
@@ -236,6 +243,11 @@ impl<'a> Context<'a> {
 
     pub fn get_cmd_duration(&self) -> Option<u128> {
         self.properties.get("cmd_duration")?.parse::<u128>().ok()
+    }
+
+    /// Execute a command and return the output on stdout and stderr if successful
+    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+        exec_cmd(cmd, args, self.cmd_timeout)
     }
 }
 

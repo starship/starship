@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_erlang_version().map(Ok),
+                "version" => get_erlang_version(context).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -49,10 +49,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_erlang_version() -> Option<String> {
-    use crate::utils;
-
-    Some(utils::exec_cmd(
+fn get_erlang_version(context: &Context) -> Option<String> {
+    Some(context.exec_cmd(
         "erl",
         &[
             "-noshell",

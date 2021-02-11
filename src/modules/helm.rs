@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::helm::HelmConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Helm version
 ///
@@ -33,7 +32,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_helm_version(
-                    &utils::exec_cmd("helm", &["version", "--short", "--client"])?
+                    &context
+                        .exec_cmd("helm", &["version", "--short", "--client"])?
                         .stdout
                         .as_str(),
                 )

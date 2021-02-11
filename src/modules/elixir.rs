@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::elixir::ElixirConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -23,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let versions = Lazy::new(get_elixir_version);
+    let versions = Lazy::new(|| get_elixir_version(context));
 
     let mut module = context.new_module("elixir");
     let config = ElixirConfig::try_load(module.config);
@@ -64,8 +63,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_elixir_version() -> Option<(String, String)> {
-    let output = utils::exec_cmd("elixir", &["--version"])?.stdout;
+fn get_elixir_version(context: &Context) -> Option<(String, String)> {
+    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
 
     parse_elixir_version(&output)
 }
