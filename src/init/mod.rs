@@ -185,7 +185,7 @@ fi"#,
         }
         Some(shell_basename) => {
             println!(
-                "\"{0}\" is not yet supported by starship.\n\
+                "{0} is not yet supported by starship.\n\
                 For the time being, we support bash, zsh, fish, and ion.\n\
                 Please open an issue in the starship repo if you would like to\
                 see support for {0}:\nhttps://github.com/starship/starship/issues/new\n",
