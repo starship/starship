@@ -98,7 +98,7 @@ pub async fn handle<'a>(
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
-            "java" => java::module(context),
+            "java" => java::module(context).await,
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),

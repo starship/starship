@@ -7,7 +7,7 @@ use regex::Regex;
 const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
 
 /// Creates a module with the current Java version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("java");
     let config: JavaConfig = JavaConfig::try_load(module.config);
 
@@ -22,8 +22,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -32,15 +32,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let java_version = get_java_version(context)?;
-                    Some(Ok(java_version))
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => get_java_version(context).await.map(Ok),
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -53,13 +54,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_java_version(context: &Context) -> Option<String> {
+async fn get_java_version<'a>(context: &'a Context<'a>) -> Option<String> {
     let java_command = match context.get_env("JAVA_HOME") {
         Some(java_home) => format!("{}/bin/java", java_home),
         None => String::from("java"),
     };
 
-    let output = context.exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let output = context
+        .async_exec_cmd(&java_command.as_str(), &["-Xinternalversion"])
+        .await?;
     let java_version = if output.stdout.is_empty() {
         output.stderr
     } else {
