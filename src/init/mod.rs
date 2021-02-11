@@ -175,20 +175,20 @@ fi"#,
         }
         None => {
             println!(
-                "Invalid shell name provided: {}\\n\
+                "Invalid shell name provided: {}\n\
                  If this issue persists, please open an \
-                 issue in the starship repo: \\n\
-                 https://github.com/starship/starship/issues/new\\n\"",
+                 issue in the starship repo: \n\
+                 https://github.com/starship/starship/issues/new\n",
                 shell_name
             );
             None
         }
         Some(shell_basename) => {
             println!(
-                "printf \"\\n{0} is not yet supported by starship.\\n\
-                 For the time being, we support bash, zsh, fish, and ion.\\n\
-                 Please open an issue in the starship repo if you would like to \
-                 see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
+                "\"{0}\" is not yet supported by starship.\n\
+                For the time being, we support bash, zsh, fish, and ion.\n\
+                Please open an issue in the starship repo if you would like to\
+                see support for {0}:\nhttps://github.com/starship/starship/issues/new\n",
                 shell_basename
             );
             None
