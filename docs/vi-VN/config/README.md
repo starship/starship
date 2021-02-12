@@ -173,7 +173,7 @@ Mặc định `format` được sử dụng để định nghĩa định dạng 
 ```toml
 format = "$all"
 
-# Cái đó tương đương với
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -209,6 +209,7 @@ $ruby\
 $rust\
 $swift\
 $terraform\
+$vagrant\
 $zig\
 $nix_shell\
 $conda\
@@ -371,6 +372,8 @@ Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất b
 
 Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi hình dạng, tham khảo [ví dụ này](#with-custom-error-shape).
 
+::: warning `error_symbol` is not supported on elvish shell. :::
+
 ### Các tuỳ chọn
 
 | Tuỳ chọn         | Mặc định            | Mô tả                                                                                |
@@ -497,7 +500,7 @@ format = "underwent [$duration](bold yellow)"
 
 Module `conda` cho biết môi trường conda hiện tại, nếu `$CONDA_DEFAULT_ENV` được thiết lập.
 
-::: thủ thuật
+::: thử thuật
 
 Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể muốn chạy `conda config --set changeps1 False`.
 
@@ -535,7 +538,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Module sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `shard.yml`
 - Đường dẫn hiện tại chứa một tập tin `.cr`
@@ -1601,7 +1604,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of Nim. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `nim.cfg` file
+- Đường dẫn hiện tại chứa một tập tin `nim.cfg`
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1677,7 +1680,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of NodeJS. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `package.json` file
+- Đường dẫn hiện tại chứa một tập tin `package.json`
 - The current directory contains a `.node-version` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
@@ -1872,7 +1875,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of PHP. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `composer.json` file
+- Đường dẫn hiện tại chứa một tập tin `composer.json`
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` file
 
@@ -1908,7 +1911,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of PureScript version. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `spago.dhall` file
+- Đường dẫn hiện tại chứa một tập tin `spago.dhall`
 - The current directory contains a \*.purs files
 
 ### Các tuỳ chọn
@@ -1948,8 +1951,8 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
+- Đường dẫn hiện tại chứa một tập tin `requirements.txt`
+- Đường dẫn hiện tại chứa một tập tin `pyproject.toml`
 - The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
 - Đường dẫn hiện tại chứa một tập tin `tox.ini`
@@ -2156,6 +2159,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
+::: warning This module is not supported on elvish shell. :::
+
 ### Các tuỳ chọn
 
 | Tuỳ chọn                | Mặc định                      | Mô tả                                                |
@@ -2195,7 +2200,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 [status]
 style = "bg:blue"
 symbol = "🔴"
-format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
@@ -2380,6 +2385,40 @@ style_root = "black bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+```
+
+## Vagrant
+
+The `vagrant` module shows the currently installed version of Vagrant. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+
+- The current directory contains a `Vagrantfile` file
+
+### Các tuỳ chọn
+
+| Tuỳ chọn   | Mặc định                             | Mô tả                                               |
+| ---------- | ------------------------------------ | --------------------------------------------------- |
+| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `style`    | `"cyan bold"`                        | Kiểu cho module.                                    |
+| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+
+### Các biến
+
+| Biến      | Ví dụ            | Mô tả                            |
+| --------- | ---------------- | -------------------------------- |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`         |
+| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |                  | Giá trị ghi đè của `style`       |
+
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[vagrant]
+format = "via [⍱ $version](bold white) "
 ```
 
 ## Zig

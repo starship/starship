@@ -388,7 +388,7 @@ can do this in two ways:
 
 By default it only changes color. If you also want to change it's shape take a
 look at [this example](#with-custom-error-shape).
- 
+
 ::: warning
 `error_symbol` is not supported on elvish shell.
 :::
@@ -667,11 +667,11 @@ it would have been `nixpkgs/pkgs`.
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                                              |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                         |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`  | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Advanced Option             | Default | Description                                                               |
+| --------------------------- | ------- | ------------------------------------------------------------------------- |
+| `substitutions`             |         | A table of substitutions to be made to the path.                          |
+| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.  |
+| `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
 prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
@@ -2041,30 +2041,32 @@ current Python virtual environment if one is activated.
 If `pyenv_version_name` is set to `true`, it will display the pyenv version
 name. Otherwise, it will display the version number from `python --version`.
 
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a `setup.py` file
 - The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
 ### Options
 
-| Option               | Default                                                                 | Description                                                                            |
-| -------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | The format for the module.                                                             |
-| `symbol`             | `"🐍 "`                                                                 | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                         | The style for the module.                                                              |
-| `pyenv_version_name` | `false`                                                                 | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv `                                                                | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                  | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                       | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                 | Disables the `python` module.                                                          |
+| Option               | Default                                                                                                      | Description                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                     | The format for the module.                                                             |
+| `symbol`             | `"🐍 "`                                                                                                      | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
+| `pyenv_prefix`       | `pyenv `                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2111,6 +2113,14 @@ pyenv_version_name = true
 [python]
 # Only use the `python3` binary to get the version.
 python_binary = "python3"
+```
+
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Don't trigger for files with the py extension
+detect_extensions = []
 ```
 
 ## Ruby

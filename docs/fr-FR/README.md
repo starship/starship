@@ -110,3 +110,16 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    eval $(starship init ion)
    ```
+
+   #### Elvish
+
+   ::: warning Only elvish v0.15 or higher is supported. :::
+
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
