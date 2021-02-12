@@ -1521,13 +1521,13 @@ mod tests {
     fn invalid_path() -> PathBuf {
         use std::ffi::OsString;
         use std::os::windows::prelude::*;
-    
+
         // Here the values 0x0066 and 0x006f correspond to 'f' and 'o'
         // respectively. The value 0xD800 is a lone surrogate half, invalid
         // in a UTF-16 sequence.
         let source = [0x0066, 0x006f, 0xD800, 0x006f];
         let os_string = OsString::from_wide(&source[..]);
-    
+
         PathBuf::from(os_string)
     }
 
@@ -1540,10 +1540,8 @@ mod tests {
             Color::Cyan.bold().paint(path.to_string_lossy())
         ));
 
-        let actual = ModuleRenderer::new("directory")
-            .path(path)
-            .collect();
+        let actual = ModuleRenderer::new("directory").path(path).collect();
 
-        assert_eq!(expected, actual);        
+        assert_eq!(expected, actual);
     }
 }
