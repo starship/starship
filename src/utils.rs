@@ -289,8 +289,20 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 
     match process.with_output_timeout(time_limit).terminating().wait() {
         Ok(Some(output)) => {
-            let stdout_string = String::from_utf8(output.stdout).unwrap();
-            let stderr_string = String::from_utf8(output.stderr).unwrap();
+            let stdout_string = match String::from_utf8(output.stdout) {
+                Ok(stdout) => stdout,
+                Err(error) => {
+                    log::warn!("Unable to decode stdout: {:?}", error);
+                    return None;
+                }
+            };
+            let stderr_string = match String::from_utf8(output.stderr) {
+                Ok(stderr) => stderr,
+                Err(error) => {
+                    log::warn!("Unable to decode stderr: {:?}", error);
+                    return None;
+                }
+            };
 
             log::trace!(
                 "stdout: {:?}, stderr: {:?}, exit code: \"{:?}\", took {:?}",
