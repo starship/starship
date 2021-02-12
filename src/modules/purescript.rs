@@ -4,7 +4,7 @@ use crate::configs::purescript::PureScriptConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current PureScript version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("purescript");
     let config: PureScriptConfig = PureScriptConfig::try_load(module.config);
     let is_purs_project = context
@@ -18,8 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -28,15 +28,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let purs_version = context.exec_cmd("purs", &["--version"])?.stdout;
-                    Some(Ok(format!("v{}", purs_version.trim())))
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        let purs_version =
+                            context.async_exec_cmd("purs", &["--version"]).await?.stdout;
+                        Some(Ok(format!("v{}", purs_version.trim())))
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
