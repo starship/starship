@@ -94,7 +94,7 @@ pub async fn handle<'a>(
             "git_commit" => git_commit::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context).await,
-            "golang" => golang::module(context),
+            "golang" => golang::module(context).await,
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
