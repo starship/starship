@@ -187,7 +187,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     let sub_path = full_path
         .without_prefix()
         .strip_prefix(top_level_path.without_prefix())
-        .expect("strip path prefix");
+        .unwrap_or(full_path);
 
     format!(
         "{replacement}{separator}{path}",
