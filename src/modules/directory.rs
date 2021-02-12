@@ -58,10 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = repo
         .and_then(|r| r.root.as_ref())
         .filter(|root| *root != &home_dir)
-        // NOTE: Always attempt to contract repo paths from the physical dir as
-        // the logical dir _may_ not be be a valid physical disk
-        // path and may be impossible to contract.
-        .and_then(|root| contract_repo_path(&physical_dir, root));
+        .and_then(|root| contract_repo_path(&display_dir, root));
 
     // Otherwise use the logical path, automatically contracting
     // the home directory if required.
