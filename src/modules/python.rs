@@ -24,12 +24,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let pyenv_prefix = if config.pyenv_version_name {
-        config.pyenv_prefix
-    } else {
-        ""
-    };
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -46,14 +40,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Some(Ok(version.trim().to_string()))
                 }
                 "pyenv_version" => {
-                    let pyenv_version = get_pyenv_version(&config)?;
+                    let pyenv_version = get_pyenv_version()?;
                     Some(Ok(pyenv_version.trim().to_string()))
                 }
                 "virtualenv" => {
                     let virtual_env = get_python_virtual_env(context);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
                 }
-                "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
                 _ => None,
             })
             .parse(None)
@@ -71,9 +64,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_python_version(config: &PythonConfig) -> Option<String> {
-    if config.pyenv_version_name {
-        return None;
-    };
     let version = config.python_binary.0.iter().find_map(|binary| {
         match utils::exec_cmd(binary, &["--version"]) {
             Some(output) => {
@@ -89,12 +79,8 @@ fn get_python_version(config: &PythonConfig) -> Option<String> {
     Some(format_python_version(&version))
 }
 
-fn get_pyenv_version(config: &PythonConfig) -> Option<String> {
-    if config.pyenv_version_name {
-        return Some(utils::exec_cmd("pyenv", &["version-name"])?.stdout);
-    } else {
-        return None;
-    };
+fn get_pyenv_version() -> Option<String> {
+    return Some(utils::exec_cmd("pyenv", &["version-name"])?.stdout);
 }
 
 fn format_python_version(python_stdout: &str) -> String {
@@ -290,8 +276,7 @@ mod tests {
 
         let config_pyenv = toml::toml! {
             [python]
-            pyenv_version_name = true
-            pyenv_prefix = "test_pyenv "
+            format="via [${symbol}pyenv ${pyenv_version}]($style)"
             detect_extensions = []
         };
         check_pyenv_renders(&dir, Some(config_pyenv));
@@ -420,8 +405,7 @@ prompt = 'foo'
     fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
-             pyenv_version_name = true
-             pyenv_prefix = "test_pyenv "
+             format="via [${symbol}pyenv ${pyenv_version}]($style)"
         });
 
         let actual = ModuleRenderer::new("python")
@@ -431,7 +415,7 @@ prompt = 'foo'
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 test_pyenv system ")
+            Color::Yellow.bold().paint("🐍 pyenv system")
         ));
         assert_eq!(expected, actual);
     }

@@ -2037,8 +2037,9 @@ format = "via [$symbol$version](bold white)"
 The `python` module shows the currently installed version of Python and the
 current Python virtual environment if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version
-name. Otherwise, it will display the version number from `python --version`.
+If `pyenv_version` variable is used in the `format` option, it will display
+the version number from `version-name`. Otherwise, it will display
+the version number from `python --version`.
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -2056,11 +2057,9 @@ By default the module will be shown if any of the following conditions are met:
 
 | Option               | Default                                                                                                       | Description                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${pyenv_version} )(v${version} )(\($virtualenv\))]($style)'`                  | The format for the module.                                                             |
+| `format`             | `'via [${symbol}(v${version} )(\($virtualenv\))]($style)'`                                                    | The format for the module.                                                             |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                               | The style for the module.                                                              |
-| `pyenv_version_name` | `false`                                                                                                       | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv `                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                             | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `[".py"]`                                                                                                     | Which extensions should trigger this moudle                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]`  | Which filenames should trigger this module                                             |
@@ -2092,7 +2091,6 @@ Python version 2, see example below.
 | version       | `"3.8.1"`       | The version of `python`                    |
 | symbol        | `"🐍 "`         | Mirrors the value of option `symbol`       |
 | style         | `"yellow bold"` | Mirrors the value of option `style`        |
-| pyenv_prefix  | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | pyenv_version | `"system"`      | The version of `python` from `pyenv`       |
 | virtualenv    | `"venv"`        | The current `virtualenv` name              |
 
@@ -2104,7 +2102,6 @@ Python version 2, see example below.
 
 [python]
 symbol = "👾 "
-pyenv_version_name = true
 ```
 
 ```toml
@@ -2123,6 +2120,13 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Display the version from `pyenv version-name` instead of the version from `python --version`
+format = 'via [${symbol}(pyenv ${pyenv_version} )(\($virtualenv\))]($style)'
+```
 ## Ruby
 
 The `ruby` module shows the currently installed version of Ruby.
