@@ -1,6 +1,7 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
 use crate::utils::{exec_cmd, CommandOutput};
+use std::process::ExitStatus;
 use std::sync::Arc;
 
 use crate::modules;
@@ -292,6 +293,15 @@ impl<'a> Context<'a> {
             return out;
         }
         crate::utils::async_exec_cmd(cmd, args).await
+    }
+
+    /// Execute a command and return the exit code and output on stdout and stderr
+    pub async fn exec_cmd_status(
+        &self,
+        cmd: &str,
+        args: &[&str],
+    ) -> Option<(ExitStatus, CommandOutput)> {
+        crate::utils::exec_cmd_status(cmd, args).await
     }
 
     #[cfg(test)]

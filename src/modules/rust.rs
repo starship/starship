@@ -1,6 +1,7 @@
-use async_process::{Command, Output};
+use crate::utils::CommandOutput;
 use std::fs;
 use std::path::Path;
+use std::process::ExitStatus;
 
 use serde::Deserialize;
 
@@ -78,7 +79,7 @@ async fn get_toolchain(context: &Context<'_>) -> Option<String> {
     // - `rustup which`
     if let Some(tool) = env_rustup_toolchain(context) {
         Some(tool)
-    } else if let Some(tool) = execute_rustup_override_list(&context.current_dir).await {
+    } else if let Some(tool) = execute_rustup_override_list(context).await {
         Some(tool)
     } else if let Some(tool) = find_rust_toolchain_file(&context) {
         Some(tool)
@@ -89,18 +90,18 @@ async fn get_toolchain(context: &Context<'_>) -> Option<String> {
 
 async fn get_module_version(context: &Context<'_>) -> Option<String> {
     let module_version = if let Some(toolchain) = get_toolchain(context).await {
-        match execute_rustup_run_rustc_version(&toolchain).await {
+        match execute_rustup_run_rustc_version(context, &toolchain).await {
             RustupRunRustcVersionOutcome::RustcVersion(stdout) => format_rustc_version(stdout),
             RustupRunRustcVersionOutcome::ToolchainName(toolchain) => toolchain,
             RustupRunRustcVersionOutcome::RustupNotWorking => {
                 // If `rustup` is not in `$PATH` or cannot be executed for other reasons, we can
                 // safely execute `rustc --version`.
-                format_rustc_version(execute_rustc_version().await?)
+                format_rustc_version(execute_rustc_version(context).await?)
             }
             RustupRunRustcVersionOutcome::Err => return None,
         }
     } else {
-        format_rustc_version(execute_rustc_version().await?)
+        format_rustc_version(execute_rustc_version(context).await?)
     };
 
     Some(module_version)
@@ -111,14 +112,12 @@ fn env_rustup_toolchain(context: &Context) -> Option<String> {
     Some(val.trim().to_owned())
 }
 
-async fn execute_rustup_override_list(cwd: &Path) -> Option<String> {
-    let Output { stdout, .. } = Command::new("rustup")
-        .args(&["override", "list"])
-        .output()
-        .await
-        .ok()?;
-    let stdout = String::from_utf8(stdout).ok()?;
-    extract_toolchain_from_rustup_override_list(&stdout, cwd)
+async fn execute_rustup_override_list(context: &Context<'_>) -> Option<String> {
+    let stdout = context
+        .async_exec_cmd("rustup", &["override", "list"])
+        .await?
+        .stdout;
+    extract_toolchain_from_rustup_override_list(&stdout, &context.current_dir)
 }
 
 fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Option<String> {
@@ -186,21 +185,24 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     }
 }
 
-async fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
-    Command::new("rustup")
-        .args(&["run", toolchain, "rustc", "--version"])
-        .output()
+async fn execute_rustup_run_rustc_version(
+    context: &Context<'_>,
+    toolchain: &str,
+) -> RustupRunRustcVersionOutcome {
+    context
+        .exec_cmd_status("rustup", &["run", toolchain, "rustc", "--version"])
         .await
         .map(extract_toolchain_from_rustup_run_rustc_version)
         .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
 }
 
-fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunRustcVersionOutcome {
-    if output.status.success() {
-        if let Ok(output) = String::from_utf8(output.stdout) {
-            return RustupRunRustcVersionOutcome::RustcVersion(output);
-        }
-    } else if let Ok(stderr) = String::from_utf8(output.stderr) {
+fn extract_toolchain_from_rustup_run_rustc_version(
+    (status, output): (ExitStatus, CommandOutput),
+) -> RustupRunRustcVersionOutcome {
+    if status.success() {
+        return RustupRunRustcVersionOutcome::RustcVersion(output.stdout);
+    } else {
+        let stderr = output.stderr;
         if stderr.starts_with("error: toolchain '") && stderr.ends_with("' is not installed\n") {
             let stderr = stderr
                 ["error: toolchain '".len()..stderr.len() - "' is not installed\n".len()]
@@ -211,11 +213,11 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
     RustupRunRustcVersionOutcome::Err
 }
 
-async fn execute_rustc_version() -> Option<String> {
-    match Command::new("rustc").arg("--version").output().await {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+async fn execute_rustc_version(context: &Context<'_>) -> Option<String> {
+    context
+        .async_exec_cmd("rustc", &["--version"])
+        .await
+        .map(|output| output.stdout)
 }
 
 fn format_rustc_version(mut rustc_stdout: String) -> String {
@@ -236,9 +238,7 @@ enum RustupRunRustcVersionOutcome {
 #[cfg(test)]
 mod tests {
     use crate::context::Shell;
-    use once_cell::sync::Lazy;
     use std::io;
-    use std::process::{ExitStatus, Output};
 
     use super::*;
 
@@ -282,53 +282,39 @@ mod tests {
         #[cfg(windows)]
         use std::os::windows::process::ExitStatusExt as _;
 
-        static RUSTC_VERSION: Lazy<Output> = Lazy::new(|| Output {
-            status: ExitStatus::from_raw(0),
-            stdout: b"rustc 1.34.0\n"[..].to_owned(),
-            stderr: vec![],
-        });
+        let rustc_version = (
+            ExitStatus::from_raw(0),
+            CommandOutput {
+                stdout: "rustc 1.34.0\n".into(),
+                stderr: "".into(),
+            },
+        );
         assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(RUSTC_VERSION.clone()),
+            extract_toolchain_from_rustup_run_rustc_version(rustc_version),
             RustupRunRustcVersionOutcome::RustcVersion("rustc 1.34.0\n".to_owned()),
         );
 
-        static TOOLCHAIN_NAME: Lazy<Output> = Lazy::new(|| Output {
-            status: ExitStatus::from_raw(1),
-            stdout: vec![],
-            stderr: b"error: toolchain 'channel-triple' is not installed\n"[..].to_owned(),
-        });
+        let toolchain_name = (
+            ExitStatus::from_raw(1),
+            CommandOutput {
+                stdout: "".into(),
+                stderr: "error: toolchain 'channel-triple' is not installed\n".into(),
+            },
+        );
         assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(TOOLCHAIN_NAME.clone()),
+            extract_toolchain_from_rustup_run_rustc_version(toolchain_name),
             RustupRunRustcVersionOutcome::ToolchainName("channel-triple".to_owned()),
         );
 
-        static INVALID_STDOUT: Lazy<Output> = Lazy::new(|| Output {
-            status: ExitStatus::from_raw(0),
-            stdout: b"\xc3\x28"[..].to_owned(),
-            stderr: vec![],
-        });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(INVALID_STDOUT.clone()),
-            RustupRunRustcVersionOutcome::Err,
+        let unexpected_format_of_error = (
+            ExitStatus::from_raw(1),
+            CommandOutput {
+                stdout: "".into(),
+                stderr: "error:".into(),
+            },
         );
-
-        static INVALID_STDERR: Lazy<Output> = Lazy::new(|| Output {
-            status: ExitStatus::from_raw(1),
-            stdout: vec![],
-            stderr: b"\xc3\x28"[..].to_owned(),
-        });
         assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(INVALID_STDERR.clone()),
-            RustupRunRustcVersionOutcome::Err,
-        );
-
-        static UNEXPECTED_FORMAT_OF_ERROR: Lazy<Output> = Lazy::new(|| Output {
-            status: ExitStatus::from_raw(1),
-            stdout: vec![],
-            stderr: b"error:"[..].to_owned(),
-        });
-        assert_eq!(
-            extract_toolchain_from_rustup_run_rustc_version(UNEXPECTED_FORMAT_OF_ERROR.clone()),
+            extract_toolchain_from_rustup_run_rustc_version(unexpected_format_of_error),
             RustupRunRustcVersionOutcome::Err,
         );
     }

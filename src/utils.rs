@@ -6,6 +6,7 @@ use std::fs::File;
 use std::future::Future;
 use std::io::{Read, Result};
 use std::path::Path;
+use std::process::ExitStatus;
 use std::time::{Duration, Instant};
 
 use crate::context::Shell;
@@ -50,6 +51,10 @@ pub async fn async_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 #[cfg(test)]
 pub async fn async_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     exec_cmd(cmd, args, Duration::from_millis(u64::MAX))
+}
+
+pub async fn exec_cmd_status(cmd: &str, args: &[&str]) -> Option<(ExitStatus, CommandOutput)> {
+    internal_exec_cmd_status(cmd, args, None).await
 }
 
 #[cfg(test)]
@@ -291,6 +296,20 @@ async fn async_internal_exec_cmd(
     args: &[&str],
     time_limit: Option<Duration>,
 ) -> Option<CommandOutput> {
+    let (status, out) = internal_exec_cmd_status(cmd, args, time_limit).await?;
+
+    if status.success() {
+        Some(out)
+    } else {
+        None
+    }
+}
+
+async fn internal_exec_cmd_status(
+    cmd: &str,
+    args: &[&str],
+    time_limit: Option<Duration>,
+) -> Option<(ExitStatus, CommandOutput)> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
 
     let full_path = match which::which(cmd) {
@@ -352,14 +371,13 @@ async fn async_internal_exec_cmd(
                 start.elapsed()
             );
 
-            if !output.status.success() {
-                return None;
-            }
-
-            Some(CommandOutput {
-                stdout: stdout_string,
-                stderr: stderr_string,
-            })
+            Some((
+                output.status,
+                CommandOutput {
+                    stdout: stdout_string,
+                    stderr: stderr_string,
+                },
+            ))
         }
         Err(TimeoutError { .. }) => {
             log::warn!("Executing command {:?} timed out.", cmd);
