@@ -110,7 +110,7 @@ pub async fn handle<'a>(
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context).await,
             "ocaml" => ocaml::module(context),
-            "openstack" => openstack::module(context),
+            "openstack" => openstack::module(context).await,
             "package" => package::module(context).await,
             "perl" => perl::module(context),
             "php" => php::module(context),

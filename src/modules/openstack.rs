@@ -9,7 +9,7 @@ use crate::utils;
 type Cloud = String;
 type Project = String;
 
-fn get_osp_project_from_config(context: &Context, osp_cloud: &str) -> Option<Project> {
+async fn get_osp_project_from_config(context: &Context<'_>, osp_cloud: &str) -> Option<Project> {
     // Attempt to follow OpenStack standards for clouds.yaml location:
     // 1st = $PWD/clouds.yaml, 2nd = $HOME/.config/openstack/clouds.yaml, 3rd = /etc/openstack/clouds.yaml
     let config = [
@@ -22,35 +22,46 @@ fn get_osp_project_from_config(context: &Context, osp_cloud: &str) -> Option<Pro
         Some(String::from("/etc/openstack/clouds.yaml")),
     ];
 
-    config
-        .iter()
-        .filter_map(|file| {
-            let config = utils::read_file(file.as_ref()?).ok()?;
-            let clouds = YamlLoader::load_from_str(config.as_str()).ok()?;
-            clouds.get(0)?["clouds"][osp_cloud]["auth"]["project_name"]
-                .as_str()
-                .map(ToOwned::to_owned)
-        })
-        .find(|s| !s.is_empty())
+    for file in &config {
+        let proj = get_osp_project_from_file(file.as_deref(), osp_cloud).await;
+        if proj.is_some() {
+            return proj;
+        }
+    }
+    None
 }
 
-fn get_osp_cloud_and_project(context: &Context) -> (Option<Cloud>, Option<Project>) {
+async fn get_osp_project_from_file(file: Option<&str>, osp_cloud: &str) -> Option<Project> {
+    let config = utils::async_read_file(file?).await.ok()?;
+    let clouds = YamlLoader::load_from_str(config.as_str()).ok()?;
+    let s = clouds.get(0)?["clouds"][osp_cloud]["auth"]["project_name"].as_str()?;
+    if !s.is_empty() {
+        Some(s.into())
+    } else {
+        None
+    }
+}
+
+async fn get_osp_cloud_and_project(context: &Context<'_>) -> (Option<Cloud>, Option<Project>) {
     match (
         context.get_env("OS_CLOUD"),
         context.get_env("OS_PROJECT_NAME"),
     ) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
-        (Some(ref p), None) => (Some(p.to_owned()), get_osp_project_from_config(context, p)),
+        (Some(ref p), None) => (
+            Some(p.to_owned()),
+            get_osp_project_from_config(context, p).await,
+        ),
         (None, None) => (None, None),
     }
 }
 
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("openstack");
     let config: OspConfig = OspConfig::try_load(module.config);
 
-    let (osp_cloud, osp_project) = get_osp_cloud_and_project(context);
+    let (osp_cloud, osp_project) = get_osp_cloud_and_project(context).await;
 
     osp_cloud.as_ref()?;
 
