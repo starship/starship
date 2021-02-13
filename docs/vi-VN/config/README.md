@@ -423,19 +423,22 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Module `cmake` cho biết phiên bản Cmake hiện tại được cài đặt nếu mọi điều kiện sau được thoả mãn:
+The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
 - Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                      |
-| ---------- | ------------------------------------ | ------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                      |
-| `symbol`   | `"喝 "`                               | Kí hiệu sử dụng trước phiên bản của cmake. |
-| `style`    | `"bold blue"`                        | Kiểu cho module.                           |
-| `disabled` | `false`                              | Vô hiệu module `cmake`.                    |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                       |
+| ------------------- | -------------------------------------- | ------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                       |
+| `symbol`            | `"喝 "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.  |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module  |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module    |
+| `style`             | `"bold blue"`                          | Kiểu cho module.                            |
+| `disabled`          | `false`                                | Disables the `cmake` module.                |
 
 ### Các biến
 
