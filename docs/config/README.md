@@ -580,9 +580,9 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | --------------------------------------------------------- |
 | `symbol`            | `"🔮 "`                              | The symbol used before displaying the version of crystal. |
 | `style`             | `"bold red"`                         | The style for the module.                                 |
-| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this moudle               |
-| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module                  |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.              |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                 |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                |
 | `disabled`          | `false`                              | Disables the `crystal` module.                            |
 
