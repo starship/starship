@@ -4,10 +4,6 @@ use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Crystal version
-///
-/// Will display the Crystal version if any of the following criteria are met:
-///     - Current directory contains a `.cr` file
-///     - Current directory contains a `shard.yml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_crystal_project = context
         .try_begin_scan()?
