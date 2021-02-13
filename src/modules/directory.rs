@@ -174,7 +174,7 @@ fn is_readonly_dir(path: &Path) -> bool {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.normalised_starts_with(top_level_path) {
-        return full_path.to_slash().unwrap();
+        return full_path.to_slash_lossy();
     }
 
     if full_path.normalised_equals(top_level_path) {
@@ -187,13 +187,13 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     let sub_path = full_path
         .without_prefix()
         .strip_prefix(top_level_path.without_prefix())
-        .expect("strip path prefix");
+        .unwrap_or(full_path);
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = sub_path.to_slash().expect("slash path")
+        path = sub_path.to_slash_lossy()
     )
 }
 
@@ -213,7 +213,9 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         }
 
         let components: Vec<_> = full_path.components().collect();
-        let repo_name = components[components.len() - i - 1].as_os_str().to_str()?;
+        let repo_name = components[components.len() - i - 1]
+            .as_os_str()
+            .to_string_lossy();
 
         if i == 0 {
             return Some(repo_name.to_string());
@@ -224,7 +226,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
             "{repo_name}{separator}{path}",
             repo_name = repo_name,
             separator = "/",
-            path = path.to_slash()?
+            path = path.to_slash_lossy()
         ));
     }
     None
@@ -1496,6 +1498,49 @@ mod tests {
             })
             .path(unc_path)
             .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
+    #[cfg(any(unix, target_os = "redox"))]
+    fn invalid_path() -> PathBuf {
+        use std::ffi::OsStr;
+        use std::os::unix::ffi::OsStrExt;
+
+        // Here, the values 0x66 and 0x6f correspond to 'f' and 'o'
+        // respectively. The value 0x80 is a lone continuation byte, invalid
+        // in a UTF-8 sequence.
+        let source = [0x66, 0x6f, 0x80, 0x6f];
+        let os_str = OsStr::from_bytes(&source[..]);
+
+        PathBuf::from(os_str)
+    }
+
+    #[cfg(windows)]
+    fn invalid_path() -> PathBuf {
+        use std::ffi::OsString;
+        use std::os::windows::prelude::*;
+
+        // Here the values 0x0066 and 0x006f correspond to 'f' and 'o'
+        // respectively. The value 0xD800 is a lone surrogate half, invalid
+        // in a UTF-16 sequence.
+        let source = [0x0066, 0x006f, 0xD800, 0x006f];
+        let os_string = OsString::from_wide(&source[..]);
+
+        PathBuf::from(os_string)
+    }
+
+    #[test]
+    #[cfg(any(unix, windows, target_os = "redox"))]
+    fn invalid_unicode() {
+        let path = invalid_path();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(path.to_string_lossy())
+        ));
+
+        let actual = ModuleRenderer::new("directory").path(path).collect();
 
         assert_eq!(expected, actual);
     }
