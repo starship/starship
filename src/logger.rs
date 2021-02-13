@@ -109,8 +109,8 @@ impl log::Log for StarshipLogger {
             eprintln!(
                 "[{}] - ({}): {}",
                 match record.level() {
-                    Level::Trace => Color::Black.dimmed().paint(format!("{}", record.level())),
-                    Level::Debug => Color::Black.paint(format!("{}", record.level())),
+                    Level::Trace => Color::Blue.dimmed().paint(format!("{}", record.level())),
+                    Level::Debug => Color::Cyan.paint(format!("{}", record.level())),
                     Level::Info => Color::White.paint(format!("{}", record.level())),
                     Level::Warn => Color::Yellow.paint(format!("{}", record.level())),
                     Level::Error => Color::Red.paint(format!("{}", record.level())),
