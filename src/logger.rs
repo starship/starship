@@ -75,6 +75,13 @@ impl log::Log for StarshipLogger {
     }
 
     fn log(&self, record: &Record) {
+        if !record
+            .module_path()
+            .map_or(false, |s| s.contains("starship"))
+        {
+            return;
+        }
+
         let to_print = format!(
             "[{}] - ({}): {}",
             record.level(),
