@@ -16,7 +16,7 @@ pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
     Ok(data)
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CommandOutput {
     pub stdout: String,
     pub stderr: String,

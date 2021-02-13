@@ -43,7 +43,12 @@ pub struct Context<'a> {
     pub shell: Shell,
 
     /// A HashMap of environment variable mocks
+    #[cfg(test)]
     pub env: HashMap<&'a str, String>,
+
+    /// A HashMap of command mocks
+    #[cfg(test)]
+    pub cmd: HashMap<&'a str, Option<CommandOutput>>,
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
@@ -114,7 +119,10 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            #[cfg(test)]
             env: HashMap::new(),
+            #[cfg(test)]
+            cmd: HashMap::new(),
             cmd_timeout,
         }
     }
@@ -129,21 +137,27 @@ impl<'a> Context<'a> {
     }
 
     // Retrives a environment variable from the os or from a table if in testing mode
+    #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        if cfg!(test) {
-            self.env.get(key.as_ref()).map(|val| val.to_string())
-        } else {
-            env::var(key.as_ref()).ok()
-        }
+        self.env.get(key.as_ref()).map(|val| val.to_string())
+    }
+
+    #[cfg(not(test))]
+    #[inline]
+    pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
+        env::var(key.as_ref()).ok()
     }
 
     // Retrives a environment variable from the os or from a table if in testing mode (os version)
+    #[cfg(test)]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        if cfg!(test) {
-            self.env.get(key.as_ref()).map(OsString::from)
-        } else {
-            env::var_os(key.as_ref())
-        }
+        self.env.get(key.as_ref()).map(OsString::from)
+    }
+
+    #[cfg(not(test))]
+    #[inline]
+    pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
+        env::var_os(key.as_ref())
     }
 
     /// Convert a `~` in a path to the home directory
@@ -246,7 +260,18 @@ impl<'a> Context<'a> {
     }
 
     /// Execute a command and return the output on stdout and stderr if successful
+    #[inline]
     pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+        #[cfg(test)]
+        {
+            let command = match args.len() {
+                0 => cmd.to_owned(),
+                _ => format!("{} {}", cmd, args.join(" ")),
+            };
+            if let Some(output) = self.cmd.get(command.as_str()) {
+                return output.clone();
+            }
+        }
         exec_cmd(cmd, args, self.cmd_timeout)
     }
 }
