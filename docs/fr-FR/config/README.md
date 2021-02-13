@@ -423,19 +423,22 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Le module `cmake` affiche la version actuellement installée de CMake si l'une des conditions suivantes est remplie :
+The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
 
 - Le répertoire actuel contient un fichier `CMakeLists.txt`
 - Le répertoire actuel contient un fichier ` CMakeCache.txt`
 
 ### Options
 
-| Option     | Défaut                               | Description                                   |
-| ---------- | ------------------------------------ | --------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                             |
-| `symbol`   | `"喝 "`                               | Le symbole utilisé avant la version de cmake. |
-| `style`    | `"bold blue"`                        | Le style du module.                           |
-| `disabled` | `false`                              | Désactive le module `cmake`.                  |
+| Option              | Défaut                                 | Description                                   |
+| ------------------- | -------------------------------------- | --------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                             |
+| `symbol`            | `"喝 "`                                 | Le symbole utilisé avant la version de cmake. |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle   |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module    |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module      |
+| `style`             | `"bold blue"`                          | Le style du module.                           |
+| `disabled`          | `false`                                | Disables the `cmake` module.                  |
 
 ### Variables
 
