@@ -542,19 +542,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-El módulo `crystal` muestra la versión actual instalada de Crystal. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `crystal` muestra la versión actual instalada de Crystal. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                   |
-| ---------- | ------------------------------------ | --------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | Símbolo usado antes de la versión de Crystal. |
-| `style`    | `"bold red"`                         | El estilo del módulo.                         |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                        |
-| `disabled` | `false`                              | Desactiva el módulo `crystal`.                |
+| Opción              | Por defecto                          | Descripción                                   |
+| ------------------- | ------------------------------------ | --------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | Símbolo usado antes de la versión de Crystal. |
+| `style`             | `"bold red"`                         | El estilo del módulo.                         |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.  |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.   |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.     |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                        |
+| `disabled`          | `false`                              | Disables the `crystal` module.                |
 
 ### Variables
 
