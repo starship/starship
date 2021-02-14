@@ -4,9 +4,6 @@ use crate::configs::zig::ZigConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Zig version
-///
-/// Will display the Zig version if any of the following criteria are met:
-///     - The current directory contains a file with extension `.zig`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("zig");
     let config = ZigConfig::try_load(module.config);
