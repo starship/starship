@@ -13,7 +13,7 @@ use crate::utils;
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
 ///     - The value of `currentContext` is not `default`
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("docker_context");
     let config: DockerContextConfig = DockerContextConfig::try_load(module.config);
 
@@ -39,46 +39,37 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let json = utils::read_file(docker_config).ok()?;
-    let parsed_json = serde_json::from_str(&json).ok()?;
+    let json = utils::async_read_file(docker_config).await.ok()?;
+    let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
 
-    match parsed_json {
-        serde_json::Value::Object(root) => {
-            let current_context = root.get("currentContext")?;
-            match current_context {
-                serde_json::Value::String(ctx) => {
-                    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-                        formatter
-                            .map_meta(|variable, _| match variable {
-                                "symbol" => Some(config.symbol),
-                                _ => None,
-                            })
-                            .map_style(|variable| match variable {
-                                "style" => Some(Ok(config.style)),
-                                _ => None,
-                            })
-                            .map(|variable| match variable {
-                                "context" => Some(Ok(ctx)),
-                                _ => None,
-                            })
-                            .parse(None)
-                    });
+    let ctx = parsed_json.get("currentContext")?.as_str()?;
 
-                    module.set_segments(match parsed {
-                        Ok(segments) => segments,
-                        Err(error) => {
-                            log::warn!("Error in module `docker_context`:\n{}", error);
-                            return None;
-                        }
-                    });
-
-                    Some(module)
-                }
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
                 _ => None,
-            }
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "context" => Some(Ok(ctx)),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `docker_context`:\n{}", error);
+            return None;
         }
-        _ => None,
-    }
+    });
+
+    Some(module)
 }
 
 #[cfg(test)]

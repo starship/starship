@@ -83,7 +83,7 @@ pub async fn handle<'a>(
             "conda" => conda::module(context),
             "dart" => dart::module(context),
             "directory" => directory::module(context),
-            "docker_context" => docker_context::module(context),
+            "docker_context" => docker_context::module(context).await,
             "dotnet" => dotnet::module(context),
             "elixir" => elixir::module(context).await,
             "elm" => elm::module(context),
