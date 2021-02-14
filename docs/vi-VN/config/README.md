@@ -541,19 +541,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `shard.yml`
 - Đường dẫn hiện tại chứa một tập tin `.cr`
 
 ### Options
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
-| `style`    | `"bold red"`                         | Kiểu cho module.                                      |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled` | `false`                              | Vô hiệu hoá module `crystal`.                         |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                      |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.          |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `disabled`          | `false`                              | Disables the `crystal` module.                        |
 
 ### Các biến
 
