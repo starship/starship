@@ -609,19 +609,19 @@ By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Options
 
-| Option              | Default                              | Description                                     |
-| ------------------- | ------------------------------------ | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`            | `"🎯 "`                              | A format string representing the symbol of Dart |
-| `detect_extensions` | `['dart']`                           | Which extensions should trigger this moudle.    |
-| `detect_files`      | `["pubspec.yaml", "pubsepc.lock"]`   | Which filenames should trigger this module.     |
-| `detect_folders`    | `[".dart_tool"]`                     | Which folders should trigger this module.       |
-| `style`             | `"bold blue"`                        | The style for the module.                       |
-| `disabled`          | `false`                              | Disables the `dart` module.                     |
+| Option              | Default                                           | Description                                     |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
+| `symbol`            | `"🎯 "`                                           | A format string representing the symbol of Dart |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.    |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.       |
+| `style`             | `"bold blue"`                                     | The style for the module.                       |
+| `disabled`          | `false`                                           | Disables the `dart` module.                     |
 
 ### Variables
 
