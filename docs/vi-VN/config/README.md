@@ -579,20 +579,23 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Module `dart` cho biết phiên bản của Dart đã cài đặt. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+Module `dart` cho biết phiên bản của Dart đã cài đặt. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
 - Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
-- Đường dẫn hiện tại chứa một tập tin `pubspec.yaml` hoặc `pubspec.lock`
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
-| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                        | Kiểu cho module.                                |
-| `disabled` | `false`                              | Disables the `dart` module.                     |
+| Tuỳ chọn            | Mặc định                                          | Mô tả                                           |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | Định dạng cho module.                           |
+| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.    |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.       |
+| `style`             | `"bold blue"`                                     | Kiểu cho module.                                |
+| `disabled`          | `false`                                           | Disables the `dart` module.                     |
 
 ### Các biến
 
@@ -2439,18 +2442,21 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the the `zig` module shows the currently installed version of Zig. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.zig` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | Kiểu cho module.                                      |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `"bold yellow"`                      | Kiểu cho module.                                      |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `disabled`          | `false`                              | Disables the `zig` module.                            |
+| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
 
 ### Các biến
 
