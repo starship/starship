@@ -541,19 +541,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. 此组件将在符合以下任意条件之一时显示：
+The `crystal` module shows the currently installed version of Crystal. By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `shard.yml` 文件
 - The current directory contains a `.cr` file
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                                        |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                         | 此组件的样式。                                                   |
-| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                  |
-| `disabled` | `false`                              | Disables the `crystal` module.                            |
+| Option              | 默认值                                  | 描述                                                        |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
+| `style`             | `"bold red"`                         | 此组件的样式。                                                   |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.              |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                 |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                  |
+| `disabled`          | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
