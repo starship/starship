@@ -342,20 +342,17 @@ async fn handle_module<'a>(
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set
         if let Some(custom_modules) = context.config.get_custom_modules() {
-            let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
+            for (custom_module, config) in custom_modules {
                 if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                    modules::custom::module(custom_module, &context)
-                } else {
-                    None
+                    modules.extend(modules::custom::module(custom_module, &context).await);
                 }
-            });
-            modules.extend(custom_modules);
+            }
         }
     } else if let Some(module) = module.strip_prefix("custom.") {
         // Write out a custom module if it isn't disabled (and it exists...)
         match context.is_custom_module_disabled_in_config(&module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(&module, &context)),
+            Some(false) => modules.extend(modules::custom::module(&module, &context).await),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",

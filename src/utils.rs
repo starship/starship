@@ -1,5 +1,6 @@
 use async_process::{Command, Stdio};
 use async_std::future::{timeout, TimeoutError};
+use async_std::io::prelude::WriteExt;
 use async_std::task::block_on;
 use futures::stream::{self, Stream, StreamExt};
 use std::fs::File;
@@ -54,7 +55,15 @@ pub async fn async_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 }
 
 pub async fn exec_cmd_status(cmd: &str, args: &[&str]) -> Option<(ExitStatus, CommandOutput)> {
-    internal_exec_cmd_status(cmd, args, None).await
+    internal_exec_cmd_status(cmd, args, None, None).await
+}
+
+pub async fn exec_cmd_with_stdin(
+    cmd: &str,
+    args: &[&str],
+    stdin: &str,
+) -> Option<(ExitStatus, CommandOutput)> {
+    internal_exec_cmd_status(cmd, args, None, Some(stdin)).await
 }
 
 #[cfg(test)]
@@ -296,7 +305,7 @@ async fn async_internal_exec_cmd(
     args: &[&str],
     time_limit: Option<Duration>,
 ) -> Option<CommandOutput> {
-    let (status, out) = internal_exec_cmd_status(cmd, args, time_limit).await?;
+    let (status, out) = internal_exec_cmd_status(cmd, args, time_limit, None).await?;
 
     if status.success() {
         Some(out)
@@ -309,6 +318,7 @@ async fn internal_exec_cmd_status(
     cmd: &str,
     args: &[&str],
     time_limit: Option<Duration>,
+    stdin: Option<&str>,
 ) -> Option<(ExitStatus, CommandOutput)> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
 
@@ -329,7 +339,11 @@ async fn internal_exec_cmd_status(
         .args(args)
         .stderr(Stdio::piped())
         .stdout(Stdio::piped())
-        .stdin(Stdio::null())
+        .stdin(if stdin.is_some() {
+            Stdio::piped()
+        } else {
+            Stdio::null()
+        })
         .kill_on_drop(true)
         .spawn()
     {
@@ -340,10 +354,26 @@ async fn internal_exec_cmd_status(
         }
     };
 
+    let output = async move {
+        let mut process = process;
+        if let Some(data) = stdin {
+            let handle = match process.stdin.as_mut() {
+                Some(handle) => handle,
+                None => {
+                    log::info!("Unable to feed input data {:?} to {:?}", data, cmd);
+                    return Err(std::io::ErrorKind::Other.into());
+                }
+            };
+            handle.write_all(data.as_bytes()).await?;
+        }
+
+        process.output().await
+    };
+
     let outcome = if let Some(time_limit) = time_limit {
-        timeout(time_limit, process.output()).await
+        timeout(time_limit, output).await
     } else {
-        Ok(process.output().await)
+        Ok(output.await)
     };
 
     match outcome {

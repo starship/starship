@@ -304,6 +304,18 @@ impl<'a> Context<'a> {
         crate::utils::exec_cmd_status(cmd, args).await
     }
 
+    /// Execute a command and return the exit code and output on stdout and stderr.
+    /// If the command spawns successfully, write all data to its stdin before reading the output.
+    /// Otherwise return None.
+    pub async fn exec_cmd_with_stdin(
+        &self,
+        cmd: &str,
+        args: &[&str],
+        stdin: &str,
+    ) -> Option<(ExitStatus, CommandOutput)> {
+        crate::utils::exec_cmd_with_stdin(cmd, args, stdin).await
+    }
+
     #[cfg(test)]
     fn try_cmd_mock(&self, cmd: &str, args: &[&str]) -> Option<Option<CommandOutput>> {
         let command = match args.len() {
