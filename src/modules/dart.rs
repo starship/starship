@@ -4,11 +4,6 @@ use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Dart version
-///
-/// Will display the Dart version if any of the following criteria are met:
-///     - Current directory contains a file with `.dart` extension
-///     - Current directory contains a `.dart_tool` directory
-///     - Current directory contains a `pubspec.yaml`/`pubspec.yml` or `pubspec.lock` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("dart");
     let config: DartConfig = DartConfig::try_load(module.config);
