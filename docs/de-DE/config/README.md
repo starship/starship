@@ -541,19 +541,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `crystal` module shows the currently installed version of Crystal. By default the module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `shard.yml`-Datei
 - The current directory contains a `.cr` file
 
 ### Optionen
 
-| Option     | Standardwert                         | Beschreibung                                              |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                         | Stil für dieses Modul.                                    |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                |
-| `disabled` | `false`                              | Disables the `crystal` module.                            |
+| Option              | Standardwert                         | Beschreibung                                              |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
+| `style`             | `"bold red"`                         | Stil für dieses Modul.                                    |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.              |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                 |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                |
+| `disabled`          | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
