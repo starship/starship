@@ -579,20 +579,23 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Le module `dart` affiche la version courante installée de Dart. Le module est affiché si l'une des ces conditions est remplie :
+Le module `dart` affiche la version courante installée de Dart. By default the module will be shown if any of the following conditions are met:
 
 - Le répertoire courant contient un fichier `.dart`
 - Le répertoire courant contient un répertoire `.dart_tool`
-- Le répertoire courant contient un fichier `pubspec.yaml` ou `pubspec.lock`
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Options
 
-| Option     | Défaut                               | Description                                              |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                                        |
-| `symbol`   | `"🎯 "`                               | Une chaîne de caractères représentant le symbole de Dart |
-| `style`    | `"bold blue"`                        | Le style du module.                                      |
-| `disabled` | `false`                              | Désactive le module `dart`.                              |
+| Option              | Défaut                                            | Description                                              |
+| ------------------- | ------------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | Format du module.                                        |
+| `symbol`            | `"🎯 "`                                            | Une chaîne de caractères représentant le symbole de Dart |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.             |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.              |
+| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.                |
+| `style`             | `"bold blue"`                                     | Le style du module.                                      |
+| `disabled`          | `false`                                           | Disables the `dart` module.                              |
 
 ### Variables
 
@@ -2439,18 +2442,21 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. Le module est affiché si l'une des ces conditions est remplie :
+By default the the `zig` module shows the currently installed version of Zig. Le module est affiché si l'une des ces conditions est remplie :
 
 - The current directory contains a `.zig` file
 
 ### Options
 
-| Option     | Défaut                               | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | Le style du module.                                   |
-| `format`   | `"via [$symbol($version )]($style)"` | Format du module.                                     |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Option              | Défaut                               | Description                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `"bold yellow"`                      | Le style du module.                                   |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                     |
+| `disabled`          | `false`                              | Disables the `zig` module.                            |
+| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
 
 ### Variables
 
