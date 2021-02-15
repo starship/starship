@@ -4,7 +4,7 @@ use crate::configs::julia::JuliaConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Julia version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("julia");
     let config = JuliaConfig::try_load(module.config);
 
@@ -19,8 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -29,15 +29,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => format_julia_version(
-                    &context.exec_cmd("julia", &["--version"])?.stdout.as_str(),
-                )
-                .map(Ok),
-                _ => None,
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => format_julia_version(
+                        &context
+                            .async_exec_cmd("julia", &["--version"])
+                            .await?
+                            .stdout,
+                    )
+                    .map(Ok),
+                    _ => None,
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
