@@ -4,7 +4,7 @@ use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current OCaml version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("ocaml");
     let config: OCamlConfig = OCamlConfig::try_load(module.config);
     let is_ocaml_project = context
@@ -18,8 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -28,24 +28,31 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let is_esy_project = context
-                        .try_begin_scan()?
-                        .set_folders(&["esy.lock"])
-                        .is_match();
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        let is_esy_project = context
+                            .try_begin_scan()?
+                            .set_folders(&["esy.lock"])
+                            .is_match();
 
-                    let ocaml_version = if is_esy_project {
-                        context.exec_cmd("esy", &["ocaml", "-vnum"])?.stdout
-                    } else {
-                        context.exec_cmd("ocaml", &["-vnum"])?.stdout
-                    };
-                    Some(Ok(format!("v{}", &ocaml_version.trim())))
+                        let ocaml_version = if is_esy_project {
+                            context
+                                .async_exec_cmd("esy", &["ocaml", "-vnum"])
+                                .await?
+                                .stdout
+                        } else {
+                            context.async_exec_cmd("ocaml", &["-vnum"]).await?.stdout
+                        };
+                        Some(Ok(format!("v{}", &ocaml_version.trim())))
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,

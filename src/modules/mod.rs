@@ -109,7 +109,7 @@ pub async fn handle<'a>(
             "nim" => nim::module(context).await,
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context).await,
-            "ocaml" => ocaml::module(context),
+            "ocaml" => ocaml::module(context).await,
             "openstack" => openstack::module(context).await,
             "package" => package::module(context).await,
             "perl" => perl::module(context).await,
