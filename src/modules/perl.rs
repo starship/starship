@@ -4,7 +4,7 @@ use crate::configs::perl::PerlConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current perl version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("perl");
     let config: PerlConfig = PerlConfig::try_load(module.config);
     let is_perl_project = context
@@ -18,8 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -28,17 +28,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let perl_version = context
-                        .exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?
-                        .stdout;
-                    Some(Ok(format!("v{}", perl_version)))
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        let perl_version = context
+                            .async_exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])
+                            .await?
+                            .stdout;
+                        Some(Ok(format!("v{}", perl_version)))
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
