@@ -78,7 +78,7 @@ pub async fn handle<'a>(
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "character" => character::module(context),
-            "cmake" => cmake::module(context),
+            "cmake" => cmake::module(context).await,
             "cmd_duration" => cmd_duration::module(context),
             "conda" => conda::module(context),
             "dart" => dart::module(context),

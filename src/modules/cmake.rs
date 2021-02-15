@@ -4,7 +4,7 @@ use crate::configs::cmake::CMakeConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current CMake version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("cmake");
     let config = CMakeConfig::try_load(module.config);
 
@@ -19,8 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -29,16 +29,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => context
-                    .exec_cmd("cmake", &["--version"])
-                    .map(|output| format_cmake_version(&output.stdout))
-                    .flatten()
-                    .map(Ok),
-                _ => None,
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => context
+                        .async_exec_cmd("cmake", &["--version"])
+                        .await
+                        .and_then(|output| format_cmake_version(&output.stdout))
+                        .map(Ok),
+                    _ => None,
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
