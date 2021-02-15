@@ -4,7 +4,7 @@ use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Dart version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("dart");
     let config: DartConfig = DartConfig::try_load(module.config);
 
@@ -19,8 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -29,15 +29,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let dart_version = context.exec_cmd("dart", &["--version"])?.stderr;
-                    parse_dart_version(&dart_version).map(Ok)
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        let dart_version =
+                            context.async_exec_cmd("dart", &["--version"]).await?.stderr;
+                        parse_dart_version(&dart_version).map(Ok)
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,

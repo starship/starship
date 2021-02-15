@@ -81,7 +81,7 @@ pub async fn handle<'a>(
             "cmake" => cmake::module(context).await,
             "cmd_duration" => cmd_duration::module(context),
             "conda" => conda::module(context),
-            "dart" => dart::module(context),
+            "dart" => dart::module(context).await,
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context).await,
             "dotnet" => dotnet::module(context).await,
