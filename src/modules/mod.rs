@@ -104,7 +104,7 @@ pub async fn handle<'a>(
             "kotlin" => kotlin::module(context).await,
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
-            "lua" => lua::module(context),
+            "lua" => lua::module(context).await,
             "memory_usage" => memory_usage::module(context),
             "nim" => nim::module(context).await,
             "nix_shell" => nix_shell::module(context),

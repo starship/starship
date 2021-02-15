@@ -7,7 +7,7 @@ use regex::Regex;
 const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+[a-z\\-]*[1-9]*)[^\\s]*";
 
 /// Creates a module with the current Lua version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("lua");
     let config = LuaConfig::try_load(module.config);
 
@@ -22,8 +22,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -32,16 +32,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let lua_version =
-                        format_lua_version(&get_lua_version(context, &config.lua_binary)?)?;
-                    Some(Ok(lua_version))
+            .async_map(|variable| {
+                let config = &config;
+                async move {
+                    match variable.as_ref() {
+                        "version" => {
+                            let lua_version = format_lua_version(
+                                &get_lua_version(context, &config.lua_binary).await?,
+                            )?;
+                            Some(Ok(lua_version))
+                        }
+                        _ => None,
+                    }
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -54,16 +62,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_lua_version(context: &Context, lua_binary: &str) -> Option<String> {
-    match context.exec_cmd(lua_binary, &["-v"]) {
-        Some(output) => {
-            if output.stdout.is_empty() {
-                Some(output.stderr)
-            } else {
-                Some(output.stdout)
-            }
-        }
-        None => None,
+async fn get_lua_version(context: &Context<'_>, lua_binary: &str) -> Option<String> {
+    let output = context.async_exec_cmd(lua_binary, &["-v"]).await?;
+    if output.stdout.is_empty() {
+        Some(output.stderr)
+    } else {
+        Some(output.stdout)
     }
 }
 
