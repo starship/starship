@@ -1,6 +1,5 @@
+use ini::Ini;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 use std::str::FromStr;
 
@@ -12,7 +11,10 @@ use crate::formatter::StringFormatter;
 type Profile = String;
 type Region = String;
 
-fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> Option<Region> {
+async fn get_aws_region_from_config(
+    context: &Context<'_>,
+    aws_profile: Option<&str>,
+) -> Option<Region> {
     let config_location = context
         .get_env("AWS_CONFIG_FILE")
         .and_then(|path| PathBuf::from_str(&path).ok())
@@ -22,31 +24,20 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
             Some(home)
         })?;
 
-    let file = File::open(&config_location).ok()?;
-    let reader = BufReader::new(file);
-    let lines = reader.lines().filter_map(Result::ok);
+    let ini = async_std::task::spawn(async move { Ini::load_from_file(config_location) })
+        .await
+        .ok()?;
 
-    let region_line = if let Some(ref aws_profile) = aws_profile {
-        lines
-            .skip_while(|line| line != &format!("[profile {}]", aws_profile))
-            .skip(1)
-            .take_while(|line| !line.starts_with('['))
-            .find(|line| line.starts_with("region"))
+    let section = if let Some(ref aws_profile) = aws_profile {
+        ini.section(Some(format!("profile {}", aws_profile)))
     } else {
-        lines
-            .skip_while(|line| line != "[default]")
-            .skip(1)
-            .take_while(|line| !line.starts_with('['))
-            .find(|line| line.starts_with("region"))
+        ini.section(Some("default"))
     }?;
 
-    let region = region_line.split('=').nth(1)?;
-    let region = region.trim();
-
-    Some(region.to_string())
+    section.get("region").map(String::from)
 }
 
-fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
+async fn get_aws_profile_and_region(context: &Context<'_>) -> (Option<Profile>, Option<Region>) {
     match (
         context
             .get_env("AWS_VAULT")
@@ -59,9 +50,9 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
         (None, Some(r)) => (None, Some(r)),
         (Some(ref p), None) => (
             Some(p.to_owned()),
-            get_aws_region_from_config(context, Some(p)),
+            get_aws_region_from_config(context, Some(p)).await,
         ),
-        (None, None) => (None, get_aws_region_from_config(context, None)),
+        (None, None) => (None, get_aws_region_from_config(context, None).await),
     }
 }
 
@@ -72,11 +63,11 @@ fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     }
 }
 
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
-    let (aws_profile, aws_region) = get_aws_profile_and_region(context);
+    let (aws_profile, aws_region) = get_aws_profile_and_region(context).await;
     if aws_profile.is_none() && aws_region.is_none() {
         return None;
     }

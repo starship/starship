@@ -74,7 +74,7 @@ pub async fn handle<'a>(
         match module {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
-            "aws" => aws::module(context),
+            "aws" => aws::module(context).await,
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "character" => character::module(context),
