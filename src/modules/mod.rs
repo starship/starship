@@ -121,7 +121,7 @@ pub async fn handle<'a>(
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
-            "swift" => swift::module(context),
+            "swift" => swift::module(context).await,
             "status" => status::module(context),
             "terraform" => terraform::module(context).await,
             "time" => time::module(context),

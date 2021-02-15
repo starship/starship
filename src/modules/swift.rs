@@ -4,7 +4,7 @@ use crate::configs::swift::SwiftConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Swift version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("swift");
     let config: SwiftConfig = SwiftConfig::try_load(module.config);
 
@@ -19,8 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -29,15 +29,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let swift_version = context.exec_cmd("swift", &["--version"])?.stdout;
-                    parse_swift_version(&swift_version).map(Ok)
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        let swift_version = context
+                            .async_exec_cmd("swift", &["--version"])
+                            .await?
+                            .stdout;
+                        parse_swift_version(&swift_version).map(Ok)
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
