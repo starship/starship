@@ -113,7 +113,7 @@ pub async fn handle<'a>(
             "openstack" => openstack::module(context).await,
             "package" => package::module(context).await,
             "perl" => perl::module(context).await,
-            "php" => php::module(context),
+            "php" => php::module(context).await,
             "purescript" => purescript::module(context).await,
             "python" => python::module(context).await,
             "ruby" => ruby::module(context).await,

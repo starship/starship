@@ -4,7 +4,7 @@ use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current PHP version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("php");
     let config: PhpConfig = PhpConfig::try_load(module.config);
     let is_php_project = context
@@ -18,8 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -28,21 +28,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let php_cmd_output = context.exec_cmd(
-                        "php",
-                        &[
-                            "-nr",
-                            "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
-                        ],
-                    )?;
-                    Some(Ok(format_php_version(&php_cmd_output.stdout)))
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        let php_cmd_output = context.async_exec_cmd(
+                            "php",
+                            &[
+                                "-nr",
+                                "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
+                            ],
+                        ).await?;
+                        Some(Ok(format_php_version(&php_cmd_output.stdout)))
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
