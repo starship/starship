@@ -128,7 +128,7 @@ pub async fn handle<'a>(
             "crystal" => crystal::module(context).await,
             "username" => username::module(context),
             "vagrant" => vagrant::module(context).await,
-            "zig" => zig::module(context),
+            "zig" => zig::module(context).await,
             _ => {
                 eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
                 None
