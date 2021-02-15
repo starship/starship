@@ -4,7 +4,7 @@ use crate::configs::erlang::ErlangConfig;
 use crate::formatter::StringFormatter;
 
 /// Create a module with the current Erlang version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("erlang");
     let config = ErlangConfig::try_load(module.config);
 
@@ -19,8 +19,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -29,12 +29,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => get_erlang_version(context).map(Ok),
-                _ => None,
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => get_erlang_version(context).await.map(Ok),
+                    _ => None,
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -47,8 +51,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_erlang_version(context: &Context) -> Option<String> {
-    Some(context.exec_cmd(
+async fn get_erlang_version(context: &Context<'_>) -> Option<String> {
+    Some(context.async_exec_cmd(
         "erl",
         &[
             "-noshell",
@@ -58,7 +62,7 @@ fn get_erlang_version(context: &Context) -> Option<String> {
              io:format(\"~s\",[Content]),\
              halt(0)."
         ]
-    )?.stdout.trim().to_string())
+    ).await?.stdout.trim().to_string())
 }
 
 #[cfg(test)]
