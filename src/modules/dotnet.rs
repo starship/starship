@@ -1,6 +1,9 @@
+use futures::pin_mut;
+use futures::stream::{self, StreamExt};
 use quick_xml::events::Event;
 use quick_xml::Reader;
 use std::ffi::OsStr;
+use std::future::ready;
 use std::iter::Iterator;
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
@@ -17,8 +20,7 @@ const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
 
 /// A module which shows the latest (or pinned) version of the dotnet SDK
-
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("dotnet");
     let config = DotnetConfig::try_load(module.config);
 
@@ -41,8 +43,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Typically it is twice as fast as running `dotnet --version`.
     let enable_heuristic = config.heuristic;
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
@@ -51,26 +53,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "symbol" => Some(Ok(config.symbol)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let version = if enable_heuristic {
-                        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
-                        estimate_dotnet_version(
-                            context,
-                            &dotnet_files,
-                            &context.current_dir,
-                            repo_root,
-                        )
-                    } else {
-                        get_version_from_cli(context)
-                    };
-                    version.map(|v| Ok(v.0))
+            .async_map(|variable| {
+                let dotnet_files = &dotnet_files;
+                async move {
+                    match variable.as_ref() {
+                        "version" => {
+                            let version = if enable_heuristic {
+                                let repo_root =
+                                    context.get_repo().ok().and_then(|r| r.root.as_deref());
+                                estimate_dotnet_version(
+                                    context,
+                                    &dotnet_files,
+                                    &context.current_dir,
+                                    repo_root,
+                                )
+                                .await
+                            } else {
+                                get_version_from_cli(context).await
+                            };
+                            version.map(|v| Ok(v.0))
+                        }
+                        "tfm" => find_current_tfm(&dotnet_files).await.map(Ok),
+                        _ => None,
+                    }
                 }
-                "tfm" => find_current_tfm(&dotnet_files).map(Ok),
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -83,16 +94,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
+async fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
     let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
 
     let relevant_file = get_file_of_type(FileType::ProjectFile)?;
 
-    get_tfm_from_project_file(relevant_file.path.as_path())
+    get_tfm_from_project_file(relevant_file.path.as_path()).await
 }
 
-fn get_tfm_from_project_file(path: &Path) -> Option<String> {
-    let project_file = utils::read_file(path).ok()?;
+async fn get_tfm_from_project_file(path: &Path) -> Option<String> {
+    let project_file = utils::async_read_file(path).await.ok()?;
     let mut reader = Reader::from_str(&project_file);
     reader.trim_text(true);
 
@@ -129,8 +140,8 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
     None
 }
 
-fn estimate_dotnet_version(
-    context: &Context,
+async fn estimate_dotnet_version(
+    context: &Context<'_>,
     files: &[DotNetFile],
     current_dir: &Path,
     repo_root: Option<&Path>,
@@ -144,19 +155,25 @@ fn estimate_dotnet_version(
         .or_else(|| files.iter().next())?;
 
     match relevant_file.file_type {
-        FileType::GlobalJson => get_pinned_sdk_version_from_file(relevant_file.path.as_path())
-            .or_else(|| get_latest_sdk_from_cli(context)),
+        FileType::GlobalJson => {
+            match get_pinned_sdk_version_from_file(relevant_file.path.as_path()).await {
+                Some(ver) => Some(ver),
+                None => get_latest_sdk_from_cli(context).await,
+            }
+        }
         FileType::SolutionFile => {
             // With this heuristic, we'll assume that a "global.json" won't
             // be found in any directory above the solution file.
-            get_latest_sdk_from_cli(context)
+            get_latest_sdk_from_cli(context).await
         }
         _ => {
             // If we see a dotnet project, we'll check a small number of neighboring
             // directories to see if we can find a global.json. Otherwise, assume the
             // latest SDK is in use.
-            try_find_nearby_global_json(current_dir, repo_root)
-                .or_else(|| get_latest_sdk_from_cli(context))
+            match try_find_nearby_global_json(current_dir, repo_root).await {
+                Some(ver) => Some(ver),
+                None => get_latest_sdk_from_cli(context).await,
+            }
         }
     }
 }
@@ -169,7 +186,10 @@ fn estimate_dotnet_version(
 ///       (Unless there is a git repository, and the parent is above the root of that repository)
 ///     - The root of the git repository
 ///       (If there is one)
-fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<Version> {
+async fn try_find_nearby_global_json(
+    current_dir: &Path,
+    repo_root: Option<&Path>,
+) -> Option<Version> {
     let current_dir_is_repo_root = repo_root.map(|r| r == current_dir).unwrap_or(false);
     let parent_dir = if current_dir_is_repo_root {
         // Don't scan the parent directory if it's above the root of a git repository
@@ -189,28 +209,29 @@ fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> 
     // so avoid checking it twice.
     check_dirs.dedup();
 
-    check_dirs
-        .iter()
+    let res = stream::iter(check_dirs)
         // repo_root may be the same as the current directory. We don't need to scan it again.
-        .filter(|&&d| d != current_dir)
-        .find_map(|d| check_directory_for_global_json(d))
+        .filter(|&d| ready(d != current_dir))
+        .filter_map(|d| check_directory_for_global_json(d));
+    pin_mut!(res);
+    res.next().await
 }
 
-fn check_directory_for_global_json(path: &Path) -> Option<Version> {
+async fn check_directory_for_global_json(path: &Path) -> Option<Version> {
     let global_json_path = path.join(GLOBAL_JSON_FILE);
     log::debug!(
         "Checking if global.json exists at: {}",
         &global_json_path.display()
     );
     if global_json_path.exists() {
-        get_pinned_sdk_version_from_file(&global_json_path)
+        get_pinned_sdk_version_from_file(&global_json_path).await
     } else {
         None
     }
 }
 
-fn get_pinned_sdk_version_from_file(path: &Path) -> Option<Version> {
-    let json_text = crate::utils::read_file(path).ok()?;
+async fn get_pinned_sdk_version_from_file(path: &Path) -> Option<Version> {
+    let json_text = utils::async_read_file(path).await.ok()?;
     log::debug!(
         "Checking if .NET SDK version is pinned in: {}",
         path.display()
@@ -220,28 +241,8 @@ fn get_pinned_sdk_version_from_file(path: &Path) -> Option<Version> {
 
 fn get_pinned_sdk_version(json: &str) -> Option<Version> {
     let parsed_json: JValue = serde_json::from_str(json).ok()?;
-
-    match parsed_json {
-        JValue::Object(root) => {
-            let sdk = root.get("sdk")?;
-            match sdk {
-                JValue::Object(sdk) => {
-                    let version = sdk.get("version")?;
-                    match version {
-                        JValue::String(version_string) => {
-                            let mut buffer = String::with_capacity(version_string.len() + 1);
-                            buffer.push('v');
-                            buffer.push_str(version_string);
-                            Some(Version(buffer))
-                        }
-                        _ => None,
-                    }
-                }
-                _ => None,
-            }
-        }
-        _ => None,
-    }
+    let version_string = parsed_json.get("sdk")?.get("version")?.as_str()?;
+    Some(Version(format!("v{}", version_string)))
 }
 
 fn get_local_dotnet_files(context: &Context) -> Result<Vec<DotNetFile>, std::io::Error> {
@@ -282,13 +283,13 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
     Some(value?.to_str()?.to_ascii_lowercase())
 }
 
-fn get_version_from_cli(context: &Context) -> Option<Version> {
-    let version_output = context.exec_cmd("dotnet", &["--version"])?;
+async fn get_version_from_cli(context: &Context<'_>) -> Option<Version> {
+    let version_output = context.async_exec_cmd("dotnet", &["--version"]).await?;
     Some(Version(format!("v{}", version_output.stdout.trim())))
 }
 
-fn get_latest_sdk_from_cli(context: &Context) -> Option<Version> {
-    match context.exec_cmd("dotnet", &["--list-sdks"]) {
+async fn get_latest_sdk_from_cli(context: &Context<'_>) -> Option<Version> {
+    match context.async_exec_cmd("dotnet", &["--list-sdks"]).await {
         Some(sdks_output) => {
             fn parse_failed<T>() -> Option<T> {
                 log::warn!("Unable to parse the output from `dotnet --list-sdks`.");
@@ -319,7 +320,7 @@ fn get_latest_sdk_from_cli(context: &Context) -> Option<Version> {
                 "Received a non-success exit code from `dotnet --list-sdks`. \
                  Falling back to `dotnet --version`.",
             );
-            get_version_from_cli(context)
+            get_version_from_cli(context).await
         }
     }
 }

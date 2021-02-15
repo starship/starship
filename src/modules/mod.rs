@@ -84,7 +84,7 @@ pub async fn handle<'a>(
             "dart" => dart::module(context),
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context).await,
-            "dotnet" => dotnet::module(context),
+            "dotnet" => dotnet::module(context).await,
             "elixir" => elixir::module(context).await,
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
