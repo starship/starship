@@ -101,7 +101,7 @@ pub async fn handle<'a>(
             "java" => java::module(context).await,
             "jobs" => jobs::module(context),
             "julia" => julia::module(context).await,
-            "kotlin" => kotlin::module(context),
+            "kotlin" => kotlin::module(context).await,
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
             "lua" => lua::module(context),

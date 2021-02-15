@@ -7,7 +7,7 @@ use regex::Regex;
 const KOTLIN_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+[\\d\\.]+[\\d\\.]+)";
 
 /// Creates a module with the current Kotlin version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("kotlin");
     let config = KotlinConfig::try_load(module.config);
 
@@ -22,8 +22,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -32,18 +32,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    let kotlin_version = format_kotlin_version(&get_kotlin_version(
-                        context,
-                        &config.kotlin_binary,
-                    )?)?;
-                    Some(Ok(kotlin_version))
+            .async_map(|variable| {
+                let config = &config;
+                async move {
+                    match variable.as_ref() {
+                        "version" => {
+                            let kotlin_version = format_kotlin_version(
+                                &get_kotlin_version(context, &config.kotlin_binary).await?,
+                            )?;
+                            Some(Ok(kotlin_version))
+                        }
+                        _ => None,
+                    }
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -56,16 +62,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_kotlin_version(context: &Context, kotlin_binary: &str) -> Option<String> {
-    match context.exec_cmd(kotlin_binary, &["-version"]) {
-        Some(output) => {
-            if output.stdout.is_empty() {
-                Some(output.stderr)
-            } else {
-                Some(output.stdout)
-            }
-        }
-        None => None,
+async fn get_kotlin_version(context: &Context<'_>, kotlin_binary: &str) -> Option<String> {
+    let output = context.async_exec_cmd(kotlin_binary, &["-version"]).await?;
+    if output.stdout.is_empty() {
+        Some(output.stderr)
+    } else {
+        Some(output.stdout)
     }
 }
 
