@@ -86,7 +86,7 @@ pub async fn handle<'a>(
             "docker_context" => docker_context::module(context).await,
             "dotnet" => dotnet::module(context).await,
             "elixir" => elixir::module(context).await,
-            "elm" => elm::module(context),
+            "elm" => elm::module(context).await,
             "erlang" => erlang::module(context).await,
             "env_var" => env_var::module(context),
             "gcloud" => gcloud::module(context),
