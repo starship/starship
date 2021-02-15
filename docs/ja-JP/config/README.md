@@ -2410,18 +2410,21 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `vagrant` module shows the currently installed version of Vagrant. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                  |
-| ---------- | ------------------------------------ | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                    |
-| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `style`    | `"cyan bold"`                        | モジュールのスタイルです。                                       |
-| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+| オプション               | デフォルト                                | 説明                                                  |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                    |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.        |
+| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
+| `style`             | `"cyan bold"`                        | モジュールのスタイルです。                                       |
+| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
 
 ### 変数
 
