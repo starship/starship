@@ -8,7 +8,7 @@ use crate::formatter::StringFormatter;
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
 ///     - Current directory contains a `Gemfile` or `.ruby-version` file
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("ruby");
     let config = RubyConfig::try_load(module.config);
 
@@ -23,8 +23,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -33,14 +33,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => {
-                    format_ruby_version(&context.exec_cmd("ruby", &["-v"])?.stdout.as_str()).map(Ok)
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => {
+                        format_ruby_version(&context.async_exec_cmd("ruby", &["-v"]).await?.stdout)
+                            .map(Ok)
+                    }
+                    _ => None,
                 }
-                _ => None,
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
