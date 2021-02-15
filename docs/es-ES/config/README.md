@@ -2409,18 +2409,21 @@ show_always = true
 
 ## Vagrant
 
-El módulo `vagrant` muestra la versión instalada de Vagrant. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `vagrant` muestra la versión instalada de Vagrant. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Vagrantfile`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
-| `symbol`   | `"⍱ "`                               | Una cadena de formato que representa el símbolo de Vagrant. |
-| `style`    | `"cyan bold"`                        | El estilo del módulo.                                       |
-| `disabled` | `false`                              | Deshabilita el módulo `Vagrant`.                            |
+| Opción              | Por defecto                          | Descripción                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
+| `symbol`            | `"⍱ "`                               | Una cadena de formato que representa el símbolo de Vagrant. |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                |
+| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.                 |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                   |
+| `style`             | `"cyan bold"`                        | El estilo del módulo.                                       |
+| `disabled`          | `false`                              | Disables the `Vagrant` module.                              |
 
 ### Variables
 
