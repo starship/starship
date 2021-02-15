@@ -1,3 +1,4 @@
+use futures::stream::{self, StreamExt};
 use yaml_rust::YamlLoader;
 
 use std::env;
@@ -9,8 +10,8 @@ use crate::configs::kubernetes::KubernetesConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
-fn get_kube_context(filename: path::PathBuf) -> Option<String> {
-    let contents = utils::read_file(filename).ok()?;
+async fn get_kube_context(filename: path::PathBuf) -> Option<String> {
+    let contents = utils::async_read_file(filename).await.ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
     if yaml_docs.is_empty() {
@@ -26,8 +27,8 @@ fn get_kube_context(filename: path::PathBuf) -> Option<String> {
     Some(current_ctx.to_string())
 }
 
-fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
-    let contents = utils::read_file(filename).ok()?;
+async fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
+    let contents = utils::async_read_file(filename).await.ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
     if yaml_docs.is_empty() {
@@ -49,7 +50,7 @@ fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
     Some(ns.to_owned())
 }
 
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("kubernetes");
     let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
 
@@ -65,10 +66,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .get_env("KUBECONFIG")
         .unwrap_or(default_config_file.to_str()?.to_string());
 
-    let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
+    let paths = || stream::iter(env::split_paths(&kube_cfg));
+    let kube_ctx = paths().filter_map(get_kube_context).boxed().next().await?;
 
-    let kube_ns =
-        env::split_paths(&kube_cfg).find_map(|filename| get_kube_ns(filename, kube_ctx.clone()));
+    let kube_ns = paths()
+        .filter_map(|filename| get_kube_ns(filename, kube_ctx.clone()))
+        .boxed()
+        .next()
+        .await;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
