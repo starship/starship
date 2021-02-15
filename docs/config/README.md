@@ -2747,7 +2747,7 @@ If you have an interesting example not covered there, feel free to share it ther
 
 ### Options
 
-| Option        | Default                       | Description                                                                                                                |
+| Option        | Default                         | Description                                                                                                                |
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
@@ -2759,7 +2759,10 @@ If you have an interesting example not covered there, feel free to share it ther
 | `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
 | `style`       | `"bold green"`                  | The style for the module.                                                                                                  |
 | `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
+| `timeout`*    |                                 | The timeout (in milliseconds) for the module.                                                                              |
 | `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+
+\*: a per-module `timeout` always takes precedence over `prompt_timeout`, even when `timeout` is longer
 
 ### Variables
 
