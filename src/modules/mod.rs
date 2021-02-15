@@ -106,7 +106,7 @@ pub async fn handle<'a>(
             "line_break" => line_break::module(context),
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
-            "nim" => nim::module(context),
+            "nim" => nim::module(context).await,
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context).await,
             "ocaml" => ocaml::module(context),

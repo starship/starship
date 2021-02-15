@@ -4,7 +4,7 @@ use crate::configs::nim::NimConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Nim version
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("nim");
     let config = NimConfig::try_load(module.config);
     let is_nim_project = context
@@ -18,8 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -28,18 +28,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => context
-                    .exec_cmd("nim", &["--version"])
-                    .map(|command_output| command_output.stdout)
-                    .and_then(|nim_version_output| {
-                        Some(format!("v{}", parse_nim_version(&nim_version_output)?))
-                    })
-                    .map(Ok),
-                _ => None,
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => context
+                        .async_exec_cmd("nim", &["--version"])
+                        .await
+                        .map(|command_output| command_output.stdout)
+                        .and_then(|nim_version_output| {
+                            Some(format!("v{}", parse_nim_version(&nim_version_output)?))
+                        })
+                        .map(Ok),
+                    _ => None,
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
