@@ -8,7 +8,7 @@ use std::io;
 use std::path::PathBuf;
 
 /// Creates a module with the current Terraform version and workspace
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
     let mut module = context.new_module("terraform");
     let config: TerraformConfig = TerraformConfig::try_load(module.config);
 
@@ -23,8 +23,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
+    let parsed = match StringFormatter::new(config.format) {
+        Ok(formatter) => formatter
             .map_meta(|variable, _| match variable {
                 "symbol" => Some(config.symbol),
                 _ => None,
@@ -33,16 +33,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "version" => format_terraform_version(
-                    &context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
-                )
-                .map(Ok),
-                "workspace" => get_terraform_workspace(context).map(Ok),
-                _ => None,
+            .async_map(|variable| async move {
+                match variable.as_ref() {
+                    "version" => format_terraform_version(
+                        &context
+                            .async_exec_cmd("terraform", &["version"])
+                            .await?
+                            .stdout,
+                    )
+                    .map(Ok),
+                    "workspace" => get_terraform_workspace(context).await.map(Ok),
+                    _ => None,
+                }
             })
-            .parse(None)
-    });
+            .await
+            .parse(None),
+        Err(e) => Err(e),
+    };
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -56,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 // Determines the currently selected workspace (see https://github.com/hashicorp/terraform/blob/master/command/meta.go for the original implementation)
-fn get_terraform_workspace(context: &Context) -> Option<String> {
+async fn get_terraform_workspace(context: &Context<'_>) -> Option<String> {
     // Workspace can be explicitly overwritten by an env var
     let workspace_override = context.get_env("TF_WORKSPACE");
     if workspace_override.is_some() {
@@ -68,7 +75,7 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
         Some(s) => PathBuf::from(s),
         None => context.current_dir.join(".terraform"),
     };
-    match utils::read_file(datadir.join("environment")) {
+    match utils::async_read_file(datadir.join("environment")).await {
         Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
         Ok(s) => Some(s),
         _ => None,

@@ -123,7 +123,7 @@ pub async fn handle<'a>(
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
-            "terraform" => terraform::module(context),
+            "terraform" => terraform::module(context).await,
             "time" => time::module(context),
             "crystal" => crystal::module(context).await,
             "username" => username::module(context),
