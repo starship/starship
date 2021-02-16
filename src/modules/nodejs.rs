@@ -99,9 +99,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 }
 
 async fn get_engines_version(base_dir: &Path) -> Option<String> {
-    let json_str = utils::async_read_file(base_dir.join("package.json"))
-        .await
-        .ok()?;
+    let json_str = utils::read_file(base_dir.join("package.json")).await.ok()?;
     let package_json: json::Value = json::from_str(&json_str).ok()?;
     let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
     Some(raw_version.to_string())

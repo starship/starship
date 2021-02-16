@@ -39,7 +39,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
         return None;
     }
 
-    let json = utils::async_read_file(docker_config).await.ok()?;
+    let json = utils::read_file(docker_config).await.ok()?;
     let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
 
     let ctx = parsed_json.get("currentContext")?.as_str()?;

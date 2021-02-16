@@ -174,7 +174,7 @@ fn extract_meson_version(file_contents: &str) -> Option<String> {
 }
 
 async fn get_package_version<'a>(base_dir: &Path, config: &'a PackageConfig<'a>) -> Option<String> {
-    use utils::async_read_file as load;
+    use utils::read_file as load;
 
     if let Ok(cargo_toml) = load(base_dir.join("Cargo.toml")).await {
         extract_cargo_version(&cargo_toml)

@@ -132,7 +132,7 @@ fn describe_rebase<'a>(root: &'a Path, rebase_config: &'a str) -> StateDescripti
 
     let file_to_usize = |relative_path: &str| {
         let path = dot_git.join(PathBuf::from(relative_path));
-        let contents = crate::utils::read_file(path).ok()?;
+        let contents = std::fs::read_to_string(path).ok()?;
         let quantity = contents.trim().parse::<usize>().ok()?;
         Some(quantity)
     };

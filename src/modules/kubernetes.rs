@@ -11,7 +11,7 @@ use crate::formatter::StringFormatter;
 use crate::utils;
 
 async fn get_kube_context(filename: path::PathBuf) -> Option<String> {
-    let contents = utils::async_read_file(filename).await.ok()?;
+    let contents = utils::read_file(filename).await.ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
     if yaml_docs.is_empty() {
@@ -28,7 +28,7 @@ async fn get_kube_context(filename: path::PathBuf) -> Option<String> {
 }
 
 async fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
-    let contents = utils::async_read_file(filename).await.ok()?;
+    let contents = utils::read_file(filename).await.ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
     if yaml_docs.is_empty() {

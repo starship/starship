@@ -1,6 +1,7 @@
 use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
+use async_std::task::block_on;
 use indexmap::IndexMap;
 
 use std::clone::Clone;
@@ -231,7 +232,7 @@ impl StarshipConfig {
             config_path_str
         };
 
-        let toml_content = match utils::read_file(&file_path) {
+        let toml_content = match block_on(utils::read_file(&file_path)) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)

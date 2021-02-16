@@ -72,7 +72,7 @@ async fn get_terraform_workspace(context: &Context<'_>) -> Option<String> {
         Some(s) => PathBuf::from(s),
         None => context.current_dir.join(".terraform"),
     };
-    match utils::async_read_file(datadir.join("environment")).await {
+    match utils::read_file(datadir.join("environment")).await {
         Err(ref e) if e.kind() == io::ErrorKind::NotFound => Some("default".to_string()),
         Ok(s) => Some(s),
         _ => None,

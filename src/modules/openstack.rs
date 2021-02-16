@@ -32,7 +32,7 @@ async fn get_osp_project_from_config(context: &Context<'_>, osp_cloud: &str) -> 
 }
 
 async fn get_osp_project_from_file(file: Option<&str>, osp_cloud: &str) -> Option<Project> {
-    let config = utils::async_read_file(file?).await.ok()?;
+    let config = utils::read_file(file?).await.ok()?;
     let clouds = YamlLoader::load_from_str(config.as_str()).ok()?;
     let s = clouds.get(0)?["clouds"][osp_cloud]["auth"]["project_name"].as_str()?;
     if !s.is_empty() {

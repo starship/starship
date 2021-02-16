@@ -1,26 +1,17 @@
 use async_process::{Command, Stdio};
 use async_std::io::prelude::WriteExt;
 use futures::stream::{self, Stream, StreamExt};
-use std::fs::File;
 use std::future::Future;
-use std::io::{Read, Result};
+use std::io::Result;
 use std::path::Path;
 use std::process::ExitStatus;
 use std::time::Instant;
 
 use crate::context::Shell;
 
-/// Return the string contents of a file
-pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
-    let mut file = File::open(file_name)?;
-    let mut data = String::new();
-
-    file.read_to_string(&mut data)?;
-    Ok(data)
-}
-
 #[inline(always)]
-pub async fn async_read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
+/// Return the string contents of a file
+pub async fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
     async_std::fs::read_to_string(file_name.as_ref()).await
 }
 

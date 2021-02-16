@@ -103,7 +103,7 @@ async fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
 }
 
 async fn get_tfm_from_project_file(path: &Path) -> Option<String> {
-    let project_file = utils::async_read_file(path).await.ok()?;
+    let project_file = utils::read_file(path).await.ok()?;
     let mut reader = Reader::from_str(&project_file);
     reader.trim_text(true);
 
@@ -231,7 +231,7 @@ async fn check_directory_for_global_json(path: &Path) -> Option<Version> {
 }
 
 async fn get_pinned_sdk_version_from_file(path: &Path) -> Option<Version> {
-    let json_text = utils::async_read_file(path).await.ok()?;
+    let json_text = utils::read_file(path).await.ok()?;
     log::debug!(
         "Checking if .NET SDK version is pinned in: {}",
         path.display()
