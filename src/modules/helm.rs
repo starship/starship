@@ -33,7 +33,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
                 match variable.as_ref() {
                     "version" => format_helm_version(
                         &context
-                            .async_exec_cmd("helm", &["version", "--short", "--client"])
+                            .exec_cmd("helm", &["version", "--short", "--client"])
                             .await?
                             .stdout,
                     )

@@ -37,12 +37,9 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
                             .is_match();
 
                         let ocaml_version = if is_esy_project {
-                            context
-                                .async_exec_cmd("esy", &["ocaml", "-vnum"])
-                                .await?
-                                .stdout
+                            context.exec_cmd("esy", &["ocaml", "-vnum"]).await?.stdout
                         } else {
-                            context.async_exec_cmd("ocaml", &["-vnum"]).await?.stdout
+                            context.exec_cmd("ocaml", &["-vnum"]).await?.stdout
                         };
                         Some(Ok(format!("v{}", &ocaml_version.trim())))
                     }

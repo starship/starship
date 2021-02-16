@@ -77,16 +77,11 @@ async fn get_python_version<'a>(
     config: &'a PythonConfig<'a>,
 ) -> Option<String> {
     if config.pyenv_version_name {
-        return Some(
-            context
-                .async_exec_cmd("pyenv", &["version-name"])
-                .await?
-                .stdout,
-        );
+        return Some(context.exec_cmd("pyenv", &["version-name"]).await?.stdout);
     };
 
     for binary in &config.python_binary.0 {
-        if let Some(output) = context.async_exec_cmd(binary, &["--version"]).await {
+        if let Some(output) = context.exec_cmd(binary, &["--version"]).await {
             let version = if output.stdout.is_empty() {
                 output.stderr
             } else {

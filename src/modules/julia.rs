@@ -32,10 +32,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => format_julia_version(
-                        &context
-                            .async_exec_cmd("julia", &["--version"])
-                            .await?
-                            .stdout,
+                        &context.exec_cmd("julia", &["--version"]).await?.stdout,
                     )
                     .map(Ok),
                     _ => None,

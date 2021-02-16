@@ -1,5 +1,6 @@
 use crate::shadow;
 use crate::utils::exec_cmd;
+use async_std::{future::timeout, task::block_on};
 
 use std::fs;
 use std::path::PathBuf;
@@ -153,9 +154,14 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500))
-        .map(|output| output.stdout.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
+    let version = block_on(timeout(
+        Duration::from_millis(500),
+        exec_cmd(&shell, &["--version"]),
+    ))
+    .ok()
+    .flatten()
+    .map(|output| output.stdout.trim().to_string())
+    .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())

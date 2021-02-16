@@ -31,7 +31,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => context
-                        .async_exec_cmd("nim", &["--version"])
+                        .exec_cmd("nim", &["--version"])
                         .await
                         .map(|command_output| command_output.stdout)
                         .and_then(|nim_version_output| {

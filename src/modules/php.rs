@@ -31,7 +31,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => {
-                        let php_cmd_output = context.async_exec_cmd(
+                        let php_cmd_output = context.exec_cmd(
                             "php",
                             &[
                                 "-nr",

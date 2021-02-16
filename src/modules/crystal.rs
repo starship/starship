@@ -34,7 +34,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
                 async move {
                     match variable.as_str() {
                         "version" => context
-                            .async_exec_cmd("crystal", &["--version"])
+                            .exec_cmd("crystal", &["--version"])
                             .await
                             .and_then(|ver| format_crystal_version(&ver.stdout))
                             .map(Ok),

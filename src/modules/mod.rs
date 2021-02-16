@@ -58,6 +58,8 @@ mod zig;
 #[cfg(feature = "battery")]
 mod battery;
 
+use async_std::future::TimeoutError;
+
 use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
@@ -141,9 +143,16 @@ pub async fn handle<'a>(
             .module_timeout(module)
             .unwrap_or(context.prompt_timeout);
 
-        async_std::future::timeout(time_limit, async_mod)
-            .await
-            .ok()?
+        let res = async_std::future::timeout(time_limit, async_mod).await;
+        // .ok()?
+        match res {
+            Ok(res) => res,
+            Err(TimeoutError { .. }) => {
+                log::warn!("Executing module {:?} timed out.", module);
+                log::warn!("You can set prompt_timeout in your config to a higher value to allow longer-running modules to keep executing.");
+                return None;
+            }
+        }
     } else {
         async_mod.await
     };

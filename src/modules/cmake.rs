@@ -32,7 +32,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => context
-                        .async_exec_cmd("cmake", &["--version"])
+                        .exec_cmd("cmake", &["--version"])
                         .await
                         .and_then(|output| format_cmake_version(&output.stdout))
                         .map(Ok),

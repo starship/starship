@@ -114,7 +114,7 @@ fn env_rustup_toolchain(context: &Context) -> Option<String> {
 
 async fn execute_rustup_override_list(context: &Context<'_>) -> Option<String> {
     let stdout = context
-        .async_exec_cmd("rustup", &["override", "list"])
+        .exec_cmd("rustup", &["override", "list"])
         .await?
         .stdout;
     extract_toolchain_from_rustup_override_list(&stdout, &context.current_dir)
@@ -215,7 +215,7 @@ fn extract_toolchain_from_rustup_run_rustc_version(
 
 async fn execute_rustc_version(context: &Context<'_>) -> Option<String> {
     context
-        .async_exec_cmd("rustc", &["--version"])
+        .exec_cmd("rustc", &["--version"])
         .await
         .map(|output| output.stdout)
 }

@@ -284,12 +284,12 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
 }
 
 async fn get_version_from_cli(context: &Context<'_>) -> Option<Version> {
-    let version_output = context.async_exec_cmd("dotnet", &["--version"]).await?;
+    let version_output = context.exec_cmd("dotnet", &["--version"]).await?;
     Some(Version(format!("v{}", version_output.stdout.trim())))
 }
 
 async fn get_latest_sdk_from_cli(context: &Context<'_>) -> Option<Version> {
-    match context.async_exec_cmd("dotnet", &["--list-sdks"]).await {
+    match context.exec_cmd("dotnet", &["--list-sdks"]).await {
         Some(sdks_output) => {
             fn parse_failed<T>() -> Option<T> {
                 log::warn!("Unable to parse the output from `dotnet --list-sdks`.");

@@ -1,14 +1,12 @@
 use async_process::{Command, Stdio};
-use async_std::future::{timeout, TimeoutError};
 use async_std::io::prelude::WriteExt;
-use async_std::task::block_on;
 use futures::stream::{self, Stream, StreamExt};
 use std::fs::File;
 use std::future::Future;
 use std::io::{Read, Result};
 use std::path::Path;
 use std::process::ExitStatus;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 use crate::context::Shell;
 
@@ -38,24 +36,14 @@ impl PartialEq for CommandOutput {
     }
 }
 
+#[cfg(not(test))]
 /// Execute a command and return the output on stdout and stderr if successful
-#[cfg(not(test))]
-pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
-    block_on(async_internal_exec_cmd(cmd, args, Some(time_limit)))
-}
-
-#[cfg(not(test))]
-pub async fn async_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    async_internal_exec_cmd(&cmd, &args, None).await
-}
-
-#[cfg(test)]
-pub async fn async_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    exec_cmd(cmd, args, Duration::from_millis(u64::MAX))
+pub async fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    internal_exec_cmd(&cmd, &args).await
 }
 
 pub async fn exec_cmd_status(cmd: &str, args: &[&str]) -> Option<(ExitStatus, CommandOutput)> {
-    internal_exec_cmd_status(cmd, args, None, None).await
+    internal_exec_cmd_status(cmd, args, None).await
 }
 
 pub async fn exec_cmd_with_stdin(
@@ -63,11 +51,11 @@ pub async fn exec_cmd_with_stdin(
     args: &[&str],
     stdin: &str,
 ) -> Option<(ExitStatus, CommandOutput)> {
-    internal_exec_cmd_status(cmd, args, None, Some(stdin)).await
+    internal_exec_cmd_status(cmd, args, Some(stdin)).await
 }
 
 #[cfg(test)]
-pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
+pub async fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
     let command = match args.len() {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
@@ -234,7 +222,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args, Some(time_limit)),
+        _ => internal_exec_cmd(&cmd, &args).await,
     }
 }
 
@@ -291,21 +279,8 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
-#[cfg(test)]
-fn internal_exec_cmd(
-    cmd: &str,
-    args: &[&str],
-    time_limit: Option<Duration>,
-) -> Option<CommandOutput> {
-    block_on(async_internal_exec_cmd(cmd, args, time_limit))
-}
-
-async fn async_internal_exec_cmd(
-    cmd: &str,
-    args: &[&str],
-    time_limit: Option<Duration>,
-) -> Option<CommandOutput> {
-    let (status, out) = internal_exec_cmd_status(cmd, args, time_limit, None).await?;
+async fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    let (status, out) = internal_exec_cmd_status(cmd, args, None).await?;
 
     if status.success() {
         Some(out)
@@ -317,7 +292,6 @@ async fn async_internal_exec_cmd(
 async fn internal_exec_cmd_status(
     cmd: &str,
     args: &[&str],
-    time_limit: Option<Duration>,
     stdin: Option<&str>,
 ) -> Option<(ExitStatus, CommandOutput)> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
@@ -370,14 +344,8 @@ async fn internal_exec_cmd_status(
         process.output().await
     };
 
-    let outcome = if let Some(time_limit) = time_limit {
-        timeout(time_limit, output).await
-    } else {
-        Ok(output.await)
-    };
-
-    match outcome {
-        Ok(Ok(output)) => {
+    match output.await {
+        Ok(output) => {
             let stdout_string = match String::from_utf8(output.stdout) {
                 Ok(stdout) => stdout,
                 Err(error) => {
@@ -409,12 +377,7 @@ async fn internal_exec_cmd_status(
                 },
             ))
         }
-        Err(TimeoutError { .. }) => {
-            log::warn!("Executing command {:?} timed out.", cmd);
-            log::warn!("You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.");
-            None
-        }
-        Ok(Err(error)) => {
+        Err(error) => {
             log::info!("Executing command {:?} failed by: {:?}", cmd, error);
             None
         }
@@ -446,9 +409,9 @@ where
 mod tests {
     use super::*;
 
-    #[test]
-    fn exec_mocked_command() {
-        let result = exec_cmd("dummy_command", &[], Duration::from_millis(500));
+    #[async_std::test]
+    async fn exec_mocked_command() {
+        let result = exec_cmd("dummy_command", &[]).await;
         let expected = Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -460,10 +423,10 @@ mod tests {
     // While the exec_cmd should work on Windows some of these tests assume a Unix-like
     // environment.
 
-    #[test]
+    #[async_std::test]
     #[cfg(not(windows))]
-    fn exec_no_output() {
-        let result = internal_exec_cmd("true", &[], None);
+    async fn exec_no_output() {
+        let result = internal_exec_cmd("true", &[]).await;
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -472,10 +435,10 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
+    #[async_std::test]
     #[cfg(not(windows))]
-    fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"], None);
+    async fn exec_with_output_stdout() {
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]).await;
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from(""),
@@ -484,10 +447,10 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
+    #[async_std::test]
     #[cfg(not(windows))]
-    fn exec_with_output_stderr() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"], None);
+    async fn exec_with_output_stderr() {
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]).await;
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from("hello\n"),
@@ -496,10 +459,10 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
+    #[async_std::test]
     #[cfg(not(windows))]
-    fn exec_with_output_both() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"], None);
+    async fn exec_with_output_both() {
+        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]).await;
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from("world\n"),
@@ -508,19 +471,10 @@ mod tests {
         assert_eq!(result, expected)
     }
 
-    #[test]
+    #[async_std::test]
     #[cfg(not(windows))]
-    fn exec_with_non_zero_exit_code() {
-        let result = internal_exec_cmd("false", &[], None);
-        let expected = None;
-
-        assert_eq!(result, expected)
-    }
-
-    #[test]
-    #[cfg(not(windows))]
-    fn exec_slow_command() {
-        let result = internal_exec_cmd("sleep", &["500"], Some(Duration::from_millis(500)));
+    async fn exec_with_non_zero_exit_code() {
+        let result = internal_exec_cmd("false", &[]).await;
         let expected = None;
 
         assert_eq!(result, expected)

@@ -33,7 +33,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 
     let nodejs_version = async {
         context
-            .async_exec_cmd("node", &["--version"])
+            .exec_cmd("node", &["--version"])
             .await
             .map(|cmd| cmd.stdout)
     }

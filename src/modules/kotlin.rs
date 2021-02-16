@@ -63,7 +63,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 }
 
 async fn get_kotlin_version(context: &Context<'_>, kotlin_binary: &str) -> Option<String> {
-    let output = context.async_exec_cmd(kotlin_binary, &["-version"]).await?;
+    let output = context.exec_cmd(kotlin_binary, &["-version"]).await?;
     if output.stdout.is_empty() {
         Some(output.stderr)
     } else {

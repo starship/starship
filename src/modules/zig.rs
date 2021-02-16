@@ -33,7 +33,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
                 match variable.as_ref() {
                     "version" => {
                         let zig_version_output =
-                            context.async_exec_cmd("zig", &["version"]).await?.stdout;
+                            context.exec_cmd("zig", &["version"]).await?.stdout;
                         let zig_version = format!("v{}", zig_version_output.trim());
                         Some(Ok(zig_version))
                     }

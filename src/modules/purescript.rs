@@ -31,8 +31,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => {
-                        let purs_version =
-                            context.async_exec_cmd("purs", &["--version"]).await?.stdout;
+                        let purs_version = context.exec_cmd("purs", &["--version"]).await?.stdout;
                         Some(Ok(format!("v{}", purs_version.trim())))
                     }
                     _ => None,

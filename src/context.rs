@@ -1,6 +1,6 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
-use crate::utils::{exec_cmd, CommandOutput};
+use crate::utils::CommandOutput;
 use std::process::ExitStatus;
 use std::sync::Arc;
 
@@ -52,9 +52,6 @@ pub struct Context<'a> {
     /// A HashMap of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
-
-    /// Timeout for the execution of commands
-    cmd_timeout: Duration,
 
     /// Timeout for returning the prompt
     pub prompt_timeout: Duration,
@@ -115,7 +112,6 @@ impl<'a> Context<'a> {
         let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
         let logical_dir = logical_path;
 
-        let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
         let prompt_timeout = Duration::from_millis(config.get_root_config().prompt_timeout);
 
         Context {
@@ -130,7 +126,6 @@ impl<'a> Context<'a> {
             env: HashMap::new(),
             #[cfg(test)]
             cmd: HashMap::new(),
-            cmd_timeout,
             prompt_timeout,
         }
     }
@@ -279,20 +274,12 @@ impl<'a> Context<'a> {
 
     /// Execute a command and return the output on stdout and stderr if successful
     #[inline]
-    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    pub async fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         #[cfg(test)]
         if let Some(out) = self.try_cmd_mock(cmd, args) {
             return out;
         }
-        exec_cmd(cmd, args, self.cmd_timeout)
-    }
-
-    pub async fn async_exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-        #[cfg(test)]
-        if let Some(out) = self.try_cmd_mock(cmd, args) {
-            return out;
-        }
-        crate::utils::async_exec_cmd(cmd, args).await
+        crate::utils::exec_cmd(cmd, args).await
     }
 
     /// Execute a command and return the exit code and output on stdout and stderr

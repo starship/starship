@@ -32,10 +32,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => {
-                        let swift_version = context
-                            .async_exec_cmd("swift", &["--version"])
-                            .await?
-                            .stdout;
+                        let swift_version = context.exec_cmd("swift", &["--version"]).await?.stdout;
                         parse_swift_version(&swift_version).map(Ok)
                     }
                     _ => None,

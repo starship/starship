@@ -32,8 +32,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => {
-                        let dart_version =
-                            context.async_exec_cmd("dart", &["--version"]).await?.stderr;
+                        let dart_version = context.exec_cmd("dart", &["--version"]).await?.stderr;
                         parse_dart_version(&dart_version).map(Ok)
                     }
                     _ => None,

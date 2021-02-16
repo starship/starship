@@ -74,10 +74,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 }
 
 async fn get_elixir_version<'a>(context: &'a Context<'a>) -> Option<(String, String)> {
-    let output = context
-        .async_exec_cmd("elixir", &["--version"])
-        .await?
-        .stdout;
+    let output = context.exec_cmd("elixir", &["--version"]).await?.stdout;
 
     parse_elixir_version(&output)
 }

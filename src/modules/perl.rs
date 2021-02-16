@@ -32,7 +32,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
                 match variable.as_ref() {
                     "version" => {
                         let perl_version = context
-                            .async_exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])
+                            .exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])
                             .await?
                             .stdout;
                         Some(Ok(format!("v{}", perl_version)))

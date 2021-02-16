@@ -61,7 +61,7 @@ async fn get_java_version<'a>(context: &'a Context<'a>) -> Option<String> {
     };
 
     let output = context
-        .async_exec_cmd(&java_command.as_str(), &["-Xinternalversion"])
+        .exec_cmd(&java_command.as_str(), &["-Xinternalversion"])
         .await?;
     let java_version = if output.stdout.is_empty() {
         output.stderr

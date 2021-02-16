@@ -36,10 +36,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
             .async_map(|variable| async move {
                 match variable.as_ref() {
                     "version" => format_terraform_version(
-                        &context
-                            .async_exec_cmd("terraform", &["version"])
-                            .await?
-                            .stdout,
+                        &context.exec_cmd("terraform", &["version"]).await?.stdout,
                     )
                     .map(Ok),
                     "workspace" => get_terraform_workspace(context).await.map(Ok),

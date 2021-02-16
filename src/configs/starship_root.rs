@@ -6,7 +6,6 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
-    pub command_timeout: u64,
     pub prompt_timeout: u64,
     pub add_newline: bool,
 }
@@ -81,7 +80,6 @@ impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
         StarshipRootConfig {
             format: "$all",
             scan_timeout: 30,
-            command_timeout: 500,
             prompt_timeout: 700,
             add_newline: true,
         }

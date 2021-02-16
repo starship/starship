@@ -63,7 +63,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 }
 
 async fn get_lua_version(context: &Context<'_>, lua_binary: &str) -> Option<String> {
-    let output = context.async_exec_cmd(lua_binary, &["-v"]).await?;
+    let output = context.exec_cmd(lua_binary, &["-v"]).await?;
     if output.stdout.is_empty() {
         Some(output.stderr)
     } else {

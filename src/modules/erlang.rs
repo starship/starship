@@ -52,7 +52,7 @@ pub async fn module<'a>(context: &'a Context<'a>) -> Option<Module<'a>> {
 }
 
 async fn get_erlang_version(context: &Context<'_>) -> Option<String> {
-    Some(context.async_exec_cmd(
+    Some(context.exec_cmd(
         "erl",
         &[
             "-noshell",
