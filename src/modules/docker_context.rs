@@ -20,11 +20,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.only_with_files
         && !context
             .try_begin_scan()?
-            .set_files(&["docker-compose.yml", "docker-compose.yaml", "Dockerfile"])
+            .set_files(&config.detect_files)
+            .set_extensions(&config.detect_extensions)
+            .set_folders(&config.detect_folders)
             .is_match()
     {
         return None;
     }
+
     let docker_config = PathBuf::from(
         &context
             .get_env_os("DOCKER_CONFIG")
