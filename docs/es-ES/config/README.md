@@ -685,13 +685,16 @@ El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.
 
 ### Opciones
 
-| Opción            | Por defecto                        | Descripción                                                                                                   |
-| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | El formato del módulo.                                                                                        |
-| `symbol`          | `"🐳 "`                             | El símbolo usado antes de mostrar el contexto de Docker.                                                      |
-| `style`           | `"blue bold"`                      | El estilo del módulo.                                                                                         |
-| `only_with_files` | `true`                             | Mostrar solo cuando hay un `docker-compose.yml`, `docker-compose.yaml`o `Dockerfile` en el directorio actual. |
-| `disabled`        | `false`                            | Desactiva el módulo `docker_context`.                                                                         |
+| Opción              | Por defecto                                                   | Descripción                                                                       |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | El formato del módulo.                                                            |
+| `symbol`            | `"🐳 "`                                                        | El símbolo usado antes de mostrar el contexto de Docker.                          |
+| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                                                 | El estilo del módulo.                                                             |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
 ### Variables
 
