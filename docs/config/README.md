@@ -1233,7 +1233,7 @@ behind = "⇣${count}"
 ## Golang
 
 The `golang` module shows the currently installed version of Golang.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
@@ -1246,12 +1246,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                    |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                     |
-| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | The style for the module.                      |
-| `disabled` | `false`                            | Disables the `golang` module.                  |
+| Option               | Default                                                                        | Description                                    |
+| -------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `format`             | `"via [$symbol($version )]($style)"`                                           | The format for the module.                     |
+| `symbol`             | `"🐹 "`                                                                        | A format string representing the symbol of Go. |
+| `detect_extensions`  | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_files`       | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
+| `detect_folders`     | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
+| `style`              | `"bold cyan"`                                                                  | The style for the module.                      |
+| `disabled`           | `false`                                                                        | Disables the `golang` module.                  |
 
 ### Variables
 
