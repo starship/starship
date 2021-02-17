@@ -9,6 +9,9 @@ pub struct LuaConfig<'a> {
     pub style: &'a str,
     pub lua_binary: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for LuaConfig<'a> {
@@ -19,6 +22,9 @@ impl<'a> RootModuleConfig<'a> for LuaConfig<'a> {
             style: "bold blue",
             lua_binary: "lua",
             disabled: false,
+            detect_extensions: vec!["lua"],
+            detect_files: vec![".lua-version"],
+            detect_folders: vec!["lua"],
         }
     }
 }
