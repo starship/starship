@@ -8,6 +8,9 @@ pub struct TerraformConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for TerraformConfig<'a> {
             symbol: "💠 ",
             style: "bold 105",
             disabled: false,
+            detect_extensions: vec!["tf", "hcl"],
+            detect_files: vec![],
+            detect_folders: vec![".terraform"],
         }
     }
 }
