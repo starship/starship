@@ -236,6 +236,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$shell\
 $character"""
 ```
 
@@ -2206,6 +2207,46 @@ The module will be shown if any of the following conditions are met:
 
 [rust]
 format = "via [⚙️ $version](red bold)"
+```
+
+## Shell
+
+The `shell` module shows an indicator for currently used shell.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option                 | Default       | Description |
+| ---------------------- | ------------- | --------------------------------------------- |
+| `bash_indicator`       | `bsh`         | A format string used to represent bash.       |
+| `fish_indicator`       | `fsh`         | A format string used to represent fish.       |
+| `zsh_indicator`        | `zsh`         | A format string used to represent zsh.        |
+| `powershell_indicator` | `psh`         | A format string used to represent powershell. |
+| `ion_indicator`        | `ion`         | A format string used to represent ion.        |
+| `elvish_indicator`     | `esh`         | A format string used to represent elvish.     |
+| `format`               | `$indicator ` | The format for the module.                    |
+| `disabled`             | `true`        | Disables the `shell` module.                  |
+
+### Variables
+
+| Variable    | Default | Description                                                |
+| ----------- | ------- | ---------------------------------------------------------- |
+| indicator   |         | Mirrors the value of `indicator` for currently used shell. |
+
+### Examples
+```toml
+# ~/.config/starship.toml
+
+[shell]
+fish_indicator = ""
+powershell_indicator = "_"
+disabled = false
 ```
 
 ## SHLVL
