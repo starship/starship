@@ -1566,7 +1566,7 @@ disabled = true
 ## Lua
 
 The `lua` module shows the currently installed version of Lua.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1574,13 +1574,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option       | Default                              | Description                                                                   |
-| ------------ | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
-| `symbol`     | `"🌙 "`                              | A format string representing the symbol of Lua.                               |
-| `style`      | `"bold blue"`                        | The style for the module.                                                     |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.    |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                    |
+| Option              | Default                              | Description                                                                   |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
+| `symbol`            | `"🌙 "`                              | A format string representing the symbol of Lua.                               |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                                  |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                   |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                     |
+| `style`             | `"bold blue"`                        | The style for the module.                                                     |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.    |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                    |
 
 ### Variables
 
