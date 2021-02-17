@@ -43,6 +43,7 @@ mod purescript;
 mod python;
 mod ruby;
 mod rust;
+mod shell;
 mod shlvl;
 mod singularity;
 mod status;
@@ -113,6 +114,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "python" => python::module(context),
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
+            "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
@@ -191,6 +193,7 @@ pub fn description(module: &str) -> &'static str {
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "swift" => "The currently installed version of Swift",
+        "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
