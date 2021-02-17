@@ -1174,7 +1174,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-El módulo `golang` muestra la versión actualmente instalada de Golang. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `golang` muestra la versión actualmente instalada de Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `go.mod`
 - El directorio actual contiene un fichero `go.sum`
@@ -1187,12 +1187,15 @@ El módulo `golang` muestra la versión actualmente instalada de Golang. El mód
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                            |
-| ---------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                 |
-| `symbol`   | `"🐹 "`                               | Una cadena de formato que representa el símbolo de Go. |
-| `style`    | `"bold cyan"`                        | El estilo del módulo.                                  |
-| `disabled` | `false`                              | Desactiva el módulo de `golang`.                       |
+| Opción              | Por defecto                                                                    | Descripción                                            |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | El formato del módulo.                                 |
+| `symbol`            | `"🐹 "`                                                                         | Una cadena de formato que representa el símbolo de Go. |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.           |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.            |
+| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.              |
+| `style`             | `"bold cyan"`                                                                  | El estilo del módulo.                                  |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                          |
 
 ### Variables
 
@@ -1495,7 +1498,7 @@ disabled = true
 
 ## Lua
 
-El módulo `lua` muestra la versión instalada de Lua. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `lua` muestra la versión instalada de Lua. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.lua-version`
 - El directorio actual contiene un directorio `lua`
@@ -1503,13 +1506,16 @@ El módulo `lua` muestra la versión instalada de Lua. El módulo se muestra si 
 
 ### Opciones
 
-| Opción       | Por defecto                          | Descripción                                                             |
-| ------------ | ------------------------------------ | ----------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                  |
-| `symbol`     | `"🌙 "`                               | Una cadena de formato que representa el símbolo de Lua.                 |
-| `style`      | `"bold blue"`                        | El estilo del módulo.                                                   |
-| `lua_binary` | `"lua"`                              | Configura el binario de lua que Starship ejecuta al obtener la versión. |
-| `disabled`   | `false`                              | Desactiva el módulo `lua`.                                              |
+| Opción              | Por defecto                          | Descripción                                                                |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                     |
+| `symbol`            | `"🌙 "`                               | Una cadena de formato que representa el símbolo de Lua.                    |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
+| `style`             | `"bold blue"`                        | El estilo del módulo.                                                      |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### Variables
 
@@ -2274,19 +2280,22 @@ Por defecto no se mostrara la versión actual de terraform, ya que esto es lento
 
 :::
 
-El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene una carpeta `.terraform`
 - El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                                                     |
-| ---------- | ------------------------------------ | ------------------------------------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                                            |
-| `symbol`   | `"💠 "`                               | Una cadena de formato que se muestra antes del espacio de trabajo de terraform. |
-| `style`    | `"bold 105"`                         | El estilo del módulo.                                                           |
-| `disabled` | `false`                              | Desactiva el módulo `terraform`.                                                |
+| Opción              | Por defecto                          | Descripción                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                                            |
+| `symbol`            | `"💠"`                                | Una cadena de formato que se muestra antes del espacio de trabajo de terraform. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                                    |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                     |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                       |
+| `style`             | `"bold 105"`                         | El estilo del módulo.                                                           |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                                |
 
 ### Variables
 
