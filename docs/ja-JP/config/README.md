@@ -1174,7 +1174,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`golang`モジュールは、現在インストールされているGolangのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -1187,12 +1187,15 @@ behind = "⇣${count}"
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                             |
-| ---------- | ------------------------------------ | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                               |
-| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                        | モジュールのスタイルです。                                  |
-| `disabled` | `false`                              | `golang`モジュールを無効にします。                          |
+| オプション               | デフォルト                                                                          | 説明                                             |
+| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | moduleのフォーマットです。                               |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
+| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
+| `style`             | `"bold cyan"`                                                                  | モジュールのスタイルです。                                  |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                  |
 
 ### 変数
 
@@ -1495,7 +1498,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1503,13 +1506,16 @@ The `lua` module shows the currently installed version of Lua. 次の条件の�
 
 ### オプション
 
-| オプション        | デフォルト                                | 説明                                                                         |
-| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                           |
-| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                        | モジュールのスタイルです。                                                              |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
+| オプション               | デフォルト                                | 説明                                                                         |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                           |
+| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                                              |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### 変数
 
@@ -2275,19 +2281,22 @@ By default the terraform version is not shown, since this is slow for current ve
 
 :::
 
-次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`.terraform`フォルダが含まれている
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                    |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | モジュールのスタイルです。                                         |
-| `disabled` | `false`                              | `terraform`モジュールを無効にします。                              |
+| オプション               | デフォルト                                | 説明                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
+| `style`             | `"bold 105"`                         | モジュールのスタイルです。                                         |
+| `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
 ### 変数
 
