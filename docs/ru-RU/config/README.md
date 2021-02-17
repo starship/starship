@@ -1173,7 +1173,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-Модуль `golang` показывает установленную версию Golang. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `golang` показывает установленную версию Golang. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `go.mod`
 - Текущий каталог содержит файл `go.sum`
@@ -1186,12 +1186,15 @@ behind = "⇣${count}"
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                       |
-| ---------- | ------------------------------------ | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                 |
-| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                        | Стиль модуля.                                  |
-| `disabled` | `false`                              | Отключает модуль `golang`.                     |
+| Параметр            | По умолчанию                                                                   | Описание                                       |
+| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Формат модуля.                                 |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
+| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
+| `style`             | `"bold cyan"`                                                                  | Стиль модуля.                                  |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                  |
 
 ### Переменные
 
@@ -1494,7 +1497,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Модуль будет показан, если любое из следующих условий соблюдено:
+The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1502,13 +1505,16 @@ The `lua` module shows the currently installed version of Lua. Модуль бу
 
 ### Опции
 
-| Параметр     | По умолчанию                         | Описание                                                                   |
-| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | Формат модуля.                                                             |
-| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                        | Стиль модуля.                                                              |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
+| Параметр            | По умолчанию                         | Описание                                                                   |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                             |
+| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
+| `style`             | `"bold blue"`                        | Стиль модуля.                                                              |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### Переменные
 
@@ -2273,19 +2279,22 @@ By default the terraform version is not shown, since this is slow for current ve
 
 :::
 
-Модуль будет показан, если любое из следующих условий соблюдено:
+By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит папку `.terraform`
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | Стиль модуля.                                         |
-| `disabled` | `false`                              | Отключает модуль `terraform`.                         |
+| Параметр            | По умолчанию                         | Описание                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
+| `style`             | `"bold 105"`                         | Стиль модуля.                                         |
+| `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
 ### Переменные
 
