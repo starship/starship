@@ -1173,7 +1173,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-`golang` 组件显示当前安装的 Golang 版本。 此组件将在符合以下任意条件之一时显示：
+`golang` 组件显示当前安装的 Golang 版本。 By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `go.mod` 文件
 - 当前目录包含 `go.sum` 文件
@@ -1186,12 +1186,15 @@ behind = "⇣${count}"
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                             |
-| ---------- | ------------------------------------ | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                       |
-| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                        | 此组件的样式。                                        |
-| `disabled` | `false`                              | 禁用 `golang` 组件。                                |
+| Option              | 默认值                                                                            | 描述                                             |
+| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | 组件格式化模板。                                       |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
+| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
+| `style`             | `"bold cyan"`                                                                  | 此组件的样式。                                        |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                  |
 
 ### Variables
 
@@ -1494,7 +1497,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. 此组件将在符合以下任意条件之一时显示：
+The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1502,13 +1505,16 @@ The `lua` module shows the currently installed version of Lua. 此组件将在�
 
 ### 配置项
 
-| Option       | 默认值                                  | 描述                                                                         |
-| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                   |
-| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                        | 此组件的样式。                                                                    |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
+| Option              | 默认值                                  | 描述                                                                         |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                   |
+| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
+| `style`             | `"bold blue"`                        | 此组件的样式。                                                                    |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### Variables
 
@@ -2273,19 +2279,22 @@ By default the terraform version is not shown, since this is slow for current ve
 
 :::
 
-此组件将在符合以下任意条件之一时显示：
+By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `.terraform` 目录
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                                    |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | 此组件的样式。                                               |
-| `disabled` | `false`                              | 禁用 `terraform` 组件。                                    |
+| Option              | 默认值                                  | 描述                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
+| `style`             | `"bold 105"`                         | 此组件的样式。                                               |
+| `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
 ### Variables
 
