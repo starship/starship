@@ -201,6 +201,22 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
+        "timew get dom.active.tag.count" => Some(CommandOutput {
+            stdout: String::from("3"),
+            stderr: String::default(),
+        }),
+        "timew get dom.active.tag.1" => Some(CommandOutput {
+            stdout: String::from("Timewarrior"),
+            stderr: String::default(),
+        }),
+        "timew get dom.active.tag.2" => Some(CommandOutput {
+            stdout: String::from("test"),
+            stderr: String::default(),
+        }),
+        "timew get dom.active.tag.3" => Some(CommandOutput {
+            stdout: String::from("tags"),
+            stderr: String::default(),
+        }),
         // If we don't have a mocked command fall back to executing the command
         _ => internal_exec_cmd(&cmd, &args, time_limit),
     }

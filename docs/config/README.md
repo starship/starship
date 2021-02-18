@@ -2489,6 +2489,29 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
+## Timewarrior
+
+The `Timewarrior` module shows a symbol if time tracking is in progress and `n`
+amount of tags (`n` is configurable in options). This module is only enabled if
+it finds `TIMEWARRIORDB` environmental variable or `.timewarrior` folder in
+users home directory.
+
+::: tip
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+:::
+
+### Options
+| Option           | Default   | Description                            |
+| ---------------- | --------- | -------------------------------------- |
+| `symbol`         | `""`     | Displayed symbol                       |
+| `symbol_style`   | `"white"` | Displayed symbol style.                |
+| `tags_style`     | `"white"` | The style for the displayed tags.      |
+| `max_tags_count` | `3`       | The amount of tags displayed.          |
+| `show_tags`      | `false`   | Controls if tags are displayed or not. |
+| `disabled`       | `true`    | Disables the `timewarrior` module.     |
+
+
 ## Username
 
 The `username` module shows active user's username.
