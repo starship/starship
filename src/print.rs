@@ -144,9 +144,7 @@ pub fn timings(args: ArgMatches) {
         .iter()
         .filter(|module| !module.is_empty() || module.duration.as_millis() > 0)
         .map(|module| {
-            let timeout = context
-                .module_timeout(module.get_name())
-                .unwrap_or(context.prompt_timeout);
+            let timeout = context.module_timeout(module.get_name());
 
             let timeout_overrun = if module.duration > timeout {
                 format!(" (>{})", format_duration(&timeout))
@@ -344,7 +342,9 @@ async fn handle_module<'a>(
         if let Some(custom_modules) = context.config.get_custom_modules() {
             for (custom_module, config) in custom_modules {
                 if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                    modules.extend(modules::custom::module(custom_module, &context).await);
+                    modules.extend(
+                        modules::custom::module(custom_module, &context, enforce_timeout).await,
+                    );
                 }
             }
         }
@@ -352,7 +352,7 @@ async fn handle_module<'a>(
         // Write out a custom module if it isn't disabled (and it exists...)
         match context.is_custom_module_disabled_in_config(&module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(&module, &context).await),
+            Some(false) => modules.extend(modules::custom::module(&module, &context, enforce_timeout).await),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",

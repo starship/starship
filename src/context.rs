@@ -1,10 +1,12 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
 use crate::utils::CommandOutput;
+use std::future::Future;
 use std::process::ExitStatus;
 use std::sync::Arc;
 
 use crate::modules;
+use async_std::future::TimeoutError;
 use clap::ArgMatches;
 use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
@@ -200,12 +202,22 @@ impl<'a> Context<'a> {
     }
 
     /// Return the timeout duration specified for this module, or None if none was given
-    pub fn module_timeout(&self, name: &str) -> Option<Duration> {
-        let config = self.config.get_module_config(name)?;
+    fn configured_module_timeout(&self, name: &str) -> Option<Duration> {
+        let config = self
+            .config
+            .get_custom_module_config(name)
+            .or_else(|| self.config.get_module_config(name))?;
 
         let int = config.as_table()?.get("timeout")?.as_integer()?;
 
         u64::try_from(int).map(Duration::from_millis).ok()
+    }
+
+    /// Return the `timeout` duration specified for this module,
+    /// or the `prompt_timeout` if one was not given
+    pub fn module_timeout(&self, name: &str) -> Duration {
+        self.configured_module_timeout(name)
+            .unwrap_or(self.prompt_timeout)
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
@@ -310,6 +322,28 @@ impl<'a> Context<'a> {
             _ => format!("{} {}", cmd, args.join(" ")),
         };
         self.cmd.get(command.as_str()).cloned()
+    }
+
+    pub async fn run_with_timeout<'m, Fut>(&self, module: &str, fut: Fut) -> Option<Module<'m>>
+    where
+        Fut: Future<Output = Option<Module<'m>>>,
+    {
+        let time_limit = self.module_timeout(module);
+
+        match async_std::future::timeout(time_limit, fut).await {
+            Ok(res) => res,
+            Err(TimeoutError { .. }) => {
+                log::warn!(
+                    "Executing module {:?} timed out after {}ms.",
+                    module,
+                    time_limit.as_millis()
+                );
+                log::warn!(
+                    r#"You can set the global "prompt_timeout" (or a per-module "timeout") in your config to allow longer-running modules to keep executing."#
+                );
+                return None;
+            }
+        }
     }
 }
 

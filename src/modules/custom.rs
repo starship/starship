@@ -13,8 +13,27 @@ use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 /// command can be run -- if its result is 0, the module will be shown.
 ///
 /// Finally, the content of the module itself is also set by a command.
-pub async fn module<'a>(name: &str, context: &'a Context<'a>) -> Option<Module<'a>> {
+pub async fn module<'a>(
+    name: &str,
+    context: &'a Context<'a>,
+    enforce_timeout: bool,
+) -> Option<Module<'a>> {
     let start: Instant = Instant::now();
+
+    let async_mod = module_impl(name, context);
+    let mut module = if enforce_timeout {
+        context.run_with_timeout(name, async_mod).await
+    } else {
+        async_mod.await
+    }?;
+
+    let elapsed = start.elapsed();
+    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
+    module.duration = elapsed;
+    Some(module)
+}
+
+async fn module_impl<'a>(name: &str, context: &'a Context<'a>) -> Option<Module<'a>> {
     let toml_config = context.config.get_custom_module_config(name).expect(
         "modules::custom::module should only be called after ensuring that the module exists",
     );
@@ -86,9 +105,7 @@ pub async fn module<'a>(name: &str, context: &'a Context<'a>) -> Option<Module<'
             log::warn!("Error in module `custom.{}`:\n{}", name, error);
         }
     };
-    let elapsed = start.elapsed();
-    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
-    module.duration = elapsed;
+
     Some(module)
 }
 
