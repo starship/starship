@@ -305,16 +305,16 @@ El módulo `battery` muestra la cantidad de batería y si se está cargando o no
 
 ### Opciones
 
-| Opción               | Por defecto                       | Descripción                                                              |
-| -------------------- | --------------------------------- | ------------------------------------------------------------------------ |
-| `full_symbol`        | `""`                             | Se muestra cuando la batería está cargada.                               |
-| `charging_symbol`    | `""`                             | Se muestra cuando la batería se está cargando.                           |
-| `discharging_symbol` | `""`                             | Se muestra cuando la batería se está descargando.                        |
-| `unknown_symbol`     | `""`                             | El símbolo que se muestra cuando el estado de la batería es desconocido. |
-| `empty_symbol`       | `""`                             | El símbolo que se muestra cuando el estado de la batería está vacío.     |
-| `format`             | `"[$symbol$percentage]($style) "` | El formato del módulo.                                                   |
-| `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
-| `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
+| Opción               | Por defecto                        | Descripción                                                              |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `full_symbol`        | `""`                              | Se muestra cuando la batería está cargada.                               |
+| `charging_symbol`    | `""`                              | Se muestra cuando la batería se está cargando.                           |
+| `discharging_symbol` | `""`                              | Se muestra cuando la batería se está descargando.                        |
+| `unknown_symbol`     | `""`                              | El símbolo que se muestra cuando el estado de la batería es desconocido. |
+| `empty_symbol`       | `""`                              | El símbolo que se muestra cuando el estado de la batería está vacío.     |
+| `format`             | `"[$symbol $percentage]($style) "` | El formato del módulo.                                                   |
+| `display`            | [ver aquí](#battery-display)       | Define cuándo mostrar el indicador y el estilo.                          |
+| `disabled`           | `false`                            | Desactiva el módulo `battery`.                                           |
 
 
 ### Ejemplo

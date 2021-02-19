@@ -304,16 +304,16 @@ symbol = "🅰 "
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                          | Mô tả                                                    |
-| -------------------- | --------------------------------- | -------------------------------------------------------- |
-| `full_symbol`        | `""`                             | Kí hiệu cho biết khi pin đầy.                            |
-| `charging_symbol`    | `""`                             | Kí hiệu cho biết khi ping đang sạc.                      |
-| `discharging_symbol` | `""`                             | Kí hiệu cho biết khi pin đang không sạc.                 |
-| `unknown_symbol`     | `""`                             | Kí hiệu cho biết khi trạng thái pin không được xác định. |
-| `empty_symbol`       | `""`                             | Kí hiệu cho biết khi hết pin.                            |
-| `format`             | `"[$symbol$percentage]($style) "` | Định dạng cho module.                                    |
-| `display`            | [link](#battery-display)          | Ngưỡng hiển thị và kiểu cho module.                      |
-| `disabled`           | `false`                           | Vô hiệu `battery` module.                                |
+| Tuỳ chọn             | Mặc định                           | Mô tả                                                    |
+| -------------------- | ---------------------------------- | -------------------------------------------------------- |
+| `full_symbol`        | `""`                              | Kí hiệu cho biết khi pin đầy.                            |
+| `charging_symbol`    | `""`                              | Kí hiệu cho biết khi ping đang sạc.                      |
+| `discharging_symbol` | `""`                              | Kí hiệu cho biết khi pin đang không sạc.                 |
+| `unknown_symbol`     | `""`                              | Kí hiệu cho biết khi trạng thái pin không được xác định. |
+| `empty_symbol`       | `""`                              | Kí hiệu cho biết khi hết pin.                            |
+| `format`             | `"[$symbol $percentage]($style) "` | Định dạng cho module.                                    |
+| `display`            | [link](#battery-display)           | Ngưỡng hiển thị và kiểu cho module.                      |
+| `disabled`           | `false`                            | Vô hiệu `battery` module.                                |
 
 
 ### Ví dụ

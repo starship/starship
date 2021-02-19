@@ -22,7 +22,7 @@ impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
             discharging_symbol: "",
             unknown_symbol: "",
             empty_symbol: "",
-            format: "[$symbol$percentage]($style) ",
+            format: "[$symbol $percentage]($style) ",
             display: vec![BatteryDisplayConfig {
                 threshold: 10,
                 style: "red bold",

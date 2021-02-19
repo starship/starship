@@ -304,16 +304,16 @@ Le module `battery` montre à quel point la batterie de l'appareil est chargée 
 
 ### Options
 
-| Option               | Default                           | Description                                                   |
-| -------------------- | --------------------------------- | ------------------------------------------------------------- |
-| `full_symbol`        | `""`                             | Le symbole affiché lorsque la batterie est pleine.            |
-| `charging_symbol`    | `""`                             | Le symbole affiché lorsque la batterie se charge.             |
-| `discharging_symbol` | `""`                             | Le symbole affiché lorsque la batterie se décharge.           |
-| `unknown_symbol`     | `""`                             | Le symbole affiché lorsque l'état de la batterie est inconnu. |
-| `empty_symbol`       | `""`                             | Le symbole affiché lorsque la batterie est vide.              |
-| `format`             | `"[$symbol$percentage]($style) "` | Format du module.                                             |
-| `display`            | [lien](#battery-display)          | Affiche le seuil et le style du module.                       |
-| `disabled`           | `false`                           | Désactive le module `battery`.                                |
+| Option               | Default                            | Description                                                   |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------- |
+| `full_symbol`        | `""`                              | Le symbole affiché lorsque la batterie est pleine.            |
+| `charging_symbol`    | `""`                              | Le symbole affiché lorsque la batterie se charge.             |
+| `discharging_symbol` | `""`                              | Le symbole affiché lorsque la batterie se décharge.           |
+| `unknown_symbol`     | `""`                              | Le symbole affiché lorsque l'état de la batterie est inconnu. |
+| `empty_symbol`       | `""`                              | Le symbole affiché lorsque la batterie est vide.              |
+| `format`             | `"[$symbol $percentage]($style) "` | Format du module.                                             |
+| `display`            | [lien](#battery-display)           | Affiche le seuil et le style du module.                       |
+| `disabled`           | `false`                            | Désactive le module `battery`.                                |
 
 
 ### Exemple
