@@ -147,6 +147,9 @@ fi"#,
             );
             Some(script)
         }
+        Some("nushell") => {
+            Some(format!("config set prompt \"{} prompt\"", starship.sprint_posix()?))
+        }
         Some("powershell") => {
             // Explanation of syntax:
             // &: Explicitly tells powershell to execute path with starship executable.

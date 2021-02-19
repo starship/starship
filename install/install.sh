@@ -428,6 +428,11 @@ info "Please follow the steps for your shell to complete the installation:
 
       eval \"\$(starship init zsh)\"
 
+  ${BOLD}${UNDERLINE}Nushell${NO_COLOR}
+  Run the following command:
+
+      config set prompt \"starship prompt\"
+
   ${BOLD}${UNDERLINE}Ion${NO_COLOR}
   Add the following to the end of ${BOLD}~/.config/ion/initrc${NO_COLOR}:
 
