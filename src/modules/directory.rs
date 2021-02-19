@@ -58,10 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = repo
         .and_then(|r| r.root.as_ref())
         .filter(|root| *root != &home_dir)
-        // NOTE: Always attempt to contract repo paths from the physical dir as
-        // the logical dir _may_ not be be a valid physical disk
-        // path and may be impossible to contract.
-        .and_then(|root| contract_repo_path(&physical_dir, root));
+        .and_then(|root| contract_repo_path(&display_dir, root));
 
     // Otherwise use the logical path, automatically contracting
     // the home directory if required.
@@ -200,7 +197,7 @@ fn is_readonly_dir(path: &Path) -> bool {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.normalised_starts_with(top_level_path) {
-        return full_path.to_slash().unwrap();
+        return full_path.to_slash_lossy();
     }
 
     if full_path.normalised_equals(top_level_path) {
@@ -213,13 +210,13 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     let sub_path = full_path
         .without_prefix()
         .strip_prefix(top_level_path.without_prefix())
-        .expect("strip path prefix");
+        .unwrap_or(full_path);
 
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
-        path = sub_path.to_slash().expect("slash path")
+        path = sub_path.to_slash_lossy()
     )
 }
 
@@ -239,7 +236,9 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         }
 
         let components: Vec<_> = full_path.components().collect();
-        let repo_name = components[components.len() - i - 1].as_os_str().to_str()?;
+        let repo_name = components[components.len() - i - 1]
+            .as_os_str()
+            .to_string_lossy();
 
         if i == 0 {
             return Some(repo_name.to_string());
@@ -250,7 +249,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
             "{repo_name}{separator}{path}",
             repo_name = repo_name,
             separator = "/",
-            path = path.to_slash()?
+            path = path.to_slash_lossy()
         ));
     }
     None
@@ -541,7 +540,7 @@ mod tests {
         }
 
         #[test]
-        fn directory_in_root() -> io::Result<()> {
+        fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
                 "{}{} ",
@@ -550,23 +549,21 @@ mod tests {
             ));
 
             assert_eq!(expected, actual);
-            Ok(())
         }
     }
 
     #[test]
-    fn home_directory_default_home_symbol() -> io::Result<()> {
+    fn home_directory_default_home_symbol() {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn home_directory_custom_home_symbol() -> io::Result<()> {
+    fn home_directory_custom_home_symbol() {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .config(toml::toml! {
@@ -577,11 +574,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn home_directory_custom_home_symbol_subdirectories() -> io::Result<()> {
+    fn home_directory_custom_home_symbol_subdirectories() {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap().join("path/subpath"))
             .config(toml::toml! {
@@ -592,11 +588,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀/path/subpath")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn substituted_truncated_path() -> io::Result<()> {
+    fn substituted_truncated_path() {
         let actual = ModuleRenderer::new("directory")
             .path("/some/long/network/path/workspace/a/b/c/dev")
             .config(toml::toml! {
@@ -613,11 +608,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn substitution_order() -> io::Result<()> {
+    fn substitution_order() {
         let actual = ModuleRenderer::new("directory")
             .path("/path/to/sub")
             .config(toml::toml! {
@@ -629,11 +623,10 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/correct/order")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn strange_substitution() -> io::Result<()> {
+    fn strange_substitution() {
         let strange_sub = "/\\/;,!";
         let actual = ModuleRenderer::new("directory")
             .path("/foo/bar/regular/path")
@@ -653,7 +646,6 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -716,7 +708,7 @@ mod tests {
     }
 
     #[test]
-    fn root_directory() -> io::Result<()> {
+    fn root_directory() {
         let actual = ModuleRenderer::new("directory").path("/").collect();
         #[cfg(not(target_os = "windows"))]
         let expected = Some(format!(
@@ -728,7 +720,6 @@ mod tests {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -1266,7 +1257,7 @@ mod tests {
     }
 
     #[test]
-    fn truncation_symbol_truncated_root() -> io::Result<()> {
+    fn truncation_symbol_truncated_root() {
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
@@ -1280,11 +1271,10 @@ mod tests {
             Color::Cyan.bold().paint("…/four/element/path")
         ));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn truncation_symbol_not_truncated_root() -> io::Result<()> {
+    fn truncation_symbol_not_truncated_root() {
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
@@ -1298,7 +1288,6 @@ mod tests {
             Color::Cyan.bold().paint("/a/four/element/path")
         ));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -1394,7 +1383,7 @@ mod tests {
 
     #[test]
     #[cfg(target_os = "windows")]
-    fn truncation_symbol_windows_root_not_truncated() -> io::Result<()> {
+    fn truncation_symbol_windows_root_not_truncated() {
         let dir = Path::new("C:\\temp");
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1406,12 +1395,11 @@ mod tests {
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("C:/temp")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
     #[cfg(target_os = "windows")]
-    fn truncation_symbol_windows_root_truncated() -> io::Result<()> {
+    fn truncation_symbol_windows_root_truncated() {
         let dir = Path::new("C:\\temp");
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1423,12 +1411,11 @@ mod tests {
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/temp")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
     #[cfg(target_os = "windows")]
-    fn truncation_symbol_windows_root_truncated_backslash() -> io::Result<()> {
+    fn truncation_symbol_windows_root_truncated_backslash() {
         let dir = Path::new("C:\\temp");
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1440,7 +1427,6 @@ mod tests {
             .collect();
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -1598,5 +1584,47 @@ mod tests {
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
+    }
+    // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
+    #[cfg(any(unix, target_os = "redox"))]
+    fn invalid_path() -> PathBuf {
+        use std::ffi::OsStr;
+        use std::os::unix::ffi::OsStrExt;
+
+        // Here, the values 0x66 and 0x6f correspond to 'f' and 'o'
+        // respectively. The value 0x80 is a lone continuation byte, invalid
+        // in a UTF-8 sequence.
+        let source = [0x66, 0x6f, 0x80, 0x6f];
+        let os_str = OsStr::from_bytes(&source[..]);
+
+        PathBuf::from(os_str)
+    }
+
+    #[cfg(windows)]
+    fn invalid_path() -> PathBuf {
+        use std::ffi::OsString;
+        use std::os::windows::prelude::*;
+
+        // Here the values 0x0066 and 0x006f correspond to 'f' and 'o'
+        // respectively. The value 0xD800 is a lone surrogate half, invalid
+        // in a UTF-16 sequence.
+        let source = [0x0066, 0x006f, 0xD800, 0x006f];
+        let os_string = OsString::from_wide(&source[..]);
+
+        PathBuf::from(os_string)
+    }
+
+    #[test]
+    #[cfg(any(unix, windows, target_os = "redox"))]
+    fn invalid_unicode() {
+        let path = invalid_path();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(path.to_string_lossy())
+        ));
+
+        let actual = ModuleRenderer::new("directory").path(path).collect();
+
+        assert_eq!(expected, actual);
     }
 }

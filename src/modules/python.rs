@@ -4,7 +4,6 @@ use std::path::Path;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -42,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let version = get_python_version(&config)?;
+                    let version = get_python_version(context, &config)?;
                     Some(Ok(version.trim().to_string()))
                 }
                 "virtualenv" => {
@@ -66,12 +65,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_python_version(config: &PythonConfig) -> Option<String> {
+fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
     if config.pyenv_version_name {
-        return Some(utils::exec_cmd("pyenv", &["version-name"])?.stdout);
+        return Some(context.exec_cmd("pyenv", &["version-name"])?.stdout);
     };
     let version = config.python_binary.0.iter().find_map(|binary| {
-        match utils::exec_cmd(binary, &["--version"]) {
+        match context.exec_cmd(binary, &["--version"]) {
             Some(output) => {
                 if output.stdout.is_empty() {
                     Some(output.stderr)

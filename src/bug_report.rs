@@ -3,6 +3,7 @@ use crate::utils::exec_cmd;
 
 use std::fs;
 use std::path::PathBuf;
+use std::time::Duration;
 
 #[cfg(feature = "http")]
 const GIT_IO_BASE_URL: &str = "https://git.io/";
@@ -152,7 +153,7 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = exec_cmd(&shell, &["--version"])
+    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500))
         .map(|output| output.stdout.trim().to_string())
         .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
 

@@ -2,24 +2,22 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::zig::ZigConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Zig version
-///
-/// Will display the Zig version if any of the following criteria are met:
-///     - The current directory contains a file with extension `.zig`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("zig");
+    let config = ZigConfig::try_load(module.config);
+
     let is_zig_project = context
         .try_begin_scan()?
-        .set_extensions(&["zig"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_zig_project {
         return None;
     }
-
-    let mut module = context.new_module("zig");
-    let config = ZigConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -33,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let zig_version_output = utils::exec_cmd("zig", &["version"])?.stdout;
+                    let zig_version_output = context.exec_cmd("zig", &["version"])?.stdout;
                     let zig_version = format!("v{}", zig_version_output.trim());
                     Some(Ok(zig_version))
                 }

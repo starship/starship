@@ -125,16 +125,15 @@ mod tests {
 
     #[test]
     #[ignore]
-    fn no_region_set() -> io::Result<()> {
+    fn no_region_set() {
         let actual = ModuleRenderer::new("aws").collect();
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn region_set() -> io::Result<()> {
+    fn region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
             .collect();
@@ -144,11 +143,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn region_set_with_alias() -> io::Result<()> {
+    fn region_set_with_alias() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-southeast-2")
             .config(toml::toml! {
@@ -159,11 +157,10 @@ mod tests {
         let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  (au)")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn default_region_set() -> io::Result<()> {
+    fn default_region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
@@ -174,11 +171,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn profile_set() -> io::Result<()> {
+    fn profile_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .collect();
@@ -188,11 +184,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn profile_set_from_aws_vault() -> io::Result<()> {
+    fn profile_set_from_aws_vault() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_VAULT", "astronauts-vault")
             .env("AWS_PROFILE", "astronauts-profile")
@@ -203,11 +198,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn profile_and_region_set() -> io::Result<()> {
+    fn profile_and_region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
@@ -218,7 +212,6 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
@@ -282,7 +275,7 @@ region = us-east-2
     }
 
     #[test]
-    fn profile_and_region_set_with_display_all() -> io::Result<()> {
+    fn profile_and_region_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
@@ -293,11 +286,10 @@ region = us-east-2
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn profile_set_with_display_all() -> io::Result<()> {
+    fn profile_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .collect();
@@ -307,11 +299,10 @@ region = us-east-2
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn region_set_with_display_all() -> io::Result<()> {
+    fn region_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-1")
             .collect();
@@ -321,11 +312,10 @@ region = us-east-2
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn profile_and_region_set_with_display_region() -> io::Result<()> {
+    fn profile_and_region_set_with_display_region() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
@@ -340,11 +330,10 @@ region = us-east-2
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn profile_and_region_set_with_display_profile() -> io::Result<()> {
+    fn profile_and_region_set_with_display_profile() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
@@ -359,11 +348,10 @@ region = us-east-2
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn region_set_with_display_profile() -> io::Result<()> {
+    fn region_set_with_display_profile() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-1")
             .config(toml::toml! {
@@ -374,12 +362,11 @@ region = us-east-2
         let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  ")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
     #[ignore]
-    fn region_not_set_with_display_region() -> io::Result<()> {
+    fn region_not_set_with_display_region() {
         let actual = ModuleRenderer::new("aws")
             .config(toml::toml! {
                 [aws]
@@ -389,6 +376,5 @@ region = us-east-2
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

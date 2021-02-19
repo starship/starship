@@ -37,7 +37,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -51,20 +50,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 ## External commands
 
-To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `utils::exec_cmd` function. Here's a quick example:
+To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `context.exec_cmd` function. Here's a quick example:
 
 ```rust
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-   // Here `my_env_var` will be either the stdout of the called command or the function
+   // Here `output` will be either the stdout of the called command or the function
    // will exit if the called program was not installed or could not be run.
-   let output = utils::exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
+   let output = context.exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
 
    // Then you can happily use the output
 }

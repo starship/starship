@@ -168,7 +168,7 @@ fi"#,
         }
         Some("elvish") => {
             let script = format!(
-                "eval ({} init elvish --print-full-init | slurp)",
+                "eval (\"{}\" init elvish --print-full-init | slurp)",
                 starship.sprint_posix()?
             );
             Some(script)

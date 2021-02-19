@@ -147,12 +147,11 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use ansi_term::Color;
-    use std::io;
 
     use crate::test::ModuleRenderer;
 
     #[test]
-    fn success_status() -> io::Result<()> {
+    fn success_status() {
         let expected = None;
 
         // Status code 0
@@ -173,21 +172,18 @@ mod tests {
             })
             .collect();
         assert_eq!(expected, actual);
-
-        Ok(())
     }
 
     #[test]
-    fn not_enabled() -> io::Result<()> {
+    fn not_enabled() {
         let expected = None;
 
         let actual = ModuleRenderer::new("status").status(1).collect();
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn failure_status() -> io::Result<()> {
+    fn failure_status() {
         let exit_values = [1, 2, 130];
 
         for status in exit_values.iter() {
@@ -205,12 +201,10 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 
     #[test]
-    fn signal_name() -> io::Result<()> {
+    fn signal_name() {
         let exit_values = [1, 2, 126, 127, 130, 101];
         let exit_values_name = [
             Some("ERROR"),
@@ -233,12 +227,10 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 
     #[test]
-    fn exit_code_name_no_signal() -> io::Result<()> {
+    fn exit_code_name_no_signal() {
         let exit_values = [1, 2, 126, 127, 130, 101, 132];
         let exit_values_name = [
             Some("ERROR"),
@@ -263,12 +255,10 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 
     #[test]
-    fn maybe_exit_code_number() -> io::Result<()> {
+    fn maybe_exit_code_number() {
         let exit_values = [1, 2, 126, 127, 130, 101, 6, -3];
         let exit_values_name = [
             None,
@@ -293,12 +283,10 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 
     #[test]
-    fn special_symbols() -> io::Result<()> {
+    fn special_symbols() {
         let exit_values = [1, 126, 127, 130, 131];
         let exit_values_name = ["🔴", "🚫", "🔍", "🧱", "⚡"];
 
@@ -321,12 +309,10 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 
     #[test]
-    fn special_symbols_no_signals() -> io::Result<()> {
+    fn special_symbols_no_signals() {
         let exit_values = [1, 126, 127, 130, 131];
         let exit_values_name = ["🔴", "🚫", "🔍", "🔴", "🔴"];
 
@@ -349,7 +335,5 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 }

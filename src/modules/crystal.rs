@@ -2,26 +2,22 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Crystal version
-///
-/// Will display the Crystal version if any of the following criteria are met:
-///     - Current directory contains a `.cr` file
-///     - Current directory contains a `shard.yml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("crystal");
+    let config: CrystalConfig = CrystalConfig::try_load(module.config);
+
     let is_crystal_project = context
         .try_begin_scan()?
-        .set_files(&["shard.yml"])
-        .set_extensions(&["cr"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_crystal_project {
         return None;
     }
-
-    let mut module = context.new_module("crystal");
-    let config: CrystalConfig = CrystalConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -35,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_crystal_version(
-                    utils::exec_cmd("crystal", &["--version"])?.stdout.as_str(),
+                    context.exec_cmd("crystal", &["--version"])?.stdout.as_str(),
                 )
                 .map(Ok),
                 _ => None,

@@ -3,8 +3,6 @@ use crate::formatter::StringFormatter;
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::utils;
-
 use regex::Regex;
 const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
 
@@ -72,7 +70,7 @@ fn get_java_version(context: &Context) -> Option<String> {
         None => String::from("java"),
     };
 
-    let output = utils::exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let output = context.exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
     let java_version = if output.stdout.is_empty() {
         output.stderr
     } else {
@@ -93,7 +91,7 @@ fn parse_java_version(java_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -177,6 +175,32 @@ mod tests {
         File::create(dir.path().join("Main.java"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_java_file_preview() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Main.java"))?.sync_all()?;
+        let actual = ModuleRenderer::new("java").cmd("java -Xinternalversion", Some(CommandOutput {
+            stdout: "OpenJDK 64-Bit Server VM (16+14) for bsd-aarch64 JRE (16+14), built on Jan 17 2021 07:19:47 by \"brew\" with clang Apple LLVM 12.0.0 (clang-1200.0.32.28)\n".to_owned(),
+            stderr: "".to_owned()
+        })).path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v16 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_java_file_no_java_installed() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Main.java"))?.sync_all()?;
+        let actual = ModuleRenderer::new("java")
+            .cmd("java -Xinternalversion", None)
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ ")));
         assert_eq!(expected, actual);
         dir.close()
     }

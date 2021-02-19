@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::purescript::PureScriptConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current PureScript version
 ///
@@ -35,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let purs_version = utils::exec_cmd("purs", &["--version"])?.stdout;
+                    let purs_version = context.exec_cmd("purs", &["--version"])?.stdout;
                     Some(Ok(format!("v{}", purs_version.trim())))
                 }
                 _ => None,

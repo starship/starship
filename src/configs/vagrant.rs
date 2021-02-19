@@ -8,6 +8,9 @@ pub struct VagrantConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for VagrantConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for VagrantConfig<'a> {
             symbol: "⍱ ",
             style: "cyan bold",
             disabled: false,
+            detect_extensions: vec![],
+            detect_files: vec!["Vagrantfile"],
+            detect_folders: vec![],
         }
     }
 }

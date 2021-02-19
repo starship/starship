@@ -2,31 +2,26 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 use regex::Regex;
 const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+[a-z\\-]*[1-9]*)[^\\s]*";
 
 /// Creates a module with the current Lua version
-///
-/// Will display the Lua version if any of the following criteria are met:
-///     - Current directory contains a `.lua-version` file
-///     - Current directory contains a `lua` directory
-///     - Current directory contains a file with the `.lua` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("lua");
+    let config = LuaConfig::try_load(module.config);
+
     let is_lua_project = context
         .try_begin_scan()?
-        .set_files(&[".lua-version"])
-        .set_folders(&["lua"])
-        .set_extensions(&["lua"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_lua_project {
         return None;
     }
 
-    let mut module = context.new_module("lua");
-    let config = LuaConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -39,7 +34,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let lua_version = format_lua_version(&get_lua_version(&config.lua_binary)?)?;
+                    let lua_version =
+                        format_lua_version(&get_lua_version(context, &config.lua_binary)?)?;
                     Some(Ok(lua_version))
                 }
                 _ => None,
@@ -58,8 +54,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_lua_version(lua_binary: &str) -> Option<String> {
-    match utils::exec_cmd(lua_binary, &["-v"]) {
+fn get_lua_version(context: &Context, lua_binary: &str) -> Option<String> {
+    match context.exec_cmd(lua_binary, &["-v"]) {
         Some(output) => {
             if output.stdout.is_empty() {
                 Some(output.stderr)

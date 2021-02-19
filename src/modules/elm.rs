@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::elm::ElmConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Elm version
 ///
@@ -39,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let elm_version = utils::exec_cmd("elm", &["--version"])?.stdout;
+                    let elm_version = context.exec_cmd("elm", &["--version"])?.stdout;
                     let module_version = Some(format!("v{}", elm_version.trim()))?;
                     Some(Ok(module_version))
                 }

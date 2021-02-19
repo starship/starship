@@ -8,6 +8,9 @@ pub struct CrystalConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for CrystalConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for CrystalConfig<'a> {
             symbol: "🔮 ",
             style: "bold red",
             disabled: false,
+            detect_extensions: vec!["cr"],
+            detect_files: vec!["shard.yml"],
+            detect_folders: vec![],
         }
     }
 }

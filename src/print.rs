@@ -27,6 +27,15 @@ pub fn get_prompt(context: Context) -> String {
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
+    match std::env::var_os("TERM") {
+        Some(term) if term == "dumb" => {
+            log::error!("Under a 'dumb' terminal (TERM=dumb).");
+            buf.push_str("Starship disabled due to TERM=dumb > ");
+            return buf;
+        }
+        _ => {}
+    }
+
     // A workaround for a fish bug (see #739,#279). Applying it to all shells
     // breaks things (see #808,#824,#834). Should only be printed in fish.
     if let Shell::Fish = context.shell {

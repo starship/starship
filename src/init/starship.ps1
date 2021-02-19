@@ -27,6 +27,7 @@ function global:prompt {
         $startInfo = [System.Diagnostics.ProcessStartInfo]::new($Executable);
         $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8;
         $startInfo.RedirectStandardOutput = $true;
+        $startInfo.RedirectStandardError = $true;
         $startInfo.CreateNoWindow = $true;
         $startInfo.UseShellExecute = $false;
         if ($startInfo.ArgumentList.Add) {
@@ -48,7 +49,17 @@ function global:prompt {
             }
             $startInfo.Arguments = $escaped -Join ' ';
         }
-        [System.Diagnostics.Process]::Start($startInfo).StandardOutput.ReadToEnd();
+        $process = [System.Diagnostics.Process]::Start($startInfo)
+
+        # stderr isn't displayed with this style of invocation
+        # Manually write it to console
+        $stderr = $process.StandardError.ReadToEnd().Trim()
+        if ($stderr -ne '') {
+            # Write-Error doesn't work here
+            $host.ui.WriteErrorLine($stderr)
+        }
+
+        $process.StandardOutput.ReadToEnd();
     }
 
     $origDollarQuestion = $global:?

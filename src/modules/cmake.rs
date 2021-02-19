@@ -2,24 +2,23 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::cmake::CMakeConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current CMake version
-///
-/// Will display the CMake version if any of the following criteria are met:
-///     - The current directory contains a `CMakeLists.txt` or `CMakeCache.txt`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("cmake");
+    let config = CMakeConfig::try_load(module.config);
+
     let is_cmake_project = context
         .try_begin_scan()?
-        .set_files(&["CMakeLists.txt", "CMakeCache.txt"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_cmake_project {
         return None;
     }
 
-    let mut module = context.new_module("cmake");
-    let config = CMakeConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -31,7 +30,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => utils::exec_cmd("cmake", &["--version"])
+                "version" => context
+                    .exec_cmd("cmake", &["--version"])
                     .map(|output| format_cmake_version(&output.stdout))
                     .flatten()
                     .map(Ok),

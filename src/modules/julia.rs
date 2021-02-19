@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::julia::JuliaConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Julia version
 ///
@@ -34,10 +33,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    format_julia_version(&utils::exec_cmd("julia", &["--version"])?.stdout.as_str())
-                        .map(Ok)
-                }
+                "version" => format_julia_version(
+                    &context.exec_cmd("julia", &["--version"])?.stdout.as_str(),
+                )
+                .map(Ok),
                 _ => None,
             })
             .parse(None)

@@ -45,18 +45,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
-    fn no_env_set() -> io::Result<()> {
+    fn no_env_set() {
         let actual = ModuleRenderer::new("singularity").collect();
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
     #[test]
-    fn env_set() -> io::Result<()> {
+    fn env_set() {
         let actual = ModuleRenderer::new("singularity")
             .env("SINGULARITY_NAME", "centos.img")
             .collect();
@@ -67,6 +65,5 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

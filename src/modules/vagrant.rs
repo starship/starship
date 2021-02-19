@@ -2,24 +2,23 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::vagrant::VagrantConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Vagrant version
-///
-/// Will display the Vagrant version if any of the following criteria are met:
-///     - Current directory contains a `Vagrantfile` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("vagrant");
+    let config = VagrantConfig::try_load(module.config);
+
     let is_vagrant_project = context
         .try_begin_scan()?
-        .set_files(&["Vagrantfile"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_vagrant_project {
         return None;
     }
 
-    let mut module = context.new_module("vagrant");
-    let config = VagrantConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -32,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_vagrant_version(
-                    &utils::exec_cmd("vagrant", &["--version"])?.stdout.as_str(),
+                    &context.exec_cmd("vagrant", &["--version"])?.stdout.as_str(),
                 )
                 .map(Ok),
                 _ => None,

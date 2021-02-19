@@ -8,6 +8,9 @@ pub struct DartConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for DartConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for DartConfig<'a> {
             symbol: "🎯 ",
             style: "bold blue",
             disabled: false,
+            detect_extensions: vec!["dart"],
+            detect_files: vec!["pubspec.yaml", "pubspec.yml", "pubspec.lock"],
+            detect_folders: vec![".dart_tool"],
         }
     }
 }

@@ -442,19 +442,23 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+The `cmake` module shows the currently installed version of CMake. By default
+the module will be activated if any of the following conditions are met:
 
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
 
 ### Options
 
-| Option     | Default                              | Description                                  |
-| ---------- | ------------------------------------ | -------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                   |
-| `symbol`   | `"喝 "`                              | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                        | The style for the module.                    |
-| `disabled` | `false`                              | Disables the `cmake` module.                 |
+| Option              | Default                                | Description                                  |
+| ------------------- | -------------------------------------- | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                   |
+| `symbol`            | `"喝 "`                                | The symbol used before the version of cmake. |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle  |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
+| `style`             | `"bold blue"`                          | The style for the module.                    |
+| `disabled`          | `false`                                | Disables the `cmake` module.                 |
 
 ### Variables
 
@@ -565,19 +569,22 @@ format = "[$symbol$environment](dimmed green) "
 ## Crystal
 
 The `crystal` module shows the currently installed version of Crystal.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
 
 ### Options
 
-| Option     | Default                              | Description                                               |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                              | The symbol used before displaying the version of crystal. |
-| `style`    | `"bold red"`                         | The style for the module.                                 |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                                |
-| `disabled` | `false`                              | Disables the `crystal` module.                            |
+| Option              | Default                              | Description                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `symbol`            | `"🔮 "`                              | The symbol used before displaying the version of crystal. |
+| `style`             | `"bold red"`                         | The style for the module.                                 |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.              |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                 |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                |
+| `disabled`          | `false`                              | Disables the `crystal` module.                            |
 
 ### Variables
 
@@ -601,20 +608,23 @@ format = "via [✨ $version](bold blue) "
 ## Dart
 
 The `dart` module shows the currently installed version of Dart.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Options
 
-| Option     | Default                              | Description                                     |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`   | `"🎯 "`                              | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                        | The style for the module.                       |
-| `disabled` | `false`                              | Disables the `dart` module.                     |
+| Option              | Default                                           | Description                                     |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
+| `symbol`            | `"🎯 "`                                           | A format string representing the symbol of Dart |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.    |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.       |
+| `style`             | `"bold blue"`                                     | The style for the module.                       |
+| `disabled`          | `false`                                           | Disables the `dart` module.                     |
 
 ### Variables
 
@@ -717,13 +727,16 @@ The `docker_context` module shows the currently active
 
 ### Options
 
-| Option            | Default                            | Description                                                                                                     |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | The format for the module.                                                                                      |
-| `symbol`          | `"🐳 "`                            | The symbol used before displaying the Docker context.                                                           |
-| `style`           | `"blue bold"`                      | The style for the module.                                                                                       |
-| `only_with_files` | `true`                             | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
-| `disabled`        | `false`                            | Disables the `docker_context` module.                                                                           |
+| Option              | Default                                                       | Description                                                                       |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | The format for the module.                                                        |
+| `symbol`            | `"🐳 "`                                                       | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                                                 | The style for the module.                                                         |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
 ### Variables
 
@@ -1221,7 +1234,7 @@ behind = "⇣${count}"
 ## Golang
 
 The `golang` module shows the currently installed version of Golang.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
@@ -1234,12 +1247,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                    |
-| ---------- | ---------------------------------- | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                     |
-| `symbol`   | `"🐹 "`                            | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                      | The style for the module.                      |
-| `disabled` | `false`                            | Disables the `golang` module.                  |
+| Option               | Default                                                                        | Description                                    |
+| -------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `format`             | `"via [$symbol($version )]($style)"`                                           | The format for the module.                     |
+| `symbol`             | `"🐹 "`                                                                        | A format string representing the symbol of Go. |
+| `detect_extensions`  | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_files`       | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
+| `detect_folders`     | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
+| `style`              | `"bold cyan"`                                                                  | The style for the module.                      |
+| `disabled`           | `false`                                                                        | Disables the `golang` module.                  |
 
 ### Variables
 
@@ -1554,7 +1570,7 @@ disabled = true
 ## Lua
 
 The `lua` module shows the currently installed version of Lua.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1562,13 +1578,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option       | Default                              | Description                                                                   |
-| ------------ | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
-| `symbol`     | `"🌙 "`                              | A format string representing the symbol of Lua.                               |
-| `style`      | `"bold blue"`                        | The style for the module.                                                     |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.    |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                    |
+| Option              | Default                              | Description                                                                   |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
+| `symbol`            | `"🌙 "`                              | A format string representing the symbol of Lua.                               |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                                  |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                   |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                     |
+| `style`             | `"bold blue"`                        | The style for the module.                                                     |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.    |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                    |
 
 ### Variables
 
@@ -2374,19 +2393,22 @@ If you still want to enable it, [follow the example shown below](#with-version).
 
 :::
 
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`   | `"💠 "`                              | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | The style for the module.                             |
-| `disabled` | `false`                              | Disables the `terraform` module.                      |
+| Option              | Default                              | Description                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`            | `"💠"`                               | A format string shown before the terraform workspace. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
+| `style`             | `"bold 105"`                         | The style for the module.                             |
+| `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
 ### Variables
 
@@ -2519,18 +2541,21 @@ show_always = true
 ## Vagrant
 
 The `vagrant` module shows the currently installed version of Vagrant.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
 
 ### Options
 
-| Option     | Default                            | Description                                         |
-| ---------- | ---------------------------------- | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                          |
-| `symbol`   | `"⍱ "`                             | A format string representing the symbol of Vagrant. |
-| `style`    | `"cyan bold"`                      | The style for the module.                           |
-| `disabled` | `false`                            | Disables the `Vagrant` module.                      |
+| Option              | Default                              | Description                                         |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                          |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.        |
+| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
+| `style`             | `"cyan bold"`                        | The style for the module.                           |
+| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
 
 ### Variables
 
@@ -2553,19 +2578,22 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig.
+By default the the `zig` module shows the currently installed version of Zig.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | The style for the module.                             |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Option              | Default                              | Description                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `"bold yellow"`                      | The style for the module.                             |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                            |
+| `disabled`          | `false`                              | Disables the `zig` module.                            |
+| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
 
 ### Variables
 

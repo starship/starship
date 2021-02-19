@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::kotlin::KotlinConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 use regex::Regex;
 const KOTLIN_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+[\\d\\.]+[\\d\\.]+)";
@@ -35,8 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let kotlin_version =
-                        format_kotlin_version(&get_kotlin_version(&config.kotlin_binary)?)?;
+                    let kotlin_version = format_kotlin_version(&get_kotlin_version(
+                        context,
+                        &config.kotlin_binary,
+                    )?)?;
                     Some(Ok(kotlin_version))
                 }
                 _ => None,
@@ -55,8 +56,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_kotlin_version(kotlin_binary: &str) -> Option<String> {
-    match utils::exec_cmd(kotlin_binary, &["-version"]) {
+fn get_kotlin_version(context: &Context, kotlin_binary: &str) -> Option<String> {
+    match context.exec_cmd(kotlin_binary, &["-version"]) {
         Some(output) => {
             if output.stdout.is_empty() {
                 Some(output.stderr)
