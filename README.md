@@ -224,6 +224,14 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval $(starship init ion)
    ```
 
+   #### Nushell
+
+   Run the following command:
+
+   ```sh
+   config set prompt "starship prompt"
+   ```
+
    #### Elvish
 
    **Warning** Only elvish v0.15 or higher is supported.
