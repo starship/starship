@@ -432,4 +432,9 @@ info "Please follow the steps for your shell to complete the installation:
   Add the following to the end of ${BOLD}~/.config/ion/initrc${NO_COLOR}:
 
       eval \$(starship init ion)
+
+  ${BOLD}${UNDERLINE}Tcsh${NO_COLOR}
+  Add the following to the end of ${BOLD}~/.tcshrc${NO_COLOR}:
+
+      eval "`(starship init tcsh)`"
 "
