@@ -739,16 +739,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                                                 | Mô tả                                                    |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                                | Định dạng cho module.                                    |
-| `symbol`            | `"•NET "`                                                                                                | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                   | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                   | Which extensions should trigger this module.             |
-| `detect_files`      | `[ "global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.              |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.               |
-| `style`             | `"bold blue"`                                                                                            | Kiểu cho module.                                         |
-| `disabled`          | `false`                                                                                                  | Disables the `dotnet` module.                            |
+| Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                    |
+| `symbol`            | `"•NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.             |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.              |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
+| `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                         |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
 
 ### Các biến
 
@@ -774,18 +774,21 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `mix.exs`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                                                    | Mô tả                                                           |
-| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | Kiểu cho module.                                                |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
+| Tuỳ chọn            | Mặc định                                                    | Mô tả                                                           |
+| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                    |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                     |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
+| `style`             | `"bold purple"`                                             | Kiểu cho module.                                                |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### Các biến
 
@@ -809,7 +812,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `elm` module shows the currently installed version of Elm. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `elm.json`
 - Đường dẫn hiện tại chứa một tập tin `elm-package.json`
@@ -819,12 +822,15 @@ The `elm` module shows the currently installed version of Elm. Module cho sẽ �
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
-| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | Kiểu cho module.                                |
-| `disabled` | `false`                              | Disables the `elm` module.                      |
+| Tuỳ chọn            | Mặc định                                           | Mô tả                                           |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Định dạng cho module.                           |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
+| `style`             | `"cyan bold"`                                      | Kiểu cho module.                                |
+| `disabled`          | `false`                                            | Disables the `elm` module.                      |
 
 ### Các biến
 
