@@ -739,16 +739,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Опции
 
-| Параметр            | По умолчанию                                                                                             | Описание                                                          |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                                | Формат модуля.                                                    |
-| `symbol`            | `"•NET "`                                                                                                | Символ перед отображением текущей версии dotnet.                  |
-| `heuristic`         | `true`                                                                                                   | Использовать быстрое определение версии, для сохранения скорости. |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                   | Which extensions should trigger this module.                      |
-| `detect_files`      | `[ "global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                       |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.                        |
-| `style`             | `"bold blue"`                                                                                            | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                                  | Disables the `dotnet` module.                                     |
+| Параметр            | По умолчанию                                                                                            | Описание                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Формат модуля.                                                    |
+| `symbol`            | `"•NET "`                                                                                               | Символ перед отображением текущей версии dotnet.                  |
+| `heuristic`         | `true`                                                                                                  | Использовать быстрое определение версии, для сохранения скорости. |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                      |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                       |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                        |
+| `style`             | `"bold blue"`                                                                                           | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                     |
 
 ### Переменные
 
@@ -774,18 +774,21 @@ heuristic = false
 
 ## Elixir
 
-Модуль `elixir` показывает установленную версию Elixir и Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `elixir` показывает установленную версию Elixir и Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `mix.exs`.
 
 ### Опции
 
-| Параметр   | По умолчанию                                                | Описание                                                      |
-| ---------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | Символ, используемый перед отображением версии Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | Стиль модуля.                                                 |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                             |
-| `disabled` | `false`                                                     | Отключает модуль `elixir`.                                    |
+| Параметр            | По умолчанию                                                | Описание                                                      |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | Символ, используемый перед отображением версии Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                  |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                   |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                    |
+| `style`             | `"bold purple"`                                             | Стиль модуля.                                                 |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                             |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                 |
 
 ### Переменные
 
@@ -809,7 +812,7 @@ symbol = "🔮 "
 
 ## Elm
 
-Модуль `elm` показывает установленную версию Elm. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `elm` показывает установленную версию Elm. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `elm.json`
 - Текущий каталог содержит файл `elm-package.json`
@@ -819,12 +822,15 @@ symbol = "🔮 "
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                        |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
-| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | Стиль модуля.                                   |
-| `disabled` | `false`                              | Отключает модуль `elm`.                         |
+| Параметр            | По умолчанию                                       | Описание                                        |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Формат модуля.                                  |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
+| `style`             | `"cyan bold"`                                      | Стиль модуля.                                   |
+| `disabled`          | `false`                                            | Disables the `elm` module.                      |
 
 ### Переменные
 
