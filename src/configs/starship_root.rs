@@ -71,6 +71,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "battery",
     "time",
     "status",
+    "shell",
     "character",
 ];
 
