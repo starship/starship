@@ -739,16 +739,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 配置项
 
-| Option              | 默认值                                                                                                      | 描述                                           |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                                | 组件格式化模板。                                     |
-| `symbol`            | `"•NET "`                                                                                                | 这个字段的内容会显示在当前 .NET 版本之前。                     |
-| `heuristic`         | `true`                                                                                                   | 使用更快的版本探测机制以保证 starship 的运行速度。               |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                   | Which extensions should trigger this module. |
-| `detect_files`      | `[ "global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.   |
-| `style`             | `"bold blue"`                                                                                            | 此组件的样式。                                      |
-| `disabled`          | `false`                                                                                                  | Disables the `dotnet` module.                |
+| Option              | 默认值                                                                                                     | 描述                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | 组件格式化模板。                                     |
+| `symbol`            | `"•NET "`                                                                                               | 这个字段的内容会显示在当前 .NET 版本之前。                     |
+| `heuristic`         | `true`                                                                                                  | 使用更快的版本探测机制以保证 starship 的运行速度。               |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module. |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.   |
+| `style`             | `"bold blue"`                                                                                           | 此组件的样式。                                      |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                |
 
 ### Variables
 
@@ -774,18 +774,21 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 此组件将在符合以下任意条件之一时显示：
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `mix.exs` 文件.
 
 ### 配置项
 
-| Option     | 默认值                                                         | 描述                                                              |
-| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | 此组件的样式。                                                         |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
+| Option              | 默认值                                                         | 描述                                                              |
+| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                    |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                     |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
+| `style`             | `"bold purple"`                                             | 此组件的样式。                                                         |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -809,7 +812,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. 此组件将在符合以下任意条件之一时显示：
+The `elm` module shows the currently installed version of Elm. By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `elm.json` 文件
 - 当前目录包含 `elm-package.json` 文件
@@ -819,12 +822,15 @@ The `elm` module shows the currently installed version of Elm. 此组件将在�
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
-| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | 此组件的样式。                                         |
-| `disabled` | `false`                              | Disables the `elm` module.                      |
+| Option              | 默认值                                                | 描述                                              |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | 组件格式化模板。                                        |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
+| `style`             | `"cyan bold"`                                      | 此组件的样式。                                         |
+| `disabled`          | `false`                                            | Disables the `elm` module.                      |
 
 ### Variables
 
