@@ -740,16 +740,16 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 ### Opciones
 
-| Opción              | Por defecto                                                                                              | Descripción                                                               |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                                | El formato del módulo.                                                    |
-| `symbol`            | `"•NET "`                                                                                                | Símbolo usado antes de mostrar la versión de .NET                         |
-| `heuristic`         | `true`                                                                                                   | Usa una detección de versiones más rápida para mantener a starship veloz. |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                   | Which extensions should trigger this module.                              |
-| `detect_files`      | `[ "global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.                                |
-| `style`             | `"bold blue"`                                                                                            | El estilo del módulo.                                                     |
-| `disabled`          | `false`                                                                                                  | Disables the `dotnet` module.                                             |
+| Opción              | Por defecto                                                                                             | Descripción                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                                    |
+| `symbol`            | `"•NET "`                                                                                               | Símbolo usado antes de mostrar la versión de .NET                         |
+| `heuristic`         | `true`                                                                                                  | Usa una detección de versiones más rápida para mantener a starship veloz. |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
+| `style`             | `"bold blue"`                                                                                           | El estilo del módulo.                                                     |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
 ### Variables
 
@@ -775,18 +775,21 @@ heuristic = false
 
 ## Elixir
 
-El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/OTP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `mix.exs`.
 
 ### Opciones
 
-| Opción     | Por defecto                                                 | Descripción                                                    |
-| ---------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | El estilo del módulo.                                          |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | El formato para el módulo elixir.                              |
-| `disabled` | `false`                                                     | Desactiva el módulo `elixir`.                                  |
+| Opción              | Por defecto                                                 | Descripción                                                    |
+| ------------------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | El símbolo usado antes de mostrar la version de Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                   |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                    |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                     |
+| `style`             | `"bold purple"`                                             | El estilo del módulo.                                          |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                              |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                  |
 
 ### Variables
 
@@ -810,7 +813,7 @@ symbol = "🔮 "
 
 ## Elm
 
-El módulo `elm` muestra la versión actualmente instalada de Elm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `elm` muestra la versión actualmente instalada de Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `elm.json`
 - El directorio actual contiene un fichero `elm-package.json`
@@ -820,12 +823,15 @@ El módulo `elm` muestra la versión actualmente instalada de Elm. El módulo se
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                             |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
-| `symbol`   | `"🌳 "`                               | Una cadena de formato que representa el símbolo de Elm. |
-| `style`    | `"cyan bold"`                        | El estilo del módulo.                                   |
-| `disabled` | `false`                              | Desactiva el módulo `elm`.                              |
+| Opción              | Por defecto                                        | Descripción                                             |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | El formato del módulo.                                  |
+| `symbol`            | `"🌳 "`                                             | Una cadena de formato que representa el símbolo de Elm. |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.            |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.             |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.              |
+| `style`             | `"cyan bold"`                                      | El estilo del módulo.                                   |
+| `disabled`          | `false`                                            | Disables the `elm` module.                              |
 
 ### Variables
 
