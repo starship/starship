@@ -12,11 +12,16 @@ Erlang/OTP (?P<otp>\\d+)[^\\n]+
 Elixir (?P<elixir>\\d[.\\d]+).*";
 
 /// Create a module with the current Elixir version
-///
-/// Will display the Elixir version if any of the following criteria are met:
-///     - Current directory contains a `mix.exs` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_elixir_project = context.try_begin_scan()?.set_files(&["mix.exs"]).is_match();
+    let mut module = context.new_module("elixir");
+    let config = ElixirConfig::try_load(module.config);
+
+    let is_elixir_project = context
+        .try_begin_scan()?
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
+        .is_match();
 
     if !is_elixir_project {
         return None;
@@ -24,8 +29,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let versions = Lazy::new(|| get_elixir_version(context));
 
-    let mut module = context.new_module("elixir");
-    let config = ElixirConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {

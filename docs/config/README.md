@@ -789,16 +789,16 @@ when there is a csproj file in the current directory.
 
 ### Options
 
-| Option              | Default                                                                                                  | Description                                              |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | The format for the module.                               |
-| `symbol`            | `"•NET "`                                                                                                | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                   | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                   | Which extensions should trigger this module.             |
-| `detect_files`      | `[ "global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.              |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.               |
-| `style`             | `"bold blue"`                                                                                            | The style for the module.                                |
-| `disabled`          | `false`                                                                                                  | Disables the `dotnet` module.                            |
+| Option              | Default                                                                                                 | Description                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                              | The format for the module.                               |
+| `symbol`            | `"•NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.             |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.              |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
+| `style`             | `"bold blue"`                                                                                           | The style for the module.                                |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
 
 ### Variables
 
@@ -825,18 +825,21 @@ heuristic = false
 ## Elixir
 
 The `elixir` module shows the currently installed version of Elixir and Erlang/OTP.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `mix.exs` file.
 
 ### Options
 
-| Option     | Default                                                   | Description                                                     |
-| ---------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                   | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                           | The style for the module.                                       |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled` | `false`                                                   | Disables the `elixir` module.                                   |
+| Option              | Default                                                   | Description                                                     |
+| ------------------- | --------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                   | The symbol used before displaying the version of Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                      | Which extensions should trigger this module.                    |
+| `detect_files`      | `["mix.exs"]`                                             | Which filenames should trigger this module.                     |
+| `detect_folders`    | `[]`                                                      | Which folders should trigger this modules.                      |
+| `style`             | `"bold purple"`                                           | The style for the module.                                       |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled`          | `false`                                                   | Disables the `elixir` module.                                   |
 
 ### Variables
 
