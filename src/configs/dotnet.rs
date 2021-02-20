@@ -9,6 +9,9 @@ pub struct DotnetConfig<'a> {
     pub style: &'a str,
     pub heuristic: bool,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
@@ -19,6 +22,15 @@ impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
             style: "blue bold",
             heuristic: true,
             disabled: false,
+            detect_extensions: vec!["sln", "csproj", "fsproj", "xproj"],
+            detect_files: vec![
+                "global.json",
+                "project.json",
+                "Directory.Build.props",
+                "Directory.Build.targets",
+                "Packages.props",
+            ],
+            detect_folders: vec![],
         }
     }
 }
