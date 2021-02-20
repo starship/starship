@@ -740,16 +740,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                    | 説明                                           |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                                | moduleのフォーマットです。                             |
-| `symbol`            | `•NET "`                                                                                                 | dotnetのバージョンを表示する前に使用される記号です。                |
-| `heuristic`         | `true`                                                                                                   | より高速なバージョン検出を使用して、starshipの動作を維持します。         |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                   | Which extensions should trigger this module. |
-| `detect_files`      | `[ "global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.   |
-| `style`             | `"bold blue"`                                                                                            | モジュールのスタイルです。                                |
-| `disabled`          | `false`                                                                                                  | Disables the `dotnet` module.                |
+| オプション               | デフォルト                                                                                                   | 説明                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | moduleのフォーマットです。                             |
+| `symbol`            | `•NET "`                                                                                                | dotnetのバージョンを表示する前に使用される記号です。                |
+| `heuristic`         | `true`                                                                                                  | より高速なバージョン検出を使用して、starshipの動作を維持します。         |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module. |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.   |
+| `style`             | `"bold blue"`                                                                                           | モジュールのスタイルです。                                |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                |
 
 ### 変数
 
@@ -775,18 +775,21 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`mix.exs`ファイルが含まれている.
 
 ### オプション
 
-| オプション      | デフォルト                                                       | 説明                                                              |
-| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | モジュールのスタイルです。                                                   |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
+| オプション               | デフォルト                                                       | 説明                                                              |
+| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                    |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                     |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
+| `style`             | `"bold purple"`                                             | モジュールのスタイルです。                                                   |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### 変数
 
@@ -810,7 +813,7 @@ symbol = "🔮 "
 
 ## Elm
 
-`elm`モジュールは、現在インストールされているElmのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`elm`モジュールは、現在インストールされているElmのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`elm.json`ファイルが含まれている
 - カレントディレクトリに`elm-package.json`ファイルが含まれている
@@ -820,12 +823,15 @@ symbol = "🔮 "
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                |
-| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | モジュールのスタイルです。                                   |
-| `disabled` | `false`                              | `elm`モジュールを無効にします。                              |
+| オプション               | デフォルト                                              | 説明                                              |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | moduleのフォーマットです。                                |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
+| `style`             | `"cyan bold"`                                      | モジュールのスタイルです。                                   |
+| `disabled`          | `false`                                            | Disables the `elm` module.                      |
 
 ### 変数
 
