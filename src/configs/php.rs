@@ -8,6 +8,9 @@ pub struct PhpConfig<'a> {
     pub style: &'a str,
     pub format: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for PhpConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for PhpConfig<'a> {
             style: "147 bold",
             format: "via [$symbol($version )]($style)",
             disabled: false,
+            detect_extensions: vec!["php"],
+            detect_files: vec!["composer.json", ".php-version"],
+            detect_folders: vec![],
         }
     }
 }

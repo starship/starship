@@ -2000,20 +2000,23 @@ format = "via [🦪 $version]($style) "
 ## PHP
 
 The `php` module shows the currently installed version of PHP.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
-- The current directory contains a `.php` file
+- The current directory contains a `.php` extension
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                            |
-| `symbol`   | `"🐘 "`                              | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                         | The style for the module.                             |
-| `disabled` | `false`                              | Disables the `php` module.                            |
+| Option               | Default                              | Description                                           |
+| -------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`             | `"via [$symbol($version )]($style)"` | The format for the module.                            |
+| `symbol`             | `"🐘 "`                              | The symbol used before displaying the version of PHP. |
+| `detect_extensions`  | `["php"]`                            | Which extensions should trigger this moudle.          |
+| `detect_files`       | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.           |
+| `detect_folders`     | `[]`                                 | Which folders should trigger this module.             |
+| `style`              | `"147 bold"`                         | The style for the module.                             |
+| `disabled`           | `false`                              | Disables the `php` module.                            |
 
 ### Variables
 
