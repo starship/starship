@@ -9,18 +9,20 @@ use crate::formatter::StringFormatter;
 ///     - Current directory contains a `.rb` file
 ///     - Current directory contains a `Gemfile` or `.ruby-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("ruby");
+    let config = RubyConfig::try_load(module.config);
+
     let is_rb_project = context
         .try_begin_scan()?
-        .set_files(&["Gemfile", ".ruby-version"])
-        .set_extensions(&["rb"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_rb_project {
         return None;
     }
 
-    let mut module = context.new_module("ruby");
-    let config = RubyConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {

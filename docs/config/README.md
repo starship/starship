@@ -2162,7 +2162,7 @@ detect_extensions = []
 
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby.
+By default the `ruby` module shows the currently installed version of Ruby.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
@@ -2171,12 +2171,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                      |
-| ---------- | ---------------------------------- | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`   | `"💎 "`                            | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                       | The style for the module.                        |
-| `disabled` | `false`                            | Disables the `ruby` module.                      |
+| Option              | Default                              | Description                                      |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `symbol`            | `"💎 "`                              | A format string representing the symbol of Ruby. |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold red"`                         | The style for the module.                        |
+| `disabled`          | `false`                              | Disables the `ruby` module.                      |
 
 ### Variables
 
