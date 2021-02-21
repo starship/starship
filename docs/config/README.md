@@ -2202,7 +2202,7 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust.
+By default the `rust` module shows the currently installed version of Rust.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
@@ -2210,12 +2210,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                     |
-| ---------- | ---------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`   | `"🦀 "`                            | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                       | The style for the module.                       |
-| `disabled` | `false`                            | Disables the `rust` module.                     |
+| Option              | Default                              | Description                                     |
+| ------------------- | ------------------------------------ | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                      |
+| `symbol`            | `"🦀 "`                              | A format string representing the symbol of Rust |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
+| `style`             | `"bold red"`                         | The style for the module.                       |
+| `disabled`          | `false`                              | Disables the `rust` module.                     |
 
 ### Variables
 
