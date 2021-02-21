@@ -424,22 +424,22 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
+`cmake` module cho biết phiên bản Cmake hiện tại đã được cài đặt. Mặc định module sẽ được kích hoạt nếu thoả mãn bất kì điều kiện nào dưới đây:
 
 - Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
 - Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                               | Mô tả                                       |
-| ------------------- | -------------------------------------- | ------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                       |
-| `symbol`            | `"喝 "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.  |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module  |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module    |
-| `style`             | `"bold blue"`                          | Kiểu cho module.                            |
-| `disabled`          | `false`                                | Disables the `cmake` module.                |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                              |
+| ------------------- | -------------------------------------- | -------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                              |
+| `symbol`            | `"喝 "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.         |
+| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                |
+| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                |
+| `style`             | `"bold blue"`                          | Kiểu cho module.                                   |
+| `disabled`          | `false`                                | Vô hiệu hoá `cmake` module.                        |
 
 ### Các biến
 
@@ -542,7 +542,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. By default the module will be shown if any of the following conditions are met:
+Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `shard.yml`
 - Đường dẫn hiện tại chứa một tập tin `.cr`
