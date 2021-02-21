@@ -21,16 +21,16 @@ success_symbol = "[➜](bold green)"     # "success_symbol" được thiết l�
 disabled = true
 ```
 
-Bạn có thể thay đổi đường dẫn mặc định của tệp tin `starship.toml` quan biến môi trường `STARSHIP_CONFIG`:
+You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship
+export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
 Tương đương trong PowerShell (Windows) sẽ được thêm dòng này vào `$PROFILE` của bạn:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
 ### Logging
