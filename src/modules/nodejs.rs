@@ -13,18 +13,14 @@ use std::ops::Deref;
 use std::path::Path;
 
 /// Creates a module with the current Node.js version
-///
-/// Will display the Node.js version if any of the following criteria are met:
-///     - Current directory contains a `.js`, `.mjs` or `.cjs` file
-///     - Current directory contains a `.ts` file
-///     - Current directory contains a `package.json` or `.node-version` file
-///     - Current directory contains a `node_modules` directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("nodejs");
+    let config = NodejsConfig::try_load(module.config);
     let is_js_project = context
         .try_begin_scan()?
-        .set_files(&["package.json", ".node-version"])
-        .set_extensions(&["js", "mjs", "cjs", "ts"])
-        .set_folders(&["node_modules"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     let is_esy_project = context
@@ -36,8 +32,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut module = context.new_module("nodejs");
-    let config = NodejsConfig::try_load(module.config);
     let nodejs_version = Lazy::new(|| {
         context
             .exec_cmd("node", &["--version"])
