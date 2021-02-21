@@ -1963,7 +1963,7 @@ format = "via [🎁 $version](208 bold) "
 ## Perl
 
 The `perl` module shows the currently installed version of Perl.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1973,12 +1973,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                              | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                         | The style for the module.                             |
-| `disabled` | `false`                              | Disables the `perl` module.                           |
+| Option               | Default                              | Description                                           |
+| -------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`             | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
+| `symbol`             | `"🐪 "`                              | The symbol used before displaying the version of Perl |
+| `detect_extensions`  | `["pl", "pm", "pod"]`                | Which extensions should trigger this moudle.          |
+| `detect_files`       | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module. |
+| `detect_folders`     | `[]`                                 | Which folders should trigger this module.             |
+| `style`              | `"bold 149"`                         | The style for the module.                             |
+| `disabled`           | `false`                              | Disables the `perl` module.                           |
 
 ### Variables
 

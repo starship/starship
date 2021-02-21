@@ -8,6 +8,9 @@ pub struct PerlConfig<'a> {
     pub style: &'a str,
     pub format: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for PerlConfig<'a> {
@@ -17,6 +20,17 @@ impl<'a> RootModuleConfig<'a> for PerlConfig<'a> {
             style: "149 bold",
             format: "via [$symbol($version )]($style)",
             disabled: false,
+            detect_extensions: vec!["pl", "pm", "pod"],
+            detect_files: vec![
+                "Makefile.PL",
+                "Build.PL",
+                "cpanfile",
+                "cpanfile.snapshot",
+                "META.json",
+                "META.yml",
+                ".perl-version",
+            ],
+            detect_folders: vec![],
         }
     }
 }
