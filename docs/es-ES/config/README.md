@@ -22,16 +22,16 @@ success_symbol = "[➜](bold green)"     # El segmento "success_symbol" es reemp
 disabled = true
 ```
 
-Puedes cambiar la ubicación predeterminada del archivo `starship.toml` con la variable de entorno `STARSHIP_CONFIG`:
+You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship
+export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
 El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
 ### Registros
