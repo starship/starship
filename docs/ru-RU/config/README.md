@@ -21,16 +21,16 @@ symbol = "➜"      # Сегменту "symbol" присваеваем знач�
 disabled = true
 ```
 
-Вы можете изменить расположение файла `starship.toml` переменной окружения `STARSHIP_CONFIG`:
+You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship
+export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
 Аналогично в PowerShell (Windows) следует добавить эту строку в `$PROFILE`:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
 ### Логгирование (Запись действий)
@@ -227,6 +227,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$shell\
 $character"""
 ```
 
@@ -423,19 +424,22 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake if any of the following conditions are met:
+The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
 
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                     |
-| ---------- | ------------------------------------ | -------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                               |
-| `symbol`   | `"喝 "`                               | The symbol used before the version of cmake. |
-| `style`    | `"bold blue"`                        | Стиль модуля.                                |
-| `disabled` | `false`                              | Disables the `cmake` module.                 |
+| Параметр            | По умолчанию                           | Описание                                     |
+| ------------------- | -------------------------------------- | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Формат модуля.                               |
+| `symbol`            | `"喝 "`                                 | The symbol used before the version of cmake. |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle  |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
+| `style`             | `"bold blue"`                          | Стиль модуля.                                |
+| `disabled`          | `false`                                | Disables the `cmake` module.                 |
 
 ### Переменные
 
@@ -538,19 +542,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Модуль `crystal` показывает установленную версию Crystal. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `crystal` показывает установленную версию Crystal. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `shard.yml`
 - Текущий каталог содержит файл `.cr`
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                                |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | Символ, используемый перед отображением версии crystal. |
-| `style`    | `"bold red"`                         | Стиль модуля.                                           |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                          |
-| `disabled` | `false`                              | Отключает модуль `crystal`.                             |
+| Параметр            | По умолчанию                         | Описание                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | Символ, используемый перед отображением версии crystal. |
+| `style`             | `"bold red"`                         | Стиль модуля.                                           |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.            |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.             |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.               |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                          |
+| `disabled`          | `false`                              | Disables the `crystal` module.                          |
 
 ### Переменные
 
@@ -573,20 +580,23 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. Модуль будет показан, если любое из следующих условий соблюдено:
+The `dart` module shows the currently installed version of Dart. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                        |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
-| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                        | Стиль модуля.                                   |
-| `disabled` | `false`                              | Disables the `dart` module.                     |
+| Параметр            | По умолчанию                                      | Описание                                        |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | Формат модуля.                                  |
+| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.    |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.       |
+| `style`             | `"bold blue"`                                     | Стиль модуля.                                   |
+| `disabled`          | `false`                                           | Disables the `dart` module.                     |
 
 ### Переменные
 
@@ -632,11 +642,11 @@ format = "via [🔰 $version](bold red) "
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
 
-| Advanced Option             | По умолчанию | Описание                                                                          |
-| --------------------------- | ------------ | --------------------------------------------------------------------------------- |
-| `substitutions`             |              | A table of substitutions to be made to the path.                                  |
-| `fish_style_pwd_dir_length` | `0`          | Количество символов, используемых при использовании логики создания пути из fish. |
-| `use_logical_path`          | `true`       | Отображает логический путь от оболочки (`PWD`) вместо пути от ОС.                 |
+| Advanced Option             | По умолчанию | Описание                                                                                                                                                               |
+| --------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |              | A table of substitutions to be made to the path.                                                                                                                       |
+| `fish_style_pwd_dir_length` | `0`          | Количество символов, используемых при использовании логики создания пути из fish.                                                                                      |
+| `use_logical_path`          | `true`       | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -675,13 +685,16 @@ truncation_symbol = "…/"
 
 ### Опции
 
-| Параметр          | По умолчанию                       | Описание                                                                                                        |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | Формат модуля.                                                                                                  |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
-| `style`           | `"blue bold"`                      | Стиль модуля.                                                                                                   |
-| `only_with_files` | `true`                             | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
-| `disabled`        | `false`                            | Disables the `docker_context` module.                                                                           |
+| Параметр            | По умолчанию                                                  | Описание                                                                          |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | Формат модуля.                                                                    |
+| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                                                 | Стиль модуля.                                                                     |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
 ### Переменные
 
@@ -706,7 +719,7 @@ format = "via [🐋 $context](blue bold)"
 
 Модуль `dotnet` показывает соответствующую версию .NET Core SDK для текущего каталога. Если SDK был закреплен в текущей директории, будет показана закрепленная версия. В противном случае модуль отображает последнюю установленную версию SDK.
 
-This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
 - `global.json`
 - `project.json`
@@ -726,13 +739,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Опции
 
-| Параметр    | По умолчанию                              | Описание                                                          |
-| ----------- | ----------------------------------------- | ----------------------------------------------------------------- |
-| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | Формат модуля.                                                    |
-| `symbol`    | `"•NET "`                                 | Символ перед отображением текущей версии dotnet.                  |
-| `heuristic` | `true`                                    | Использовать быстрое определение версии, для сохранения скорости. |
-| `style`     | `"bold blue"`                             | Стиль модуля.                                                     |
-| `disabled`  | `false`                                   | Отключает модуль `dotnet`.                                        |
+| Параметр            | По умолчанию                                                                                            | Описание                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Формат модуля.                                                    |
+| `symbol`            | `"•NET "`                                                                                               | Символ перед отображением текущей версии dotnet.                  |
+| `heuristic`         | `true`                                                                                                  | Использовать быстрое определение версии, для сохранения скорости. |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                      |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                       |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                        |
+| `style`             | `"bold blue"`                                                                                           | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                     |
 
 ### Переменные
 
@@ -758,18 +774,21 @@ heuristic = false
 
 ## Elixir
 
-Модуль `elixir` показывает установленную версию Elixir и Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `elixir` показывает установленную версию Elixir и Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `mix.exs`.
 
 ### Опции
 
-| Параметр   | По умолчанию                                                | Описание                                                      |
-| ---------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | Символ, используемый перед отображением версии Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | Стиль модуля.                                                 |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                             |
-| `disabled` | `false`                                                     | Отключает модуль `elixir`.                                    |
+| Параметр            | По умолчанию                                                | Описание                                                      |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | Символ, используемый перед отображением версии Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                  |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                   |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                    |
+| `style`             | `"bold purple"`                                             | Стиль модуля.                                                 |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                             |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                 |
 
 ### Переменные
 
@@ -793,7 +812,7 @@ symbol = "🔮 "
 
 ## Elm
 
-Модуль `elm` показывает установленную версию Elm. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `elm` показывает установленную версию Elm. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `elm.json`
 - Текущий каталог содержит файл `elm-package.json`
@@ -803,12 +822,15 @@ symbol = "🔮 "
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                        |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
-| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | Стиль модуля.                                   |
-| `disabled` | `false`                              | Отключает модуль `elm`.                         |
+| Параметр            | По умолчанию                                       | Описание                                        |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Формат модуля.                                  |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
+| `style`             | `"cyan bold"`                                      | Стиль модуля.                                   |
+| `disabled`          | `false`                                            | Disables the `elm` module.                      |
 
 ### Переменные
 
@@ -868,19 +890,22 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Модуль будет показан, если любое из следующих условий соблюдено:
+The `erlang` module shows the currently installed version of Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `rebar.config`.
 - Текущий каталог содержит файл `erlang.mk`.
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                                 |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                         | Стиль модуля.                                            |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                           |
-| `disabled` | `false`                              | Disables the `erlang` module.                            |
+| Параметр            | По умолчанию                         | Описание                                                 |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`             | `"bold red"`                         | Стиль модуля.                                            |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                           |
+| `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
 ### Переменные
 
@@ -1161,7 +1186,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-Модуль `golang` показывает установленную версию Golang. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `golang` показывает установленную версию Golang. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `go.mod`
 - Текущий каталог содержит файл `go.sum`
@@ -1174,12 +1199,15 @@ behind = "⇣${count}"
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                       |
-| ---------- | ------------------------------------ | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                 |
-| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                        | Стиль модуля.                                  |
-| `disabled` | `false`                              | Отключает модуль `golang`.                     |
+| Параметр            | По умолчанию                                                                   | Описание                                       |
+| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Формат модуля.                                 |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
+| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
+| `style`             | `"bold cyan"`                                                                  | Стиль модуля.                                  |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                  |
 
 ### Переменные
 
@@ -1202,19 +1230,22 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Модуль будет показан, если любое из следующих условий соблюдено:
+The `helm` module shows the currently installed version of Helm. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `helmfile.yaml`
 - The current directory contains a `Chart.yaml` file
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                         |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
-| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                       | Стиль модуля.                                    |
-| `disabled` | `false`                              | Disables the `helm` module.                      |
+| Параметр            | По умолчанию                         | Описание                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.     |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.       |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`             | `"bold white"`                       | Стиль модуля.                                    |
+| `disabled`          | `false`                              | Disables the `helm` module.                      |
 
 ### Переменные
 
@@ -1272,19 +1303,22 @@ disabled = false
 
 ## Java
 
-Модуль `java` показывает установленную версию Java. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `java` показывает установленную версию Java. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Опции
 
-| Параметр   | По умолчанию                             | Описание                                        |
-| ---------- | ---------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}(${version} )]($style)"` | Формат модуля.                                  |
-| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                           | Стиль модуля.                                   |
-| `disabled` | `false`                                  | Отключает модуль `java`.                        |
+| Параметр            | По умолчанию                                                                                              | Описание                                        |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Формат модуля.                                  |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
+| `style`             | `"red dimmed"`                                                                                            | Стиль модуля.                                   |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
 
 ### Переменные
 
@@ -1341,7 +1375,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Модуль будет показан, если любое из следующих условий соблюдено:
+The `julia` module shows the currently installed version of Julia. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1349,12 +1383,15 @@ The `julia` module shows the currently installed version of Julia. Модуль 
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                          |
-| ---------- | ------------------------------------ | ------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                    |
-| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                      | Стиль модуля.                                     |
-| `disabled` | `false`                              | Disables the `julia` module.                      |
+| Параметр            | По умолчанию                         | Описание                                          |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                    |
+| `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.      |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.        |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`             | `"bold purple"`                      | Стиль модуля.                                     |
+| `disabled`          | `false`                              | Disables the `julia` module.                      |
 
 ### Переменные
 
@@ -1377,19 +1414,22 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. Модуль будет показан, если любое из следующих условий соблюдено:
+The `kotlin` module shows the currently installed version of Kotlin. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.kt` or a `.kts` file
 
 ### Опции
 
-| Параметр        | По умолчанию                         | Описание                                                                      |
-| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                |
-| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                        | Стиль модуля.                                                                 |
-| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
+| Параметр            | По умолчанию                         | Описание                                                                      |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                |
+| `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `"bold blue"`                        | Стиль модуля.                                                                 |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Переменные
 
@@ -1482,7 +1522,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Модуль будет показан, если любое из следующих условий соблюдено:
+The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1490,13 +1530,16 @@ The `lua` module shows the currently installed version of Lua. Модуль бу
 
 ### Опции
 
-| Параметр     | По умолчанию                         | Описание                                                                   |
-| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | Формат модуля.                                                             |
-| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                        | Стиль модуля.                                                              |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
+| Параметр            | По умолчанию                         | Описание                                                                   |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                             |
+| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
+| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
+| `style`             | `"bold blue"`                        | Стиль модуля.                                                              |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### Переменные
 
@@ -1602,7 +1645,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. Модуль будет показан, если любое из следующих условий соблюдено:
+The `nim` module shows the currently installed version of Nim. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `nim.cfg`
 - The current directory contains a file with the `.nim` extension
@@ -1611,12 +1654,15 @@ The `nim` module shows the currently installed version of Nim. Модуль бу
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля                                         |
-| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                      | Стиль модуля.                                         |
-| `disabled` | `false`                              | Disables the `nim` module.                            |
+| Параметр            | По умолчанию                         | Описание                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля                                         |
+| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this moudle.          |
+| `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `style`             | `"bold yellow"`                      | Стиль модуля.                                         |
+| `disabled`          | `false`                              | Disables the `nim` module.                            |
 
 ### Переменные
 
@@ -1678,7 +1724,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-Модуль `nodejs` показывает установленную версию NodeJS. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `nodejs` показывает установленную версию NodeJS. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `package.json`
 - The current directory contains a `.node-version` file
@@ -1692,8 +1738,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                                        |
 | `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
 | `style`             | `"bold green"`                       | Стиль модуля.                                                                                         |
-| `disabled`          | `false`                              | Отключает модуль `nodejs`.                                                                            |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
@@ -1717,7 +1766,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Модуль будет показан, если любое из следующих условий соблюдено:
+The `ocaml` module shows the currently installed version of OCaml. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1728,12 +1777,15 @@ The `ocaml` module shows the currently installed version of OCaml. Модуль 
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                                |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                      | Стиль модуля.                                           |
-| `disabled` | `false`                              | Disables the `ocaml` module.                            |
+| Параметр            | По умолчанию                                                     | Описание                                                |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                             | The format string for the module.                       |
+| `symbol`            | `"🐫 "`                                                           | The symbol used before displaying the version of OCaml. |
+| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Which extensions should trigger this moudle.            |
+| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Which filenames should trigger this module.             |
+| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Which folders should trigger this module.               |
+| `style`             | `"bold yellow"`                                                  | Стиль модуля.                                           |
+| `disabled`          | `false`                                                          | Disables the `ocaml` module.                            |
 
 ### Переменные
 
@@ -1837,7 +1889,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. Модуль будет показан, если любое из следующих условий соблюдено:
+The `perl` module shows the currently installed version of Perl. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1847,12 +1899,15 @@ The `perl` module shows the currently installed version of Perl. Модуль б
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                         | Стиль модуля.                                         |
-| `disabled` | `false`                              | Disables the `perl` module.                           |
+| Параметр            | По умолчанию                                                                                             | Описание                                              |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this moudle.          |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.             |
+| `style`             | `"bold 149"`                                                                                             | Стиль модуля.                                         |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                           |
 
 ### Переменные
 
@@ -1873,20 +1928,23 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-Модуль `php` показывает установленную версию PHP. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `php` показывает установленную версию PHP. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `composer.json`
 - Текущий каталог содержит файл `.php-version`
-- Текущий каталог содержит файл `.php`
+- The current directory contains a `.php` extension
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                            |
-| ---------- | ------------------------------------ | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                      |
-| `symbol`   | `"🐘 "`                               | Символ, используемый перед отображением версии PHP. |
-| `style`    | `"147 bold"`                         | Стиль модуля.                                       |
-| `disabled` | `false`                              | Отключает модуль `php`.                             |
+| Параметр            | По умолчанию                         | Описание                                            |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                      |
+| `symbol`            | `"🐘 "`                               | Символ, используемый перед отображением версии PHP. |
+| `detect_extensions` | `["php"]`                            | Which extensions should trigger this moudle.        |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.         |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
+| `style`             | `"147 bold"`                         | Стиль модуля.                                       |
+| `disabled`          | `false`                              | Disables the `php` module.                          |
 
 ### Переменные
 
@@ -1909,19 +1967,22 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Модуль будет показан, если любое из следующих условий соблюдено:
+The `purescript` module shows the currently installed version of PureScript version. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `spago.dhall`
-- The current directory contains a \*.purs files
+- The current directory contains a file with the `.purs` extension
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                                     |
-| ---------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                               |
-| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                       | Стиль модуля.                                                |
-| `disabled` | `false`                              | Disables the `purescript` module.                            |
+| Параметр            | По умолчанию                         | Описание                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                               |
+| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this moudle.                 |
+| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                  |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                    |
+| `style`             | `"bold white"`                       | Стиль модуля.                                                |
+| `disabled`          | `false`                              | Disables the `purescript` module.                            |
 
 ### Переменные
 
@@ -1948,30 +2009,32 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Модуль будет показан, если любое из следующих условий соблюдено:
+By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `.python-version`
-- Текущий каталог содержит файл `requirements.txt`
-- Текущий каталог содержит файл `pyproject.toml`
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
-- Текущий каталог содержит файл `Pipfile`
-- Текущий каталог содержит файл `tox.ini`
-- Текущий каталог содержит файл `setup.py`
+- The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
 - Виртуальная среда в данный момент активирована
 
 ### Опции
 
-| Параметр             | По умолчанию                                                               | Описание                                                                               |
-| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | Формат модуля.                                                                         |
-| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                            | Стиль модуля.                                                                          |
-| `pyenv_version_name` | `false`                                                                    | Использовать pyenv для получения версии Python                                         |
-| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                    | Disables the `python` module.                                                          |
+| Параметр             | По умолчанию                                                                                                 | Описание                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | Формат модуля.                                                                         |
+| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                                                              | Стиль модуля.                                                                          |
+| `pyenv_version_name` | `false`                                                                                                      | Использовать pyenv для получения версии Python                                         |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2010,9 +2073,17 @@ pyenv_version_name = true
 python_binary = "python3"
 ```
 
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Don't trigger for files with the py extension
+detect_extensions = []
+```
+
 ## Ruby
 
-Модуль `ruby` показывает установленную версию Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `ruby` module shows the currently installed version of Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Gemfile`
 - Текущий каталог содержит файл `.ruby-version`
@@ -2020,12 +2091,15 @@ python_binary = "python3"
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                         |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
-| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                         | Стиль модуля.                                    |
-| `disabled` | `false`                              | Отключает модуль `ruby`.                         |
+| Параметр            | По умолчанию                         | Описание                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold red"`                         | Стиль модуля.                                    |
+| `disabled`          | `false`                              | Disables the `ruby` module.                      |
 
 ### Переменные
 
@@ -2048,19 +2122,22 @@ symbol = "🔺 "
 
 ## Rust
 
-Модуль `rust` показывает установленную версию Rust. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `rust` module shows the currently installed version of Rust. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Cargo.toml`
 - Текущий каталог содержит файл с расширением `.rs`
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                        |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
-| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                         | Стиль модуля.                                   |
-| `disabled` | `false`                              | Отключает модуль `rust`.                        |
+| Параметр            | По умолчанию                         | Описание                                        |
+| ------------------- | ------------------------------------ | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
+| `style`             | `"bold red"`                         | Стиль модуля.                                   |
+| `disabled`          | `false`                              | Disables the `rust` module.                     |
 
 ### Переменные
 
@@ -2079,6 +2156,45 @@ symbol = "🔺 "
 
 [rust]
 format = "via [⚙️ $version](red bold)"
+```
+
+## Shell
+
+The `shell` module shows an indicator for currently used shell.
+
+::: tip
+
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
+:::
+
+### Опции
+
+| Параметр               | По умолчанию | Описание                                      |
+| ---------------------- | ------------ | --------------------------------------------- |
+| `bash_indicator`       | `bsh`        | A format string used to represent bash.       |
+| `fish_indicator`       | `fsh`        | A format string used to represent fish.       |
+| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.        |
+| `powershell_indicator` | `psh`        | A format string used to represent powershell. |
+| `ion_indicator`        | `ion`        | A format string used to represent ion.        |
+| `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
+| `format`               | `$indicator` | Формат модуля.                                |
+| `disabled`             | `true`       | Disables the `shell` module.                  |
+
+### Переменные
+
+| Переменная | По умолчанию | Описание                                                   |
+| ---------- | ------------ | ---------------------------------------------------------- |
+| indicator  |              | Mirrors the value of `indicator` for currently used shell. |
+
+### Примеры
+```toml
+# ~/.config/starship.toml
+
+[shell]
+fish_indicator = ""
+powershell_indicator = "_"
+disabled = false
 ```
 
 ## SHLVL
@@ -2119,7 +2235,7 @@ threshold = 3
 
 ## Singularity
 
-Модуль `singularity` показывает текущий образ singularity, если внутри контейнера и `$SINGULARITY_NAME` установлена.
+The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
 
 ### Опции
 
@@ -2208,19 +2324,22 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `swift` module shows the currently installed version of Swift. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                         |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
-| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | Стиль модуля.                                    |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Параметр            | По умолчанию                         | Описание                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
+| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold 202"`                         | Стиль модуля.                                    |
+| `disabled`          | `false`                              | Disables the `swift` module.                     |
 
 ### Переменные
 
@@ -2243,7 +2362,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-Модуль `terraform` показывает выбранную рабочую область и версию terraform.
+The `terraform` module shows the currently selected terraform workspace and version.
 
 ::: tip
 
@@ -2251,19 +2370,22 @@ By default the terraform version is not shown, since this is slow for current ve
 
 :::
 
-Модуль будет показан, если любое из следующих условий соблюдено:
+By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит папку `.terraform`
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | Стиль модуля.                                         |
-| `disabled` | `false`                              | Отключает модуль `terraform`.                         |
+| Параметр            | По умолчанию                         | Описание                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
+| `style`             | `"bold 105"`                         | Стиль модуля.                                         |
+| `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
 ### Переменные
 
@@ -2298,7 +2420,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Время
 
-Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2308,23 +2430,23 @@ format = "[🏎💨 $workspace]($style) "
 
 ### Опции
 
-| Параметр          | По умолчанию            | Описание                                                                                                                                                      |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                                             |
-| `use_12hr`        | `false`                 | Включить 12-часовое форматирование                                                                                                                            |
-| `time_format`     | см. ниже                | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.                             |
-| `style`           | `"bold yellow"`         | Стиль модуля времени                                                                                                                                          |
-| `utc_time_offset` | `"local"`               | Устанавливает смещение UTC. Range from -24 &lt; x &lt; 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
-| `disabled`        | `true`                  | Отключает модуль `time`.                                                                                                                                      |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                         |
+| Параметр          | По умолчанию            | Описание                                                                                                                           |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Иначе по умолчанию используется `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Переменные
 
 | Переменная | Пример     | Описание                            |
 | ---------- | ---------- | ----------------------------------- |
-| время      | `13:08:10` | The current time.                   |
+| time       | `13:08:10` | The current time.                   |
 | style\*  |            | Отражает значение параметра `style` |
 
 \*: Эта переменная может использоваться только в качестве части строки style
@@ -2342,9 +2464,9 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Имя пользователя
+## Username
 
-Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
+The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий пользователь - root
 - Текущий пользователь отличается от залогиненного
@@ -2359,13 +2481,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Опции
 
-| Параметр      | По умолчанию            | Описание                                                |
-| ------------- | ----------------------- | ------------------------------------------------------- |
-| `style_root`  | `"bold red"`            | Стиль, используемый для пользователя root.              |
-| `style_user`  | `"bold yellow"`         | Стиль, используемый для всех пользователей, кроме root. |
-| `format`      | `"[$user]($style) in "` | Формат модуля.                                          |
-| `show_always` | `false`                 | Всегда показывать модуль `username`.                    |
-| `disabled`    | `false`                 | Отключает модуль `username`.                            |
+| Параметр      | По умолчанию            | Описание                              |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | Формат модуля.                        |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Переменные
 
@@ -2389,18 +2511,21 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant. Модуль будет показан, если любое из следующих условий соблюдено:
+The `vagrant` module shows the currently installed version of Vagrant. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                            |
-| ---------- | ------------------------------------ | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                      |
-| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `style`    | `"cyan bold"`                        | Стиль модуля.                                       |
-| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+| Параметр            | По умолчанию                         | Описание                                            |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                      |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.        |
+| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
+| `style`             | `"cyan bold"`                        | Стиль модуля.                                       |
+| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
 
 ### Переменные
 
@@ -2423,18 +2548,21 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the the `zig` module shows the currently installed version of Zig. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a `.zig` file
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | Стиль модуля.                                         |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                        |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Параметр            | По умолчанию                         | Описание                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `"bold yellow"`                      | Стиль модуля.                                         |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                        |
+| `disabled`          | `false`                              | Disables the `zig` module.                            |
+| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.          |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
 
 ### Переменные
 
@@ -2491,7 +2619,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `описание`    | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |

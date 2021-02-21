@@ -19,7 +19,7 @@
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Trạng thái đóng gói" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Trò chuyện trên Discord" /></a>
@@ -221,7 +221,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Cảnh báo** Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv

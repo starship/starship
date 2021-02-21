@@ -125,7 +125,7 @@ error_symbol = "[✖](bold red)"
 ++ format = "took [$duration]($style) "
 ```
 
-#### Directory
+#### Đường dẫn
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |

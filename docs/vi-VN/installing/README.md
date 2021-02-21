@@ -8,10 +8,20 @@
 Đối với đa số người dùng, các hướng dẫn trên [trang chính](/guide/#🚀-installation) sẽ làm việc tốt. Tuy nhiên, với một vài nền tảng đặc biệt hơn, các hướng dẫn khác nhau là cần thiết.
 
 Có rất nhiều nền tảng bên ngoài, rằng chúng đã không khớp như trong tệp tin README.md, do đó đây là vài hướng dẫn cài đặt cho những nền tảng khác đến từ cộng đồng. Của bạn không có ở đây? Xin hãy thêm nó vào đây nếu bạn tìm ra nó!
+## [termux](https://termux.com)
+### Yêu cầu
+```sh
+pkg install getconf
+```
+
+### Installation
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Lấy tệp tin nhị phân
+### Getting the Binary
 
 #### Lệnh
 
@@ -35,7 +45,7 @@ Thêm `pkgs.starship` vào `environment.packages` trong `configuration.nix` củ
 sudo nixos-rebuild switch
 ```
 
-### Sửa những đoạn mã khởi tạo
+### Modifying Init Scripts
 
 #### Với Nix và home-manager, sử dụng zsh:
 

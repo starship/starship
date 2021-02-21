@@ -19,7 +19,7 @@
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Status do pacote" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat no Discord" /></a>
@@ -150,7 +150,7 @@
    #### Instalar via gerenciador de pacotes
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Exemplo: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
