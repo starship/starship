@@ -4,32 +4,19 @@ use crate::configs::perl::PerlConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current perl version
-///
-/// Will display the perl version if any of the following criteria are met:
-///     - Current directory contains a `.pl`, `.pm` or a `.pod` file
-///     - Current directory contains a "Makefile.PL", "Build.PL",  "cpanfile", "cpanfile.snapshot",
-///       "META.json", "META.yml", or ".perl-version" file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("perl");
+    let config: PerlConfig = PerlConfig::try_load(module.config);
     let is_perl_project = context
         .try_begin_scan()?
-        .set_files(&[
-            "Makefile.PL",
-            "Build.PL",
-            "cpanfile",
-            "cpanfile.snapshot",
-            "META.json",
-            "META.yml",
-            ".perl-version",
-        ])
-        .set_extensions(&["pl", "pm", "pod"])
+        .set_extensions(&config.detect_extensions)
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_perl_project {
         return None;
     }
-
-    let mut module = context.new_module("perl");
-    let config: PerlConfig = PerlConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
