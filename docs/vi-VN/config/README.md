@@ -21,7 +21,7 @@ success_symbol = "[➜](bold green)"     # "success_symbol" được thiết l�
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Bạn thay đổi địa chỉ tệp tin cấu hình mặc định bằng biến môi trường `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
@@ -173,7 +173,7 @@ Mặc định `format` được sử dụng để định nghĩa định dạng 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Nó tương đương với
 format = """
 $username\
 $hostname\
