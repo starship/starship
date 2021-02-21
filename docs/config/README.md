@@ -1832,7 +1832,7 @@ format = "via [🤖 $version](bold green) "
 ## OCaml
 
 The `ocaml` module shows the currently installed version of OCaml.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1843,12 +1843,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                             |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                              | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                      | The style for the module.                               |
-| `disabled` | `false`                              | Disables the `ocaml` module.                            |
+| Option              | Default                              | Description                                             |
+| ------------------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
+| `symbol`            | `"🐫 "`                              | The symbol used before displaying the version of OCaml. |
+| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]` | Which extensions should trigger this moudle.            |
+| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Which filenames should trigger this module. |
+| `detect_folders`    | `["_opam", "esy.lock"]`              | Which folders should trigger this module.               |
+| `style`             | `"bold yellow"`                      | The style for the module.                               |
+| `disabled`          | `false`                              | Disables the `ocaml` module.                            |
 
 ### Variables
 
