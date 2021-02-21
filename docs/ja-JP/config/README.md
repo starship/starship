@@ -21,16 +21,16 @@ success_symbol = "[➜](bold green)"     # 「success_symbol」セグメント�
 disabled = true
 ```
 
-`STARSHIP_CONFIG` 環境変数を使用して、デフォルトの`starship.toml` ファイルの場所を変更できます。
+You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship
+export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
 PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
 ### ロギング
