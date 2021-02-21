@@ -1231,19 +1231,22 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-El módulo `helm` muestra la versión instalada de Helm. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `helm` muestra la versión instalada de Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
 - El directorio actual contiene un archivo `Chart.yaml`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                              |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
-| `symbol`   | `"⎈ "`                               | Una cadena de formato que representa el símbolo de Helm. |
-| `style`    | `"bold white"`                       | El estilo del módulo.                                    |
-| `disabled` | `false`                              | Desactiva el módulo `helm`.                              |
+| Opción              | Por defecto                          | Descripción                                      |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                           |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.     |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.       |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`             | `"bold white"`                       | El estilo del módulo.                            |
+| `disabled`          | `false`                              | Disables the `helm` module.                      |
 
 ### Variables
 
@@ -1301,19 +1304,22 @@ disabled = false
 
 ## Java
 
-El módulo `java` muestra la versión actualmente instalada de Java. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `java` muestra la versión actualmente instalada de Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, o `build.boot`
 - El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`, `.clj` o `.cljc`
 
 ### Opciones
 
-| Opción     | Por defecto                              | Descripción                                             |
-| ---------- | ---------------------------------------- | ------------------------------------------------------- |
-| `format`   | `"via [${symbol}(${version} )]($style)"` | El formato del módulo.                                  |
-| `symbol`   | `"☕ "`                                   | Una cadena de formato que representa el símbolo de Java |
-| `style`    | `"red dimmed"`                           | El estilo del módulo.                                   |
-| `disabled` | `false`                                  | Desactiva el módulo `java`.                             |
+| Opción              | Por defecto                                                                                               | Descripción                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | El formato del módulo.                          |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
+| `style`             | `"red dimmed"`                                                                                            | El estilo del módulo.                           |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
 
 ### Variables
 
@@ -1370,7 +1376,7 @@ threshold = 4
 
 ## Julia
 
-El módulo `Julia` muestra la versión actualmente instalada de Julia. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `Julia` muestra la versión actualmente instalada de Julia. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Project.toml`
 - El directorio actual contiene un archivo `Manifest.toml`
@@ -1378,12 +1384,15 @@ El módulo `Julia` muestra la versión actualmente instalada de Julia. El módul
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                               |
-| ---------- | ------------------------------------ | --------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                    |
-| `symbol`   | `"ஃ "`                               | Una cadena de formato que representa el símbolo de Julia. |
-| `style`    | `"bold purple"`                      | El estilo del módulo.                                     |
-| `disabled` | `false`                              | Desactiva el módulo `julia`.                              |
+| Opción              | Por defecto                          | Descripción                                       |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                            |
+| `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.      |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.        |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`             | `"bold purple"`                      | El estilo del módulo.                             |
+| `disabled`          | `false`                              | Disables the `julia` module.                      |
 
 ### Variables
 
@@ -1406,19 +1415,22 @@ symbol = "∴ "
 
 ## Kotlin
 
-El módulo `kotlin` muestra la versión instalada de Kotlin. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `kotlin` muestra la versión instalada de Kotlin. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.kt` o `.kts`
 
 ### Opciones
 
-| Opción          | Por defecto                          | Descripción                                                             |
-| --------------- | ------------------------------------ | ----------------------------------------------------------------------- |
-| `format`        | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                  |
-| `symbol`        | `"🅺 "`                               | Una cadena de formato que representa el símbolo de Kotlin.              |
-| `style`         | `"bold blue"`                        | El estilo del módulo.                                                   |
-| `kotlin_binary` | `"kotlin"`                           | Configura el binario kotlin que Starship ejecuta al obtener la versión. |
-| `disabled`      | `false`                              | Deshabilita el módulo `kotlin`.                                         |
+| Opción              | Por defecto                          | Descripción                                                                   |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                        |
+| `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `"bold blue"`                        | El estilo del módulo.                                                         |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Variables
 
@@ -1755,7 +1767,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-El módulo `ocaml` muestra la versión actualmente instalada de OCaml. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `ocaml` muestra la versión actualmente instalada de OCaml. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con extensión `.opam` o directorio `_opam`
 - El directorio actual contiene un directorio `esy.lock`
@@ -1766,12 +1778,15 @@ El módulo `ocaml` muestra la versión actualmente instalada de OCaml. El módul
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                            |
-| ---------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | La cadena de formato para el módulo.                   |
-| `symbol`   | `"🐫 "`                               | El símbolo usado antes de mostrar la versión de OCaml. |
-| `style`    | `"bold yellow"`                      | El estilo del módulo.                                  |
-| `disabled` | `false`                              | Desactiva el módulo `ocaml`.                           |
+| Opción              | Por defecto                                                      | Descripción                                            |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                             | La cadena de formato para el módulo.                   |
+| `symbol`            | `"🐫 "`                                                           | El símbolo usado antes de mostrar la versión de OCaml. |
+| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Which extensions should trigger this moudle.           |
+| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Which filenames should trigger this module.            |
+| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Which folders should trigger this module.              |
+| `style`             | `"bold yellow"`                                                  | El estilo del módulo.                                  |
+| `disabled`          | `false`                                                          | Disables the `ocaml` module.                           |
 
 ### Variables
 
@@ -1875,7 +1890,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-El módulo `perl` muestra la versión actualmente instalada de Perl. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `perl` muestra la versión actualmente instalada de Perl. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Makefile.PL` o `Build.PL`
 - El directorio actual contiene un archivo `cpanfile` o `cpanfile.snapshot`
@@ -1885,12 +1900,15 @@ El módulo `perl` muestra la versión actualmente instalada de Perl. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                          |
-| ---------- | ------------------------------------ | ---------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | La cadena de formato para el módulo.                 |
-| `symbol`   | `"🐪 "`                               | El símbolo usado antes de mostrar la versión de Perl |
-| `style`    | `"bold 149"`                         | El estilo del módulo.                                |
-| `disabled` | `false`                              | Desactiva el módulo `perl`.                          |
+| Opción              | Por defecto                                                                                              | Descripción                                          |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | La cadena de formato para el módulo.                 |
+| `symbol`            | `"🐪 "`                                                                                                   | El símbolo usado antes de mostrar la versión de Perl |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this moudle.         |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.          |
+| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.            |
+| `style`             | `"bold 149"`                                                                                             | El estilo del módulo.                                |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                          |
 
 ### Variables
 
@@ -1911,20 +1929,23 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-El módulo `php` muestra la versión instalada de PHP. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `php` muestra la versión instalada de PHP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `composer.json`
 - El directorio actual contiene un archivo `.php-version`
-- El directorio actual contiene un archivo `.php`
+- The current directory contains a `.php` extension
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                          |
-| ---------- | ------------------------------------ | ---------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
-| `symbol`   | `"🐘 "`                               | El símbolo usado antes de mostrar la versión de PHP. |
-| `style`    | `"147 bold"`                         | El estilo del módulo.                                |
-| `disabled` | `false`                              | Desactiva el módulo `php`.                           |
+| Opción              | Por defecto                          | Descripción                                          |
+| ------------------- | ------------------------------------ | ---------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
+| `symbol`            | `"🐘 "`                               | El símbolo usado antes de mostrar la versión de PHP. |
+| `detect_extensions` | `["php"]`                            | Which extensions should trigger this moudle.         |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.          |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.            |
+| `style`             | `"147 bold"`                         | El estilo del módulo.                                |
+| `disabled`          | `false`                              | Disables the `php` module.                           |
 
 ### Variables
 
@@ -1947,19 +1968,22 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-El módulo `purescript` muestra la versión actualmente instalada de PureScript. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+El módulo `purescript` muestra la versión actualmente instalada de PureScript. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `spago.dhall`
-- El directorio actual contiene un archivo \*.purs
+- The current directory contains a file with the `.purs` extension
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
-| `symbol`   | `"<=> "`                       | El símbolo usado antes de mostrar la versión de PureScript. |
-| `style`    | `"bold white"`                       | El estilo del módulo.                                       |
-| `disabled` | `false`                              | Deshabilita el módulo `purescript`.                         |
+| Opción              | Por defecto                          | Descripción                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                      |
+| `symbol`            | `"<=> "`                       | El símbolo usado antes de mostrar la versión de PureScript. |
+| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this moudle.                |
+| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                 |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                   |
+| `style`             | `"bold white"`                       | El estilo del módulo.                                       |
+| `disabled`          | `false`                              | Disables the `purescript` module.                           |
 
 ### Variables
 
