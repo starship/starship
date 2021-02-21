@@ -891,19 +891,22 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `erlang` module shows the currently installed version of Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`rebar.config`ファイルが含まれている.
 - カレントディレクトリに`erlang.mk`ファイルが含まれている.
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                       |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                         | モジュールのスタイルです。                                            |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                         |
-| `disabled` | `false`                              | Disables the `erlang` module.                            |
+| オプション               | デフォルト                                | 説明                                                       |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`             | `"bold red"`                         | モジュールのスタイルです。                                            |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                         |
+| `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
 ### 変数
 
@@ -1632,7 +1635,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nim` module shows the currently installed version of Nim. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`nim.cfg`ファイルが含まれている
 - The current directory contains a file with the `.nim` extension
@@ -1641,12 +1644,15 @@ The `nim` module shows the currently installed version of Nim. 次の条件の�
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                    |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
-| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                      | モジュールのスタイルです。                                         |
-| `disabled` | `false`                              | Disables the `nim` module.                            |
+| オプション               | デフォルト                                | 説明                                                    |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this moudle.          |
+| `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `style`             | `"bold yellow"`                      | モジュールのスタイルです。                                         |
+| `disabled`          | `false`                              | Disables the `nim` module.                            |
 
 ### 変数
 
@@ -1708,7 +1714,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`package.json`ファイルが含まれている
 - The current directory contains a `.node-version` file
@@ -1722,8 +1728,11 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                                                      |
 | `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
 | `style`             | `"bold green"`                       | モジュールのスタイルです。                                                                                         |
-| `disabled`          | `false`                              | `nodejs`モジュールを無効にします。                                                                                 |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ###  Variables
