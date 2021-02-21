@@ -890,19 +890,22 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. The module will be shown if any of the following conditions are met:
+The `erlang` module shows the currently installed version of Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
 
 ### Opções
 
-| Option     | Padrão                               | Descrição                                                |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                         | O estilo do módulo.                                      |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                               |
-| `disabled` | `false`                              | Disables the `erlang` module.                            |
+| Option              | Padrão                               | Descrição                                                |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`             | `"bold red"`                         | O estilo do módulo.                                      |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                               |
+| `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
 ### Variables
 
@@ -1630,7 +1633,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. The module will be shown if any of the following conditions are met:
+The `nim` module shows the currently installed version of Nim. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
@@ -1639,12 +1642,15 @@ The `nim` module shows the currently installed version of Nim. The module will b
 
 ### Opções
 
-| Option     | Padrão                               | Descrição                                             |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module                             |
-| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                      | O estilo do módulo.                                   |
-| `disabled` | `false`                              | Disables the `nim` module.                            |
+| Option              | Padrão                               | Descrição                                             |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                             |
+| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this moudle.          |
+| `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `style`             | `"bold yellow"`                      | O estilo do módulo.                                   |
+| `disabled`          | `false`                              | Disables the `nim` module.                            |
 
 ### Variables
 
@@ -1706,7 +1712,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. The module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -1720,6 +1726,9 @@ The `nodejs` module shows the currently installed version of NodeJS. The module 
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
 | `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
 | `style`             | `"bold green"`                       | O estilo do módulo.                                                                                   |
 | `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
