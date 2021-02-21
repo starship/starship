@@ -2059,7 +2059,7 @@ detect_extensions = []
 
 ## Ruby
 
-Модуль `ruby` показывает установленную версию Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `ruby` module shows the currently installed version of Ruby. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Gemfile`
 - Текущий каталог содержит файл `.ruby-version`
@@ -2067,12 +2067,15 @@ detect_extensions = []
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                         |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
-| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                         | Стиль модуля.                                    |
-| `disabled` | `false`                              | Отключает модуль `ruby`.                         |
+| Параметр            | По умолчанию                         | Описание                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold red"`                         | Стиль модуля.                                    |
+| `disabled`          | `false`                              | Disables the `ruby` module.                      |
 
 ### Переменные
 
@@ -2095,19 +2098,22 @@ symbol = "🔺 "
 
 ## Rust
 
-Модуль `rust` показывает установленную версию Rust. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `rust` module shows the currently installed version of Rust. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - Текущий каталог содержит файл `Cargo.toml`
 - Текущий каталог содержит файл с расширением `.rs`
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                        |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
-| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                         | Стиль модуля.                                   |
-| `disabled` | `false`                              | Отключает модуль `rust`.                        |
+| Параметр            | По умолчанию                         | Описание                                        |
+| ------------------- | ------------------------------------ | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                  |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
+| `style`             | `"bold red"`                         | Стиль модуля.                                   |
+| `disabled`          | `false`                              | Disables the `rust` module.                     |
 
 ### Переменные
 
@@ -2294,19 +2300,22 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `swift` module shows the currently installed version of Swift. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
 ### Опции
 
-| Параметр   | По умолчанию                         | Описание                                         |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
-| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | Стиль модуля.                                    |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Параметр            | По умолчанию                         | Описание                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
+| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold 202"`                         | Стиль модуля.                                    |
+| `disabled`          | `false`                              | Disables the `swift` module.                     |
 
 ### Переменные
 
