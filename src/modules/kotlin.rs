@@ -7,21 +7,21 @@ use regex::Regex;
 const KOTLIN_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+[\\d\\.]+[\\d\\.]+)";
 
 /// Creates a module with the current Kotlin version
-///
-/// Will display the Kotlin version if any of the following criteria are met:
-///     - Current directory contains a file with a `.kt` or `.kts` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("kotlin");
+    let config = KotlinConfig::try_load(module.config);
+
     let is_kotlin_project = context
         .try_begin_scan()?
-        .set_extensions(&["kt", "kts"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_kotlin_project {
         return None;
     }
 
-    let mut module = context.new_module("kotlin");
-    let config = KotlinConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
