@@ -4,22 +4,21 @@ use crate::configs::helm::HelmConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Helm version
-///
-/// Will display the Helm version if any of the following criteria are met:
-///     - Current directory contains a `helmfile.yaml` file
-///     - Current directory contains a `Chart.yaml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("helm");
+    let config = HelmConfig::try_load(module.config);
+
     let is_helm_project = context
         .try_begin_scan()?
-        .set_files(&["helmfile.yaml", "Chart.yaml"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_helm_project {
         return None;
     }
 
-    let mut module = context.new_module("helm");
-    let config = HelmConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
