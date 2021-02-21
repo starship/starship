@@ -957,7 +957,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `"bold red"`                         | The style for the module.                                |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
-| `detect_folders`    | `["elm-stuff"]`                      | Which folders should trigger this modules.               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                               |
 | `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
