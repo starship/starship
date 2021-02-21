@@ -944,19 +944,22 @@ default = "unknown shell"
 ## Erlang
 
 The `erlang` module shows the currently installed version of Erlang/OTP.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
 
 ### Options
 
-| Option     | Default                            | Description                                              |
-| ---------- | ---------------------------------- | -------------------------------------------------------- |
-| `symbol`   | `" "`                             | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                       | The style for the module.                                |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                               |
-| `disabled` | `false`                            | Disables the `erlang` module.                            |
+| Option              | Default                              | Description                                              |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`             | `"bold red"`                         | The style for the module.                                |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
+| `detect_folders`    | `["elm-stuff"]`                      | Which folders should trigger this modules.               |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                               |
+| `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
 ### Variables
 
