@@ -2412,7 +2412,7 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift.
+By default the `swift` module shows the currently installed version of Swift.
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
@@ -2420,12 +2420,15 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                              | Description                                      |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`   | `"🐦 "`                              | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | The style for the module.                        |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Option              | Default                              | Description                                      |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `symbol`            | `"🐦 "`                              | A format string representing the symbol of Swift |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
+| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold 202"`                         | The style for the module.                        |
+| `disabled`          | `false`                              | Disables the `swift` module.                     |
 
 ### Variables
 
