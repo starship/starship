@@ -1231,19 +1231,22 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `helm` module shows the currently installed version of Helm. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`helmfile.yaml`ファイルが含まれている
 - The current directory contains a `Chart.yaml` file
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                               |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                 |
-| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                       | モジュールのスタイルです。                                    |
-| `disabled` | `false`                              | Disables the `helm` module.                      |
+| オプション               | デフォルト                                | 説明                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                 |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.     |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.       |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm. |
+| `style`             | `"bold white"`                       | モジュールのスタイルです。                                    |
+| `disabled`          | `false`                              | Disables the `helm` module.                      |
 
 ### 変数
 
@@ -1301,19 +1304,22 @@ disabled = false
 
 ## Java
 
-`java`モジュールは、現在インストールされているJavaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`java`モジュールは、現在インストールされているJavaのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### オプション
 
-| オプション      | デフォルト                                    | 説明                                              |
-| ---------- | ---------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}(${version} )]($style)"` | moduleのフォーマットです。                                |
-| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                           | モジュールのスタイルです。                                   |
-| `disabled` | `false`                                  | `java`モジュールを無効にします。                             |
+| オプション               | デフォルト                                                                                                     | 説明                                              |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | moduleのフォーマットです。                                |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
+| `style`             | `"red dimmed"`                                                                                            | モジュールのスタイルです。                                   |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
 
 ### 変数
 
@@ -1370,7 +1376,7 @@ threshold = 4
 
 ## Julia
 
-`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`Project.toml`ファイルが含まれている
 - カレントディレクトリに`Manifest.toml`ファイルが含まれている
@@ -1378,12 +1384,15 @@ threshold = 4
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                |
-| ---------- | ------------------------------------ | ------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                  |
-| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                      | モジュールのスタイルです。                                     |
-| `disabled` | `false`                              | `julia`モジュールを無効にします。                              |
+| オプション               | デフォルト                                | 説明                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                  |
+| `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.      |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.        |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia. |
+| `style`             | `"bold purple"`                      | モジュールのスタイルです。                                     |
+| `disabled`          | `false`                              | Disables the `julia` module.                      |
 
 ### 変数
 
@@ -1406,19 +1415,22 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `kotlin` module shows the currently installed version of Kotlin. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.kt` or a `.kts` file
 
 ### オプション
 
-| オプション           | デフォルト                                | 説明                                                                            |
-| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                              |
-| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                        | モジュールのスタイルです。                                                                 |
-| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
+| オプション               | デフォルト                                | 説明                                                                            |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                              |
+| `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                                                 |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### 変数
 
@@ -1756,7 +1768,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ocaml` module shows the currently installed version of OCaml. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1767,12 +1779,15 @@ The `ocaml` module shows the currently installed version of OCaml. 次の条件�
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                      |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                      | モジュールのスタイルです。                                           |
-| `disabled` | `false`                              | Disables the `ocaml` module.                            |
+| オプション               | デフォルト                                                            | 説明                                                      |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                             | The format string for the module.                       |
+| `symbol`            | `"🐫 "`                                                           | The symbol used before displaying the version of OCaml. |
+| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Which extensions should trigger this moudle.            |
+| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Which filenames should trigger this module.             |
+| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Which folders should trigger this module.               |
+| `style`             | `"bold yellow"`                                                  | モジュールのスタイルです。                                           |
+| `disabled`          | `false`                                                          | Disables the `ocaml` module.                            |
 
 ### 変数
 
@@ -1876,7 +1891,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `perl` module shows the currently installed version of Perl. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1886,12 +1901,15 @@ The `perl` module shows the currently installed version of Perl. 次の条件の
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                    |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                         | モジュールのスタイルです。                                         |
-| `disabled` | `false`                              | Disables the `perl` module.                           |
+| オプション               | デフォルト                                                                                                    | 説明                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this moudle.          |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.             |
+| `style`             | `"bold 149"`                                                                                             | モジュールのスタイルです。                                         |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                           |
 
 ### 変数
 
@@ -1912,20 +1930,23 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-`php`モジュールは、現在インストールされているPHPのバージョンを示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+`php`モジュールは、現在インストールされているPHPのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
 - The current directory contains a `.php-version` file
-- カレントディレクトリに`.php`の拡張子のファイルが含まれている
+- The current directory contains a `.php` extension
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                         |
-| ---------- | ------------------------------------ | -------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。           |
-| `symbol`   | `"🐘 "`                               | PHPのバージョンを表示する前に使用される記号です。 |
-| `style`    | `"147 bold"`                         | モジュールのスタイルです。              |
-| `disabled` | `false`                              | `php`モジュールを無効にします。         |
+| オプション               | デフォルト                                | 説明                                           |
+| ------------------- | ------------------------------------ | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                             |
+| `symbol`            | `"🐘 "`                               | PHPのバージョンを表示する前に使用される記号です。                   |
+| `detect_extensions` | `["php"]`                            | Which extensions should trigger this moudle. |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.    |
+| `style`             | `"147 bold"`                         | モジュールのスタイルです。                                |
+| `disabled`          | `false`                              | Disables the `php` module.                   |
 
 ### 変数
 
@@ -1948,19 +1969,22 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `purescript` module shows the currently installed version of PureScript version. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`spago.dhall`ファイルが含まれている
-- The current directory contains a \*.purs files
+- The current directory contains a file with the `.purs` extension
 
 ### オプション
 
-| オプション      | デフォルト                                | 説明                                                           |
-| ---------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                             |
-| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                       | モジュールのスタイルです。                                                |
-| `disabled` | `false`                              | Disables the `purescript` module.                            |
+| オプション               | デフォルト                                | 説明                                                           |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                             |
+| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this moudle.                 |
+| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                  |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                    |
+| `style`             | `"bold white"`                       | モジュールのスタイルです。                                                |
+| `disabled`          | `false`                              | Disables the `purescript` module.                            |
 
 ### 変数
 
