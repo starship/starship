@@ -2059,7 +2059,7 @@ detect_extensions = []
 
 ## Ruby
 
-`ruby` 组件显示当前安装的 Ruby 版本。 此组件将在符合以下任意条件之一时显示：
+By default the `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Gemfile` 文件
 - The current directory contains a `.ruby-version` file
@@ -2067,12 +2067,15 @@ detect_extensions = []
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                               |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
-| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                         | 此组件的样式。                                          |
-| `disabled` | `false`                              | 禁用 `ruby` 组件。                                    |
+| Option              | 默认值                                  | 描述                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby. |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold red"`                         | 此组件的样式。                                          |
+| `disabled`          | `false`                              | Disables the `ruby` module.                      |
 
 ### Variables
 
@@ -2095,19 +2098,22 @@ symbol = "🔺 "
 
 ## Rust
 
-`rust` 组件显示当前安装的 Rust 版本。 此组件将在符合以下任意条件之一时显示：
+By default the `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Cargo.toml` 文件
 - 当前目录包含一个使用 `.rs` 扩展名的文件
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                              |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
-| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                         | 此组件的样式。                                         |
-| `disabled` | `false`                              | 禁用 `rust` 组件。                                   |
+| Option              | 默认值                                  | 描述                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
+| `style`             | `"bold red"`                         | 此组件的样式。                                         |
+| `disabled`          | `false`                              | Disables the `rust` module.                     |
 
 ### Variables
 
@@ -2294,19 +2300,22 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. 此组件将在符合以下任意条件之一时显示：
+By default the `swift` module shows the currently installed version of Swift. 此组件将在符合以下任意条件之一时显示：
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
 ### 配置项
 
-| Option     | 默认值                                  | 描述                                               |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
-| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | 此组件的样式。                                          |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Option              | 默认值                                  | 描述                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
+| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold 202"`                         | 此组件的样式。                                          |
+| `disabled`          | `false`                              | Disables the `swift` module.                     |
 
 ### Variables
 
