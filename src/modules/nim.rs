@@ -4,23 +4,19 @@ use crate::configs::nim::NimConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Nim version
-///
-/// Will display the Nim version if any of the following criteria are met:
-///     - The current directory contains a file with extension `.nim`, `.nims`, or `.nimble`
-///     - The current directory contains a `nim.cfg` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("nim");
+    let config = NimConfig::try_load(module.config);
     let is_nim_project = context
         .try_begin_scan()?
-        .set_files(&["nim.cfg"])
-        .set_extensions(&["nim", "nims", "nimble"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_files)
         .is_match();
 
     if !is_nim_project {
         return None;
     }
-
-    let mut module = context.new_module("nim");
-    let config = NimConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
