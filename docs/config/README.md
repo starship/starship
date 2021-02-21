@@ -9,7 +9,7 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
-# Inserts a newline between shell prompts
+# Inserts a blank line between shell prompts
 add_newline = true
 
 # Replace the "❯" symbol in the prompt with "➜"
@@ -155,7 +155,7 @@ This is the list of prompt-wide configuration options.
 | -------------- | ------------------------------ | ----------------------------------------------------- |
 | `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Inserts new line between shell prompts.               |
+| `add_newline`  | `true`                         | Inserts blank line between shell prompts.               |
 
 ### Example
 
@@ -171,7 +171,7 @@ format = """
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
