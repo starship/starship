@@ -21,16 +21,16 @@ symbol = "➜"      # Сегменту "symbol" присваеваем знач�
 disabled = true
 ```
 
-Вы можете изменить расположение файла `starship.toml` переменной окружения `STARSHIP_CONFIG`:
+You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship
+export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
 Аналогично в PowerShell (Windows) следует добавить эту строку в `$PROFILE`:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
 ### Логгирование (Запись действий)
