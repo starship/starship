@@ -2245,6 +2245,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `powershell_indicator` | `psh`         | A format string used to represent powershell. |
 | `ion_indicator`        | `ion`         | A format string used to represent ion.        |
 | `elvish_indicator`     | `esh`         | A format string used to represent elvish.     |
+| `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.       |
 | `format`               | `$indicator ` | The format for the module.                    |
 | `disabled`             | `true`        | Disables the `shell` module.                  |
 

@@ -11,6 +11,7 @@ pub struct ShellConfig<'a> {
     pub powershell_indicator: &'a str,
     pub ion_indicator: &'a str,
     pub elvish_indicator: &'a str,
+    pub tcsh_indicator: &'a str,
     pub disabled: bool,
 }
 
@@ -24,6 +25,7 @@ impl<'a> RootModuleConfig<'a> for ShellConfig<'a> {
             powershell_indicator: "psh",
             ion_indicator: "ion",
             elvish_indicator: "esh",
+            tcsh_indicator: "tsh",
             disabled: true,
         }
     }
