@@ -1783,7 +1783,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 ## NodeJS
 
 The `nodejs` module shows the currently installed version of NodeJS.
-The module will be shown if any of the following conditions are met:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -1793,13 +1793,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option     | Default                            | Description                                        |
-| ---------- | ---------------------------------- | -------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format for the module.                         |
-| `symbol`   | `"⬢ "`                             | A format string representing the symbol of NodeJS. |
-| `style`    | `"bold green"`                     | The style for the module.                          |
-| `disabled` | `false`                            | Disables the `nodejs` module.                      |
-| `not_capable_style` | `bold red` | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Option              | Default                              | Description                                        |
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS. |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.       |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.        |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.          |
+| `style`             | `"bold green"`                       | The style for the module.                          |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                      |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
 ### Variables
 
