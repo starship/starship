@@ -4,22 +4,20 @@ use crate::configs::erlang::ErlangConfig;
 use crate::formatter::StringFormatter;
 
 /// Create a module with the current Erlang version
-///
-/// Will display the Erlang version if any of the following criteria are met:
-///     - Current directory contains a rebar.config file
-///     - Current directory contains a erlang.mk file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("erlang");
+    let config = ErlangConfig::try_load(module.config);
+
     let is_erlang_project = context
         .try_begin_scan()?
-        .set_files(&["rebar.config", "erlang.mk"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_erlang_project {
         return None;
     }
-
-    let mut module = context.new_module("erlang");
-    let config = ErlangConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
