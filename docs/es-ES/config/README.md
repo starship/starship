@@ -2060,7 +2060,7 @@ detect_extensions = []
 
 ## Ruby
 
-El módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+By default the `ruby` module shows the currently installed version of Ruby. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Gemfile`
 - El directorio actual contiene un archivo `.ruby-version`
@@ -2068,12 +2068,15 @@ El módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo 
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                              |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
-| `symbol`   | `"💎 "`                               | Una cadena de formato que representa el símbolo de Ruby. |
-| `style`    | `"bold red"`                         | El estilo del módulo.                                    |
-| `disabled` | `false`                              | Desactiva el módulo `ruby`.                              |
+| Opción              | Por defecto                          | Descripción                                              |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `symbol`            | `"💎 "`                               | Una cadena de formato que representa el símbolo de Ruby. |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.             |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.              |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                |
+| `style`             | `"bold red"`                         | El estilo del módulo.                                    |
+| `disabled`          | `false`                              | Disables the `ruby` module.                              |
 
 ### Variables
 
@@ -2096,19 +2099,22 @@ symbol = "🔺 "
 
 ## Rust
 
-El módulo `rust` muestra la versión actualmente instalada de Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+By default the `rust` module shows the currently installed version of Rust. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Cargo.toml`
 - El directorio actual contiene un archivo con la extensión `.rs`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                             |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
-| `symbol`   | `"🦀 "`                               | Una cadena de formato que representa el símbolo de Rust |
-| `style`    | `"bold red"`                         | El estilo del módulo.                                   |
-| `disabled` | `false`                              | Desactiva el módulo `rust`.                             |
+| Opción              | Por defecto                          | Descripción                                             |
+| ------------------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `symbol`            | `"🦀 "`                               | Una cadena de formato que representa el símbolo de Rust |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.            |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.             |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.               |
+| `style`             | `"bold red"`                         | El estilo del módulo.                                   |
+| `disabled`          | `false`                              | Disables the `rust` module.                             |
 
 ### Variables
 
@@ -2295,19 +2301,22 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+By default the `swift` module shows the currently installed version of Swift. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                                      |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | El formato del módulo.                           |
-| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | El estilo del módulo.                            |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Opción              | Por defecto                          | Descripción                                      |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                           |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
+| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `style`             | `"bold 202"`                         | El estilo del módulo.                            |
+| `disabled`          | `false`                              | Disables the `swift` module.                     |
 
 ### Variables
 
