@@ -175,7 +175,7 @@ fi"#,
         }
         Some("tcsh") => {
             let script = format!(
-                r#"eval "`({} init tcsh --print-full-init)`""#,
+                r#"eval "`("{}" init tcsh --print-full-init)`""#,
                 starship.sprint_posix()?
             );
             Some(script)
