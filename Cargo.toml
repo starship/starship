@@ -70,7 +70,7 @@ shadow-rs = "0.5.24"
 process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
 
 # Optional/http:
-attohttpc = { version = "0.16.1", optional = true, default-features = false, features = ["tls", "form"] }
+attohttpc = { version = "0.16.3", optional = true, default-features = false, features = ["tls", "form"] }
 native-tls = { version = "0.2.7", optional = true }
 shell-words = "1.0.0"
 
