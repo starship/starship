@@ -80,7 +80,7 @@ La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#sty
 Par exemple :
 
 - `[on](red bold)` affichera une chaîne de caractères `on` avec un texte gras de couleur rouge.
-- `[⬢ $version](bold green)` affichera un symbole `⬢` suivi du contenu de la variable `version`, avec un texte en gras de couleur verte.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` affichera `a b c` avec `b` rouge, et `a` et `c` vert.
 
 #### Chaînes de style
@@ -1737,7 +1737,7 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 | Option              | Défaut                               | Description                                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                                     |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
