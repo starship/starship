@@ -85,7 +85,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢ ` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` will print a symbol `⌘ ` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### Style Strings
