@@ -32,19 +32,16 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
+    # Configuration written to ~/.config/starship.toml
     settings = {
-      add_newline = false;
-      format = lib.concatStrings [
-        "$line_break"
-        "$package"
-        "$line_break"
-        "$character"
-      ];
-      scan_timeout = 10;
-      character = {
-        success_symbol = "➜";
-        error_symbol = "➜";
-      };
+      # add_newline = false;
+
+      # character = {
+      #   success_symbol = "[➜](bold green)";
+      #   error_symbol = "[➜](bold red)";
+      # };
+
+      # package.disabled = true;
     };
   };
 }
