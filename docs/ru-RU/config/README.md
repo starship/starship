@@ -80,7 +80,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 Например:
 
 - `[on](red bold)` будет печатать строку `on` жирным текстом красного цвета.
-- `[⬢ $version](bold green)` будет печатать символ `⬢` за которым следует содержимое переменной `версии`, с жирным шрифтом зеленого цвета.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` будет печатать `a b c` с `b` красного и `a` и `c` зеленого цвета соответсвенно.
 
 #### Строки стиля
@@ -1737,7 +1737,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | Параметр            | По умолчанию                         | Описание                                                                                              |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                                        |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
