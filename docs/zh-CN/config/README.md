@@ -9,8 +9,8 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
-# Don't print a new line at the start of the prompt
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -142,11 +142,11 @@ format = '''
 
 ### 配置项
 
-| Option         | 默认值                           | 描述                                  |
-| -------------- | ----------------------------- | ----------------------------------- |
-| `format`       | [见下文](#default-prompt-format) | Configure the format of the prompt. |
-| `scan_timeout` | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。          |
-| `add_newline`  | `true`                        | 在提示符与提示信息间换行。                       |
+| Option         | 默认值                           | 描述                                        |
+| -------------- | ----------------------------- | ----------------------------------------- |
+| `format`       | [见下文](#default-prompt-format) | Configure the format of the prompt.       |
+| `scan_timeout` | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                |
+| `add_newline`  | `true`                        | Inserts blank line between shell prompts. |
 
 ### 示例
 
@@ -162,7 +162,7 @@ format = """
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
