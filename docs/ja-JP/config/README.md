@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 
 ```toml
-# プロンプトの先頭に改行を表示しません
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
-# プロンプトの「❯」記号を「➜」に置き換えます
-[character]                            # 設定しているモジュールの名前は「character」です
-success_symbol = "[➜](bold green)"     # 「success_symbol」セグメントは「ボールドグリーン」の色で「➜」に設定されています
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# package モジュールを無効にし、プロンプトから完全に隠します
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -142,11 +142,11 @@ format = '''
 
 ### オプション
 
-| オプション          | デフォルト                          | 説明                                       |
-| -------------- | ------------------------------ | ---------------------------------------- |
-| `format`       | [link](#default-prompt-format) | プロンプトの形式を設定します。                          |
-| `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
-| `add_newline`  | `true`                         | プロンプトの開始前に新しい行を追加します。                    |
+| オプション          | デフォルト                          | 説明                                        |
+| -------------- | ------------------------------ | ----------------------------------------- |
+| `format`       | [link](#default-prompt-format) | プロンプトの形式を設定します。                           |
+| `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。  |
+| `add_newline`  | `true`                         | Inserts blank line between shell prompts. |
 
 ### 設定例
 
@@ -163,7 +163,7 @@ format = """
 
 scan_timeout = 10
 
-# プロンプトの 先頭での改行を無効にする
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
