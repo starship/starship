@@ -423,6 +423,11 @@ info "Please follow the steps for your shell to complete the installation:
 
       starship init fish | source
 
+  ${BOLD}${UNDERLINE}Xonsh${NO_COLOR}
+  Add the following to the end of ${BOLD}~/.xonshrc${NO_COLOR}:
+
+      $PROMPT = lambda: $(starship prompt)
+
   ${BOLD}${UNDERLINE}Zsh${NO_COLOR}
   Add the following to the end of ${BOLD}~/.zshrc${NO_COLOR}:
 
