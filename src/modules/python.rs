@@ -89,8 +89,10 @@ fn format_python_version(python_stdout: &str) -> String {
         "v{}",
         python_stdout
             .trim_start_matches("Python ")
-            .trim_end_matches(":: Anaconda, Inc.")
             .trim()
+            .split_whitespace()
+            .next()
+            .unwrap_or("?")
     )
 }
 
@@ -130,6 +132,12 @@ mod tests {
     fn test_format_python_version_anaconda() {
         let input = "Python 3.6.10 :: Anaconda, Inc.";
         assert_eq!(format_python_version(input), "v3.6.10");
+    }
+
+    #[test]
+    fn test_format_python_version_pypy() {
+        let input = "Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)\n[PyPy 7.3.3-beta0 with GCC 10.2.0]";
+        assert_eq!(format_python_version(input), "v3.7.9");
     }
 
     #[test]
