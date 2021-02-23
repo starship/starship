@@ -9,15 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Toda la configuración de Starship se realiza en este archivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Evita imprimir una nueva línea al inicio del prompt
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
-# Reemplaza el símbolo "❯" por "➜" del prompt
-[character]       # El nombre del módulo que se está configurando es "character"
-symbol = "➜"     # El segmento "symbol" es reemplazado por "➜"
-success_symbol = "[➜](bold green)"     # El segmento "success_symbol" es reemplazado por "➜" con el color "bold green"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Desactiva el gestor de paquetes, ocultándolo por completo del prompt
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -147,7 +146,7 @@ Esta es la lista de opciones de configuración.
 | -------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
 | `format`       | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                              |
 | `scan_timeout` | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos). |
-| `add_newline`  | `true`                             | Añade una nueva línea antes del prompt.                                       |
+| `add_newline`  | `true`                             | Inserts blank line between shell prompts.                                     |
 
 ### Ejemplo
 
@@ -163,7 +162,7 @@ format = """
 # Espera 10 milisegundos para que starship revise los archivos del directorio actual.
 scan_timeout = 10
 
-# Desactiva la nueva línea al inicio del prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
