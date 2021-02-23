@@ -31,7 +31,29 @@ nix-env -iA nixos.starship
 
 #### Khai báo, người dùng đơn, thông qua [home-manager](home-manager)
 
-Thêm `pkgs.starship` vào `home.packages` trong tệp tin `home.nix` của bạn, sau đó chạy
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
+
+```nix
+{
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    # Configuration written to ~/.config/starship.toml
+    settings = {
+      # add_newline = false;
+
+      # character = {
+      #   success_symbol = "[➜](bold green)";
+      #   error_symbol = "[➜](bold red)";
+      # };
+
+      # package.disabled = true;
+    };
+  };
+}
+```
+
+then run
 
 ```sh
 home-manager switch
@@ -39,18 +61,8 @@ home-manager switch
 
 #### Khai báo, system-wide, với NixOS
 
-Thêm `pkgs.starship` vào `environment.packages` trong `configuration.nix` của bạn, sau đó chạy
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch
-```
-
-### Modifying Init Scripts
-
-#### Với Nix và home-manager, sử dụng zsh:
-
-Thêm phần sau vào `programs.zsh.initExtra` trong tệp tin `home.nix` của bạn, sau đó chạy
-
-```sh
-home-manager switch
 ```
