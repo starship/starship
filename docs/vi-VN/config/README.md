@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Tất cả cấu hình của starship đã xong trong tập tin này: [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Không in dòng mới tại điểm bắt đầu của prompt
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
-# Thay thế kí hiệu "❯" trong prompt với "➜"
-[character]                            # Tên module chúng ta đang cấu hình là "character"
-success_symbol = "[➜](bold green)"     # "success_symbol" được thiết lập là "➜" với màu "bold green"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Vô hiệu hoá module, ẩn nó từ prompt hoàn chỉnh
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -146,7 +146,7 @@ Cái này là danh sách các tuỳ chọn cho cấu hình prompt-wide.
 | -------------- | ------------------------------ | ------------------------------------------------------------------------ |
 | `format`       | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                           |
 | `scan_timeout` | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds). |
-| `add_newline`  | `true`                         | Thêm một dòng mới trước khi bắt đầu một prompt.                          |
+| `add_newline`  | `true`                         | Inserts blank line between shell prompts.                                |
 
 ### Ví dụ
 
@@ -162,7 +162,7 @@ format = """
 # Chờ 10 milliseconds để starship kiểm tra các tập tin trong đường dẫn hiện tại.
 scan_timeout = 10
 
-# Vô hiệu hoá dòng mới tại điểm bắt đầu của prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
