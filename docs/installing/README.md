@@ -12,13 +12,31 @@ There are so many platforms out there that they didn't fit into the main
 README.md file, so here are some installation instructions for other platforms
 from the community. Is yours not here? Please do add it here if you figure it
 out!
-## [termux](https://termux.com)
+
+## [Chocolatey](https://chocolatey.org)
+
 ### Prerequisites
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
+
+### Installation
+
+```powershell
+choco install starship
+```
+
+## [termux](https://termux.com)
+
+### Prerequisites
+
 ```sh
 pkg install getconf
 ```
 
 ### Installation
+
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
 ```
