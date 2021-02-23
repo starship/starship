@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Toute la configuration de starship est faite dans ce fichier [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# N'écrivez pas une nouvelle ligne au début de la console
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
-# Remplacez le symbole "❯" dans la console avec "➜"
-[character]             # Le nom du module que nous configurons est "character"
-success_symbol = "[➜](bold green)"    # Le segment "success_symbol" est mis comme "➜" avec la couleur "bold green"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Désactivez le module package, le masquant complètement dans la console
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -146,7 +146,7 @@ Voici la liste des options de configuration de l'invite en lui-même.
 | -------------- | ------------------------------ | -------------------------------------------------------------------------- |
 | `format`       | [lien](#default-prompt-format) | Configure le format de l'invite.                                           |
 | `scan_timeout` | `30`                           | Délai d'attente avant que starship scanne les fichiers (en millisecondes). |
-| `add_newline`  | `true`                         | Ajoute une nouvelle ligne a début de l'invite.                             |
+| `add_newline`  | `true`                         | Inserts blank line between shell prompts.                                  |
 
 ### Exemple
 
@@ -162,7 +162,7 @@ format = """
 # Attendez 10 millisecondes pour que starship vérifie les fichiers dans le répertoire de travail.
 scan_timeout = 10
 
-# Désactive la nouvelle ligne au démarrage de l'invite
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
