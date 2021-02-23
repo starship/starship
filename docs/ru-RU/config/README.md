@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Вся конфигурация Starship выполняется в этом файле [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Не добавлять пустую строку в начале ввода
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
-# Поменять символ "❯" на символ "➜"
-[character]      # Имя настраемого модуля - "character"
-symbol = "➜"      # Сегменту "symbol" присваеваем значение "➜"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Отключить модуль пакетов, полностью скрывая его из терминала
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -142,11 +142,11 @@ format = '''
 
 ### Опции
 
-| Параметр       | По умолчанию                     | Описание                                                 |
-| -------------- | -------------------------------- | -------------------------------------------------------- |
-| `format`       | [ссылка](#default-prompt-format) | Настройка форматирования оболочки.                       |
-| `scan_timeout` | `30`                             | Тайм-аут запуска сканирования файлов (в миллисекундах).  |
-| `add_newline`  | `true`                           | Добавление пустой строки перед началом командной строки. |
+| Параметр       | По умолчанию                     | Описание                                                |
+| -------------- | -------------------------------- | ------------------------------------------------------- |
+| `format`       | [ссылка](#default-prompt-format) | Настройка форматирования оболочки.                      |
+| `scan_timeout` | `30`                             | Тайм-аут запуска сканирования файлов (в миллисекундах). |
+| `add_newline`  | `true`                           | Inserts blank line between shell prompts.               |
 
 ### Пример
 
@@ -162,7 +162,7 @@ format = """
 # Подождите 10 милисекунд пока starship прочитает файлы в этой директории.
 scan_timeout = 10
 
-# Выключить новую строку в начале подсказки (prompt)
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
