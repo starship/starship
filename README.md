@@ -196,6 +196,14 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    starship init fish | source
    ```
 
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```python
+   $PROMPT = lambda: $(starship prompt)
+   ```
+
    #### Zsh
 
    Add the following to the end of `~/.zshrc`:
