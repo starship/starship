@@ -2,18 +2,21 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt" />
+    alt="Starship – Cross-shell prompt"
+ />
 </p>
 
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="Status do workflow Actions do GitHub" /></a>
+      alt="Status do workflow Actions do GitHub"
+ /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Versão no Crates.io" /></a>
+      alt="Versão no Crates.io"
+ /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
@@ -22,11 +25,13 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat no Discord" /></a>
+      alt="Chat no Discord"
+ /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Siga o @StarshipPrompt no Twitter" /></a>
+      alt="Siga o @StarshipPrompt no Twitter"
+ /></a>
 </p>
 
 <p align="center">
@@ -42,63 +47,72 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="English" /></a>
+      alt="English"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語" /></a>
+      alt="日本語"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文" /></a>
+      alt="繁體中文"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский" /></a>
+      alt="Русский"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch" /></a>
+      alt="Deutsch"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文" /></a>
+      alt="简体中文"
+ /></a>
   &nbsp;
   <a 
     href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español" /></a>
+      alt="Español"
+ /></a>
   &nbsp;
   <a 
     href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Français" /></a>
+      alt="Français"
+ /></a>
   &nbsp;
   <a 
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt" /></a>
+      alt="Tiếng Việt"
+ /></a>
 </p>
 
 <h1></h1>
@@ -107,7 +121,8 @@
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
   alt="Starship com iTerm2 e o tema Snazzy"
   width="50%"
-  align="right" />
+  align="right"
+ />
 
 **O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!**
 
