@@ -236,7 +236,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **警告** elvish v0.15 以上のみがサポートされています。 `~/.elvish/rc.elv` の最後に以下を追記してください。
 
    ```sh
    # ~/.elvish/rc.elv
@@ -248,7 +248,7 @@
 
 私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+あなたが英語以外の言語に堪能な場合、ドキュメントの翻訳と更新に協力していただけると嬉しいです。 協力してくれる場合、翻訳は [Starship Crowdin](https://translate.starship.rs/) から貢献できます。
 
 もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
 
