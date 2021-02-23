@@ -31,26 +31,38 @@ nix-env -iA nixos.starship
 
 #### Declarativo, usuario único, a través de [home-manager](home-manager)
 
-Añade `pkgs.starship` a tu `home.packages` en tu archivo `home.nix` y luego ejecuta
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
+
+```nix
+{
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    # Configuration written to ~/.config/starship.toml
+    settings = {
+      # add_newline = false;
+
+      # character = {
+      #   success_symbol = "[➜](bold green)";
+      #   error_symbol = "[➜](bold red)";
+      # };
+
+      # package.disabled = true;
+    };
+  };
+}
+```
+
+then run
 
 ```sh
-interruptor home-manager
+home-manager switch
 ```
 
 #### Declarativo, en todo el sistema, con NixOS
 
-Añade `pkgs.starship` a `environment.packages` en tu `configuration.nix`, luego ejecuta
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch
-```
-
-### Modifying Init Scripts
-
-#### Con Nix y home-manager, usando zsh:
-
-Añade lo siguiente a `programs.zsh.initExtra` en tu archivo `home.nix` y luego ejecutar
-
-```sh
-interruptor home-manager
 ```
