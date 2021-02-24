@@ -56,6 +56,11 @@ If you get an error like "_version 'GLIBC_2.18' not found (required by starship)
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
 
+## I see symbols I don't understand or expect, what do they mean?
+
+If you see symbols that you don't recognise you can use `starship explain` to
+explain the currently showing modules.
+
 ## Why don't I see a glyph symbol in my prompt?
 
 The most common cause of this is system misconfiguration. Some Linux distros in
