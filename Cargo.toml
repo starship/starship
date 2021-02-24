@@ -58,7 +58,7 @@ urlencoding = "1.1.1"
 open = "1.4.0"
 unicode-width = "0.1.8"
 term_size = "0.3.2"
-quick-xml = "0.21.0"
+quick-xml = "0.22.0"
 rand = "0.8.3"
 serde = { version = "1.0.123", features = ["derive"] }
 indexmap = "1.6.1"
