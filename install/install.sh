@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 
-# shellcheck disable=SC2039
+# shellcheck disable=SC1090 # can't follow non-constant source
+# shellcheck disable=SC1091 # not following due to SC1090 (or other reasons)
+# shellcheck disable=SC2039 # something is undefined in posix, in this case the local keyword
 
 # Options
 #

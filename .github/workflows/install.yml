@@ -1,0 +1,74 @@
+name: Installation
+on:
+  push:
+    paths:
+      - "install/**"
+  pull_request:
+    paths:
+      - "install/**"
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-20.04
+    container: koalaman/shellcheck-alpine:stable
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: shell
+        run: shellcheck install/install.sh
+
+  shell:
+    name: "Install in ${{ matrix.shell }}"
+    runs-on: ubuntu-20.04
+    needs:
+      - check
+    strategy:
+      matrix:
+        shell:
+          - dash
+          - bash
+          - zsh
+          - ash
+          - ksh
+          - mksh
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install-shell
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl grep ${{ matrix.shell }}
+      - name: install
+        shell: ${{ matrix.shell }} -lc {0}
+        run: ./install/install.sh --force
+      - name: test
+        shell: ${{ matrix.shell }} -lc {0}
+        run: |
+          echo $0 | grep ${{ matrix.shell }} || exit 1
+          starship --version
+          command -v starship
+
+  macos:
+    name: "Install in bash on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    needs:
+      - check
+    strategy:
+      matrix:
+        os:
+          - macos-11.0
+          - macos-10.15
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install
+        shell: bash
+        run: ./install/install.sh --force
+      - name: test
+        shell: bash
+        run: |
+          echo $0 | grep bash || exit 1
+          $0 --version
+          starship --version
+          command -v starship
