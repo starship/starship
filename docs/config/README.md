@@ -1399,6 +1399,10 @@ The module will be shown only if there are background jobs running.
 The module will show the number of jobs running if there is more than 1 job, or
 more than the `threshold` config value, if it exists.
 
+::: warning
+This module is not supported on tcsh.
+:::
+
 ### Options
 
 | Option      | Default                       | Description                                      |
