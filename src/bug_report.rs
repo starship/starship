@@ -205,6 +205,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             }
             "zsh" => Some(".zshrc"),
             "elvish" => Some(".elvish/rc.elv"),
+            "tcsh" => Some(".tcshrc"),
             _ => None,
         }
         .map(|path| home_dir.join(path))
