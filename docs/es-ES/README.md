@@ -123,3 +123,14 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval "`starship init tcsh`"
+   ```
+
