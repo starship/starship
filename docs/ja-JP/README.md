@@ -123,3 +123,14 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval "`starship init tcsh`"
+   ```
+
