@@ -1344,6 +1344,12 @@ symbol = "🌟 "
 
 `jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。
 
+::: warning
+
+This module is not supported on tcsh.
+
+:::
+
 ### オプション
 
 | オプション       | デフォルト                         | 説明                                               |
@@ -1376,7 +1382,7 @@ threshold = 4
 
 ## Julia
 
-`julia`モジュールは、現在インストールされているJuliaのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
+The `julia` module shows the currently installed version of Julia. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`Project.toml`ファイルが含まれている
 - カレントディレクトリに`Manifest.toml`ファイルが含まれている
@@ -1465,7 +1471,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1504,7 +1510,7 @@ disabled = false
 
 ## 改行
 
-`line_break`モジュールは、プロンプトを2行に分割します。
+The `line_break` module separates the prompt into two lines.
 
 ### オプション
 
@@ -1563,14 +1569,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## メモリ使用量
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+The `memory_usage` module shows current system memory and swap usage.
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+By default the swap usage is displayed if the total system swap is non-zero.
 
-<p spaces-before="0">::: tip</p>
+::: tip
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1611,7 +1616,7 @@ style = "bold dimmed green"
 
 ## Mercurial ブランチ
 
-` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
@@ -1688,7 +1693,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell`モジュールは、nix-shell環境を示しています。 このモジュールは、nixシェル環境内にあるときに表示されます。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### オプション
 
@@ -1726,7 +1731,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-`nodejs`モジュールは、現在インストールされているNodeJSのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`package.json`ファイルが含まれている
 - The current directory contains a `.node-version` file
@@ -1845,7 +1850,7 @@ symbol = "☁️ "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - **npm** – `npm`パッケージバージョンは、現在のディレクトリにある`package.json`から抽出されます
 - **cargo** – `cargo`パッケージバージョンは、現在のディレクトリにある`Cargo.toml`から抽出されます。
@@ -1930,7 +1935,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-`php`モジュールは、現在インストールされているPHPのバージョンを示します。 By default the module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of PHP. By default the module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
 - The current directory contains a `.php-version` file
@@ -2007,7 +2012,7 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-`python` モジュールは現在インストールされているPythonのバージョンと アクティブ化されている場合は現在のPython仮想環境を表示します。
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
@@ -2085,7 +2090,7 @@ detect_extensions = []
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby. 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - The current directory contains a `.ruby-version` file
@@ -2124,7 +2129,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust. 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -2166,7 +2171,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2180,6 +2185,7 @@ The `shell` module shows an indicator for currently used shell.
 | `powershell_indicator` | `psh`        | A format string used to represent powershell. |
 | `ion_indicator`        | `ion`        | A format string used to represent ion.        |
 | `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
 | `format`               | `$indicator` | moduleのフォーマットです。                              |
 | `disabled`             | `true`       | Disables the `shell` module.                  |
 
@@ -2273,7 +2279,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2326,7 +2332,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2426,7 +2432,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2468,7 +2474,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - カレントユーザーがroot
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -2550,7 +2556,7 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig. 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the the `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
