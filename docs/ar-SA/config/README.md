@@ -1343,6 +1343,12 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
+::: warning
+
+This module is not supported on tcsh.
+
+:::
+
 ### Options
 
 | Option      | Default                       | Description                                      |
@@ -2178,6 +2184,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `powershell_indicator` | `psh`        | A format string used to represent powershell. |
 | `ion_indicator`        | `ion`        | A format string used to represent ion.        |
 | `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
 | `format`               | `$indicator` | The format for the module.                    |
 | `disabled`             | `true`       | Disables the `shell` module.                  |
 
