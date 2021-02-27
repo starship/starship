@@ -28,14 +28,19 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
   </video>
 </div>
 
-### Installation
+## Installation
 
-1. Installer le binaire **starship** :
+### Prérequis
 
+* Une police d'écriture dite "Nerd-font" installée et configurée dans votre terminal (par exemple, [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads).
+
+**Note** : les instructions ci-dessous ne concernent que les principales plateformes supportées. Vous ne voyer pas la votre ? Regardez [cette page](https://starship.rs/fr-fr/config/).
+
+1. Installer l'exécutable **starship** (précompilé) :
 
    #### Installer la dernière version
 
-   Avec Shell:
+   Depuis le shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -58,7 +63,6 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
 1. Ajouter le script d’initialisation au fichier configuration de votre shell:
 
-
    #### Bash
 
    Ajouter ce qui suit à la fin de `~/.bashrc`:
@@ -68,7 +72,6 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    eval "$(starship init bash)"
    ```
-
 
    #### Fish
 
@@ -80,7 +83,6 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    starship init fish | source
    ```
 
-
    #### Zsh
 
    Ajouter ce qui suit à la fin de `~/.zshrc`:
@@ -91,15 +93,13 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    eval "$(starship init zsh)"
    ```
 
-
    #### Powershell
 
-   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en affichant la valeur de la variable `$PROFILE` dans le PowerShell. Le chemin est habituellement `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sous -nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -113,9 +113,9 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   **Attention** : ne supporte elvish qu'à partir de la v0.15
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Ajouter ce qui suit à la fin de `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -123,3 +123,34 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    eval (starship init elvish)
    ```
 
+# 🤝 Contribuer
+
+Nous acceptons des contributeurs de tous niveaux ! Si vous souhaitez participer à ce projet, commencez par ouvrir une première \[[issue](https://github.com/starship/starship/labels/%F0%9F%8C%B1%20good%20first%20issue)\] (rapport de bug/demande de fonctionnalité/etc).
+
+Si vous ne parlez pas anglais, nous apprécierions vraiment que vous nous aidiez à mettre à jour les traductions en diverses langues. Si vous souhaitez nous aider, vous pouvez traduire la documentation (complète) en français sur le [Crowdin de Starship](https://translate.starship.rs/project/starship-prompt/fr#) ou [en d'autres langues](https://translate.starship.rs/).
+
+Si vous réfléchissez à contribuer à starship, nous vous remercierions de lire le [Guide du Contributeur](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) (en anglais). N'hésitez pas rejoindre notre serveur [Discord](https://discord.gg/8Jzqu3T) pour nous passer le bonjour ! 👋
+
+# [Contributeurs de code](https://github.com/starship/starship/#code-contributors)
+
+# [Contributeurs financiers](https://github.com/starship/starship/#financial-contributors)
+
+# 💭 Inspiré par
+
+Merci à ces travaux en amont ayant permis à starship d'être développé. :pray:
+
+*traduction des slogans anglais :*
+
+  * [denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt) - *Un prompt ZSH pour astronautes*.
+  * [denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node) - *Thème multiplateforme robbyrussell écrit en Javascript*
+  * [reujab/silver](https://github.com/reujab/silver) - *Un prompt multiplateforme et configurable du style de powerline à icones*.
+
+# Lisense
+
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).
+
+Ce projet est sous lisense (ISC](https://github.com/starship/starship/blob/master/LICENSE).
+
+---
+
+Plus d'informations générales sur la [page anglophone](https://github.com/starship/starship/blob/master/README.md), sur [starship.rs](https://starship.rs/fr-FR/) et dans la [documentation](https://starship.rs/fr-FR/guide/#🚀-installation).
