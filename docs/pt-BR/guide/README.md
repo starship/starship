@@ -244,6 +244,17 @@
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval "`starship init tcsh`"
+   ```
+
 ## 🤝 Contribuindo
 
 Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
