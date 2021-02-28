@@ -1343,7 +1343,7 @@ symbol = "🌟 "
 
 `jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 如果有超过 1 个作业，模块将显示正在运行的作业数量，如果配置了 `threshold` 字段，则使用它作为显示作业数量的下限。
 
-::: 警告
+::: warning
 
 This module is not supported on tcsh.
 
