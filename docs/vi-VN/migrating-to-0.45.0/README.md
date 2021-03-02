@@ -10,7 +10,7 @@ Từ trước đế v0.45.0, `prompt_order` sẽ chấp nhận một mảng các
 
 Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó.
 
-**Example pre-v0.45.0 configuration**
+**Ví dụcủa cấu hình pre-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Ví dụcủa cấu hình v0.45.0**
 
 ```toml
 format = """\
@@ -52,40 +52,40 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Mô đun `prefix` và`suffix` thay bằng `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Từ trước tới v0.45.0, một vài mô đun sẽ chấp nhận `prefix` và/hoặc `suffix` theo thứ tự để stylize các mà các mô đun được render.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó. Thay vì định nghĩa một tiền tố và hậu tố cho các giá trị context-based, các giá trị bây giờ có thể được thay thế với một format string, cái đại diện cho đầu ra của module.
 
-**Example pre-v0.45.0 configuration**
+**Ví dụ của cấu hình pre-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Ví dụ của cấu hình v0.45.0**
 
 ```toml
 [cmd_duration]
-# $duration – The command duration (e.g. "15s")
-# $style    – The default style of the module (e.g. "bold yellow")
+# $duration – Thời gian câu lệnh dùng để thực thi (e.g. "15s")
+# $style    – Style mặc định của mô đun (e.g. "bold yellow")
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Các mô đun ảnh hưởng
 
 #### Character
 
-| Removed Property        | Replacement      |
+| Thuộc tính bị gỡ bỏ     | Thay thế bằng    |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Trước đây, thuộc tính `use_symbol_for_status` được sử dụng để cấu hình dấu nhắc lệnh hiển thị `error_symbol` khi câu lệnh cuối cùng trả về kết quả có status code khác 0.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+Với bản hát hành v0.45.0, chúng ta bây giờ luôn sử dụng `error_symbol` sau các status khác 0, thống nhất các thuộc tính `use_symbol_for_status` và `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Cấu hình dâu nhắc lệnh để sử dụng cấu hình `use_symbol_for_status = true`, thêm đoạn dưới vào tệp cấu hình của bạn:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*Lưu ý:* Phần tử `character` tự động thêm vào một khoảng trắng phía sau, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Command Duration
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [cmd_duration]
@@ -127,11 +127,11 @@ error_symbol = "[✖](bold red)"
 
 #### Đường dẫn
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [directory]
@@ -141,12 +141,12 @@ error_symbol = "[✖](bold red)"
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
+| `suffix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [env_var]
@@ -157,12 +157,12 @@ error_symbol = "[✖](bold red)"
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
+| `suffix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [git_commit]
@@ -173,13 +173,13 @@ error_symbol = "[✖](bold red)"
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
+| `suffix`            | `format`      |
+| `show_sync_count`   | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
+| `suffix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `label`             | `format`      |
+| `prefix`            | `format`      |
+| `suffix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [singularity]
@@ -237,11 +237,11 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `format`            | `time_format` |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [time]
@@ -252,12 +252,12 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Thuộc tính bị gỡ bỏ | Thay thế bằng |
+| ------------------- | ------------- |
+| `prefix`            | `format`      |
+| `suffix`            | `format`      |
 
-**Changes to the Default Configuration**
+**Các thay đổi về cấu hình mặc định**
 
 ```diff
 [custom.example]
