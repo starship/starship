@@ -685,22 +685,22 @@ Mô đun `docker_context` hiển thị [Docker context](https://docs.docker.com/
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                      | Mô tả                                                                             |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | Định dạng cho module.                                                             |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | Kiểu cho module.                                                                  |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| Tuỳ chọn            | Mặc định                                                      | Mô tả                                                                                    |
+| ------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | Định dạng cho module.                                                                    |
+| `symbol`            | `"🐳 "`                                                        | Biểu tượng sử dụng để hiển thị trước Docker context.                                     |
+| `only_with_files`   | `true`                                                        | Chỉ hiển thị khi có một tệp tin khớp                                                     |
+| `detect_extensions` | `[]`                                                          | Các mở rộng nào nên kích hoạt mô đun này (cần `only_with_files` thiết lập là true).      |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Tên tệp tin nào nên kích hoạt mô đun này (cần `only_with_files` được thiết lập là true). |
+| `detect_folders`    | `[]`                                                          | Thư mục nào nên kích hoạt mô đun này (cần `only_with_files` được thiết lập là true).     |
+| `style`             | `"blue bold"`                                                 | Kiểu cho module.                                                                         |
+| `disabled`          | `false`                                                       | Vô hiệu mô đun `docker_context`.                                                         |
 
 ### Các biến
 
 | Biến      | Ví dụ          | Mô tả                            |
 | --------- | -------------- | -------------------------------- |
-| context   | `test_context` | The current docker context       |
+| context   | `test_context` | Docker context hiện tại          |
 | symbol    |                | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |                | Giá trị ghi đè của `style`       |
 
@@ -717,7 +717,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+Mô đun `dotnet` hiển thị phiên bản thích hợp của .NET Core SDK của đường dẫn hiện tại. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
