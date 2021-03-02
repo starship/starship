@@ -953,9 +953,9 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Các vị dụ
+### Các ví dụ
 
-#### Display account and project
+#### Hiển thị tài khoản và dự án
 
 ```toml
 # ~/.config/starship.toml
@@ -964,7 +964,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 format = 'on [$symbol$account(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Chỉ hiển thị tên cấu hình hiệu lực
 
 ```toml
 # ~/.config/starship.toml
@@ -974,7 +974,7 @@ format = "[$symbol$active]($style) "
 style = "bold yellow"
 ```
 
-#### Display account and aliased region
+#### Hiển thị tài khoản và bí danh khu vực
 
 ```toml
 # ~/.config/starship.toml
@@ -988,20 +988,20 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư mục hiện tại của bạn.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                    |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Use `"$branch"` to refer to the current branch name.               |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                         |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
-| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                             |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
+| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                       |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.        |
+| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.             |
+| `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                      |
+| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                            |
+| `truncation_length`  | `2^63 - 1`                       | Rút gọn một nhánh git sang X graphemes.                                                     |
+| `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. You can use `""` for no symbol. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                |
+| `disabled`           | `false`                          | Disables the `git_branch` module.                                                           |
 
 ### Các biến
 
@@ -1625,7 +1625,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | Kiểu cho module.                                                                             |
 | `format`            | `"on [$symbol$branch]($style) "` | Định dạng cho module.                                                                        |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn.                                  |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Các biến
