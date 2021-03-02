@@ -1,14 +1,14 @@
-# Migrating to v0.45.0
+# Tích hợp sang v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 là một bản phát hành chứa nhiều thay đổi trong việc chuẩn bị cho bản thay đổi lớn v1.0.0. Chúng tôi tạo một vài thay đổi xung quanh cách cấu hình được thực hiện trên dáu nhắc lệnh, cho phép tùy biến theo góc độ tốt hơn.
 
-This guide is intended to walk you through the breaking changes.
+Hướng dẫn này nhằm hướng dẫn bạn vượt qua những sự thay đổi.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` được thay thế boiwr một root-level `format`
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Từ trước đế v0.45.0, `prompt_order` sẽ chấp nhận một mảng các tên mô đun theo thứ tự mà chúng nên được render bởi Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó.
 
 **Example pre-v0.45.0 configuration**
 
