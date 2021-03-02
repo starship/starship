@@ -222,7 +222,7 @@ behind = "⇣${count}"
 
 | Thuộc tính bị gỡ bỏ | Thay thế bằng |
 | ------------------- | ------------- |
-| `label`             | `format`      |
+| `nhãn`              | `format`      |
 | `prefix`            | `format`      |
 | `suffix`            | `format`      |
 
@@ -250,7 +250,7 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Các câu lệnh tùy biến
 
 | Thuộc tính bị gỡ bỏ | Thay thế bằng |
 | ------------------- | ------------- |
