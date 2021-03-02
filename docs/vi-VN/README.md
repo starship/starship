@@ -126,7 +126,7 @@ eval $(starship init ion)
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Thêm đoạn dưới vào cuối file `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
