@@ -1082,12 +1082,12 @@ Mô đun `git_state` sẽ hiển hiển thị trong các thư mục là một ph
 
 ### Các biến
 
-| Biến             | Ví dụ      | Mô tả                          |
-| ---------------- | ---------- | ------------------------------ |
-| state            | `REBASING` | Trạng thái của repo hiện tại   |
-| progress_current | `1`        | The current operation progress |
-| progress_total   | `2`        | The total operation progress   |
-| style\*        |            | Giá trị ghi đè của `style`     |
+| Biến             | Ví dụ      | Mô tả                             |
+| ---------------- | ---------- | --------------------------------- |
+| state            | `REBASING` | Trạng thái của repo hiện tại      |
+| progress_current | `1`        | Trạng thái của quá trình hiện tại |
+| progress_total   | `2`        | Tổng số các quá trình             |
+| style\*        |            | Giá trị ghi đè của `style`        |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1103,33 +1103,33 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạng thái của repo trong thư mục hiện tại của bạn.
 
 ### Các tuỳ chọn
 
 | Tuỳ chọn     | Mặc định                                        | Mô tả                               |
 | ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
-| `behind`     | `"⇣"`                                           | The format of `behind`              |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status` |
+| `conflicted` | `"="`                                           | Nhánh này có nhiều merge conflicts. |
+| `ahead`      | `"⇡"`                                           | Định dạng của `ahead`               |
+| `behind`     | `"⇣"`                                           | Định dạng của `behind`              |
+| `diverged`   | `"⇕"`                                           | Định dạng của `diverged`            |
+| `untracked`  | `"?"`                                           | Định dạng của `untracked`           |
+| `stashed`    | `"$"`                                           | Định dạng của `stashed`             |
+| `modified`   | `"!"`                                           | Định dạng của `modified`            |
+| `staged`     | `"+"`                                           | Định dạng của `modified`            |
+| `renamed`    | `"»"`                                           | Định dạng của `renamed`             |
+| `deleted`    | `"✘"`                                           | Định dạng của `deleted`             |
 | `style`      | `"bold red"`                                    | Kiểu cho module.                    |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| `disabled`   | `false`                                         | Vô hiệu `git_status` module.        |
 
 ### Các biến
 
-The following variables can be used in `format`:
+Các biến dưới đây có thể được sử dụng trong `format`:
 
 | Biến           | Mô tả                                                                                         |
 | -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
+| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                  |
 | `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
