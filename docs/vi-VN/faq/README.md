@@ -56,13 +56,13 @@ Nếu bạn nhận được một lỗi giống như "_version 'GLIBC_2.18' not 
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## Tôi thấy các biểu tượng tôi không hiểu hoặc không mong muốn, chúng có nghĩa là gì?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Nếu bạn thấy các biểu tượng bạn không biết, bạn có thể sử dụng `starship explain` để giải thích các mô đun hiện tại đang hiển thị.
 
-## Why don't I see a glyph symbol in my prompt?
+## Tại sao tôi không thấy một biểu tượng glyph trong dấu nhắc lệnh của tôi?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+Đa số lí do phổ biến là do cái này mất cấu hình hệ thống. Một số bản phân phối Linux cụ thể không đi kèm việ hõ trợ font out-of-the-box. Bạn cần chắc chắn rằng:
 
 - Mã ngôn ngữ của bạn được thiết lập là một giá trị UTF-8, giống như `de_DE.UTF-8` or `ja_JP.UTF-8`. Nếu `LO_ALL` không phải là một giá trị UTF-8, [ bạn sẽ cần thay đổi nó](https://www.tecmint.com/set-system-locales-in-linux/).
 - Bạn đã cài đặt phông chữ biểu tượng cảm xúc. Đa số hệ thống đi kèm với một phông biểu tượng cảm xúc mặc định, nhưng một vài (đáng chú ý là Arch Linux) thì không. Bạn có thể thường cài đặt thông qua một trình quản lí gói hệ thống của bạn--[noto emoji](https://www.google.com/get/noto/help/emoji/) là một lựa chọn phổ biến.
