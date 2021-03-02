@@ -139,7 +139,7 @@ error_symbol = "[✖](bold red)"
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### Biến môi trường
 
 | Thuộc tính bị gỡ bỏ | Thay thế bằng |
 | ------------------- | ------------- |
@@ -189,11 +189,11 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Trước đây, thuộc tính `show_sync_count` được sử dụng để cấu hình dấu nhắc lệnh hiển thị số commit của nhánh ahead hoặc số lượng behind của remote branch.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+Với bản phát hành v0.45.0, cái này được thay thế bằng ba thuộc tính rời `ahead`, `behind`, và `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Cấu hình dấu nhắc lệnh sử dụng cấu hình `show_sync_count = true` cũ hơn, thiết lâp như dưới đây trong tệp cấu hình của bạn:
 
 ```toml
 [git_status]
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### Thời gian
 
 | Thuộc tính bị gỡ bỏ | Thay thế bằng |
 | ------------------- | ------------- |
