@@ -1009,7 +1009,7 @@ Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư m�
 | ------------- | -------- | --------------------------------------------------------------------------------------------------- |
 | branch        | `master` | Tên nhánh hiện tại, nhảy trở lại `HEAD` nếu không có nhánh hiện tại (ví dụ. git đã tách khỏi HEAD). |
 | remote_name   | `origin` | Tên remote.                                                                                         |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                    |
+| remote_branch | `master` | Tên của nhánh đã theo dõi trên `remote_name`.                                                       |
 | symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                    |
 | style\*     |          | Giá trị ghi đè của `style`                                                                          |
 
@@ -1028,26 +1028,26 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) của repo trong thư mục hiện tại của bạn.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                               | Mô tả                                                 |
-| -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.          |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                 |
-| `style`              | `"bold green"`                                         | Kiểu cho module.                                      |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached HEAD state |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.     |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                   |
-| `disabled`           | `false`                                                | Disables the `git_commit` module.                     |
+| Tuỳ chọn             | Mặc định                                               | Mô tả                                                           |
+| -------------------- | ------------------------------------------------------ | --------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | Độ dài của git commit hash được hiển thị.                       |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                           |
+| `style`              | `"bold green"`                                         | Kiểu cho module.                                                |
+| `only_detached`      | `true`                                                 | Chỉ hiện git commit hash khi ở trong HEAD state đã được tách ra |
+| `tag_disabled`       | `true`                                                 | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`.       |
+| `tag_symbol`         | `"🏷 "`                                                 | Biểu tượng tag trước thông tin được hiển thị                    |
+| `disabled`           | `false`                                                | Vô hiệu mô đun `git_commit`.                                    |
 
 ### Các biến
 
-| Biến      | Ví dụ     | Mô tả                       |
-| --------- | --------- | --------------------------- |
-| hash      | `b703eb3` | The current git commit hash |
-| style\* |           | Giá trị ghi đè của `style`  |
+| Biến      | Ví dụ     | Mô tả                      |
+| --------- | --------- | -------------------------- |
+| hash      | `b703eb3` | Git commit hash hiện tại   |
+| style\* |           | Giá trị ghi đè của `style` |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1063,7 +1063,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Mô đun `git_state` sẽ hiển hiển thị trong các thư mục là một phần của gt repository và những nơi tồn tại một hoạt động trong tiến trình như _REBASING_, _BISECTING_. Nếu có thông tin tiến trình (ví dụ, REBASING 3/10), thông tin đó cũng sẽ được hiển thị.
 
 ### Các tuỳ chọn
 
