@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Tất cả cấu hình của starship đã xong trong tập tin này: [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Inserts a blank line between shell prompts
+# Chèn một dòng trắng vào giữa các dấu nhắc lệnh
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Thay thế biểu tượng "❯" trong dấu nhắc lệnh bằng "➜"
+[character]                            # Tên mô đun chúng ta đang cấu hình là "character"
+success_symbol = "[➜](bold green)"     # đoạn "success_symbol" đươc thiết lập thành "➜" với màu "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+#Vô hiệu mô đun package, ẩn nó hoàn toàn trong dấu nhắc lệnh
 [package]
 disabled = true
 ```
@@ -80,7 +80,7 @@ Phần thứ hai, cái được bao bọc trong một `()`, là một [chuỗi k
 Ví dụ:
 
 - `[on](red bold)` sẽ in một chuỗi `on` với chữ đậm tô màu đỏ.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` sẽ in một biểu tượng `⌘` theo sau là nội dung của biến `version`, với chữ in đậm màu xanh lá cây.
 - `[a [b](red) c](green)` sẽ in `a b c` với `b` màu đỏ, `a` và `c` màu xanh lá cây.
 
 #### Các chuỗi kiểu
@@ -146,7 +146,7 @@ Cái này là danh sách các tuỳ chọn cho cấu hình prompt-wide.
 | -------------- | ------------------------------ | ------------------------------------------------------------------------ |
 | `format`       | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                           |
 | `scan_timeout` | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds). |
-| `add_newline`  | `true`                         | Inserts blank line between shell prompts.                                |
+| `add_newline`  | `true`                         | Chèn dòng trắng giữa các dấu nhắc lệnh.                                  |
 
 ### Ví dụ
 
@@ -162,7 +162,7 @@ format = """
 # Chờ 10 milliseconds để starship kiểm tra các tập tin trong đường dẫn hiện tại.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Vô hiệu hóa dòng trắng tại ví trị bắt đầu của dấu nhắc lệnh
 add_newline = false
 ```
 
@@ -387,9 +387,9 @@ Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi 
 
 ### Các biến
 
-| Biến   | Ví dụ | Mô tả                                                                 |
-| ------ | ----- | --------------------------------------------------------------------- |
-| symbol |       | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Biến   | Ví dụ | Mô tả                                                                         |
+| ------ | ----- | ----------------------------------------------------------------------------- |
+| symbol |       | Một phản ánh của một trong `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
 ### Các vị dụ
 
@@ -621,28 +621,28 @@ format = "via [🔰 $version](bold red) "
 
 `directory` module hiển thị đường dẫn thư mục hiện hành của bạn,, cắt ngắn ba thư mục cha. Đường dẫn của bạn cũng sẽ được cắt ngắn tới đường dẫn gốc của git repo hiện tại của bạn.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Khi sử dụng fish style pwd option, thay vì ẩn đường dẫn được rút gọn, bạn sẽ thấy một tên ngắn cho mỗi thư mục dựa trên số bạn cho phép trng tùy chọn.
 
 Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và tuỳ chọn thiết lập sang `1`. Bây giờ bạn sẽ thấy `~/D/N/nixpkgs/pkgs`, trong khi trước nó là `nixpkgs/pkgs`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                           | Mô tả                                                                            |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Định dạng cho module.                                                            |
-| `style`             | `"bold cyan"`                                      | Kiểu cho module.                                                                 |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| Tuỳ chọn            | Mặc định                                           | Mô tả                                                              |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------ |
+| `truncation_length` | `3`                                                | Số lượng thư mục cha của thư mục hiện tại nên được rút gọn.        |
+| `truncate_to_repo`  | `true`                                             | Có hoặc không rút gọn đường dẫn gốc của git repo hiện tại của bạn. |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Định dạng cho module.                                              |
+| `style`             | `"bold cyan"`                                      | Kiểu cho module.                                                   |
+| `disabled`          | `false`                                            | Vô hiệu mô đun `directory`.                                        |
+| `read_only`         | `"🔒"`                                              | Biểu tượng để nhận biết thư mục hiện tại là chỉ đọc.               |
+| `read_only_style`   | `"red"`                                            | Style cho biểu tượng chỉ đọc.                                      |
+| `truncation_symbol` | `""`                                               | Biểu tượng tiền tố cho các đường dẫn rút gọn. ví dụ: "…/"          |
+| `home_symbol`       | `"~"`                                              | Biểu tượng nhận biết thư mục home.                                 |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Mô đun này có một vài tùy chọn nâng cao để điều khiển cách thư mục được hiển thị.</summary>
 
-| Advanced Option             | Mặc định | Mô tả                                                                                                                                                                  |
+| Tùy chọn nâng cao           | Mặc định | Mô tả                                                                                                                                                                  |
 | --------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |          | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`      | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
@@ -664,7 +664,7 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 
 | Biến      | Ví dụ                 | Mô tả                      |
 | --------- | --------------------- | -------------------------- |
-| path      | `"D:/Projects"`       | The current directory path |
+| path      | `"D:/Projects"`       | Đường dẫn thư mục hiện tại |
 | style\* | `"black bold dimmed"` | Giá trị ghi đè của `style` |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -681,7 +681,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+Mô đun `docker_context` hiển thị [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) hiện tại được kích hoạt nếu nó không được thiết lập `mặc định`.
 
 ### Các tuỳ chọn
 
