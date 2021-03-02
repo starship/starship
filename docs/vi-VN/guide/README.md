@@ -247,7 +247,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
