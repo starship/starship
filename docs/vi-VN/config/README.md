@@ -739,16 +739,16 @@ Mô đun cũng sẽ hiện Target Framework Moniker (<https://docs.microsoft.com
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                    |
-| `symbol`            | `"•NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.      |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                     |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
-| `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                         |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
+| Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                      |
+| `symbol`            | `"•NET "`                                                                                               | Biểu tượng sử dụng để hiển thị trước phiên bản của dotnet. |
+| `heuristic`         | `true`                                                                                                  | Sử dụng phiên bản phát hiện thông minh hơn.                |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.        |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                       |
+| `detect_folders`    | `[]`                                                                                                    | Những thư mục nào nên kích hoạt các mô đun này.            |
+| `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                           |
+| `disabled`          | `false`                                                                                                 | Vô hiệu mô đun `dotnet`.                                   |
 
 ### Các biến
 
@@ -774,28 +774,28 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Module `elixir` cho biết phiên bản của Elixir và Erlang/OTP đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `mix.exs`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                    | Mô tả                                                           |
-| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `detect_extensions` | `[]`                                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.             |
-| `detect_files`      | `["mix.exs"]`                                               | Tên tệp nào sẽ kích hoạt mô-đun này.                            |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
-| `style`             | `"bold purple"`                                             | Kiểu cho module.                                                |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| Tuỳ chọn            | Mặc định                                                    | Mô tả                                                       |
+| ------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | Kí hiệu sử dụng trước phiên bản hiển thị của Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.         |
+| `detect_files`      | `["mix.exs"]`                                               | Tên tệp nào sẽ kích hoạt mô-đun này.                        |
+| `detect_folders`    | `[]`                                                        | Những thư mục nào nên kích hoạt các mô đun này.             |
+| `style`             | `"bold purple"`                                             | Kiểu cho module.                                            |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Định dạng cho module elixir.                                |
+| `disabled`          | `false`                                                     | Vô hiệu mô đun `elixir`.                                    |
 
 ### Các biến
 
 | Biến        | Ví dụ   | Mô tả                            |
 | ----------- | ------- | -------------------------------- |
-| version     | `v1.10` | The version of `elixir`          |
-| otp_version |         | The otp version of `elixir`      |
+| version     | `v1.10` | Phiên bản của `elixir`           |
+| otp_version |         | Phiên bản otp của `elixir`       |
 | symbol      |         | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\*   |         | Giá trị ghi đè của `style`       |
 
@@ -812,31 +812,31 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Module `elm` cho biết phiên bản của Elm đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `elm.json`
 - Đường dẫn hiện tại chứa một tập tin `elm-package.json`
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- Đường dẫn hiện tại chứa một tệp tin `.elm-version`
+- Đường dẫn hiện tại chứa một thư mục `elm-stuff`
+- Đường dẫn hiện tại chứa một tập tin `*.elm`
 
 ### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                                           | Mô tả                                               |
 | ------------------- | -------------------------------------------------- | --------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | Định dạng cho module.                               |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.     |
+| `symbol`            | `"🌳 "`                                             | Một format string đại diện cho biểu tượng của Elm.  |
 | `detect_extensions` | `["elm"]`                                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.          |
+| `detect_folders`    | `["elm-stuff"]`                                    | Những thư mục nào nên kích hoạt các mô đun này.     |
 | `style`             | `"cyan bold"`                                      | Kiểu cho module.                                    |
-| `disabled`          | `false`                                            | Disables the `elm` module.                          |
+| `disabled`          | `false`                                            | Vô hiệu mô đun `elm`.                               |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v0.19.1` | The version of `elm`             |
+| version   | `v0.19.1` | Phiên bản của `elm`              |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
@@ -853,28 +853,28 @@ format = "via [ $version](cyan bold) "
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+Mô đun `env_var` hiển thị giá trị hiện tại của biến môi trường được chọn. Mô đun sẽ được hiển thị chỉ khi bất kì điều kiện nào sau đây thỏa mãn:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- Tùy chọn `variable` khớp với mootjj biến môi trường tồn tại
+- Tùy chọn `variable` không được định nghĩa, nhưng tùy chọn `default` là
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                       | Mô tả                                                                        |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
-| `biến`     |                                | The environment variable to be displayed.                                    |
-| `mặc định` |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Tuỳ chọn   | Mặc định                       | Mô tả                                                                    |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------ |
+| `symbol`   |                                | Biểu tượng sử dụng để hiển thị trước giá trị của biến.                   |
+| `variable` |                                | Biến môi trường được hiển thị.                                           |
+| `default`  |                                | Giá trị mặc định được hiển thị khi biến được chọn không được định nghĩa. |
+| `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                    |
+| `disabled` | `false`                        | Vô hiệu `env_var`.                                                       |
 
 ### Các biến
 
-| Biến      | Ví dụ                                       | Mô tả                                      |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Giá trị ghi đè tuỳ chọn `symbol`           |
-| style\* | `black bold dimmed`                         | Giá trị ghi đè của `style`                 |
+| Biến      | Ví dụ                                     | Mô tả                                           |
+| --------- | ----------------------------------------- | ----------------------------------------------- |
+| env_value | `Windows NT` (nếu _variable_ sẽ là `$OS`) | Giá trị biến môi trường của tùy chọn `variable` |
+| symbol    |                                           | Giá trị ghi đè tuỳ chọn `symbol`                |
+| style\* | `black bold dimmed`                       | Giá trị ghi đè của `style`                      |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -890,22 +890,22 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Module `erlang` cho biết phiên bản của Erlang/OTP đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `rebar.config`.
 - Đường dẫn hiện tại chứa một tập tin `erlang.mk`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                    |
-| ------------------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`             | `"bold red"`                         | Kiểu cho module.                                         |
-| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.      |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                     |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                    |
-| `disabled`          | `false`                              | Disables the `erlang` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                      |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------- |
+| `symbol`            | `" "`                               | Biểu tượng sử dụng để hiển thị trước phiên bản của erlang. |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                           |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.        |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                       |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.            |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                      |
+| `disabled`          | `false`                              | Vô hiệu mô đun `erlang`.                                   |
 
 ### Các biến
 
@@ -947,7 +947,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | region    | `us-central1`     | The current GCP region                                             |
 | account   | `foo@example.com` | The current GCP profile                                            |
 | project   |                   | The current GCP project                                            |
-| active    | `mặc định`        | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`                                   |
 | style\* |                   | Giá trị ghi đè của `style`                                         |
 
@@ -1242,7 +1242,7 @@ The `helm` module shows the currently installed version of Helm. Mặc định m
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.          |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.     |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.    |
 | `style`             | `"bold white"`                       | Kiểu cho module.                                    |
 | `disabled`          | `false`                              | Disables the `helm` module.                         |
@@ -1315,7 +1315,7 @@ The `java` module shows the currently installed version of Java. Mặc định m
 | `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Định dạng cho module.                               |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.          |
+| `detect_folders`    | `[]`                                                                                                      | Những thư mục nào nên kích hoạt các mô đun này.     |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java     |
 | `style`             | `"red dimmed"`                                                                                            | Kiểu cho module.                                    |
 | `disabled`          | `false`                                                                                                   | Disables the `java` module.                         |
@@ -1394,7 +1394,7 @@ The `julia` module shows the currently installed version of Julia. Mặc định
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
 | `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.          |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.     |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.   |
 | `style`             | `"bold purple"`                      | Kiểu cho module.                                    |
 | `disabled`          | `false`                              | Disables the `julia` module.                        |
@@ -1431,7 +1431,7 @@ The `kotlin` module shows the currently installed version of Kotlin. Mặc đị
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
 | `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                           |
 | `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                          |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                               |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `"bold blue"`                        | Kiểu cho module.                                                              |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -2399,7 +2399,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | Biến      | Ví dụ      | Mô tả                            |
 | --------- | ---------- | -------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`       |
-| workspace | `mặc định` | The current terraform workspace  |
+| workspace | `default`  | The current terraform workspace  |
 | symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |            | Giá trị ghi đè của `style`       |
 
