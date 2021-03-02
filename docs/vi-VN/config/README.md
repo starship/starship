@@ -1127,33 +1127,33 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 
 Các biến dưới đây có thể được sử dụng trong `format`:
 
-| Biến           | Mô tả                                                                                         |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                  |
-| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*      | Giá trị ghi đè của `style`                                                                    |
+| Biến           | Mô tả                                                                                           |
+| -------------- | ----------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                    |
+| `ahead_behind` | Hiển thị format string của `diverged` `ahead` or `behind` dựa trên trạng thái hiện tại của repo |
+| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                         |
+| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                           |
+| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                |
+| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                       |
+| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                               |
+| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                       |
+| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                        |
+| style\*      | Giá trị ghi đè của `style`                                                                      |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-The following variables can be used in `diverged`:
+Các biến sau có thể được sử dụng trong `diverged`:
 
-| Biến           | Mô tả                                          |
-| -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| Biến           | Mô tả                                         |
+| -------------- | --------------------------------------------- |
+| `ahead_count`  | Số lượng commit phía trước của nhánh tracking |
+| `behind_count` | Số lượng commit phía sau nhánh tracking       |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Các biến sau có thể được sử dụng trong `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Biến    | Mô tả                    |
-| ------- | ------------------------ |
-| `count` | Show the number of files |
+| Biến    | Mô tả                         |
+| ------- | ----------------------------- |
+| `count` | Hiển thị số lượng các tệp tin |
 
 ### Ví dụ
 
@@ -1173,7 +1173,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Hiển thị tổng số nhánh phía trước/phía sau của nhánh được track
 
 ```toml
 # ~/.config/starship.toml
@@ -1186,13 +1186,13 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Mô đun `golang` hiển thị phiên bản Golang hiện tại được cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `go.mod`
 - Đường dẫn hiện tại chứa một tập tin `go.sum`
 - Đường dẫn hiện tại chứa một tập tin `glide.yaml`
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- Đường dẫn hiện tại chứa một tập tin `Gopkg.yml`
+- Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
 - The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
