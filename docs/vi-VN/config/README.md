@@ -992,26 +992,26 @@ Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư m�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                       |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.        |
-| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.             |
-| `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                      |
-| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                            |
-| `truncation_length`  | `2^63 - 1`                       | Rút gọn một nhánh git sang X graphemes.                                                     |
-| `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                           |
+| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                                 |
+| -------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.                  |
+| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
+| `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
+| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                                      |
+| `truncation_length`  | `2^63 - 1`                       | Rút gọn một nhánh git sang X graphemes.                                                               |
+| `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                          |
+| `disabled`           | `false`                          | Vô hiệu mô đun `git_branch`.                                                                          |
 
 ### Các biến
 
-| Biến          | Ví dụ    | Mô tả                                                                                                |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote_name   | `origin` | The remote name.                                                                                     |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
-| symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                     |
-| style\*     |          | Giá trị ghi đè của `style`                                                                           |
+| Biến          | Ví dụ    | Mô tả                                                                                               |
+| ------------- | -------- | --------------------------------------------------------------------------------------------------- |
+| branch        | `master` | Tên nhánh hiện tại, nhảy trở lại `HEAD` nếu không có nhánh hiện tại (ví dụ. git đã tách khỏi HEAD). |
+| remote_name   | `origin` | Tên remote.                                                                                         |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                    |
+| symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                    |
+| style\*     |          | Giá trị ghi đè của `style`                                                                          |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
