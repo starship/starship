@@ -77,18 +77,18 @@ echo -e "\xee\x82\xa0"
 
 Dòng đầu tiên nên sinh ra một [snake emoji](https://emojipedia.org/snake/), trong khi dòng thứ hai nên sinh ra một [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Nếu biểu tượng không hiển thị đúng, hệ thống của bạn vẫn cấu hình sai. Thật không may, lấy cấu hình font đúng đôi khi khó khăn. Người dùng trên Discord có thể có giúp đỡ được. Nếu các biểu tượng hiển thị đúng, nhưng bạn vẫn không thấy chúng trong starship, [nộp một báo cáo lỗi](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Là thế nào để tôi gỡ cài đặt Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship thì dễ dàng gỡ cài đặt như cài đặt ngay từ đầu.
 
 1. Gỡ mọi tập tin trong cấu hình shell của bạn (e.g. `~/.bashrc`) đã sử dụng để khởi tạo Starship.
 1. Xoá tập tin Starship nhị phân.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Nếu Starship đã được cài đặt bằng việc sử dụng một trình quản lí gói, vui lòng tham khảo tài liệu của chúng để gỡ cài đặt.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+Nếu Starship đã được cài đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
 
 ```sh
 # Xác định vị trí và xóa tập tin nhị phân của starship
