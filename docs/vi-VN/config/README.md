@@ -1188,32 +1188,32 @@ behind = "⇣${count}"
 
 Mô đun `golang` hiển thị phiên bản Golang hiện tại được cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `go.mod`
+- Thư mục hiện tại chứa một tập tin `go.mod`
 - Đường dẫn hiện tại chứa một tập tin `go.sum`
-- Đường dẫn hiện tại chứa một tập tin `glide.yaml`
-- Đường dẫn hiện tại chứa một tập tin `Gopkg.yml`
+- Thư mục hiện tại chứa một tập tin `glide.yaml`
+- Thư mục hiện tại chứa một tập tin `Gopkg.yml`
 - Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Thư mục hiện tại chứa một tệp tin `.go-version`
+- Thư mục hiện tại chứa một thư mục `Godeps`
+- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.go`
 
 ### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                                                                       | Mô tả                                               |
 | ------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                           | Định dạng cho module.                               |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.      |
+| `symbol`            | `"🐹 "`                                                                         | Một format string đại diện cho biểu tượng của Go.   |
 | `detect_extensions` | `["go"]`                                                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
 | `detect_folders`    | `["Godeps"]`                                                                   | Những thư mục nào sẽ kích hoạt mô-đun này.          |
 | `style`             | `"bold cyan"`                                                                  | Kiểu cho module.                                    |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                       |
+| `disabled`          | `false`                                                                        | Vô hiệu `golang` module.                            |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v1.12.1` | The version of `go`              |
+| version   | `v1.12.1` | Phiên bản của `go`               |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
@@ -1230,10 +1230,10 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Mô đun `helm` hiển thị phiên bản Helm hiện tại được cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `helmfile.yaml`
-- The current directory contains a `Chart.yaml` file
+- Thư mục hiện tại chứa một tập tin `Chart.yaml`
 
 ### Các tuỳ chọn
 
@@ -1243,15 +1243,15 @@ The `helm` module shows the currently installed version of Helm. Mặc định m
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.    |
+| `symbol`            | `"⎈ "`                               | Một format string đại diện cho biểu tượng của Helm. |
 | `style`             | `"bold white"`                       | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `helm` module.                         |
+| `disabled`          | `false`                              | Vô hiệu `helm` module.                              |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v3.1.1` | The version of `helm`            |
+| version   | `v3.1.1` | Phiên bản của `helm`             |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
@@ -1268,13 +1268,13 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
 | Tuỳ chọn   | Mặc định                    | Mô tả                                                                                                                                |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
+| `ssh_only` | `true`                      | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                            |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
 | `style`    | `"bold dimmed green"`       | Kiểu cho module.                                                                                                                     |
