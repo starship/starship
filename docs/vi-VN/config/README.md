@@ -928,28 +928,28 @@ format = "via [e $version](bold red) "
 
 ## Gcloud
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Cái này dựa trên tập tin `~/.config/gcloud/active_config`, `~/.config/gcloud/configurations/config_{CONFIG NAME}` và biến môi trường `CLOUDSDK_CONFIG`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | Định dạng cho module.                                           |
-| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | Kiểu cho module.                                                |
-| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
+| Tuỳ chọn         | Mặc định                                         | Mô tả                                                             |
+| ---------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | Định dạng cho module.                                             |
+| `symbol`         | `"☁️ "`                                          | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
+| `region_aliases` |                                                  | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
+| `style`          | `"bold blue"`                                    | Kiểu cho module.                                                  |
+| `disabled`       | `false`                                          | Vô hiệu mô đun `gcloud`.                                          |
 
 ### Các biến
 
-| Biến      | Ví dụ             | Mô tả                                                              |
-| --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | The current GCP region                                             |
-| account   | `foo@example.com` | The current GCP profile                                            |
-| project   |                   | The current GCP project                                            |
-| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`                                   |
-| style\* |                   | Giá trị ghi đè của `style`                                         |
+| Biến      | Ví dụ             | Mô tả                                                                |
+| --------- | ----------------- | -------------------------------------------------------------------- |
+| region    | `us-central1`     | Region GCP hiện tại                                                  |
+| account   | `foo@example.com` | Profile hiện tại của GCP                                             |
+| project   |                   | Dự án hiện tại của GCP                                               |
+| active    | `default`         | Tên cấu hình có hiệu lực viết trong `~/.config/gcloud/active_config` |
+| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`                                     |
+| style\* |                   | Giá trị ghi đè của `style`                                           |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
