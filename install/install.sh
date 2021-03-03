@@ -199,7 +199,7 @@ detect_platform() {
     freebsd) platform="unknown-freebsd" ;;
   esac
 
-  printf '%s\n' "${platform}"
+  printf '%s' "${platform}"
 }
 
 # Currently supporting:
