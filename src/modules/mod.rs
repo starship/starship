@@ -194,6 +194,7 @@ pub fn description(module: &str) -> &'static str {
         "python" => "The currently installed version of Python",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
+        "scala" => "The currently installed version of Scala",
         "swift" => "The currently installed version of Swift",
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
