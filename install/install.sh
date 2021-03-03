@@ -87,39 +87,6 @@ test_writeable() {
   fi
 }
 
-fetch() {
-  local fetch_cmd
-  if has curl; then
-    set +e
-    fetch_cmd="curl --silent --fail --location $1"
-    curl --silent --fail --location "$1"
-    rc=$?
-    set -e
-  else
-    if has wget; then
-      set +e
-      fetch_cmd="wget -O- -q $1"
-      wget -O- -q "$1"
-      rc=$?
-      set -e
-    else
-      error "No HTTP download program (curl, wget) found…"
-      exit 1
-    fi
-  fi
-
-  if [ $rc -ne 0 ]; then
-    printf "\n" >&2
-    error "Command failed (exit code $rc): ${BLUE}${fetch_cmd}${NO_COLOR}"
-    printf "\n" >&2
-    info "This is likely due to Starship not yet supporting your configuration." >&2
-    info "If you would like to see a build for your configuration," >&2
-    info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:" >&2
-    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}" >&2
-    exit $rc
-  fi
-}
-
 download() {
   file="$1"
   url="$2"
@@ -141,9 +108,9 @@ download() {
   printf "\n" >&2
   info "This is likely due to Starship not yet supporting your configuration."
   info "If you would like to see a build for your configuration,"
-  info "please create an issue requesting a build for ${MAGENTA}${arch}-${platform}${NO_COLOR}:"
+  info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
   info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
-  return 1
+  return $rc
 }
 
 unpack() {
