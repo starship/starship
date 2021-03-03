@@ -42,6 +42,7 @@ pub mod purescript;
 pub mod python;
 pub mod ruby;
 pub mod rust;
+pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
