@@ -1,3 +1,5 @@
+use std::fs;
+
 use crate::configs::scala::ScalaConfig;
 use crate::formatter::StringFormatter;
 
@@ -34,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let scala_version = get_scala_version(context)?;
-                    return Some(Ok(scala_version));
+                    Some(Ok(scala_version))
                 }
                 _ => None,
             })
@@ -75,7 +77,7 @@ fn parse_scala_version(scala_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{test::ModuleRenderer, utils::CommandOutput};
+    use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
