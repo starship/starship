@@ -2277,7 +2277,7 @@ The `scala` module shows the currently installed version of Scala.
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.scalarc` extension
+- The current directory contains a file with the `.scala` or `.sbt` extension
 - The current directory contains a directory named `.metals`
 
 ### Options
