@@ -1316,15 +1316,15 @@ Mô đun `java` cho biết phiên bản của Java đã cài đặt. Mặc đị
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
 | `detect_folders`    | `[]`                                                                                                      | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java     |
+| `symbol`            | `"☕ "`                                                                                                    | Một format string đại diện cho biểu tượng Java      |
 | `style`             | `"red dimmed"`                                                                                            | Kiểu cho module.                                    |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                         |
+| `disabled`          | `false`                                                                                                   | Vô hiệu `java` module.                              |
 
 ### Các biến
 
 | Biến      | Ví dụ | Mô tả                            |
 | --------- | ----- | -------------------------------- |
-| version   | `v14` | The version of `java`            |
+| version   | `v14` | Phiên bản của `java`             |
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
@@ -1341,29 +1341,29 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+`jobs` module cho biết số lượng các jobs đang chạy. Mô đun sẽ được hiển thị chỉ khi có background jobs đang chạy. Mô đúnẽ hiển thị số lượng jobs đang chỵ nếu có nhiều hơn 1 jobs, hoặc nhiều hơn giá trị cấu hình `threshold`, nếu nó tồn tại.
 
 ::: cảnh báo
 
-This module is not supported on tcsh.
+Mô đun này không hỗ trợ trên tcsh.
 
 :::
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn    | Mặc định                      | Mô tả                                            |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | Định dạng cho module.                            |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | Kiểu cho module.                                 |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Tuỳ chọn    | Mặc định                      | Mô tả                                        |
+| ----------- | ----------------------------- | -------------------------------------------- |
+| `threshold` | `1`                           | Cho biết số lượng jobs nếu nó vượt quá.      |
+| `format`    | `"[$symbol$number]($style) "` | Định dạng cho module.                        |
+| `symbol`    | `"✦"`                         | Một format string đại diện cho số lượng job. |
+| `style`     | `"bold blue"`                 | Kiểu cho module.                             |
+| `disabled`  | `false`                       | Vô hiệu `jobs` module.                       |
 
 ### Các biến
 
 | Biến      | Ví dụ | Mô tả                            |
 | --------- | ----- | -------------------------------- |
-| number    | `1`   | The number of jobs               |
+| number    | `1`   | Số lượng job                     |
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
@@ -1381,29 +1381,29 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Mô đun `julia` hiển thị phiên bản Julia hiện tại được cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- Thư mục hiện tại chứa một tệp tin `Project.toml`
+- Thư mục hiện tại chứa một tập tin `Manifest.toml`
+- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.jl`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
-| ------------------- | ------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
-| `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.   |
-| `style`             | `"bold purple"`                      | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `julia` module.                        |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                |
+| ------------------- | ------------------------------------ | ---------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                |
+| `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.  |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                 |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.      |
+| `symbol`            | `"ஃ "`                               | Một format string đại diện cho biếu tượng của Julia. |
+| `style`             | `"bold purple"`                      | Kiểu cho module.                                     |
+| `disabled`          | `false`                              | Vô hiệu `julia` module.                              |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v1.4.0` | The version of `julia`           |
+| version   | `v1.4.0` | Phiên bản của `julia`            |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
@@ -1420,28 +1420,28 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Mô đun `golang` hiển thị phiên bản Kotlin hiện tại được cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `.kt` or a `.kts` file
+- Thư mục hiện tại chứa một tệp tin `.kt` hoặc một tệp tin `.kts`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                                         |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
-| `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                           |
-| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                          |
-| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                               |
-| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`             | `"bold blue"`                        | Kiểu cho module.                                                              |
-| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                            |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                            |
+| `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.              |
+| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                             |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                  |
+| `symbol`            | `"🅺 "`                               | Một format string đại diện cho biết tượng của Kotllin.           |
+| `style`             | `"bold blue"`                        | Kiểu cho module.                                                 |
+| `kotlin_binary`     | `"kotlin"`                           | Cấu hình kotlin nhị phân mà Starship thực thi khi lấy phiên bản. |
+| `disabled`          | `false`                              | Vô hiệu `kotlin` module.                                         |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`          |
+| version   | `v1.4.21` | Phiên bản của `kotlin`           |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
