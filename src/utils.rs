@@ -208,11 +208,12 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
 
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
 pub fn wrap_colorseq_for_shell(mut ansi: String, shell: Shell) -> String {
-    // Bash might interepret baskslashes and $
+    // Bash might interepret baskslashes, backticks and $
     // see #658 for more details
     if shell == Shell::Bash {
         ansi = ansi.replace('\\', r"\\");
         ansi = ansi.replace('$', r"\$");
+        ansi = ansi.replace('`', r"\`");
     }
 
     const ESCAPE_BEGIN: char = '\u{1b}';
@@ -489,6 +490,16 @@ mod tests {
         assert_eq!(
             wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
             r"\\\$(echo a)"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"`echo a`";
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
+            r"\`echo a\`"
         );
         assert_eq!(
             wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
