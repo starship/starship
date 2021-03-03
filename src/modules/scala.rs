@@ -110,7 +110,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Test.scala"))?.sync_all()?;
         let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("🆂 v2.13.5 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -123,7 +123,7 @@ mod tests {
             .cmd("scalac -version", None)
             .path(dir.path())
             .collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("🆂 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -133,7 +133,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.sbt"))?.sync_all()?;
         let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("🆂 v2.13.5 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -143,7 +143,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".scalaenv"))?.sync_all()?;
         let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("🆂 v2.13.5 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -153,7 +153,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".sbtenv"))?.sync_all()?;
         let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("🆂 v2.13.5 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -163,7 +163,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join(".metals"))?;
         let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.dimmed().paint("🆂 v2.13.5 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

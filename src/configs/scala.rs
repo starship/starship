@@ -18,7 +18,7 @@ impl<'a> RootModuleConfig<'a> for ScalaConfig<'a> {
         ScalaConfig {
             format: "via [$symbol($version )]($style)",
             disabled: false,
-            style: "red",
+            style: "red bold",
             symbol: "🆂 ",
             detect_extensions: vec!["sbt", "scala"],
             detect_files: vec![".scalaenv", ".sbtenv", "build.sbt"],
