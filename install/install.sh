@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env sh
+
+# shellcheck disable=SC2039
 
 # Options
 #
@@ -20,18 +22,18 @@
 #   -B, --base-url
 #     Override the base URL used for downloading releases
 
-set -euo pipefail
-printf "\n"
+set -eu
+printf '\n'
 
-BOLD="$(tput bold 2>/dev/null || echo '')"
-GREY="$(tput setaf 0 2>/dev/null || echo '')"
-UNDERLINE="$(tput smul 2>/dev/null || echo '')"
-RED="$(tput setaf 1 2>/dev/null || echo '')"
-GREEN="$(tput setaf 2 2>/dev/null || echo '')"
-YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
-BLUE="$(tput setaf 4 2>/dev/null || echo '')"
-MAGENTA="$(tput setaf 5 2>/dev/null || echo '')"
-NO_COLOR="$(tput sgr0 2>/dev/null || echo '')"
+BOLD="$(tput bold 2>/dev/null || printf '')"
+GREY="$(tput setaf 0 2>/dev/null || printf '')"
+UNDERLINE="$(tput smul 2>/dev/null || printf '')"
+RED="$(tput setaf 1 2>/dev/null || printf '')"
+GREEN="$(tput setaf 2 2>/dev/null || printf '')"
+YELLOW="$(tput setaf 3 2>/dev/null || printf '')"
+BLUE="$(tput setaf 4 2>/dev/null || printf '')"
+MAGENTA="$(tput setaf 5 2>/dev/null || printf '')"
+NO_COLOR="$(tput sgr0 2>/dev/null || printf '')"
 
 SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   i686-unknown-linux-musl aarch64-unknown-linux-musl \
@@ -41,26 +43,30 @@ SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   x86_64-unknown-freebsd"
 
 info() {
-  printf "%s\n" "${BOLD}${GREY}>${NO_COLOR} $*"
+  printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
 }
 
 warn() {
-  printf "%s\n" "${YELLOW}! $*${NO_COLOR}"
+  printf '%s\n' "${YELLOW}! $*${NO_COLOR}"
 }
 
 error() {
-  printf "%s\n" "${RED}x $*${NO_COLOR}" >&2
+  printf '%s\n' "${RED}x $*${NO_COLOR}" >&2
 }
 
-complete() {
-  printf "%s\n" "${GREEN}✓${NO_COLOR} $*"
+completed() {
+  printf '%s\n' "${GREEN}✓${NO_COLOR} $*"
+}
+
+has() {
+  command -v "$1" 1>/dev/null 2>&1
 }
 
 # Gets path to a temporary file, even if
 get_tmpfile() {
   local suffix
   suffix="$1"
-  if hash mktemp; then
+  if has mktemp; then
     printf "%s.%s" "$(mktemp)" "${suffix}"
   else
     # No really good options here--let's pick a default + hope
@@ -81,64 +87,59 @@ test_writeable() {
   fi
 }
 
-fetch() {
-  local command
-  if hash curl 2>/dev/null; then
-    set +e
-    command="curl --silent --fail --location $1"
-    curl --silent --fail --location "$1"
-    rc=$?
-    set -e
+download() {
+  file="$1"
+  url="$2"
+
+  if has curl; then
+    cmd="curl --fail --silent --location --output $file $url"
+  elif has wget; then
+    cmd="wget --quiet --output-document=$file $url"
+  elif has fetch; then
+    cmd="fetch --quiet --output=$file $url"
   else
-    if hash wget 2>/dev/null; then
-      set +e
-      command="wget -O- -q $1"
-      wget -O- -q "$1"
-      rc=$?
-      set -e
-    else
-      error "No HTTP download program (curl, wget) found…"
-      exit 1
-    fi
+    error "No HTTP download program (curl, wget, fetch) found, exiting…"
+    return 1
   fi
 
-  if [ $rc -ne 0 ]; then
-    printf "\n" >&2
-    error "Command failed (exit code $rc): ${BLUE}${command}${NO_COLOR}"
-    printf "\n" >&2
-    info "This is likely due to Starship not yet supporting your configuration." >&2
-    info "If you would like to see a build for your configuration," >&2
-    info "please create an issue requesting a build for ${MAGENTA}${ARCH}-${PLATFORM}${NO_COLOR}:" >&2
-    info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}\n" >&2
-    exit $rc
-  fi
+  $cmd && return 0 || rc=$?
+
+  error "Command failed (exit code $rc): ${BLUE}${cmd}${NO_COLOR}"
+  printf "\n" >&2
+  info "This is likely due to Starship not yet supporting your configuration."
+  info "If you would like to see a build for your configuration,"
+  info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
+  info "${BOLD}${UNDERLINE}https://github.com/starship/starship/issues/new/${NO_COLOR}"
+  return $rc
 }
 
-fetch_and_unpack() {
-  local sudo
-  local tmpfile
-  sudo="$1"
-  # I'd like to separate this into a fetch() and unpack() function, but I can't
-  # figure out how to get bash functions to read STDIN/STDOUT from pipes
-  if [ "${EXT}" = "tar.gz" ]; then
-    fetch "${URL}" | ${sudo} tar xz"${VERBOSE}"f - -C "${BIN_DIR}"
-  elif [ "${EXT}" = "zip" ]; then
-    # According to https://unix.stackexchange.com/q/2690, zip files cannot be read
-    # through a pipe. We'll have to do our own file-based setup.
-    tmpfile="$(get_tmpfile "${EXT}")"
-    fetch "${URL}" >"${tmpfile}"
-    ${sudo} unzip "${tmpfile}" -d "${BIN_DIR}"
-    rm "${tmpfile}"
-  else
-    error "Unknown package extension."
-    info "This almost certainly results from a bug in this script--please file a"
-    info "bug report at https://github.com/starship/starship/issues"
-    exit 1
-  fi
+unpack() {
+  local archive=$1
+  local bin_dir=$2
+  local sudo=${3-}
+
+  case "$archive" in
+    *.tar.gz)
+      flags=$(test -n "${VERBOSE-}" && echo "-v" || echo "")
+      ${sudo} tar "${flags}" -xzf "${archive}" -C "${bin_dir}"
+      return 0
+      ;;
+    *.zip)
+      flags=$(test -z "${VERBOSE-}" && echo "-qq" || echo "")
+      UNZIP="${flags}" ${sudo} unzip "${archive}" -d "${bin_dir}"
+      return 0
+      ;;
+  esac
+
+  error "Unknown package extension."
+  printf "\n"
+  info "This almost certainly results from a bug in this script--please file a"
+  info "bug report at https://github.com/starship/starship/issues"
+  return 1
 }
 
 elevate_priv() {
-  if ! hash sudo 2>/dev/null; then
+  if ! has sudo; then
     error 'Could not find the command "sudo", needed to get permissions for install.'
     info "If you are on Windows, please run your shell as an administrator, then"
     info "rerun this script. Otherwise, please run this script as root, or install"
@@ -154,6 +155,8 @@ elevate_priv() {
 install() {
   local msg
   local sudo
+  local archive
+  local ext="$1"
 
   if test_writeable "${BIN_DIR}"; then
     sudo=""
@@ -165,7 +168,14 @@ install() {
     msg="Installing Starship as root, please wait…"
   fi
   info "$msg"
-  fetch_and_unpack "${sudo}"
+
+  archive=$(get_tmpfile "$ext")
+
+  # download to the temp file
+  download "${archive}" "${URL}"
+
+  # unpack the temp file to the bin dir, using sudo if required
+  unpack "${archive}" "${BIN_DIR}" "${sudo}"
 }
 
 # Currently supporting:
@@ -189,7 +199,7 @@ detect_platform() {
     freebsd) platform="unknown-freebsd" ;;
   esac
 
-  echo "${platform}"
+  printf '%s' "${platform}"
 }
 
 # Currently supporting:
@@ -212,7 +222,7 @@ detect_arch() {
     arch=arm
   fi
 
-  echo "${arch}"
+  printf '%s' "${arch}"
 }
 
 detect_target() {
@@ -224,7 +234,7 @@ detect_target() {
     target="${target}eabihf"
   fi
 
-  echo "${target}"
+  printf '%s' "${target}"
 }
 
 
@@ -261,7 +271,7 @@ check_bin_dir() {
     IFS=:
     for path in $PATH; do
       if [ "${path}" = "${bin_dir}" ]; then
-        echo 1
+        printf 1
         break
       fi
     done
@@ -278,12 +288,12 @@ is_build_available() {
   local target="$3"
 
   local good
-  
+
   good=$(
     IFS=" "
     for t in $SUPPORTED_TARGETS; do
-      if [ "${t}" == "${target}" ]; then
-        echo 1
+      if [ "${t}" = "${target}" ]; then
+        printf 1
         break
       fi
     done
@@ -395,7 +405,7 @@ else
   VERBOSE=
 fi
 
-echo
+printf '\n'
 
 EXT=tar.gz
 if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
@@ -407,10 +417,10 @@ info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"
 
-install
-complete "Starship installed"
+install "${EXT}"
+completed "Starship installed"
 
-echo
+printf '\n'
 info "Please follow the steps for your shell to complete the installation:
 
   ${BOLD}${UNDERLINE}Bash${NO_COLOR}
