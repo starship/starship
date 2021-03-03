@@ -344,7 +344,7 @@ Tuỳ chọn `display` là một mảng của của bảng sau.
 
 | Tuỳ chọn    | Mô tả                                                      |
 | ----------- | ---------------------------------------------------------- |
-| `threshold` | Cận trên của tuỳ chọn hiển thị.                            |
+| `threshold` | Cận trên cho tuỳ chọn hiển thị.                            |
 | `style`     | Kiểu sử dụng nếu tuỳ chọn hiển thị được sử dụng bên trong. |
 
 #### Ví dụ
@@ -752,12 +752,12 @@ Mô đun cũng sẽ hiện Target Framework Moniker (<https://docs.microsoft.com
 
 ### Các biến
 
-| Biến      | Ví dụ            | Mô tả                                                              |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol`                                   |
-| style\* |                  | Giá trị ghi đè của `style`                                         |
+| Biến      | Ví dụ            | Mô tả                                                         |
+| --------- | ---------------- | ------------------------------------------------------------- |
+| version   | `v3.1.201`       | Phiên bản của `dotnet` sdk                                    |
+| tfm       | `netstandard2.0` | Target Framework Monike của dự án hiện tại đang được nhắm đến |
+| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol`                              |
+| style\* |                  | Giá trị ghi đè của `style`                                    |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -994,13 +994,13 @@ Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư m�
 
 | Tuỳ chọn             | Mặc định                         | Mô tả                                                                                                 |
 | -------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.                  |
+| `always_show_remote` | `false`                          | Hiển thị tên nhánh remote tracking, thậm chí nếu nó bằng với tên nhánh local.                         |
 | `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
 | `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
 | `style`              | `"bold purple"`                  | Kiểu cho module.                                                                                      |
 | `truncation_length`  | `2^63 - 1`                       | Rút gọn một nhánh git sang X graphemes.                                                               |
 | `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                          |
+| `only_attached`      | `false`                          | Chỉ hiển thị tên nhánh khi không nằm trong một trạng thái detached HEAD.                              |
 | `disabled`           | `false`                          | Vô hiệu mô đun `git_branch`.                                                                          |
 
 ### Các biến
@@ -1272,13 +1272,13 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                    | Mô tả                                                                                                                                |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                            |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
-| `style`    | `"bold dimmed green"`       | Kiểu cho module.                                                                                                                     |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Tuỳ chọn   | Mặc định                    | Mô tả                                                                                                                            |
+| ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                        |
+| `trim_at`  | `"."`                       | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `"."` sẽ dừng sau dấu chấm đầu tiên. `""` sẽ vô hiệu mọi sự cắt ngắn |
+| `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                            |
+| `style`    | `"bold dimmed green"`       | Kiểu cho module.                                                                                                                 |
+| `disabled` | `false`                     | Vô hiệu `hastname` module.                                                                                                       |
 
 ### Các biến
 
@@ -1303,10 +1303,10 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+Mô đun `java` cho biết phiên bản của Java đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- Thư mục hiện tại chứa một tệp tin `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot`
+- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc`
 
 ### Các tuỳ chọn
 
