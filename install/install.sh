@@ -152,6 +152,56 @@ elevate_priv() {
   fi
 }
 
+# This functions handles signing the starship binary locally on macOS
+sign() {
+  local sudo
+
+  local bin
+  local rc
+  local tmpfile
+
+  # Only sign if all these apply:
+  # - Installing for macOS/darwin
+  # - Host is ARM
+  # - Host is macOS/darwin
+  if [ "$PLATFORM" != "apple-darwin" ] || [ "$(uname -m)" != "aarch64" ] || [ "$(uname -s)" != "Darwin" ]; then
+    return
+  fi
+
+  sudo="$1"
+  bin="${BIN_DIR}/starship"
+
+  set +e
+  $sudo codesign --sign - --force "$bin" > /dev/null 2>&1
+  rc=$?
+  set -e
+
+  if [ $rc -ne 0 ]; then
+    # https://github.com/Homebrew/brew/blob/320bccb38d8bbbf8c8c3c4fcd3f8ec34dcc123c5/Library/Homebrew/os/mac/keg.rb
+    # If the codesigning fails, it may be a bug in Apple's codesign utility
+    # A known workaround is to copy the file to another inode, then move it back
+    # erasing the previous file. Then sign again.
+    #
+    # TODO: remove this once the bug in Apple's codesign utility is fixed
+
+    tmpfile="$(get_tmpfile "exe")"
+    cp "$bin" "$tmpfile"
+    $sudo mv "$tmpfile" "$bin"
+
+    set +e
+    $sudo codesign --sign - --force "$bin" > /dev/null 2>&1
+    rc=$?
+    set -e
+
+    if [ $rc -ne 0 ]; then
+      warn "Failed to sign starship for your local machine."
+      warn 'You might need to install or update the XCode commandline tools with "xcode-select --install" to allow the installer to sign binaries.'
+      warn "You may need to manually sign the starship binary before you can run it."
+    fi
+  fi
+}
+
+
 install() {
   local msg
   local sudo
@@ -176,6 +226,8 @@ install() {
 
   # unpack the temp file to the bin dir, using sudo if required
   unpack "${archive}" "${BIN_DIR}" "${sudo}"
+
+  sign "$sudo"
 }
 
 # Currently supporting:
