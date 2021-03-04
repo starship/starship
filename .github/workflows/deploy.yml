@@ -38,14 +38,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup | Checkout
-      uses: actions/checkout@master
+      - name: Setup | Checkout
+        uses: actions/checkout@master
 
-    - name: Publish
-      uses: netlify/actions/build@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - name: Publish
+        uses: netlify/actions/build@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
   # Build sources for every OS
   github_build:
@@ -125,7 +125,7 @@ jobs:
         uses: actions-rs/cargo@v1
         # TODO: Remove this once it's the default
         env:
-           SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
+          SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
         with:
           command: build
           args: --release --features tls-vendored --target ${{ matrix.target }}
@@ -188,23 +188,3 @@ jobs:
           body_path: RELEASE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  aur_release:
-    runs-on: ubuntu-latest
-    name: Create AUR release
-    needs: github_release # The -bin version downloads and shasums it
-    steps:
-      - name: Build | Publish AUR package
-        uses: ATiltedTree/create-aur-release@v1
-        with:
-          package_name: starship
-          commit_username: "Starship Bot"
-          commit_email: starship.bot.noreply@gmail.com
-          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-      - name: Build | Publish AUR package (-bin version)
-        uses: ATiltedTree/create-aur-release@v1
-        with:
-          package_name: starship-bin
-          commit_username: "Starship Bot"
-          commit_email: starship.bot.noreply@gmail.com
-          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
