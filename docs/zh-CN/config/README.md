@@ -239,13 +239,13 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 ### 配置项
 
-| Option           | 默认值                                              | 描述                        |
-| ---------------- | ------------------------------------------------ | ------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | 组件格式化模板。                  |
-| `symbol`         | `"☁️ "`                                          | 这个字段的内容会显示在当前 AWS 配置信息之前。 |
-| `region_aliases` |                                                  | 地区缩写列表，用来显示在 AWS 主机名之后。   |
-| `style`          | `"bold yellow"`                                  | 此组件的样式。                   |
-| `disabled`       | `false`                                          | 禁用 `AWS` 组件。              |
+| Option           | 默认值                                                 | 描述                        |
+| ---------------- | --------------------------------------------------- | ------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | 组件格式化模板。                  |
+| `symbol`         | `"☁️ "`                                             | 这个字段的内容会显示在当前 AWS 配置信息之前。 |
+| `region_aliases` |                                                     | 地区缩写列表，用来显示在 AWS 主机名之后。   |
+| `style`          | `"bold yellow"`                                     | 此组件的样式。                   |
+| `disabled`       | `false`                                             | 禁用 `AWS` 组件。              |
 
 ### Variables
 
@@ -266,7 +266,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
