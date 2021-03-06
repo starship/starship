@@ -253,7 +253,7 @@ is read from the `AWS_VAULT` env var.
 
 | Option           | Default                                        | Description                                                     |
 | ---------------- | ---------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module.                                      |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module.                                      |
 | `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current AWS profile.      |
 | `region_aliases` |                                                | Table of region aliases to display in addition to the AWS name. |
 | `style`          | `"bold yellow"`                                | The style for the module.                                       |
@@ -278,7 +278,7 @@ is read from the `AWS_VAULT` env var.
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]

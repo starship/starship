@@ -14,7 +14,7 @@ pub struct AwsConfig<'a> {
 impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
     fn new() -> Self {
         AwsConfig {
-            format: "on [$symbol$profile(\\($region\\))]($style) ",
+            format: "on [$symbol($profile )(\\($region\\) )]($style)",
             symbol: "☁️  ",
             style: "bold yellow",
             disabled: false,
