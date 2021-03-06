@@ -240,13 +240,13 @@ $character"""
 
 ### オプション
 
-| オプション            | デフォルト                                            | 説明                            |
-| ---------------- | ------------------------------------------------ | ----------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | moduleのフォーマットです。              |
-| `symbol`         | `"☁️ "`                                          | 現在のAWSプロファイルを表示する前に表示される記号です。 |
-| `region_aliases` |                                                  | AWS名に加えて表示するリージョンのエイリアスです。    |
-| `style`          | `"bold yellow"`                                  | モジュールのスタイルです。                 |
-| `disabled`       | `false`                                          | `aws`モジュールを無効にします。            |
+| オプション            | デフォルト                                               | 説明                            |
+| ---------------- | --------------------------------------------------- | ----------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | moduleのフォーマットです。              |
+| `symbol`         | `"☁️ "`                                             | 現在のAWSプロファイルを表示する前に表示される記号です。 |
+| `region_aliases` |                                                     | AWS名に加えて表示するリージョンのエイリアスです。    |
+| `style`          | `"bold yellow"`                                     | モジュールのスタイルです。                 |
+| `disabled`       | `false`                                             | `aws`モジュールを無効にします。            |
 
 ### 変数
 
@@ -267,7 +267,7 @@ $character"""
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
