@@ -37,6 +37,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update starship itself, rerunnning the script above will work.
 
    #### Install via Package Manager
 

@@ -159,6 +159,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update starship itself, rerunnning the script above will work.
 
    #### Install via Package Manager
 
