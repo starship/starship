@@ -239,13 +239,13 @@ $character"""
 
 ### 選項
 
-| Option           | 預設                                               | 說明                         |
-| ---------------- | ------------------------------------------------ | -------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module. |
-| `symbol`         | `"☁️ "`                                          | 顯示在目前 AWS 配置之前的符號。         |
-| `region_aliases` |                                                  | 除了AWS名稱外，顯示區域別名表           |
-| `style`          | `"bold yellow"`                                  | 這個模組的風格。                   |
-| `disabled`       | `false`                                          | 停用 `AWS` 模組。               |
+| Option           | 預設                                                  | 說明                         |
+| ---------------- | --------------------------------------------------- | -------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module. |
+| `symbol`         | `"☁️ "`                                             | 顯示在目前 AWS 配置之前的符號。         |
+| `region_aliases` |                                                     | 除了AWS名稱外，顯示區域別名表           |
+| `style`          | `"bold yellow"`                                     | 這個模組的風格。                   |
+| `disabled`       | `false`                                             | 停用 `AWS` 模組。               |
 
 ### Variables
 
@@ -266,7 +266,7 @@ $character"""
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
