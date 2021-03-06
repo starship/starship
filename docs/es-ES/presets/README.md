@@ -16,7 +16,7 @@ Este ajuste predeterminado no modifica nada excepto los símbolos usados para ca
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "
