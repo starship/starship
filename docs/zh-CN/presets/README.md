@@ -16,7 +16,7 @@
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "
