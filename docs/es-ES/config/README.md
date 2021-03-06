@@ -239,13 +239,13 @@ Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obt
 
 ### Opciones
 
-| Opción           | Por defecto                                      | Descripción                                                  |
-| ---------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | El formato del módulo.                                       |
-| `symbol`         | `"☁️ "`                                          | El símbolo que se muestra antes del perfil de AWS.           |
-| `region_aliases` |                                                  | Tabla de alias de región para mostrar además del nombre AWS. |
-| `style`          | `"bold yellow"`                                  | El estilo del módulo.                                        |
-| `disabled`       | `false`                                          | Desactiva el módulo AWS.                                     |
+| Opción           | Por defecto                                         | Descripción                                                  |
+| ---------------- | --------------------------------------------------- | ------------------------------------------------------------ |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | El formato del módulo.                                       |
+| `symbol`         | `"☁️ "`                                             | El símbolo que se muestra antes del perfil de AWS.           |
+| `region_aliases` |                                                     | Tabla de alias de región para mostrar además del nombre AWS. |
+| `style`          | `"bold yellow"`                                     | El estilo del módulo.                                        |
+| `disabled`       | `false`                                             | Desactiva el módulo AWS.                                     |
 
 ### Variables
 
@@ -266,7 +266,7 @@ Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obt
 # ~/.config/starship.toml
 
 [aws]
-format = 'en [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
