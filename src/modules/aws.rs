@@ -138,8 +138,8 @@ mod tests {
             .env("AWS_REGION", "ap-northeast-2")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2)")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -154,7 +154,7 @@ mod tests {
                 ap-southeast-2 = "au"
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  (au)")));
+        let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  (au) ")));
 
         assert_eq!(expected, actual);
     }
@@ -166,8 +166,8 @@ mod tests {
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-1)")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-1) ")
         ));
 
         assert_eq!(expected, actual);
@@ -179,8 +179,8 @@ mod tests {
             .env("AWS_PROFILE", "astronauts")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);
@@ -193,8 +193,8 @@ mod tests {
             .env("AWS_PROFILE", "astronauts-profile")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts-vault")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts-vault ")
         ));
 
         assert_eq!(expected, actual);
@@ -207,8 +207,10 @@ mod tests {
             .env("AWS_REGION", "ap-northeast-2")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-2)")
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -234,8 +236,8 @@ region = us-east-2
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  (us-east-1)")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (us-east-1) ")
         ));
 
         assert_eq!(expected, actual);
@@ -266,8 +268,8 @@ region = us-east-2
             })
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts(us-east-2)")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (us-east-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -281,8 +283,10 @@ region = us-east-2
             .env("AWS_REGION", "ap-northeast-1")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts(ap-northeast-1)")
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (ap-northeast-1) ")
         ));
 
         assert_eq!(expected, actual);
@@ -294,8 +298,8 @@ region = us-east-2
             .env("AWS_PROFILE", "astronauts")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);
@@ -307,8 +311,8 @@ region = us-east-2
             .env("AWS_REGION", "ap-northeast-1")
             .collect();
         let expected = Some(format!(
-            "on {} ",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-1)")
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-1) ")
         ));
 
         assert_eq!(expected, actual);
