@@ -239,13 +239,13 @@ Khi sử dụng [aws-vault](https://github.com/99designs/aws-vault) profile đư
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                         | Mô tả                                                |
-| ---------------- | ------------------------------------------------ | ---------------------------------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | Định dạng cho module.                                |
-| `symbol`         | `"☁️ "`                                          | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại. |
-| `region_aliases` |                                                  | Bảng của các region alias để hiển thị ngoài tên AWS. |
-| `style`          | `"bold yellow"`                                  | Kiểu cho module.                                     |
-| `disabled`       | `false`                                          | Vô hiệu `AWS` module.                                |
+| Tuỳ chọn         | Mặc định                                            | Mô tả                                                |
+| ---------------- | --------------------------------------------------- | ---------------------------------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | Định dạng cho module.                                |
+| `symbol`         | `"☁️ "`                                             | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại. |
+| `region_aliases` |                                                     | Bảng của các region alias để hiển thị ngoài tên AWS. |
+| `style`          | `"bold yellow"`                                     | Kiểu cho module.                                     |
+| `disabled`       | `false`                                             | Vô hiệu `AWS` module.                                |
 
 ### Các biến
 
@@ -266,7 +266,7 @@ Khi sử dụng [aws-vault](https://github.com/99designs/aws-vault) profile đư
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
