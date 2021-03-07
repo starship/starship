@@ -7,9 +7,11 @@ use std::cmp::Ordering;
 #[derive(Clone, Serialize)]
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
+    pub format_right: &'a str,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    pub split_padding: usize,
 }
 
 // List of default prompt order
@@ -88,9 +90,11 @@ impl<'a> Default for StarshipRootConfig<'a> {
     fn default() -> Self {
         StarshipRootConfig {
             format: "$all",
+            format_right: "",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
+            split_padding: 3,
         }
     }
 }
@@ -100,9 +104,11 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
         if let toml::Value::Table(config) = config {
             config.iter().for_each(|(k, v)| match k.as_str() {
                 "format" => self.format.load_config(v),
+                "format_right" => self.format_right.load_config(v),
                 "scan_timeout" => self.scan_timeout.load_config(v),
                 "command_timeout" => self.command_timeout.load_config(v),
                 "add_newline" => self.add_newline.load_config(v),
+                "split_padding" => self.split_padding.load_config(v),
                 unknown => {
                     if !ALL_MODULES.contains(&unknown) && unknown != "custom" {
                         log::warn!("Unknown config key '{}'", unknown);
@@ -110,9 +116,11 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                         let did_you_mean = &[
                             // Root options
                             "format",
+                            "format_right",
                             "scan_timeout",
                             "command_timeout",
                             "add_newline",
+                            "split_padding",
                             // Modules
                             "custom",
                         ]

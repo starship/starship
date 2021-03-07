@@ -79,50 +79,106 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
-    } else {
-        log::error!("Error parsing `format`");
-        buf.push('>');
-        return buf;
-    };
-    let modules = formatter.get_variables();
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules
-        if module == "all" {
-            Some(Ok(PROMPT_ORDER
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, &context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(&module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, &context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
+    let left_lines = match config
+        .format
+        .lines()
+        .map(|line| StringFormatter::new(line))
+        .collect::<Result<Vec<StringFormatter>, _>>()
+    {
+        Ok(left_lines) => left_lines,
+        Err(_) => {
+            log::error!("Error parsing `format`");
+            buf.push('>');
+            return buf;
         }
-    });
+    };
 
-    // Creates a root module and prints it.
-    let mut root_module = Module::new("Starship Root", "The root module", None);
-    root_module.set_segments(
-        formatter
-            .parse(None)
-            .expect("Unexpected error returned in root format variables"),
-    );
+    let right_lines = match config
+        .format_right
+        .lines()
+        .map(|line| StringFormatter::new(line))
+        .collect::<Result<Vec<StringFormatter>, _>>()
+    {
+        Ok(right_lines) => right_lines,
+        Err(_) => {
+            log::error!("Error parsing `format_right`");
+            buf.push('>');
+            return buf;
+        }
+    };
 
-    let module_strings = root_module.ansi_strings_for_shell(context.shell);
     if config.add_newline {
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+
+    let mut left_lines = left_lines.into_iter();
+    let mut right_lines = right_lines.into_iter();
+    loop {
+        let left_line = left_lines.next();
+        let right_line = right_lines.next();
+        if left_line.is_none() && right_line.is_none() {
+            break;
+        }
+
+        let left_line_module = left_line.map(|formatter| compute_format(&context, formatter));
+        let right_line_module = right_line.map(|formatter| compute_format(&context, formatter));
+        let add_trailing_newline = right_line_module.is_some() || left_lines.len() > 0;
+
+        match (left_line_module, right_line_module) {
+            (Some(left_line_module), Some(right_line_module)) => {
+                let left_line_width = left_line_module.get_segments_width();
+                let right_line_width = right_line_module.get_segments_width();
+                if left_line_width + config.split_padding + right_line_width <= context.width {
+                    // To end cursor in correct position, we print right, carriage return, print left.
+                    let padding = context.width - (left_line_width + right_line_width);
+                    write!(
+                        buf,
+                        "{}{pad_char:padding$}{}",
+                        ANSIStrings(&left_line_module.ansi_strings_for_shell(context.shell)),
+                        ANSIStrings(&right_line_module.ansi_strings_for_shell(context.shell)),
+                        pad_char = ' ',
+                        padding = padding,
+                    )
+                    .unwrap();
+                } else {
+                    write!(
+                        buf,
+                        "{}",
+                        ANSIStrings(&left_line_module.ansi_strings_for_shell(context.shell))
+                    )
+                    .unwrap();
+                }
+            }
+            (Some(left_line_module), None) => {
+                write!(
+                    buf,
+                    "{}",
+                    ANSIStrings(&left_line_module.ansi_strings_for_shell(context.shell))
+                )
+                .unwrap();
+            }
+            (None, Some(right_line_module)) => {
+                let right_line_width = right_line_module.get_segments_width();
+                if right_line_width <= context.width {
+                    // To end cursor in correct position, we print right, carriage return.
+                    let padding = context.width - right_line_width;
+                    write!(
+                        buf,
+                        "{pad_char:padding$}{}",
+                        ANSIStrings(&right_line_module.ansi_strings_for_shell(context.shell)),
+                        pad_char = ' ',
+                        padding = padding,
+                    )
+                    .unwrap();
+                }
+            }
+            _ => (),
+        }
+
+        if add_trailing_newline {
+            writeln!(buf).unwrap();
+        }
+    }
 
     // escape \n and ! characters for tcsh
     if let Shell::Tcsh = context.shell {
@@ -285,17 +341,65 @@ pub fn explain(args: ArgMatches) {
     }
 }
 
+fn compute_format<'a>(context: &'a Context, formatter: StringFormatter) -> Module<'a> {
+    let modules = formatter.get_variables();
+    let formatter = formatter.map_variables_to_segments(|module| {
+        // Make $all display all modules
+        if module == "all" {
+            Some(Ok(PROMPT_ORDER
+                .par_iter()
+                .flat_map(|module| {
+                    handle_module(module, &context, &modules)
+                        .into_iter()
+                        .flat_map(|module| module.segments)
+                        .collect::<Vec<Segment>>()
+                })
+                .collect::<Vec<_>>()))
+        } else if context.is_module_disabled_in_config(&module) {
+            None
+        } else {
+            // Get segments from module
+            Some(Ok(handle_module(module, &context, &modules)
+                .into_iter()
+                .flat_map(|module| module.segments)
+                .collect::<Vec<Segment>>()))
+        }
+    });
+
+    // Creates a root module and prints it.
+    let mut root_module = Module::new("Starship Root", "The root module", None);
+    root_module.set_segments(
+        formatter
+            .parse(None)
+            .expect("Unexpected error returned in root format variables"),
+    );
+    root_module
+}
+
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
     let config = context.config.get_root_config();
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
+
+    let left_formatter = if let Ok(left_formatter) = StringFormatter::new(config.format) {
+        left_formatter
     } else {
         log::error!("Error parsing `format`");
         return Vec::new();
     };
-    let modules = formatter.get_variables();
+    let right_formatter = if let Ok(right_formatter) = StringFormatter::new(config.format_right) {
+        right_formatter
+    } else {
+        log::error!("Error parsing `right_format`");
+        return Vec::new();
+    };
+
+    let modules = {
+        let mut result = BTreeSet::new();
+        result.extend(left_formatter.get_variables());
+        result.extend(right_formatter.get_variables());
+        result
+    };
 
     for module in &modules {
         // Manually add all modules if `$all` is encountered
@@ -401,5 +505,75 @@ pub fn format_duration(duration: &Duration) -> String {
         "<1ms".to_string()
     } else {
         format!("{:?}ms", &milis)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+
+    #[test]
+    fn test_prompt_left() {
+        let actual = ModuleRenderer::new("")
+            .config(toml::toml! {
+                format = "HOST:user  ~\n> "
+                add_newline = false
+            })
+            .width(40)
+            .prompt();
+
+        let expected = "HOST:user  ~\n> ";
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_prompt_right() {
+        // Prompt can't end on a right line, so it must always end of a trailing
+        // line break if right prompt has more lines than left prompt.
+        let actual = ModuleRenderer::new("")
+            .config(toml::toml! {
+                format = ""
+                format_right = "5:17 PM\nSaturday, May 5"
+                add_newline = false
+                split_padding = 10
+            })
+            .width(40)
+            .prompt();
+
+        let expected =
+            "                                 5:17 PM\n                         Saturday, May 5\n";
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_prompt_both() {
+        let actual = ModuleRenderer::new("")
+            .config(toml::toml! {
+                format = "HOST:user  ~\n> "
+                format_right = "5:17 PM"
+                add_newline = false
+                split_padding = 10
+            })
+            .width(40)
+            .prompt();
+
+        let expected = "HOST:user  ~                     5:17 PM\n> ";
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_prompt_both_too_narrow() {
+        let actual = ModuleRenderer::new("")
+            .config(toml::toml! {
+                format = "HOST:user  ~\n> "
+                format_right = "5:17 PM"
+                add_newline = false
+                split_padding = 30
+            })
+            .width(40)
+            .prompt();
+
+        let expected = "HOST:user  ~\n> ";
+        assert_eq!(expected, actual);
     }
 }

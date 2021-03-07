@@ -1,4 +1,5 @@
 use crate::context::Shell;
+use crate::print::UnicodeWidthGraphemes;
 use crate::segment::Segment;
 use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::{ANSIString, ANSIStrings};
@@ -123,6 +124,14 @@ impl<'a> Module<'a> {
             .iter()
             // no trim: if we add spaces/linebreaks it's not "empty" as we change the final output
             .all(|segment| segment.value.is_empty())
+    }
+
+    /// Get values of the module's segments
+    pub fn get_segments_width(&self) -> usize {
+        self.segments
+            .iter()
+            .map(|segment| segment.value.width_graphemes())
+            .sum()
     }
 
     /// Get values of the module's segments

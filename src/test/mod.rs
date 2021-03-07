@@ -77,6 +77,12 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    /// Sets the terminal width of the underlying context
+    pub fn width(mut self, width: usize) -> Self {
+        self.context.width = width;
+        self
+    }
+
     /// Adds the variable to the env_mocks of the underlying context
     pub fn env<V: Into<String>>(mut self, key: &'a str, val: V) -> Self {
         self.context.env.insert(key, val.into());
@@ -128,6 +134,11 @@ impl<'a> ModuleRenderer<'a> {
     ) -> Self {
         self.context.battery_info_provider = battery_info_provider;
         self
+    }
+
+    /// Renders the prompt returning its output
+    pub fn prompt(self) -> String {
+        crate::print::get_prompt(self.context)
     }
 
     /// Renders the module returning its output

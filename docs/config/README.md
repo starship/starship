@@ -151,29 +151,38 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                  |
-| ----------------- | ------------------------------ | ------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                          |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).        |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
+| Option            | Default                        | Description                                                                                          |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                  |
+| `format_right`    | `""`                           | Configure the format of the right prompt.                                                            |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                         |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                            |
+| `split_padding`   | `3`                            | The minimum amount of space required between left and right prompt for the right prompt to be shown. |
 
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Use custom format.
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
+# Display time on the right prompt.
+# This will only display if the terminal is wide enough.
+format_right = "$time"
+
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Disable the blank line at the start of the prompt.
 add_newline = false
+
+# Only display the right prompt if there's room for a 30 width margin between it and the left prompt.
+split_padding = 30
 ```
 
 ### Default Prompt Format

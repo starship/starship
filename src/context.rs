@@ -42,6 +42,9 @@ pub struct Context<'a> {
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
+    /// Width of terminal, or zero if width cannot be detected.
+    pub width: usize,
+
     /// A HashMap of environment variable mocks
     #[cfg(test)]
     pub env: HashMap<&'a str, String>,
@@ -121,6 +124,9 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            width: term_size::dimensions()
+                .map(|(width, _)| width)
+                .unwrap_or_default(),
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
