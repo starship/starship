@@ -2180,13 +2180,13 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | ---------------------- | ------------ | -------------------------------------------------------- |
 | `bash_indicator`       | `bsh`        | Una cadena de formato usada para representar Bash.       |
 | `fish_indicator`       | `fsh`        | Una cadena de formato usada para representar Fish.       |
-| `zsh_indicator`        | `zsh`        | Una cadena de formato usada para representar zsh.        |
+| `zsh_indicator`        | `zsh`        | Una cadena de formato usada para representar Zsh.        |
 | `powershell_indicator` | `psh`        | Una cadena de formato usada para representar Powershell. |
 | `ion_indicator`        | `ion`        | Una cadena de formato usada para representar Ion.        |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.                |
-| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                  |
+| `elvish_indicator`     | `esh`        | Una cadena de formato usada para representar Elvish.     |
+| `tcsh_indicator`       | `tsh`        | Una cadena de formato usada para representar tcsh.       |
 | `format`               | `$indicator` | El formato del módulo.                                   |
-| `disabled`             | `true`       | Disables the `shell` module.                             |
+| `disabled`             | `true`       | Deshabilita el módulo `shell`.                           |
 
 ### Variables
 
@@ -2212,7 +2212,7 @@ El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"
 
 | Opción      | Por defecto                  | Descripción                                                    |
 | ----------- | ---------------------------- | -------------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                             |
+| `threshold` | `2`                          | Mostrar umbral.                                                |
 | `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                         |
 | `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                    |
 | `repeat`    | `false`                      | Causa `symbol` a ser repetido por la cantidad actual de SHLVL. |
@@ -2301,16 +2301,16 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                          |
-| -------------- | ------- | -------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                    |
-| int            | `127`   | The exit code of the last command                                    |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                  |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | Refleja el valor de la opción `symbol`                               |
-| style\*      |         | Refleja el valor de la opción `style`                                |
+| Variable       | Ejemplo | Descripción                                                                          |
+| -------------- | ------- | ------------------------------------------------------------------------------------ |
+| status         | `127`   | El código de salida del último comando                                               |
+| int            | `127`   | El código de salida del último comando                                               |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                           |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está marcado            |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada      |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado |
+| symbol         |         | Refleja el valor de la opción `symbol`                                               |
+| style\*      |         | Refleja el valor de la opción `style`                                                |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2331,28 +2331,28 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
+Por defecto, el módulo `swift` muestra la versión actualmente instalada de Swift. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                          |
-| ------------------- | ------------------------------------ | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
-| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift     |
-| `detect_extensions` | `["swift"]`                          | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["Package.swift"]`                  | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.           |
-| `style`             | `"bold 202"`                         | El estilo del módulo.                                |
-| `disabled`          | `false`                              | Disables the `swift` module.                         |
+| Opción              | Por defecto                          | Descripción                                              |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `symbol`            | `"🐦 "`                               | Una cadena de formato que representa el símbolo de Swift |
+| `detect_extensions` | `["swift"]`                          | Qué extensiones deberían activar este módulo.            |
+| `detect_files`      | `["Package.swift"]`                  | Qué nombres de archivo deberían activar este módulo.     |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.               |
+| `style`             | `"bold 202"`                         | El estilo del módulo.                                    |
+| `disabled`          | `false`                              | Deshabilita el módulo `swift`.                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                 |
+| version   | `v5.2.4` | La versión de `swift`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2369,11 +2369,11 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+El módulo `terraform` muestra el espacio de trabajo y la versión actual de terraform.
 
 ::: tip
 
-By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+Por defecto no se mostrara la versión actual de terraform, ya que esto es lento en las versiones actuales de terraform cuando muchos plugins están en uso. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version).
 
 :::
 
@@ -2384,24 +2384,24 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                  |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
-| `detect_extensions` | `["tf", "hcl"]`                      | Qué extensiones deberían activar este módulo.         |
-| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.  |
-| `detect_folders`    | `[".terraform"]`                     | Qué carpetas deberían activar este módulo.            |
-| `style`             | `"bold 105"`                         | El estilo del módulo.                                 |
-| `disabled`          | `false`                              | Disables the `terraform` module.                      |
+| Opción              | Por defecto                          | Descripción                                                                   |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                                          |
+| `symbol`            | `"💠"`                                | Una cadena de formato que se muestra antes del espacio de trabajo terraforme. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Qué extensiones deberían activar este módulo.                                 |
+| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                          |
+| `detect_folders`    | `[".terraform"]`                     | Qué carpetas deberían activar este módulo.                                    |
+| `style`             | `"bold 105"`                         | El estilo del módulo.                                                         |
+| `disabled`          | `false`                              | Deshabilita el módulo `de terraforma`.                                        |
 
 ### Variables
 
-| Variable  | Ejemplo       | Descripción                            |
-| --------- | ------------- | -------------------------------------- |
-| version   | `v0.12.24`    | The version of `terraform`             |
-| workspace | `por defecto` | The current terraform workspace        |
-| symbol    |               | Refleja el valor de la opción `symbol` |
-| style\* |               | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo       | Descripción                               |
+| --------- | ------------- | ----------------------------------------- |
+| version   | `v0.12.24`    | La versión de `terraform`                 |
+| workspace | `por defecto` | El espacio de trabajo actual de terraform |
+| symbol    |               | Refleja el valor de la opción `symbol`    |
+| style\* |               | Refleja el valor de la opción `style`     |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
