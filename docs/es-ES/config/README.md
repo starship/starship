@@ -1397,7 +1397,7 @@ El módulo `julia` muestra la versión actualmente instalada de Julia. Por defec
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.              |
 | `symbol`            | `"ஃ "`                               | Una cadena de formato que representa el símbolo de Julia. |
 | `style`             | `"bold purple"`                      | El estilo del módulo.                                     |
-| `disabled`          | `false`                              | Disables the `julia` module.                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `julia`.                            |
 
 ### Variables
 
@@ -1420,22 +1420,22 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `kotlin` muestra la versión instalada de Kotlin. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.kt` o `.kts`
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                   |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                        |
-| `detect_extensions` | `["kt", "kts"]`                      | Qué extensiones deberían activar este módulo.                                 |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                                  |
-| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`             | `"bold blue"`                        | El estilo del módulo.                                                         |
-| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
+| Opción              | Por defecto                          | Descripción                                                             |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                  |
+| `detect_extensions` | `["kt", "kts"]`                      | Qué extensiones deberían activar este módulo.                           |
+| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                    |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                            |
+| `symbol`            | `"🅺 "`                               | Una cadena de formato que representa el símbolo de Kotlin.              |
+| `style`             | `"bold blue"`                        | El estilo del módulo.                                                   |
+| `kotlin_binary`     | `"kotlin"`                           | Configura el binario kotlin que Starship ejecuta al obtener la versión. |
+| `disabled`          | `false`                              | Deshabilita el módulo `kotlin`.                                         |
 
 ### Variables
 
@@ -1466,11 +1466,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Muestra el nombre del contexto actual de Kubernetes y, si se establece, el espacio de nombres del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -1509,7 +1509,7 @@ disabled = false
 
 ## Salto de línea
 
-The `line_break` module separates the prompt into two lines.
+El módulo `line_break` separa el prompt en dos líneas.
 
 ### Opciones
 
@@ -1528,7 +1528,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `lua` muestra la versión instalada de Lua. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.lua-version`
 - El directorio actual contiene un directorio `lua`
@@ -1536,16 +1536,16 @@ The `lua` module shows the currently installed version of Lua. Por defecto, el m
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                     |
-| `symbol`            | `"🌙 "`                               | Una cadena de formato que representa el símbolo de Lua.                    |
-| `detect_extensions` | `["lua"]`                            | Qué extensiones deberían activar este módulo.                              |
-| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
-| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
-| `style`             | `"bold blue"`                        | El estilo del módulo.                                                      |
-| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
+| Opción              | Por defecto                          | Descripción                                                          |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                               |
+| `symbol`            | `"🌙 "`                               | Una cadena de formato que representa el símbolo de Lua.              |
+| `detect_extensions` | `["lua"]`                            | Qué extensiones deberían activar este módulo.                        |
+| `detect_files`      | `[".lua-version"]`                   | Qué nombres de archivo deberían activar este módulo.                 |
+| `detect_folders`    | `["lua"]`                            | Qué carpetas deberían activar este módulo.                           |
+| `style`             | `"bold blue"`                        | El estilo del módulo.                                                |
+| `lua_binary`        | `"lua"`                              | Configura el binario lua que Starship ejecuta al obtener la versión. |
+| `disabled`          | `false`                              | Deshabilita el módulo `lua`.                                         |
 
 ### Variables
 
@@ -1568,13 +1568,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memoria utilizada
 
-The `memory_usage` module shows current system memory and swap usage.
+El módulo `memory_usage` muestra la memoria del sistema actual y el uso de memoria de intercambio.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2170,7 +2170,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2278,7 +2278,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2431,7 +2431,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
