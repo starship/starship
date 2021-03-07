@@ -8,13 +8,29 @@ Para instalar Starship, necesitas hacer dos cosas:
 Para la mayoría de los usuarios, las instrucciones en [la página principal](/guide/#🚀-installation) funcionarán genial. Sin embargo, para algunas plataformas más especializadas, se necesitan diferentes instrucciones.
 
 Hay tantas plataformas ahí fuera que no cabían en el README.md principal, así que aquí están algunas instrucciones de instalación para otras plataformas de la comunidad. ¿No está usted aquí? ¡Por favor, añádelo aquí si lo encuentras!
-## [termux](https://termux.com)
+
+## [Chocolatey](https://chocolatey.org)
+
 ### Prerequisitos
+
+Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+
+### Installation
+
+```powershell
+choco install starship
+```
+
+## [termux](https://termux.com)
+
+### Prerequisitos
+
 ```sh
 pkg install getconf
 ```
 
 ### Installation
+
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
 ```
