@@ -13,9 +13,9 @@ Hay tantas plataformas ahí fuera que no cabían en el README.md principal, así
 
 ### Prerequisitos
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Dirígete a la página de instalación de [Chocolatey](https://chocolatey.org/install) y sigue las instrucciones para instalar Chocolatey.
 
-### Installation
+### Instalación
 
 ```powershell
 choco install starship
@@ -29,7 +29,7 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### Instalación
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
@@ -37,7 +37,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Obtener el binario
 
 #### Imperativamente
 
@@ -47,7 +47,7 @@ nix-env -iA nixos.starship
 
 #### Declarativo, usuario único, a través de [home-manager](home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Activa el módulo `programs.starship` en tu archivo `home.nix` y añade tus ajustes
 
 ```nix
 {
@@ -69,7 +69,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+luego ejecutar
 
 ```sh
 home-manager switch
@@ -77,7 +77,7 @@ home-manager switch
 
 #### Declarativo, en todo el sistema, con NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Añade `pkgs.starship` a `environment.systemPackages` en tu `configuration.nix`, luego ejecuta
 
 ```sh
 sudo nixos-rebuild switch
