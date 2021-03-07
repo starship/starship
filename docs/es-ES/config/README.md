@@ -1740,16 +1740,16 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. Por defecto, el mó
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                |
-| `symbol`            | `" "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                            |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Qué extensiones deberían activar este módulo.                                                         |
-| `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                  |
-| `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                            |
-| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                 |
-| `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                       |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Opción              | Por defecto                          | Descripción                                                                                                     |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                          |
+| `symbol`            | `" "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Qué extensiones deberían activar este módulo.                                                                   |
+| `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                            |
+| `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                                      |
+| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                           |
+| `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                                 |
+| `not_capable_style` | `bold red`                           | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |
 
 ###  Variables
 
@@ -1772,7 +1772,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `ocaml` muestra la versión actualmente instalada de OCaml. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con extensión `.opam` o directorio `_opam`
 - El directorio actual contiene un directorio `esy.lock`
@@ -1791,7 +1791,7 @@ The `ocaml` module shows the currently installed version of OCaml. Por defecto, 
 | `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Qué nombres de archivo deberían activar este módulo.   |
 | `detect_folders`    | `["_opam", "esy.lock"]`                                          | Qué carpetas deberían activar este módulo.             |
 | `style`             | `"bold yellow"`                                                  | El estilo del módulo.                                  |
-| `disabled`          | `false`                                                          | Disables the `ocaml` module.                           |
+| `disabled`          | `false`                                                          | Deshabilita el módulo `ocaml`.                         |
 
 ### Variables
 
@@ -1814,7 +1814,7 @@ format = "via [🐪 $version]($style) "
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+El módulo `openstack` muestra la nube actual y el proyecto OpenStack. El módulo solo está activo cuando la variable de entorno `OS_CLOUD` está definida, en cuyo caso leerá el archivo `clouds.yaml` desde cualquiera de las [ubicaciones por defecto](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). para obtener el proyecto actual en uso.
 
 ### Opciones
 
@@ -1849,7 +1849,7 @@ symbol = "☁️ "
 
 ## Versión del paquete
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+El módulo `package` se muestra cuando el directorio actual es el repositorio de un paquete, y muestra su versión actual. El módulo soporta actualmente los paquetes `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` y `helm`.
 
 - **npm** – La versión del paquete `npm` se extrae del `package.json` presente en el directorio actual
 - **cargo** – La versión del paquete `cargo` se extrae del `Cargo.toml` presente en el directorio actual
@@ -1895,7 +1895,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `perl` muestra la versión actualmente instalada de Perl. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Makefile.PL` o `Build.PL`
 - El directorio actual contiene un archivo `cpanfile` o `cpanfile.snapshot`
@@ -1913,7 +1913,7 @@ The `perl` module shows the currently installed version of Perl. Por defecto, el
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Qué nombres de archivo deberían activar este módulo. |
 | `detect_folders`    | `[]`                                                                                                     | Qué carpetas deberían activar este módulo.           |
 | `style`             | `"bold 149"`                                                                                             | El estilo del módulo.                                |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                          |
+| `disabled`          | `false`                                                                                                  | Deshabilita el módulo `perl`.                        |
 
 ### Variables
 
@@ -1934,11 +1934,11 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `php` muestra la versión instalada de PHP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `composer.json`
 - El directorio actual contiene un archivo `.php-version`
-- The current directory contains a `.php` extension
+- El directorio actual contiene una extensión `.php`
 
 ### Opciones
 
@@ -2190,9 +2190,9 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Variables
 
-| Variable  | Por defecto | Descripción                                                |
-| --------- | ----------- | ---------------------------------------------------------- |
-| indicator |             | Mirrors the value of `indicator` for currently used shell. |
+| Variable  | Por defecto | Descripción                                                         |
+| --------- | ----------- | ------------------------------------------------------------------- |
+| indicator |             | Ordena el valor de `indicator` para el shell actualmente utilizado. |
 
 ### Ejemplos
 ```toml
@@ -2206,24 +2206,24 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"), si está establecido en un número y conoce o supera el umbral especificado.
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                                 |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                      |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                                       |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
+| Opción      | Por defecto                  | Descripción                                                    |
+| ----------- | ---------------------------- | -------------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                             |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                         |
+| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                    |
+| `repeat`    | `false`                      | Causa `symbol` a ser repetido por la cantidad actual de SHLVL. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                          |
+| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.                                 |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | The current value of SHLVL             |
+| shlvl     | `3`     | El valor actual de SHLVL               |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2242,22 +2242,22 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+El módulo `singularity` muestra la imagen de singularity actual, si se encuentra dentro de un contenedor y `$SINGULARITY_NAME` está establecido.
 
 ### Opciones
 
-| Opción     | Por defecto                      | Descripción                                      |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                           |
-| `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                            |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| Opción     | Por defecto                      | Descripción                                                         |
+| ---------- | -------------------------------- | ------------------------------------------------------------------- |
+| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                                              |
+| `symbol`   | `""`                             | Una cadena de formato que se muestra antes del nombre de la imagen. |
+| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                                               |
+| `disabled` | `false`                          | Deshabilita el módulo `singularity`.                                |
 
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                            |
 | --------- | ------------ | -------------------------------------- |
-| env       | `centos.img` | The current singularity image          |
+| env       | `centos.img` | La imagen de singularity actual        |
 | symbol    |              | Refleja el valor de la opción `symbol` |
 | style\* |              | Refleja el valor de la opción `style`  |
 
@@ -2274,7 +2274,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`.
 
 ::: tip
 
@@ -2282,22 +2282,22 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: advertencia Este módulo no es compatible con el shell de elvish. :::
 
 ### Opciones
 
-| Opción                  | Por defecto                   | Descripción                                          |
-| ----------------------- | ----------------------------- | ---------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "` | The format of the module                             |
-| `symbol`                | `"✖"`                         | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                         | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                         | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                         | The symbol displayed on SIGINT (Ctrl + c)            |
-| `signal_symbol`         | `"⚡"`                         | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`                  | El estilo del módulo.                                |
-| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                        | Disables the `status` module.                        |
+| Opción                  | Por defecto                   | Descripción                                            |
+| ----------------------- | ----------------------------- | ------------------------------------------------------ |
+| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                  |
+| `symbol`                | `"✖"`                         | El símbolo mostrado en error del programa              |
+| `not_executable_symbol` | `"🚫"`                         | El símbolo mostrado cuando el archivo no es ejecutable |
+| `not_found_symbol`      | `"🔍"`                         | El símbolo mostrado cuando no se encuentra el comando  |
+| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
+| `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
+| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                   |
+| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                  |
+| `disabled`              | `true`                        | Disables the `status` module.                          |
 
 ### Variables
 
