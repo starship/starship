@@ -827,10 +827,10 @@ El módulo `elm` muestra la versión actualmente instalada de Elm. Por defecto, 
 | `format`            | `"via [$symbol($version )]($style)"`               | El formato del módulo.                                  |
 | `symbol`            | `"🌳 "`                                             | Una cadena de formato que representa el símbolo de Elm. |
 | `detect_extensions` | `["elm"]`                                          | Qué extensiones deberían activar este módulo.           |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.             |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Qué nombres de archivo deberían activar este módulo.    |
 | `detect_folders`    | `["elm-stuff"]`                                    | Qué carpetas deberían activar estos módulos.            |
 | `style`             | `"cyan bold"`                                      | El estilo del módulo.                                   |
-| `disabled`          | `false`                                            | Disables the `elm` module.                              |
+| `disabled`          | `false`                                            | Deshabilita el módulo `elm`.                            |
 
 ### Variables
 
@@ -902,10 +902,10 @@ El módulo `erlang` muestra la versión instalada de Erlang/OTP. Por defecto, el
 | `symbol`            | `" "`                               | El símbolo usado antes de mostrar la versión de Erlang. |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                   |
 | `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.           |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.             |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Qué nombres de archivo deberían activar este módulo.    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.            |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
-| `disabled`          | `false`                              | Disables the `erlang` module.                           |
+| `disabled`          | `false`                              | Deshabilita el módulo `erlang`.                         |
 
 ### Variables
 
@@ -1204,10 +1204,10 @@ El módulo `golang` muestra la versión actualmente instalada de Golang. Por def
 | `format`            | `"via [$symbol($version )]($style)"`                                           | El formato del módulo.                                 |
 | `symbol`            | `"🐹 "`                                                                         | Una cadena de formato que representa el símbolo de Go. |
 | `detect_extensions` | `["go"]`                                                                       | Qué extensiones deberían activar este módulo.          |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.            |
-| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.              |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Qué nombres de archivo deberían activar este módulo.   |
+| `detect_folders`    | `["Godeps"]`                                                                   | Qué carpetas deberían activar este módulo.             |
 | `style`             | `"bold cyan"`                                                                  | El estilo del módulo.                                  |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                          |
+| `disabled`          | `false`                                                                        | Deshabilita el módulo de `golang`.                     |
 
 ### Variables
 
@@ -1237,15 +1237,15 @@ El módulo `helm` muestra la versión instalada de Helm. Por defecto, el módulo
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                      |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                           |
-| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.    |
-| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.     |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm. |
-| `style`             | `"bold white"`                       | El estilo del módulo.                            |
-| `disabled`          | `false`                              | Disables the `helm` module.                      |
+| Opción              | Por defecto                          | Descripción                                              |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.            |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Qué nombres de archivo deberían activar este módulo.     |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.             |
+| `symbol`            | `"⎈ "`                               | Una cadena de formato que representa el símbolo de Helm. |
+| `style`             | `"bold white"`                       | El estilo del módulo.                                    |
+| `disabled`          | `false`                              | Deshabilita el módulo `helm`.                            |
 
 ### Variables
 
@@ -1310,15 +1310,15 @@ El módulo `java` muestra la versión actualmente instalada de Java. Por defecto
 
 ### Opciones
 
-| Opción              | Por defecto                                                                                               | Descripción                                     |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | El formato del módulo.                          |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Qué extensiones deberían activar este módulo.   |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                                                                                      | Qué carpetas deberían activar estos módulos.    |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
-| `style`             | `"red dimmed"`                                                                                            | El estilo del módulo.                           |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
+| Opción              | Por defecto                                                                                               | Descripción                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | El formato del módulo.                                  |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Qué extensiones deberían activar este módulo.           |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Qué nombres de archivo deberían activar este módulo.    |
+| `detect_folders`    | `[]`                                                                                                      | Qué carpetas deberían activar estos módulos.            |
+| `symbol`            | `"☕ "`                                                                                                    | Una cadena de formato que representa el símbolo de Java |
+| `style`             | `"red dimmed"`                                                                                            | El estilo del módulo.                                   |
+| `disabled`          | `false`                                                                                                   | Deshabilita el módulo `java`.                           |
 
 ### Variables
 
@@ -1345,7 +1345,7 @@ El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo 
 
 ::: aviso
 
-This module is not supported on tcsh.
+Este módulo no está soportado en tcsh.
 
 :::
 
@@ -1381,7 +1381,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `julia` muestra la versión actualmente instalada de Julia. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Project.toml`
 - El directorio actual contiene un archivo `Manifest.toml`
@@ -1389,15 +1389,15 @@ The `julia` module shows the currently installed version of Julia. Por defecto, 
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                       |
-| ------------------- | ------------------------------------ | ------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                            |
-| `detect_extensions` | `["jl"]`                             | Qué extensiones deberían activar este módulo.     |
-| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.       |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.      |
-| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia. |
-| `style`             | `"bold purple"`                      | El estilo del módulo.                             |
-| `disabled`          | `false`                              | Disables the `julia` module.                      |
+| Opción              | Por defecto                          | Descripción                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                    |
+| `detect_extensions` | `["jl"]`                             | Qué extensiones deberían activar este módulo.             |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Qué nombres de archivo deberían activar este módulo.      |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.              |
+| `symbol`            | `"ஃ "`                               | Una cadena de formato que representa el símbolo de Julia. |
+| `style`             | `"bold purple"`                      | El estilo del módulo.                                     |
+| `disabled`          | `false`                              | Disables the `julia` module.                              |
 
 ### Variables
 
