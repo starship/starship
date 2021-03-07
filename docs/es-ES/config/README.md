@@ -2629,48 +2629,48 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 | `description` | `"<módulo personalizado>"` | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                            |
 | `files`       | `[]`                             | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                             |
 | `directories` | `[]`                             | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                  |
-| `extensions`  | `[]`                             | The extensions that will be searched in the working directory for a match.                                                          |
-| `symbol`      | `""`                             | The symbol used before displaying the command output.                                                                               |
+| `extensions`  | `[]`                             | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                          |
+| `symbol`      | `""`                             | El símbolo usado antes de mostrar la salida del comando.                                                                            |
 | `style`       | `"bold green"`                   | El estilo del módulo.                                                                                                               |
 | `format`      | `"[$symbol($output )]($style)"`  | El formato del módulo.                                                                                                              |
-| `disabled`    | `false`                          | Disables this `custom` module.                                                                                                      |
+| `disabled`    | `false`                          | Deshabilita este `módulo` personalizado.                                                                                            |
 
 ### Variables
 
-| Variable  | Descripción                            |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| symbol    | Refleja el valor de la opción `symbol` |
-| style\* | Refleja el valor de la opción `style`  |
+| Variable  | Descripción                               |
+| --------- | ----------------------------------------- |
+| output    | La salida del comando de shell en `shell` |
+| symbol    | Refleja el valor de la opción `symbol`    |
+| style\* | Refleja el valor de la opción `style`     |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 #### Comando personalizado de shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` acepta una lista no vacía de cadenas, donde:
 
 - La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
 - Otros argumentos siguientes son pasados al shell.
 
-If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+Si no está activado, se retornará a STARSHIP_SHELL y luego a "sh" en Linux, y "cmd /C" en Windows.
 
-The `command` will be passed in on stdin.
+El `comando` será pasado en stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Si no se da el `shell` o solo contiene un elemento y Starship detecta PowerShell los siguientes argumentos se añadirán automáticamente: `-NoProfile -Command -`. Este comportamiento puede evitarse pasando explícitamente argumentos al intérprete, p.ej.
 
 ```toml
 shell = ["pwsh", "-Command", "-"]
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: advertencia Asegúrate de que tu configuración personalizada de shell salga con éxito
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Si establece un comando personalizado, asegúrese de que el Shell por defecto usado por Starship ejecutará correctamente el comando con una salida elegante (a través de la opción `shell`).
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Por ejemplo, PowerShell requiere el parámetro `-Command` para ejecutar una sola línea. Omitir este parámetro puede arrojar a Starship a un bucle recursivo donde el shell podría intentar cargar un entorno de perfil completo con Starship en sí misma y volver a ejecutar el comando personalizado, entrando en un bucle infinito.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Se recomiendan parámetros similares a `-NoProfile` en PowerShell para otros shells para evitar tiempo extra de carga de un perfil personalizado en cada invocación de Starship.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. Por favor, [abre un issue](https://github.com/starship/starship/issues/new/choose) con los detalles del intérprete de comandos y la configuración de Starship si te encuentras en tal escenario.
 
 :::
 
