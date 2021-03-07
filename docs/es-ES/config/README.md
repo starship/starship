@@ -1950,7 +1950,7 @@ El módulo `php` muestra la versión instalada de PHP. Por defecto, el módulo s
 | `detect_files`      | `["composer.json", ".php-version"]`  | Qué nombres de archivo deberían activar este módulo. |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.           |
 | `style`             | `"147 bold"`                         | El estilo del módulo.                                |
-| `disabled`          | `false`                              | Disables the `php` module.                           |
+| `disabled`          | `false`                              | Deshabilita el módulo `php`.                         |
 
 ### Variables
 
@@ -1973,10 +1973,10 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `purescript` muestra la versión actualmente instalada de PureScript. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `spago.dhall`
-- The current directory contains a file with the `.purs` extension
+- El directorio actual contiene un archivo con la extensión `.purs`
 
 ### Opciones
 
@@ -1988,7 +1988,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 | `detect_files`      | `["spago.dhall"]`                    | Qué nombres de archivo deberían activar este módulo.        |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                  |
 | `style`             | `"bold white"`                       | El estilo del módulo.                                       |
-| `disabled`          | `false`                              | Disables the `purescript` module.                           |
+| `disabled`          | `false`                              | Deshabilita el módulo `purescript`.                         |
 
 ### Variables
 
@@ -2011,9 +2011,9 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+El módulo `python` muestra la versión actualmente instalada de Python y el actual entorno virtual de Python si uno está activado.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
@@ -2044,9 +2044,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ::: tip
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+La variable `python_binary` acepta una cadena o una lista de cadenas. La Starship intentará ejecutar cada binario hasta que obtenga un resultado. Ten en cuenta que sólo puedes cambiar el binario que Starship ejecuta para obtener la versión de Python no los argumentos que se utilizan.
 
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+Los valores por defecto y el orden para `python_binary` fue elegido para identificar primero la versión de Python en un entorno virtualenv/conda (que actualmente añade un `python`, no importa si apunta a `python3` o `python2`). Esto tiene el efecto secundario que si todavía tienes un sistema de Python 2 instalado, puede ser recogido antes de cualquier Python 3 (al menos en las Distros de Linux que siempre enlazan `/usr/bin/python` a Python 2). Si ya no trabajas con Python 2 pero no puedes removerlo del sistema, cambiando esto a `"python3"` ocultará cualquier versión de Python 2, ver ejemplo a continuación.
 
 :::
 
@@ -2089,7 +2089,7 @@ detect_extensions = []
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Gemfile`
 - El directorio actual contiene un archivo `.ruby-version`
@@ -2105,7 +2105,7 @@ By default the `ruby` module shows the currently installed version of Ruby. The 
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Qué nombres de archivo deberían activar este módulo.     |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.               |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                    |
-| `disabled`          | `false`                              | Disables the `ruby` module.                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `ruby`.                            |
 
 ### Variables
 
@@ -2128,7 +2128,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `rust` muestra la versión actualmente instalada de Rust. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Cargo.toml`
 - El directorio actual contiene un archivo con la extensión `.rs`
@@ -2143,7 +2143,7 @@ By default the `rust` module shows the currently installed version of Rust. The 
 | `detect_files`      | `["Cargo.toml"]`                     | Qué nombres de archivo deberían activar este módulo.    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.              |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                   |
-| `disabled`          | `false`                              | Disables the `rust` module.                             |
+| `disabled`          | `false`                              | Deshabilita el módulo `rust`.                           |
 
 ### Variables
 
@@ -2166,7 +2166,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+El módulo `shell` muestra un indicador para el shell actualmente utilizado.
 
 ::: tip
 
@@ -2176,17 +2176,17 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                 | Por defecto  | Descripción                                   |
-| ---------------------- | ------------ | --------------------------------------------- |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.       |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.       |
-| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.        |
-| `powershell_indicator` | `psh`        | A format string used to represent powershell. |
-| `ion_indicator`        | `ion`        | A format string used to represent ion.        |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
-| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
-| `format`               | `$indicator` | El formato del módulo.                        |
-| `disabled`             | `true`       | Disables the `shell` module.                  |
+| Opción                 | Por defecto  | Descripción                                              |
+| ---------------------- | ------------ | -------------------------------------------------------- |
+| `bash_indicator`       | `bsh`        | Una cadena de formato usada para representar Bash.       |
+| `fish_indicator`       | `fsh`        | Una cadena de formato usada para representar Fish.       |
+| `zsh_indicator`        | `zsh`        | Una cadena de formato usada para representar zsh.        |
+| `powershell_indicator` | `psh`        | Una cadena de formato usada para representar Powershell. |
+| `ion_indicator`        | `ion`        | Una cadena de formato usada para representar Ion.        |
+| `elvish_indicator`     | `esh`        | A format string used to represent elvish.                |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                  |
+| `format`               | `$indicator` | El formato del módulo.                                   |
+| `disabled`             | `true`       | Disables the `shell` module.                             |
 
 ### Variables
 
@@ -2295,9 +2295,9 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
 | `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
 | `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
-| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                   |
-| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                  |
-| `disabled`              | `true`                        | Disables the `status` module.                          |
+| `recognize_signal_code` | `true`                        | Habilitar mapeo de señales desde el código de salida   |
+| `map_symbol`            | `false`                       | Habilitar mapeo de símbolos desde el código de salida  |
+| `disabled`              | `true`                        | Deshabilita el módulo `status`.                        |
 
 ### Variables
 
@@ -2331,7 +2331,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of Swift. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
@@ -2473,7 +2473,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El usuario actual es root
 - El usuario actual no es el mismo que el que está conectado
@@ -2555,7 +2555,7 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of Zig. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.zig`
 
