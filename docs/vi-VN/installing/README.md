@@ -8,20 +8,36 @@
 Đối với đa số người dùng, các hướng dẫn trên [trang chính](/guide/#🚀-installation) sẽ làm việc tốt. Tuy nhiên, với một vài nền tảng đặc biệt hơn, các hướng dẫn khác nhau là cần thiết.
 
 Có rất nhiều nền tảng bên ngoài, rằng chúng đã không khớp như trong tệp tin README.md, do đó đây là vài hướng dẫn cài đặt cho những nền tảng khác đến từ cộng đồng. Của bạn không có ở đây? Xin hãy thêm nó vào đây nếu bạn tìm ra nó!
-## [termux](https://termux.com)
+
+## [Chocolatey](https://chocolatey.org)
+
 ### Yêu cầu
+
+Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+
+### Cài đặt
+
+```powershell
+choco install starship
+```
+
+## [termux](https://termux.com)
+
+### Yêu cầu
+
 ```sh
 pkg install getconf
 ```
 
 ### Cài đặt
+
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Lấy tệp tin nhị phân
+### Getting the Binary
 
 #### Lệnh
 
@@ -31,14 +47,14 @@ nix-env -iA nixos.starship
 
 #### Khai báo, người dùng đơn, thông qua [home-manager](home-manager)
 
-Kích hoạt mô đun `programs.starship` trong tệp `home.nix` của bạn, và thêm các cài đặt của bạn
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
 
 ```nix
 {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # Cấu hình viết vào ~/.config/starship.toml
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
@@ -53,7 +69,7 @@ Kích hoạt mô đun `programs.starship` trong tệp `home.nix` của bạn, v�
 }
 ```
 
-sau đó chạy
+then run
 
 ```sh
 home-manager switch
@@ -61,7 +77,7 @@ home-manager switch
 
 #### Khai báo, system-wide, với NixOS
 
-Thêm`pkgs.starship` vào `environment.systemPackages` trong `configuration.nix` của bạn, sau đó chạy
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch
