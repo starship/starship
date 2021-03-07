@@ -2,8 +2,8 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+tagline: 適合任何 shell 的最小、極速、無限客製化的提示字元！
+actionText: 馬上開始 →
 actionLink: ./guide/
 features:
   - 
@@ -17,8 +17,8 @@ features:
     details: 任何些微的細節都可以隨你喜愛地客製化，讓你的提示字元可以隨你所欲地最小化或是充滿各種特色。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+metaTitle: "Starship：跨 Shell 提示字元"
+description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 有針對 Bash、Fish、ZSH、Ion 與 Powershell 的快速安裝指南。
 ---
 
 <div class="center">
@@ -33,16 +33,16 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 1. 安裝 **starship** 執行檔：
 
 
-   #### Install Latest Version
+   #### 安裝最新版本
 
-   With Shell:
+   使用 Shell 安裝：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
 
 
-   #### Install via Package Manager
+   #### 使用套件管理器安裝：
 
    With [Homebrew](https://brew.sh/):
 
