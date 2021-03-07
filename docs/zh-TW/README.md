@@ -44,13 +44,13 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### 使用套件管理器安裝：
 
-   With [Homebrew](https://brew.sh/):
+   使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   使用 [Scoop](https://scoop.sh)：
 
    ```powershell
    scoop install starship
@@ -94,7 +94,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -103,7 +103,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   將以下內容放到 `~/.config/ion/initrc` 的結尾：
 
    ```sh
    # ~/.config/ion/initrc
@@ -113,9 +113,9 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning 只有 elvish v0.15 或以上版本才有支援 :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -126,7 +126,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   將以下內容放到 `~/.tcshrc` 的結尾：
 
    ```sh
    # ~/.tcshrc
