@@ -9,7 +9,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
-use crate::context::{Context, Shell};
+use crate::context::{Context, PromptMode, Shell};
 use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
@@ -61,6 +61,13 @@ pub fn prompt(args: ArgMatches) {
 }
 
 pub fn get_prompt(context: Context) -> String {
+    match context.prompt_mode {
+        PromptMode::Main => get_prompt_main(context),
+        PromptMode::Secondary => get_prompt_secondary(context),
+    }
+}
+
+pub fn get_prompt_main(context: Context) -> String {
     let config = context.config.get_root_config();
     let mut buf = String::new();
 
@@ -79,30 +86,18 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let left_lines = match config
-        .format
-        .lines()
-        .map(|line| StringFormatter::new(line))
-        .collect::<Result<Vec<StringFormatter>, _>>()
-    {
-        Ok(left_lines) => left_lines,
-        Err(_) => {
+    let left_prompt = match compute_prompt(&context, &config.format) {
+        Some(left_prompt) => left_prompt,
+        None => {
             log::error!("Error parsing `format`");
-            buf.push('>');
             return buf;
         }
     };
 
-    let right_lines = match config
-        .format_right
-        .lines()
-        .map(|line| StringFormatter::new(line))
-        .collect::<Result<Vec<StringFormatter>, _>>()
-    {
-        Ok(right_lines) => right_lines,
-        Err(_) => {
+    let right_prompt = match compute_prompt(&context, &config.format_right) {
+        Some(right_prompt) => right_prompt,
+        None => {
             log::error!("Error parsing `format_right`");
-            buf.push('>');
             return buf;
         }
     };
@@ -111,8 +106,8 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
 
-    let mut left_lines = left_lines.into_iter();
-    let mut right_lines = right_lines.into_iter();
+    let mut left_lines = left_prompt.into_iter();
+    let mut right_lines = right_prompt.into_iter();
     loop {
         let left_line = left_lines.next();
         let right_line = right_lines.next();
@@ -120,52 +115,40 @@ pub fn get_prompt(context: Context) -> String {
             break;
         }
 
-        let left_line_module = left_line.map(|formatter| compute_format(&context, formatter));
-        let right_line_module = right_line.map(|formatter| compute_format(&context, formatter));
-        let add_trailing_newline = right_line_module.is_some() || left_lines.len() > 0;
+        let add_trailing_newline = right_line.is_some() || left_lines.len() > 0;
 
-        match (left_line_module, right_line_module) {
-            (Some(left_line_module), Some(right_line_module)) => {
-                let left_line_width = left_line_module.get_segments_width();
-                let right_line_width = right_line_module.get_segments_width();
+        match (left_line, right_line) {
+            (
+                Some((left_line_string, left_line_width)),
+                Some((right_line_string, right_line_width)),
+            ) => {
                 if left_line_width + config.split_padding + right_line_width <= context.width {
                     // To end cursor in correct position, we print right, carriage return, print left.
                     let padding = context.width - (left_line_width + right_line_width);
                     write!(
                         buf,
                         "{}{pad_char:padding$}{}",
-                        ANSIStrings(&left_line_module.ansi_strings_for_shell(context.shell)),
-                        ANSIStrings(&right_line_module.ansi_strings_for_shell(context.shell)),
+                        left_line_string,
+                        right_line_string,
                         pad_char = ' ',
                         padding = padding,
                     )
                     .unwrap();
                 } else {
-                    write!(
-                        buf,
-                        "{}",
-                        ANSIStrings(&left_line_module.ansi_strings_for_shell(context.shell))
-                    )
-                    .unwrap();
+                    write!(buf, "{}", left_line_string).unwrap();
                 }
             }
-            (Some(left_line_module), None) => {
-                write!(
-                    buf,
-                    "{}",
-                    ANSIStrings(&left_line_module.ansi_strings_for_shell(context.shell))
-                )
-                .unwrap();
+            (Some((left_line_string, _)), None) => {
+                write!(buf, "{}", left_line_string).unwrap();
             }
-            (None, Some(right_line_module)) => {
-                let right_line_width = right_line_module.get_segments_width();
+            (None, Some((right_line_string, right_line_width))) => {
                 if right_line_width <= context.width {
                     // To end cursor in correct position, we print right, carriage return.
                     let padding = context.width - right_line_width;
                     write!(
                         buf,
                         "{pad_char:padding$}{}",
-                        ANSIStrings(&right_line_module.ansi_strings_for_shell(context.shell)),
+                        right_line_string,
                         pad_char = ' ',
                         padding = padding,
                     )
@@ -188,6 +171,74 @@ pub fn get_prompt(context: Context) -> String {
     }
 
     buf
+}
+
+pub fn get_prompt_secondary(context: Context) -> String {
+    let config = context.config.get_root_config();
+    let mut buf = String::new();
+
+    match std::env::var_os("TERM") {
+        Some(term) if term == "dumb" => {
+            log::error!("Under a 'dumb' terminal (TERM=dumb).");
+            buf.push_str("Starship disabled due to TERM=dumb");
+            return buf;
+        }
+        _ => {}
+    }
+
+    if config.format_secondary.contains('\n') {
+        log::error!("Secondary prompt contains linebreak.");
+        buf.push_str("Secondary prompt contains linebreak");
+        return buf;
+    }
+
+    let secondary_prompt = match compute_prompt(&context, &config.format_secondary) {
+        Some(secondary_prompt) => secondary_prompt,
+        None => {
+            log::error!("Error parsing `format_secondary`");
+            return buf;
+        }
+    };
+
+    if let Some((secondary_line, _)) = secondary_prompt.first() {
+        write!(buf, "{}", secondary_line).unwrap();
+    }
+
+    // escape \n and ! characters for tcsh
+    if let Shell::Tcsh = context.shell {
+        buf = buf.replace('!', "\\!");
+        // space is required before newline
+        buf = buf.replace('\n', " \\n");
+    }
+
+    buf
+}
+
+pub fn compute_prompt(context: &Context, format: &str) -> Option<Vec<(String, usize)>> {
+    let string_formatters = match format
+        .lines()
+        .map(|line| StringFormatter::new(line))
+        .collect::<Result<Vec<StringFormatter>, _>>()
+    {
+        Ok(string_formatters) => string_formatters,
+        Err(_) => return None,
+    };
+
+    let result = string_formatters
+        .into_iter()
+        .map(|string_formatter| {
+            let module = compute_format(&context, string_formatter);
+            let string = format!(
+                "{}",
+                ANSIStrings(&module.ansi_strings_for_shell(context.shell))
+            );
+            let width = module.get_segments_width();
+
+            (string, width)
+        })
+        .collect();
+
+    Some(result)
 }
 
 pub fn module(module_name: &str, args: ArgMatches) {
@@ -510,6 +561,7 @@ pub fn format_duration(duration: &Duration) -> String {
 
 #[cfg(test)]
 mod tests {
+    use crate::context::PromptMode;
     use crate::test::ModuleRenderer;
 
     #[test]
@@ -574,6 +626,32 @@ mod tests {
             .prompt();
 
         let expected = "HOST:user  ~\n> ";
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_prompt_secondary() {
+        let actual = ModuleRenderer::new("")
+            .config(toml::toml! {
+                format_secondary = "<<"
+            })
+            .prompt_mode(PromptMode::Secondary)
+            .prompt();
+
+        let expected = "<<";
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_prompt_secondary_multiline() {
+        let actual = ModuleRenderer::new("")
+            .config(toml::toml! {
+                format_secondary = "<<\n<<"
+            })
+            .prompt_mode(PromptMode::Secondary)
+            .prompt();
+
+        let expected = "Secondary prompt contains linebreak";
         assert_eq!(expected, actual);
     }
 }

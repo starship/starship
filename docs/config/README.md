@@ -151,14 +151,15 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                                                          |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                  |
-| `format_right`    | `""`                           | Configure the format of the right prompt.                                                            |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                         |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                            |
-| `split_padding`   | `3`                            | The minimum amount of space required between left and right prompt for the right prompt to be shown. |
+| Option             | Default                        | Description                                                                                          |
+| ------------------ | ------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `format`           | [link](#default-prompt-format) | Configure the format of the prompt.                                                                  |
+| `format_right`     | `""`                           | Configure the format of the right prompt.                                                            |
+| `format_secondary` | `""`                           | Configure the format of the secondary prompt, which is return by `--prompt-mode=secondary`.          |
+| `scan_timeout`     | `30`                           | Timeout for starship to scan files (in milliseconds).                                                |
+| `command_timeout`  | `500`                          | Timeout for commands executed by starship (in milliseconds).                                         |
+| `add_newline`      | `true`                         | Inserts blank line between shell prompts.                                                            |
+| `split_padding`    | `3`                            | The minimum amount of space required between left and right prompt for the right prompt to be shown. |
 
 ### Example
 
@@ -174,6 +175,10 @@ format = """
 # Display time on the right prompt.
 # This will only display if the terminal is wide enough.
 format_right = "$time"
+
+# Display status on the secondary prompt.
+# This will only display if the shell makes use of the secondary prompt, for example  Zsh's `RPROMPT`.
+format_secondary = "$status"
 
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10

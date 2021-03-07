@@ -1,4 +1,4 @@
-use crate::context::{Context, Shell};
+use crate::context::{Context, PromptMode, Shell};
 use crate::logger::StarshipLogger;
 use crate::{config::StarshipConfig, utils::CommandOutput};
 use log::{Level, LevelFilter};
@@ -50,6 +50,12 @@ impl<'a> ModuleRenderer<'a> {
         context.config = StarshipConfig { config: None };
 
         Self { name, context }
+    }
+
+    /// Sets the terminal width of the underlying context
+    pub fn prompt_mode(mut self, prompt_mode: PromptMode) -> Self {
+        self.context.prompt_mode = prompt_mode;
+        self
     }
 
     pub fn path<T>(mut self, path: T) -> Self

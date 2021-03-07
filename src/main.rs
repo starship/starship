@@ -90,6 +90,15 @@ fn main() {
         .subcommand(
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
+                .arg(
+                    Arg::with_name("prompt_mode")
+                        .long("prompt-mode")
+                        .value_name("PROMPT_MODE")
+                        .help("Which prompt mode to render.")
+                        .takes_value(true)
+                        .possible_values(&["main", "secondary"])
+                        .default_value("main"),
+                )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
                 .arg(&logical_path_arg)

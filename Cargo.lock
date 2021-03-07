@@ -1686,7 +1686,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "0.56.0"
+version = "0.57.0"
 dependencies = [
  "ansi_term 0.12.1",
  "attohttpc",

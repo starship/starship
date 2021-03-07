@@ -22,6 +22,9 @@ pub struct Context<'a> {
     /// The deserialized configuration map from the user's `starship.toml` file.
     pub config: StarshipConfig,
 
+    /// Which prompt to render.  By default, the main prompt is rendered.
+    pub prompt_mode: PromptMode,
+
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
@@ -58,6 +61,11 @@ pub struct Context<'a> {
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
+}
+
+pub enum PromptMode {
+    Main,
+    Secondary,
 }
 
 impl<'a> Context<'a> {
@@ -98,6 +106,12 @@ impl<'a> Context<'a> {
     ) -> Context {
         let config = StarshipConfig::initialize();
 
+        let prompt_mode = match arguments.value_of("prompt_mode") {
+            Some("main") => PromptMode::Main,
+            Some("secondary") => PromptMode::Secondary,
+            _ => PromptMode::Main,
+        };
+
         // Unwrap the clap arguments into a simple hashtable
         // we only care about single arguments at this point, there isn't a
         // use-case for a list of arguments yet.
@@ -118,6 +132,7 @@ impl<'a> Context<'a> {
 
         Context {
             config,
+            prompt_mode,
             properties,
             current_dir,
             logical_dir,
