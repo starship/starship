@@ -142,11 +142,11 @@ Esta es la lista de opciones de configuración.
 
 ### Opciones
 
-| Opción         | Por defecto                        | Descripción                                                                   |
-| -------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
-| `format`       | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                              |
-| `scan_timeout` | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos). |
-| `add_newline`  | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete.            |
+| Opción         | Por defecto                        | Descripción                                                                    |
+| -------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
+| `format`       | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                               |
+| `scan_timeout` | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos).  |
+| `add_newline`  | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
 
 ### Ejemplo
 
@@ -642,11 +642,11 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
-| Opciones avanzadas          | Por defecto | Descripción                                                                                                                                                                                                 |
-| --------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |             | Una tabla de sustituciones que se deben hacer a la ruta.                                                                                                                                                    |
-| `fish_style_pwd_dir_length` | `0`         | El número de caracteres a usar al aplicar la lógica de ruta pwd de la shell de fish.                                                                                                                        |
-| `use_logical_path`          | `true`      | Si `true` renderiza la ruta lógica originada desde el shell a través de `PWD` o `--logical-path`. Si `false` en su lugar renderiza la ruta física del sistema de archivos con enlaces simbólicos resueltos. |
+| Opciones avanzadas          | Por defecto | Descripción                                                                                                                                                                                                                  |
+| --------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |             | Una tabla de sustituciones que se deben hacer a la ruta.                                                                                                                                                                     |
+| `fish_style_pwd_dir_length` | `0`         | El número de caracteres a usar al aplicar la lógica de ruta pwd del intérprete de comandos de Fish.                                                                                                                          |
+| `use_logical_path`          | `true`      | Si `true` renderiza la ruta lógica originada desde el intérprete de comandos a través de `PWD` o `--logical-path`. Si `false` en su lugar renderiza la ruta física del sistema de archivos con enlaces simbólicos resueltos. |
 
 `substitutions` permite definir reemplazos arbitrarios para cadenas literales que ocurren en la ruta, por ejemplo prefijos largos de red o directorios de desarrollo (p. ej. Java). Ten en cuenta que esto desactivará el estilo PWD de fish.
 
@@ -2166,7 +2166,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Shell
 
-El módulo `shell` muestra un indicador para el shell actualmente utilizado.
+El módulo `shell` muestra un indicador para el intérprete de comandos actualmente utilizado.
 
 ::: tip
 
