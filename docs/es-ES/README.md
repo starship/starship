@@ -126,7 +126,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Añade el siguiente código al final de `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
