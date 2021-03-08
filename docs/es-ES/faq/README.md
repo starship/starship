@@ -16,14 +16,14 @@ El soporte de terminación, o autocompletado, es proporcionado por tu intérpret
 
 ## ¿`prompt_order` y `<module>.disabled` hacen lo mismo?
 
-Sí, se pueden usar ambos para desactivar los módulos en el símbolo del sistema. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
+Sí, se pueden usar ambos para desactivar los módulos en el prompt. Si todo lo que planeas es desactivar módulos, `<module>.disabled` es el método preferido por las siguientes razones:
 
 - Deshabilitar módulos es más explícito que omitirlos del nivel superior `format`
-- Los nuevos módulos se añadirán al símbolo del sistema en cuanto Starship se actualice
+- Los nuevos módulos se añadirán al prompt en cuanto Starship se actualice
 
 ## La documentación dice que Starship es "cross-shell". ¿Por qué no es compatible mi intérprete de comandos preferido?
 
-Por la forma en que Starship está construído, debería ser posible añadir soporte para prácticamente cualquier intérprete de comandos. El binario de Starship es sin estado y agnóstico, por lo que mientras que tu intérprete de comandos se pueda ampliar y soporte la personalización del símbolo del sistema, puede utilizar Starship.
+Por la forma en que Starship está construído, debería ser posible añadir soporte para prácticamente cualquier intérprete de comandos. El binario de Starship es sin estado y agnóstico, por lo que mientras que tu intérprete de comandos se pueda ampliar y soporte la personalización del prompt, puedes utilizar Starship.
 
 Aquí tienes un pequeño ejemplo haciendo que Starship funcione con bash:
 
@@ -40,7 +40,7 @@ PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 
 La [implementación de Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) en Starship es sensíblemente is ligeramente más compleja para permitir características avanzadas como [el módulo de duración de comando](https://starship.rs/config/#Command-Duration) y para asegurar que Starship es compatible con las configuraciones preinstaladas de Bash.
 
-Para obtener una lista de todos los parámetros aceptados por `el símbolo del sistema starship`, usa el siguiente comando:
+Para obtener una lista de todos los parámetros aceptados por `el prompt de Starship`, usa el siguiente comando:
 
 ```sh
 starship prompt --help
