@@ -19,7 +19,7 @@
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="패키징 상태" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="디스코드에 채팅을 하세요" /></a>

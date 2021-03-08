@@ -7,31 +7,20 @@ use regex::Regex;
 const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
 
 /// Creates a module with the current Java version
-///
-/// Will display the Java version if any of the following criteria are met:
-///     - Current directory contains a file with a `.java`, `.class`, `.jar`, `.gradle`, `.clj`, or `.cljc` extension
-///     - Current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("java");
+    let config: JavaConfig = JavaConfig::try_load(module.config);
+
     let is_java_project = context
         .try_begin_scan()?
-        .set_files(&[
-            "pom.xml",
-            "build.gradle.kts",
-            "build.sbt",
-            ".java-version",
-            "deps.edn",
-            "project.clj",
-            "build.boot",
-        ])
-        .set_extensions(&["java", "class", "jar", "gradle", "clj", "cljc"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_java_project {
         return None;
     }
-
-    let mut module = context.new_module("java");
-    let config: JavaConfig = JavaConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

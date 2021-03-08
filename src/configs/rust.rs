@@ -8,6 +8,9 @@ pub struct RustConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for RustConfig<'a> {
             symbol: "🦀 ",
             style: "bold red",
             disabled: false,
+            detect_extensions: vec!["rs"],
+            detect_files: vec!["Cargo.toml"],
+            detect_folders: vec![],
         }
     }
 }

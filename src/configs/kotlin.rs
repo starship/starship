@@ -9,6 +9,9 @@ pub struct KotlinConfig<'a> {
     pub style: &'a str,
     pub kotlin_binary: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for KotlinConfig<'a> {
@@ -19,6 +22,9 @@ impl<'a> RootModuleConfig<'a> for KotlinConfig<'a> {
             style: "bold blue",
             kotlin_binary: "kotlin",
             disabled: false,
+            detect_extensions: vec!["kt", "kts"],
+            detect_files: vec![],
+            detect_folders: vec![],
         }
     }
 }

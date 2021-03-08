@@ -4,22 +4,20 @@ use crate::configs::swift::SwiftConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current Swift version
-///
-/// Will display the Swift version if any of the following criteria are met:
-///     - The current directory contains a `Package.swift` file
-///     - The current directory contains a file with extension `.swift`
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("swift");
+    let config: SwiftConfig = SwiftConfig::try_load(module.config);
+
     let is_swift_project = context
         .try_begin_scan()?
-        .set_extensions(&["swift"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_swift_project {
         return None;
     }
-
-    let mut module = context.new_module("swift");
-    let config: SwiftConfig = SwiftConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

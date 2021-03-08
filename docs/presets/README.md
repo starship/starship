@@ -18,7 +18,7 @@ If emojis aren't your thing, this might catch your eye!
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "

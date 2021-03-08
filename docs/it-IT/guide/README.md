@@ -19,7 +19,7 @@
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Stato del pacchetto" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat su Discord" /></a>
@@ -132,7 +132,7 @@
 
 ### Inizia
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Nota**: a causa della proliferazione di piattaforme diverse, un sottoinsieme di piattaforme supportate sono mostrate di seguito. Non riesci a vedere la tua? Dai un'occhiata alle [istruzioni aggiuntive della piattaforma](https://starship.rs/installing/).
 
 1. Installa il binario **starship**:
 
@@ -150,7 +150,7 @@
    #### Installa via Package Manager
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Esempio: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -221,7 +221,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Attenzione** È supportato solo elvish v0.15 o superiore. Aggiungi quanto segue alla fine di `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv

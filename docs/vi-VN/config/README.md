@@ -21,16 +21,16 @@ success_symbol = "[➜](bold green)"     # "success_symbol" được thiết l�
 disabled = true
 ```
 
-Bạn có thể thay đổi đường dẫn mặc định của tệp tin `starship.toml` quan biến môi trường `STARSHIP_CONFIG`:
+Bạn thay đổi địa chỉ tệp tin cấu hình mặc định bằng biến môi trường `STARSHIP_CONFIG`:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship
+export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
 Tương đương trong PowerShell (Windows) sẽ được thêm dòng này vào `$PROFILE` của bạn:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship"
+$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
 ### Logging
@@ -173,7 +173,7 @@ Mặc định `format` được sử dụng để định nghĩa định dạng 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Nó tương đương với
 format = """
 $username\
 $hostname\
@@ -227,6 +227,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$shell\
 $character"""
 ```
 
@@ -372,7 +373,7 @@ Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất b
 
 Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi hình dạng, tham khảo [ví dụ này](#with-custom-error-shape).
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: warning `error_symbol` không được hỗ trợ trên elvish shell. :::
 
 ### Các tuỳ chọn
 
@@ -423,19 +424,22 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Module `cmake` cho biết phiên bản Cmake hiện tại được cài đặt nếu mọi điều kiện sau được thoả mãn:
+`cmake` module cho biết phiên bản Cmake hiện tại đã được cài đặt. Mặc định module sẽ được kích hoạt nếu thoả mãn bất kì điều kiện nào dưới đây:
 
 - Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
 - Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                      |
-| ---------- | ------------------------------------ | ------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                      |
-| `symbol`   | `"喝 "`                               | Kí hiệu sử dụng trước phiên bản của cmake. |
-| `style`    | `"bold blue"`                        | Kiểu cho module.                           |
-| `disabled` | `false`                              | Vô hiệu module `cmake`.                    |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                              |
+| ------------------- | -------------------------------------- | -------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                              |
+| `symbol`            | `"喝 "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.         |
+| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                |
+| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                |
+| `style`             | `"bold blue"`                          | Kiểu cho module.                                   |
+| `disabled`          | `false`                                | Vô hiệu hoá `cmake` module.                        |
 
 ### Các biến
 
@@ -538,19 +542,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `shard.yml`
 - Đường dẫn hiện tại chứa một tập tin `.cr`
 
 ### Options
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
-| `style`    | `"bold red"`                         | Kiểu cho module.                                      |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled` | `false`                              | Vô hiệu hoá module `crystal`.                         |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                      |
+| `detect_extensions` | `["cr"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `["shard.yml"]`                      | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `disabled`          | `false`                              | Vô hiệu hoá module `crystal`.                         |
 
 ### Các biến
 
@@ -573,26 +580,29 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Module `dart` cho biết phiên bản của Dart đã cài đặt. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+Module `dart` cho biết phiên bản của Dart đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
 - Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
-- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+- Đường dẫn hiện tại chứa một tệp tin `pubspec.yaml`, `pubspec.yml` hoặc `pubspec.lock`
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
-| `symbol`   | `"🎯 "`                               | A format string representing the symbol of Dart |
-| `style`    | `"bold blue"`                        | Kiểu cho module.                                |
-| `disabled` | `false`                              | Disables the `dart` module.                     |
+| Tuỳ chọn            | Mặc định                                          | Mô tả                                               |
+| ------------------- | ------------------------------------------------- | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | Định dạng cho module.                               |
+| `symbol`            | `"🎯 "`                                            | Một chuỗi định dạng hiển thị biểu tượng của Dart    |
+| `detect_extensions` | `['dart']`                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.          |
+| `detect_folders`    | `[".dart_tool"]`                                  | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"bold blue"`                                     | Kiểu cho module.                                    |
+| `disabled`          | `false`                                           | Vô hiệu `dart` module.                              |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v2.8.4` | The version of `dart`            |
+| version   | `v2.8.4` | Phiên bản của `dart`             |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
@@ -607,9 +617,9 @@ Module `dart` cho biết phiên bản của Dart đã cài đặt. Module cho s�
 format = "via [🔰 $version](bold red) "
 ```
 
-## Directory
+## Đường dẫn
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` module hiển thị đường dẫn thư mục hiện hành của bạn,, cắt ngắn ba thư mục cha. Đường dẫn của bạn cũng sẽ được cắt ngắn tới đường dẫn gốc của git repo hiện tại của bạn.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
@@ -632,11 +642,11 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Mặc định | Mô tả                                                                                    |
-| --------------------------- | -------- | ---------------------------------------------------------------------------------------- |
-| `substitutions`             |          | A table of substitutions to be made to the path.                                         |
-| `fish_style_pwd_dir_length` | `0`      | The number of characters to use when applying fish shell pwd path logic.                 |
-| `use_logical_path`          | `true`   | Displays the logical path provided by the shell (`PWD`) instead of the path from the OS. |
+| Advanced Option             | Mặc định | Mô tả                                                                                                                                                                  |
+| --------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |          | A table of substitutions to be made to the path.                                                                                                                       |
+| `fish_style_pwd_dir_length` | `0`      | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
+| `use_logical_path`          | `true`   | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -675,13 +685,16 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn          | Mặc định                           | Mô tả                                                                                                           |
-| ----------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"via [$symbol$context]($style) "` | Định dạng cho module.                                                                                           |
-| `symbol`          | `"🐳 "`                             | The symbol used before displaying the Docker context.                                                           |
-| `style`           | `"blue bold"`                      | Kiểu cho module.                                                                                                |
-| `only_with_files` | `true`                             | Only show when there's a `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile` in the current directory. |
-| `disabled`        | `false`                            | Disables the `docker_context` module.                                                                           |
+| Tuỳ chọn            | Mặc định                                                      | Mô tả                                                                             |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | Định dạng cho module.                                                             |
+| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                                                 | Kiểu cho module.                                                                  |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
 ### Các biến
 
@@ -706,7 +719,7 @@ format = "via [🐋 $context](blue bold)"
 
 The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-This module will only be shown in your prompt when one or more of the following files are present in the current directory:
+By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
 - `global.json`
 - `project.json`
@@ -726,13 +739,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn    | Mặc định                                  | Mô tả                                                    |
-| ----------- | ----------------------------------------- | -------------------------------------------------------- |
-| `format`    | `"[$symbol($version )(🎯 $tfm )]($style)"` | Định dạng cho module.                                    |
-| `symbol`    | `"•NET "`                                 | The symbol used before displaying the version of dotnet. |
-| `heuristic` | `true`                                    | Use faster version detection to keep starship snappy.    |
-| `style`     | `"bold blue"`                             | Kiểu cho module.                                         |
-| `disabled`  | `false`                                   | Disables the `dotnet` module.                            |
+| Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                    |
+| `symbol`            | `"•NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.      |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                     |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
+| `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                         |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
 
 ### Các biến
 
@@ -758,18 +774,21 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `mix.exs`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                                                    | Mô tả                                                           |
-| ---------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`   | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `style`    | `"bold purple"`                                             | Kiểu cho module.                                                |
-| `format`   | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled` | `false`                                                     | Disables the `elixir` module.                                   |
+| Tuỳ chọn            | Mặc định                                                    | Mô tả                                                           |
+| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.             |
+| `detect_files`      | `["mix.exs"]`                                               | Tên tệp nào sẽ kích hoạt mô-đun này.                            |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
+| `style`             | `"bold purple"`                                             | Kiểu cho module.                                                |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
 
 ### Các biến
 
@@ -793,7 +812,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `elm` module shows the currently installed version of Elm. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `elm.json`
 - Đường dẫn hiện tại chứa một tập tin `elm-package.json`
@@ -803,12 +822,15 @@ The `elm` module shows the currently installed version of Elm. Module cho sẽ �
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
-| `symbol`   | `"🌳 "`                               | A format string representing the symbol of Elm. |
-| `style`    | `"cyan bold"`                        | Kiểu cho module.                                |
-| `disabled` | `false`                              | Disables the `elm` module.                      |
+| Tuỳ chọn            | Mặc định                                           | Mô tả                                               |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Định dạng cho module.                               |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.     |
+| `detect_extensions` | `["elm"]`                                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.          |
+| `style`             | `"cyan bold"`                                      | Kiểu cho module.                                    |
+| `disabled`          | `false`                                            | Disables the `elm` module.                          |
 
 ### Các biến
 
@@ -868,19 +890,22 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `erlang` module shows the currently installed version of Erlang/OTP. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `rebar.config`.
 - Đường dẫn hiện tại chứa một tập tin `erlang.mk`.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                    |
-| ---------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`   | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`    | `"bold red"`                         | Kiểu cho module.                                         |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                    |
-| `disabled` | `false`                              | Disables the `erlang` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                    |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                         |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.      |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                     |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                    |
+| `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
 ### Các biến
 
@@ -1161,7 +1186,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `golang` module shows the currently installed version of Golang. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `go.mod`
 - Đường dẫn hiện tại chứa một tập tin `go.sum`
@@ -1174,12 +1199,15 @@ The `golang` module shows the currently installed version of Golang. Module cho 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                          |
-| ---------- | ------------------------------------ | ---------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                          |
-| `symbol`   | `"🐹 "`                               | A format string representing the symbol of Go. |
-| `style`    | `"bold cyan"`                        | Kiểu cho module.                               |
-| `disabled` | `false`                              | Disables the `golang` module.                  |
+| Tuỳ chọn            | Mặc định                                                                       | Mô tả                                               |
+| ------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Định dạng cho module.                               |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.      |
+| `detect_extensions` | `["go"]`                                                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `["Godeps"]`                                                                   | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"bold cyan"`                                                                  | Kiểu cho module.                                    |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                       |
 
 ### Các biến
 
@@ -1202,19 +1230,22 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `helm` module shows the currently installed version of Helm. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `helmfile.yaml`
 - The current directory contains a `Chart.yaml` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                            |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                            |
-| `symbol`   | `"⎈ "`                               | A format string representing the symbol of Helm. |
-| `style`    | `"bold white"`                       | Kiểu cho module.                                 |
-| `disabled` | `false`                              | Disables the `helm` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.          |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.    |
+| `style`             | `"bold white"`                       | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `helm` module.                         |
 
 ### Các biến
 
@@ -1272,19 +1303,22 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `java` module shows the currently installed version of Java. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                                 | Mô tả                                           |
-| ---------- | ---------------------------------------- | ----------------------------------------------- |
-| `format`   | `"via [${symbol}(${version} )]($style)"` | Định dạng cho module.                           |
-| `symbol`   | `"☕ "`                                   | A format string representing the symbol of Java |
-| `style`    | `"red dimmed"`                           | Kiểu cho module.                                |
-| `disabled` | `false`                                  | Disables the `java` module.                     |
+| Tuỳ chọn            | Mặc định                                                                                                  | Mô tả                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Định dạng cho module.                               |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.          |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java     |
+| `style`             | `"red dimmed"`                                                                                            | Kiểu cho module.                                    |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                         |
 
 ### Các biến
 
@@ -1341,7 +1375,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `julia` module shows the currently installed version of Julia. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1349,12 +1383,15 @@ The `julia` module shows the currently installed version of Julia. Module cho s�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                             |
-| ---------- | ------------------------------------ | ------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                             |
-| `symbol`   | `"ஃ "`                               | A format string representing the symbol of Julia. |
-| `style`    | `"bold purple"`                      | Kiểu cho module.                                  |
-| `disabled` | `false`                              | Disables the `julia` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.          |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.   |
+| `style`             | `"bold purple"`                      | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `julia` module.                        |
 
 ### Các biến
 
@@ -1377,19 +1414,22 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `kotlin` module shows the currently installed version of Kotlin. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.kt` or a `.kts` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn        | Mặc định                             | Mô tả                                                                         |
-| --------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`        | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
-| `symbol`        | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`         | `"bold blue"`                        | Kiểu cho module.                                                              |
-| `kotlin_binary` | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`      | `false`                              | Disables the `kotlin` module.                                                 |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                         |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
+| `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                           |
+| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                          |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `"bold blue"`                        | Kiểu cho module.                                                              |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Các biến
 
@@ -1482,7 +1522,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1490,13 +1530,16 @@ The `lua` module shows the currently installed version of Lua. Module cho sẽ �
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                             | Mô tả                                                                      |
-| ------------ | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`     | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                      |
-| `symbol`     | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `style`      | `"bold blue"`                        | Kiểu cho module.                                                           |
-| `lua_binary` | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`   | `false`                              | Disables the `lua` module.                                                 |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                      |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                      |
+| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
+| `detect_extensions` | `["lua"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                        |
+| `detect_files`      | `[".lua-version"]`                   | Tên tệp nào sẽ kích hoạt mô-đun này.                                       |
+| `detect_folders`    | `["lua"]`                            | Những thư mục nào sẽ kích hoạt mô-đun này.                                 |
+| `style`             | `"bold blue"`                        | Kiểu cho module.                                                           |
+| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
 ### Các biến
 
@@ -1602,7 +1645,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `nim` module shows the currently installed version of Nim. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `nim.cfg`
 - The current directory contains a file with the `.nim` extension
@@ -1611,12 +1654,15 @@ The `nim` module shows the currently installed version of Nim. Module cho sẽ �
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module                                  |
-| `symbol`   | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `style`    | `"bold yellow"`                      | Kiểu cho module.                                      |
-| `disabled` | `false`                              | Disables the `nim` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module                                  |
+| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `["nim.cfg"]`                        | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| `style`             | `"bold yellow"`                      | Kiểu cho module.                                      |
+| `disabled`          | `false`                              | Disables the `nim` module.                            |
 
 ### Các biến
 
@@ -1678,7 +1724,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `nodejs` module shows the currently installed version of NodeJS. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `package.json`
 - The current directory contains a `.node-version` file
@@ -1692,6 +1738,9 @@ The `nodejs` module shows the currently installed version of NodeJS. Module cho 
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                 |
 | `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                   |
+| `detect_files`      | `["package.json", ".node-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                                                  |
+| `detect_folders`    | `["node_modules"]`                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                                            |
 | `style`             | `"bold green"`                       | Kiểu cho module.                                                                                      |
 | `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
@@ -1717,7 +1766,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `ocaml` module shows the currently installed version of OCaml. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1728,12 +1777,15 @@ The `ocaml` module shows the currently installed version of OCaml. Module cho s�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                   |
-| ---------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                       |
-| `symbol`   | `"🐫 "`                               | The symbol used before displaying the version of OCaml. |
-| `style`    | `"bold yellow"`                      | Kiểu cho module.                                        |
-| `disabled` | `false`                              | Disables the `ocaml` module.                            |
+| Tuỳ chọn            | Mặc định                                                         | Mô tả                                                   |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                             | The format string for the module.                       |
+| `symbol`            | `"🐫 "`                                                           | The symbol used before displaying the version of OCaml. |
+| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.     |
+| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                    |
+| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Những thư mục nào sẽ kích hoạt mô-đun này.              |
+| `style`             | `"bold yellow"`                                                  | Kiểu cho module.                                        |
+| `disabled`          | `false`                                                          | Disables the `ocaml` module.                            |
 
 ### Các biến
 
@@ -1837,7 +1889,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `perl` module shows the currently installed version of Perl. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1847,12 +1899,15 @@ The `perl` module shows the currently installed version of Perl. Module cho sẽ
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
-| `symbol`   | `"🐪 "`                               | The symbol used before displaying the version of Perl |
-| `style`    | `"bold 149"`                         | Kiểu cho module.                                      |
-| `disabled` | `false`                              | Disables the `perl` module.                           |
+| Tuỳ chọn            | Mặc định                                                                                                 | Mô tả                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
+| `detect_folders`    | `[]`                                                                                                     | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| `style`             | `"bold 149"`                                                                                             | Kiểu cho module.                                      |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                           |
 
 ### Các biến
 
@@ -1873,20 +1928,23 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `php` module shows the currently installed version of PHP. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `composer.json`
 - The current directory contains a `.php-version` file
-- The current directory contains a `.php` file
+- The current directory contains a `.php` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `symbol`   | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
-| `style`    | `"147 bold"`                         | Kiểu cho module.                                      |
-| `disabled` | `false`                              | Disables the `php` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
+| `detect_extensions` | `["php"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| `style`             | `"147 bold"`                         | Kiểu cho module.                                      |
+| `disabled`          | `false`                              | Disables the `php` module.                            |
 
 ### Các biến
 
@@ -1909,19 +1967,22 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `purescript` module shows the currently installed version of PureScript version. By default the module will be shown if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `spago.dhall`
-- The current directory contains a \*.purs files
+- The current directory contains a file with the `.purs` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                        |
-| ---------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                        |
-| `symbol`   | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
-| `style`    | `"bold white"`                       | Kiểu cho module.                                             |
-| `disabled` | `false`                              | Disables the `purescript` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                        |
+| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `["purs"]`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.          |
+| `detect_files`      | `["spago.dhall"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                         |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                   |
+| `style`             | `"bold white"`                       | Kiểu cho module.                                             |
+| `disabled`          | `false`                              | Disables the `purescript` module.                            |
 
 ### Các biến
 
@@ -1948,30 +2009,32 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
-- Đường dẫn hiện tại chứa một tập tin `requirements.txt`
-- Đường dẫn hiện tại chứa một tập tin `pyproject.toml`
-- The current directory contains a file with the `.py` extension (and `scan_for_pyfiles` is true)
 - The current directory contains a `Pipfile` file
-- Đường dẫn hiện tại chứa một tập tin `tox.ini`
-- Đường dẫn hiện tại chứa một tập tin `setup.py`
 - The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                                                   | Mô tả                                                                                  |
-| -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'` | Định dạng cho module.                                                                  |
-| `symbol`             | `"🐍 "`                                                                     | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                            | Kiểu cho module.                                                                       |
-| `pyenv_version_name` | `false`                                                                    | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv`                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
-| `scan_for_pyfiles`   | `true`                                                                     | If false, Python files in the current directory will not show this module.             |
-| `python_binary`      | `["python", "python3, "python2"]`                                          | Configures the python binaries that Starship should executes when getting the version. |
-| `disabled`           | `false`                                                                    | Disables the `python` module.                                                          |
+| Tuỳ chọn             | Mặc định                                                                                                     | Mô tả                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | Định dạng cho module.                                                                  |
+| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
+| `style`              | `"yellow bold"`                                                                                              | Kiểu cho module.                                                                       |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: thử thuật
 
@@ -2010,9 +2073,17 @@ pyenv_version_name = true
 python_binary = "python3"
 ```
 
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Don't trigger for files with the py extension
+detect_extensions = []
+```
+
 ## Ruby
 
-The `ruby` module shows the currently installed version of Ruby. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `ruby` module shows the currently installed version of Ruby. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -2020,12 +2091,15 @@ The `ruby` module shows the currently installed version of Ruby. Module cho sẽ
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                            |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                            |
-| `symbol`   | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `style`    | `"bold red"`                         | Kiểu cho module.                                 |
-| `disabled` | `false`                              | Disables the `ruby` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.    |
+| `detect_extensions` | `["rb"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `ruby` module.                         |
 
 ### Các biến
 
@@ -2048,19 +2122,22 @@ symbol = "🔺 "
 
 ## Rust
 
-The `rust` module shows the currently installed version of Rust. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `rust` module shows the currently installed version of Rust. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                           |
-| ---------- | ------------------------------------ | ----------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                           |
-| `symbol`   | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `style`    | `"bold red"`                         | Kiểu cho module.                                |
-| `disabled` | `false`                              | Disables the `rust` module.                     |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust     |
+| `detect_extensions` | `["rs"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["Cargo.toml"]`                     | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `rust` module.                         |
 
 ### Các biến
 
@@ -2079,6 +2156,45 @@ The `rust` module shows the currently installed version of Rust. Module cho sẽ
 
 [rust]
 format = "via [⚙️ $version](red bold)"
+```
+
+## Shell
+
+The `shell` module shows an indicator for currently used shell.
+
+::: thử thuật
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Các tuỳ chọn
+
+| Tuỳ chọn               | Mặc định     | Mô tả                                         |
+| ---------------------- | ------------ | --------------------------------------------- |
+| `bash_indicator`       | `bsh`        | A format string used to represent bash.       |
+| `fish_indicator`       | `fsh`        | A format string used to represent fish.       |
+| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.        |
+| `powershell_indicator` | `psh`        | A format string used to represent powershell. |
+| `ion_indicator`        | `ion`        | A format string used to represent ion.        |
+| `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
+| `format`               | `$indicator` | Định dạng cho module.                         |
+| `disabled`             | `true`       | Disables the `shell` module.                  |
+
+### Các biến
+
+| Biến      | Mặc định | Mô tả                                                      |
+| --------- | -------- | ---------------------------------------------------------- |
+| indicator |          | Mirrors the value of `indicator` for currently used shell. |
+
+### Các vị dụ
+```toml
+# ~/.config/starship.toml
+
+[shell]
+fish_indicator = ""
+powershell_indicator = "_"
+disabled = false
 ```
 
 ## SHLVL
@@ -2208,19 +2324,22 @@ disabled = false
 
 ## Swift
 
-The `swift` module shows the currently installed version of Swift. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `swift` module shows the currently installed version of Swift. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                            |
-| ---------- | ------------------------------------ | ------------------------------------------------ |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                            |
-| `symbol`   | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `style`    | `"bold 202"`                         | Kiểu cho module.                                 |
-| `disabled` | `false`                              | Disables the `swift` module.                     |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift    |
+| `detect_extensions` | `["swift"]`                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["Package.swift"]`                  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"bold 202"`                         | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `swift` module.                        |
 
 ### Các biến
 
@@ -2251,19 +2370,22 @@ By default the terraform version is not shown, since this is slow for current ve
 
 :::
 
-Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`   | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`   | `"💠 "`                               | A format string shown before the terraform workspace. |
-| `style`    | `"bold 105"`                         | Kiểu cho module.                                      |
-| `disabled` | `false`                              | Disables the `terraform` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
+| `detect_folders`    | `[".terraform"]`                     | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| `style`             | `"bold 105"`                         | Kiểu cho module.                                      |
+| `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
 ### Các biến
 
@@ -2389,18 +2511,21 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `vagrant` module shows the currently installed version of Vagrant. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                               |
-| ---------- | ------------------------------------ | --------------------------------------------------- |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
-| `symbol`   | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `style`    | `"cyan bold"`                        | Kiểu cho module.                                    |
-| `disabled` | `false`                              | Disables the `Vagrant` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["Vagrantfile"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"cyan bold"`                        | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
 
 ### Các biến
 
@@ -2423,18 +2548,21 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-The `zig` module shows the currently installed version of Zig. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the the `zig` module shows the currently installed version of Zig. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.zig` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                                 |
-| ---------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`   | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`    | `"bold yellow"`                      | Kiểu cho module.                                      |
-| `format`   | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled` | `false`                              | Disables the `zig` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
+| `style`             | `"bold yellow"`                      | Kiểu cho module.                                      |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
+| `disabled`          | `false`                              | Disables the `zig` module.                            |
+| `detect_extensions` | `["zig"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
 
 ### Các biến
 
@@ -2491,7 +2619,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `mô tả`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |

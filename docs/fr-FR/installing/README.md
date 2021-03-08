@@ -8,10 +8,20 @@ Pour installer starship, vous devez faire deux choses:
 Pour la plupart des utilisateurs, les instructions sur [la page principale](/guide/#🚀-installation) fonctionneront bien. Cependant, pour certaines plateformes plus spécialisées, des instructions différentes sont nécessaires.
 
 Il y a tellement de plates-formes, qu'il aurait été déraisonnable de les faire apparaître dans le README principal, voici donc quelques instructions d'installation supplémentaires pour celles-ci, écrient par la commaunauté. La vôtre n'est-elle pas là ? S'il vous plaît, ajoutez-la ici pour les suivants !
+## [termux](https://termux.com)
+### Pré-requis
+```sh
+pkg install getconf
+```
+
+### Installation
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Obtention du binaire
+### Getting the Binary
 
 #### Impératif
 
@@ -35,7 +45,7 @@ Ajoutez `pkgs.starship` à `environment.packages` dans votre `configuration.nix`
 sudo nixos-rebuild switch
 ```
 
-### Modification des scripts d'initialisation
+### Modifying Init Scripts
 
 #### Avec Nix et home manager, en utilisant zsh :
 

@@ -8,6 +8,9 @@ pub struct HelmConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for HelmConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for HelmConfig<'a> {
             symbol: "⎈ ",
             style: "bold white",
             disabled: false,
+            detect_extensions: vec![],
+            detect_files: vec!["helmfile.yaml", "Chart.yaml"],
+            detect_folders: vec![],
         }
     }
 }

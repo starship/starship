@@ -4,28 +4,19 @@ use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current OCaml version
-///
-/// Will display the OCaml version if any of the following criteria are met:
-///     - Current directory contains a file with `.opam` extension or `_opam` directory
-///     - Current directory contains a `esy.lock` directory
-///     - Current directory contains a `dune` or `dune-project` file
-///     - Current directory contains a `jbuild` or `jbuild-ignore` file
-///     - Current directory contains a `.merlin` file
-///     - Current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("ocaml");
+    let config: OCamlConfig = OCamlConfig::try_load(module.config);
     let is_ocaml_project = context
         .try_begin_scan()?
-        .set_files(&["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"])
-        .set_folders(&["_opam", "esy.lock"])
-        .set_extensions(&["opam", "ml", "mli", "re", "rei"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_ocaml_project {
         return None;
     }
-
-    let mut module = context.new_module("ocaml");
-    let config: OCamlConfig = OCamlConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

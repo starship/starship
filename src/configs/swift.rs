@@ -8,6 +8,9 @@ pub struct SwiftConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> RootModuleConfig<'a> for SwiftConfig<'a> {
@@ -17,6 +20,9 @@ impl<'a> RootModuleConfig<'a> for SwiftConfig<'a> {
             symbol: "🐦 ",
             style: "bold 202",
             disabled: false,
+            detect_extensions: vec!["swift"],
+            detect_files: vec!["Package.swift"],
+            detect_folders: vec![],
         }
     }
 }
