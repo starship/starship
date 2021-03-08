@@ -86,11 +86,11 @@ Starshipのアンインストールはインストールと同じぐらい簡単
 1. Starshipを初期化するために使用した、シェルの設定行を削除します (例:`~/.bashrc`)。
 1. Starshipのバイナリを削除します。
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+`curl | bash` スクリプトを使用してStarshipをインストールした場合は、以下のコマンドでバイナリを削除してください。
 
 ```sh
-# starshipバイナリを見つけて削除します
+# starshipバイナリを見つけて削除
 rm "$(which starship)"
 ```
