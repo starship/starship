@@ -50,25 +50,25 @@ starship prompt --help
 
 ## 古いバージョンの glibc を使用する Linux ディストリビューションで Starship を実行するにはどうすればよいですか?
 
-"_version 'GLIBC_2のようなエラーが表示された場合。 8' が見つかりません (starshipで要求されます)_" プリビルドバイナリを使用しています（例えば、 CentOS 6 または 7 では、`glibc`の代わりに`musl`でコンパイルされたバイナリを使用できます。
+CentOS6や7などで事前にビルドされたバイナリを使用していて、"_version 'GLIBC_2.18' not found (required by starship)_" のようなエラーが出た場合、`glibc`の替わりに `musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## よくわからない記号を見つけました。これはどういった意味ですか？
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+不明な記号に遭遇した場合、`starship explain` を使用することで、現在表示しているモジュールの説明を見ることができます。
 
-## Why don't I see a glyph symbol in my prompt?
+## 私のプロンプトで記号のグリフがないのはなぜですか？
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+よくある原因はシステム上での設定ミスです。 いくつかのLinuxディストリビューションの初期設定にフォントサポートがありません。 次のことを確認してください。
 
-- ロケールは、`de_DE.UTF-8`や` ja_JP.UTF-8</ 0>などのUTF-8値に設定されています。 <code>LC_ALL`がUTF-8値でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
-- 絵文字フォントがインストールされています。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部(特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます--[noto emoji](https://www.google.com/get/noto/help/emoji/)は人気な選択肢です。
-- [Nerd Font](https://www.nerdfonts.com/)を使用しています。
+- ロケールが、`de_DE.UTF-8`や` ja_JP.UTF-8`などのUTF-8に設定されている。 `LC_ALL`がUTF-8でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 絵文字フォントがインストールされている。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部 (特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます。--[noto emoji](https://www.google.com/get/noto/help/emoji/)は一般的な選択肢です。
+- [Nerd Font](https://www.nerdfonts.com/)を使用している。
 
-To test your system, run the following commands in a terminal:
+ターミナルで以下のコマンドを実行することでテストできます。
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
