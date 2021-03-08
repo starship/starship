@@ -28,7 +28,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Quick Install
+### 빠른 설치
 
 1. **starship** 바이러니 설치:
 
@@ -113,9 +113,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: 주의 elvish v0.15 이상만 지원. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -126,7 +126,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   아래의 라인을 `~/.tcshrc` 마지막에 추가:
 
    ```sh
    # ~/.tcshrc
