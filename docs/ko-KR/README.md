@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 위치.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -103,7 +103,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   아래의 라인을 `~/.config/ion/initrc` 마지막에 추가:
 
    ```sh
    # ~/.config/ion/initrc
