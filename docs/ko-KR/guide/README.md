@@ -216,7 +216,7 @@
 
    #### 파워셀
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
