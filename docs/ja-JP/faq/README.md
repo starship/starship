@@ -77,13 +77,13 @@ echo -e "\xee\x82\xa0"
 
 一行目は[蛇の絵文字](https://emojipedia.org/snake/)、二行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)となります。
 
-もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし記号が正しく表示されているのにもかかわらず、Starshipが正しく表示されていない場合は、[バグの報告](https://github.com/starship/starship/issues/new/choose)をお願いします。
 
-## How do I uninstall Starship?
+## Starshipをアンインストールしたい
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starshipのアンインストールはインストールと同じぐらい簡単です。
 
-1. Starshipを初期化するために使用されるシェル設定の行を削除します(例:`~/.bashrc`)。
+1. Starshipを初期化するために使用した、シェルの設定行を削除します (例:`~/.bashrc`)。
 1. Starshipのバイナリを削除します。
 
 If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
