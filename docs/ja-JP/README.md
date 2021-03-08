@@ -126,7 +126,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   `~/.tcshrc` の最後に以下を追加します:
 
    ```sh
    # ~/.tcshrc
