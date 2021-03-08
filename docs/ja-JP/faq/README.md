@@ -14,18 +14,18 @@
 
 補完サポート、または自動補完は選択したシェルによって提供されます。 デモ中では、デフォルトの[Fish Shell](https://fishshell.com/)によって補完されています。 Z Shell (zsh) を利用しているのであれば、[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)を照参してください。
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## トップレベルの`format`と`<module>.disabled`は同じように動作しますか？
 
 はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- モジュールを無効化することは、トップレベルの`format`を削除するよりも明示的です。
 - Starshipが更新されると、新しく作成されたモジュールがプロンプトに追加されます
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Starshipはcross-shellとのことです。 私の好みのshellはサポートしていないようですが。
 
 Starshipの構築方法は、事実上すべてのシェルのサポートを追加できるはずです。 Starshipのバイナリはステートレスであり、シェルに依存しないため、シェルがプロンプトのカスタマイズとシェルの拡張をサポートしている限り、Starshipを使用できます。
 
-Starshipをbashで動作させる小さな例を次に示します。
+Starshipをbashで動作させる例を次に示します。
 
 ```sh
 # Get the status code from the last command executed
