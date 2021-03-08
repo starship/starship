@@ -70,7 +70,7 @@ prefix = "tomó "
 ```toml
 [cmd_duration]
 # $duration – La duración del comando (p. ej. "15s")
-# $style    – El estilo predeterminado del módulo (p. ej. "bold yellow")
+# $style    – El estilo por defecto del módulo (p. ej. "bold yellow")
 format = "tomó [$duration]($style) "
 ```
 
