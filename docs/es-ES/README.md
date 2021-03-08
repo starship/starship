@@ -14,11 +14,11 @@ features:
     details: Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.
   - 
     title: Personalizable
-    details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.
+    details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener un prompt minimalista o rico en funcionalidades.
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: el indicador de comando multi-intérprete"
-description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos! Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.'
+metaTitle: "Starship: el prompt multi-intérprete"
+description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos! Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.'
 ---
 
 <div class="center">
