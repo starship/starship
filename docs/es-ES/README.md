@@ -8,7 +8,7 @@ actionLink: ./guide/
 features:
   - 
     title: Compatibilidad primero
-    details: Funciona en las shells más comunes en los sistemas operativos más comunes. ¡Úsalo en todas partes!
+    details: Funciona en los intérprete de comandos más comunes de los sistemas operativos más comunes. ¡Úsalo en todas partes!
   - 
     title: Desarrollado en Rust
     details: Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.
@@ -18,7 +18,7 @@ features:
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: el indicador de comando multi-intérprete"
-description: Starship es el símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos. Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.
+description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos! Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.'
 ---
 
 <div class="center">
@@ -35,7 +35,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
    #### Instalar la última versión
 
-   Con la interfaz de línea de comandos:
+   Con el intérprete de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
@@ -56,7 +56,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
    scoop install starship
    ```
 
-1. Añade el script de inicio al archivo de configuración de tu interfaz de línea de comandos:
+1. Añade el guión de inicio al archivo de configuración de tu intérprete de comandos:
 
 
    #### Bash
