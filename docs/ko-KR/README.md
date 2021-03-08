@@ -42,9 +42,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
 
-   #### Install via Package Manager
+   #### 패키지 매니저를 이용한 설치
 
-   With [Homebrew](https://brew.sh/):
+   [Homebrew](https://brew.sh/)를 통한 설치:
 
    ```sh
    brew install starship
@@ -56,12 +56,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. 쉘 설정에 시동 스크립트를 추가:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc`에 아래 라인을 추가
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish`에 아래 라인을 추가
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc`에 아래 라인을 추가
 
    ```sh
    # ~/.zshrc
