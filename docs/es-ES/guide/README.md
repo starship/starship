@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship - Prompt multi intérprete de comandos"
+    alt="Starship - Prompt multi-intérprete de comandos"
  />
 </p>
 
@@ -178,7 +178,7 @@
    scoop install starship
    ```
 
-2. Añade el script de inicio al archivo de configuración de tu interfaz de línea de comandos:
+2. Añade el guión de inicio al archivo de configuración de tu intérprete de comandos:
 
 
    #### Bash
@@ -297,9 +297,9 @@ Por favor, revisa estos trabajos previos que ayudaron a inspirar la creación de
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt ZSH para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi intérprete de comandos escrito en JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi-intérprete de comandos escrito en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt multi intérprete de comandos personalizable, basada en Powerline con iconos.
+- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt multi-intérprete de comandos personalizable, basada en Powerline con iconos.
 
 <p align="center">
     <br>
