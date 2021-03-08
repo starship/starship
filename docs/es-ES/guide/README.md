@@ -295,11 +295,11 @@ Apoya este proyecto con tu organización. Su logo se mostrará aquí con un enla
 
 Por favor, revisa estos trabajos previos que ayudaron a inspirar la creación de starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Una prompt ZSH para astronautas.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un prompt ZSH para astronautas.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - robbyrussel, tema multi-intérprete de comandos escrito en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - Una prompt multi-intérprete de comandos personalizable, basada en Powerline con iconos.
+- **[reujab/silver](https://github.com/reujab/silver)** - Un prompt multi-intérprete de comandos personalizable, basada en Powerline con iconos.
 
 <p align="center">
     <br>
