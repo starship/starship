@@ -138,7 +138,7 @@ format = '''
 
 ## Prompt
 
-Esta es la lista de opciones de configuración.
+Esta es la lista de opciones de configuración del prompt.
 
 ### Opciones
 
@@ -1513,9 +1513,9 @@ El módulo `line_break` separa el prompt en dos líneas.
 
 ### Opciones
 
-| Opción     | Por defecto | Descripción                                                                     |
-| ---------- | ----------- | ------------------------------------------------------------------------------- |
-| `disabled` | `false`     | Deshabilita el módulo `line_break`, haciendo que el mensaje sea una sola línea. |
+| Opción     | Por defecto | Descripción                                                                    |
+| ---------- | ----------- | ------------------------------------------------------------------------------ |
+| `disabled` | `false`     | Deshabilita el módulo `line_break`, haciendo que el prompt sea una sola línea. |
 
 ### Ejemplo
 
