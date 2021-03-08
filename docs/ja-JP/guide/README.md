@@ -247,7 +247,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   `~/.tcshrc` の最後に以下を追加します:
 
    ```sh
    # ~/.tcshrc
