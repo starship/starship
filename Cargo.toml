@@ -61,7 +61,7 @@ term_size = "0.3.2"
 quick-xml = "0.22.0"
 rand = "0.8.3"
 serde = { version = "1.0.123", features = ["derive"] }
-indexmap = "1.6.1"
+indexmap = "1.6.2"
 notify-rust = { version = "4.3.0", optional = true }
 semver = "0.11.0"
 which = "4.0.2"
