@@ -1,5 +1,3 @@
-use std::fs;
-
 use crate::configs::scala::ScalaConfig;
 use crate::formatter::StringFormatter;
 
@@ -7,7 +5,8 @@ use super::{Context, Module, RootModuleConfig};
 
 use regex::Regex;
 
-const SCALA_VERSION_PATTERN: &str = "version[\\s](?P<version>[0-9\\.\\-A-z]+)";
+const SCALA_VERSION_PATTERN: &str = "version[\\s](?P<version>[^\\s]+)";
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("scala");
     let config: ScalaConfig = ScalaConfig::try_load(module.config);
@@ -55,8 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_scala_version(context: &Context) -> Option<String> {
-    let scala_command = String::from("scalac");
-    let output = context.exec_cmd(&scala_command.as_str(), &["-version"])?;
+    let output = context.exec_cmd("scalac", &["-version"])?;
     let scala_version = if output.stdout.is_empty() {
         output.stderr
     } else {
@@ -79,7 +77,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::fs::File;
+    use std::fs::{self, File};
     use std::io;
 
     #[test]
