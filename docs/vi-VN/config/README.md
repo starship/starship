@@ -434,7 +434,7 @@ vicmd_symbol = "[V](bold green) "
 | Tuỳ chọn            | Mặc định                               | Mô tả                                              |
 | ------------------- | -------------------------------------- | -------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                              |
-| `symbol`            | `"喝 "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.         |
+| `symbol`            | `"△ "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.         |
 | `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                |
 | `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                |

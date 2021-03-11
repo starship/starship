@@ -434,7 +434,7 @@ The `cmake` module shows the currently installed version of CMake. By default th
 | Option              | Défaut                                 | Description                                   |
 | ------------------- | -------------------------------------- | --------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                             |
-| `symbol`            | `"喝 "`                                 | Le symbole utilisé avant la version de cmake. |
+| `symbol`            | `"△ "`                                 | Le symbole utilisé avant la version de cmake. |
 | `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle   |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module    |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module      |
