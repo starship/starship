@@ -1,4 +1,4 @@
-code use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::cmake::CMakeConfig;
 use crate::formatter::StringFormatter;
