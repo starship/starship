@@ -47,7 +47,7 @@ gethostname = "0.2.1"
 once_cell = "1.7.2"
 chrono = "0.4.19"
 sys-info = "0.8.0"
-byte-unit = "4.0.9"
+byte-unit = "4.0.10"
 starship_module_config_derive = { version = "0.1.2", path = "starship_module_config_derive" }
 yaml-rust = "0.4.5"
 pest = "2.1.3"
