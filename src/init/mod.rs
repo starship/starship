@@ -180,17 +180,7 @@ fi"#,
             );
             Some(script)
         }
-        None => {
-            println!(
-                "Invalid shell name provided: {}\\n\
-                 If this issue persists, please open an \
-                 issue in the starship repo: \\n\
-                 https://github.com/starship/starship/issues/new\\n\"",
-                shell_name
-            );
-            None
-        }
-        Some(shell_basename) => {
+        _ => {
             println!(
                 "printf \"\\n{0} is not yet supported by starship.\\n\
                  For the time being, we support the following shells:\\n\
@@ -204,7 +194,7 @@ fi"#,
                  \\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for {0}:\\nhttps://github.com/starship/starship/issues/new\\n\\n\"",
-                shell_basename
+                shell_name
             );
             None
         }
