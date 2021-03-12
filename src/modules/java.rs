@@ -61,8 +61,9 @@ fn get_java_version(context: &Context) -> Option<String> {
             Path::new(&java_home)
                 .join("bin")
                 .join("java")
-                .to_str()
-                .map(str::to_owned)
+                .into_os_string()
+                .into_string()
+                .ok()
         })
         .unwrap_or_else(|| String::from("java"));
 
