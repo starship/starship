@@ -131,6 +131,6 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    ```sh
    # ~/.tcshrc
 
-   eval "`starship init tcsh`"
+   eval `starship init tcsh`
    ```
 
