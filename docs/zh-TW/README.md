@@ -131,6 +131,6 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    ```sh
    # ~/.tcshrc
 
-   eval "`starship init tcsh`"
+   eval `starship init tcsh`
    ```
 
