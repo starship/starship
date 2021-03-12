@@ -55,15 +55,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_java_version(context: &Context) -> Option<String> {
-    let java_command = match context.get_env("JAVA_HOME") {
-        Some(java_home) => {
-            let java_path = Path::new(&java_home).join("bin").join("java");
-            java_path.to_str().unwrap_or("java").to_owned()
-        }
-        None => String::from("java"),
-    };
+    let java_command = context
+        .get_env("JAVA_HOME")
+        .and_then(|java_home| {
+            Path::new(&java_home)
+                .join("bin")
+                .join("java")
+                .to_str()
+                .map(str::to_owned)
+        })
+        .unwrap_or_else(|| String::from("java"));
 
-    let output = context.exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let output = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
     let java_version = if output.stdout.is_empty() {
         output.stderr
     } else {
