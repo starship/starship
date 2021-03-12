@@ -252,7 +252,7 @@
    ```sh
    # ~/.tcshrc
 
-   eval "`starship init tcsh`"
+   eval `starship init tcsh`
    ```
 
 ## 🤝 Помощь
