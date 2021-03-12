@@ -52,7 +52,7 @@ starship_module_config_derive = { version = "0.1.2", path = "starship_module_con
 yaml-rust = "0.4.5"
 pest = "2.1.3"
 pest_derive = "2.1.0"
-regex = "1.4.3"
+regex = "1.4.4"
 os_info = "3.0.1"
 urlencoding = "1.1.1"
 open = "1.6.0"
