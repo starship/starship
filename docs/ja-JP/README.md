@@ -131,6 +131,6 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    # ~/.tcshrc
 
-   eval "`starship init tcsh`"
+   eval `starship init tcsh`
    ```
 
