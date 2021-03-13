@@ -237,6 +237,8 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+
 ### Opções
 
 | Option           | Padrão                                              | Descrição                                                       |
@@ -455,7 +457,7 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Não utilize o DEBUG-trap no Bash
+::: warning Do not hook the DEBUG trap in Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
