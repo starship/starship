@@ -92,7 +92,6 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use std::path::PathBuf;
 
     #[test]
     fn test_parse_java_version_openjdk() {
