@@ -1,5 +1,6 @@
 use crate::configs::java::JavaConfig;
 use crate::formatter::StringFormatter;
+use std::path::PathBuf;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -54,12 +55,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_java_version(context: &Context) -> Option<String> {
-    let java_command = match context.get_env("JAVA_HOME") {
-        Some(java_home) => format!("{}/bin/java", java_home),
-        None => String::from("java"),
-    };
+    let java_command = context
+        .get_env("JAVA_HOME")
+        .map(PathBuf::from)
+        .and_then(|path| {
+            path.join("bin")
+                .join("java")
+                .into_os_string()
+                .into_string()
+                .ok()
+        })
+        .unwrap_or_else(|| String::from("java"));
 
-    let output = context.exec_cmd(&java_command.as_str(), &["-Xinternalversion"])?;
+    let output = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
     let java_version = if output.stdout.is_empty() {
         output.stderr
     } else {
@@ -260,6 +268,27 @@ mod tests {
         File::create(dir.path().join(".java-version"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_java_home() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Main.java"))?.sync_all()?;
+        let java_home: PathBuf = ["a", "b", "c"].iter().collect();
+        let java_bin = java_home.join("bin").join("java");
+
+        let actual = ModuleRenderer::new("java")
+            .env("JAVA_HOME", java_home.to_str().unwrap())
+            .cmd(&format!("{} -Xinternalversion", java_bin.to_str().unwrap()),
+            Some(CommandOutput {
+                stdout: "OpenJDK 64-Bit Server VM (11.0.4+11-LTS-sapmachine) for linux-amd64 JRE (11.0.4+11-LTS-sapmachine), built on Jul 17 2019 08:58:43 by \"\" with gcc 7.3.0".to_owned(),
+                stderr: String::new(),
+            }))
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v11.0.4 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
