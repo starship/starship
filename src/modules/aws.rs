@@ -47,14 +47,14 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
 }
 
 fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
-    match (
-        context
-            .get_env("AWS_VAULT")
-            .or_else(|| context.get_env("AWS_PROFILE")),
-        context
-            .get_env("AWS_DEFAULT_REGION")
-            .or_else(|| context.get_env("AWS_REGION")),
-    ) {
+    let profile_env_vars = vec!["AWSU_PROFILE", "AWS_VAULT", "AWS_PROFILE"];
+    let profile = profile_env_vars
+        .iter()
+        .find_map(|env_var| context.get_env(env_var));
+    let region = context
+        .get_env("AWS_DEFAULT_REGION")
+        .or_else(|| context.get_env("AWS_REGION"));
+    match (profile, region) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
         (Some(ref p), None) => (
@@ -195,6 +195,20 @@ mod tests {
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-vault ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_from_awsu() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWSU_PROFILE", "astronauts-awsu")
+            .env("AWS_PROFILE", "astronauts-profile")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts-awsu ")
         ));
 
         assert_eq!(expected, actual);
