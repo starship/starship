@@ -57,9 +57,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_java_version(context: &Context) -> Option<String> {
     let java_command = context
         .get_env("JAVA_HOME")
-        .and_then(|java_home| {
-            Path::new(&java_home)
-                .join("bin")
+        .map(PathBuf::from)
+        .and_then(|path| {
+            path.join("bin")
                 .join("java")
                 .into_os_string()
                 .into_string()
