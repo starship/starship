@@ -237,6 +237,8 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+
 ### Options
 
 | Option           | Default                                             | Description                                                     |
