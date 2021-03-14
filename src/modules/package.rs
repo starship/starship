@@ -68,7 +68,7 @@ fn extract_package_version(file_contents: &str, display_private: bool) -> Option
     };
 
     let formatted_version = format_version(raw_version);
-    if formatted_version == "v0.0.0-development" || formatted_version.find("semantic").is_some() {
+    if formatted_version == "v0.0.0-development" || formatted_version.starts_with("v0.0.0-semantic") {
         return Some("semantic".to_string());
     };
 
