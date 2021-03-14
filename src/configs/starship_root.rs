@@ -50,6 +50,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "python",
     "ruby",
     "rust",
+    "scala",
     "swift",
     "terraform",
     "vagrant",

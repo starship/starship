@@ -34,6 +34,7 @@ pub const ALL_MODULES: &[&str] = &[
     "hg_branch",
     "hostname",
     "java",
+    "scala",
     "jobs",
     "julia",
     "kotlin",
