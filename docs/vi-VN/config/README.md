@@ -173,7 +173,7 @@ Mặc định `format` được sử dụng để định nghĩa định dạng 
 ```toml
 format = "$all"
 
-# Nó tương đương với
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -207,6 +207,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$scala\
 $swift\
 $terraform\
 $vagrant\
@@ -2165,6 +2166,48 @@ By default the `rust` module shows the currently installed version of Rust. The 
 [rust]
 format = "via [⚙️ $version](red bold)"
 ```
+
+
+## Scala
+
+The `scala` module shows the currently installed version of Scala. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+
+- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- The current directory contains a file with the `.scala` or `.sbt` extension
+- The current directory contains a directory named `.metals`
+
+### Các tuỳ chọn
+
+
+| Tuỳ chọn            | Mặc định                                 | Mô tả                                               |
+| ------------------- | ---------------------------------------- | --------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | Định dạng cho module.                               |
+| `detect_extensions` | `["sbt", "scala"]`                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
+| `detect_folders`    | `[".metals"]`                            | Những thư mục nào nên kích hoạt các mô đun này.     |
+| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.   |
+| `style`             | `"red dimmed"`                           | Kiểu cho module.                                    |
+| `disabled`          | `false`                                  | Disables the `scala` module.                        |
+
+### Các biến
+
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `2.13.5` | The version of `scala`           |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
+
+\*: This variable can only be used as a part of a style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[scala]
+symbol = "🌟 "
+```
+
 
 ## Shell
 
