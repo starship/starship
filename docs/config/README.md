@@ -2289,7 +2289,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["sbt", "scala"]`                         | Which extensions should trigger this module.     |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`    | Which filenames should trigger this module.      |
 | `detect_folders`    | `[".metals"]`                              | Which folders should trigger this modules.       |
-| `symbol`            | `"🆂 "`                                    | format string representing the symbol of Scala   |
+| `symbol`            | `"🆂 "`                                    | A format string representing the symbol of Scala.   |
 | `style`             | `"red dimmed"`                             | The style for the module.                        |
 | `disabled`          | `false`                                    | Disables the `scala` module.                     |
 
