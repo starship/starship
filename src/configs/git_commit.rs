@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -13,8 +13,8 @@ pub struct GitCommitConfig<'a> {
     pub tag_disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for GitCommitConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for GitCommitConfig<'a> {
+    fn default() -> Self {
         GitCommitConfig {
             // be consistent with git by default, which has DEFAULT_ABBREV set to 7
             commit_hash_length: 7,

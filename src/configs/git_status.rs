@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -19,8 +19,8 @@ pub struct GitStatusConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for GitStatusConfig<'a> {
+    fn default() -> Self {
         GitStatusConfig {
             format: "([\\[$all_status$ahead_behind\\]]($style) )",
             style: "red bold",

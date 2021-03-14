@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -14,8 +14,8 @@ pub struct LuaConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for LuaConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for LuaConfig<'a> {
+    fn default() -> Self {
         LuaConfig {
             format: "via [$symbol($version )]($style)",
             symbol: "🌙 ",

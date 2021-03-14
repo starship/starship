@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -14,8 +14,8 @@ pub struct DotnetConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for DotnetConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for DotnetConfig<'a> {
+    fn default() -> Self {
         DotnetConfig {
             format: "[$symbol($version )(🎯 $tfm )]($style)",
             symbol: "•NET ",

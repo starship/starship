@@ -14,18 +14,15 @@ use toml::Value;
 /// Root config of a module.
 pub trait RootModuleConfig<'a>
 where
-    Self: ModuleConfig<'a>,
+    Self: ModuleConfig<'a> + Default,
 {
-    /// Create a new root module config with default values.
-    fn new() -> Self;
-
     /// Load root module config from given Value and fill unset variables with default
     /// values.
     fn load(config: &'a Value) -> Self {
         if config.get("prompt_order").is_some() {
             log::warn!("\"prompt_order\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
         }
-        Self::new().load_config(config)
+        Self::default().load_config(config)
     }
 
     /// Helper function that will call RootModuleConfig::load(config) if config is Some,
@@ -34,10 +31,12 @@ where
         if let Some(config) = config {
             Self::load(config)
         } else {
-            Self::new()
+            Self::default()
         }
     }
 }
+
+impl<'a, T: ModuleConfig<'a> + Default> RootModuleConfig<'a> for T {}
 
 /// Parsable config.
 pub trait ModuleConfig<'a>
@@ -346,7 +345,7 @@ impl StarshipConfig {
         if let Some(root_config) = &self.config {
             StarshipRootConfig::load(root_config)
         } else {
-            StarshipRootConfig::new()
+            StarshipRootConfig::default()
         }
     }
 }

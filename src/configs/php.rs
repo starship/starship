@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -13,8 +13,8 @@ pub struct PhpConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for PhpConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for PhpConfig<'a> {
+    fn default() -> Self {
         PhpConfig {
             symbol: "🐘 ",
             style: "147 bold",

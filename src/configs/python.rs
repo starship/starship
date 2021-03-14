@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig, VecOr};
+use crate::config::{ModuleConfig, VecOr};
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -16,8 +16,8 @@ pub struct PythonConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for PythonConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for PythonConfig<'a> {
+    fn default() -> Self {
         PythonConfig {
             pyenv_version_name: false,
             pyenv_prefix: "pyenv ",

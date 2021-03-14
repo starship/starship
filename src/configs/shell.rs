@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -15,8 +15,8 @@ pub struct ShellConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for ShellConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for ShellConfig<'a> {
+    fn default() -> Self {
         ShellConfig {
             format: "$indicator ",
             bash_indicator: "bsh",

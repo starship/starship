@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -12,8 +12,8 @@ pub struct EnvVarConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for EnvVarConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for EnvVarConfig<'a> {
+    fn default() -> Self {
         EnvVarConfig {
             symbol: "",
             style: "black bold dimmed",

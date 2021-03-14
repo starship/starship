@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -13,8 +13,8 @@ pub struct VagrantConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for VagrantConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for VagrantConfig<'a> {
+    fn default() -> Self {
         VagrantConfig {
             format: "via [$symbol($version )]($style)",
             symbol: "⍱ ",

@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -13,8 +13,8 @@ pub struct ElixirConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for ElixirConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for ElixirConfig<'a> {
+    fn default() -> Self {
         ElixirConfig {
             format: "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
             symbol: "💧 ",

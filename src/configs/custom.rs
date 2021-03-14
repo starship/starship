@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig, VecOr};
+use crate::config::{ModuleConfig, VecOr};
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -26,8 +26,8 @@ pub struct CustomConfig<'a> {
     pub directories: Directories<'a>,
 }
 
-impl<'a> RootModuleConfig<'a> for CustomConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for CustomConfig<'a> {
+    fn default() -> Self {
         CustomConfig {
             format: "[$symbol($output )]($style)",
             symbol: "",
