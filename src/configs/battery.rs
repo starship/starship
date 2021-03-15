@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -14,8 +14,8 @@ pub struct BatteryConfig<'a> {
     pub format: &'a str,
 }
 
-impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for BatteryConfig<'a> {
+    fn default() -> Self {
         BatteryConfig {
             full_symbol: "",
             charging_symbol: "",

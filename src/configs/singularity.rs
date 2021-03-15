@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -10,8 +10,8 @@ pub struct SingularityConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for SingularityConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for SingularityConfig<'a> {
+    fn default() -> Self {
         SingularityConfig {
             format: "[$symbol\\[$env\\]]($style) ",
             symbol: "",

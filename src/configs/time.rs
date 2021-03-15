@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -13,8 +13,8 @@ pub struct TimeConfig<'a> {
     pub time_range: &'a str,
 }
 
-impl<'a> RootModuleConfig<'a> for TimeConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for TimeConfig<'a> {
+    fn default() -> Self {
         TimeConfig {
             format: "at [$time]($style) ",
             style: "bold yellow",

@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -11,8 +11,8 @@ pub struct PackageConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for PackageConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for PackageConfig<'a> {
+    fn default() -> Self {
         PackageConfig {
             format: "is [$symbol$version]($style) ",
             symbol: "📦 ",

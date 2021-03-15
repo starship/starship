@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -14,8 +14,8 @@ pub struct KotlinConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for KotlinConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for KotlinConfig<'a> {
+    fn default() -> Self {
         KotlinConfig {
             format: "via [$symbol($version )]($style)",
             symbol: "🅺 ",

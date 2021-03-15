@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -11,8 +11,8 @@ pub struct JobsConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for JobsConfig<'a> {
+    fn default() -> Self {
         JobsConfig {
             threshold: 1,
             format: "[$symbol$number]($style) ",

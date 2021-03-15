@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -12,8 +12,8 @@ pub struct HgBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for HgBranchConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for HgBranchConfig<'a> {
+    fn default() -> Self {
         HgBranchConfig {
             symbol: " ",
             style: "bold purple",

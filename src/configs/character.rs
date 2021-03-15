@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -11,8 +11,8 @@ pub struct CharacterConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for CharacterConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for CharacterConfig<'a> {
+    fn default() -> Self {
         CharacterConfig {
             format: "$symbol ",
             success_symbol: "[❯](bold green)",

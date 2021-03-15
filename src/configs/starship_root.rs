@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -76,8 +76,8 @@ pub const PROMPT_ORDER: &[&str] = &[
     "character",
 ];
 
-impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for StarshipRootConfig<'a> {
+    fn default() -> Self {
         StarshipRootConfig {
             format: "$all",
             scan_timeout: 30,

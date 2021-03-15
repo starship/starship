@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -16,8 +16,8 @@ pub struct StatusConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for StatusConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for StatusConfig<'a> {
+    fn default() -> Self {
         StatusConfig {
             format: "[$symbol$status]($style) ",
             symbol: "✖",

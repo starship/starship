@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -14,8 +14,8 @@ pub struct DockerContextConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for DockerContextConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for DockerContextConfig<'a> {
+    fn default() -> Self {
         DockerContextConfig {
             symbol: "🐳 ",
             style: "blue bold",

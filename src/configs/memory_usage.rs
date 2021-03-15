@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -11,8 +11,8 @@ pub struct MemoryConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for MemoryConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for MemoryConfig<'a> {
+    fn default() -> Self {
         MemoryConfig {
             threshold: 75,
             format: "via $symbol[$ram( | $swap)]($style) ",

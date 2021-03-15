@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -12,8 +12,8 @@ pub struct ShLvlConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for ShLvlConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for ShLvlConfig<'a> {
+    fn default() -> Self {
         ShLvlConfig {
             threshold: 2,
             format: "[$symbol$shlvl]($style) ",

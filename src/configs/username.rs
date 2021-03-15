@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -11,8 +11,8 @@ pub struct UsernameConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for UsernameConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for UsernameConfig<'a> {
+    fn default() -> Self {
         UsernameConfig {
             format: "[$user]($style) in ",
             style_root: "red bold",

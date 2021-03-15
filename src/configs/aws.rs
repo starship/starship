@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 use starship_module_config_derive::ModuleConfig;
 use std::collections::HashMap;
 
@@ -11,8 +11,8 @@ pub struct AwsConfig<'a> {
     pub region_aliases: HashMap<String, &'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for AwsConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for AwsConfig<'a> {
+    fn default() -> Self {
         AwsConfig {
             format: "on [$symbol($profile )(\\($region\\) )]($style)",
             symbol: "☁️  ",

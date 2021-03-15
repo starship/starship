@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -15,8 +15,8 @@ pub struct NixShellConfig<'a> {
 /* The trailing double spaces in `symbol` are needed to work around issues with
 multiwidth emoji support in some shells. Please do not file a PR to change this
 unless you can show that your changes do not affect this workaround.  */
-impl<'a> RootModuleConfig<'a> for NixShellConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for NixShellConfig<'a> {
+    fn default() -> Self {
         NixShellConfig {
             format: "via [$symbol$state( \\($name\\))]($style) ",
             symbol: "❄️  ",

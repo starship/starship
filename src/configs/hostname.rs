@@ -1,4 +1,4 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
 use starship_module_config_derive::ModuleConfig;
 
@@ -11,8 +11,8 @@ pub struct HostnameConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for HostnameConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for HostnameConfig<'a> {
+    fn default() -> Self {
         HostnameConfig {
             ssh_only: true,
             trim_at: ".",
