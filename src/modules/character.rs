@@ -25,6 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let exit_code = props.get("status_code").map(String::as_str).unwrap_or("0");
     let keymap = props.get("keymap").map(String::as_str).unwrap_or("viins");
     let exit_success = exit_code == "0";
+    let exit_cancel = exit_code == "130";
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -37,10 +38,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let symbol = match mode {
-        ShellEditMode::Normal => config.vicmd_symbol,
+        ShellEditMode::Normal => {
+            if exit_success {
+                config.vicmd_success_symbol
+            } else if exit_cancel {
+                config.vicmd_cancel_symbol
+            } else {
+                config.vicmd_error_symbol
+            }
+        }
         ShellEditMode::Insert => {
             if exit_success {
                 config.success_symbol
+            } else if exit_cancel {
+                config.cancel_symbol
             } else {
                 config.error_symbol
             }
@@ -87,6 +98,14 @@ mod test {
     }
 
     #[test]
+    fn cancel_status() {
+        let expected = Some(format!("{} ", Color::Yellow.bold().paint("❯")));
+
+        let actual = ModuleRenderer::new("character").status(130).collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn failure_status() {
         let expected = Some(format!("{} ", Color::Red.bold().paint("❯")));
 
@@ -101,6 +120,7 @@ mod test {
     #[test]
     fn custom_symbol() {
         let expected_fail = Some(format!("{} ", Color::Red.bold().paint("✖")));
+        let expected_cancel = Some(format!("{} ", Color::Yellow.bold().paint("➜")));
         let expected_success = Some(format!("{} ", Color::Green.bold().paint("➜")));
 
         let exit_values = [1, 54321, -5000];
@@ -118,6 +138,17 @@ mod test {
             assert_eq!(expected_fail, actual);
         }
 
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                success_symbol = "[➜](bold green)"
+                cancel_symbol = "[➜](bold yellow)"
+                error_symbol = "[✖](bold red)"
+            })
+            .status(130)
+            .collect();
+        assert_eq!(expected_cancel, actual);
+
         // Test success
         let actual = ModuleRenderer::new("character")
             .config(toml::toml! {
@@ -132,7 +163,9 @@ mod test {
 
     #[test]
     fn zsh_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_vicmd_success = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_vicmd_cancel = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
+        let expected_vicmd_error = Some(format!("{} ", Color::Red.bold().paint("❮")));
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
@@ -141,13 +174,33 @@ mod test {
             .shell(Shell::Zsh)
             .keymap("vicmd")
             .collect();
-        assert_eq!(expected_vicmd, actual);
+        assert_eq!(expected_vicmd_success, actual);
+
+        // Cancel status
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Zsh)
+            .keymap("vicmd")
+            .status(130)
+            .collect();
+        assert_eq!(expected_vicmd_cancel, actual);
+
+        // Failure status
+        let exit_values = [1, 54321, -5000];
+
+        for status in &exit_values {
+            let actual = ModuleRenderer::new("character")
+                .shell(Shell::Zsh)
+                .keymap("vicmd")
+                .status(*status)
+                .collect();
+            assert_eq!(expected_vicmd_error, actual);
+        }
 
         // specified vicmd character
         let actual = ModuleRenderer::new("character")
             .config(toml::toml! {
                 [character]
-                vicmd_symbol = "[V](bold green)"
+                vicmd_success_symbol = "[V](bold green)"
             })
             .shell(Shell::Zsh)
             .keymap("vicmd")
@@ -164,7 +217,9 @@ mod test {
 
     #[test]
     fn fish_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_vicmd_success = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_vicmd_cancel = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
+        let expected_vicmd_error = Some(format!("{} ", Color::Red.bold().paint("❮")));
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
@@ -173,13 +228,33 @@ mod test {
             .shell(Shell::Fish)
             .keymap("default")
             .collect();
-        assert_eq!(expected_vicmd, actual);
+        assert_eq!(expected_vicmd_success, actual);
+
+        // Cancel status
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("default")
+            .status(130)
+            .collect();
+        assert_eq!(expected_vicmd_cancel, actual);
+
+        // Failure status
+        let exit_values = [1, 54321, -5000];
+
+        for status in &exit_values {
+            let actual = ModuleRenderer::new("character")
+                .shell(Shell::Fish)
+                .keymap("default")
+                .status(*status)
+                .collect();
+            assert_eq!(expected_vicmd_error, actual);
+        }
 
         // specified vicmd character
         let actual = ModuleRenderer::new("character")
             .config(toml::toml! {
                 [character]
-                vicmd_symbol = "[V](bold green)"
+                vicmd_success_symbol = "[V](bold green)"
             })
             .shell(Shell::Fish)
             .keymap("default")
