@@ -247,7 +247,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Aggiungi quanto segue alla fine di `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
