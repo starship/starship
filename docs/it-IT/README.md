@@ -38,7 +38,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    Con Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   curl -fsSL https://starship.rs/install.sh <unk> bash
    ```
 
 
@@ -121,5 +121,16 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Aggiungi quanto segue alla fine di `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```
 

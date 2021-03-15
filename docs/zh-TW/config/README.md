@@ -9,8 +9,8 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 所有關於 Starship 的設定都在這個 [TOML](https://github.com/toml-lang/toml) 檔案內：
 
 ```toml
-# Don't print a new line at the start of the prompt
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -80,7 +80,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### 風格字串
@@ -146,7 +146,7 @@ format = '''
 | -------------- | ---------------------------- | ----------------------------------------------------- |
 | `format`       | [連結](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                         | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                       | 在提示字元前面加上換行字元。                                        |
+| `add_newline`  | `true`                       | Inserts blank line between shell prompts.             |
 
 ### 範例
 
@@ -162,7 +162,7 @@ format = """
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
@@ -207,6 +207,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$scala\
 $swift\
 $terraform\
 $vagrant\
@@ -237,15 +238,17 @@ $character"""
 
 從 `AWS_VAULT`讀取而使用 [aws-vault](https://github.com/99designs/aws-vault) 這個設定檔
 
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+
 ### 選項
 
-| Option           | 預設                                               | 說明                         |
-| ---------------- | ------------------------------------------------ | -------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module. |
-| `symbol`         | `"☁️ "`                                          | 顯示在目前 AWS 配置之前的符號。         |
-| `region_aliases` |                                                  | 除了AWS名稱外，顯示區域別名表           |
-| `style`          | `"bold yellow"`                                  | 這個模組的風格。                   |
-| `disabled`       | `false`                                          | 停用 `AWS` 模組。               |
+| Option           | 預設                                                  | 說明                         |
+| ---------------- | --------------------------------------------------- | -------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module. |
+| `symbol`         | `"☁️ "`                                             | 顯示在目前 AWS 配置之前的符號。         |
+| `region_aliases` |                                                     | 除了AWS名稱外，顯示區域別名表           |
+| `style`          | `"bold yellow"`                                     | 這個模組的風格。                   |
+| `disabled`       | `false`                                             | 停用 `AWS` 模組。               |
 
 ### Variables
 
@@ -266,7 +269,7 @@ $character"""
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -301,7 +304,7 @@ symbol = "🅰 "
 
 ## 電池
 
-`battery` 模組顯示電池的電量以及現在的充電狀態。 這個模組只會在裝置的電量低於 10% 的時候看見。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### 選項
 
@@ -330,7 +333,7 @@ discharging_symbol = "💀"
 
 ### 電池顯示
 
-`display` 設定是用來定義甚麼時候電池指示會顯示出來 (threshold)，以及它長甚麼樣子 (style)。 如果沒有提供 `display`。 預設如下：
+The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. 預設如下：
 
 ```toml
 [[battery.display]]
@@ -340,7 +343,7 @@ style = "bold red"
 
 #### 選項
 
-`display` 選項是一個下列表格的陣列。
+The `display` option is an array of the following table.
 
 | Option      | 說明          |
 | ----------- | ----------- |
@@ -364,9 +367,9 @@ style = "bold yellow"
 
 ## 字元
 
-`character` 模組在你的文字輸入處旁顯示一個字元 (通常是箭頭)。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-這個字元會告訴你最後的指令是成功還是失敗。 It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -434,7 +437,7 @@ The `cmake` module shows the currently installed version of CMake. By default th
 | Option              | 預設                                     | 說明                                           |
 | ------------------- | -------------------------------------- | -------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                   |
-| `symbol`            | `"喝 "`                                 | The symbol used before the version of cmake. |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake. |
 | `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle  |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
@@ -453,15 +456,15 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 ## 指令持續時間
 
-`cmd_duration` 模組顯示最後一個指令執行所花費的時間。 這個模組只會在指令花費超過兩秒或是有設定 `min_time` 時，超過設定值時出現。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning 不要在 Bash 中設置 DEBUG trap
+::: warning Do not hook the DEBUG trap in Bash
 
-如果你在 `bash` 中使用 Starship，不要在執行 `eval $(starship init $0)` 之後設置 `DEBUG` trap，不然這個模組**會**壞掉。
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-想使用類似 preexec 功能的 Bash 使用者可以 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只要在 `eval $(starship init $0)` 之前簡單地定義 `preexec_functions` 與 `precmd_functions` 兩個陣列，然後就可以照常進行。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### 選項
 
@@ -502,7 +505,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
@@ -542,7 +545,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-`crystal` 模組顯示現在所安裝的Crystal版本 By default the module will be shown if any of the following conditions are met:
+The `crystal` module shows the currently installed version of Crystal. By default the module will be shown if any of the following conditions are met:
 
 - 現在資料夾中含有一個 `shard.yml` 檔案
 - 現在資料夾中含有一個`.cr`檔案
@@ -619,11 +622,11 @@ format = "via [🔰 $version](bold red) "
 
 ## 資料夾
 
-`directory` 模組顯示到現在資料夾的路徑，並裁減到前三層資料夾。 你的資料夾也會被裁減到你所在的 git 儲存庫的根目錄。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-如果正在使用 fish 風格的 pwd 選項，將不會隱藏被裁減的資料夾，而是會根據你在選項中設定的數字看到每一層資料夾的縮寫。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-例如，給定一個右列的路徑 `~/Dev/Nix/nixpkgs/pkgs` 其中 `nixpkgs` 是儲存庫的根目錄，而且該選項被設定為 `1`。 你會看到 `~/D/N/nixpkgs/pkgs`，而在這個設定之前則是 `nixpkgs/pkgs`。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### 選項
 
@@ -640,7 +643,7 @@ format = "via [🔰 $version](bold red) "
 | `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                 |
 
 <details>
-<summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | 預設     | 說明                                                                                                                                                                     |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -717,7 +720,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-`dotnet` 模組顯示現在資料夾使用的 .NET Core SDK 的版本。 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -733,7 +736,7 @@ By default this module will only be shown in your prompt when one or more of the
 
 You'll also need the .NET Core SDK installed in order to use it correctly.
 
-這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
@@ -853,7 +856,7 @@ format = "via [ $version](cyan bold) "
 
 ## 環境變數
 
-`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
@@ -988,7 +991,7 @@ asia-northeast1 = "an1"
 
 ## Git 分支
 
-`git_branch` 模組顯示現在的資料夾中使用中的儲存庫的分支。
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### 選項
 
@@ -1063,7 +1066,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-`git_state` 模組會顯示在 git 儲存庫中的資料夾內，以及會在有作業正在進行時顯示，像是：_REBASING_、_BISECTING_ 等等。 如果有進展的資訊 (像是 REBASING 3/10)，也會一併顯示出來。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### 選項
 
@@ -1103,7 +1106,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Status
 
-`git_status` 模組顯示用來表示現在資料夾之中儲存庫狀態的符號。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### 選項
 
@@ -1186,7 +1189,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-`golang` 模組顯示現在安裝的 Golang 版本。 By default the module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of Golang. By default the module will be shown if any of the following conditions are met:
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
@@ -1268,7 +1271,7 @@ format = "via [⎈ $version](bold white) "
 
 ## 主機名稱
 
-`hostname` 模組顯示系統的主機名稱。
+The `hostname` module shows the system hostname.
 
 ### 選項
 
@@ -1303,7 +1306,7 @@ disabled = false
 
 ## Java
 
-`java` 模組顯示現在安裝的 Java 版本。 By default the module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of Java. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
@@ -1341,7 +1344,13 @@ symbol = "🌟 "
 
 ## 工作
 
-`jobs` 模組顯示現在正在執行中的工作。 這個模組只會在有背景工作正在執行時顯示。 這個模組會在工作數量超過一個，或者有設定 `threshold` 時且數量超過設定值時，顯示工作的數量。
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+
+::: warning
+
+This module is not supported on tcsh.
+
+:::
 
 ### 選項
 
@@ -1464,7 +1473,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1503,7 +1512,7 @@ disabled = false
 
 ## 換行
 
-`line_break` 模組將提示字元分成兩行。
+The `line_break` module separates the prompt into two lines.
 
 ### 選項
 
@@ -1562,13 +1571,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## 記憶體使用量
 
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+The `memory_usage` module shows current system memory and swap usage.
 
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1686,7 +1695,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell` 模組顯示 nix-shell 環境。 這個模組會在 nix-shell 環境中顯示。
+The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
 
 ### 選項
 
@@ -1724,7 +1733,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-`nodejs` 模組顯示現在安裝的 NodeJS 版本。 By default the module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. By default the module will be shown if any of the following conditions are met:
 
 - 現在資料夾中包含一個 `package.json` 檔案
 - The current directory contains a `.node-version` file
@@ -1737,7 +1746,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | Option              | 預設                                   | 說明                                                                                                    |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
@@ -1843,7 +1852,7 @@ symbol = "☁️ "
 
 ## 套件版本
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 這個模組目前支援 `npm`、`cargo`、`poetry`、`composer`、`gradle`、`julia`、`mix`, 跟 `helm` 套件
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - **npm** – `npm` 套件的版本是從現在資料夾中的 `package.json` 之中擷取出來的
 - **cargo** – `cargo` 套件的版本是從現在資料夾中的 `Cargo.toml` 之中擷取出來的
@@ -2083,7 +2092,7 @@ detect_extensions = []
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby. 這個模組在下列其中一個條件達成時顯示：
+By default the `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - 目前資料夾中有一個 `Gemfile` 檔案
 - The current directory contains a `.ruby-version` file
@@ -2122,7 +2131,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust. 這個模組在下列其中一個條件達成時顯示：
+By default the `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - 目前資料夾中有一個 `Cargo.toml` 檔案
 - 現在資料夾中包含一個檔案具有 `.rs` 副檔名
@@ -2158,13 +2167,55 @@ By default the `rust` module shows the currently installed version of Rust. 這�
 format = "via [⚙️ $version](red bold)"
 ```
 
+
+## Scala
+
+The `scala` module shows the currently installed version of Scala. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- The current directory contains a file with the `.scala` or `.sbt` extension
+- The current directory contains a directory named `.metals`
+
+### 選項
+
+
+| Option              | 預設                                       | 說明                                                |
+| ------------------- | ---------------------------------------- | ------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | The format for the module.                        |
+| `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.      |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.       |
+| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.        |
+| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala. |
+| `style`             | `"red dimmed"`                           | 這個模組的風格。                                          |
+| `disabled`          | `false`                                  | Disables the `scala` module.                      |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `2.13.5` | The version of `scala`               |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+[scala]
+symbol = "🌟 "
+```
+
+
 ## Shell
 
 The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2178,6 +2229,7 @@ The `shell` module shows an indicator for currently used shell.
 | `powershell_indicator` | `psh`        | A format string used to represent powershell. |
 | `ion_indicator`        | `ion`        | A format string used to represent ion.        |
 | `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
 | `format`               | `$indicator` | The format for the module.                    |
 | `disabled`             | `true`       | Disables the `shell` module.                  |
 
@@ -2271,7 +2323,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2324,7 +2376,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. 這個模組在下列其中一個條件達成時顯示：
+By default the `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2424,7 +2476,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2466,12 +2518,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- 目前使用者為 root
-- 目前使用者並非登入時的使用者
-- 使用者透過 SSH session 進行連線
-- 變數 `show_always` 被設為 true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -2548,7 +2600,7 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig. 這個模組在下列其中一個條件達成時顯示：
+By default the the `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 

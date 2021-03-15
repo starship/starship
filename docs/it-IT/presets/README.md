@@ -16,7 +16,7 @@ Questo preset non cambia nulla tranne i simboli utilizzati per ogni modulo. Se g
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "
@@ -83,6 +83,9 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "

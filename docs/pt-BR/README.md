@@ -123,3 +123,14 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+

@@ -6,7 +6,7 @@ Esta guía pretende guiarle a través de los cambios de ruptura.
 
 ## `prompt_order` ha sido reemplazado por un "nivel raíz" `format`
 
-Anterioramente a v0.45.0, `prompt_order` aceptaría un array de nombres de módulos en el orden que deberían ser renderizados por Starship.
+Anterioramente a v0.45.0, `prompt_order` aceptaría un arreglo de nombres de módulos en el orden que deberían ser renderizados por Starship.
 
 En su lugar, Starship v0.45.0 acepta un valor de `format`, permitiendo la personalización del indicador fuera de los propios módulos.
 
@@ -70,7 +70,7 @@ prefix = "tomó "
 ```toml
 [cmd_duration]
 # $duration – La duración del comando (p. ej. "15s")
-# $style    – El estilo predeterminado del módulo (p. ej. "bold yellow")
+# $style    – El estilo por defecto del módulo (p. ej. "bold yellow")
 format = "tomó [$duration]($style) "
 ```
 

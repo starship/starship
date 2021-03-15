@@ -28,7 +28,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Quick Install
+### 빠른 설치
 
 1. **starship** 바이러니 설치:
 
@@ -42,9 +42,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
 
-   #### Install via Package Manager
+   #### 패키지 매니저를 이용한 설치
 
-   With [Homebrew](https://brew.sh/):
+   [Homebrew](https://brew.sh/)를 통한 설치:
 
    ```sh
    brew install starship
@@ -56,12 +56,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. 쉘 설정에 시동 스크립트를 추가:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc`에 아래 라인을 추가
 
    ```sh
    # ~/.bashrc
@@ -72,7 +72,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish`에 아래 라인을 추가
 
    ```sh
    # ~/.config/fish/config.fish
@@ -83,7 +83,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc`에 아래 라인을 추가
 
    ```sh
    # ~/.zshrc
@@ -94,7 +94,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 위치.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -103,7 +103,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   아래의 라인을 `~/.config/ion/initrc` 마지막에 추가:
 
    ```sh
    # ~/.config/ion/initrc
@@ -113,13 +113,24 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: 주의 elvish v0.15 이상만 지원. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
 
    ```sh
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   아래의 라인을 `~/.tcshrc` 마지막에 추가:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```
 

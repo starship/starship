@@ -123,3 +123,14 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+

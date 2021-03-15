@@ -123,3 +123,14 @@ eval $(starship init ion)
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Thêm đoạn dưới vào cuối file `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+

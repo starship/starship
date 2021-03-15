@@ -16,7 +16,7 @@ This preset doesn't change anything except for the symbols used for each module.
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "
@@ -83,6 +83,9 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "

@@ -82,7 +82,7 @@ starship_precmd_user_func="set_win_title"
 
 ここで、 `<color>` は色を指定します（以下で述べます）。 `fg:<color>` と `<color>` は現在同様の動作ですが、将来変更される可能性があります。 文字列中の単語の順序は関係ありません。
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 将来 `none` を他の単語と一緒に使用することはエラーになるかもしれません。
+`none` トークンは、文字列中の`bg:` 指定子の一部でない場合、他のすべてのトークンをオーバーライドします。そのため、たとえば、`fg:red none fg:blue` と指定した場合、スタイルなしの文字列が作られます。 `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 将来 `none` を他の単語と一緒に使用することはエラーになるかもしれません。
 
 色は以下のいずれか1つを指定できます。
 

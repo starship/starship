@@ -8,13 +8,29 @@
 Đối với đa số người dùng, các hướng dẫn trên [trang chính](/guide/#🚀-installation) sẽ làm việc tốt. Tuy nhiên, với một vài nền tảng đặc biệt hơn, các hướng dẫn khác nhau là cần thiết.
 
 Có rất nhiều nền tảng bên ngoài, rằng chúng đã không khớp như trong tệp tin README.md, do đó đây là vài hướng dẫn cài đặt cho những nền tảng khác đến từ cộng đồng. Của bạn không có ở đây? Xin hãy thêm nó vào đây nếu bạn tìm ra nó!
-## [termux](https://termux.com)
+
+## [Chocolatey](https://chocolatey.org)
+
 ### Yêu cầu
+
+Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+
+### Cài đặt
+
+```powershell
+choco install starship
+```
+
+## [termux](https://termux.com)
+
+### Yêu cầu
+
 ```sh
 pkg install getconf
 ```
 
-### Installation
+### Cài đặt
+
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
 ```
@@ -31,7 +47,29 @@ nix-env -iA nixos.starship
 
 #### Khai báo, người dùng đơn, thông qua [home-manager](home-manager)
 
-Thêm `pkgs.starship` vào `home.packages` trong tệp tin `home.nix` của bạn, sau đó chạy
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
+
+```nix
+{
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    # Configuration written to ~/.config/starship.toml
+    settings = {
+      # add_newline = false;
+
+      # character = {
+      #   success_symbol = "[➜](bold green)";
+      #   error_symbol = "[➜](bold red)";
+      # };
+
+      # package.disabled = true;
+    };
+  };
+}
+```
+
+then run
 
 ```sh
 home-manager switch
@@ -39,18 +77,8 @@ home-manager switch
 
 #### Khai báo, system-wide, với NixOS
 
-Thêm `pkgs.starship` vào `environment.packages` trong `configuration.nix` của bạn, sau đó chạy
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch
-```
-
-### Modifying Init Scripts
-
-#### Với Nix và home-manager, sử dụng zsh:
-
-Thêm phần sau vào `programs.zsh.initExtra` trong tệp tin `home.nix` của bạn, sau đó chạy
-
-```sh
-home-manager switch
 ```

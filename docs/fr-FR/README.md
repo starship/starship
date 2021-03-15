@@ -123,3 +123,14 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+

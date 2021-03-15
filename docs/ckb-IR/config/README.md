@@ -9,8 +9,8 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
-# Don't print a new line at the start of the prompt
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -80,7 +80,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### Style Strings
@@ -146,7 +146,7 @@ This is the list of prompt-wide configuration options.
 | -------------- | ------------------------------ | ----------------------------------------------------- |
 | `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Add a new line before the start of the prompt.        |
+| `add_newline`  | `true`                         | Inserts blank line between shell prompts.             |
 
 ### Example
 
@@ -162,7 +162,7 @@ format = """
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
@@ -207,6 +207,7 @@ $purescript\
 $python\
 $ruby\
 $rust\
+$scala\
 $swift\
 $terraform\
 $vagrant\
@@ -237,15 +238,17 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+
 ### Options
 
-| Option           | Default                                          | Description                                                     |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current AWS profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the AWS name. |
-| `style`          | `"bold yellow"`                                  | The style for the module.                                       |
-| `disabled`       | `false`                                          | Disables the `AWS` module.                                      |
+| Option           | Default                                             | Description                                                     |
+| ---------------- | --------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module.                                      |
+| `symbol`         | `"☁️ "`                                             | The symbol used before displaying the current AWS profile.      |
+| `region_aliases` |                                                     | Table of region aliases to display in addition to the AWS name. |
+| `style`          | `"bold yellow"`                                     | The style for the module.                                       |
+| `disabled`       | `false`                                             | Disables the `AWS` module.                                      |
 
 ### Variables
 
@@ -266,7 +269,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -434,7 +437,7 @@ The `cmake` module shows the currently installed version of CMake. By default th
 | Option              | Default                                | Description                                  |
 | ------------------- | -------------------------------------- | -------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                   |
-| `symbol`            | `"喝 "`                                 | The symbol used before the version of cmake. |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake. |
 | `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle  |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
@@ -1343,6 +1346,12 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
 
+::: warning
+
+This module is not supported on tcsh.
+
+:::
+
 ### Options
 
 | Option      | Default                       | Description                                      |
@@ -1737,7 +1746,7 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 | Option              | Default                              | Description                                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
@@ -2158,6 +2167,48 @@ By default the `rust` module shows the currently installed version of Rust. The 
 format = "via [⚙️ $version](red bold)"
 ```
 
+
+## Scala
+
+The `scala` module shows the currently installed version of Scala. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- The current directory contains a file with the `.scala` or `.sbt` extension
+- The current directory contains a directory named `.metals`
+
+### Options
+
+
+| Option              | Default                                  | Description                                       |
+| ------------------- | ---------------------------------------- | ------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | The format for the module.                        |
+| `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.      |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.       |
+| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.        |
+| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala. |
+| `style`             | `"red dimmed"`                           | The style for the module.                         |
+| `disabled`          | `false`                                  | Disables the `scala` module.                      |
+
+### Variables
+
+| Variable  | Example  | Description                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `2.13.5` | The version of `scala`               |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[scala]
+symbol = "🌟 "
+```
+
+
 ## Shell
 
 The `shell` module shows an indicator for currently used shell.
@@ -2178,6 +2229,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `powershell_indicator` | `psh`        | A format string used to represent powershell. |
 | `ion_indicator`        | `ion`        | A format string used to represent ion.        |
 | `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
 | `format`               | `$indicator` | The format for the module.                    |
 | `disabled`             | `true`       | Disables the `shell` module.                  |
 

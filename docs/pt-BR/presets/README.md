@@ -16,7 +16,7 @@ Essa predefinição não altera nada exceto os símbolos usados para cada módul
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "
@@ -83,6 +83,9 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "

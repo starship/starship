@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-[Bản cài đặt Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) xây dựng bên trong Starship phực tạp hơn một chút để cho phép thực hiện các tính năng nâng cao hơn một chứt như [Command Duration module](https://starship.rs/config/#Command-Duration) và chắc chắn rằng Starship là tương thích với cấu hình Bash đã cài đặt trước đó.
+The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
 Với một danh sách tất cả các cờ đã được chấp nhận bởi `starship prompt`, sử dụng lệnh sau:
 
@@ -56,15 +56,19 @@ Nếu bạn nhận được một lỗi giống như "_version 'GLIBC_2.18' not 
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
 
-## Tại sao tôi không tình thấy một kí hiệu glyph trong prompt?
+## Tôi thấy các biểu tượng tôi không hiểu hoặc không mong muốn, chúng có nghĩa là gì?
 
-Đa số nguyên nhân phổ biến của việc này là cấu hình hệ thống sai. Một số bản phân phối Linux đặc biệt không có hỗ trợ phông chữ ngay lập tức. Bạn cần chắc chắn rằng:
+Nếu bạn thấy các biểu tượng bạn không biết, bạn có thể sử dụng `starship explain` để giải thích các mô đun hiện tại đang hiển thị.
+
+## Tại sao tôi không thấy một biểu tượng glyph trong dấu nhắc lệnh của tôi?
+
+Đa số lí do phổ biến là do cái này mất cấu hình hệ thống. Một số bản phân phối Linux cụ thể không đi kèm việ hõ trợ font out-of-the-box. Bạn cần chắc chắn rằng:
 
 - Mã ngôn ngữ của bạn được thiết lập là một giá trị UTF-8, giống như `de_DE.UTF-8` or `ja_JP.UTF-8`. Nếu `LO_ALL` không phải là một giá trị UTF-8, [ bạn sẽ cần thay đổi nó](https://www.tecmint.com/set-system-locales-in-linux/).
 - Bạn đã cài đặt phông chữ biểu tượng cảm xúc. Đa số hệ thống đi kèm với một phông biểu tượng cảm xúc mặc định, nhưng một vài (đáng chú ý là Arch Linux) thì không. Bạn có thể thường cài đặt thông qua một trình quản lí gói hệ thống của bạn--[noto emoji](https://www.google.com/get/noto/help/emoji/) là một lựa chọn phổ biến.
 - Bạn đang sử dụng một [Nerd Font](https://www.nerdfonts.com/).
 
-Để kiểm tra hệ thống của bạn, chạy các câu lệnh sau trong một terminal:
+Để kiểm tra hệ thống của bạn, chạy các câu lệnh bên dưới trong terminal:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
@@ -73,9 +77,9 @@ echo -e "\xee\x82\xa0"
 
 Dòng đầu tiên nên sinh ra một [snake emoji](https://emojipedia.org/snake/), trong khi dòng thứ hai nên sinh ra một [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-Nếu một trong hai biểu tượng không hiển thị chính xác, hệ thống của bạn vẫn bị cấu hình sai. Thật không may, việc lấy đúng cấu hình phông chữ đôi khi rất khó. Những người dùng trên Discord có thể giúp đỡ. Nếu cả hai kí hiệu hiển thị đúng, nhưng bạn vẫn không thấy chúng trong starship, [nộp một báo cáo lỗi!](https://github.com/starship/starship/issues/new/choose)
+Nếu biểu tượng không hiển thị đúng, hệ thống của bạn vẫn cấu hình sai. Thật không may, lấy cấu hình font đúng đôi khi khó khăn. Người dùng trên Discord có thể có giúp đỡ được. Nếu các biểu tượng hiển thị đúng, nhưng bạn vẫn không thấy chúng trong starship, [nộp một báo cáo lỗi](https://github.com/starship/starship/issues/new/choose)
 
-## Làm cách nào để tôi gỡ cài đặt Starship?
+## Là thế nào để tôi gỡ cài đặt Starship?
 
 Starship thì dễ dàng gỡ cài đặt như cài đặt ngay từ đầu.
 
@@ -84,7 +88,7 @@ Starship thì dễ dàng gỡ cài đặt như cài đặt ngay từ đầu.
 
 Nếu Starship đã được cài đặt bằng việc sử dụng một trình quản lí gói, vui lòng tham khảo tài liệu của chúng để gỡ cài đặt.
 
-Nếu Starship đã được càu đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
+Nếu Starship đã được cài đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
 
 ```sh
 # Xác định vị trí và xóa tập tin nhị phân của starship

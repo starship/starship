@@ -10,22 +10,22 @@
   - **設定**: [matchaiのDotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **プロンプト**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## デモのGIFのようにコマンド補完はどうしたら使用できますか？
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+補完サポート、または自動補完は選択したシェルによって提供されます。 デモ中では、デフォルトの[Fish Shell](https://fishshell.com/)によって補完されています。 Z Shell (zsh) を利用しているのであれば、[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)を照参してください。
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## トップレベルの`format`と`<module>.disabled`は同じように動作しますか？
 
 はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- モジュールを無効化することは、トップレベルの`format`を削除するよりも明示的です。
 - Starshipが更新されると、新しく作成されたモジュールがプロンプトに追加されます
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Starshipはcross-shellとのことです。 私の好みのshellはサポートしていないようですが。
 
 Starshipの構築方法は、事実上すべてのシェルのサポートを追加できるはずです。 Starshipのバイナリはステートレスであり、シェルに依存しないため、シェルがプロンプトのカスタマイズとシェルの拡張をサポートしている限り、Starshipを使用できます。
 
-Starshipをbashで動作させる小さな例を次に示します。
+Starshipをbashで動作させる例を次に示します。
 
 ```sh
 # Get the status code from the last command executed
@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-Starshipに組み込まれた[Bashの実装](https://github.com/starship/starship/blob/master/src/init/starship.bash)は、[ Command Durationモジュール](https://starship.rs/config/#Command-Duration)などの高度な機能を可能にし、Starshipが事前にインストールされたBash構成と互換性があるようにするため、少し複雑です。
+The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
 
 `Starshipのプロンプト`で受け入れられるすべてのフラグのリストは、次のコマンドを取得できます。
 
@@ -50,43 +50,47 @@ starship prompt --help
 
 ## 古いバージョンの glibc を使用する Linux ディストリビューションで Starship を実行するにはどうすればよいですか?
 
-"_version 'GLIBC_2のようなエラーが表示された場合。 8' が見つかりません (starshipで要求されます)_" プリビルドバイナリを使用しています（例えば、 CentOS 6 または 7 では、`glibc`の代わりに`musl`でコンパイルされたバイナリを使用できます。
+CentOS6や7などで事前にビルドされたバイナリを使用していて、"_version 'GLIBC_2.18' not found (required by starship)_" のようなエラーが出た場合、`glibc`の替わりに `musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
 ```
 
-## プロンプトにグリフ記号が表示されないのはなぜですか?
+## よくわからない記号を見つけました。これはどういった意味ですか？
 
-これの最も一般的な原因は、システムの設定ミスです。 いくつかのLinuxディストリビューション 特に、すぐに使用できるフォントサポートは付属していません。 次のことを確認する必要があります。
+不明な記号に遭遇した場合、`starship explain` を使用することで、現在表示しているモジュールの説明を見ることができます。
 
-- ロケールは、`de_DE.UTF-8`や` ja_JP.UTF-8</ 0>などのUTF-8値に設定されています。 <code>LC_ALL`がUTF-8値でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
-- 絵文字フォントがインストールされています。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部(特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます--[noto emoji](https://www.google.com/get/noto/help/emoji/)は人気な選択肢です。
-- [Nerd Font](https://www.nerdfonts.com/)を使用しています。
+## 私のプロンプトで記号のグリフがないのはなぜですか？
 
-システムをテストするには、ターミナルで次のコマンドを実行します。
+よくある原因はシステム上での設定ミスです。 いくつかのLinuxディストリビューションの初期設定にフォントサポートがありません。 次のことを確認してください。
+
+- ロケールが、`de_DE.UTF-8`や` ja_JP.UTF-8`などのUTF-8に設定されている。 `LC_ALL`がUTF-8でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 絵文字フォントがインストールされている。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部 (特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます。--[noto emoji](https://www.google.com/get/noto/help/emoji/)は一般的な選択肢です。
+- [Nerd Font](https://www.nerdfonts.com/)を使用している。
+
+ターミナルで以下のコマンドを実行することでテストできます。
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-1行目は[snake emoji](https://emojipedia.org/snake/)を生成し、2行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)を生成するはずです。
+一行目は[蛇の絵文字](https://emojipedia.org/snake/)、二行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)が表示されるはずです。
 
-いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 両方の記号が正しく表示されているにもかかわらず、まだStarshipに表示されていない場合は、[バグ報告をしてください!](https://github.com/starship/starship/issues/new/choose)
+もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし記号が正しく表示されているのにもかかわらず、Starshipが正しく表示されていない場合は、[バグの報告](https://github.com/starship/starship/issues/new/choose)をお願いします。
 
-## Starshipをアンインストールするにはどうすればいいですか?
+## Starshipをアンインストールしたい
 
-Starshipは、最初の場所にインストールするのと同じくらい簡単にアンインストールできます。
+Starshipのアンインストールはインストールと同じぐらい簡単です。
 
-1. Starshipを初期化するために使用されるシェル設定の行を削除します(例:`~/.bashrc`)。
+1. Starshipを初期化するために使用した、シェルの設定行を削除します (例:`~/.bashrc`)。
 1. Starshipのバイナリを削除します。
 
-Starship がパッケージマネージャを使用してインストールされている場合は、アンインストール手順については、そのドキュメントを参照してください。
+パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
-Starship が `curl | bash` スクリプトを使用してインストールされた場合、次のコマンドはバイナリを削除します:
+`curl | bash` スクリプトを使用してStarshipをインストールした場合は、以下のコマンドでバイナリを削除してください。
 
 ```sh
-# starshipバイナリを見つけて削除します
+# starshipバイナリを見つけて削除
 rm "$(which starship)"
 ```
