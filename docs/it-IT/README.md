@@ -126,7 +126,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Aggiungi quanto segue alla fine di `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
