@@ -9,6 +9,7 @@ pub struct AwsConfig<'a> {
     pub style: &'a str,
     pub disabled: bool,
     pub region_aliases: HashMap<String, &'a str>,
+    pub hide_profiles_without_section: bool,
 }
 
 impl<'a> Default for AwsConfig<'a> {
@@ -19,6 +20,7 @@ impl<'a> Default for AwsConfig<'a> {
             style: "bold yellow",
             disabled: false,
             region_aliases: HashMap::new(),
+            hide_profiles_without_section: false,
         }
     }
 }

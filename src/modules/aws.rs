@@ -12,15 +12,30 @@ use crate::formatter::StringFormatter;
 type Profile = String;
 type Region = String;
 
-fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> Option<Region> {
-    let config_location = context
+fn get_credentials_file_path(context: &Context) -> Option<PathBuf> {
+    context
+        .get_env("AWS_CREDENTIALS_FILE")
+        .and_then(|path| PathBuf::from_str(&path).ok())
+        .or_else(|| {
+            let mut home = context.get_home()?;
+            home.push(".aws/credentials");
+            Some(home)
+        })
+}
+
+fn get_config_file_path(context: &Context) -> Option<PathBuf> {
+    context
         .get_env("AWS_CONFIG_FILE")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
             let mut home = context.get_home()?;
             home.push(".aws/config");
             Some(home)
-        })?;
+        })
+}
+
+fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> Option<Region> {
+    let config_location = get_config_file_path(context)?;
 
     let file = File::open(&config_location).ok()?;
     let reader = BufReader::new(file);
@@ -65,6 +80,57 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
     }
 }
 
+fn has_profile_section(context: &Context, aws_profile: Option<&Profile>) -> Option<bool> {
+    let credentials_location = get_credentials_file_path(context)?;
+
+    let has_credentials_section = {
+        let file = File::open(&credentials_location).ok();
+        if let Some(file) = file {
+            let reader = BufReader::new(file);
+            let mut lines = reader.lines().filter_map(Result::ok);
+
+            let profile_line = if let Some(aws_profile) = aws_profile {
+                format!("[{}]", aws_profile)
+            } else {
+                "[default]".to_string()
+            };
+
+            lines
+                .find(|line| line.starts_with(&profile_line))
+                .map_or_else(|| false, |_| true)
+        } else {
+            false
+        }
+    };
+
+    if aws_profile.is_none() {
+        return Some(has_credentials_section);
+    }
+
+    let config_location = get_config_file_path(context)?;
+    let has_config_section = {
+        let file = File::open(&config_location).ok();
+        if let Some(file) = file {
+            let reader = BufReader::new(file);
+            let mut lines = reader.lines().filter_map(Result::ok);
+
+            let profile_line = if let Some(aws_profile) = aws_profile {
+                format!("[profile {}]", aws_profile)
+            } else {
+                "[default]".to_string()
+            };
+
+            lines
+                .find(|line| line.starts_with(&profile_line))
+                .map_or_else(|| false, |_| true)
+        } else {
+            false
+        }
+    };
+
+    Some(has_credentials_section || has_config_section)
+}
+
 fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     match aliases.get(&region) {
         None => region,
@@ -78,6 +144,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let (aws_profile, aws_region) = get_aws_profile_and_region(context);
     if aws_profile.is_none() && aws_region.is_none() {
+        return None;
+    }
+
+    if config.hide_profiles_without_section
+        && !(has_profile_section(context, aws_profile.as_ref()).unwrap_or(false))
+    {
         return None;
     }
 
@@ -146,6 +218,20 @@ mod tests {
     }
 
     #[test]
+    fn region_set_hide_credentials() {
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                hide_profiles_without_section=true
+            })
+            .env("AWS_REGION", "ap-northeast-2")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn region_set_with_alias() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-southeast-2")
@@ -184,6 +270,72 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_dont_hide_credentials_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let credentials_path = dir.path().join("credentials");
+        let mut file = File::create(&credentials_path)?;
+
+        file.write_all(
+            "[default]
+aws_access_key_id=dummy
+aws_secret_access_key=dummy
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "eu-west-1")
+            .env(
+                "AWS_CREDENTIALS_FILE",
+                credentials_path.to_string_lossy().as_ref(),
+            )
+            .config(toml::toml! {
+                [aws]
+                hide_profiles_without_section=true
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (eu-west-1) ")
+        ));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn profile_set_dont_hide_config_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[profile astronauts]
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_REGION", "eu-west-1")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [aws]
+                hide_profiles_without_section=true
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (eu-west-1) ")
+        ));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 
     #[test]
