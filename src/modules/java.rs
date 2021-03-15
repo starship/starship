@@ -17,7 +17,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_files(&config.detect_files)
         .set_extensions(&config.detect_extensions)
         .set_folders(&config.detect_folders)
-        .is_match();
+        .is_match()
+        && !context.current_dir.ends_with("Downloads");
 
     if !is_java_project {
         return None;
