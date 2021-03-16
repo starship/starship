@@ -9,16 +9,20 @@ pub struct AwsConfig<'a> {
     pub style: &'a str,
     pub disabled: bool,
     pub region_aliases: HashMap<String, &'a str>,
+    pub show_duration: bool,
+    pub expiration_symbol: &'a str,
 }
 
 impl<'a> Default for AwsConfig<'a> {
     fn default() -> Self {
         AwsConfig {
-            format: "on [$symbol($profile )(\\($region\\) )]($style)",
+            format: "on [$symbol($profile )(\\($region\\) )(\\[$duration\\])]($style)",
             symbol: "☁️  ",
             style: "bold yellow",
             disabled: false,
             region_aliases: HashMap::new(),
+            show_duration: false,
+            expiration_symbol: "X",
         }
     }
 }
