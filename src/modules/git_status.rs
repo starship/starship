@@ -114,6 +114,7 @@ struct GitStatusInfo<'a> {
     repo: &'a Repo,
     repo_status: OnceCell<Option<RepoStatus>>,
     stashed_count: OnceCell<Option<usize>>,
+    valid_repo: OnceCell<Option<bool>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -123,22 +124,26 @@ impl<'a> GitStatusInfo<'a> {
             repo,
             repo_status: OnceCell::new(),
             stashed_count: OnceCell::new(),
+            valid_repo: OnceCell::new(),
         }
     }
 
-    pub fn check_repository(&self) -> Option<bool> {
-        let repo_root = self.repo.root.as_ref()?;
-        self.context
-            .exec_cmd(
-                "git",
-                &[
-                    "-C",
-                    &repo_root.to_string_lossy(),
-                    "--no-optional-locks",
-                    "status",
-                ],
-            )
-            .map(|output| output.stderr.trim().is_empty())
+    pub fn check_repository(&self) -> &Option<bool> {
+        self.valid_repo.get_or_init(|| {
+            let repo_root = self.repo.root.as_ref()?;
+            self.context
+                .exec_cmd(
+                    "git",
+                    &[
+                        "-C",
+                        &repo_root.to_string_lossy(),
+                        "--no-optional-locks",
+                        "rev-parse",
+                        "HEAD",
+                    ],
+                )
+                .map(|output| output.stderr.trim().is_empty())
+        })
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
@@ -147,7 +152,7 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_repo_status(&self) -> &Option<RepoStatus> {
         self.repo_status.get_or_init(|| {
-            if !self.check_repository()? {
+            if !self.check_repository().unwrap_or(false) {
                 return None;
             };
 
@@ -165,7 +170,7 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_stashed(&self) -> &Option<usize> {
         self.stashed_count.get_or_init(|| {
-            if !self.check_repository()? {
+            if !self.check_repository().unwrap_or(false) {
                 return None;
             };
 
