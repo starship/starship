@@ -35,7 +35,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Neueste Version installieren
 
-   With Shell:
+   Mit Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
