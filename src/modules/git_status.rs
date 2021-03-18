@@ -7,8 +7,8 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
+use std::io::{Error, ErrorKind, Result};
 use std::path::PathBuf;
-use std::process::{Command, Stdio};
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -29,7 +29,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
-    let info = Arc::new(GitStatusInfo::load(repo));
+    let info = Arc::new(GitStatusInfo::load(context, repo));
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
@@ -110,33 +110,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 struct GitStatusInfo<'a> {
+    context: &'a Context<'a>,
     repo: &'a Repo,
     repo_status: OnceCell<Option<RepoStatus>>,
     stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
-    pub fn load(repo: &'a Repo) -> Self {
+    pub fn load(context: &'a Context, repo: &'a Repo) -> Self {
         Self {
+            context,
             repo,
             repo_status: OnceCell::new(),
             stashed_count: OnceCell::new(),
         }
     }
 
-    fn check_repository(&self) -> Option<bool> {
+    pub fn check_repository(&self) -> Option<bool> {
         let repo_root = self.repo.root.as_ref()?;
-        match Command::new("git")
-            .current_dir(repo_root)
-            .arg("status")
-            .stdin(Stdio::null())
-            .stdout(Stdio::null())
-            .stderr(Stdio::null())
-            .status()
-        {
-            Ok(status) => Some(status.success()),
-            Err(_) => None,
-        }
+        self.context
+            .exec_cmd("git", &["-C", &repo_root.to_string_lossy(), "status"])
+            .map(|output| output.stderr.trim().is_empty())
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
@@ -151,7 +145,7 @@ impl<'a> GitStatusInfo<'a> {
 
             let repo_root = self.repo.root.as_ref()?;
 
-            match get_repo_status(repo_root) {
+            match get_repo_status(self.context, repo_root) {
                 Ok(repo_status) => Some(repo_status),
                 Err(error) => {
                     log::debug!("get_repo_status: {}", error);
@@ -169,7 +163,7 @@ impl<'a> GitStatusInfo<'a> {
 
             let repo_root = self.repo.root.as_ref()?;
 
-            match get_stashed_count(repo_root) {
+            match get_stashed_count(self.context, repo_root) {
                 Ok(stashed_count) => Some(stashed_count),
                 Err(error) => {
                     log::debug!("get_stashed_count: {}", error);
@@ -205,37 +199,45 @@ impl<'a> GitStatusInfo<'a> {
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(repo_root: &PathBuf) -> std::io::Result<RepoStatus> {
+fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Result<RepoStatus> {
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-
-    let output = Command::new("git")
-        .current_dir(repo_root)
-        .args(&["config", "--get", "--local", "status.showUntrackedFiles"])
-        .stdin(Stdio::null())
-        .output()?;
-    let output_str = String::from_utf8_lossy(&output.stdout);
+    let config_output = context
+        .exec_cmd(
+            "git",
+            &[
+                "-C",
+                &repo_root.to_string_lossy(),
+                "config",
+                "--get",
+                "--local",
+                "status.showUntrackedFiles",
+            ],
+        )
+        .map_or("all".to_owned(), |output| output.stdout);
 
     let untracked = "--untracked-files=".to_owned()
-        + if !output_str.trim().is_empty() {
-            output_str.trim()
+        + if !config_output.trim().is_empty() {
+            config_output.trim()
         } else {
             "all"
         };
-    let raw_output = Command::new("git")
-        .current_dir(repo_root)
-        .args(&[
-            "status",
-            "--porcelain=2",
-            "--renames",
-            "--branch",
-            &untracked,
-        ])
-        .stdin(Stdio::null())
-        .output()?;
-    let output = String::from_utf8_lossy(&raw_output.stdout);
-    let statuses = output.lines();
+    let status_output = context
+        .exec_cmd(
+            "git",
+            &[
+                "-C",
+                &repo_root.to_string_lossy(),
+                "status",
+                "--porcelain=2",
+                "--renames",
+                "--branch",
+                &untracked,
+            ],
+        )
+        .ok_or_else(|| Error::new(ErrorKind::NotFound, "git status failed"))?;
+    let statuses = status_output.stdout.lines();
 
     statuses.for_each(|status| {
         if status.starts_with("# branch.ab ") {
@@ -248,15 +250,15 @@ fn get_repo_status(repo_root: &PathBuf) -> std::io::Result<RepoStatus> {
     Ok(repo_status)
 }
 
-fn get_stashed_count(repo_root: &PathBuf) -> std::io::Result<usize> {
-    let raw_output = Command::new("git")
-        .current_dir(repo_root)
-        .args(&["stash", "list"])
-        .stdin(Stdio::null())
-        .output()?;
-    let output = String::from_utf8_lossy(&raw_output.stdout);
+fn get_stashed_count(context: &Context, repo_root: &PathBuf) -> std::io::Result<usize> {
+    let stash_output = context
+        .exec_cmd(
+            "git",
+            &["-C", &repo_root.to_string_lossy(), "stash", "list"],
+        )
+        .ok_or_else(|| Error::new(ErrorKind::NotFound, "git stash failed"))?;
 
-    Result::Ok(output.trim().lines().count())
+    Result::Ok(stash_output.stdout.trim().lines().count())
 }
 
 #[derive(Default, Debug, Copy, Clone)]
