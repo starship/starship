@@ -745,7 +745,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | Option              | Standardwert                                                                                            | Beschreibung                                                       |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | The format for the module.                                         |
-| `symbol`            | `".NET "`                                                                                               | Symbol das vor der dotnet-Version angezeigt wird.                  |
+| `symbol`            | `"•NET "`                                                                                               | Symbol das vor der dotnet-Version angezeigt wird.                  |
 | `heuristic`         | `true`                                                                                                  | Schnelle Versionserkennung nutzen um Starship bedienbar zu halten. |
 | `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                       |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                        |

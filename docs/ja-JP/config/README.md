@@ -746,7 +746,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | オプション               | デフォルト                                                                                                   | 説明                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | moduleのフォーマットです。                             |
-| `symbol`            | `.NET "`                                                                                                | dotnetのバージョンを表示する前に使用される記号です。                |
+| `symbol`            | `•NET "`                                                                                                | dotnetのバージョンを表示する前に使用される記号です。                |
 | `heuristic`         | `true`                                                                                                  | より高速なバージョン検出を使用して、starshipの動作を維持します。         |
 | `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module. |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
