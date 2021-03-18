@@ -124,4 +124,11 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval `starship init tcsh`
    ```
+   
+   #### Nushell
 
+   Run the following in your shell
+
+   ```sh
+   config set prompt "starship prompt"
+   ```
