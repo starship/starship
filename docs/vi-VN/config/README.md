@@ -745,7 +745,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                      |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                      |
-| `symbol`            | `"•NET "`                                                                                               | Biểu tượng sử dụng để hiển thị trước phiên bản của dotnet. |
+| `symbol`            | `".NET "`                                                                                               | Biểu tượng sử dụng để hiển thị trước phiên bản của dotnet. |
 | `heuristic`         | `true`                                                                                                  | Sử dụng phiên bản phát hiện thông minh hơn.                |
 | `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.        |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                       |
