@@ -745,7 +745,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | Option              | 默认值                                                                                                     | 描述                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | 组件格式化模板。                                     |
-| `symbol`            | `"•NET "`                                                                                               | 这个字段的内容会显示在当前 .NET 版本之前。                     |
+| `symbol`            | `".NET "`                                                                                               | 这个字段的内容会显示在当前 .NET 版本之前。                     |
 | `heuristic`         | `true`                                                                                                  | 使用更快的版本探测机制以保证 starship 的运行速度。               |
 | `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module. |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
