@@ -18,7 +18,7 @@ impl<'a> Default for DotnetConfig<'a> {
     fn default() -> Self {
         DotnetConfig {
             format: "[$symbol($version )(🎯 $tfm )]($style)",
-            symbol: "•NET ",
+            symbol: ".NET ",
             style: "blue bold",
             heuristic: true,
             disabled: false,
