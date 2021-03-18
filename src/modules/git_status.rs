@@ -203,26 +203,6 @@ fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Result<RepoStatus>
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-    let config_output = context
-        .exec_cmd(
-            "git",
-            &[
-                "-C",
-                &repo_root.to_string_lossy(),
-                "config",
-                "--get",
-                "--local",
-                "status.showUntrackedFiles",
-            ],
-        )
-        .map_or("all".to_owned(), |output| output.stdout);
-
-    let untracked = "--untracked-files=".to_owned()
-        + if !config_output.trim().is_empty() {
-            config_output.trim()
-        } else {
-            "all"
-        };
     let status_output = context
         .exec_cmd(
             "git",
@@ -233,7 +213,6 @@ fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Result<RepoStatus>
                 "--porcelain=2",
                 "--renames",
                 "--branch",
-                &untracked,
             ],
         )
         .ok_or_else(|| Error::new(ErrorKind::NotFound, "git status failed"))?;
