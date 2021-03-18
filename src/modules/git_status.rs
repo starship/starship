@@ -129,7 +129,7 @@ impl<'a> GitStatusInfo<'a> {
     pub fn check_repository(&self) -> Option<bool> {
         let repo_root = self.repo.root.as_ref()?;
         self.context
-            .exec_cmd("git", &["-C", &repo_root.to_string_lossy(), "status"])
+            .exec_cmd("git", &["-C", &repo_root.to_string_lossy(), "--no-optional-locks", "status"])
             .map(|output| output.stderr.trim().is_empty())
     }
 
@@ -209,6 +209,7 @@ fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Result<RepoStatus>
             &[
                 "-C",
                 &repo_root.to_string_lossy(),
+                "--no-optional-locks",
                 "status",
                 "--porcelain=2",
                 "--renames",
@@ -233,7 +234,7 @@ fn get_stashed_count(context: &Context, repo_root: &PathBuf) -> std::io::Result<
     let stash_output = context
         .exec_cmd(
             "git",
-            &["-C", &repo_root.to_string_lossy(), "stash", "list"],
+            &["-C", &repo_root.to_string_lossy(), "--no-optional-locks", "stash", "list"],
         )
         .ok_or_else(|| Error::new(ErrorKind::NotFound, "git stash failed"))?;
 
