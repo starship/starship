@@ -7,7 +7,6 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::io::{Error, ErrorKind, Result};
 use std::path::PathBuf;
 use std::sync::Arc;
 
@@ -114,7 +113,6 @@ struct GitStatusInfo<'a> {
     repo: &'a Repo,
     repo_status: OnceCell<Option<RepoStatus>>,
     stashed_count: OnceCell<Option<usize>>,
-    valid_repo: OnceCell<Option<bool>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -124,26 +122,7 @@ impl<'a> GitStatusInfo<'a> {
             repo,
             repo_status: OnceCell::new(),
             stashed_count: OnceCell::new(),
-            valid_repo: OnceCell::new(),
         }
-    }
-
-    pub fn check_repository(&self) -> &Option<bool> {
-        self.valid_repo.get_or_init(|| {
-            let repo_root = self.repo.root.as_ref()?;
-            self.context
-                .exec_cmd(
-                    "git",
-                    &[
-                        "-C",
-                        &repo_root.to_string_lossy(),
-                        "--no-optional-locks",
-                        "rev-parse",
-                        "HEAD",
-                    ],
-                )
-                .map(|output| output.stderr.trim().is_empty())
-        })
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
@@ -152,16 +131,12 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_repo_status(&self) -> &Option<RepoStatus> {
         self.repo_status.get_or_init(|| {
-            if !self.check_repository().unwrap_or(false) {
-                return None;
-            };
-
             let repo_root = self.repo.root.as_ref()?;
 
             match get_repo_status(self.context, repo_root) {
-                Ok(repo_status) => Some(repo_status),
-                Err(error) => {
-                    log::debug!("get_repo_status: {}", error);
+                Some(repo_status) => Some(repo_status),
+                None => {
+                    log::debug!("get_repo_status: git status execution failed");
                     None
                 }
             }
@@ -170,16 +145,12 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_stashed(&self) -> &Option<usize> {
         self.stashed_count.get_or_init(|| {
-            if !self.check_repository().unwrap_or(false) {
-                return None;
-            };
-
             let repo_root = self.repo.root.as_ref()?;
 
             match get_stashed_count(self.context, repo_root) {
-                Ok(stashed_count) => Some(stashed_count),
-                Err(error) => {
-                    log::debug!("get_stashed_count: {}", error);
+                Some(stashed_count) => Some(stashed_count),
+                None => {
+                    log::debug!("get_stashed_count: git stash execution failed");
                     None
                 }
             }
@@ -212,24 +183,21 @@ impl<'a> GitStatusInfo<'a> {
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Result<RepoStatus> {
+fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Option<RepoStatus> {
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-    let status_output = context
-        .exec_cmd(
-            "git",
-            &[
-                "-C",
-                &repo_root.to_string_lossy(),
-                "--no-optional-locks",
-                "status",
-                "--porcelain=2",
-                "--renames",
-                "--branch",
-            ],
-        )
-        .ok_or_else(|| Error::new(ErrorKind::NotFound, "git status failed"))?;
+    let status_output = context.exec_cmd(
+        "git",
+        &[
+            "-C",
+            &repo_root.to_string_lossy(),
+            "--no-optional-locks",
+            "status",
+            "--porcelain=2",
+            "--branch",
+        ],
+    )?;
     let statuses = status_output.stdout.lines();
 
     statuses.for_each(|status| {
@@ -240,24 +208,22 @@ fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Result<RepoStatus>
         }
     });
 
-    Ok(repo_status)
+    Some(repo_status)
 }
 
-fn get_stashed_count(context: &Context, repo_root: &PathBuf) -> std::io::Result<usize> {
-    let stash_output = context
-        .exec_cmd(
-            "git",
-            &[
-                "-C",
-                &repo_root.to_string_lossy(),
-                "--no-optional-locks",
-                "stash",
-                "list",
-            ],
-        )
-        .ok_or_else(|| Error::new(ErrorKind::NotFound, "git stash failed"))?;
+fn get_stashed_count(context: &Context, repo_root: &PathBuf) -> Option<usize> {
+    let stash_output = context.exec_cmd(
+        "git",
+        &[
+            "-C",
+            &repo_root.to_string_lossy(),
+            "--no-optional-locks",
+            "stash",
+            "list",
+        ],
+    )?;
 
-    Result::Ok(stash_output.stdout.trim().lines().count())
+    Some(stash_output.stdout.trim().lines().count())
 }
 
 #[derive(Default, Debug, Copy, Clone)]
