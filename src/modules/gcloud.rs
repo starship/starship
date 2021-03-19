@@ -101,19 +101,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GcloudConfig = GcloudConfig::try_load(module.config);
 
     let config_path = get_current_config_path(context)?;
-    let gcloud_account = get_gcloud_account_from_config(&config_path);
+    let gcloud_account = get_gcloud_account_from_config(&config_path)?;
     let gcloud_project = get_gcloud_project_from_config(&config_path);
     let gcloud_region = get_gcloud_region_from_config(&config_path);
     let config_dir = get_config_dir(context)?;
     let gcloud_active: Option<Active> = get_active_config(context, &config_dir);
-
-    if gcloud_account.is_none()
-        && gcloud_project.is_none()
-        && gcloud_region.is_none()
-        && gcloud_active.is_none()
-    {
-        return None;
-    }
 
     let mapped_region = if let Some(gcloud_region) = gcloud_region {
         Some(alias_region(gcloud_region, &config.region_aliases))
@@ -132,7 +124,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "account" => gcloud_account.as_ref().map(Ok),
+                "account" => Some(Ok(&gcloud_account)),
                 "project" => gcloud_project.as_ref().map(Ok),
                 "region" => mapped_region.as_ref().map(Ok),
                 "active" => gcloud_active.as_ref().map(Ok),
@@ -254,13 +246,41 @@ region = us-central1
         assert_eq!(actual, expected);
         dir.close()
     }
-
     #[test]
-    fn active_set() -> io::Result<()> {
+    fn active_set_account_not_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
         let mut active_config_file = File::create(&active_config_path)?;
         active_config_file.write_all(b"default1")?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$active]($style) "
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn active_and_account_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default1")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations/config_default1");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"[core]
+account = foo@example.com
+",
+        )?;
 
         let actual = ModuleRenderer::new("gcloud")
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
@@ -276,7 +296,7 @@ region = us-central1
     }
 
     #[test]
-    fn project_set() -> io::Result<()> {
+    fn project_set_account_not_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
         let mut active_config_file = File::create(&active_config_path)?;
@@ -287,6 +307,36 @@ region = us-central1
         let mut config_default_file = File::create(&config_default_path)?;
         config_default_file.write_all(
             b"[core]
+project = abc
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn project_and_account_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations/config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"[core]
+account = foo@example.com
 project = abc
 ",
         )?;
@@ -321,7 +371,7 @@ project = abc
     }
 
     #[test]
-    fn active_config_manually_overridden() -> io::Result<()> {
+    fn active_config_manually_overridden_account_not_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
         let mut active_config_file = File::create(&active_config_path)?;
@@ -340,6 +390,46 @@ project = default
         let mut config_overridden_file = File::create(&config_overridden_path)?;
         config_overridden_file.write_all(
             b"[core]
+project = overridden
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .env("CLOUDSDK_ACTIVE_CONFIG_NAME", "overridden")
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn active_config_manually_overridden_account_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations/config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"[core]
+account = foo@example.com
+project = default
+",
+        )?;
+
+        let config_overridden_path = dir.path().join("configurations/config_overridden");
+        let mut config_overridden_file = File::create(&config_overridden_path)?;
+        config_overridden_file.write_all(
+            b"[core]
+account = foo@example.com
 project = overridden
 ",
         )?;
