@@ -34,7 +34,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "symbol" => match state {
                         battery::State::Full => Some(config.full_symbol),
                         battery::State::Charging => Some(config.charging_symbol),
-                        battery::State::Discharging => Some(config.discharging_symbol),
+                        battery::State::Discharging => {
+                            if display_style.symbol != "" {
+                                Some(display_style.symbol)
+                            } else {
+                                Some(config.discharging_symbol)
+                            }
+                        }
                         battery::State::Unknown => Some(config.unknown_symbol),
                         battery::State::Empty => Some(config.empty_symbol),
                         _ => {
