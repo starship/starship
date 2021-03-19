@@ -1,4 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
+use std::path::Path;
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
@@ -29,6 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
+                "switch" => get_opam_switch(context).map(Ok),
                 "version" => {
                     let is_esy_project = context
                         .try_begin_scan()?
@@ -58,12 +60,43 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn get_opam_switch(context: &Context) -> Option<String> {
+    let opam_switch = context
+        .exec_cmd("opam", &["switch", "show", "--safe"])?
+        .stdout;
+
+    parse_opam_switch(&opam_switch.trim())
+}
+
+fn parse_opam_switch(opam_switch: &str) -> Option<String> {
+    let path = Path::new(opam_switch);
+    let name = if !path.has_root() {
+        String::from(opam_switch)
+    } else {
+        format!("*{}", path.file_name()?.to_str()?)
+    };
+
+    Some(name)
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use super::parse_opam_switch;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
+
+    #[test]
+    fn test_parse_opam_switch() {
+        let global_switch = "ocaml-base-compiler.4.10.0";
+        let local_switch = "/path/to/my-project";
+        assert_eq!(
+            parse_opam_switch(global_switch),
+            Some("ocaml-base-compiler.4.10.0".to_string())
+        );
+        assert_eq!(parse_opam_switch(local_switch), Some("*my-project".to_string()));
+    }
 
     #[test]
     fn folder_without_ocaml_file() -> io::Result<()> {
@@ -206,6 +239,66 @@ mod tests {
 
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐫 v4.10.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn with_global_opam_switch() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.ml"))?.sync_all()?;
+
+        let config = toml::toml! {
+            [ocaml]
+            format = "via [$symbol($version )(\\($switch\\))]($style)"
+        };
+
+        let actual = ModuleRenderer::new("ocaml")
+            .config(config)
+            .cmd(
+                "opam switch show --safe",
+                Some(CommandOutput {
+                    stdout: String::from("ocaml-base-compiler.4.10.0\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow
+                .bold()
+                .paint("🐫 v4.10.0 (ocaml-base-compiler.4.10.0)")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn with_local_opam_switch() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.ml"))?.sync_all()?;
+
+        let config = toml::toml! {
+            [ocaml]
+            format = "via [$symbol($version )(\\($switch\\))]($style)"
+        };
+
+        let actual = ModuleRenderer::new("ocaml")
+            .config(config)
+            .cmd(
+                "opam switch show --safe",
+                Some(CommandOutput {
+                    stdout: String::from("/path/to/my-project\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐫 v4.10.0 (*my-project)")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
