@@ -1,4 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
+use std::path::Path;
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
@@ -29,6 +30,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
+                "switch" => {
+                    let stdout = context.exec_cmd("opam", &["switch", "-s", "show"])?.stdout;
+                    let switch_raw = stdout.trim();
+                    let path = Path::new(switch_raw);
+                    let normalized = if path.has_root() {
+                        // use named local switch, oft prefixed with full path by opam
+                        path.file_name()?.to_str()?
+                    } else {
+                        switch_raw
+                    };
+                    Some(Ok(normalized.to_owned()))
+                }
                 "version" => {
                     let is_esy_project = context
                         .try_begin_scan()?
@@ -206,6 +219,23 @@ mod tests {
 
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐫 v4.10.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_ml_file_and_uses_switch_variable() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.ml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ocaml")
+            .path(dir.path())
+            .config(toml::toml! {
+               [ocaml]
+               format = "$switch"
+            })
+            .collect();
+        let expected = Some("test-switch-name".to_string());
         assert_eq!(expected, actual);
         dir.close()
     }

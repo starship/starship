@@ -1880,6 +1880,7 @@ By default the module will be shown if any of the following conditions are met:
 | Variable | Example   | Description                          |
 | -------- | --------- | ------------------------------------ |
 | version  | `v4.10.0` | The version of `ocaml`               |
+| switch   | `my-project` | The active `opam` switch             |
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
