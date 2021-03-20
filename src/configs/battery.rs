@@ -24,7 +24,7 @@ impl<'a> Default for BatteryConfig<'a> {
             unknown_symbol: "",
             empty_symbol: "",
             format: "[$symbol$percentage]($style) ",
-            display: vec![BatteryDisplayConfig::new()],
+            display: vec![BatteryDisplayConfig::default()],
             disabled: false,
         }
     }
@@ -37,8 +37,8 @@ pub struct BatteryDisplayConfig<'a> {
     pub symbol: &'a str,
 }
 
-impl<'a> RootModuleConfig<'a> for BatteryDisplayConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for BatteryDisplayConfig<'a> {
+    fn default() -> Self {
         BatteryDisplayConfig {
             threshold: 10,
             style: "red bold",
@@ -49,7 +49,7 @@ impl<'a> RootModuleConfig<'a> for BatteryDisplayConfig<'a> {
 
 impl<'a> ModuleConfig<'a> for BatteryDisplayConfig<'a> {
     fn from_config(config: &'a Value) -> Option<Self> {
-        let mut conf = BatteryDisplayConfig::new();
+        let mut conf = BatteryDisplayConfig::default();
 
         for (key, val) in config.as_table()?.iter() {
             let s = key.to_string();
