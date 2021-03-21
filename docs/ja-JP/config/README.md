@@ -978,7 +978,7 @@ format = "[$symbol$active]($style) "
 style = "bold yellow"
 ```
 
-#### Display account and aliased region
+#### アカウントとエイリアスされたリージョンを表示する
 
 ```toml
 # ~/.config/starship.toml
