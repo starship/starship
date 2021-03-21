@@ -932,7 +932,7 @@ format = "via [e $version](bold red) "
 
 ## Gcloud
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+`gcloud` モジュールは、 [`gcloud`](https://cloud.google.com/sdk/gcloud) CLIの現在の設定が表示されます。 これは `~/.config/gcloud/active_config` ファイルと `~/.config/gcloud/configurations/config_{CONFIG NAME}` ファイルと `CLOUDSDK_CONFIG` 環境変数に基づきます。
 
 ### オプション
 
@@ -955,11 +955,11 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |                   | オプション `記号` の値をミラーする                             |
 | style\* |                   | オプション `style` の値をミラーする                          |
 
-\*: This variable can only be used as a part of a style string
+\*: この変数はスタイル文字列の一部としてのみ使用できます
 
 ### 設定例
 
-#### Display account and project
+#### アカウントとプロジェクトを表示
 
 ```toml
 # ~/.config/starship.toml
@@ -968,7 +968,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 format = 'on [$symbol$account(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### アクティブな設定名のみ表示
 
 ```toml
 # ~/.config/starship.toml
