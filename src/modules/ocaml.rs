@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let switch_raw = stdout.trim();
                     let path = Path::new(switch_raw);
                     let normalized = if path.has_root() {
-                        // use named local switch, oft prefixed with full path by opam
+                        // use named local switch, often prefixed with full path by opam
                         path.file_name()?.to_str()?
                     } else {
                         switch_raw
