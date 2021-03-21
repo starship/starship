@@ -936,13 +936,13 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### オプション
 
-| オプション            | デフォルト                                            | 説明                                                              |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | moduleのフォーマットです。                                                |
-| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | モジュールのスタイルです。                                                   |
-| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
+| オプション            | デフォルト                                            | 説明                            |
+| ---------------- | ------------------------------------------------ | ----------------------------- |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | moduleのフォーマットです。              |
+| `symbol`         | `"☁️ "`                                          | 現在のGCPプロファイルを表示する前に表示される記号です。 |
+| `region_aliases` |                                                  | GCP名に加えて表示するリージョンのエイリアスです。    |
+| `style`          | `"bold blue"`                                    | モジュールのスタイルです。                 |
+| `disabled`       | `false`                                          | Disables the `gcloud` module. |
 
 ### 変数
 
