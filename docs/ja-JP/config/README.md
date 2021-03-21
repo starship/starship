@@ -942,18 +942,18 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `symbol`         | `"☁️ "`                                          | 現在のGCPプロファイルを表示する前に表示される記号です。 |
 | `region_aliases` |                                                  | GCP名に加えて表示するリージョンのエイリアスです。    |
 | `style`          | `"bold blue"`                                    | モジュールのスタイルです。                 |
-| `disabled`       | `false`                                          | Disables the `gcloud` module. |
+| `disabled`       | `false`                                          | `gcloud`モジュールを無効にします。         |
 
 ### 変数
 
-| 変数        | 設定例               | 説明                                                                 |
-| --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | The current GCP region                                             |
-| account   | `foo@example.com` | The current GCP profile                                            |
-| project   |                   | The current GCP project                                            |
-| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | オプション `記号` の値をミラーする                                                |
-| style\* |                   | オプション `style` の値をミラーする                                             |
+| 変数        | 設定例               | 説明                                              |
+| --------- | ----------------- | ----------------------------------------------- |
+| region    | `us-central1`     | 現在のGCPリージョン                                     |
+| account   | `foo@example.com` | 現在のGCPプロファイル                                    |
+| project   |                   | 現在のGCPプロジェクト                                    |
+| active    | `default`         | `~/.config/gcloud/active_config` に書かれたアクティブな設定名 |
+| symbol    |                   | オプション `記号` の値をミラーする                             |
+| style\* |                   | オプション `style` の値をミラーする                          |
 
 \*: This variable can only be used as a part of a style string
 
