@@ -129,7 +129,7 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
-        "opam switch -s show" => Some(CommandOutput {
+        "opam switch -s --safe show" => Some(CommandOutput {
           stdout: String::from("/path/to/my-test.switch\n"),
           stderr: String::default(),
       }),

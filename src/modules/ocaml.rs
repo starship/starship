@@ -31,16 +31,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "switch" => {
-                    let stdout = context.exec_cmd("opam", &["switch", "-s", "show"])?.stdout;
+                    let stdout = context
+                        .exec_cmd("opam", &["switch", "-s", "--safe", "show"])?
+                        .stdout;
                     let switch_raw = stdout.trim();
-                    let path = Path::new(switch_raw);
-                    let normalized = if path.has_root() {
-                        // use named local switch, often prefixed with full path by opam
-                        path.file_name()?.to_str()?
-                    } else {
-                        switch_raw
-                    };
-                    Some(Ok(normalized.to_owned()))
+                    Some(Ok(Path::new(switch_raw).file_name()?.to_str()?.to_owned()))
                 }
                 "version" => {
                     let is_esy_project = context
