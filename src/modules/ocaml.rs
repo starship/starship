@@ -235,7 +235,7 @@ mod tests {
                format = "$switch"
             })
             .collect();
-        let expected = Some("test-switch-name".to_string());
+        let expected = Some("my-test.switch".to_string());
         assert_eq!(expected, actual);
         dir.close()
     }

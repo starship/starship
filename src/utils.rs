@@ -130,7 +130,7 @@ active boot switches: -d:release\n",
             stderr: String::default(),
         }),
         "opam switch -s show" => Some(CommandOutput {
-          stdout: String::from("test-switch-name\n"),
+          stdout: String::from("/path/to/my-test.switch\n"),
           stderr: String::default(),
       }),
         "esy ocaml -vnum" => Some(CommandOutput {
