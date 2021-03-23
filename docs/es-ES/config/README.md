@@ -1306,7 +1306,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `java` muestra la versión actualmente instalada de Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, o `build.boot`
 - El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`, `.clj` o `.cljc`
@@ -1344,11 +1344,11 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas en ejecución si hay más de 1 tarea o más que el valor configurado de `threshold`, si existe.
 
 ::: aviso
 
-This module is not supported on tcsh.
+Este módulo no está soportado en tcsh.
 
 :::
 
@@ -1384,7 +1384,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `julia` muestra la versión actualmente instalada de Julia. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Project.toml`
 - El directorio actual contiene un archivo `Manifest.toml`
@@ -1423,7 +1423,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `kotlin` muestra la versión instalada de Kotlin. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.kt` o `.kts`
 
@@ -1469,11 +1469,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Muestra el nombre del contexto actual de Kubernetes y, si se establece, el espacio de nombres del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
-::: tip
+::: consejo
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -1512,7 +1512,7 @@ disabled = false
 
 ## Salto de línea
 
-The `line_break` module separates the prompt into two lines.
+El módulo `line_break` separa el prompt en dos líneas.
 
 ### Opciones
 
@@ -1531,7 +1531,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `lua` muestra la versión instalada de Lua. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.lua-version`
 - El directorio actual contiene un directorio `lua`
@@ -1571,13 +1571,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memoria utilizada
 
-The `memory_usage` module shows current system memory and swap usage.
+El módulo `memory_usage` muestra la memoria del sistema actual y el uso de la memoria de intercambio.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Por defecto, el uso de la memoria de intercambio se muestra si no es cero.
 
-::: tip
+::: consejo
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -1602,7 +1602,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol           | `🐏`           | Refleja el valor de la opción `symbol`                                             |
 | style\*        |               | Refleja el valor de la opción `style`                                              |
 
-\*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
+\*: Esta variable sólo puede utilizarse como parte de una cadena de estilo \*\*: La información del archivo SWAP sólo se muestra si se detecta en el sistema actual
 
 ### Ejemplo
 
@@ -1618,7 +1618,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+El módulo `hg_branch` muestra la rama activa del repositorio en su directorio actual.
 
 ### Opciones
 
@@ -1654,7 +1654,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `nim` muestra la versión instalada de Nim. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `nim.cfg`
 - El directorio actual contiene un archivo con la extensión `.nim`
@@ -1695,7 +1695,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment. The module will be shown when inside a nix-shell environment.
+El módulo `nix_shell` muestra el entorno nix-shell. El módulo se mostrará dentro de un entorno nix-shell.
 
 ### Opciones
 
@@ -1733,7 +1733,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `nodejs` muestra la versión instalada de NodeJS. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `package.json`
 - El directorio actual contiene un archivo `.node-version`
@@ -1775,7 +1775,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `ocaml` muestra la versión actualmente instalada de OCaml. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con extensión `.opam` o directorio `_opam`
 - El directorio actual contiene un directorio `esy.lock`
@@ -1817,7 +1817,7 @@ format = "via [🐪 $version]($style) "
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+El módulo `openstack` muestra la nube actual y el proyecto OpenStack. El módulo solo está activo cuando la variable de entorno `OS_CLOUD` está definida, en cuyo caso leerá el archivo `clouds.yaml` desde cualquiera de las [ubicaciones por defecto](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). para obtener el proyecto actual en uso.
 
 ### Opciones
 
@@ -1852,7 +1852,7 @@ symbol = "☁️ "
 
 ## Versión del paquete
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+El módulo `package` se muestra cuando el directorio actual es el repositorio de un paquete, y muestra su versión actual. El módulo soporta actualmente los paquetes `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` y `helm`.
 
 - **npm** – La versión del paquete `npm` se extrae del `package.json` presente en el directorio actual
 - **cargo** – La versión del paquete `cargo` se extrae del `Cargo.toml` presente en el directorio actual
@@ -1898,7 +1898,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `perl` muestra la versión actualmente instalada de Perl. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Makefile.PL` o `Build.PL`
 - El directorio actual contiene un archivo `cpanfile` o `cpanfile.snapshot`
@@ -1937,7 +1937,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `php` muestra la versión instalada de PHP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `composer.json`
 - El directorio actual contiene un archivo `.php-version`
@@ -1976,7 +1976,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `purescript` muestra la versión actualmente instalada de PureScript. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `spago.dhall`
 - El directorio actual contiene un archivo con la extensión `.purs`
@@ -2014,9 +2014,9 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+El módulo `python` muestra la versión actualmente instalada de Python y el actual entorno virtual de Python si uno está activado.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
@@ -2045,9 +2045,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                |
 | `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                       |
 
-::: tip
+::: consejo
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+La variable `python_binary` acepta una cadena o una lista de cadenas. Starship intentará ejecutar cada binario hasta que obtenga un resultado. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
 The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
 
@@ -2092,7 +2092,7 @@ detect_extensions = []
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `ruby` muestra la versión actualmente instalada de Ruby. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Gemfile`
 - El directorio actual contiene un archivo `.ruby-version`
@@ -2131,7 +2131,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `rust` muestra la versión actualmente instalada de Rust. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Cargo.toml`
 - El directorio actual contiene un archivo con la extensión `.rs`
@@ -2170,30 +2170,30 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of Scala. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `scala` muestra la versión actualmente instalada de Scala. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- El directorio actual contiene un archivo `build.sbt`, `.scalaenv` o `.sbtenv`
+- El directorio actual contiene un archivo con la extensión `.scala` o `.sbt`
+- El directorio actual contiene un directorio llamado `.metals`
 
 ### Opciones
 
 
-| Opción              | Por defecto                              | Descripción                                          |
-| ------------------- | ---------------------------------------- | ---------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"` | El formato del módulo.                               |
-| `detect_extensions` | `["sbt", "scala"]`                       | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[".metals"]`                            | Qué carpetas deberían activar estos módulos.         |
-| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.    |
-| `style`             | `"red dimmed"`                           | El estilo del módulo.                                |
-| `disabled`          | `false`                                  | Disables the `scala` module.                         |
+| Opción              | Por defecto                              | Descripción                                               |
+| ------------------- | ---------------------------------------- | --------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | El formato del módulo.                                    |
+| `detect_extensions` | `["sbt", "scala"]`                       | Qué extensiones deberían activar este módulo.             |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Qué nombres de archivo deberían activar este módulo.      |
+| `detect_folders`    | `[".metals"]`                            | Qué carpetas deberían activar estos módulos.              |
+| `symbol`            | `"🆂 "`                                   | Una cadena de formato que representa el símbolo de Scala. |
+| `style`             | `"red dimmed"`                           | El estilo del módulo.                                     |
+| `disabled`          | `false`                                  | Deshabilita el módulo `scala`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `2.13.5` | The version of `scala`                 |
+| version   | `2.13.5` | La versión de `scala`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2211,11 +2211,11 @@ symbol = "🌟 "
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+El módulo `shell` muestra un indicador para el intérprete de comandos actualmente utilizado.
 
-::: tip
+::: consejo
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2323,7 +2323,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2376,7 +2376,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of Swift. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2476,7 +2476,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2518,7 +2518,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2600,7 +2600,7 @@ format = "via [⍱ $version](bold white) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of Zig. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - The current directory contains a `.zig` file
 
