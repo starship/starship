@@ -720,9 +720,9 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+El módulo `dotnet` muestra la versión relevante de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Por defecto, este módulo solo se mostrará en tu prompt cuando uno o más de de los siguientes archivos estén presentes en el directorio actual:
 
 - `global.json`
 - `project.json`
@@ -734,11 +734,11 @@ By default this module will only be shown in your prompt when one or more of the
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+También necesitarás tener instalado .NET Core SDK para poder usarlo correctamente.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Internamente, este módulo utiliza su propio mecanismo para la detección de versiones. Normalmente es el doble de rápido que ejecutar `dotnet --version`, pero puede mostrar una versión incorrecta si tu proyecto .NET tiene un diseño de directorio inusual. Si la precisión es más importante que la velocidad, puede desactivar el mecanismo estableciendo `heuristic = false` en las opciones del módulo.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+El módulo también mostrará el Target Framework Moniker ([https://docs.microsoft. om/es/dotnet/standard/frameworks#supported-target-framework-versions](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)) cuando exista un archivo csproj en el directorio actual.
 
 ### Opciones
 
@@ -777,7 +777,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `elixir` muestra la version instalada actualmente de Elixir y Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `mix.exs`.
 
@@ -815,7 +815,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `elm` muestra la versión actualmente instalada de Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `elm.json`
 - El directorio actual contiene un fichero `elm-package.json`
@@ -856,7 +856,7 @@ format = "via [ $version](cyan bold) "
 
 ## Variable de entorno
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
 
 - La opción de configuración de `variable` coincide con una variable de entorno existente
 - La opción de configuración de `variable` no está definida, pero la opción de configuración `predeterminada` se encuentra
@@ -893,7 +893,7 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `erlang` muestra la versión instalada de Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `rebar.config`.
 - El directorio actual contiene un fichero `erlang.mk`.
@@ -931,7 +931,7 @@ format = "via [e $version](bold red) "
 
 ## Gcloud
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](https://cloud.google.com/sdk/gcloud). Esto se basa en el archivo `~/.config/gcloud/active_config`, el archivo `~/.config/gcloud/configurations/config_{CONFIG NAME}` y la variable de entorno `CLOUDSDK_CONFIG`.
 
 ### Opciones
 
@@ -991,7 +991,7 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+El módulo `git_branch` muestra la rama activa del repositorio en su directorio actual.
 
 ### Opciones
 
@@ -1031,7 +1031,7 @@ truncation_symbol = ""
 
 ## Git commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+El módulo `git_commit` muestra el hash de la confirmación actual y también la etiqueta (si existe) del repositorio en su directorio actual.
 
 ### Opciones
 
@@ -1066,7 +1066,7 @@ tag_symbol = "🔖 "
 
 ## Git state
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+El módulo `git_state` se mostrará en directorios que son parte de un repositorio git, y donde hay una operación en curso, tales como: _REBASING_, _BISECTING_, etc. Si hay información de progreso (por ejemplo, REBASING 3/10), esa información será mostrada también.
 
 ### Opciones
 
@@ -1106,7 +1106,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+El módulo `git_status` muestra símbolos que representan el estado del repositorio en su directorio actual.
 
 ### Opciones
 
@@ -1128,7 +1128,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Variables
 
-The following variables can be used in `format`:
+Las siguientes variables se pueden utilizar en `format`:
 
 | Variable       | Descripción                                                                                              |
 | -------------- | -------------------------------------------------------------------------------------------------------- |
@@ -1145,14 +1145,14 @@ The following variables can be used in `format`:
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-The following variables can be used in `diverged`:
+Las siguientes variables pueden ser usadas en `diverged`:
 
 | Variable       | Descripción                                             |
 | -------------- | ------------------------------------------------------- |
 | `ahead_count`  | Número de commits por delante de la rama de seguimiento |
 | `behind_count` | Número de commits detrás de la rama de seguimiento      |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
 | Variable | Descripción                   |
 | -------- | ----------------------------- |
@@ -1176,7 +1176,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Mostrar el recuento delante/detrás de la rama que está siendo rastreada
 
 ```toml
 # ~/.config/starship.toml
@@ -1189,7 +1189,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `golang` muestra la versión actualmente instalada de Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `go.mod`
 - El directorio actual contiene un fichero `go.sum`
@@ -1233,7 +1233,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `helm` muestra la versión instalada de Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
 - El directorio actual contiene un archivo `Chart.yaml`
@@ -1271,7 +1271,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
