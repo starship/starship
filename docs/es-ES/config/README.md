@@ -2268,7 +2268,7 @@ El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | The current value of SHLVL             |
+| shlvl     | `3`     | El valor actual de SHLVL               |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2287,22 +2287,22 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+El módulo `singularity` muestra la imagen de singularity actual, si se encuentra dentro de un contenedor y `$SINGULARITY_NAME` está establecido.
 
 ### Opciones
 
-| Opción     | Por defecto                      | Descripción                                      |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                           |
-| `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                            |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| Opción     | Por defecto                      | Descripción                                                         |
+| ---------- | -------------------------------- | ------------------------------------------------------------------- |
+| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                                              |
+| `symbol`   | `""`                             | Una cadena de formato que se muestra antes del nombre de la imagen. |
+| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                                               |
+| `disabled` | `false`                          | Deshabilita el módulo `singularity`.                                |
 
 ### Variables
 
 | Variable  | Ejemplo      | Descripción                            |
 | --------- | ------------ | -------------------------------------- |
-| env       | `centos.img` | The current singularity image          |
+| env       | `centos.img` | La imagen de singularity actual        |
 | symbol    |              | Refleja el valor de la opción `symbol` |
 | style\* |              | Refleja el valor de la opción `style`  |
 
@@ -2331,31 +2331,31 @@ Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disab
 
 ### Opciones
 
-| Opción                  | Por defecto                   | Descripción                                          |
-| ----------------------- | ----------------------------- | ---------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                |
-| `symbol`                | `"✖"`                         | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                         | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                         | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)             |
-| `signal_symbol`         | `"⚡"`                         | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`                  | El estilo del módulo.                                |
-| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                        | Disables the `status` module.                        |
+| Opción                  | Por defecto                   | Descripción                                            |
+| ----------------------- | ----------------------------- | ------------------------------------------------------ |
+| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                  |
+| `symbol`                | `"✖"`                         | El símbolo mostrado en un error del programa           |
+| `not_executable_symbol` | `"🚫"`                         | El símbolo mostrado cuando el archivo no es ejecutable |
+| `not_found_symbol`      | `"🔍"`                         | El símbolo mostrado cuando no se encuentra el comando  |
+| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
+| `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
+| `recognize_signal_code` | `true`                        | Habilitar mapeo de señales desde el código de salida   |
+| `map_symbol`            | `false`                       | Habilitar mapeo de símbolos desde el código de salida  |
+| `disabled`              | `true`                        | Deshabilita el módulo `status`.                        |
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                          |
-| -------------- | ------- | -------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                    |
-| int            | `127`   | The exit code of the last command                                    |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                  |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | Refleja el valor de la opción `symbol`                               |
-| style\*      |         | Refleja el valor de la opción `style`                                |
+| Variable       | Ejemplo | Descripción                                                                          |
+| -------------- | ------- | ------------------------------------------------------------------------------------ |
+| status         | `127`   | El código de salida del último comando                                               |
+| int            | `127`   | El código de salida del último comando                                               |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                           |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada         |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada      |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado |
+| symbol         |         | Refleja el valor de la opción `symbol`                                               |
+| style\*      |         | Refleja el valor de la opción `style`                                                |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2376,28 +2376,28 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
+Por defecto, el módulo `swift` muestra la versión actualmente instalada de Swift. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- El directorio actual contiene un archivo `Package.swift`
+- El directorio actual contiene un archivo con la extensión `.swift`
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                          |
-| ------------------- | ------------------------------------ | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
-| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift     |
-| `detect_extensions` | `["swift"]`                          | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["Package.swift"]`                  | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.           |
-| `style`             | `"bold 202"`                         | El estilo del módulo.                                |
-| `disabled`          | `false`                              | Disables the `swift` module.                         |
+| Opción              | Por defecto                          | Descripción                                              |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `symbol`            | `"🐦 "`                               | Una cadena de formato que representa el símbolo de Swift |
+| `detect_extensions` | `["swift"]`                          | Qué extensiones deberían activar este módulo.            |
+| `detect_files`      | `["Package.swift"]`                  | Qué nombres de archivo deberían activar este módulo.     |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.               |
+| `style`             | `"bold 202"`                         | El estilo del módulo.                                    |
+| `disabled`          | `false`                              | Deshabilita el módulo `swift`.                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                 |
+| version   | `v5.2.4` | La versión de `swift`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2414,30 +2414,30 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+El módulo `terraform` muestra el espacio de trabajo y la versión actual de Terraform.
 
 ::: consejo
 
-By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+Por defecto la versión de Terraform no se muestra, ya que esto es lento en las versiones actuales de Terraform cuando muchos plugins están en uso. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-version).
 
 :::
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- El directorio actual contiene una carpeta `.terraform`
+- El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                  |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
-| `detect_extensions` | `["tf", "hcl"]`                      | Qué extensiones deberían activar este módulo.         |
-| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.  |
-| `detect_folders`    | `[".terraform"]`                     | Qué carpetas deberían activar este módulo.            |
-| `style`             | `"bold 105"`                         | El estilo del módulo.                                 |
-| `disabled`          | `false`                              | Disables the `terraform` module.                      |
+| Opción              | Por defecto                          | Descripción                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | La cadena de formato para el módulo.                                            |
+| `symbol`            | `"💠"`                                | Una cadena de formato que se muestra antes del espacio de trabajo de Terraform. |
+| `detect_extensions` | `["tf", "hcl"]`                      | Qué extensiones deberían activar este módulo.                                   |
+| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                            |
+| `detect_folders`    | `[".terraform"]`                     | Qué carpetas deberían activar este módulo.                                      |
+| `style`             | `"bold 105"`                         | El estilo del módulo.                                                           |
+| `disabled`          | `false`                              | Desactiva el módulo `terraform`.                                                |
 
 ### Variables
 
