@@ -6,9 +6,9 @@ Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含む�
 
 ## `prompt_order`をルートレベルの`format`に置換
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+v0.45.0までは、`prompt_order` はStarshipによってレンダリングされる順序でモジュール名の配列を指定できるようになっていました。
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 では代わりに  `format` を指定できるようになり、モジュール外でプロンプトをカスタマイズ可能になります。
 
 **v0.45.0以前の設定例**
 
