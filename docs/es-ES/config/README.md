@@ -478,7 +478,7 @@ Los usuarios de Bash que necesiten la funcionalidad como preexec pueden usar el 
 | `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.    |
 | `min_time_to_notify` | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos). |
 
-::: tip
+::: consejo
 
 Mostrar notificaciones de escritorio requiere que se construya Starship con soporte de `rust-notify`. Comprueba si tu Starship soporta notificaciones ejecutando `STARSHIP_LOG=debug starship module cmd_duration -d 60000` cuando `show_notifications` está establecido en `true`.
 
@@ -2319,25 +2319,25 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`.
 
-::: tip
+::: consejo
 
 Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: advertencia Este módulo no es compatible con el intérprete de comandos Elvish. :::
 
 ### Opciones
 
 | Opción                  | Por defecto                   | Descripción                                          |
 | ----------------------- | ----------------------------- | ---------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "` | The format of the module                             |
+| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                |
 | `symbol`                | `"✖"`                         | The symbol displayed on program error                |
 | `not_executable_symbol` | `"🚫"`                         | The symbol displayed when file isn't executable      |
 | `not_found_symbol`      | `"🔍"`                         | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                         | The symbol displayed on SIGINT (Ctrl + c)            |
+| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)             |
 | `signal_symbol`         | `"⚡"`                         | The symbol displayed on any signal                   |
 | `style`                 | `"bold red"`                  | El estilo del módulo.                                |
 | `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                 |
@@ -2416,7 +2416,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected terraform workspace and version.
 
-::: tip
+::: consejo
 
 By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
 
@@ -2474,7 +2474,7 @@ format = "[🏎💨 $workspace]($style) "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: consejo
 
 Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
@@ -2525,7 +2525,7 @@ The `username` module shows active user's username. El módulo se mostrará si s
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-::: tip
+::: consejo
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
@@ -2646,19 +2646,19 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: tip
+::: consejo
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: consejo
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip
+::: consejo
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
