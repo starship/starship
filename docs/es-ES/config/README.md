@@ -2221,23 +2221,23 @@ Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disab
 
 ### Opciones
 
-| Opción                 | Por defecto  | Descripción                                   |
-| ---------------------- | ------------ | --------------------------------------------- |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.       |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.       |
-| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.        |
-| `powershell_indicator` | `psh`        | A format string used to represent powershell. |
-| `ion_indicator`        | `ion`        | A format string used to represent ion.        |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
-| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
-| `format`               | `$indicator` | El formato del módulo.                        |
-| `disabled`             | `true`       | Disables the `shell` module.                  |
+| Opción                 | Por defecto  | Descripción                                              |
+| ---------------------- | ------------ | -------------------------------------------------------- |
+| `bash_indicator`       | `bsh`        | Una cadena de formato usada para representar Bash.       |
+| `fish_indicator`       | `fsh`        | Una cadena de formato usada para representar Fish.       |
+| `zsh_indicator`        | `zsh`        | Una cadena de formato usada para representar Zsh.        |
+| `powershell_indicator` | `psh`        | Una cadena de formato usada para representar Powershell. |
+| `ion_indicator`        | `ion`        | Una cadena de formato usada para representar Ion.        |
+| `elvish_indicator`     | `esh`        | Una cadena de formato usada para representar Elvish.     |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                  |
+| `format`               | `$indicator` | El formato del módulo.                                   |
+| `disabled`             | `true`       | Deshabilita el módulo `shell`.                           |
 
 ### Variables
 
-| Variable  | Por defecto | Descripción                                                |
-| --------- | ----------- | ---------------------------------------------------------- |
-| indicator |             | Mirrors the value of `indicator` for currently used shell. |
+| Variable  | Por defecto | Descripción                                                                          |
+| --------- | ----------- | ------------------------------------------------------------------------------------ |
+| indicator |             | Ordena el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
 
 ### Ejemplos
 ```toml
@@ -2251,18 +2251,18 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"), si está establecido en un número y conoce o supera el umbral especificado.
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                                 |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                      |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                                       |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
+| Opción      | Por defecto                  | Descripción                                                    |
+| ----------- | ---------------------------- | -------------------------------------------------------------- |
+| `threshold` | `2`                          | Mostrar el umbral.                                             |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                         |
+| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                    |
+| `repeat`    | `false`                      | Causa `symbol` a ser repetido por la cantidad actual de SHLVL. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                          |
+| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.                                 |
 
 ### Variables
 
