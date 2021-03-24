@@ -319,7 +319,6 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 | `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
 
-
 ### Ejemplo
 
 ```toml
@@ -1754,7 +1753,7 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. Por defecto, el mó
 | `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                        |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
-###  Variables
+### Variables
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
@@ -2063,7 +2062,6 @@ Los valores por defecto y el orden para `python_binary` fue elegido para identif
 | pyenv_prefix | `"pyenv "`      | Ordena el valor de la opción `pyenv_prefix` |
 | virtualenv   | `"venv"`        | El nombre actual del `virtualenv`           |
 
-
 ### Ejemplo
 
 ```toml
@@ -2167,7 +2165,6 @@ Por defecto, el módulo `rust` muestra la versión actualmente instalada de Rust
 format = "via [⚙️ $version](red bold)"
 ```
 
-
 ## Scala
 
 El módulo `scala` muestra la versión actualmente instalada de Scala. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -2177,7 +2174,6 @@ El módulo `scala` muestra la versión actualmente instalada de Scala. Por defec
 - El directorio actual contiene un directorio llamado `.metals`
 
 ### Opciones
-
 
 | Opción              | Por defecto                              | Descripción                                               |
 | ------------------- | ---------------------------------------- | --------------------------------------------------------- |
@@ -2207,7 +2203,6 @@ El módulo `scala` muestra la versión actualmente instalada de Scala. Por defec
 [scala]
 symbol = "🌟 "
 ```
-
 
 ## Shell
 
@@ -2240,6 +2235,7 @@ Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disab
 | indicator |             | Ordena el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
 
 ### Ejemplos
+
 ```toml
 # ~/.config/starship.toml
 
