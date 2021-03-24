@@ -261,7 +261,7 @@ is read from the `AWSU_PROFILE` env var.
 | `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current AWS profile.      |
 | `region_aliases` |                                                | Table of region aliases to display in addition to the AWS name. |
 | `style`          | `"bold yellow"`                                | The style for the module.                                       |
-| `disabled`       | `false`                                        | Disables the `AWS` module.                                      |
+| `disabled`       | `false`                                        | Disables the `aws` module.                                      |
 
 ### Variables
 
@@ -1057,16 +1057,16 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `format`            | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
 | `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                |
-| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                                   |
+| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                   |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`     | `false`                         | Only show the branch name when not in a detached HEAD state.                             |
+| `only_attached`     | `false`                         | Only show the branch name when not in a detached `HEAD` state.                             |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
 | Variable        | Example  | Description                                                                                          |
 | ----------------| -------- | ---------------------------------------------------------------------------------------------------- |
-| branch          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| branch          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name     | `origin` | The remote name.                                                                                     |
 | remote_branch   | `master` | The name of the branch tracked on `remote_name`.                                                     |
 | symbol          |          | Mirrors the value of option `symbol`                                                                 |
@@ -1096,7 +1096,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `commit_hash_length` | `7`                                            | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                            |
 | `style`              | `"bold green"`                                 | The style for the module.                             |
-| `only_detached`      | `true`                                         | Only show git commit hash when in detached HEAD state |
+| `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.     |
 | `tag_symbol`         | `"🏷 "`                                        | Tag symbol prefixing the info shown                   |
 | `disabled`           | `false`                                        | Disables the `git_commit` module.                     |
@@ -1702,7 +1702,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                    |
 | `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                  |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
@@ -1830,7 +1830,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.          |
 | `style`             | `"bold green"`                       | The style for the module.                          |
 | `disabled`          | `false`                              | Disables the `nodejs` module.                      |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
 ### Variables
 
@@ -1908,7 +1908,7 @@ to fetch the current project in use.
 | `format`         | `"on [$symbol$cloud(\\($project\\))]($style) "`  | The format for the module.                                      |
 | `symbol`         | `"☁️ "`                                           | The symbol used before displaying the current OpenStack cloud.  |
 | `style`          | `"bold yellow"`                                  | The style for the module.                                       |
-| `disabled`       | `false`                                          | Disables the `OpenStack` module.                                |
+| `disabled`       | `false`                                          | Disables the `openstack` module.                                |
 
 ### Variables
 
@@ -2359,7 +2359,7 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is
+The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is
 set to a number and meets or exceeds the specified threshold.
 
 ### Options
@@ -2368,8 +2368,8 @@ set to a number and meets or exceeds the specified threshold.
 | ----------- | ---------------------------- | --------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                      |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL. |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`. |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | The style for the module.               |
 | `disabled`  | `true`                       | Disables the `shlvl` module.            |
 
@@ -2377,7 +2377,7 @@ set to a number and meets or exceeds the specified threshold.
 
 | Variable | Example | Description                          |
 | -------- | ------- | ------------------------------------ |
-| shlvl    | `3`     | The current value of SHLVL           |
+| shlvl    | `3`     | The current value of `SHLVL`           |
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
@@ -2700,7 +2700,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
 | `style`             | `"cyan bold"`                        | The style for the module.                           |
-| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                      |
 
 ### Variables
 
