@@ -248,7 +248,7 @@ Cuando uses [awsu](https://github.com/kreuzwerker/awsu) el perfil se obtiene de 
 | `symbol`         | `"☁️ "`                                             | El símbolo que se muestra antes del perfil de AWS.           |
 | `region_aliases` |                                                     | Tabla de alias de región para mostrar además del nombre AWS. |
 | `style`          | `"bold yellow"`                                     | El estilo del módulo.                                        |
-| `disabled`       | `false`                                             | Desactiva el módulo AWS.                                     |
+| `disabled`       | `false`                                             | Disables the `aws` module.                                   |
 
 ### Variables
 
@@ -1001,20 +1001,20 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
 | `symbol`             | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                         |
 | `style`              | `"bold purple"`                  | El estilo del módulo.                                                                                   |
-| `truncation_length`  | `2^63 - 1`                       | Trunca una rama git a X grafemas.                                                                       |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                                |
 | `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `only_attached`      | `false`                          | Muestra sólo el nombre de la rama cuando no esté en un estado detached HEAD.                            |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                          |
 | `disabled`           | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
 
 ### Variables
 
-| Variable      | Ejemplo  | Descripción                                                                                                   |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| branch        | `master` | El nombre de la rama actual, regresa a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached HEAD). |
-| remote_name   | `origin` | El nombre remoto.                                                                                             |
-| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                              |
-| symbol        |          | Refleja el valor de la opción `symbol`                                                                        |
-| style\*     |          | Refleja el valor de la opción `style`                                                                         |
+| Variable      | Ejemplo  | Descripción                                                                                            |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | El nombre remoto.                                                                                      |
+| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                       |
+| symbol        |          | Refleja el valor de la opción `symbol`                                                                 |
+| style\*     |          | Refleja el valor de la opción `style`                                                                  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1035,15 +1035,15 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 
 ### Opciones
 
-| Opción               | Por defecto                                            | Descripción                                                                  |
-| -------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | La longitud del hash del commit de git mostrado.                             |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                                       |
-| `style`              | `"bold green"`                                         | El estilo del módulo.                                                        |
-| `only_detached`      | `true`                                                 | Mostrar solo el hash del commit de git cuando esté en estado "detached HEAD" |
-| `tag_disabled`       | `true`                                                 | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.      |
-| `tag_symbol`         | `"🏷 "`                                                 | Símbolo de etiqueta prefijando la información mostrada                       |
-| `disabled`           | `false`                                                | Desactiva el módulo `git_commit`.                                            |
+| Opción               | Por defecto                                            | Descripción                                                             |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | La longitud del hash del commit de git mostrado.                        |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                                  |
+| `style`              | `"bold green"`                                         | El estilo del módulo.                                                   |
+| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state                 |
+| `tag_disabled`       | `true`                                                 | Deshabilita mostrar información de etiquetas en el módulo `git_commit`. |
+| `tag_symbol`         | `"🏷 "`                                                 | Símbolo de etiqueta prefijando la información mostrada                  |
+| `disabled`           | `false`                                                | Desactiva el módulo `git_commit`.                                       |
 
 ### Variables
 
@@ -1627,7 +1627,7 @@ El módulo `hg_branch` muestra la rama activa del repositorio en su directorio a
 | `symbol`            | `" "`                           | El símbolo usado antes del marcador hg o nombre de la rama del repositorio en su directorio actual. |
 | `style`             | `"bold purple"`                  | El estilo del módulo.                                                                               |
 | `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                              |
-| `truncation_length` | `2^63 - 1`                       | Trunca el nombre de la rama hg a X grafemas                                                         |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                       |
 | `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado.                                   |
 | `disabled`          | `true`                           | Desactiva el módulo `hg_branch`.                                                                    |
 
@@ -1743,16 +1743,16 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. Por defecto, el mó
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                                                     |
-| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                          |
-| `symbol`            | `" "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                      |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Qué extensiones deberían activar este módulo.                                                                   |
-| `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                            |
-| `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                                      |
-| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                           |
-| `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                                 |
-| `not_capable_style` | `bold red`                           | El estilo para el módulo cuando una propiedad de motores en Packages.json no coincide con la versión de NodeJS. |
+| Opción              | Por defecto                          | Descripción                                                                                            |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                 |
+| `symbol`            | `" "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                             |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Qué extensiones deberían activar este módulo.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                   |
+| `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                             |
+| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                  |
+| `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                        |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
 ###  Variables
 
@@ -1826,7 +1826,7 @@ El módulo `openstack` muestra la nube actual y el proyecto OpenStack. El módul
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | El formato del módulo.                                      |
 | `symbol`   | `"☁️ "`                                             | El símbolo usado antes de mostrar la nube OpenStack actual. |
 | `style`    | `"bold yellow"`                                     | El estilo del módulo.                                       |
-| `disabled` | `false`                                             | Desactiva el módulo `OpenStack`.                            |
+| `disabled` | `false`                                             | Disables the `openstack` module.                            |
 
 ### Variables
 
@@ -2251,24 +2251,24 @@ disabled = false
 
 ## SHLVL
 
-El módulo `shlvl` muestra la variable de entorno actual SHLVL ("nivel de shell"), si está establecido en un número y conoce o supera el umbral especificado.
+The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                                    |
-| ----------- | ---------------------------- | -------------------------------------------------------------- |
-| `threshold` | `2`                          | Mostrar el umbral.                                             |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                         |
-| `symbol`    | `"↕️ "`                      | El símbolo usado para representar el SHLVL.                    |
-| `repeat`    | `false`                      | Causa `symbol` a ser repetido por la cantidad actual de SHLVL. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                                          |
-| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.                                 |
+| Opción      | Por defecto                  | Descripción                                                   |
+| ----------- | ---------------------------- | ------------------------------------------------------------- |
+| `threshold` | `2`                          | Mostrar el umbral.                                            |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                        |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                         |
+| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.                                |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | El valor actual de SHLVL               |
+| shlvl     | `3`     | The current value of `SHLVL`           |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2577,7 +2577,7 @@ El módulo `vagrant` muestra la versión instalada de Vagrant. Por defecto, el m
 | `detect_files`      | `["Vagrantfile"]`                    | Qué nombres de archivo deberían activar este módulo.        |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                  |
 | `style`             | `"cyan bold"`                        | El estilo del módulo.                                       |
-| `disabled`          | `false`                              | Deshabilita el módulo `Vagrant`.                            |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                              |
 
 ### Variables
 
