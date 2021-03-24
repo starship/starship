@@ -2034,7 +2034,7 @@ By default the module will be shown if any of the following conditions are met:
 
 | Параметр             | По умолчанию                                                                                                 | Описание                                                                               |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | Формат модуля.                                                                         |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                         |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | Стиль модуля.                                                                          |
 | `pyenv_version_name` | `false`                                                                                                      | Использовать pyenv для получения версии Python                                         |
