@@ -438,7 +438,7 @@ The `cmake` module shows the currently installed version of CMake. By default th
 | ------------------- | -------------------------------------- | -------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | Формат модуля.                               |
 | `symbol`            | `"△ "`                                 | The symbol used before the version of cmake. |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle  |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module  |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
 | `style`             | `"bold blue"`                          | Стиль модуля.                                |
@@ -595,7 +595,7 @@ The `dart` module shows the currently installed version of Dart. By default the 
 | ------------------- | ------------------------------------------------- | ----------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | Формат модуля.                                  |
 | `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart |
-| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.    |
+| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this module.    |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.     |
 | `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.       |
 | `style`             | `"bold blue"`                                     | Стиль модуля.                                   |
@@ -1206,7 +1206,7 @@ The `golang` module shows the currently installed version of Golang. By default 
 | ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                           | Формат модуля.                                 |
 | `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
-| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.   |
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
 | `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
 | `style`             | `"bold cyan"`                                                                  | Стиль модуля.                                  |
@@ -1543,7 +1543,7 @@ The `lua` module shows the currently installed version of Lua. By default the mo
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                             |
 | `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this module.                               |
 | `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
 | `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
 | `style`             | `"bold blue"`                        | Стиль модуля.                                                              |
@@ -1667,7 +1667,7 @@ The `nim` module shows the currently installed version of Nim. By default the mo
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля                                         |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this moudle.          |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this module.          |
 | `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.           |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
 | `style`             | `"bold yellow"`                      | Стиль модуля.                                         |
@@ -1747,7 +1747,7 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                                        |
 | `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
 | `style`             | `"bold green"`                       | Стиль модуля.                                                                                         |
@@ -1790,7 +1790,7 @@ The `ocaml` module shows the currently installed version of OCaml. By default th
 | ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                             | The format string for the module.                       |
 | `symbol`            | `"🐫 "`                                                           | The symbol used before displaying the version of OCaml. |
-| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Which extensions should trigger this moudle.            |
+| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Which extensions should trigger this module.            |
 | `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Which filenames should trigger this module.             |
 | `detect_folders`    | `["_opam", "esy.lock"]`                                          | Which folders should trigger this module.               |
 | `style`             | `"bold yellow"`                                                  | Стиль модуля.                                           |
@@ -1912,7 +1912,7 @@ The `perl` module shows the currently installed version of Perl. By default the 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
 | `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
-| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this moudle.          |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this module.          |
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.           |
 | `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.             |
 | `style`             | `"bold 149"`                                                                                             | Стиль модуля.                                         |
@@ -1949,7 +1949,7 @@ The `php` module shows the currently installed version of PHP. By default the mo
 | ------------------- | ------------------------------------ | --------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                      |
 | `symbol`            | `"🐘 "`                               | Символ, используемый перед отображением версии PHP. |
-| `detect_extensions` | `["php"]`                            | Which extensions should trigger this moudle.        |
+| `detect_extensions` | `["php"]`                            | Which extensions should trigger this module.        |
 | `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.         |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
 | `style`             | `"147 bold"`                         | Стиль модуля.                                       |
@@ -1987,7 +1987,7 @@ The `purescript` module shows the currently installed version of PureScript vers
 | ------------------- | ------------------------------------ | ------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                               |
 | `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
-| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this moudle.                 |
+| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this module.                 |
 | `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                  |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                    |
 | `style`             | `"bold white"`                       | Стиль модуля.                                                |
@@ -2040,7 +2040,7 @@ By default the module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                                                      | Использовать pyenv для получения версии Python                                         |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this module                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
@@ -2387,7 +2387,7 @@ By default the `swift` module shows the currently installed version of Swift. Th
 | ------------------- | ------------------------------------ | ------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                   |
 | `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this module.     |
 | `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
 | `style`             | `"bold 202"`                         | Стиль модуля.                                    |
