@@ -2034,7 +2034,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 | Opción               | Por defecto                                                                                                  | Descripción                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | El formato del módulo.                                                                |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | El formato del módulo.                                                                |
 | `symbol`             | `"🐍 "`                                                                                                       | Una cadena de formato que representa el símbolo de Python                             |
 | `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                 |
 | `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                          |
