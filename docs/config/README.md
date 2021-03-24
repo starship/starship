@@ -1830,7 +1830,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.          |
 | `style`             | `"bold green"`                       | The style for the module.                          |
 | `disabled`          | `false`                              | Disables the `nodejs` module.                      |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
 ### Variables
 
