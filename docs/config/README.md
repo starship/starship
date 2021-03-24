@@ -1059,14 +1059,14 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `style`             | `"bold purple"`                  | The style for the module.                                                                |
 | `truncation_length` | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                   |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`     | `false`                         | Only show the branch name when not in a detached HEAD state.                             |
+| `only_attached`     | `false`                         | Only show the branch name when not in a detached `HEAD` state.                             |
 | `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
 | Variable        | Example  | Description                                                                                          |
 | ----------------| -------- | ---------------------------------------------------------------------------------------------------- |
-| branch          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
+| branch          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name     | `origin` | The remote name.                                                                                     |
 | remote_branch   | `master` | The name of the branch tracked on `remote_name`.                                                     |
 | symbol          |          | Mirrors the value of option `symbol`                                                                 |
@@ -1096,7 +1096,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `commit_hash_length` | `7`                                            | The length of the displayed git commit hash.          |
 | `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                            |
 | `style`              | `"bold green"`                                 | The style for the module.                             |
-| `only_detached`      | `true`                                         | Only show git commit hash when in detached HEAD state |
+| `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.     |
 | `tag_symbol`         | `"🏷 "`                                        | Tag symbol prefixing the info shown                   |
 | `disabled`           | `false`                                        | Disables the `git_commit` module.                     |
