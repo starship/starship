@@ -248,7 +248,7 @@ When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from 
 | `symbol`         | `"☁️ "`                                             | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại. |
 | `region_aliases` |                                                     | Bảng của các region alias để hiển thị ngoài tên AWS. |
 | `style`          | `"bold yellow"`                                     | Kiểu cho module.                                     |
-| `disabled`       | `false`                                             | Vô hiệu `AWS` module.                                |
+| `disabled`       | `false`                                             | Disables the `aws` module.                           |
 
 ### Các biến
 
@@ -1001,20 +1001,20 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
 | `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
 | `style`              | `"bold purple"`                  | Kiểu cho module.                                                                                      |
-| `truncation_length`  | `2^63 - 1`                       | Rút gọn một nhánh git sang X graphemes.                                                               |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                              |
 | `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
-| `only_attached`      | `false`                          | Chỉ hiển thị tên nhánh khi không nằm trong một trạng thái detached HEAD.                              |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                        |
 | `disabled`           | `false`                          | Vô hiệu mô đun `git_branch`.                                                                          |
 
 ### Các biến
 
-| Biến          | Ví dụ    | Mô tả                                                                                               |
-| ------------- | -------- | --------------------------------------------------------------------------------------------------- |
-| branch        | `master` | Tên nhánh hiện tại, nhảy trở lại `HEAD` nếu không có nhánh hiện tại (ví dụ. git đã tách khỏi HEAD). |
-| remote_name   | `origin` | Tên remote.                                                                                         |
-| remote_branch | `master` | Tên của nhánh đã theo dõi trên `remote_name`.                                                       |
-| symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                    |
-| style\*     |          | Giá trị ghi đè của `style`                                                                          |
+| Biến          | Ví dụ    | Mô tả                                                                                                  |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | Tên remote.                                                                                            |
+| remote_branch | `master` | Tên của nhánh đã theo dõi trên `remote_name`.                                                          |
+| symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                       |
+| style\*     |          | Giá trị ghi đè của `style`                                                                             |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1035,15 +1035,15 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                               | Mô tả                                                           |
-| -------------------- | ------------------------------------------------------ | --------------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | Độ dài của git commit hash được hiển thị.                       |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                           |
-| `style`              | `"bold green"`                                         | Kiểu cho module.                                                |
-| `only_detached`      | `true`                                                 | Chỉ hiện git commit hash khi ở trong HEAD state đã được tách ra |
-| `tag_disabled`       | `true`                                                 | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`.       |
-| `tag_symbol`         | `"🏷 "`                                                 | Biểu tượng tag trước thông tin được hiển thị                    |
-| `disabled`           | `false`                                                | Vô hiệu mô đun `git_commit`.                                    |
+| Tuỳ chọn             | Mặc định                                               | Mô tả                                                     |
+| -------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | Độ dài của git commit hash được hiển thị.                 |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                     |
+| `style`              | `"bold green"`                                         | Kiểu cho module.                                          |
+| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state   |
+| `tag_disabled`       | `true`                                                 | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`. |
+| `tag_symbol`         | `"🏷 "`                                                 | Biểu tượng tag trước thông tin được hiển thị              |
+| `disabled`           | `false`                                                | Vô hiệu mô đun `git_commit`.                              |
 
 ### Các biến
 
@@ -1627,7 +1627,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | Kiểu cho module.                                                                             |
 | `format`            | `"on [$symbol$branch]($style) "` | Định dạng cho module.                                                                        |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
 | `truncation_symbol` | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn.                                  |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
@@ -1743,16 +1743,16 @@ The `nodejs` module shows the currently installed version of NodeJS. Mặc đị
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                 |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                   |
-| `detect_files`      | `["package.json", ".node-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                                                  |
-| `detect_folders`    | `["node_modules"]`                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                                            |
-| `style`             | `"bold green"`                       | Kiểu cho module.                                                                                      |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                  |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                     |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                    |
+| `detect_files`      | `["package.json", ".node-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                                                   |
+| `detect_folders`    | `["node_modules"]`                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                                             |
+| `style`             | `"bold green"`                       | Kiểu cho module.                                                                                       |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                          |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
 ###  Variables
 
@@ -1826,7 +1826,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Định dạng cho module.                                          |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | Kiểu cho module.                                               |
-| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+| `disabled` | `false`                                             | Disables the `openstack` module.                               |
 
 ### Các biến
 
@@ -2251,24 +2251,24 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn    | Mặc định                     | Mô tả                                                       |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | Định dạng cho module.                                       |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | Kiểu cho module.                                            |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
+| Tuỳ chọn    | Mặc định                     | Mô tả                                                         |
+| ----------- | ---------------------------- | ------------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                            |
+| `format`    | `"[$symbol$shlvl]($style) "` | Định dạng cho module.                                         |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
+| `style`     | `"bold yellow"`              | Kiểu cho module.                                              |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
 ### Các biến
 
 | Biến      | Ví dụ | Mô tả                            |
 | --------- | ----- | -------------------------------- |
-| shlvl     | `3`   | The current value of SHLVL       |
+| shlvl     | `3`   | The current value of `SHLVL`     |
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
@@ -2577,7 +2577,7 @@ The `vagrant` module shows the currently installed version of Vagrant. Mặc đ�
 | `detect_files`      | `["Vagrantfile"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
 | `style`             | `"cyan bold"`                        | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                      |
 
 ### Các biến
 
