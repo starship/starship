@@ -261,7 +261,7 @@ is read from the `AWSU_PROFILE` env var.
 | `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current AWS profile.      |
 | `region_aliases` |                                                | Table of region aliases to display in addition to the AWS name. |
 | `style`          | `"bold yellow"`                                | The style for the module.                                       |
-| `disabled`       | `false`                                        | Disables the `AWS` module.                                      |
+| `disabled`       | `false`                                        | Disables the `aws` module.                                      |
 
 ### Variables
 
@@ -1908,7 +1908,7 @@ to fetch the current project in use.
 | `format`         | `"on [$symbol$cloud(\\($project\\))]($style) "`  | The format for the module.                                      |
 | `symbol`         | `"☁️ "`                                           | The symbol used before displaying the current OpenStack cloud.  |
 | `style`          | `"bold yellow"`                                  | The style for the module.                                       |
-| `disabled`       | `false`                                          | Disables the `OpenStack` module.                                |
+| `disabled`       | `false`                                          | Disables the `openstack` module.                                |
 
 ### Variables
 
@@ -2700,7 +2700,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
 | `style`             | `"cyan bold"`                        | The style for the module.                           |
-| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                      |
 
 ### Variables
 
