@@ -44,9 +44,6 @@ symbol = " "
 [golang]
 symbol = " "
 
-[haskell]
-symbol = " "
-
 [hg_branch]
 symbol = " "
 
