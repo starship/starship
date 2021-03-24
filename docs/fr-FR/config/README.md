@@ -319,7 +319,6 @@ The `battery` module shows how charged the device's battery is and its current c
 | `display`            | [lien](#battery-display)          | Affiche le seuil et le style du module.                       |
 | `disabled`           | `false`                           | Désactive le module `battery`.                                |
 
-
 ### Exemple
 
 ```toml
@@ -1754,7 +1753,7 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 | `disabled`          | `false`                              | Disables the `nodejs` module.                                                                          |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
-###  Variables
+### Variables
 
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
@@ -2063,7 +2062,6 @@ The default values and order for `python_binary` was chosen to first identify th
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
-
 ### Exemple
 
 ```toml
@@ -2167,7 +2165,6 @@ By default the `rust` module shows the currently installed version of Rust. The 
 format = "via [⚙️ $version](red bold)"
 ```
 
-
 ## Scala
 
 The `scala` module shows the currently installed version of Scala. By default the module will be shown if any of the following conditions are met:
@@ -2177,7 +2174,6 @@ The `scala` module shows the currently installed version of Scala. By default th
 - The current directory contains a directory named `.metals`
 
 ### Options
-
 
 | Option              | Défaut                                   | Description                                       |
 | ------------------- | ---------------------------------------- | ------------------------------------------------- |
@@ -2207,7 +2203,6 @@ The `scala` module shows the currently installed version of Scala. By default th
 [scala]
 symbol = "🌟 "
 ```
-
 
 ## Shell
 
@@ -2240,6 +2235,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
 
 ### Exemples
+
 ```toml
 # ~/.config/starship.toml
 
