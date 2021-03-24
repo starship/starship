@@ -13,7 +13,7 @@ categories = ["command-line-utilities"]
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
-exclude = ["docs/**/*"]
+include = ["src/**/*", "LICENSE", "README.md"]
 
 [lib]
 name = "starship_module_config_derive"
