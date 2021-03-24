@@ -333,7 +333,6 @@ The module is only visible when the device's battery is below 10%.
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
 
-
 ### Example
 
 ```toml
@@ -1832,7 +1831,7 @@ By default the module will be shown if any of the following conditions are met:
 | `disabled`          | `false`                              | Disables the `nodejs` module.                      |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
 
-### Variables
+### Variables
 
 | Variable | Example    | Description                          |
 | -------- | ---------- | ------------------------------------ |
@@ -2167,7 +2166,6 @@ Python version 2, see example below.
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
-
 ### Example
 
 ```toml
@@ -2273,7 +2271,6 @@ The module will be shown if any of the following conditions are met:
 format = "via [⚙️ $version](red bold)"
 ```
 
-
 ## Scala
 
 The `scala` module shows the currently installed version of Scala.
@@ -2284,7 +2281,6 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a directory named `.metals`
 
 ### Options
-
 
 | Option              | Default                                    | Description                                      |
 | ------------------- | -------------------------------------------| -----------------------------------------------  |
@@ -2314,7 +2310,6 @@ By default the module will be shown if any of the following conditions are met:
 [scala]
 symbol = "🌟 "
 ```
-
 
 ## Shell
 
@@ -2348,6 +2343,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | indicator   |         | Mirrors the value of `indicator` for currently used shell. |
 
 ### Examples
+
 ```toml
 # ~/.config/starship.toml
 
