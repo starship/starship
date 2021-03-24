@@ -248,7 +248,7 @@ When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from 
 | `symbol`         | `"☁️ "`                                             | Символ перед отображением текущего профиля AWS.                |
 | `region_aliases` |                                                     | Таблица региона псевдонимов, отображаемая вместе с именем AWS. |
 | `style`          | `"bold yellow"`                                     | Стиль модуля.                                                  |
-| `disabled`       | `false`                                             | Отключение модуля `AWS`.                                       |
+| `disabled`       | `false`                                             | Disables the `aws` module.                                     |
 
 ### Переменные
 
@@ -1001,20 +1001,20 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `format`             | `"on [$symbol$branch]($style) "` | Формат модуля. Use `"$branch"` to refer to the current branch name.                           |
 | `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                        |
 | `style`              | `"bold purple"`                  | Стиль модуля.                                                                                 |
-| `truncation_length`  | `2^63 - 1`                       | Отрезает ветку git до X графемов.                                                             |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                      |
 | `truncation_symbol`  | `"…"`                            | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                                  |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                |
 | `disabled`           | `false`                          | Отключает модуль `git_branch`.                                                                |
 
 ### Переменные
 
-| Переменная    | Пример   | Описание                                                                                             |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote_name   | `origin` | The remote name.                                                                                     |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
-| symbol        |          | Отражает значение параметра `symbol`                                                                 |
-| style\*     |          | Отражает значение параметра `style`                                                                  |
+| Переменная    | Пример   | Описание                                                                                               |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | The remote name.                                                                                       |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol        |          | Отражает значение параметра `symbol`                                                                   |
+| style\*     |          | Отражает значение параметра `style`                                                                    |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1035,15 +1035,15 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Опции
 
-| Параметр             | По умолчанию                                           | Описание                                                                |
-| -------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | Длина отображаемого хэша коммита git.                                   |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Формат модуля.                                                          |
-| `style`              | `"bold green"`                                         | Стиль модуля.                                                           |
-| `only_detached`      | `true`                                                 | Показывать хэш коммита git, только находясь в состоянии отделённой HEAD |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.                       |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                                     |
-| `disabled`           | `false`                                                | Отключает модуль `git_commit`.                                          |
+| Параметр             | По умолчанию                                           | Описание                                                |
+| -------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | Длина отображаемого хэша коммита git.                   |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Формат модуля.                                          |
+| `style`              | `"bold green"`                                         | Стиль модуля.                                           |
+| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state |
+| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.       |
+| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                     |
+| `disabled`           | `false`                                                | Отключает модуль `git_commit`.                          |
 
 ### Переменные
 
@@ -1627,7 +1627,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`                           | Символ, используемый перед закладкой hg или именем ветки репозитория в текущем каталоге. |
 | `style`             | `"bold purple"`                  | Стиль модуля.                                                                            |
 | `format`            | `"on [$symbol$branch]($style) "` | Формат модуля.                                                                           |
-| `truncation_length` | `2^63 - 1`                       | Обрезает имя ветки hg до X графемов                                                      |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                            |
 | `truncation_symbol` | `"…"`                            | Символ, используемый для обозначения усечения названия ветки.                            |
 | `disabled`          | `true`                           | Отключает модуль `hg_branch`.                                                            |
 
@@ -1743,16 +1743,16 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 
 ### Опции
 
-| Параметр            | По умолчанию                         | Описание                                                                                              |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                                        |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
-| `style`             | `"bold green"`                       | Стиль модуля.                                                                                         |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| Параметр            | По умолчанию                         | Описание                                                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                                                         |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                     |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                           |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                            |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                              |
+| `style`             | `"bold green"`                       | Стиль модуля.                                                                                          |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                          |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
 ###  Variables
 
@@ -1826,7 +1826,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Формат модуля.                                                 |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | Стиль модуля.                                                  |
-| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+| `disabled` | `false`                                             | Disables the `openstack` module.                               |
 
 ### Переменные
 
@@ -2251,24 +2251,24 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
 ### Опции
 
-| Параметр    | По умолчанию                 | Описание                                                    |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | Формат модуля.                                              |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | Стиль модуля.                                               |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
+| Параметр    | По умолчанию                 | Описание                                                      |
+| ----------- | ---------------------------- | ------------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                            |
+| `format`    | `"[$symbol$shlvl]($style) "` | Формат модуля.                                                |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
+| `style`     | `"bold yellow"`              | Стиль модуля.                                                 |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
 ### Переменные
 
 | Переменная | Пример | Описание                             |
 | ---------- | ------ | ------------------------------------ |
-| shlvl      | `3`    | The current value of SHLVL           |
+| shlvl      | `3`    | The current value of `SHLVL`         |
 | symbol     |        | Отражает значение параметра `symbol` |
 | style\*  |        | Отражает значение параметра `style`  |
 
@@ -2577,7 +2577,7 @@ The `vagrant` module shows the currently installed version of Vagrant. By defaul
 | `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
 | `style`             | `"cyan bold"`                        | Стиль модуля.                                       |
-| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                      |
 
 ### Переменные
 
