@@ -42,9 +42,6 @@ symbol = " "
 [golang]
 symbol = " "
 
-[haskell]
-symbol = " "
-
 [hg_branch]
 symbol = " "
 
@@ -62,9 +59,6 @@ symbol = " "
 
 [nix_shell]
 symbol = " "
-
-[nodejs]
-symbol = " "
 
 [package]
 symbol = " "
