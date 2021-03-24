@@ -249,7 +249,7 @@ When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from 
 | `symbol`         | `"☁️ "`                                             | 現在のAWSプロファイルを表示する前に表示される記号です。 |
 | `region_aliases` |                                                     | AWS名に加えて表示するリージョンのエイリアスです。    |
 | `style`          | `"bold yellow"`                                     | モジュールのスタイルです。                 |
-| `disabled`       | `false`                                             | `aws`モジュールを無効にします。            |
+| `disabled`       | `false`                                             | Disables the `aws` module.    |
 
 ### 変数
 
@@ -1002,20 +1002,20 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `format`             | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。 Use `"$branch"` to refer to the current branch name.                |
 | `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
 | `style`              | `"bold purple"`                  | モジュールのスタイルです。                                                                        |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                               |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                             |
 | `truncation_symbol`  | `"…"`                            | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.                          |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                         |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                       |
 | `disabled`           | `false`                          | `git_branch`モジュールを無効にします。                                                            |
 
 ### 変数
 
-| 変数            | 設定例      | 説明                                                                                                   |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote_name   | `origin` | The remote name.                                                                                     |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
-| symbol        |          | オプション `記号` の値をミラーする                                                                                  |
-| style\*     |          | オプション `style` の値をミラーする                                                                               |
+| 変数            | 設定例      | 説明                                                                                                     |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | The remote name.                                                                                       |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol        |          | オプション `記号` の値をミラーする                                                                                    |
+| style\*     |          | オプション `style` の値をミラーする                                                                                 |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1036,15 +1036,15 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### オプション
 
-| オプション                | デフォルト                                                  | 説明                                                |
-| -------------------- | ------------------------------------------------------ | ------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | 表示されるgitコミットハッシュの長さです。                            |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | moduleのフォーマットです。                                  |
-| `style`              | `"bold green"`                                         | モジュールのスタイルです。                                     |
-| `only_detached`      | `true`                                                 | 切り離されたHEAD状態のときのみgit commit hashを表示します            |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module. |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown               |
-| `disabled`           | `false`                                                | `git_commit`モジュールを無効にします。                         |
+| オプション                | デフォルト                                                  | 説明                                                      |
+| -------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | 表示されるgitコミットハッシュの長さです。                                  |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | moduleのフォーマットです。                                        |
+| `style`              | `"bold green"`                                         | モジュールのスタイルです。                                           |
+| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state |
+| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.       |
+| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                     |
+| `disabled`           | `false`                                                | `git_commit`モジュールを無効にします。                               |
 
 ### 変数
 
@@ -1628,7 +1628,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | モジュールのスタイルです。                                                                                |
 | `format`            | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。                                                                             |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to X graphemes                                                  |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
 | `truncation_symbol` | `"…"`                            | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
@@ -1744,16 +1744,16 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                                                      |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                    |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
-| `style`             | `"bold green"`                       | モジュールのスタイルです。                                                                                         |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| オプション               | デフォルト                                | 説明                                                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                                                       |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                     |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                           |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                            |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                              |
+| `style`             | `"bold green"`                       | モジュールのスタイルです。                                                                                          |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                          |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
 
 ###  Variables
 
@@ -1827,7 +1827,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | moduleのフォーマットです。                                               |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | モジュールのスタイルです。                                                  |
-| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+| `disabled` | `false`                                             | Disables the `openstack` module.                               |
 
 ### 変数
 
@@ -2252,26 +2252,26 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
 ### オプション
 
-| オプション       | デフォルト                        | 説明                                                          |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | moduleのフォーマットです。                                            |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | モジュールのスタイルです。                                               |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
+| オプション       | デフォルト                        | 説明                                                            |
+| ----------- | ---------------------------- | ------------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                            |
+| `format`    | `"[$symbol$shlvl]($style) "` | moduleのフォーマットです。                                              |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
+| `style`     | `"bold yellow"`              | モジュールのスタイルです。                                                 |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
 ### 変数
 
-| 変数        | 設定例 | 説明                         |
-| --------- | --- | -------------------------- |
-| shlvl     | `3` | The current value of SHLVL |
-| symbol    |     | オプション `記号` の値をミラーする        |
-| style\* |     | オプション `style` の値をミラーする     |
+| 変数        | 設定例 | 説明                           |
+| --------- | --- | ---------------------------- |
+| shlvl     | `3` | The current value of `SHLVL` |
+| symbol    |     | オプション `記号` の値をミラーする          |
+| style\* |     | オプション `style` の値をミラーする       |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2578,7 +2578,7 @@ The `vagrant` module shows the currently installed version of Vagrant. By defaul
 | `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
 | `style`             | `"cyan bold"`                        | モジュールのスタイルです。                                       |
-| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                      |
 
 ### 変数
 
