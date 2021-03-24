@@ -90,7 +90,7 @@
       alt="Tiếng Trung giản thể"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
@@ -98,7 +98,7 @@
       alt="Tiếng Tây Ban Nha"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
@@ -106,7 +106,7 @@
       alt="Thiếng Pháp"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
