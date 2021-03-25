@@ -433,15 +433,15 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                               | Mô tả                                              |
-| ------------------- | -------------------------------------- | -------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                              |
-| `symbol`            | `"△ "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.         |
-| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                |
-| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                |
-| `style`             | `"bold blue"`                          | Kiểu cho module.                                   |
-| `disabled`          | `false`                                | Vô hiệu hoá `cmake` module.                        |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                       |
+| ------------------- | -------------------------------------- | ------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                       |
+| `symbol`            | `"△ "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.  |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này         |
+| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này         |
+| `style`             | `"bold blue"`                          | Kiểu cho module.                            |
+| `disabled`          | `false`                                | Vô hiệu hoá `cmake` module.                 |
 
 ### Các biến
 
@@ -2039,7 +2039,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this module                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
