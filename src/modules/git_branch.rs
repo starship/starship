@@ -294,7 +294,7 @@ mod tests {
 
     #[test]
     fn test_render_branch_only_attached_on_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "-b", "test_branch"])
@@ -322,7 +322,7 @@ mod tests {
 
     #[test]
     fn test_render_branch_only_attached_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "@~1"])
@@ -394,7 +394,7 @@ mod tests {
         truncation_symbol: &str,
         config_options: &str,
     ) -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "-b", branch_name])
@@ -433,7 +433,7 @@ mod tests {
         config_options: &str,
         expected: T,
     ) -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "-b", branch_name])

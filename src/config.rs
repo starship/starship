@@ -582,15 +582,15 @@ mod tests {
 
         #[derive(Debug, PartialEq, Clone)]
         enum Switch {
-            ON,
-            OFF,
+            On,
+            Off,
         }
 
         impl<'a> ModuleConfig<'a> for Switch {
             fn from_config(config: &'a Value) -> Option<Self> {
                 match config.as_str()? {
-                    "on" => Some(Self::ON),
-                    "off" => Some(Self::OFF),
+                    "on" => Some(Self::On),
+                    "off" => Some(Self::Off),
                     _ => None,
                 }
             }
@@ -601,15 +601,15 @@ mod tests {
             switch_b = "any"
         };
         let default_config = TestConfig {
-            switch_a: Switch::OFF,
-            switch_b: Switch::OFF,
-            switch_c: Switch::OFF,
+            switch_a: Switch::Off,
+            switch_b: Switch::Off,
+            switch_c: Switch::Off,
         };
         let rust_config = default_config.load_config(&config);
 
-        assert_eq!(rust_config.switch_a, Switch::ON);
-        assert_eq!(rust_config.switch_b, Switch::OFF);
-        assert_eq!(rust_config.switch_c, Switch::OFF);
+        assert_eq!(rust_config.switch_a, Switch::On);
+        assert_eq!(rust_config.switch_b, Switch::Off);
+        assert_eq!(rust_config.switch_c, Switch::Off);
     }
 
     #[test]

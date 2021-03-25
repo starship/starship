@@ -332,9 +332,9 @@ impl DirContents {
         );
 
         Ok(DirContents {
-            folders,
             files,
             file_names,
+            folders,
             extensions,
         })
     }
