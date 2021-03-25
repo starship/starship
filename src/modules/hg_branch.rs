@@ -94,7 +94,7 @@ fn get_graphemes(text: &str, length: usize) -> String {
 }
 
 fn graphemes_len(text: &str) -> usize {
-    UnicodeSegmentation::graphemes(&text[..], true).count()
+    UnicodeSegmentation::graphemes(text, true).count()
 }
 
 #[cfg(test)]
@@ -132,7 +132,7 @@ mod tests {
     #[test]
     #[ignore]
     fn test_hg_disabled_per_default() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::HG)?;
+        let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
         run_hg(&["whatever", "blubber"], &repo_dir)?;
         expect_hg_branch_with_config(
@@ -176,7 +176,7 @@ mod tests {
     #[test]
     #[ignore]
     fn test_hg_bookmark() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::HG)?;
+        let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
         run_hg(&["bookmark", "bookmark-101"], &repo_dir)?;
         expect_hg_branch_with_config(
@@ -190,7 +190,7 @@ mod tests {
     #[test]
     #[ignore]
     fn test_default_truncation_symbol() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::HG)?;
+        let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
         run_hg(&["branch", "-f", "branch-name-101"], &repo_dir)?;
         run_hg(
@@ -218,7 +218,7 @@ mod tests {
     #[test]
     #[ignore]
     fn test_configured_symbols() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::HG)?;
+        let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
         run_hg(&["branch", "-f", "branch-name-121"], &repo_dir)?;
         run_hg(
@@ -252,7 +252,7 @@ mod tests {
     #[test]
     #[ignore]
     fn test_configured_style() -> io::Result<()> {
-        let tempdir = fixture_repo(FixtureProvider::HG)?;
+        let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
         run_hg(&["branch", "-f", "branch-name-131"], &repo_dir)?;
         run_hg(

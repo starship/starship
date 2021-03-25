@@ -7,7 +7,7 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::path::PathBuf;
+use std::path::Path;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -183,7 +183,7 @@ impl<'a> GitStatusInfo<'a> {
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Option<RepoStatus> {
+fn get_repo_status(context: &Context, repo_root: &Path) -> Option<RepoStatus> {
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
@@ -211,7 +211,7 @@ fn get_repo_status(context: &Context, repo_root: &PathBuf) -> Option<RepoStatus>
     Some(repo_status)
 }
 
-fn get_stashed_count(context: &Context, repo_root: &PathBuf) -> Option<usize> {
+fn get_stashed_count(context: &Context, repo_root: &Path) -> Option<usize> {
     let stash_output = context.exec_cmd(
         "git",
         &[
@@ -359,7 +359,7 @@ mod tests {
 
     #[test]
     fn shows_behind() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         behind(&repo_dir.path())?;
 
@@ -374,7 +374,7 @@ mod tests {
 
     #[test]
     fn shows_behind_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         behind(&repo_dir.path())?;
 
@@ -393,7 +393,7 @@ mod tests {
 
     #[test]
     fn shows_ahead() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
         ahead(&repo_dir.path())?;
@@ -409,7 +409,7 @@ mod tests {
 
     #[test]
     fn shows_ahead_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
         ahead(&repo_dir.path())?;
@@ -429,7 +429,7 @@ mod tests {
 
     #[test]
     fn shows_diverged() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         diverge(&repo_dir.path())?;
 
@@ -444,7 +444,7 @@ mod tests {
 
     #[test]
     fn shows_diverged_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         diverge(&repo_dir.path())?;
 
@@ -463,7 +463,7 @@ mod tests {
 
     #[test]
     fn shows_conflicted() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_conflict(&repo_dir.path())?;
 
@@ -478,7 +478,7 @@ mod tests {
 
     #[test]
     fn shows_conflicted_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_conflict(&repo_dir.path())?;
 
@@ -497,7 +497,7 @@ mod tests {
 
     #[test]
     fn shows_untracked_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_untracked(&repo_dir.path())?;
 
@@ -512,7 +512,7 @@ mod tests {
 
     #[test]
     fn shows_untracked_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_untracked(&repo_dir.path())?;
 
@@ -531,7 +531,7 @@ mod tests {
 
     #[test]
     fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_untracked(&repo_dir.path())?;
 
@@ -552,7 +552,7 @@ mod tests {
 
     #[test]
     fn shows_stashed() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
         barrier();
 
         create_stash(&repo_dir.path())?;
@@ -574,7 +574,7 @@ mod tests {
 
     #[test]
     fn shows_stashed_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
         barrier();
 
         create_stash(&repo_dir.path())?;
@@ -601,7 +601,7 @@ mod tests {
 
     #[test]
     fn shows_modified() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_modified(&repo_dir.path())?;
 
@@ -616,7 +616,7 @@ mod tests {
 
     #[test]
     fn shows_modified_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_modified(&repo_dir.path())?;
 
@@ -635,7 +635,7 @@ mod tests {
 
     #[test]
     fn shows_staged_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(&repo_dir.path())?;
 
@@ -650,7 +650,7 @@ mod tests {
 
     #[test]
     fn shows_staged_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(&repo_dir.path())?;
 
@@ -676,7 +676,7 @@ mod tests {
 
     #[test]
     fn shows_renamed_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_renamed(&repo_dir.path())?;
 
@@ -691,7 +691,7 @@ mod tests {
 
     #[test]
     fn shows_renamed_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_renamed(&repo_dir.path())?;
 
@@ -710,7 +710,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_deleted(&repo_dir.path())?;
 
@@ -725,7 +725,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_deleted(&repo_dir.path())?;
 
@@ -748,7 +748,7 @@ mod tests {
     #[test]
     #[ignore]
     fn ignore_manually_renamed() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
         File::create(repo_dir.path().join("a"))?.sync_all()?;
         File::create(repo_dir.path().join("b"))?.sync_all()?;
         Command::new("git")
