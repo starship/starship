@@ -129,6 +129,10 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
+        "opam switch show --safe" => Some(CommandOutput {
+            stdout: String::from("default\n"),
+            stderr: String::default(),
+        }),
         "esy ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
