@@ -437,7 +437,7 @@ El módulo `cmake` muestra la versión instalada de CMake. Por defecto el módul
 | ------------------- | -------------------------------------- | ------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`   | El formato del módulo.                           |
 | `symbol`            | `"△ "`                                 | El símbolo usado antes de la versión de cmake.   |
-| `detect_extensions` | `[]`                                   | Qué extensiones deben activar este módulo        |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module      |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Qué nombres de archivo deben activar este módulo |
 | `detect_folders`    | `[]`                                   | Qué carpetas deben activar este módulo           |
 | `style`             | `"bold blue"`                          | El estilo del módulo.                            |
@@ -2039,7 +2039,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                          |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv      |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configura los binarios de python que Starship debería ejecutar al obtener la versión. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Qué extensiones deben activar este módulo                                             |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this module                                           |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                      |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                |
 | `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                       |
