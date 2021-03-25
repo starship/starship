@@ -40,5 +40,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return None;
         }
     });
+
     Some(module)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+
+    #[test]
+    fn not_in_env() {
+        let actual = ModuleRenderer::new("vcsh").collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn env_set() {
+        let actual = ModuleRenderer::new("vcsh")
+            .env("VCSH_REPO_NAME", "astronauts")
+            .collect();
+
+        let expected = Some(format!(
+            "vcsh {} ",
+            Color::Yellow.bold().paint("astronauts")
+        ));
+
+        assert_eq!(expected, actual);
+    }
 }
