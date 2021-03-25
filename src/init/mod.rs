@@ -81,12 +81,15 @@ init code. The stub produces the main init script, then evaluates it with
 pub fn init_stub(shell_name: &str) -> io::Result<()> {
     log::debug!("Shell name: {}", shell_name);
 
-    let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
+    let shell_basename = Path::new(shell_name)
+        .file_stem()
+        .and_then(OsStr::to_str)
+        .unwrap_or(shell_name);
 
     let starship = StarshipPath::init()?;
 
     let setup_stub = match shell_basename {
-        Some("bash") => {
+        "bash" => {
             /*
              * The standard bash bootstrap is:
              *      `source <(starship init bash --print-full-init)`
@@ -132,14 +135,14 @@ fi"#,
 
             Some(script)
         }
-        Some("zsh") => {
+        "zsh" => {
             let script = format!(
                 "source <(\"{}\" init zsh --print-full-init)",
                 starship.sprint_posix()?
             );
             Some(script)
         }
-        Some("fish") => {
+        "fish" => {
             // Fish does process substitution with pipes and psub instead of bash syntax
             let script = format!(
                 "source (\"{}\" init fish --print-full-init | psub)",
@@ -147,7 +150,7 @@ fi"#,
             );
             Some(script)
         }
-        Some("powershell") => {
+        "powershell" => {
             // Explanation of syntax:
             // &: Explicitly tells powershell to execute path with starship executable.
             //
@@ -162,41 +165,40 @@ fi"#,
             );
             Some(script)
         }
-        Some("ion") => {
+        "ion" => {
             let script = format!("eval $({} init ion --print-full-init)", starship.sprint()?);
             Some(script)
         }
-        Some("elvish") => {
+        "elvish" => {
             let script = format!(
                 "eval (\"{}\" init elvish --print-full-init | slurp)",
                 starship.sprint_posix()?
             );
             Some(script)
         }
-        Some("tcsh") => {
+        "tcsh" => {
             let script = format!(
                 r#"eval "`("{}" init tcsh --print-full-init)`""#,
                 starship.sprint_posix()?
             );
             Some(script)
         }
-        None => {
+        _ => {
+            let quoted_arg = shell_words::quote(shell_basename);
             println!(
-                "Invalid shell name provided: {}\\n\
-                 If this issue persists, please open an \
-                 issue in the starship repo: \\n\
-                 https://github.com/starship/starship/issues/new\\n\"",
-                shell_name
-            );
-            None
-        }
-        Some(shell_basename) => {
-            println!(
-                "printf \"\\n{0} is not yet supported by starship.\\n\
-                 For the time being, we support bash, zsh, fish, and ion.\\n\
+                "printf \"\\n%s is not yet supported by starship.\\n\
+                 For the time being, we support the following shells:\\n\
+                 * bash\\n\
+                 * elvish\\n\
+                 * fish\\n\
+                 * ion\\n\
+                 * powershell\\n\
+                 * tcsh\\n\
+                 * zsh\\n\
+                 \\n\
                  Please open an issue in the starship repo if you would like to \
-                 see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
-                shell_basename
+                 see support for %s:\\nhttps://github.com/starship/starship/issues/new\\n\\n\" {0} {0}",
+                quoted_arg
             );
             None
         }
