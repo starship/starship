@@ -119,7 +119,7 @@ fn format_exit_code<'a>(
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => match exit_code_int {
-                    0 if config.map_symbol => Some(config.sucess_symbol),
+                    0 => Some(config.sucess_symbol),
                     126 if config.map_symbol => Some(config.not_executable_symbol),
                     127 if config.map_symbol => Some(config.not_found_symbol),
                     130 if config.recognize_signal_code && config.map_symbol => {
@@ -441,6 +441,50 @@ mod tests {
                     pipestatus = true
                     pipestatus_separator = " "
                     pipestatus_format = "PSF $symbol=$pipestatus"
+                    disabled = false
+                })
+                .status(main_exit_code)
+                .pipestatus(pipe_exit_code)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+    }
+
+    #[test]
+    fn pipeline_no_map_symbols() {
+        let exit_values = [
+            [0, 0, 0, 0],
+            [0, 1, 2, 3],
+            [130, 126, 131, 127],
+            [1, 1, 1, 1],
+        ];
+        let exit_values_rendered = [
+            "PSF 🟢=🟢0 🟢0 🟢0",
+            "PSF 🟢=🔴1 🔴2 🔴3",
+            "PSF INT🔴=🔴126 🔴1313 🔴127",
+            "PSF 🔴=🔴1 🔴1 🔴1",
+        ];
+
+        for (status, rendered) in exit_values.iter().zip(exit_values_rendered.iter()) {
+            let main_exit_code = status[0];
+            let pipe_exit_code = &status[1..];
+
+            let expected = Some(rendered.to_string());
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    format = "$symbol$int$signal_number"
+                    symbol = "🔴"
+                    sucess_symbol = "🟢"
+                    not_executable_symbol = "🚫"
+                    not_found_symbol = "🔍"
+                    sigint_symbol = "🧱"
+                    signal_symbol = "⚡"
+                    recognize_signal_code = true
+                    map_symbol = false
+                    pipestatus = true
+                    pipestatus_separator = " "
+                    pipestatus_format = "PSF $signal_name$symbol=$pipestatus"
                     disabled = false
                 })
                 .status(main_exit_code)
