@@ -11,6 +11,7 @@ enum SwitchType {
     Global,
     Local,
 }
+type OpamSwitch = (SwitchType, String);
 
 /// Creates a module with the current OCaml version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -27,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let opam_switch: Lazy<Option<(SwitchType, String)>, _> = Lazy::new(|| get_opam_switch(context));
+    let opam_switch: Lazy<Option<OpamSwitch>, _> = Lazy::new(|| get_opam_switch(context));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -80,7 +81,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_opam_switch(context: &Context) -> Option<(SwitchType, String)> {
+fn get_opam_switch(context: &Context) -> Option<OpamSwitch> {
     let opam_switch = context
         .exec_cmd("opam", &["switch", "show", "--safe"])?
         .stdout;
@@ -88,7 +89,7 @@ fn get_opam_switch(context: &Context) -> Option<(SwitchType, String)> {
     parse_opam_switch(&opam_switch.trim())
 }
 
-fn parse_opam_switch(opam_switch: &str) -> Option<(SwitchType, String)> {
+fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
     let path = Path::new(opam_switch);
     if !path.has_root() {
         Some((SwitchType::Global, opam_switch.to_string()))
