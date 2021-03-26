@@ -90,6 +90,10 @@ fn get_opam_switch(context: &Context) -> Option<OpamSwitch> {
 }
 
 fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
+    if opam_switch.is_empty() {
+        return None;
+    }
+
     let path = Path::new(opam_switch);
     if !path.has_root() {
         Some((SwitchType::Global, opam_switch.to_string()))
@@ -297,6 +301,26 @@ mod tests {
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
         ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn without_opam_switch() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.ml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ocaml")
+            .cmd(
+                "opam switch show --safe",
+                Some(CommandOutput {
+                    stdout: String::default(),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐫 v4.10.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
