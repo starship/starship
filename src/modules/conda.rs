@@ -9,9 +9,7 @@ use crate::formatter::StringFormatter;
 /// Will display the Conda environment iff `$CONDA_DEFAULT_ENV` is set.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Reference implementation: https://github.com/denysdovhan/spaceship-prompt/blob/master/sections/conda.zsh
-    let conda_env = context
-        .get_env("CONDA_DEFAULT_ENV")
-        .unwrap_or_else(|| "".into());
+    let conda_env = context.get_env("CONDA_DEFAULT_ENV").unwrap_or_default();
     if conda_env.trim().is_empty() {
         return None;
     }
