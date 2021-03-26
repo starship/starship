@@ -140,11 +140,11 @@ fn get_editor() -> String {
 }
 
 fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
-    let editor_name = visual.unwrap_or_else(|| "".into());
+    let editor_name = visual.unwrap_or_default();
     if !editor_name.is_empty() {
         return editor_name;
     }
-    let editor_name = editor.unwrap_or_else(|| "".into());
+    let editor_name = editor.unwrap_or_default();
     if !editor_name.is_empty() {
         return editor_name;
     }
