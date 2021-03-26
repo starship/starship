@@ -26,7 +26,7 @@ impl<'a> Default for StatusConfig<'a> {
         StatusConfig {
             format: "[$symbol$status]($style) ",
             symbol: "✖",
-            sucess_symbol: "🟢",
+            sucess_symbol: "✔️",
             not_executable_symbol: "🚫",
             not_found_symbol: "🔍",
             sigint_symbol: "🧱",
@@ -34,7 +34,7 @@ impl<'a> Default for StatusConfig<'a> {
             style: "bold red",
             map_symbol: false,
             recognize_signal_code: true,
-            pipestatus: true,
+            pipestatus: false,
             pipestatus_separator: "|",
             pipestatus_format:
                 "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
