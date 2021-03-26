@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamesisch"
  /></a>
 </p>
 
@@ -124,7 +124,7 @@
   align="right"
  />
 
-**Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!**
+**Der minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
