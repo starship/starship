@@ -34,7 +34,7 @@ impl<'a> Default for BatteryConfig<'a> {
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,
     pub style: &'a str,
-    pub symbol: &'a str,
+    pub symbol: Option<&'a str>,
 }
 
 impl<'a> Default for BatteryDisplayConfig<'a> {
@@ -42,7 +42,7 @@ impl<'a> Default for BatteryDisplayConfig<'a> {
         BatteryDisplayConfig {
             threshold: 10,
             style: "red bold",
-            symbol: "",
+            symbol: None,
         }
     }
 }
@@ -56,7 +56,7 @@ impl<'a> ModuleConfig<'a> for BatteryDisplayConfig<'a> {
             match &*s {
                 "threshold" => conf.threshold = val.as_integer()?,
                 "style" => conf.style = val.as_str()?,
-                "symbol" => conf.symbol = val.as_str()?,
+                "symbol" => conf.symbol = Some(val.as_str()?),
                 _ => (),
             }
         }
