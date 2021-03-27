@@ -2,6 +2,7 @@ use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
 use indexmap::IndexMap;
+use serde::Serialize;
 
 use std::clone::Clone;
 use std::collections::HashMap;
@@ -174,7 +175,7 @@ where
 
 /// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
 /// accepts a value of type `T` or a list of values of type `T`.
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Serialize)]
 pub struct VecOr<T>(pub Vec<T>);
 
 impl<'a, T> ModuleConfig<'a> for VecOr<T>
