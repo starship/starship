@@ -480,7 +480,7 @@ mod tests {
 
     #[test]
     fn test_load_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig<'a> {
             pub symbol: &'a str,
             pub disabled: bool,
@@ -506,13 +506,13 @@ mod tests {
 
     #[test]
     fn test_load_nested_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig<'a> {
             pub untracked: SegmentDisplayConfig<'a>,
             pub modified: SegmentDisplayConfig<'a>,
         }
 
-        #[derive(PartialEq, Debug, Clone, ModuleConfig)]
+        #[derive(PartialEq, Debug, Clone, Default, ModuleConfig)]
         struct SegmentDisplayConfig<'a> {
             pub value: &'a str,
             pub style: Style,
@@ -553,7 +553,7 @@ mod tests {
 
     #[test]
     fn test_load_optional_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig<'a> {
             pub optional: Option<&'a str>,
             pub hidden: Option<&'a str>,
@@ -574,7 +574,7 @@ mod tests {
 
     #[test]
     fn test_load_enum_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig {
             pub switch_a: Switch,
             pub switch_b: Switch,
@@ -585,6 +585,12 @@ mod tests {
         enum Switch {
             On,
             Off,
+        }
+
+        impl Default for Switch {
+            fn default() -> Self {
+                Self::Off
+            }
         }
 
         impl<'a> ModuleConfig<'a> for Switch {
