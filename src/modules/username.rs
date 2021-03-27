@@ -12,51 +12,60 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 /// Creates a module with the current user's username
 ///
 /// Will display the username if any of the following criteria are met:
-///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`)
-///     - The current user is root (UID = 0)
-///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - The current user is root (UID = 0) [1]
+///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
+///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let username = context.get_env(USERNAME_ENV_VAR)?;
-    let logname = context.get_env("LOGNAME");
-
-    let is_root = is_root_user();
-    let is_not_login = logname.is_some() && username != logname.unwrap();
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
-    if is_not_login || is_ssh_connection(&context) || is_root || config.show_always {
-        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-            formatter
-                .map_style(|variable| match variable {
-                    "style" => {
-                        let module_style = if is_root {
-                            config.style_root
-                        } else {
-                            config.style_user
-                        };
-                        Some(Ok(module_style))
-                    }
-                    _ => None,
-                })
-                .map(|variable| match variable {
-                    "user" => Some(Ok(&username)),
-                    _ => None,
-                })
-                .parse(None)
-        });
-        module.set_segments(match parsed {
-            Ok(segments) => segments,
-            Err(error) => {
-                log::warn!("Error in module `username`:\n{}", error);
-                return None;
-            }
-        });
+    let is_root = is_root_user();
+    let show_username = config.show_always
+        || is_root // [1]
+        || !is_login_user(&context, &username) // [2]
+        || is_ssh_session(&context); // [3]
 
-        Some(module)
-    } else {
-        None
+    if !show_username {
+        return None;
     }
+
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => {
+                    let module_style = if is_root {
+                        config.style_root
+                    } else {
+                        config.style_user
+                    };
+                    Some(Ok(module_style))
+                }
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "user" => Some(Ok(&username)),
+                _ => None,
+            })
+            .parse(None)
+    });
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `username`:\n{}", error);
+            return None;
+        }
+    });
+
+    Some(module)
+}
+
+fn is_login_user(context: &Context, username: &str) -> bool {
+    context
+        .get_env("LOGNAME")
+        .map(|logname| logname == username)
+        .unwrap_or(true)
 }
 
 #[cfg(target_os = "windows")]
@@ -66,13 +75,12 @@ fn is_root_user() -> bool {
 
 #[cfg(not(target_os = "windows"))]
 fn is_root_user() -> bool {
-    let user_uid = nix::unistd::geteuid();
-    user_uid == nix::unistd::ROOT
+    nix::unistd::geteuid() == nix::unistd::ROOT
 }
 
-fn is_ssh_connection(context: &Context) -> bool {
+fn is_ssh_session(context: &Context) -> bool {
     let ssh_env = ["SSH_CONNECTION", "SSH_CLIENT", "SSH_TTY"];
-    ssh_env.iter().any(|env| context.get_env(env).is_some())
+    ssh_env.iter().any(|env| context.get_env_os(env).is_some())
 }
 
 #[cfg(test)]
