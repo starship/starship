@@ -1,4 +1,5 @@
 use crate::config::ModuleConfig;
+use indexmap::IndexMap;
 use serde::{self, Serialize};
 use starship_module_config_derive::ModuleConfig;
 
@@ -73,7 +74,6 @@ pub struct FullConfig<'a> {
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
     conda: conda::CondaConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
-    custom: custom::CustomConfig<'a>,
     dart: dart::DartConfig<'a>,
     directory: directory::DirectoryConfig<'a>,
     docker_context: docker_context::DockerContextConfig<'a>,
@@ -121,4 +121,5 @@ pub struct FullConfig<'a> {
     username: username::UsernameConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
+    custom: IndexMap<String, custom::CustomConfig<'a>>,
 }
