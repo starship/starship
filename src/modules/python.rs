@@ -4,6 +4,7 @@ use std::path::Path;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -90,35 +91,13 @@ fn format_python_version(version_format: &str, python_version: &str) -> Option<S
         // split into ["Python", "3.8.6", ...]
         .split_whitespace()
         // get down to "3.8.6"
-        .nth(1)?
-        // split out major/minor/patch
-        .split('.')
-        // assemble into a 3-part vector
-        .collect::<Vec<&str>>();
+        .nth(1)?;
 
-    let parsed = StringFormatter::new(version_format).and_then(|formatter| {
-        formatter
-            .map(|variable| match variable {
-                "major" => version.get(0).map(|major| Ok(*major)),
-                "minor" => version.get(1).map(|major| Ok(*major)),
-                "patch" => version.get(2).map(|major| Ok(*major)),
-                _ => None,
-            })
-            .parse(None)
-    });
-    match parsed {
-        Ok(segments) => Some(
-            segments
-                .iter()
-                .map(|segment| segment.value.as_str())
-                .collect::<Vec<&str>>()
-                .join(""),
-        ),
-        Err(error) => {
-            log::warn!("Error in module `python` version format: \n{}", error);
-            None
-        }
-    }
+    Some(
+        VersionFormatter::new(version_format)
+            .ok()?
+            .format_version(version),
+    )
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
