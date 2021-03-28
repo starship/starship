@@ -180,6 +180,7 @@ $hostname\
 $shlvl\
 $kubernetes\
 $directory\
+$vcsh\
 $git_branch\
 $git_commit\
 $git_state\
@@ -2592,6 +2593,38 @@ The `vagrant` module shows the currently installed version of Vagrant. By defaul
 
 [vagrant]
 format = "via [⍱ $version](bold white) "
+```
+
+## VCSH
+
+The `vcsh` module displays the current active VCSH repository. The module will be shown only if a repository is currently in use.
+
+### Opções
+
+| Option     | Padrão                           | Descrição                                              |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `style`    | `"bold yellow"`                  | O estilo do módulo.                                    |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | The format for the module.                             |
+| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+
+### Variables
+
+| Variável  | Exemplo                                     | Descrição                            |
+| --------- | ------------------------------------------- | ------------------------------------ |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
+| symbol    |                                             | Mirrors the value of option `symbol` |
+| style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[vcsh]
+format = "[🆅 $repo](bold blue) "
 ```
 
 ## Zig
