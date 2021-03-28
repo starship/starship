@@ -1,7 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nodejs::NodejsConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils;
 
 use once_cell::sync::Lazy;
@@ -57,11 +57,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => nodejs_version
-                    .deref()
-                    .as_ref()
-                    .map(|version| version.trim())
-                    .map(Ok),
+                "version" => Some(Ok(VersionFormatter::new(config.version_format)
+                    .ok()?
+                    .format_version(
+                        &nodejs_version
+                            .deref()
+                            .as_ref()
+                            .map(|version| version.trim())
+                            .unwrap()
+                            .to_string()
+                            .drain(1..)
+                            .collect::<String>(),
+                    ))),
                 _ => None,
             })
             .parse(None)

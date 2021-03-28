@@ -25,7 +25,7 @@ impl<'a> VersionFormatter<'a> {
         let formatted = self
             .formatter
             .map(|variable| match variable {
-                "raw" => Some(Ok(format!("{}", version))),
+                "raw" => Some(Ok(version.to_string())),
                 "major" => match parsed.as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.major.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(0)?.to_string())),
@@ -50,7 +50,7 @@ impl<'a> VersionFormatter<'a> {
                 .map(|segment| segment.value.as_str())
                 .collect::<Vec<&str>>()
                 .join(""),
-            Err(_) => format!("{}", version),
+            Err(_) => version.to_string(),
         }
     }
 }

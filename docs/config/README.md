@@ -1376,15 +1376,16 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                                                                                   | Description                                     |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                      |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
-| `symbol`            | `"☕ "`                                                                                                   | A format string representing the symbol of Java |
-| `style`             | `"red dimmed"`                                                                                            | The style for the module.                       |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
+| Option              | Default                                                                                                   | Description                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                                                |
+| `version_format`.   | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
+| `symbol`            | `"☕ "`                                                                                                   | A format string representing the symbol of Java                           |
+| `style`             | `"red dimmed"`                                                                                            | The style for the module.                                                 |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
 
 ### Variables
 
@@ -1821,16 +1822,17 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                        |
-| ------------------- | ------------------------------------ | -------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS. |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.       |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.        |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.          |
-| `style`             | `"bold green"`                       | The style for the module.                          |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                      |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
+| Option              | Default                              | Description                                                                                          |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                           |
+| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                         |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                          |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                            |
+| `style`             | `"bold green"`                       | The style for the module.                                                                            |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                        |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the NodeJS version. |
 
 ### Variables
 
@@ -2133,6 +2135,7 @@ By default the module will be shown if any of the following conditions are met:
 | Option               | Default                                                                                                      | Description                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                    | The format for the module.                                                             |
+| `version_format`.    | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                      | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
@@ -2208,15 +2211,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                      |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`            | `"💎 "`                              | A format string representing the symbol of Ruby. |
-| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
-| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
-| `style`             | `"bold red"`                         | The style for the module.                        |
-| `disabled`          | `false`                              | Disables the `ruby` module.                      |
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💎 "`                              | A format string representing the symbol of Ruby.                          |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
 ### Variables
 
@@ -2247,15 +2251,16 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                     |
-| ------------------- | ------------------------------------ | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`            | `"🦀 "`                              | A format string representing the symbol of Rust |
-| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
-| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
-| `style`             | `"bold red"`                         | The style for the module.                       |
-| `disabled`          | `false`                              | Disables the `rust` module.                     |
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦀 "`                              | A format string representing the symbol of Rust                           |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
 ### Variables
 
