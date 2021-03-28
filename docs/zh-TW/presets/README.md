@@ -27,7 +27,7 @@ symbol = " "
 [directory]
 read_only = " "
 
-[docker]
+[docker_context]
 symbol = " "
 
 [elixir]
