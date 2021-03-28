@@ -20,10 +20,9 @@ where
     /// Load root module config from given Value and fill unset variables with default
     /// values.
     fn load(config: &'a Value) -> Self {
-        if config.get("prompt_order").is_some() {
-            log::warn!("\"prompt_order\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
-        }
-        Self::default().load_config(config)
+        let mut out = Self::default();
+        out.load_config(config);
+        out
     }
 
     /// Helper function that will call RootModuleConfig::load(config) if config is Some,
@@ -50,8 +49,10 @@ where
     }
 
     /// Merge `self` with config from a toml table.
-    fn load_config(&self, config: &'a Value) -> Self {
-        Self::from_config(config).unwrap_or_else(|| self.clone())
+    fn load_config(&mut self, config: &'a Value) {
+        if let Some(value) = Self::from_config(config) {
+            let _ = std::mem::replace(self, value);
+        }
     }
 }
 
@@ -492,12 +493,12 @@ mod tests {
             disabled = true
             some_array = ["A"]
         };
-        let default_config = TestConfig {
+        let mut rust_config = TestConfig {
             symbol: "S ",
             disabled: false,
             some_array: vec!["A", "B", "C"],
         };
-        let rust_config = default_config.load_config(&config);
+        rust_config.load_config(&config);
 
         assert_eq!(rust_config.symbol, "T ");
         assert_eq!(rust_config.disabled, true);
@@ -523,7 +524,7 @@ mod tests {
             modified = { value = "•", style = "red" }
         };
 
-        let default_config = TestConfig {
+        let mut git_status_config = TestConfig {
             untracked: SegmentDisplayConfig {
                 value: "?",
                 style: Color::Red.bold(),
@@ -533,7 +534,7 @@ mod tests {
                 style: Color::Red.bold(),
             },
         };
-        let git_status_config = default_config.load_config(&config);
+        git_status_config.load_config(&config);
 
         assert_eq!(
             git_status_config.untracked,
@@ -562,11 +563,11 @@ mod tests {
         let config = toml::toml! {
             optional = "test"
         };
-        let default_config = TestConfig {
+        let mut rust_config = TestConfig {
             optional: None,
             hidden: None,
         };
-        let rust_config = default_config.load_config(&config);
+        rust_config.load_config(&config);
 
         assert_eq!(rust_config.optional, Some("test"));
         assert_eq!(rust_config.hidden, None);
@@ -607,12 +608,12 @@ mod tests {
             switch_a = "on"
             switch_b = "any"
         };
-        let default_config = TestConfig {
+        let mut rust_config = TestConfig {
             switch_a: Switch::Off,
             switch_b: Switch::Off,
             switch_c: Switch::Off,
         };
-        let rust_config = default_config.load_config(&config);
+        rust_config.load_config(&config);
 
         assert_eq!(rust_config.switch_a, Switch::On);
         assert_eq!(rust_config.switch_b, Switch::Off);
