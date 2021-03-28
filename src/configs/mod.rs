@@ -53,6 +53,7 @@ pub mod terraform;
 pub mod time;
 pub mod username;
 pub mod vagrant;
+pub mod vcsh;
 pub mod zig;
 
 pub use starship_root::*;

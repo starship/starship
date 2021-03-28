@@ -20,6 +20,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "singularity",
     "kubernetes",
     "directory",
+    "vcsh",
     "git_branch",
     "git_commit",
     "git_state",
