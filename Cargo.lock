@@ -1731,26 +1731,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "thiserror"
-version = "1.0.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0f4a65597094d4483ddaed134f409b2cb7c1beccf25201a9f73c719254fa98e"
-dependencies = [
- "thiserror-impl",
-]
-
-[[package]]
-name = "thiserror-impl"
-version = "1.0.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7765189610d8241a44529806d6fd1f2e0a08734313a35d5b3a556f92b381f3c0"
-dependencies = [
- "proc-macro2",
- "quote 1.0.9",
- "syn 1.0.64",
-]
-
-[[package]]
 name = "time"
 version = "0.1.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1927,12 +1907,12 @@ dependencies = [
 
 [[package]]
 name = "which"
-version = "4.0.2"
+version = "4.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87c14ef7e1b8b8ecfc75d5eca37949410046e66f15d185c01d70824f1f8111ef"
+checksum = "b55551e42cbdf2ce2bedd2203d0cc08dba002c27510f86dab6d0ce304cba3dfe"
 dependencies = [
+ "either",
  "libc",
- "thiserror",
 ]
 
 [[package]]
