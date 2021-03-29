@@ -48,11 +48,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let tag_names = git_repo.tag_names(None).ok()?;
         let tag_and_refs = tag_names.iter().flat_map(|name| {
             let full_tag = format!("refs/tags/{}", name.unwrap());
-            let tag_obj = git_repo.find_reference(&full_tag)?.peel_to_tag()?;
-            let sig_obj = tag_obj.tagger().unwrap();
+            let ref_obj = git_repo.find_reference(&full_tag)?.peel_to_commit()?;
             git_repo
                 .find_reference(&full_tag)
-                .map(|reference| (String::from(name.unwrap()), sig_obj.when(), reference))
+                .map(|reference| (String::from(name.unwrap()), ref_obj.time(), reference))
         });
 
         let mut tag_name = String::new();
