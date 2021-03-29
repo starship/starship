@@ -1,6 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
 use git2::Repository;
-use git2::Time;
 
 use crate::configs::git_commit::GitCommitConfig;
 use crate::formatter::StringFormatter;
@@ -48,23 +47,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let tag_names = git_repo.tag_names(None).ok()?;
         let tag_and_refs = tag_names.iter().flat_map(|name| {
             let full_tag = format!("refs/tags/{}", name.unwrap());
-            let ref_obj = git_repo.find_reference(&full_tag)?.peel_to_commit()?;
             git_repo
                 .find_reference(&full_tag)
-                .map(|reference| (String::from(name.unwrap()), ref_obj.time(), reference))
+                .map(|reference| (String::from(name.unwrap()), reference))
         });
 
-        let mut tag_name = String::new();
-        let mut oldest = Time::new(0, 0);
-        // Let's check if HEAD has some tag. If several, gets last created one...
-        for (name, timestamp, reference) in tag_and_refs.rev() {
-            if commit_oid == reference.peel_to_commit().ok()?.id() && timestamp > oldest {
-                tag_name = name;
-                oldest = timestamp;
+        let mut tag_names = Vec::new();
+        // Let's check if HEAD has some tags.
+        for (name, reference) in tag_and_refs.rev() {
+            if commit_oid == reference.peel_to_commit().ok()?.id() {
+                tag_names.push(name);
             }
         }
+        tag_names.sort();
         // If we have tag...
-        if !tag_name.is_empty() {
+        if !tag_names.is_empty() {
             parsed = StringFormatter::new(config.format).and_then(|formatter| {
                 formatter
                     .map_style(|variable| match variable {
@@ -79,7 +76,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         _ => None,
                     })
                     .map(|variable| match variable {
-                        "tag" => Some(Ok(format!(" {}{}", &config.tag_symbol, &tag_name))),
+                        "tag" => Some(Ok(format!(
+                            " {}{}",
+                            &config.tag_symbol,
+                            tag_names.join(", ")
+                        ))),
                         _ => None,
                     })
                     .parse(None)
@@ -340,7 +341,7 @@ mod tests {
     }
 
     #[test]
-    fn test_latest_tag_shown_with_tag_enabled() -> io::Result<()> {
+    fn test_all_tags_shown_with_tag_enabled() -> io::Result<()> {
         use std::{thread, time};
 
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
@@ -367,7 +368,7 @@ mod tests {
             .output()?;
 
         Command::new("git")
-            .args(&["tag", "v1", "-m", "Testing tags v1"])
+            .args(&["tag", "v1"])
             .current_dir(&repo_dir.path())
             .output()?;
 
@@ -376,8 +377,6 @@ mod tests {
                 "for-each-ref",
                 "--contains",
                 "HEAD",
-                "--sort=-taggerdate",
-                "--count=1",
                 "--format",
                 "%(refname:short)",
                 "refs/tags",
@@ -385,7 +384,7 @@ mod tests {
             .current_dir(&repo_dir.path())
             .output()?
             .stdout;
-        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim().replace("\n", ", ");
 
         let expected_output = format!("{} {}", commit_output, tag_output);
 
