@@ -1402,11 +1402,11 @@ dependencies = [
 
 [[package]]
 name = "rust-ini"
-version = "0.16.1"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "55b134767a87e0b086f73a4ce569ac9ce7d202f39c8eab6caa266e2617e73ac6"
+checksum = "63471c4aa97a1cf8332a5f97709a79a4234698de6a1f5087faf66f2dae810e22"
 dependencies = [
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "ordered-multimap",
 ]
 
