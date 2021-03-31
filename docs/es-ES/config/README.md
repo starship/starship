@@ -173,7 +173,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# el cual es el equivalente a
 format = """
 $username\
 $hostname\
@@ -249,7 +249,7 @@ Cuando uses [awsu](https://github.com/kreuzwerker/awsu) el perfil se obtiene de 
 | `symbol`         | `"☁️ "`                                             | El símbolo que se muestra antes del perfil de AWS.           |
 | `region_aliases` |                                                     | Tabla de alias de región para mostrar además del nombre AWS. |
 | `style`          | `"bold yellow"`                                     | El estilo del módulo.                                        |
-| `disabled`       | `false`                                             | Disables the `aws` module.                                   |
+| `disabled`       | `false`                                             | Deshabilita el módulo `aws`.                                 |
 
 ### Variables
 
@@ -438,7 +438,7 @@ El módulo `cmake` muestra la versión instalada de CMake. Por defecto el módul
 | ------------------- | -------------------------------------- | ------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`   | El formato del módulo.                           |
 | `symbol`            | `"△ "`                                 | El símbolo usado antes de la versión de cmake.   |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module      |
+| `detect_extensions` | `[]`                                   | Qué extensiones deben activar este módulo        |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Qué nombres de archivo deben activar este módulo |
 | `detect_folders`    | `[]`                                   | Qué carpetas deben activar este módulo           |
 | `style`             | `"bold blue"`                          | El estilo del módulo.                            |
@@ -1001,20 +1001,20 @@ El módulo `git_branch` muestra la rama activa del repositorio en su directorio 
 | `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
 | `symbol`             | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                         |
 | `style`              | `"bold purple"`                  | El estilo del módulo.                                                                                   |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                                |
+| `truncation_length`  | `2^63 - 1`                       | Trunca una rama git a grafemas `N`.                                                                     |
 | `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                          |
+| `only_attached`      | `false`                          | Mostrar solo el nombre de la rama cuando no esté en un estado `HEAD`.                                   |
 | `disabled`           | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
 
 ### Variables
 
-| Variable      | Ejemplo  | Descripción                                                                                            |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | El nombre remoto.                                                                                      |
-| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                       |
-| symbol        |          | Refleja el valor de la opción `symbol`                                                                 |
-| style\*     |          | Refleja el valor de la opción `style`                                                                  |
+| Variable      | Ejemplo  | Descripción                                                                                                    |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| branch        | `master` | El nombre de la rama actual, vuelve a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached `HEAD`). |
+| remote_name   | `origin` | El nombre remoto.                                                                                              |
+| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                               |
+| symbol        |          | Refleja el valor de la opción `symbol`                                                                         |
+| style\*     |          | Refleja el valor de la opción `style`                                                                          |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2040,7 +2040,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                          |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv      |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configura los binarios de python que Starship debería ejecutar al obtener la versión. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this module                                           |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Qué extensiones deben activar este módulo                                             |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                      |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                |
 | `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                       |
@@ -2610,11 +2610,11 @@ The `vcsh` module displays the current active VCSH repository. The module will b
 
 ### Variables
 
-| Variable  | Ejemplo                                     | Descripción                            |
-| --------- | ------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
-| symbol    |                                             | Refleja el valor de la opción `symbol` |
-| style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
+| Variable    | Ejemplo                                     | Descripción                            |
+| ----------- | ------------------------------------------- | -------------------------------------- |
+| repositorio | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
+| symbol      |                                             | Refleja el valor de la opción `symbol` |
+| style\*   | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2649,7 +2649,7 @@ By default the the `zig` module shows the currently installed version of Zig. El
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | The version of `zig`                   |
+| version   | `v0.6.0` | La versión de `zig`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2664,7 +2664,7 @@ By default the the `zig` module shows the currently installed version of Zig. El
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Comandos personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -2697,23 +2697,23 @@ The order in which custom modules are shown can be individually set by including
 
 | Opción        | Por defecto                     | Descripción                                                                                                                |
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `comando`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `cuando`      |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [Ver abajo](#custom-command-shell)                                                                                         |
+| `descripción` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `archivos`    | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directorios` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensiones` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
 | `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
 | `style`       | `"bold green"`                  | El estilo del módulo.                                                                                                      |
 | `format`      | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                     |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| `disabled`    | `false`                         | Deshabilita este `módulo` personalizado.                                                                                   |
 
 ### Variables
 
 | Variable  | Descripción                            |
 | --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
+| salida    | The output of shell command in `shell` |
 | symbol    | Refleja el valor de la opción `symbol` |
 | style\* | Refleja el valor de la opción `style`  |
 
@@ -2754,7 +2754,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
+command = "echo foo"  # mostrar resultado de command
 files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
