@@ -3,7 +3,7 @@
 Para comenzar a configurar Starship, crea el siguiente archivo: `~/.config/starship.toml`.
 
 ```sh
-mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && starship print-config --default > ~/.config/starship.toml
 ```
 
 Toda la configuración de Starship se realiza en este archivo [TOML](https://github.com/toml-lang/toml):
