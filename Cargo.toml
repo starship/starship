@@ -65,7 +65,7 @@ indexmap = "1.6.2"
 notify-rust = { version = "4.3.0", optional = true }
 semver = "0.11.0"
 which = "4.1.0"
-shadow-rs = "0.5.24"
+shadow-rs = "0.5.25"
 
 process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
 
@@ -87,7 +87,7 @@ winapi = { version = "0.3.9", features = [
 nix = "0.20.0"
 
 [build-dependencies]
-shadow-rs = "0.5.24"
+shadow-rs = "0.5.25"
 
 [dev-dependencies]
 tempfile = "3.2.0"
