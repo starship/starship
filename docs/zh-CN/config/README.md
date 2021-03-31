@@ -3,7 +3,7 @@
 您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
 
 ```sh
-mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.config && starship print-config --default > ~/.config/starship.toml
 ```
 
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
