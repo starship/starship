@@ -23,9 +23,7 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
                 let ident = field.ident.as_ref().unwrap();
 
                 let new_load_tokens = quote! {
-                    if let Some(config_str) = config.get(stringify!(#ident)) {
-                        new_module_config.#ident = new_module_config.#ident.load_config(config_str);
-                    }
+                    stringify!(#ident) => self.#ident.load_config(v),
                 };
 
                 load_tokens = quote! {
@@ -35,23 +33,24 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
             }
 
             load_config = quote! {
-                fn load_config(&self, config: &'a toml::Value) -> Self {
-                    let mut new_module_config = self.clone();
+                fn load_config(&mut self, config: &'a toml::Value) {
                     if let toml::Value::Table(config) = config {
-                        if config.get("prefix").is_some() {
-                            log::warn!("\"prefix\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
-                        }
-                        if config.get("suffix").is_some() {
-                            log::warn!("\"suffix\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
-                        }
-                        #load_tokens
+                        config.iter().for_each(|(k, v)| {
+                            match k.as_str() {
+                                #load_tokens
+                                unknown => {
+                                    ::log::warn!("Unknown config key '{}'", unknown);
+                                },
+                            }
+                        });
                     }
-                    new_module_config
                 }
             };
             from_config = quote! {
                 fn from_config(config: &'a toml::Value) -> Option<Self> {
-                    Some(Self::default().load_config(config))
+                    let mut out = Self::default();
+                    out.load_config(config);
+                    Some(out)
                 }
             };
         }
