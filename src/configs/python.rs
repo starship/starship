@@ -1,8 +1,9 @@
 use crate::config::{ModuleConfig, VecOr};
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub pyenv_prefix: &'a str,

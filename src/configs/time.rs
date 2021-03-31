@@ -1,12 +1,14 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct TimeConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
     pub use_12hr: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time_format: Option<&'a str>,
     pub disabled: bool,
     pub utc_time_offset: &'a str,

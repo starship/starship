@@ -18,29 +18,20 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
     if let syn::Data::Struct(data) = dinput.data {
         if let syn::Fields::Named(fields_named) = data.fields {
             let mut load_tokens = quote! {};
-            let mut from_tokens = quote! {};
 
             for field in fields_named.named.iter() {
                 let ident = field.ident.as_ref().unwrap();
-                let ty = &field.ty;
 
                 let new_load_tokens = quote! {
                     if let Some(config_str) = config.get(stringify!(#ident)) {
                         new_module_config.#ident = new_module_config.#ident.load_config(config_str);
                     }
                 };
-                let new_from_tokens = quote! {
-                    #ident: config.get(stringify!(#ident)).and_then(<#ty>::from_config)?,
-                };
 
                 load_tokens = quote! {
                     #load_tokens
                     #new_load_tokens
                 };
-                from_tokens = quote! {
-                    #from_tokens
-                    #new_from_tokens
-                }
             }
 
             load_config = quote! {
@@ -60,11 +51,7 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
             };
             from_config = quote! {
                 fn from_config(config: &'a toml::Value) -> Option<Self> {
-                    let config = config.as_table()?;
-
-                    Some(#struct_ident {
-                        #from_tokens
-                    })
+                    Some(Self::default().load_config(config))
                 }
             };
         }
