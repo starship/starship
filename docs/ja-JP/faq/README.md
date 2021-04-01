@@ -91,6 +91,6 @@ Starshipのアンインストールはインストールと同じぐらい簡単
 `curl | bash` スクリプトを使用してStarshipをインストールした場合は、以下のコマンドでバイナリを削除してください。
 
 ```sh
-# starshipバイナリを見つけて削除
-rm "$(which starship)"
+# Locate and delete the starship binary
+bash -c 'rm "$(which starship)"'
 ```
