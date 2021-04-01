@@ -159,7 +159,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
-   To update starship itself, rerunnning the script above will replace the current version, keeping configs untouched.
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
    #### Install via Package Manager
 
