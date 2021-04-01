@@ -40,11 +40,12 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Installer via le gestionnaire de paquets
 
-   Avec [Homebrew](https://brew.sh/):
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -133,4 +134,3 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    eval `starship init tcsh`
    ```
-
