@@ -40,11 +40,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### 通过软件包管理器安装
 
-   使用 [Homebrew](https://brew.sh/)：
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -133,4 +134,3 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval `starship init tcsh`
    ```
-
