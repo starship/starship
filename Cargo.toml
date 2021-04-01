@@ -14,7 +14,8 @@ build = "build.rs"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
-exclude = ["docs/**/*", "media/**/*"]
+# Keep `/` in front of `README.md` to exclude localized readmes
+include = ["src/**/*", "build.rs", "Cross.toml", "LICENSE", "/README.md"]
 
 [badges]
 is-it-maintained-issue-resolution = { repository = "starship/starship" }
