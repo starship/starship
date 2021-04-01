@@ -91,6 +91,6 @@ Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a s
 Si Starship fue instalado usando el script `curl | bash`, el siguiente comando eliminará el binario:
 
 ```sh
-# Localiza y elimina el binario de starship
-rm "$(which starship)"
+# Locate and delete the starship binary
+bash -c 'rm "$(which starship)"'
 ```
