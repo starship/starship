@@ -683,6 +683,8 @@ mod tests {
 
     #[test]
     fn root_directory() {
+        // Note: We have disable the read_only settings here due to false positives when running
+        // the tests on Windows as a non-admin.
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
@@ -1461,6 +1463,8 @@ mod tests {
             Color::Cyan.bold().paint("C:/Windows/System32")
         ));
 
+        // Note: We have disable the read_only settings here due to false positives when running
+        // the tests on Windows as a non-admin.
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
                 [directory]
