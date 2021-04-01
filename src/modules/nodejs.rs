@@ -57,18 +57,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(VersionFormatter::new(config.version_format)
-                    .ok()?
-                    .format_version(
-                        &nodejs_version
-                            .deref()
-                            .as_ref()
-                            .map(|version| version.trim())
-                            .unwrap()
-                            .to_string()
-                            .drain(1..)
-                            .collect::<String>(),
-                    ))),
+                "version" => {
+                    let nodejs_detected_version = &nodejs_version
+                        .deref()
+                        .as_ref()
+                        .map(|version| version.trim());
+                    match nodejs_detected_version {
+                        Some(version) => Some(Ok(VersionFormatter::new(config.version_format)
+                            .ok()?
+                            .format_version(&version.to_string().drain(1..).collect::<String>()))),
+                        None => None,
+                    }
+                }
                 _ => None,
             })
             .parse(None)
