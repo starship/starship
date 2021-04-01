@@ -91,6 +91,6 @@ Nếu Starship đã được cài đặt bằng việc sử dụng một trình 
 Nếu Starship đã được cài đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
 
 ```sh
-# Xác định vị trí và xóa tập tin nhị phân của starship
-rm "$(which starship)"
+# Locate and delete the starship binary
+bash -c 'rm "$(which starship)"'
 ```
