@@ -1786,23 +1786,27 @@ The `ocaml` module shows the currently installed version of OCaml. Mặc định
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                         | Mô tả                                                   |
-| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                             | The format string for the module.                       |
-| `symbol`            | `"🐫 "`                                                           | The symbol used before displaying the version of OCaml. |
-| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.     |
-| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                    |
-| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Những thư mục nào sẽ kích hoạt mô-đun này.              |
-| `style`             | `"bold yellow"`                                                  | Kiểu cho module.                                        |
-| `disabled`          | `false`                                                          | Disables the `ocaml` module.                            |
+| Tuỳ chọn                  | Mặc định                                                                   | Mô tả                                                   |
+| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                       |
+| `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml. |
+| `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch. |
+| `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.  |
+| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.     |
+| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Tên tệp nào sẽ kích hoạt mô-đun này.                    |
+| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Những thư mục nào sẽ kích hoạt mô-đun này.              |
+| `style`                   | `"bold yellow"`                                                            | Kiểu cho module.                                        |
+| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                            |
 
 ### Các biến
 
-| Biến      | Ví dụ     | Mô tả                            |
-| --------- | --------- | -------------------------------- |
-| version   | `v4.10.0` | The version of `ocaml`           |
-| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |           | Giá trị ghi đè của `style`       |
+| Biến             | Ví dụ        | Mô tả                                                             |
+| ---------------- | ------------ | ----------------------------------------------------------------- |
+| version          | `v4.10.0`    | The version of `ocaml`                                            |
+| switch_name      | `my-project` | The active OPAM switch                                            |
+| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
+| symbol           |              | Giá trị ghi đè tuỳ chọn `symbol`                                  |
+| style\*        |              | Giá trị ghi đè của `style`                                        |
 
 \*: This variable can only be used as a part of a style string
 
