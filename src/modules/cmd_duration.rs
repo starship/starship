@@ -19,34 +19,30 @@ impl Duration {
         }
     }
 
-    fn get_hours(&self, allow_zero: bool) -> Option<&u8> {
-        match (self.hours, allow_zero) {
-            (0, false) => None,
-            (0, true) => self.get_days().and(Some(&self.hours)),
+    fn get_hours(&self) -> Option<&u8> {
+        match self.hours {
+            0 => self.get_days().and(Some(&self.hours)),
             _ => Some(&self.hours),
         }
     }
 
-    fn get_minutes(&self, allow_zero: bool) -> Option<&u8> {
-        match (self.minutes, allow_zero) {
-            (0, false) => None,
-            (0, true) => self.get_hours(true).and(Some(&self.minutes)),
+    fn get_minutes(&self) -> Option<&u8> {
+        match self.minutes {
+            0 => self.get_hours().and(Some(&self.minutes)),
             _ => Some(&self.minutes),
         }
     }
 
-    fn get_seconds(&self, allow_zero: bool) -> Option<&u8> {
-        match (self.seconds, allow_zero) {
-            (0, false) => None,
-            (0, true) => self.get_minutes(true).and(Some(&self.seconds)),
+    fn get_seconds(&self) -> Option<&u8> {
+        match self.seconds {
+            0 => self.get_minutes().and(Some(&self.seconds)),
             _ => Some(&self.seconds),
         }
     }
 
-    fn get_milliseconds(&self, allow_zero: bool) -> Option<&u16> {
-        match (self.millis, allow_zero) {
-            (0, false) => None,
-            (0, true) => self.get_seconds(true).and(Some(&self.millis)),
+    fn get_milliseconds(&self) -> Option<&u16> {
+        match self.millis {
+            0 => self.get_seconds().and(Some(&self.millis)),
             _ => Some(&self.millis),
         }
     }
@@ -102,35 +98,71 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "d" => duration.get_days().map(|days| format!("{}", days)).map(Ok),
                 "hh" => duration
-                    .get_hours(config.show_zero_units)
+                    .get_hours()
+                    .and_then(|hours| match hours {
+                        0 => config.show_zero_units.then(|| 0),
+                        _ => Some(*hours),
+                    })
                     .map(|hours| format!("{:02}", hours))
                     .map(Ok),
                 "h" => duration
-                    .get_hours(config.show_zero_units)
+                    .get_hours()
+                    .and_then(|hours| match hours {
+                        0 => config.show_zero_units.then(|| 0),
+                        _ => Some(*hours),
+                    })
                     .map(|hours| format!("{}", hours))
                     .map(Ok),
-                "mm" => (duration.get_minutes(config.show_zero_units))
+                "mm" => duration
+                    .get_minutes()
+                    .and_then(|minutes| match minutes {
+                        0 => config.show_zero_units.then(|| 0),
+                        _ => Some(*minutes),
+                    })
                     .map(|minutes| format!("{:02}", minutes))
                     .map(Ok),
-                "m" => (duration.get_minutes(config.show_zero_units))
+                "m" => duration
+                    .get_minutes()
+                    .and_then(|minutes| match minutes {
+                        0 => config.show_zero_units.then(|| 0),
+                        _ => Some(*minutes),
+                    })
                     .map(|minutes| format!("{}", minutes))
                     .map(Ok),
-                "ss" => (duration.get_seconds(config.show_zero_units))
+                "ss" => duration
+                    .get_seconds()
+                    .and_then(|seconds| match seconds {
+                        0 => config.show_zero_units.then(|| 0),
+                        _ => Some(*seconds),
+                    })
                     .map(|seconds| format!("{:02}", seconds))
                     .map(Ok),
-                "s" => (duration.get_seconds(config.show_zero_units))
+                "s" => duration
+                    .get_seconds()
+                    .and_then(|seconds| match seconds {
+                        0 => config.show_zero_units.then(|| 0),
+                        _ => Some(*seconds),
+                    })
                     .map(|seconds| format!("{}", seconds))
                     .map(Ok),
                 "SSS" => match config.show_milliseconds {
                     true => duration
-                        .get_milliseconds(config.show_zero_units)
-                        .map(|millis| format!("{:03}", millis))
+                        .get_milliseconds()
+                        .and_then(|millis| match millis {
+                            0 => config.show_zero_units.then(|| 0),
+                            _ => Some(*millis),
+                        })
+                        .map(|millis| format!("{:003}", millis))
                         .map(Ok),
                     _ => None,
                 },
                 "S" => match config.show_milliseconds {
                     true => duration
-                        .get_milliseconds(config.show_zero_units)
+                        .get_milliseconds()
+                        .and_then(|millis| match millis {
+                            0 => config.show_zero_units.then(|| 0),
+                            _ => Some(*millis),
+                        })
                         .map(|millis| format!("{}", millis))
                         .map(Ok),
                     _ => None,
