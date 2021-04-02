@@ -527,7 +527,7 @@ The format string is parsed for token characters, which are replaced with the du
 | s        | `2`     | Second                              |
 | ss       | `02`    | Second (padded with zero)           |
 | S        | `42`    | Millisecond                         |
-| SSS      | `042`   | Millisecond (padded with zero)      |
+| SSS      | `042`   | Millisecond (padded with zeros)     |
 | style\*  |         | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
@@ -539,7 +539,7 @@ The format string is parsed for token characters, which are replaced with the du
 
 [cmd_duration]
 min_time = 500
-format = "underwent took [(${d}d )(${hh}h )(${mm}m )(${ss}s )(${SSS}ms )](bold yellow)"
+format = "underwent [(${d}d )(${hh}h )(${mm}m )(${ss}s )(${SSS}ms )](bold yellow)"
 ```
 
 ## Conda
