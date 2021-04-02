@@ -8,6 +8,7 @@ pub struct CmdDurationConfig<'a> {
     pub min_time: i64,
     pub format: &'a str,
     pub style: &'a str,
+    pub show_zero_units: bool,
     pub show_milliseconds: bool,
     pub disabled: bool,
     pub show_notifications: bool,
@@ -19,6 +20,7 @@ impl<'a> Default for CmdDurationConfig<'a> {
         CmdDurationConfig {
             min_time: 2_000,
             format: "took [(${d}d)(${h}h)(${m}m)(${s}s)(${S}ms) ]($style)",
+            show_zero_units: false,
             show_milliseconds: false,
             style: "yellow bold",
             disabled: false,

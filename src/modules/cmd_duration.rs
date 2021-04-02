@@ -11,6 +11,47 @@ struct Duration {
     pub millis: u16,
 }
 
+impl Duration {
+    fn get_days(&self) -> Option<&u128> {
+        match self.days {
+            0 => None,
+            _ => Some(&self.days),
+        }
+    }
+
+    fn get_hours(&self, allow_zero: bool) -> Option<&u8> {
+        match (self.hours, allow_zero) {
+            (0, false) => None,
+            (0, true) => self.get_days().and(Some(&self.hours)),
+            _ => Some(&self.hours),
+        }
+    }
+
+    fn get_minutes(&self, allow_zero: bool) -> Option<&u8> {
+        match (self.minutes, allow_zero) {
+            (0, false) => None,
+            (0, true) => self.get_hours(true).and(Some(&self.minutes)),
+            _ => Some(&self.minutes),
+        }
+    }
+
+    fn get_seconds(&self, allow_zero: bool) -> Option<&u8> {
+        match (self.seconds, allow_zero) {
+            (0, false) => None,
+            (0, true) => self.get_minutes(true).and(Some(&self.seconds)),
+            _ => Some(&self.seconds),
+        }
+    }
+
+    fn get_milliseconds(&self, allow_zero: bool) -> Option<&u16> {
+        match (self.millis, allow_zero) {
+            (0, false) => None,
+            (0, true) => self.get_seconds(true).and(Some(&self.millis)),
+            _ => Some(&self.millis),
+        }
+    }
+}
+
 impl From<u128> for Duration {
     fn from(raw_millis: u128) -> Self {
         // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
@@ -59,33 +100,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "d" => (duration.days > 0)
-                    .then(|| duration.days.to_string())
+                "d" => duration.get_days().map(|days| format!("{}", days)).map(Ok),
+                "hh" => duration
+                    .get_hours(config.show_zero_units)
+                    .map(|hours| format!("{:02}", hours))
                     .map(Ok),
-                "hh" => (duration.hours > 0)
-                    .then(|| format!("{:02}", duration.hours))
+                "h" => duration
+                    .get_hours(config.show_zero_units)
+                    .map(|hours| format!("{}", hours))
                     .map(Ok),
-                "h" => (duration.hours > 0)
-                    .then(|| duration.hours.to_string())
+                "mm" => (duration.get_minutes(config.show_zero_units))
+                    .map(|minutes| format!("{:02}", minutes))
                     .map(Ok),
-                "mm" => (duration.minutes > 0)
-                    .then(|| format!("{:02}", duration.minutes))
+                "m" => (duration.get_minutes(config.show_zero_units))
+                    .map(|minutes| format!("{}", minutes))
                     .map(Ok),
-                "m" => (duration.minutes > 0)
-                    .then(|| duration.minutes.to_string())
+                "ss" => (duration.get_seconds(config.show_zero_units))
+                    .map(|seconds| format!("{:02}", seconds))
                     .map(Ok),
-                "ss" => (duration.seconds > 0)
-                    .then(|| format!("{:02}", duration.seconds))
+                "s" => (duration.get_seconds(config.show_zero_units))
+                    .map(|seconds| format!("{}", seconds))
                     .map(Ok),
-                "s" => (duration.seconds > 0)
-                    .then(|| duration.seconds.to_string())
-                    .map(Ok),
-                "SSS" => (config.show_milliseconds && duration.millis > 0)
-                    .then(|| format!("{:03}", duration.millis))
-                    .map(Ok),
-                "S" => (config.show_milliseconds && duration.millis > 0)
-                    .then(|| duration.millis.to_string())
-                    .map(Ok),
+                "SSS" => match config.show_milliseconds {
+                    true => duration
+                        .get_milliseconds(config.show_zero_units)
+                        .map(|millis| format!("{:03}", millis))
+                        .map(Ok),
+                    _ => None,
+                },
+                "S" => match config.show_milliseconds {
+                    true => duration
+                        .get_milliseconds(config.show_zero_units)
+                        .map(|millis| format!("{}", millis))
+                        .map(Ok),
+                    _ => None,
+                },
                 _ => None,
             })
             .parse(None)
@@ -216,6 +265,20 @@ mod tests {
     }
 
     #[test]
+    fn config_zero_units_duration_7230s() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                show_zero_units = true
+            })
+            .cmd_duration(7_230_000)
+            .collect();
+
+        let expected = Some(format!("took {}", Color::Yellow.bold().paint("2h0m30s ")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn config_blank_duration_10110s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .cmd_duration(10_110_000)
@@ -301,7 +364,10 @@ mod tests {
             .cmd_duration(7_470_000)
             .collect();
 
-        let expected = Some(format!("took {}", Color::Yellow.bold().paint("02h 04m 30s ")));
+        let expected = Some(format!(
+            "took {}",
+            Color::Yellow.bold().paint("02h 04m 30s ")
+        ));
         assert_eq!(expected, actual);
     }
 }

@@ -498,6 +498,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | Option               | Default                                                  | Description                                                |
 | -------------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
 | `min_time`           | `2_000`                                                  | Shortest duration to show time for (in milliseconds).      |
+| `show_zero_units`    | `false`                                                  | Display zero time units. (Turns `2h30s` into `2h0m30s`.)   |
 | `show_milliseconds`  | `false`                                                  | Show milliseconds in addition to seconds for the duration. |
 | `format`             | `"took [(${d}d)(${h}h)(${m}m)(${s}s)(${S}ms) ]($style)"` | The format for the module.                                 |
 | `style`              | `"bold yellow"`                                          | The style for the module.                                  |
