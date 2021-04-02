@@ -1,8 +1,9 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct ScalaConfig<'a> {
     pub disabled: bool,
     pub format: &'a str,

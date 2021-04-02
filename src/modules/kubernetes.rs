@@ -85,10 +85,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     None => Some(Ok(kube_ctx.as_str())),
                     Some(&alias) => Some(Ok(alias)),
                 },
-                "namespace" => match &kube_ns {
-                    Some(kube_ns) => Some(Ok(kube_ns)),
-                    None => None,
-                },
+                "namespace" => kube_ns.as_ref().map(|s| Ok(s.as_str())),
                 _ => None,
             })
             .parse(None)

@@ -1,9 +1,10 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 use std::collections::HashMap;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct KubernetesConfig<'a> {
     pub symbol: &'a str,
     pub format: &'a str,

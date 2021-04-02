@@ -1,8 +1,9 @@
 use crate::config::{ModuleConfig, VecOr};
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub pyenv_prefix: &'a str,
@@ -22,7 +23,7 @@ impl<'a> Default for PythonConfig<'a> {
             pyenv_version_name: false,
             pyenv_prefix: "pyenv ",
             python_binary: VecOr(vec!["python", "python3", "python2"]),
-            format: "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\))]($style)",
+            format: "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
             style: "yellow bold",
             symbol: "🐍 ",
             disabled: false,

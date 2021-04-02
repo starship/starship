@@ -1,20 +1,24 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module};
 
-use crate::configs::singularity::SingularityConfig;
+use crate::config::RootModuleConfig;
+use crate::configs::vcsh::VcshConfig;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the current Singularity image
+/// Creates a module that displays VCSH repository currently in use
 ///
-/// Will display the Singularity image if `$SINGULARITY_NAME` is set.
+/// Will display the name of the current VCSH repository if one is active.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let singularity_env = context.get_env("SINGULARITY_NAME")?;
+    let repo = context.get_env("VCSH_REPO_NAME").unwrap_or_default();
+    if repo.trim().is_empty() {
+        return None;
+    }
 
-    let mut module = context.new_module("singularity");
-    let config: SingularityConfig = SingularityConfig::try_load(module.config);
+    let mut module = context.new_module("vcsh");
+    let config: VcshConfig = VcshConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
-            .map_meta(|variable, _| match variable {
+            .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
                 _ => None,
             })
@@ -23,7 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "env" => Some(Ok(&singularity_env)),
+                "repo" => Some(Ok(&repo)),
                 _ => None,
             })
             .parse(None)
@@ -32,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `singularity`: \n{}", error);
+            log::warn!("Error in module `vcsh`:\n{}", error);
             return None;
         }
     });
@@ -46,21 +50,23 @@ mod tests {
     use ansi_term::Color;
 
     #[test]
-    fn no_env_set() {
-        let actual = ModuleRenderer::new("singularity").collect();
+    fn not_in_env() {
+        let actual = ModuleRenderer::new("vcsh").collect();
 
         let expected = None;
+
         assert_eq!(expected, actual);
     }
+
     #[test]
     fn env_set() {
-        let actual = ModuleRenderer::new("singularity")
-            .env("SINGULARITY_NAME", "centos.img")
+        let actual = ModuleRenderer::new("vcsh")
+            .env("VCSH_REPO_NAME", "astronauts")
             .collect();
 
         let expected = Some(format!(
-            "{} ",
-            Color::Blue.bold().dimmed().paint("[centos.img]")
+            "vcsh {} ",
+            Color::Yellow.bold().paint("astronauts")
         ));
 
         assert_eq!(expected, actual);

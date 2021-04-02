@@ -54,6 +54,7 @@ mod time;
 mod username;
 mod utils;
 mod vagrant;
+mod vcsh;
 mod zig;
 
 #[cfg(feature = "battery")]
@@ -126,6 +127,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "crystal" => crystal::module(context),
             "username" => username::module(context),
             "vagrant" => vagrant::module(context),
+            "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),
             _ => {
                 eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
@@ -203,6 +205,7 @@ pub fn description(module: &str) -> &'static str {
         "time" => "The current local time",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
+        "vcsh" => "The currently active VCSH repository",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }
