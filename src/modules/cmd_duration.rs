@@ -242,6 +242,21 @@ mod tests {
     }
 
     #[test]
+    fn config_show_ms_duration_50ms() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 10
+                show_milliseconds = true
+            })
+            .cmd_duration(50)
+            .collect();
+
+        let expected = Some(format!("took {}", Color::Yellow.bold().paint("50ms ")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn config_show_ms_duration_500ms() {
         let actual = ModuleRenderer::new("cmd_duration")
             .config(toml::toml! {
@@ -383,6 +398,38 @@ mod tests {
             .collect();
 
         let expected = Some(format!("underwent {}", Color::Yellow.bold().paint("5s ")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_custom_format_duration_5ms() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 0
+                show_milliseconds = true
+                format = "took [(${d}d )(${hh}h )(${mm}m )(${ss}s )(${SSS}ms )]($style)"
+            })
+            .cmd_duration(5)
+            .collect();
+
+        let expected = Some(format!("took {}", Color::Yellow.bold().paint("005ms ")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_custom_format_duration_30ms() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .config(toml::toml! {
+                [cmd_duration]
+                min_time = 0
+                show_milliseconds = true
+                format = "took [(${d}d )(${hh}h )(${mm}m )(${ss}s )(${SSS}ms )]($style)"
+            })
+            .cmd_duration(30)
+            .collect();
+
+        let expected = Some(format!("took {}", Color::Yellow.bold().paint("030ms ")));
         assert_eq!(expected, actual);
     }
 
