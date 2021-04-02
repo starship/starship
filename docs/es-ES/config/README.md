@@ -1786,23 +1786,27 @@ El módulo `ocaml` muestra la versión actualmente instalada de OCaml. Por defec
 
 ### Opciones
 
-| Opción              | Por defecto                                                      | Descripción                                            |
-| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                             | La cadena de formato para el módulo.                   |
-| `symbol`            | `"🐫 "`                                                           | El símbolo usado antes de mostrar la versión de OCaml. |
-| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Qué extensiones deberían activar este módulo.          |
-| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Qué nombres de archivo deberían activar este módulo.   |
-| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Qué carpetas deberían activar este módulo.             |
-| `style`             | `"bold yellow"`                                                  | El estilo del módulo.                                  |
-| `disabled`          | `false`                                                          | Deshabilita el módulo `ocaml`.                         |
+| Opción                    | Por defecto                                                                | Descripción                                             |
+| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | La cadena de formato para el módulo.                    |
+| `symbol`                  | `"🐫 "`                                                                     | El símbolo usado antes de mostrar la versión de OCaml.  |
+| `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch. |
+| `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.  |
+| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Qué extensiones deberían activar este módulo.           |
+| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Qué nombres de archivo deberían activar este módulo.    |
+| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Qué carpetas deberían activar este módulo.              |
+| `style`                   | `"bold yellow"`                                                            | El estilo del módulo.                                   |
+| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                            |
 
 ### Variables
 
-| Variable  | Ejemplo   | Descripción                            |
-| --------- | --------- | -------------------------------------- |
-| version   | `v4.10.0` | La versión de `ocaml`                  |
-| symbol    |           | Refleja el valor de la opción `symbol` |
-| style\* |           | Refleja el valor de la opción `style`  |
+| Variable         | Ejemplo      | Descripción                                                       |
+| ---------------- | ------------ | ----------------------------------------------------------------- |
+| version          | `v4.10.0`    | La versión de `ocaml`                                             |
+| switch_name      | `my-project` | The active OPAM switch                                            |
+| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
+| symbol           |              | Refleja el valor de la opción `symbol`                            |
+| style\*        |              | Refleja el valor de la opción `style`                             |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
