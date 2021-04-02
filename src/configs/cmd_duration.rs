@@ -18,7 +18,7 @@ impl<'a> Default for CmdDurationConfig<'a> {
     fn default() -> Self {
         CmdDurationConfig {
             min_time: 2_000,
-            format: "took [$duration]($style) ",
+            format: "took [(${d}d)(${h}h)(${m}m)(${s}s)(${S}ms) ]($style)",
             show_milliseconds: false,
             style: "yellow bold",
             disabled: false,
