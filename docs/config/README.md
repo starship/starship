@@ -495,15 +495,15 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Option              | Default                       | Description                                                |
-| ------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`          | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds` | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`            | `"took [$duration]($style) "` | The format for the module.                                 |
-| `style`             | `"bold yellow"`               | The style for the module.                                  |
-| `disabled`          | `false`                       | Disables the `cmd_duration` module.                        |
-| `show_notifications`| `false`                       | Show desktop notifications when command completes.         |
-| `min_time_to_notify`| `45_000`                      | Shortest duration for notification (in milliseconds).      |
+| Option               | Default                                                  | Description                                                |
+| -------------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
+| `min_time`           | `2_000`                                                  | Shortest duration to show time for (in milliseconds).      |
+| `show_milliseconds`  | `false`                                                  | Show milliseconds in addition to seconds for the duration. |
+| `format`             | `"took [(${d}d)(${h}h)(${m}m)(${s}s)(${S}ms) ]($style)"` | The format for the module.                                 |
+| `style`              | `"bold yellow"`                                          | The style for the module.                                  |
+| `disabled`           | `false`                                                  | Disables the `cmd_duration` module.                        |
+| `show_notifications` | `false`                                                  | Show desktop notifications when command completes.         |
+| `min_time_to_notify` | `45_000`                                                 | Shortest duration for notification (in milliseconds).      |
 
 ::: tip
 
@@ -514,10 +514,20 @@ supports notifications by running `STARSHIP_LOG=debug starship module cmd_durati
 
 ### Variables
 
-| Variable | Example  | Description                             |
-| -------- | -------- | --------------------------------------- |
-| duration | `16m40s` | The time it took to execute the command |
-| style\*  |          | Mirrors the value of option `style`     |
+The format string is parsed for token characters, which are replaced with the duration's value for each unit type. The tokens are:
+
+| Variable | Example | Description                         |
+| -------- | ------- | ----------------------------------- |
+| d        | `1`     | Day                                 |
+| h        | `4`     | Hour                                |
+| hh       | `04`    | Hour (padded with zero)             |
+| m        | `3`     | Minute                              |
+| mm       | `03`    | Minute (padded with zero)           |
+| s        | `2`     | Second                              |
+| ss       | `02`    | Second (padded with zero)           |
+| S        | `42`    | Millisecond                         |
+| SSS      | `042`   | Millisecond (padded with zero)      |
+| style\*  |         | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
 
@@ -528,7 +538,7 @@ supports notifications by running `STARSHIP_LOG=debug starship module cmd_durati
 
 [cmd_duration]
 min_time = 500
-format = "underwent [$duration](bold yellow)"
+format = "underwent took [(${d}d )(${hh}h )(${mm}m )(${ss}s )(${SSS}ms )](bold yellow)"
 ```
 
 ## Conda
