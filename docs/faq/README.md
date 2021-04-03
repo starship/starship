@@ -101,5 +101,5 @@ If Starship was installed using the `curl | bash` script, the following command 
 
 ```sh
 # Locate and delete the starship binary
-bash -c 'rm "$(which starship)"'
+sh -c 'rm "$(which starship)"'
 ```
