@@ -311,11 +311,11 @@ The `battery` module shows how charged the device's battery is and its current c
 
 | Option               | Default                           | Description                                                   |
 | -------------------- | --------------------------------- | ------------------------------------------------------------- |
-| `full_symbol`        | `""`                             | Le symbole affiché lorsque la batterie est pleine.            |
-| `charging_symbol`    | `""`                             | Le symbole affiché lorsque la batterie se charge.             |
-| `discharging_symbol` | `""`                             | Le symbole affiché lorsque la batterie se décharge.           |
-| `unknown_symbol`     | `""`                             | Le symbole affiché lorsque l'état de la batterie est inconnu. |
-| `empty_symbol`       | `""`                             | Le symbole affiché lorsque la batterie est vide.              |
+| `full_symbol`        | `" "`                            | Le symbole affiché lorsque la batterie est pleine.            |
+| `charging_symbol`    | `" "`                            | Le symbole affiché lorsque la batterie se charge.             |
+| `discharging_symbol` | `" "`                            | Le symbole affiché lorsque la batterie se décharge.           |
+| `unknown_symbol`     | `" "`                            | Le symbole affiché lorsque l'état de la batterie est inconnu. |
+| `empty_symbol`       | `" "`                            | Le symbole affiché lorsque la batterie est vide.              |
 | `format`             | `"[$symbol$percentage]($style) "` | Format du module.                                             |
 | `display`            | [lien](#battery-display)          | Affiche le seuil et le style du module.                       |
 | `disabled`           | `false`                           | Désactive le module `battery`.                                |
@@ -326,9 +326,9 @@ The `battery` module shows how charged the device's battery is and its current c
 # ~/.config/starship.toml
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
 ```
 
 ### Indicateur de batterie
