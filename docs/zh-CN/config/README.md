@@ -311,11 +311,11 @@ The `battery` module shows how charged the device's battery is and its current c
 
 | Option               | 默认值                               | 描述               |
 | -------------------- | --------------------------------- | ---------------- |
-| `full_symbol`        | `""`                             | 显示于电池充满时。        |
-| `charging_symbol`    | `""`                             | 显示于正在充电时。        |
-| `discharging_symbol` | `""`                             | 显示于电池放电时。        |
-| `unknown_symbol`     | `""`                             | 显示于电池状态未知时       |
-| `empty_symbol`       | `""`                             | 显示于电池状态为空时       |
+| `full_symbol`        | `" "`                            | 显示于电池充满时。        |
+| `charging_symbol`    | `" "`                            | 显示于正在充电时。        |
+| `discharging_symbol` | `" "`                            | 显示于电池放电时。        |
+| `unknown_symbol`     | `" "`                            | 显示于电池状态未知时       |
+| `empty_symbol`       | `" "`                            | 显示于电池状态为空时       |
 | `format`             | `"[$symbol$percentage]($style) "` | 组件格式化模板。         |
 | `display`            | [见下文](#battery-display)           | 电量显示阈值和样式。       |
 | `disabled`           | `false`                           | 禁用 `battery` 组件。 |
@@ -326,9 +326,9 @@ The `battery` module shows how charged the device's battery is and its current c
 # ~/.config/starship.toml
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
 ```
 
 ### Battery 组件的显示
