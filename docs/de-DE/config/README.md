@@ -311,11 +311,11 @@ The `battery` module shows how charged the device's battery is and its current c
 
 | Option               | Standartwert                      | Beschreibung                                                                        |
 | -------------------- | --------------------------------- | ----------------------------------------------------------------------------------- |
-| `full_symbol`        | `""`                             | Das Symbol das angezeigt wird wenn der Akku voll geladen ist.                       |
-| `charging_symbol`    | `""`                             | Das Symbol das angezeigt wird wenn der Akku aufgeladen wird.                        |
-| `discharging_symbol` | `""`                             | Das Symbol, das angezeigt wird, wenn die Batterie entladen wird.                    |
-| `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown.                                 |
-| `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.                                   |
+| `full_symbol`        | `" "`                            | Das Symbol das angezeigt wird wenn der Akku voll geladen ist.                       |
+| `charging_symbol`    | `" "`                            | Das Symbol das angezeigt wird wenn der Akku aufgeladen wird.                        |
+| `discharging_symbol` | `" "`                            | Das Symbol, das angezeigt wird, wenn die Batterie entladen wird.                    |
+| `unknown_symbol`     | `" "`                            | The symbol shown when the battery state is unknown.                                 |
+| `empty_symbol`       | `" "`                            | The symbol shown when the battery state is empty.                                   |
 | `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                                                          |
 | `display`            | [link](#battery-display)          | Stellt den Grenzwert ein ab dem der Ladezustand (das battery-Modul) angezeigt wird. |
 | `disabled`           | `false`                           | Wenn der Wert auf `true` steht, wird das Akkustand-Modul deaktiviert.               |
@@ -326,9 +326,9 @@ The `battery` module shows how charged the device's battery is and its current c
 # ~/.config/starship.toml
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
 ```
 
 ### Anzeige des Akkustandes
