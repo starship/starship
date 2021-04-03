@@ -311,11 +311,11 @@ The `battery` module shows how charged the device's battery is and its current c
 
 | Option               | Default                           | Description                                         |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `""`                             | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `""`                             | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `""`                             | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `""`                             | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `""`                             | The symbol shown when the battery state is empty.   |
+| `full_symbol`        | `" "`                            | The symbol shown when the battery is full.          |
+| `charging_symbol`    | `" "`                            | The symbol shown when the battery is charging.      |
+| `discharging_symbol` | `" "`                            | The symbol shown when the battery is discharging.   |
+| `unknown_symbol`     | `" "`                            | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `" "`                            | The symbol shown when the battery state is empty.   |
 | `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
@@ -326,9 +326,9 @@ The `battery` module shows how charged the device's battery is and its current c
 # ~/.config/starship.toml
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
 ```
 
 ### Battery Display
