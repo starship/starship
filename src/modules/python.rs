@@ -373,7 +373,7 @@ prompt = 'foo'
         venv_cfg.write_all(
             br#"
 home = something
-prompt = '(foo) '
+prompt = '(foo)'
         "#,
         )?;
         venv_cfg.sync_all()?;
@@ -390,7 +390,7 @@ prompt = '(foo) '
 
         assert_eq!(actual, expected);
         dir.close()
-    }    
+    }
 
     fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
         let config = starship_config.unwrap_or(toml::toml! {
