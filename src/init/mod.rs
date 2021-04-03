@@ -147,23 +147,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint_posix()?
         ),
         "powershell" => print!(
-            /*
-             * Explanation of syntax:
-             *
-             *      iex: alias of Invoke-Expression
-             *
-             *      &: Explicitly tells PowerShell to execute path with Starship
-             *         executable.
-             *
-             *      @: multi-line stdout is returned as an array, but a single
-             *         line or no lines are returned as-is. @ ensures it's always
-             *         an array.
-             *
-             *      -join "`n": Joins the stdout array together as a string with
-             *                  newlines. PowerShell escapes with ` instead of \
-             *                  thus `n translates to a newline.
-             */
-            r#"iex (@(&"{}" init powershell --print-full-init) -join "`n")"#,
+            r#"Invoke-Expression (& "{}" init powershell --print-full-init | Out-String)"#,
             starship.sprint()?
         ),
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
