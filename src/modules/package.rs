@@ -373,7 +373,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("semantic"), None)?;
+        expect_output(&project_dir, Some("semantic"), None);
         project_dir.close()
     }
 
