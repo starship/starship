@@ -311,11 +311,11 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 
 | Opción               | Por defecto                       | Descripción                                                              |
 | -------------------- | --------------------------------- | ------------------------------------------------------------------------ |
-| `full_symbol`        | `""`                             | Se muestra cuando la batería está cargada.                               |
-| `charging_symbol`    | `""`                             | Se muestra cuando la batería se está cargando.                           |
-| `discharging_symbol` | `""`                             | Se muestra cuando la batería se está descargando.                        |
-| `unknown_symbol`     | `""`                             | El símbolo que se muestra cuando el estado de la batería es desconocido. |
-| `empty_symbol`       | `""`                             | El símbolo que se muestra cuando el estado de la batería está vacío.     |
+| `full_symbol`        | `" "`                            | Se muestra cuando la batería está cargada.                               |
+| `charging_symbol`    | `" "`                            | Se muestra cuando la batería se está cargando.                           |
+| `discharging_symbol` | `" "`                            | Se muestra cuando la batería se está descargando.                        |
+| `unknown_symbol`     | `" "`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
+| `empty_symbol`       | `" "`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 | `format`             | `"[$symbol$percentage]($style) "` | El formato del módulo.                                                   |
 | `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
@@ -326,9 +326,9 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 # ~/.config/starship.toml
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
 ```
 
 ### Indicador de batería
