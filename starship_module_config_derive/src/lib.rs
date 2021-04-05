@@ -18,6 +18,7 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
     if let syn::Data::Struct(data) = dinput.data {
         if let syn::Fields::Named(fields_named) = data.fields {
             let mut load_tokens = quote! {};
+            let mut fields = quote! {};
 
             for field in fields_named.named.iter() {
                 let ident = field.ident.as_ref().unwrap();
@@ -26,9 +27,18 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
                     stringify!(#ident) => self.#ident.load_config(v),
                 };
 
+                let new_field = quote! {
+                    stringify!(#ident),
+                };
+
                 load_tokens = quote! {
                     #load_tokens
                     #new_load_tokens
+                };
+
+                fields = quote! {
+                    #fields
+                    #new_field
                 };
             }
 
@@ -40,6 +50,21 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
                                 #load_tokens
                                 unknown => {
                                     ::log::warn!("Unknown config key '{}'", unknown);
+
+                                    let did_you_mean = ::std::array::IntoIter::new([#fields])
+                                    .filter_map(|field| {
+                                        let score = ::strsim::jaro_winkler(unknown, field);
+                                        (score > 0.8).then(|| (score, field))
+                                    })
+                                    .max_by(
+                                        |(score_a, _field_a), (score_b, _field_d)| {
+                                            score_a.partial_cmp(score_b).unwrap_or(::std::cmp::Ordering::Equal)
+                                        },
+                                    );
+
+                                    if let Some((_score, field)) = did_you_mean {
+                                        ::log::warn!("Did you mean '{}'?", field);
+                                    }
                                 },
                             }
                         });

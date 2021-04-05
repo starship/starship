@@ -1,6 +1,7 @@
 use crate::{config::ModuleConfig, module::ALL_MODULES};
 
 use serde::Serialize;
+use std::cmp::Ordering;
 
 // On changes please also update the `FullConfig` struct in `mod.rs`
 #[derive(Clone, Serialize)]
@@ -100,6 +101,31 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                 unknown => {
                     if !ALL_MODULES.contains(&unknown) && unknown != "custom" {
                         log::warn!("Unknown config key '{}'", unknown);
+
+                        let did_you_mean = &[
+                            // Root options
+                            "format",
+                            "scan_timeout",
+                            "command_timeout",
+                            "add_newline",
+                            // Modules
+                            "custom",
+                        ]
+                        .iter()
+                        .chain(ALL_MODULES.iter())
+                        .filter_map(|field| {
+                            let score = strsim::jaro_winkler(unknown, field);
+                            (score > 0.8).then(|| (score, field))
+                        })
+                        .max_by(
+                            |(score_a, _field_a), (score_b, _field_d)| {
+                                score_a.partial_cmp(score_b).unwrap_or(Ordering::Equal)
+                            },
+                        );
+
+                        if let Some((_score, field)) = did_you_mean {
+                            log::warn!("Did you mean '{}'?", field);
+                        }
                     }
                 }
             });
