@@ -2,6 +2,7 @@ use crate::{config::ModuleConfig, module::ALL_MODULES};
 
 use serde::Serialize;
 
+// On changes please also update the `FullConfig` struct in `mod.rs`
 #[derive(Clone, Serialize)]
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
