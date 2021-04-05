@@ -92,5 +92,5 @@ Nếu Starship đã được cài đặt bằng việc sử dụng `curl | bash`
 
 ```sh
 # Locate and delete the starship binary
-bash -c 'rm "$(which starship)"'
+sh -c 'rm "$(which starship)"'
 ```
