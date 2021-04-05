@@ -109,7 +109,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
         .ok()?
         .general_section()
         .get("prompt")
-        .map(String::from)
+        .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
 }
 
 #[cfg(test)]
@@ -347,6 +347,33 @@ mod tests {
             br#"
 home = something
 prompt = 'foo'
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_dirty_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = '(foo)'
         "#,
         )?;
         venv_cfg.sync_all()?;
