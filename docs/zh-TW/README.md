@@ -40,11 +40,12 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### 使用套件管理器安裝：
 
-   使用 [Homebrew](https://brew.sh/)：
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -133,4 +134,3 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    eval `starship init tcsh`
    ```
-

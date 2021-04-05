@@ -63,7 +63,7 @@ Por ejemplo, si quieres mostrar tu directorio actual en el título de la pestañ
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```

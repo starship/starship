@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+Starshipに搭載されている[Bashの実装](https://github.com/starship/starship/blob/master/src/init/starship.bash)は、[Command Duration モジュール](https://starship.rs/config/#command-duration)のような高度な機能を可能にするためと、プリインストールされたBashの設定との互換性を確保するために、若干複雑になっています。
 
 `Starshipのプロンプト`で受け入れられるすべてのフラグのリストは、次のコマンドを取得できます。
 
@@ -91,6 +91,6 @@ Starshipのアンインストールはインストールと同じぐらい簡単
 `curl | bash` スクリプトを使用してStarshipをインストールした場合は、以下のコマンドでバイナリを削除してください。
 
 ```sh
-# starshipバイナリを見つけて削除
-rm "$(which starship)"
+# Locate and delete the starship binary
+bash -c 'rm "$(which starship)"'
 ```

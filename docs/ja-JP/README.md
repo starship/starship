@@ -40,11 +40,12 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### パッケージマネージャー経由でインストール
 
-   [ Homebrew ](https://brew.sh/)の場合：
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -133,4 +134,3 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    eval `starship init tcsh`
    ```
-

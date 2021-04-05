@@ -40,11 +40,12 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    ```sh
    curl -fsSL https://starship.rs/install.sh <unk> bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Installa con Package Manager
 
-   Con [Homebrew](https://brew.sh/):
+   With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -133,4 +134,3 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    eval `starship init tcsh`
    ```
-
