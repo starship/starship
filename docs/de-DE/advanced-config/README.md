@@ -57,9 +57,9 @@ Füge dies in `Zsh` zum `precmd_functions`-Array hinzu:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Wenn Sie das Resultat für gut empfinden, fügen Sie diese Zeilen zu ihrer Shell Konfigurationsdatei hinzu (`~/.bashrc` oder `~/.zshrc`) um das Ergebnis permanent zu machen.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Zum Beispiel, wenn sie ihr aktuelles Verzeichnis als Terminal Title anzeigen wollen, fügen Sie folgenden Code-Schnipsel zu ihrer `~/.bashrc` oder `~/.zshrc` hinzu:
 
 ```bash
 function set_win_title(){
