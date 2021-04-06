@@ -62,6 +62,7 @@ pub const ALL_MODULES: &[&str] = &[
     "singularity",
     "status",
     "time",
+    "toolbox",
     "username",
     "vcsh",
     "vagrant",

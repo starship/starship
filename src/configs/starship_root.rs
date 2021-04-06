@@ -19,6 +19,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "hostname",
     "shlvl",
     "singularity",
+    "toolbox",
     "kubernetes",
     "directory",
     "vcsh",

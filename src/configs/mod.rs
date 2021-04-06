@@ -56,6 +56,7 @@ pub mod status;
 pub mod swift;
 pub mod terraform;
 pub mod time;
+pub mod toolbox;
 pub mod username;
 pub mod vagrant;
 pub mod vcsh;
@@ -123,6 +124,7 @@ pub struct FullConfig<'a> {
     swift: swift::SwiftConfig<'a>,
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
+    toolbox: toolbox::ToolboxConfig<'a>,
     username: username::UsernameConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,

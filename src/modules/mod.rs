@@ -50,6 +50,7 @@ mod singularity;
 mod status;
 mod swift;
 mod terraform;
+mod toolbox;
 mod time;
 mod username;
 mod utils;
@@ -123,6 +124,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "swift" => swift::module(context),
             "status" => status::module(context),
             "terraform" => terraform::module(context),
+            "toolbox" => toolbox::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
