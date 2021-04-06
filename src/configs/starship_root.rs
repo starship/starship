@@ -118,7 +118,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                             (score > 0.8).then(|| (score, field))
                         })
                         .max_by(
-                            |(score_a, _field_a), (score_b, _field_d)| {
+                            |(score_a, _field_a), (score_b, _field_b)| {
                                 score_a.partial_cmp(score_b).unwrap_or(Ordering::Equal)
                             },
                         );
