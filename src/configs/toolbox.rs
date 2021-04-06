@@ -16,7 +16,7 @@ impl<'a> Default for ToolboxConfig<'a> {
         ToolboxConfig {
             format: "[$symbol\\[$env\\]]($style) ",
             symbol: "",
-            style: "blue bold dimmed",
+            style: "bright-blue bold dimmed",
             disabled: false,
         }
     }
