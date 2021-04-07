@@ -45,7 +45,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### 通过软件包管理器安装
 
-   With [Homebrew](https://brew.sh/):
+   使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
