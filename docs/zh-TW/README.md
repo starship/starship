@@ -45,7 +45,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### 使用套件管理器安裝：
 
-   With [Homebrew](https://brew.sh/):
+   使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
