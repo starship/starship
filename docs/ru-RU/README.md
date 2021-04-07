@@ -45,7 +45,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Установить через менеджер пакетов
 
-   With [Homebrew](https://brew.sh/):
+   С [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
