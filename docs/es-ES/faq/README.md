@@ -53,7 +53,7 @@ El símbolo de sistema usará tanto contexto como le proveas, pero no hay parám
 Si obtienes un error como "_version 'GLIBC_2.18' not found (required by starship)_" al usar el binario precompilado (por ejemplo, en CentOS 6 o 7), puedes usar el binario compilado con `musl` en vez de `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
 ## Veo símbolos que no entiendo ni espero, ¿qué significan?
@@ -88,7 +88,7 @@ Starship es tan fácil de desinstalar como de instalar en primer lugar.
 
 Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a sus documentos para instrucciones de desinstalación.
 
-Si Starship fue instalado usando el script `curl | bash`, el siguiente comando eliminará el binario:
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Localiza y elimina el binario de starship
