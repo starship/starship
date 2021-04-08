@@ -32,7 +32,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
-### Quick Install
+### Schnellinstallation
 
 1. Installiere die Binärversion von **starship**:
 
