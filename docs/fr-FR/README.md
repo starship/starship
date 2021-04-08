@@ -45,7 +45,7 @@ description: Starship est un invite minimaliste, ultra-rapide et hautement perso
 
    #### Installer via le gestionnaire de paquets
 
-   With [Homebrew](https://brew.sh/):
+   Avec [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship

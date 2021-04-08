@@ -124,7 +124,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -152,7 +152,7 @@
 1. 安裝 **starship** 執行檔：
 
 
-   #### Install Latest Version
+   #### 安裝最新版本
 
 
    ##### From prebuilt binary, with Shell:
@@ -163,7 +163,7 @@
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
-   #### Install via Package Manager
+   #### 使用套件管理器安裝：
 
 
    ##### Example: [Homebrew](https://brew.sh/):
@@ -217,7 +217,7 @@
 
    #### PowerShell
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -226,7 +226,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   將以下內容放到 `~/.config/ion/initrc` 的結尾：
 
    ```sh
    # ~/.config/ion/initrc
@@ -237,7 +237,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.15 or higher is supported. 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -248,7 +248,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   將以下內容放到 `~/.tcshrc` 的結尾：
 
    ```sh
    # ~/.tcshrc

@@ -45,7 +45,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Declarativo, usuario único, a través de [home-manager](https://github.com/nix-community/home-manager)
 
 Activa el módulo `programs.starship` en tu archivo `home.nix` y añade tus ajustes
 
