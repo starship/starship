@@ -28,7 +28,11 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
   </video>
 </div>
 
-### Cài đặt nhanh chóng
+### Yêu cầu
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
+### Quick Install
 
 1. Cài đặt **starship** nhị phân:
 
