@@ -45,7 +45,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Cài đặt thông qua Trình quản lí gói
 
-   With [Homebrew](https://brew.sh/):
+   Với [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship

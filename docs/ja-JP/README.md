@@ -45,7 +45,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### パッケージマネージャー経由でインストール
 
-   With [Homebrew](https://brew.sh/):
+   [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
    brew install starship
@@ -95,7 +95,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
+   `Microsoft.PowerShell_profile.ps1` の最後に以下を追記してください。 PowerShell 上で `$PROFILE` 変数を問い合わせると、ファイルの場所を確認できます。 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
 
    ```sh
    Invoke-Expression (&starship init powershell)

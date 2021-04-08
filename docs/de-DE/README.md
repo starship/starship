@@ -45,7 +45,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Installation mithilfe eines Paket-Managers
 
-   With [Homebrew](https://brew.sh/):
+   Mit [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship

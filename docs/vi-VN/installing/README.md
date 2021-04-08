@@ -37,7 +37,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Lấy tệp tin nhị phân
 
 #### Lệnh
 
@@ -45,16 +45,16 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Khai báo, người dùng đơn, thông qua [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Kích hoạt mô đun `programs.starship` trong tệp `home.nix` của bạn, và thêm các cài đặt của bạn
 
 ```nix
 {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # Configuration written to ~/.config/starship.toml
+    # Cấu hình viết vào ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
@@ -69,7 +69,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+sau đó chạy
 
 ```sh
 home-manager switch
@@ -77,7 +77,7 @@ home-manager switch
 
 #### Khai báo, system-wide, với NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Thêm`pkgs.starship` vào `environment.systemPackages` trong `configuration.nix` của bạn, sau đó chạy
 
 ```sh
 sudo nixos-rebuild switch

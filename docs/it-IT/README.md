@@ -45,7 +45,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Installa con Package Manager
 
-   With [Homebrew](https://brew.sh/):
+   Con [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship

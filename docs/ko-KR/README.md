@@ -45,7 +45,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### 패키지 매니저를 이용한 설치
 
-   With [Homebrew](https://brew.sh/):
+   [Homebrew](https://brew.sh/)를 통한 설치:
 
    ```sh
    brew install starship

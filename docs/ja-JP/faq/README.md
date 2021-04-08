@@ -92,5 +92,5 @@ Starshipのアンインストールはインストールと同じぐらい簡単
 
 ```sh
 # Locate and delete the starship binary
-bash -c 'rm "$(which starship)"'
+sh -c 'rm "$(which starship)"'
 ```
