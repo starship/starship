@@ -53,7 +53,7 @@ starship prompt --help
 CentOS6や7などで事前にビルドされたバイナリを使用していて、"_version 'GLIBC_2.18' not found (required by starship)_" のようなエラーが出た場合、`glibc`の替わりに `musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
 ## よくわからない記号を見つけました。これはどういった意味ですか？
@@ -88,7 +88,7 @@ Starshipのアンインストールはインストールと同じぐらい簡単
 
 パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
-`curl | bash` スクリプトを使用してStarshipをインストールした場合は、以下のコマンドでバイナリを削除してください。
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Locate and delete the starship binary
