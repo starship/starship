@@ -4,6 +4,7 @@ use std::path::Path;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -82,17 +83,21 @@ fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String
             }
         })?;
 
-    format_python_version(&version)
+    format_python_version(config.version_format, &version)
 }
 
-fn format_python_version(python_version: &str) -> Option<String> {
+fn format_python_version(version_format: &str, python_version: &str) -> Option<String> {
     let version = python_version
         // split into ["Python", "3.8.6", ...]
         .split_whitespace()
-        // return "3.8.6"
+        // get down to "3.8.6"
         .nth(1)?;
 
-    Some(format!("v{}", version))
+    Some(
+        VersionFormatter::new(version_format)
+            .ok()?
+            .format_version(version),
+    )
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
@@ -124,19 +129,46 @@ mod tests {
     #[test]
     fn test_format_python_version() {
         let input = "Python 3.7.2";
-        assert_eq!(format_python_version(input), Some("v3.7.2".to_string()));
+        assert_eq!(
+            format_python_version("v${major}.${minor}.${patch}", input),
+            Some("v3.7.2".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_truncated() {
+        let input = "Python 3.7.2";
+        assert_eq!(
+            format_python_version("v${major}.${minor}", input),
+            Some("v3.7".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_is_malformed() {
+        let input = "Python 3.7";
+        assert_eq!(
+            format_python_version("v${major}.${minor}.${patch}", input),
+            Some("v3.7.".to_string())
+        );
     }
 
     #[test]
     fn test_format_python_version_anaconda() {
         let input = "Python 3.6.10 :: Anaconda, Inc.";
-        assert_eq!(format_python_version(input), Some("v3.6.10".to_string()));
+        assert_eq!(
+            format_python_version("v${major}.${minor}.${patch}", input),
+            Some("v3.6.10".to_string())
+        );
     }
 
     #[test]
     fn test_format_python_version_pypy() {
         let input = "Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)\n[PyPy 7.3.3-beta0 with GCC 10.2.0]";
-        assert_eq!(format_python_version(input), Some("v3.7.9".to_string()));
+        assert_eq!(
+            format_python_version("v${major}.${minor}.${patch}", input),
+            Some("v3.7.9".to_string())
+        );
     }
 
     #[test]

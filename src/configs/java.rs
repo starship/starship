@@ -7,6 +7,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct JavaConfig<'a> {
     pub disabled: bool,
     pub format: &'a str,
+    pub version_format: &'a str,
     pub style: &'a str,
     pub symbol: &'a str,
     pub detect_extensions: Vec<&'a str>,
@@ -18,6 +19,7 @@ impl<'a> Default for JavaConfig<'a> {
     fn default() -> Self {
         JavaConfig {
             format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             disabled: false,
             style: "red dimmed",
             symbol: "☕ ",
