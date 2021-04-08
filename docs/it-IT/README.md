@@ -28,7 +28,11 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
   </video>
 </div>
 
-### Installazione Veloce
+### Prerequisiti
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
+### Quick Install
 
 1. Installa il binario **starship**:
 
