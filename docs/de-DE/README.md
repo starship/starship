@@ -28,7 +28,11 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
   </video>
 </div>
 
-### Schnellinstallation
+### Voraussetzungen
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
+### Quick Install
 
 1. Installiere die Binärversion von **starship**:
 
