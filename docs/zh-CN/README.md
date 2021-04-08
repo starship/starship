@@ -28,7 +28,11 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### 快速安装
+### 前置要求
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
+### Quick Install
 
 1. 安装 **starship** 二进制文件：
 
