@@ -21,7 +21,7 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+`STARSHIP_CONFIG` 環境変数を使用することによって、デフォルトの設定ファイルの場所を変更できます。
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
