@@ -41,10 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    let version = get_python_version(context, &config)?;
-                    Some(Ok(version.trim().to_string()))
-                }
+                "version" => get_python_version(context, &config).map(Ok),
                 "virtualenv" => {
                     let virtual_env = get_python_virtual_env(context);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
@@ -68,7 +65,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
     if config.pyenv_version_name {
-        return Some(context.exec_cmd("pyenv", &["version-name"])?.stdout);
+        let version_name = context.exec_cmd("pyenv", &["version-name"])?.stdout;
+        return Some(version_name.trim().to_string());
     };
     let version = config
         .python_binary
@@ -83,21 +81,26 @@ fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String
             }
         })?;
 
-    format_python_version(config.version_format, &version)
+    format_python_version(&version, config.version_format)
 }
 
-fn format_python_version(version_format: &str, python_version: &str) -> Option<String> {
+fn format_python_version(python_version: &str, version_format: &str) -> Option<String> {
     let version = python_version
         // split into ["Python", "3.8.6", ...]
         .split_whitespace()
         // get down to "3.8.6"
         .nth(1)?;
 
-    Some(
-        VersionFormatter::new(version_format)
-            .ok()?
-            .format_version(version),
-    )
+    let formatted = VersionFormatter::new(version_format)
+        .and_then(|formatter| formatter.format_version(version));
+
+    match formatted {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formating `python` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
@@ -128,45 +131,48 @@ mod tests {
 
     #[test]
     fn test_format_python_version() {
-        let input = "Python 3.7.2";
         assert_eq!(
-            format_python_version("v${major}.${minor}.${patch}", input),
+            format_python_version("Python 3.7.2", "v${major}.${minor}.${patch}"),
             Some("v3.7.2".to_string())
         );
     }
 
     #[test]
     fn test_format_python_version_truncated() {
-        let input = "Python 3.7.2";
         assert_eq!(
-            format_python_version("v${major}.${minor}", input),
+            format_python_version("Python 3.7.2", "v${major}.${minor}"),
             Some("v3.7".to_string())
         );
     }
 
     #[test]
     fn test_format_python_version_is_malformed() {
-        let input = "Python 3.7";
         assert_eq!(
-            format_python_version("v${major}.${minor}.${patch}", input),
+            format_python_version("Python 3.7", "v${major}.${minor}.${patch}"),
             Some("v3.7.".to_string())
         );
     }
 
     #[test]
     fn test_format_python_version_anaconda() {
-        let input = "Python 3.6.10 :: Anaconda, Inc.";
         assert_eq!(
-            format_python_version("v${major}.${minor}.${patch}", input),
+            format_python_version(
+                "Python 3.6.10 :: Anaconda, Inc.",
+                "v${major}.${minor}.${patch}"
+            ),
             Some("v3.6.10".to_string())
         );
     }
 
     #[test]
     fn test_format_python_version_pypy() {
-        let input = "Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)\n[PyPy 7.3.3-beta0 with GCC 10.2.0]";
         assert_eq!(
-            format_python_version("v${major}.${minor}.${patch}", input),
+            format_python_version(
+                "\
+Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
+[PyPy 7.3.3-beta0 with GCC 10.2.0]",
+                "v${major}.${minor}.${patch}"
+            ),
             Some("v3.7.9".to_string())
         );
     }
