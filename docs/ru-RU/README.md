@@ -28,7 +28,11 @@ description: Starship - минимальная, быстрая и бесконе
   </video>
 </div>
 
-### Быстрая установка
+### Требования
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
+### Quick Install
 
 1. Установите двоичный файл **starship**:
 
