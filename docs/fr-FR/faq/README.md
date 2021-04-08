@@ -53,7 +53,7 @@ L'invite utilisera autant de contexte que possible, mais aucun paramètre n'est 
 Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by starship)_" lors de l'utilisation de l'exécutable précompilé (par exemple sur CentOS 6 ou 7), vous pouvez utiliser un exécutable compilé avec `musl` au lieu de `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
 ## I see symbols I don't understand or expect, what do they mean?
@@ -88,7 +88,7 @@ Starship est tout aussi facile à désinstaller que d'installer.
 
 Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez vous référer à leur documentation pour les instructions de désinstallation.
 
-Si Starship a été installé en utilisant le script `curl | bash` , la commande suivante supprimera l'exécutable :
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Locate and delete the starship binary
