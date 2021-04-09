@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::StringFormatter;
@@ -17,7 +15,7 @@ use serde_json as json;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
-    let module_version = get_package_version(&context.current_dir, &config)?;
+    let module_version = get_package_version(context, &config)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -212,10 +210,16 @@ fn extract_vpkg_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
+fn get_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let base_dir = &context.current_dir;
+
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
-    } else if utils::find_file(base_dir, |file_name| file_name.ends_with(".nimble")).is_some() {
+    } else if context
+        .try_begin_scan()?
+        .set_extensions(&["nimble"])
+        .is_match()
+    {
         extract_nimble_version()
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
         extract_package_version(&package_json, config.display_private)

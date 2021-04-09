@@ -1,5 +1,5 @@
 use process_control::{ChildExt, Timeout};
-use std::fs::{self, File};
+use std::fs::File;
 use std::io::{Read, Result};
 use std::path::Path;
 use std::process::{Command, Stdio};
@@ -14,26 +14,6 @@ pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
 
     file.read_to_string(&mut data)?;
     Ok(data)
-}
-
-/// Find a file in a given directory that satisfies a given predicate
-/// and returns its filename
-pub fn find_file<F: FnOnce(&str) -> bool + Copy>(dir: &Path, predicate: F) -> Option<String> {
-    let entries = fs::read_dir(dir).ok()?;
-
-    entries
-        .filter_map(Result::ok)
-        .find(|entry| {
-            let path = entry.path();
-            !path.is_dir()
-                && path
-                    .file_name()
-                    .and_then(|file_name| file_name.to_str())
-                    .map(predicate)
-                    .is_some()
-        })
-        .map(|entry| entry.file_name())
-        .and_then(|os_string| os_string.into_string().ok())
 }
 
 #[derive(Debug, Clone)]
