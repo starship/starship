@@ -9,7 +9,7 @@ mkdir -p ~/.config && starship print-config --default > ~/.config/starship.toml
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 
 ```toml
-# プロンプトの間に空行を追加します
+# シェルプロンプトの間に空行を追加します
 add_newline = true
 
 # "❯" 記号を "➜" 記号に置き換えます
@@ -80,7 +80,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 例：
 
 - `[on](red bold)` は文字列 `on` に太字のテキストを赤色で表示します。
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` は `⌘` 記号とその後に続く変数 `version` の値を、太字の緑色で表示します。
 - `[a [b](red) c](green)` は  `a b c` を  `b` だけ赤色に表示し、 `a` と `c`  を緑色に表示します。
 
 #### スタイルの設定
@@ -102,8 +102,8 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 例：
 
-- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
+- `(@$region)` は `region` が `None` の場合何も表示せず、そうでなければ `@` とその後ろに region の値を表示します。
+- `(some text)` は括弧の中に変数がないので、常に何も表示しません。
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
 #### エスケープ可能な文字
@@ -142,11 +142,11 @@ format = '''
 
 ### オプション
 
-| オプション          | デフォルト                          | 説明                                        |
-| -------------- | ------------------------------ | ----------------------------------------- |
-| `format`       | [link](#default-prompt-format) | プロンプトの形式を設定します。                           |
-| `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。  |
-| `add_newline`  | `true`                         | Inserts blank line between shell prompts. |
+| オプション          | デフォルト                          | 説明                                       |
+| -------------- | ------------------------------ | ---------------------------------------- |
+| `format`       | [link](#default-prompt-format) | プロンプトの形式を設定します。                          |
+| `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
+| `add_newline`  | `true`                         | シェルプロンプトの間に空行を挿入します。                     |
 
 ### 設定例
 
@@ -163,7 +163,7 @@ format = """
 
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# プロンプトの先頭の空行を無効にします
 add_newline = false
 ```
 
