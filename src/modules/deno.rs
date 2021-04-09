@@ -50,14 +50,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_deno_version(version_cmd_output: &str) -> Option<&str> {
-    version_cmd_output
-        .lines()
-        // First line has the version
-        .next()?
-        .split(' ')
-        .find(|&s| s.chars().all(|c| ('0'..='9').contains(&c) || c == '.'))
+fn parse_deno_version(deno_version: &str) -> Option<String> {
+    let version = deno_version
+        // split into ["deno", "1.8.3"]
+        .split_whitespace()
+        // return "1.8.3"
+        .nth(1)?;
+
+    Some(format!("v{}", version))
 }
+
 
 #[cfg(test)]
 mod tests {
