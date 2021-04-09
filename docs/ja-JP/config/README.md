@@ -375,7 +375,7 @@ style = "bold yellow"
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-デフォルトでは、色だけが変更されます。 If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+デフォルトでは、色だけが変更されます。 形も変更したい場合は、 [この例](#with-custom-error-shape) を見てください。
 
 ::: warning `error_symbol` is not supported on elvish shell. :::
 
