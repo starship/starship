@@ -57,11 +57,8 @@ Default target: x86_64-apple-macosx\n",
                 "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
             ),
         }),
-        "deno --version" => Some(CommandOutput {
-            stdout: String::from("\
-deno 1.8.3 (release, x86_64-pc-windows-msvc)
-v8 9.0.257.3
-typescript 4.2.2\n"),
+        "deno -V" => Some(CommandOutput {
+            stdout: String::from("deno 1.8.3\n"),
             stderr: String::default()
         }),
         "dummy_command" => Some(CommandOutput {
