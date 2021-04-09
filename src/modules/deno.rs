@@ -73,7 +73,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_without_deno() -> io::Result<()> {
+    fn folder_without_deno_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
         let expected = None;
