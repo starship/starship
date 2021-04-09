@@ -1,5 +1,7 @@
 use super::string_formatter::StringFormatterError;
 use super::StringFormatter;
+use once_cell::sync::Lazy;
+use std::ops::Deref;
 use versions::Versioning;
 
 pub struct VersionFormatter<'a> {
@@ -27,22 +29,22 @@ impl<'a> VersionFormatter<'a> {
 
     /// Formats a version structure into a readable string
     pub fn format(self, version: &'a str) -> Result<String, StringFormatterError> {
-        let parsed = Versioning::new(version);
+        let parsed = Lazy::new(|| Versioning::new(version));
         let formatted = self
             .formatter
             .map(|variable| match variable {
                 "raw" => Some(Ok(version.to_string())),
-                "major" => match parsed.as_ref() {
+                "major" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.major.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(0)?.to_string())),
                     _ => None,
                 },
-                "minor" => match parsed.as_ref() {
+                "minor" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.minor.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(1)?.to_string())),
                     _ => None,
                 },
-                "patch" => match parsed.as_ref() {
+                "patch" => match parsed.deref().as_ref() {
                     Some(Versioning::Ideal(v)) => Some(Ok(v.patch.to_string())),
                     Some(Versioning::General(v)) => Some(Ok(v.nth_lenient(2)?.to_string())),
                     _ => None,
