@@ -1313,16 +1313,16 @@ El módulo `java` muestra la versión actualmente instalada de Java. Por defecto
 
 ### Opciones
 
-| Opción              | Por defecto                                                                                               | Descripción                                                               |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | El formato del módulo.                                                    |
-| `version_format`.   | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Qué extensiones deberían activar este módulo.                             |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Qué nombres de archivo deberían activar este módulo.                      |
-| `detect_folders`    | `[]`                                                                                                      | Qué carpetas deberían activar estos módulos.                              |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
-| `style`             | `"red dimmed"`                                                                                            | El estilo del módulo.                                                     |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
+| Opción              | Por defecto                                                                                               | Descripción                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | El formato del módulo.                                                                  |
+| `version_format`    | `v{raw}`                                                                                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                                                      | Qué carpetas deberían activar estos módulos.                                            |
+| `symbol`            | `"☕ "`                                                                                                    | Una cadena de formato que representa el símbolo de Java                                 |
+| `style`             | `"red dimmed"`                                                                                            | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                                                                                   | Deshabilita el módulo `java`.                                                           |
 
 ### Variables
 
@@ -1744,17 +1744,17 @@ El módulo `nodejs` muestra la versión instalada de NodeJS. Por defecto, el mó
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                                          |
-| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                               |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                         |
-| `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                 |
-| `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                           |
-| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                        |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the NodeJS version. |
+| Opción              | Por defecto                          | Descripción                                                                                                    |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                                         |
+| `version_format`    | `v{raw}`                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch`                        |
+| `symbol`            | `" "`                               | Una cadena de formato que representa el símbolo de NodeJS.                                                     |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Qué extensiones deberían activar este módulo.                                                                  |
+| `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                           |
+| `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                                     |
+| `style`             | `"bold green"`                       | El estilo del módulo.                                                                                          |
+| `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                                |
+| `not_capable_style` | `bold red`                           | El estilo para el módulo cuando una propiedad de motores en package.json no coincide con la versión de NodeJS. |
 
 ### Variables
 
@@ -2038,19 +2038,19 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Opciones
 
-| Opción               | Por defecto                                                                                                  | Descripción                                                                            |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | El formato del módulo.                                                                 |
-| `version_format`.    | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
-| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                  |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Qué extensiones deben activar este módulo                                              |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                       |
-| `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                 |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| Opción               | Por defecto                                                                                                  | Descripción                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | El formato del módulo.                                                                  |
+| `version_format`     | `v{raw}`                                                                                                     | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`             | `"🐍 "`                                                                                                       | Una cadena de formato que representa el símbolo de Python                               |
+| `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                   |
+| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                            |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
+| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Qué extensiones deben activar este módulo                                               |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                        |
+| `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
+| `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                         |
 
 ::: consejo
 
@@ -2106,16 +2106,16 @@ Por defecto, el módulo `ruby` muestra la versión actualmente instalada de Ruby
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                    |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
-| `detect_extensions` | `["rb"]`                             | Qué extensiones deberían activar este módulo.                             |
-| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Qué nombres de archivo deberían activar este módulo.                      |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                |
-| `style`             | `"bold red"`                         | El estilo del módulo.                                                     |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
+| Opción              | Por defecto                          | Descripción                                                                             |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
+| `version_format`    | `v{raw}`                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💎 "`                               | Una cadena de formato que representa el símbolo de Ruby.                                |
+| `detect_extensions` | `["rb"]`                             | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                              | Deshabilita el módulo `ruby`.                                                           |
 
 ### Variables
 
@@ -2145,16 +2145,16 @@ Por defecto, el módulo `rust` muestra la versión actualmente instalada de Rust
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                    |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
-| `detect_extensions` | `["rs"]`                             | Qué extensiones deberían activar este módulo.                             |
-| `detect_files`      | `["Cargo.toml"]`                     | Qué nombres de archivo deberían activar este módulo.                      |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                |
-| `style`             | `"bold red"`                         | El estilo del módulo.                                                     |
-| `disabled`          | `false`                              | Disables the `rust` module.                                               |
+| Opción              | Por defecto                          | Descripción                                                                             |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
+| `version_format`    | `v{raw}`                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦀 "`                               | Una cadena de formato que representa el símbolo de Rust                                 |
+| `detect_extensions` | `["rs"]`                             | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `["Cargo.toml"]`                     | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                              | Deshabilita el módulo `rust`.                                                           |
 
 ### Variables
 
