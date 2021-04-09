@@ -67,25 +67,9 @@ mod tests {
     use std::io;
 
     #[test]
-    fn deno_version() {
-        let ok_versions = ["1.1.1", "2.0.0"];
-        let not_ok_versions = ["abc", " \n.", ". ", "abc."];
-
-        let all_some = ok_versions.iter().all(|&v| parse_deno_version(v).is_some());
-        let all_none = not_ok_versions
-            .iter()
-            .any(|&v| parse_deno_version(v).is_some());
-
-        assert_eq!(true, all_some);
-        assert_eq!(true, all_none);
-
-        let sample_deno_output = "\
-deno 1.8.3 (release, x86_64-pc-windows-msvc)
-v8 9.0.257.3
-typescript 4.2.2
-        ";
-
-        assert_eq!(Some("1.8.3"), parse_deno_version(sample_deno_output))
+    fn test_parse_deno_version() {
+        const OUTPUT: &str = "deno 1.8.3\n";
+        assert_eq!(parse_deno_version(OUTPUT), Some("v1.8.3".to_string()))
     }
 
     #[test]
