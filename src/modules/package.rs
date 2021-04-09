@@ -4,6 +4,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
+use std::time::Duration;
 
 use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
@@ -49,6 +50,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
     let cargo_toml: toml::Value = toml::from_str(file_contents).ok()?;
     let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
+
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
+}
+
+fn extract_vlang_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
+    let caps = re.captures(file_contents)?;
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
+fn extract_nimble_version() -> Option<String> {
+    let cmd_output = utils::exec_cmd("nimble", &["dump", "--json"], Duration::from_millis(500))?;
+
+    let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
+    let raw_version = nimble_json.get("version")?.as_str()?;
 
     let formatted_version = format_version(raw_version);
     Some(formatted_version)
@@ -197,6 +215,8 @@ fn extract_vpkg_version(file_contents: &str) -> Option<String> {
 fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
+    } else if utils::find_file(base_dir, |file_name| file_name.ends_with(".nimble")).is_some() {
+        extract_nimble_version()
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
         extract_package_version(&package_json, config.display_private)
     } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
