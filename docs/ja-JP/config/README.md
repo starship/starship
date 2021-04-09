@@ -104,7 +104,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 - `(@$region)` は `region` が `None` の場合何も表示せず、そうでなければ `@` とその後ろに region の値を表示します。
 - `(some text)` は括弧の中に変数がないので、常に何も表示しません。
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. これは `(\[$a$b\] )` と同じ動作をします。
 
 #### エスケープ可能な文字
 
@@ -117,9 +117,9 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 - (
 - )
 
-`toml` は [独自のエスケープ構文](https://github.com/toml-lang/toml#user-content-string) を持っていることに注意してください。 It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+`toml` は [独自のエスケープ構文](https://github.com/toml-lang/toml#user-content-string) を持っていることに注意してください。 設定ファイル内では文字列リテラル (`''`) を使うのがおすすめです。 基本文字列 (`""`) を使う場合は, バックスラッシュ `\` をエスケープするよう気を付けてください。
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+例えば、新しい行に `$` 記号を表示したい場合、以下の `format` の設定が等価です。
 
 ```toml
 # 基本文字列と
@@ -250,7 +250,7 @@ When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from 
 | `symbol`         | `"☁️ "`                                             | 現在のAWSプロファイルを表示する前に表示される記号です。 |
 | `region_aliases` |                                                     | AWS名に加えて表示するリージョンのエイリアスです。    |
 | `style`          | `"bold yellow"`                                     | モジュールのスタイルです。                 |
-| `disabled`       | `false`                                             | Disables the `aws` module.    |
+| `disabled`       | `false`                                             | `aws` モジュールを無効にします。           |
 
 ### 変数
 
@@ -428,10 +428,10 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
+`cmake` モジュールは、現在インストールされているCMakeのバージョンを表示します。 デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
+- カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
 
 ### オプション
 
