@@ -17,10 +17,16 @@ impl<'a> VersionFormatter<'a> {
         Ok(Self { formatter })
     }
 
+    /// Format version string using provided format
+    pub fn format_version(
+        version: &'a str,
+        format: &'a str,
+    ) -> Result<String, StringFormatterError> {
+        Self::new(format).and_then(|formatter| formatter.format(version))
+    }
+
     /// Formats a version structure into a readable string
-    ///
-    /// No matter what comes in, this will return some usable string
-    pub fn format_version(self, version: &str) -> Result<String, StringFormatterError> {
+    pub fn format(self, version: &'a str) -> Result<String, StringFormatterError> {
         let parsed = Versioning::new(version);
         let formatted = self
             .formatter
@@ -59,37 +65,36 @@ impl<'a> VersionFormatter<'a> {
 mod tests {
     use super::*;
 
+    const VERSION_FORMAT: &str = "major:${major} minor:${minor} patch:${patch} raw:${raw}";
+
     #[test]
     fn test_semver_full() {
-        const FORMAT_STR: &str = "major:${major} minor:${minor} patch:${patch} raw:${raw}";
-        let result = VersionFormatter::new(FORMAT_STR)
-            .and_then(|formatter| formatter.format_version("1.2.3"));
-        assert_eq!(result, Ok("major:1 minor:2 patch:3 raw:1.2.3".to_string()));
+        assert_eq!(
+            VersionFormatter::format_version("1.2.3", VERSION_FORMAT),
+            Ok("major:1 minor:2 patch:3 raw:1.2.3".to_string())
+        );
     }
 
     #[test]
     fn test_semver_partial() {
-        const FORMAT_STR: &str = "major:${major} minor:${minor} patch:${patch} raw:${raw}";
-        let result =
-            VersionFormatter::new(FORMAT_STR).and_then(|formatter| formatter.format_version("1.2"));
-        assert_eq!(result, Ok("major:1 minor:2 patch: raw:1.2".to_string()));
+        assert_eq!(
+            VersionFormatter::format_version("1.2", VERSION_FORMAT),
+            Ok("major:1 minor:2 patch: raw:1.2".to_string())
+        );
     }
 
     #[test]
     fn test_general() {
-        const FORMAT_STR: &str = "major:${major} minor:${minor} patch:${patch} raw:${raw}";
-        let result = VersionFormatter::new(FORMAT_STR)
-            .and_then(|formatter| formatter.format_version("1.2-a.3"));
-        assert_eq!(result, Ok("major:1 minor:2 patch: raw:1.2-a.3".to_string()));
+        assert_eq!(
+            VersionFormatter::format_version("1.2-a.3", VERSION_FORMAT),
+            Ok("major:1 minor:2 patch: raw:1.2-a.3".to_string())
+        );
     }
 
     #[test]
     fn test_dummy() {
-        const FORMAT_STR: &str = "major:${major} minor:${minor} patch:${patch} raw:${raw}";
-        let result = VersionFormatter::new(FORMAT_STR)
-            .and_then(|formatter| formatter.format_version("dummy version"));
         assert_eq!(
-            result,
+            VersionFormatter::format_version("dummy version", VERSION_FORMAT),
             Ok("major: minor: patch: raw:dummy version".to_string())
         );
     }

@@ -66,10 +66,7 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
         // return "2.6.0"
         .next()?;
 
-    let formatted = VersionFormatter::new(version_format)
-        .and_then(|formatter| formatter.format_version(version));
-
-    match formatted {
+    match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formating `ruby` version:\n{}", error);

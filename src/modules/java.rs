@@ -79,10 +79,7 @@ fn format_java_version(java_version: &str, version_format: &str) -> Option<Strin
     let captures = re.captures(java_version)?;
     let version = &captures["version"];
 
-    let formatted = VersionFormatter::new(version_format)
-        .and_then(|formatter| formatter.format_version(version));
-
-    match formatted {
+    match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formating `java` version:\n{}", error);

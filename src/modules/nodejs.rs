@@ -109,10 +109,7 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
 fn format_node_version(node_version: &str, version_format: &str) -> Option<String> {
     let version = node_version.trim_start_matches('v').trim();
 
-    let formatted = VersionFormatter::new(version_format)
-        .and_then(|formatter| formatter.format_version(version));
-
-    match formatted {
+    match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formating `node` version:\n{}", error);

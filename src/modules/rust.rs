@@ -210,10 +210,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         // get down to "1.34.0"
         .nth(1)?;
 
-    let formatted = VersionFormatter::new(version_format)
-        .and_then(|formatter| formatter.format_version(version));
-
-    match formatted {
+    match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formating `rust` version:\n{}", error);
