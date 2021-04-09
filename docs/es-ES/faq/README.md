@@ -88,7 +88,7 @@ Starship es tan fácil de desinstalar como de instalar en primer lugar.
 
 Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a sus documentos para instrucciones de desinstalación.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Si Starship fue instalado usando el guión de instalación, el siguiente comando eliminará el binario:
 
 ```sh
 # Localiza y elimina el binario de starship
