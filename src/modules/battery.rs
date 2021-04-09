@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         battery::State::Full => Some(config.full_symbol),
                         battery::State::Charging => Some(config.charging_symbol),
                         battery::State::Discharging => {
-                            Some(display_style.symbol.unwrap_or(config.discharging_symbol))
+                            display_style.symbol.or(Some(config.discharging_symbol))
                         }
                         battery::State::Unknown => Some(config.unknown_symbol),
                         battery::State::Empty => Some(config.empty_symbol),

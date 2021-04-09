@@ -347,15 +347,16 @@ discharging_symbol = "💀"
 
 ### Battery Display
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). The shown symbol can be specified as (symbol).
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style).
 If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
 threshold = 10
 style = "bold red"
-symbol = None
 ```
+
+The default value for the `symbol` option is the value of `battery`'s `discharging_symbol` option.
 
 #### Options
 
@@ -365,7 +366,7 @@ The `display` option is an array of the following table.
 | ----------- | ----------------------------------------------- |
 | `threshold` | The upper bound for the display option.         |
 | `style`     | The style used if the display option is in use. |
-| `symbol`    | The symbol shown if the display option is in use. This is optional. If this is not set, `discharging_symbol` is shown. |
+| `symbol`    | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Example
 
@@ -376,7 +377,7 @@ style = "bold red"
 
 [[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
-style = "bold yellow"z
+style = "bold yellow"
 symbol = 💦
 
 # when capacity is over 30%, the battery indicator will not be displayed
