@@ -31,7 +31,7 @@ impl<'a> Default for BatteryConfig<'a> {
     }
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,
     pub style: &'a str,
@@ -45,22 +45,5 @@ impl<'a> Default for BatteryDisplayConfig<'a> {
             style: "red bold",
             symbol: None,
         }
-    }
-}
-
-impl<'a> ModuleConfig<'a> for BatteryDisplayConfig<'a> {
-    fn from_config(config: &'a Value) -> Option<Self> {
-        let mut conf = BatteryDisplayConfig::default();
-
-        for (key, val) in config.as_table()?.iter() {
-            let s = key.to_string();
-            match &*s {
-                "threshold" => conf.threshold = val.as_integer()?,
-                "style" => conf.style = val.as_str()?,
-                "symbol" => conf.symbol = Some(val.as_str()?),
-                _ => (),
-            }
-        }
-        Some(conf)
     }
 }

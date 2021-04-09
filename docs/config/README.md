@@ -362,11 +362,11 @@ The default value for the `symbol` option is the value of `battery`'s `dischargi
 
 The `display` option is an array of the following table.
 
-| Option      | Description                                     |
-| ----------- | ----------------------------------------------- |
-| `threshold` | The upper bound for the display option.         |
-| `style`     | The style used if the display option is in use. |
-| `symbol`    | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Option      | Default    | Description                                     |
+| ----------- | ---------- | ----------------------------------------------- |
+| `threshold` | `10`       | The upper bound for the display option.         |
+| `style`     | `bold red` | The style used if the display option is in use. |
+| `symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Example
 
