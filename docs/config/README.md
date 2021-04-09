@@ -662,7 +662,7 @@ By default the module will be shown if any of the following conditions are met:
 | Option              | Default                                           | Description                                     |
 | ------------------- | ------------------------------------------------- | ----------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
-| `symbol`            | `"🦕 "`                                           | A format string representing the symbol of Dart |
+| `symbol`            | `"🦕  "`                                           | A format string representing the symbol of Dart |
 | `detect_extensions` | `[]`                                        | Which extensions should trigger this module.    |
 | `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.     |
 | `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
