@@ -40,6 +40,7 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Установить через менеджер пакетов
@@ -133,4 +134,3 @@ description: Starship - минимальная, быстрая и бесконе
 
    eval `starship init tcsh`
    ```
-

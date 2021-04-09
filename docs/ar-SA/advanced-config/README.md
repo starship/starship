@@ -1,4 +1,4 @@
-# Advanced Configuration
+# الإعداد المتقدم
 
 While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
@@ -63,7 +63,7 @@ For example, if you want to display your current directory in your terminal tab 
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```

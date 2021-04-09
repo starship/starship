@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+内置于 Starship 的 [Bash 适配](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微复杂一些，实现了像 [命令用时统计组件](https://starship.rs/config/#command-duration) 这样的功能，还确保 Starship 能与之前设置的 Bash 配置相兼容。
 
 使用以下命令了解 `starship prompt` 所能接受的所有参数：
 
@@ -92,5 +92,5 @@ If Starship was installed using the `curl | bash` script, the following command 
 
 ```sh
 # Locate and delete the starship binary
-rm "$(which starship)"
+sh -c 'rm "$(which starship)"'
 ```

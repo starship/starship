@@ -66,8 +66,12 @@ pub use starship_root::*;
 #[derive(Default, Serialize, ModuleConfig, Clone)]
 #[serde(default)]
 pub struct FullConfig<'a> {
-    #[serde(flatten)]
-    root: starship_root::StarshipRootConfig<'a>,
+    // Root config
+    pub format: &'a str,
+    pub scan_timeout: u64,
+    pub command_timeout: u64,
+    pub add_newline: bool,
+    // modules
     aws: aws::AwsConfig<'a>,
     battery: battery::BatteryDisplayConfig<'a>,
     character: character::CharacterConfig<'a>,
@@ -88,7 +92,7 @@ pub struct FullConfig<'a> {
     git_commit: git_commit::GitCommitConfig<'a>,
     git_state: git_state::GitStateConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
-    go: go::GoConfig<'a>,
+    golang: go::GoConfig<'a>,
     helm: helm::HelmConfig<'a>,
     hg_branch: hg_branch::HgBranchConfig<'a>,
     hostname: hostname::HostnameConfig<'a>,

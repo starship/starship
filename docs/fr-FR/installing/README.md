@@ -37,7 +37,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Obtention du binaire
 
 #### Impératif
 
@@ -45,7 +45,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 nix-env -iA nixos.starship
 ```
 
-#### Déclaration, utilisateur unique, via [home-manager](home-manager)
+#### Déclaration, utilisateur unique, via [home-manager](https://github.com/nix-community/home-manager)
 
 Enable the `programs.starship` module in your `home.nix` file, and add your settings
 
@@ -77,7 +77,7 @@ home-manager switch
 
 #### Déclaration, au niveau du système, avec NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Ajoutez `pkgs.starship` à `environment.systemPackages` dans votre `configuration.nix`, puis exécutez
 
 ```sh
 sudo nixos-rebuild switch

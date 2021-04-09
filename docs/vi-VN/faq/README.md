@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+[Bản cài đặt Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) xây dựng bên trong Starship phực tạp hơn một chút để cho phép thực hiện các tính năng nâng cao hơn một chứt như [Command Duration module](https://starship.rs/config/#command-duration) và chắc chắn rằng Starship là tương thích với cấu hình Bash đã cài đặt trước đó.
 
 Với một danh sách tất cả các cờ đã được chấp nhận bởi `starship prompt`, sử dụng lệnh sau:
 
@@ -91,6 +91,6 @@ Nếu Starship đã được cài đặt bằng việc sử dụng một trình 
 Nếu Starship đã được cài đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
 
 ```sh
-# Xác định vị trí và xóa tập tin nhị phân của starship
-rm "$(which starship)"
+# Locate and delete the starship binary
+sh -c 'rm "$(which starship)"'
 ```

@@ -90,7 +90,7 @@
       alt="简体中文"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
@@ -98,7 +98,7 @@
       alt="Español"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
@@ -106,7 +106,7 @@
       alt="Français"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -160,9 +160,10 @@
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
-   #### Install via Package Manager
+   #### 패키지 매니저를 이용한 설치
 
 
    ##### 예제: [Homebrew](https://brew.sh/):
@@ -178,12 +179,12 @@
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. 쉘 설정에 시동 스크립트를 추가:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc`에 아래 라인을 추가
 
    ```sh
    # ~/.bashrc
@@ -194,7 +195,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish`에 아래 라인을 추가
 
    ```sh
    # ~/.config/fish/config.fish
@@ -205,7 +206,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc`에 아래 라인을 추가
 
    ```sh
    # ~/.zshrc
@@ -216,7 +217,7 @@
 
    #### 파워셀
 
-   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 위치.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -225,7 +226,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   아래의 라인을 `~/.config/ion/initrc` 마지막에 추가:
 
    ```sh
    # ~/.config/ion/initrc
@@ -236,7 +237,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.15 or higher is supported. 아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -247,7 +248,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   아래의 라인을 `~/.tcshrc` 마지막에 추가:
 
    ```sh
    # ~/.tcshrc

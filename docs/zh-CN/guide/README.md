@@ -90,7 +90,7 @@
       alt="简体中文"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
@@ -98,7 +98,7 @@
       alt="Español"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
@@ -106,7 +106,7 @@
       alt="Français"
  /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -160,6 +160,7 @@
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### 通过软件包管理器安装

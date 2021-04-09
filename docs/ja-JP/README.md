@@ -40,6 +40,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### パッケージマネージャー経由でインストール
@@ -94,7 +95,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
+   `Microsoft.PowerShell_profile.ps1` の最後に以下を追記してください。 PowerShell 上で `$PROFILE` 変数を問い合わせると、ファイルの場所を確認できます。 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -133,4 +134,3 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    eval `starship init tcsh`
    ```
-

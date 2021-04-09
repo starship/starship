@@ -40,6 +40,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
 
    #### Instalar con un gestor de paquetes
@@ -133,4 +134,3 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    eval `starship init tcsh`
    ```
-
