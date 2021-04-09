@@ -29,10 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => context
                     .exec_cmd("deno", &["--version"])
-                    .map(|command_output| command_output.stdout)
-                    .and_then(|deno_version_output| {
-                        Some(format!("v{}", parse_deno_version(&deno_version_output)?))
-                    })
+                    .and_then(|output| parse_deno_version(output.stdout.trim()))
                     .map(Ok),
                 _ => None,
             })
