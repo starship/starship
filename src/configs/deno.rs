@@ -18,7 +18,7 @@ impl<'a> Default for DenoConfig<'a> {
     fn default() -> Self {
         DenoConfig {
             format: "via [$symbol($version )]($style)",
-            symbol: "🦕  ",
+            symbol: "🦕 ",
             style: "green bold",
             disabled: false,
             detect_extensions: vec![],
