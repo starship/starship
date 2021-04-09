@@ -57,7 +57,6 @@ fn parse_deno_version(deno_version: &str) -> Option<String> {
     Some(format!("v{}", version))
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::parse_deno_version;
