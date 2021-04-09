@@ -9,14 +9,14 @@ mkdir -p ~/.config && starship print-config --default > ~/.config/starship.toml
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 
 ```toml
-# Inserts a blank line between shell prompts
+# プロンプトの間に空行を追加します
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# "❯" 記号を "➜" 記号に置き換えます
+[character]                            # 設定しようとしているモジュールの名前は "character" です。
+success_symbol = "[➜](bold green)"     # "success_symbol" セグメントが「太字の緑色」スタイルの "➜"に設定されています
 
-# Disable the package module, hiding it from the prompt completely
+# packageモジュールを無効にし、プロンプトから完全に隠します
 [package]
 disabled = true
 ```
