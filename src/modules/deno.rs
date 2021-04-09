@@ -53,7 +53,7 @@ fn parse_deno_version(deno_version: &str) -> Option<String> {
         .split_whitespace()
         // return "1.8.3"
         .nth(1)?;
-        
+
     Some(format!("v{}", version))
 }
 
