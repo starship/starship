@@ -28,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => context
-                    .exec_cmd("deno", &["--version"])
+                    .exec_cmd("deno", &["-V"])
                     .and_then(|output| parse_deno_version(output.stdout.trim()))
                     .map(Ok),
                 _ => None,
@@ -53,7 +53,7 @@ fn parse_deno_version(deno_version: &str) -> Option<String> {
         .split_whitespace()
         // return "1.8.3"
         .nth(1)?;
-
+        
     Some(format!("v{}", version))
 }
 
