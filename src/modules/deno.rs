@@ -49,6 +49,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_deno_version(deno_version: &str) -> Option<String> {
     let version = deno_version
+        // split into ["deno 1.8.3", ""]
+        .split("\n")
+        // get first line
+        .nth(0)
+        // unwrap
+        .unwrap()
         // split into ["deno", "1.8.3"]
         .split_whitespace()
         // return "1.8.3"
