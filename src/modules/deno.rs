@@ -68,7 +68,10 @@ mod tests {
     #[test]
     fn test_parse_deno_version() {
         const OUTPUT: &str = "deno 1.8.3\n";
-        assert_eq!(parse_deno_version(OUTPUT.trim()), Some("v1.8.3".to_string()))
+        assert_eq!(
+            parse_deno_version(OUTPUT.trim()),
+            Some("v1.8.3".to_string())
+        )
     }
 
     #[test]
