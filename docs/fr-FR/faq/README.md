@@ -21,7 +21,7 @@ Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'i
 - Désactiver les modules est plus explicite que de les omettre du `format global`
 - Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## La documentation dit que Starship est shell-agnostique. Pourquoi mon shell préféré n'est-il pas pris en charge ?
 
 Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion, Starship peut être utilisé.
 
