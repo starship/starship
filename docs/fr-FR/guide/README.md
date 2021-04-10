@@ -147,7 +147,7 @@
 
 ### Démarrage rapide
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Remarque**: en raison de la prolifération des plates-formes, seul un sous ensemble des plates-formes prises en charge sont montrées ci-dessous. Vous ne trouvez pas la vôtre? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
 1. Installer l'exécutable **starship** :
 
