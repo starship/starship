@@ -8,11 +8,11 @@ Les configurations dans cette section sont sujettes à modification dans les fut
 
 :::
 
-## Personnalisation des commandes pré-commande et pré-exécution en Bash
+## Commandes pré-commande et pré-exécution personnalisées en Bash
 
-Bash n'a pas de structure officielle préexec/précmd comme la plupart des autres shells. C'est pourquoi il est difficile de fournir des hooks entièrement personnalisables dans `bash`. Cependant, Starship vous donne une capacité limitée à insérer vos propres fonctions dans la procédure de rendu commande :
+Bash n'a pas de structure officielle préexec/précmd comme la plupart des autres shells. C'est pourquoi il est difficile de fournir des hooks entièrement personnalisables dans `bash`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
 
-- Pour exécuter une fonction personnalisée juste avant que commande soit dessinée, définissez une nouvelle fonction et assignez son nom à `starship_precmd_user_func`. Par exemple, pour dessiner une fusée avant la commande, vous feriez
+- Pour exécuter une fonction personnalisée juste avant que le prompt ne soit dessiné, définissez une nouvelle fonction et assignez son nom à `starship_precmd_user_func`. Par exemple, pour dessiner une fusée avant la commande, vous feriez
 
 ```bash
 function blastoff(){
@@ -21,45 +21,45 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Pour exécuter une fonction personnalisée juste avant l'exécution d'une commande, vous pouvez utiliser le [` DEBUG` mécanisme d'interruption ](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** piéger le signal DEBUG *avant* initialisation du Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
+- Pour exécuter une fonction personnalisée juste avant l'exécution d'une commande, vous pouvez utiliser le [ mécanisme d'interruption du signal ` DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** piéger le signal DEBUG *avant* l'initialisation de Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
 
 ```bash
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Pièger DEBUG *avant* l'initiation de starship
+trap blastoff DEBUG     # Pièger DEBUG *avant* l'initialisation de starship
 eval $(starship init bash)
 ```
 
-## Modifier le style des fenêtres commande
+## Modifier le titre des fenêtres
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, refléter votre répertoire de travail). Fish le fait par défaut. Starship ne le fait pas, mais il est assez simple d'ajouter cette fonctionnalité à `bash` ou `zsh`.
+Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter votre répertoire de travail). Fish le fait même par défaut. Starship ne le fait pas, mais il est assez simple d'ajouter cette fonctionnalité à `bash` ou `zsh`.
 
-Tout d'abord, définir une fonction de changement de titre de fenêtre (identique en bash et zsh) :
+Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
 ```bash
 function set_titre_fenetre(){
-    echo -ne "\033]0; TON_TITRE_FENETRE_ICI \007"
+    echo -ne "\033]0; VOTRE_TITRE_ICI\007"
 }
 ```
 
 Vous pouvez utiliser des variables pour personnaliser ce titre (`$USER`, `$HOSTNAME`, et `$PWD` sont des choix populaires).
 
-Dans `bash`, définissez cette fonction comme la fonction precmd Starship :
+Dans `bash`, définissez cette fonction comme la fonction précommande Starship :
 
 ```bash
-starship_precmd_user_func="set_titre_gagnante"
+starship_precmd_user_func="set_titre_fenetre"
 ```
 
 Dans `zsh`, ajoutez ceci au tableau `precmd_functions` :
 
 ```bash
-précmd_functions+=(set_titre_gagnant)
+precmd_functions+=(set_titre_fenetre)
 ```
 
 Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
 
-Par exemple, si vous voulez afficher votre répertoire actuel dans votre titre d'onglets de terminal, ajoutez le snippet suivant à votre `~/.bashrc` ou `~/.zshrc`:
+Par exemple, si vous voulez afficher votre répertoire actuel dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
 
 ```bash
 function set_win_title(){
