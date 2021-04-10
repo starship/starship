@@ -240,7 +240,7 @@ $character"""
 
 [aws-vault](https://github.com/99designs/aws-vault)を使用する場合、プロファイル は`AWS_VAULT`env varから読み取られます。
 
-When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+[awsu](https://github.com/kreuzwerker/awsu) を使う場合、そのプロファイルは環境変数 `AWSU_PROFILE` から読まれます。
 
 ### オプション
 
@@ -377,7 +377,7 @@ style = "bold yellow"
 
 デフォルトでは、色だけが変更されます。 形も変更したい場合は、 [この例](#with-custom-error-shape) を見てください。
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: warning `error_symbol` はelvishシェルではサポートされていません。 :::
 
 ### オプション
 
@@ -391,9 +391,9 @@ style = "bold yellow"
 
 ### 変数
 
-| 変数     | 設定例 | 説明                                                                    |
-| ------ | --- | --------------------------------------------------------------------- |
-| symbol |     | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| 変数     | 設定例 | 説明                                                          |
+| ------ | --- | ----------------------------------------------------------- |
+| symbol |     | `success_symbol` 、もしくは `error_symbol` 、 `vicmd_symbol` のミラー |
 
 ### 設定例
 
@@ -443,13 +443,13 @@ vicmd_symbol = "[V](bold green) "
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
 | `style`             | `"bold blue"`                          | モジュールのスタイルです。                                |
-| `disabled`          | `false`                                | Disables the `cmake` module.                 |
+| `disabled`          | `false`                                | `cmake`モジュールを無効にします。                         |
 
 ### 変数
 
 | 変数        | 設定例       | 説明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v3.17.3` | The version of cmake   |
+| version   | `v3.17.3` | cmake のバージョン           |
 | symbol    |           | オプション `記号` の値をミラーする    |
 | style\* |           | オプション `style` の値をミラーする |
 
@@ -909,15 +909,15 @@ The `erlang` module shows the currently installed version of Erlang/OTP. By defa
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                         |
-| `disabled`          | `false`                              | Disables the `erlang` module.                            |
+| `disabled`          | `false`                              | `erlang`モジュールを無効にします。                                    |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                      |
-| --------- | --------- | ----------------------- |
-| version   | `v22.1.3` | The version of `erlang` |
-| symbol    |           | オプション `記号` の値をミラーする     |
-| style\* |           | オプション `style` の値をミラーする  |
+| 変数        | 設定例       | 説明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v22.1.3` | `erlang` のバージョン        |
+| symbol    |           | オプション `記号` の値をミラーする    |
+| style\* |           | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
