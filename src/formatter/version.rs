@@ -57,8 +57,7 @@ impl<'a> VersionFormatter<'a> {
             segments
                 .iter()
                 .map(|segment| segment.value.as_str())
-                .collect::<Vec<&str>>()
-                .join("")
+                .collect::<String>()
         })
     }
 }
