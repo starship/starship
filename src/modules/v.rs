@@ -68,10 +68,7 @@ mod tests {
     #[test]
     fn test_parse_v_version() {
         const OUTPUT: &str = "V 0.2 30c0659\n";
-        assert_eq!(
-            parse_v_version(OUTPUT.trim()),
-            Some("v0.2".to_string())
-        )
+        assert_eq!(parse_v_version(OUTPUT.trim()), Some("v0.2".to_string()))
     }
 
     #[test]
@@ -92,5 +89,4 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
-
 }
