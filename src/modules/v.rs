@@ -81,11 +81,11 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_v_file() -> io::Result<()> {
+    fn folder_with_v_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.v"))?.sync_all()?;
         let actual = ModuleRenderer::new("v").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v2 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
