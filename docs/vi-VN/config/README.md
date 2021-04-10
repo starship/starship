@@ -1316,7 +1316,7 @@ Mô đun `java` cho biết phiên bản của Java đã cài đặt. Mặc đị
 | Tuỳ chọn            | Mặc định                                                                                                  | Mô tả                                                                     |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Định dạng cho module.                                                     |
-| `version_format`.   | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
 | `detect_folders`    | `[]`                                                                                                      | Những thư mục nào nên kích hoạt các mô đun này.                           |
@@ -1747,9 +1747,9 @@ The `nodejs` module shows the currently installed version of NodeJS. Mặc đị
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                                                |
 | ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
 | `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                         |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                  |
 | `detect_files`      | `["package.json", ".node-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                                                 |
 | `detect_folders`    | `["node_modules"]`                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                                           |
 | `style`             | `"bold green"`                       | Kiểu cho module.                                                                                     |
@@ -2041,7 +2041,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | Tuỳ chọn             | Mặc định                                                                                                     | Mô tả                                                                                  |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Định dạng cho module.                                                                  |
-| `version_format`.    | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
+| `version_format`     | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | Kiểu cho module.                                                                       |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
@@ -2109,7 +2109,7 @@ By default the `ruby` module shows the currently installed version of Ruby. Modu
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
 | `detect_extensions` | `["rb"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
@@ -2148,7 +2148,7 @@ By default the `rust` module shows the currently installed version of Rust. Modu
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
 | `detect_extensions` | `["rs"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["Cargo.toml"]`                     | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
