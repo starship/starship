@@ -514,6 +514,7 @@ mod tests {
         }
 
         #[test]
+        #[ignore]
         fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
