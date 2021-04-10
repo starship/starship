@@ -56,6 +56,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "scala",
     "swift",
     "terraform",
+    "v",
     "vagrant",
     "zig",
     // ↑ Toolchain version modules ↑

@@ -220,6 +220,7 @@ $rust\
 $scala\
 $swift\
 $terraform\
+$v\
 $vagrant\
 $zig\
 $nix_shell\
@@ -2725,6 +2726,40 @@ By default the module will be shown if any of the following conditions are met:
 
 [vagrant]
 format = "via [⍱ $version](bold white) "
+```
+
+## V
+
+The `v` module shows you your currently installed version of V.
+By default the module will be shown if any of the following conditions are met:
+- The current directory contains a file with the extension of .v
+
+### Options
+
+| Option              | Default                                           | Description                                     |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
+| `symbol`            | `"V "`                                           | A format string representing the symbol of Deno |
+| `detect_extensions` | `["v"]`                                        | Which extensions should trigger this module.    |
+| `detect_files`      | `[]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
+| `style`             | `"blue bold"`                                     | The style for the module.                       |
+| `disabled`          | `false`                                           | Disables the `deno` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.2` | The version of `v`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+[v]
+format = "via [V $version](bold bold) "
 ```
 
 ## VCSH
