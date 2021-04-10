@@ -481,7 +481,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ::: tip
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+デスクトップ通知を表示するには、 `rust-notify` をサポートしているstarshipをビルドする必要があります。 You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
 
 :::
 
