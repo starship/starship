@@ -1328,7 +1328,7 @@ The `java` module shows the currently installed version of Java. By default the 
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v14`   | The version of `java`                  |
+| version   | `v14`   | La version de `java`                   |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -1749,7 +1749,7 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                                    |
 | `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
 | `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                         |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quelles extensions devraient déclencher ce module.                                                   |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                          |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                            |
 | `style`             | `"bold green"`                       | Le style du module.                                                                                  |
