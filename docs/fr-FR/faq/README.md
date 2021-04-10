@@ -23,7 +23,7 @@ Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'i
 
 ## La documentation dit que Starship est shell-agnostique. Pourquoi mon shell préféré n'est-il pas pris en charge ?
 
-Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion, Starship peut être utilisé.
+Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation de l'invite de commande et l'expansion, Starship peut être utilisé.
 
 Voici un petit exemple pour que Starship fonctionne avec bash :
 
@@ -56,9 +56,9 @@ Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## Je vois des symboles que je ne comprends pas et auxquels je ne m'attendais pas, que signifient-t-ils ?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Si vous voyez des symboles que vous ne reconnaissez pas, vous pouvez utiliser `starship explain` pour obtenir des explications concernant les modules actuellement affichés.
 
 ## Pourquoi ne vois-je pas de glyphe dans mon invite?
 
@@ -81,16 +81,16 @@ Si l'un ou l'autre des symboles ne parvient pas à s'afficher correctement, votr
 
 ## Comment désinstaller Starship ?
 
-Starship est tout aussi facile à désinstaller que d'installer.
+Starship est tout aussi facile à désinstaller qu'à installer.
 
 1. Supprimez les lignes de la configuration de votre shell (par exemple `~/.bashrc`) utilisées pour initialiser Starship.
-1. Supprimer l'exécutable de Starship.
+1. Supprimez l'exécutable de Starship.
 
 Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez vous référer à leur documentation pour les instructions de désinstallation.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Si Starship a été installé en utilisant le script d'installation, la commande suivante supprimera l'exécutable :
 
 ```sh
-# Locate and delete the starship binary
+# Trouver et supprimer l'exécutable starship
 sh -c 'rm "$(which starship)"'
 ```
