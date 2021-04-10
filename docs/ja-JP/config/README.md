@@ -481,7 +481,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ::: tip
 
-デスクトップ通知を表示するには、 `rust-notify` をサポートしているstarshipをビルドする必要があります。 You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+デスクトップ通知を表示するには、 `rust-notify` をサポートしているstarshipをビルドする必要があります。 `show_notifications` が `true` となっている状態で `STARSHIP_LOG=debug starship module cmd_duration -d 60000` を実行することにより、starshipが通知をサポートしているかを確認することができます。
 
 :::
 
@@ -546,7 +546,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 By default the module will be shown if any of the following conditions are met:
+`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`shard.yml`ファイルが含まれている
 - カレントディレクトリに`.cr`の拡張子のファイルが含まれている
@@ -584,7 +584,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. By default the module will be shown if any of the following conditions are met:
+`dart`モジュールは、現在インストールされているDartのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -592,15 +592,15 @@ The `dart` module shows the currently installed version of Dart. By default the 
 
 ### オプション
 
-| オプション               | デフォルト                                             | 説明                                              |
-| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | moduleのフォーマットです。                                |
-| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart |
-| `detect_extensions` | `['dart']`                                        | どの拡張子がこのモジュールをアクティブにするか                         |
-| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | どのファイル名がこのモジュールをアクティブにするか                       |
-| `detect_folders`    | `[".dart_tool"]`                                  | どのフォルダーがこのモジュールをアクティブにするか                       |
-| `style`             | `"bold blue"`                                     | モジュールのスタイルです。                                   |
-| `disabled`          | `false`                                           | Disables the `dart` module.                     |
+| オプション               | デフォルト                                             | 説明                          |
+| ------------------- | ------------------------------------------------- | --------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | moduleのフォーマットです。            |
+| `symbol`            | `"🎯 "`                                            | Dartのシンボルを表すフォーマット文字列       |
+| `detect_extensions` | `['dart']`                                        | どの拡張子がこのモジュールをアクティブにするか     |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | どのファイル名がこのモジュールをアクティブにするか   |
+| `detect_folders`    | `[".dart_tool"]`                                  | どのフォルダーがこのモジュールをアクティブにするか   |
+| `style`             | `"bold blue"`                                     | モジュールのスタイルです。               |
+| `disabled`          | `false`                                           | Disables the `dart` module. |
 
 ### 変数
 
