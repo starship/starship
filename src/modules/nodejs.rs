@@ -57,18 +57,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    let nodejs_detected_version = &nodejs_version
-                        .deref()
-                        .as_ref()
-                        .map(|version| version.trim());
-                    match nodejs_detected_version {
-                        Some(version) => Some(Ok(VersionFormatter::new(config.version_format)
-                            .ok()?
-                            .format_version(&version.to_string().drain(1..).collect::<String>()))),
-                        None => None,
-                    }
-                }
+                "version" => Some(Ok(format_node_version(
+                    nodejs_version.deref().as_ref()?,
+                    config.version_format,
+                ))),
                 _ => None,
             })
             .parse(None)
@@ -112,6 +104,18 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
         Err(_e) => return true,
     };
     r.matches(&v)
+}
+
+fn format_node_version(node_version: &str, version_format: &str) -> String {
+    let version = node_version.trim_start_matches('v').trim();
+
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => formatted,
+        Err(error) => {
+            log::warn!("Error formating `node` version:\n{}", error);
+            format!("v{}", version)
+        }
+    }
 }
 
 #[cfg(test)]
