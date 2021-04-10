@@ -3,17 +3,17 @@
 Pour installer starship, vous devez faire deux choses:
 
 1. Installez le binaire **starship** sur votre ordinateur
-1. Dites à votre shell d'utiliser le binaire de starship comme invite en modifiant ses scripts d'initialisation
+1. Dire à votre shell d'utiliser le binaire de starship comme invite en modifiant ses scripts d'initialisation
 
 Pour la plupart des utilisateurs, les instructions sur [la page principale](/guide/#🚀-installation) fonctionneront bien. Cependant, pour certaines plateformes plus spécialisées, des instructions différentes sont nécessaires.
 
-Il y a tellement de plates-formes, qu'il aurait été déraisonnable de les faire apparaître dans le README principal, voici donc quelques instructions d'installation supplémentaires pour celles-ci, écrient par la commaunauté. La vôtre n'est-elle pas là ? S'il vous plaît, ajoutez-la ici pour les suivants !
+Il y a tellement de plates-formes, qu'il aurait été déraisonnable de les faire apparaître dans le README principal, voici donc quelques instructions d'installation supplémentaires pour celles-ci, écrites par la communauté. La vôtre n'est pas là ? S'il vous plaît, ajoutez-la ici pour les suivants !
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### Pré-requis
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Rendez-vous sur la [page d'installation de Chocolatey](https://chocolatey.org/install) et suivez leurs instructions pour installer Chocolatey.
 
 ### Installation
 
@@ -47,14 +47,14 @@ nix-env -iA nixos.starship
 
 #### Déclaration, utilisateur unique, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Activez le module `programs.starship` dans votre fichier `home.nix`, et ajoutez vos paramètres
 
 ```nix
 {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuration écrite dans ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
@@ -69,7 +69,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+puis lancez
 
 ```sh
 home-manager switch
