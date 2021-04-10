@@ -32,7 +32,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
 - Une [Nerd Font](https://www.nerdfonts.com/) est installée et activée dans votre terminal.
 
-### Quick Install
+### Installation rapide
 
 1. Installer le binaire **starship** :
 
