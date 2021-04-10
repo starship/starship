@@ -397,7 +397,7 @@ style = "bold yellow"
 
 ### 設定例
 
-#### With custom error shape
+#### エラーの形式をカスタムする
 
 ```toml
 # ~/.config/starship.toml
@@ -407,7 +407,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### エラーの形式をカスタムしない
 
 ```toml
 # ~/.config/starship.toml
