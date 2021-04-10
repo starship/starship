@@ -1316,7 +1316,7 @@ The `java` module shows the currently installed version of Java. By default the 
 | Option              | Default                                                                                                   | Description                                                               |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                                                |
-| `version_format`.   | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
@@ -1747,9 +1747,9 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 | Option              | Default                              | Description                                                                                          |
 | ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                           |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
 | `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                         |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                         |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                          |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                            |
 | `style`             | `"bold green"`                       | The style for the module.                                                                            |
@@ -2041,7 +2041,7 @@ By default the module will be shown if any of the following conditions are met:
 | Option               | Default                                                                                                      | Description                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | The format for the module.                                                             |
-| `version_format`.    | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
+| `version_format`     | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
@@ -2109,7 +2109,7 @@ By default the `ruby` module shows the currently installed version of Ruby. The 
 | Option              | Default                              | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
@@ -2148,7 +2148,7 @@ By default the `rust` module shows the currently installed version of Rust. The 
 | Option              | Default                              | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
-| `version_format`.   | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
 | `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
