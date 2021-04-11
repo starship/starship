@@ -2,6 +2,9 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::typescript::TypeScriptConfig;
 use crate::formatter::StringFormatter;
+use crate::utils;
+
+use serde_json as json;
 
 /// Creates a module with the current TypeScript version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -10,20 +13,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let should_use = context.try_begin_scan()?.set_extensions(&["ts"]).is_match();
     let is_deno_project = context
         .try_begin_scan()?
-        .set_files(&["mod.ts", "mod.js", "deps.ts", "deps.js"])
+        .set_files(&["mod.ts", "deps.ts"])
         .is_match();
     let is_node_project = context
         .try_begin_scan()?
         .set_files(&["package.json"])
         .is_match();
     let global = context.exec_cmd("tsc", &["--version"]).is_some();
-
     if !should_use && !is_deno_project && !is_node_project && global {
         return None;
     };
-    let cmd = if is_node_project {
-        "./node_modules/.bin/tsc"
-    } else if is_deno_project {
+    let cmd = if is_deno_project {
         "deno"
     } else {
         "tsc"
@@ -39,7 +39,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => context
+                "version" => {
+                    if is_node_project {
+                        let package_json_result: json::Result<json::Value> = json::from_str(&utils::read_file(context.current_dir.join(&"package.json")).unwrap());
+                        let package_json = package_json_result.unwrap();
+                        let deps = package_json.get("dependencies")?.get("typescript")?.as_str();
+                        let dev_deps = package_json.get("devDependencies")?.get("typescript")?.as_str();
+                        if let Some(deps_v) = deps {
+                            Some(format!("v{}", deps_v)).map(Ok)
+                        } else if let Some(dev_deps_v) = dev_deps {
+                            Some(format!("v{}", dev_deps_v)).map(Ok)
+                        } else {
+                            None
+                        }
+                    } else {
+                    context
                     .exec_cmd(cmd, &["--version"])
                     .and_then(|output| {
                         if output.stdout.contains("deno") {
@@ -48,7 +62,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             parse_tsc_version(output.stdout.trim())
                         }
                     })
-                    .map(Ok),
+                    .map(Ok)
+                }
+                },
                 _ => None,
             })
             .parse(None)
