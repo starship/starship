@@ -51,6 +51,7 @@ mod status;
 mod swift;
 mod terraform;
 mod time;
+mod typescript;
 mod username;
 mod utils;
 mod vagrant;
@@ -124,6 +125,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "status" => status::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
+            "typescript" => typescript::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
             "vagrant" => vagrant::module(context),
@@ -203,6 +205,7 @@ pub fn description(module: &str) -> &'static str {
         "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
+        "typescript" => "Get the currently installed version of TypeScript",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",
