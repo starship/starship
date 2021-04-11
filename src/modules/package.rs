@@ -2,7 +2,6 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
-use std::time::Duration;
 
 use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
@@ -60,8 +59,8 @@ fn extract_vlang_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn extract_nimble_version() -> Option<String> {
-    let cmd_output = utils::exec_cmd("nimble", &["dump", "--json"], Duration::from_millis(500))?;
+fn extract_nimble_version(context: &Context) -> Option<String> {
+    let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
 
     let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
     let raw_version = nimble_json.get("version")?.as_str()?;
@@ -220,7 +219,7 @@ fn get_package_version(context: &Context, config: &PackageConfig) -> Option<Stri
         .set_extensions(&["nimble"])
         .is_match()
     {
-        extract_nimble_version()
+        extract_nimble_version(context)
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
         extract_package_version(&package_json, config.display_private)
     } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
