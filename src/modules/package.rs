@@ -259,7 +259,7 @@ fn format_version(version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -294,6 +294,86 @@ mod tests {
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_nimble_package_version() -> io::Result<()> {
+        let config_name = "test_project.nimble";
+
+        let config_content = r##"
+version = "0.1.0"
+author = "Mr. nimble"
+description = "A new awesome nimble package"
+license = "MIT"
+"##;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "nimble dump --json",
+                Some(CommandOutput {
+                    stdout: r##"
+{
+  "name": "test_project.nimble",
+  "version": "0.1.0",
+  "author": "Mr. nimble",
+  "desc": "A new awesome nimble package",
+  "license": "MIT",
+  "skipDirs": [],
+  "skipFiles": [],
+  "skipExt": [],
+  "installDirs": [],
+  "installFiles": [],
+  "installExt": [],
+  "requires": [],
+  "bin": [],
+  "binDir": "",
+  "srcDir": "",
+  "backend": "c"
+}
+"##
+                    .to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+
+        let expected = Some(format!(
+            "is {} ",
+            Color::Fixed(208).bold().paint(format!("📦 {}", "v0.1.0"))
+        ));
+
+        assert_eq!(actual, expected);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_nimble_package_version_for_non_nimble_directory() -> io::Result<()> {
+        // Only create an empty directory. There's no .nibmle file for this case.
+        let project_dir = create_project_dir()?;
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd("nimble dump --json", None)
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(actual, expected);
         project_dir.close()
     }
 
