@@ -23,7 +23,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if !should_use && !is_deno_project && !is_node_project && global {
         return None;
     };
-    let cmd = if is_deno_project { "deno" } else { "tsc" };
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -37,26 +36,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     if is_node_project {
-                        let package_json_result: json::Result<json::Value> = json::from_str(
-                            &utils::read_file(context.current_dir.join(&"package.json")).unwrap(),
-                        );
-                        let package_json = package_json_result.unwrap();
-                        let deps = package_json
-                            .get("dependencies")?
-                            .get("typescript")?
-                            .as_str();
-                        let dev_deps = package_json
-                            .get("devDependencies")?
-                            .get("typescript")?
-                            .as_str();
+                        let file_contents =
+                            &utils::read_file(context.current_dir.join(&"package.json")).unwrap();
+                        let package_json: json::Value = json::from_str(file_contents).ok()?;
+                        let deps = package_json["dependencies"]["typescript"].as_str();
+                        let dev_deps = package_json["devDependencies"]["typescript"].as_str();
                         if let Some(deps_v) = deps {
-                            Some(format!("v{}", deps_v)).map(Ok)
+                            Some(format!("v{}", deps_v.to_owned())).map(Ok)
                         } else if let Some(dev_deps_v) = dev_deps {
-                            Some(format!("v{}", dev_deps_v)).map(Ok)
+                            Some(format!("v{}", dev_deps_v.to_owned())).map(Ok)
                         } else {
                             None
                         }
                     } else {
+                        let cmd = if is_deno_project { "deno" } else { "tsc" };
                         context
                             .exec_cmd(cmd, &["--version"])
                             .and_then(|output| {
