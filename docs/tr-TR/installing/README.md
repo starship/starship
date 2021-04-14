@@ -3,7 +3,7 @@
 Starship'i kurmak için, 2 şeye ihtiyacınız var:
 
 1. **Starship** binary dosyalarını bilgisayarınıza alın
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. Kabuğunuza Starship binary scriptini kullanmasını söyleyin
 
 For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
 
@@ -69,7 +69,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+sonra çalıştırın
 
 ```sh
 home-manager switch
