@@ -5,17 +5,17 @@ Starship'i kurmak için, 2 şeye ihtiyacınız var:
 1. **Starship** binary dosyalarını bilgisayarınıza alın
 1. Kabuğunuza Starship binary scriptini kullanmasını söyleyin
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Çoğu kullanıcı için, [ana sayfadaki](/guide/#🚀-installation) talimatlar gayet iyi çalışacaktır. Fakat, bazı özel platformlar için, farklı talimatlara ihtiyaç vardır.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Birçok platform var ki ana sisteme uymuyorlar. README.md belgesi ile diğer platformlar için bazı kurulum talimatları. Seninki burada değil mi? Anlarsan lütfen buraya ekle!
 
 ## [Chocolatey ](https://chocolatey.org)
 
 ### Ön gereklilikler
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+[Chocolatey kurulum sayfasına](https://chocolatey.org/install) gidin ve Chocolatey'i yüklemek için talimatları izleyin.
 
-### Installation
+### Kurulum
 
 ```powershell
 choco install starship
@@ -23,13 +23,13 @@ choco install starship
 
 ## [termux](https://termux.com)
 
-### Prerequisites
+### Ön gereklilikler
 
 ```sh
 pkg install getconf
 ```
 
-### Installation
+### Kurulum
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
@@ -37,17 +37,17 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Binary Alma
 
-#### Imperatively
+#### Zorunlu olarak
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Açıklayıcı, tek kullanıcı, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+`home.nix` dosyanızda, `programs.starship` modülünü etkinleştirin, ayarlarınızı ekleyin
 
 ```nix
 {
@@ -75,7 +75,7 @@ sonra çalıştırın
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### NixOS ile sistem genelinde, açıklama
 
 Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
