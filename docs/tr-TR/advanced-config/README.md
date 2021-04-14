@@ -1,10 +1,10 @@
 # Gelişmiş Yapılandırma
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Starship çok yönlü bir kabuk olsa da, yine de belirli şeyleri yapması için `starship.toml`'u düzenlemek gerekebilir. Bu sayfa, Starship'i daha fazla yapılandırma tekniklerini anlatır.
 
-::: warning
+::: uyarı
 
-The configurations in this section are subject to change in future releases of Starship.
+Bu bölümdeki yapılandırmalar, Starship'in gelecekteki sürümlerinde değişiklik gösterebilir.
 
 :::
 
