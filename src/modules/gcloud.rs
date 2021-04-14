@@ -96,6 +96,16 @@ fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     }
 }
 
+fn map_account(account: String) -> (Option<String>, Option<String>) {
+    match account.find('@') {
+        Some(index) => {
+            let (account, at) = account.split_at(index);
+            (Some(account.to_owned()), Some(at.to_owned()))
+        }
+        None => (Some(account), None),
+    }
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("gcloud");
     let config: GcloudConfig = GcloudConfig::try_load(module.config);
@@ -121,6 +131,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
 
+    let (account, at) = match gcloud_account {
+        Some(account) => map_account(account),
+        None => (None, None),
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -132,7 +147,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "account" => gcloud_account.as_ref().map(Ok),
+                "account" => account.as_ref().map(Ok),
+                "account_at" => at.as_ref().map(Ok),
                 "project" => gcloud_project.as_ref().map(Ok),
                 "region" => mapped_region.as_ref().map(Ok),
                 "active" => gcloud_active.as_ref().map(Ok),

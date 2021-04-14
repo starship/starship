@@ -15,7 +15,7 @@ pub struct GcloudConfig<'a> {
 impl<'a> Default for GcloudConfig<'a> {
     fn default() -> Self {
         GcloudConfig {
-            format: "on [$symbol$account(\\($region\\))]($style) ",
+            format: "on [$symbol$account$account_at(\\($region\\))]($style) ",
             symbol: "☁️ ",
             style: "bold blue",
             disabled: false,
