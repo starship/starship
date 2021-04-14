@@ -10,7 +10,7 @@ Bu bölümdeki yapılandırmalar, Starship'in gelecekteki sürümlerinde değiş
 
 ## Bash'e Özel ön-komut istemi(pre-prompt) ve ön-çalıştırma(pre-execution) Komutları
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash, çoğu diğer kabuklar gibi resmi bir preexec/precmd çerçevesine sahip değildir. Bu yüzden, `Bash'i` tamamen özelleştirmek zordur. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
