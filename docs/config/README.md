@@ -1001,14 +1001,15 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Variables
 
-| Variable | Example           | Description                                                        |
-| -------- | ----------------- | ------------------------------------------------------------------ |
-| region   | `us-central1`     | The current GCP region                                             |
-| account  | `foo@example.com` | The current GCP profile                                            |
-| project  |                   | The current GCP project                                            |
-| active   | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol   |                   | Mirrors the value of option `symbol`                               |
-| style\*  |                   | Mirrors the value of option `style`                                |
+| Variable   | Example           | Description                                                        |
+| --------   | ----------------- | ------------------------------------------------------------------ |
+|   region   |   `us-central1`   | The current GCP region                                             |
+|   account  |      `foo`        | The current GCP profile                                            |
+| account_at |   `@example.com`  | The current GCP profile at                                         |
+|   project  |                   | The current GCP project                                            |
+|   active   |     `default`     | The active config name written in `~/.config/gcloud/active_config` |
+|   symbol   |                   | Mirrors the value of option `symbol`                               |
+|   style\*  |                   | Mirrors the value of option `style`                                |
 
 \*: This variable can only be used as a part of a style string
 
