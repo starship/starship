@@ -120,8 +120,8 @@ unpack() {
 
   case "$archive" in
     *.tar.gz)
-      flags=$(test -n "${VERBOSE-}" && echo "-v" || echo "")
-      ${sudo} tar "${flags}" -xzf "${archive}" -C "${bin_dir}"
+      flags=$(test -n "${VERBOSE-}" && echo "-xzvf" || echo "-xzf")
+      ${sudo} tar "${flags}" "${archive}" -C "${bin_dir}"
       return 0
       ;;
     *.zip)

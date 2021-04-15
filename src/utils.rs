@@ -62,6 +62,8 @@ Default target: x86_64-apple-macosx\n",
             deno 1.8.3 (release, x86_64-pc-windows-msvc)
             v8 9.0.257.3
             typescript 4.2.2"),
+        "deno -V" => Some(CommandOutput {
+            stdout: String::from("deno 1.8.3\n"),
             stderr: String::default()
         }),
         "dummy_command" => Some(CommandOutput {
