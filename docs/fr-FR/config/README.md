@@ -173,7 +173,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Est équivalent à
 format = """
 $username\
 $hostname\
