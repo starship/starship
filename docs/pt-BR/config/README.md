@@ -190,6 +190,7 @@ $docker_context\
 $package\
 $cmake\
 $dart\
+$deno\
 $dotnet\
 $elixir\
 $elm\
@@ -618,6 +619,40 @@ The `dart` module shows the currently installed version of Dart. By default the 
 
 [dart]
 format = "via [🔰 $version](bold red) "
+```
+
+## Deno
+
+The `deno` module shows you your currently installed version of Deno. By default the module will be shown if any of the following conditions are met:
+- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+
+### Opções
+
+| Option              | Padrão                                       | Descrição                                       |
+| ------------------- | -------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                      |
+| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno |
+| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.    |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.       |
+| `style`             | `"green bold"`                               | O estilo do módulo.                             |
+| `disabled`          | `false`                                      | Disables the `deno` module.                     |
+
+### Variables
+
+| Variável  | Exemplo  | Descrição                            |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.8.3` | The version of `deno`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[deno]
+format = "via [🦕 $version](green bold) "
 ```
 
 ## Diretório
@@ -1511,7 +1546,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Quebra de linha
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
@@ -1570,7 +1605,7 @@ The `lua` module shows the currently installed version of Lua. By default the mo
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Uso de memória
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
