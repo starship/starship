@@ -3,10 +3,6 @@ use crate::formatter::StringFormatter;
 
 use super::{Context, Module, RootModuleConfig};
 
-use regex::Regex;
-
-const SCALA_VERSION_PATTERN: &str = "version[\\s](?P<version>[^\\s]+)";
-
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("scala");
     let config: ScalaConfig = ScalaConfig::try_load(module.config);
@@ -65,9 +61,11 @@ fn get_scala_version(context: &Context) -> Option<String> {
 }
 
 fn parse_scala_version(scala_version: &str) -> Option<String> {
-    let re = Regex::new(SCALA_VERSION_PATTERN).ok()?;
-    let captures = re.captures(scala_version)?;
-    let version = &captures["version"];
+    let version = scala_version
+        // split into ["Scala", "compiler", "version", "2.13.5", "--", ...]
+        .split_whitespace()
+        // take "2.13.5"
+        .nth(3)?;
 
     Some(format!("v{}", &version))
 }
