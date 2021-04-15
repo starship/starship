@@ -82,10 +82,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(mut segments) => {
             let mut i = 0;
-            let keep = &segments.clone().into_iter().map(|_v| true).collect::<Vec<bool>>();
+            let keep = &segments
+                .clone()
+                .into_iter()
+                .map(|_v| true)
+                .collect::<Vec<bool>>();
             &segments.retain(|_| (keep[i], i += 1).0);
             segments
-        },
+        }
         Err(error) => {
             log::warn!("Error in module `typescript`:\n{}", error);
             return None;
