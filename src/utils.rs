@@ -212,6 +212,10 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("Terraform v0.12.14\n"),
             stderr: String::default(),
         }),
+        "tsc --version" => Some(CommandOutput {
+            stdout: String::from("Version 4.2.0\n"),
+            stderr: String::default()
+        }),
         s if s.starts_with("erl -noshell -eval") => Some(CommandOutput {
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),

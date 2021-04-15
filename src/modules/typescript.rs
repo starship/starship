@@ -3,8 +3,9 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::typescript::TypeScriptConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
-
 use serde_json as json;
+#[allow(unused_imports)]
+use std::io::Write;
 
 /// Creates a module with the current TypeScript version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -42,9 +43,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         let deps = package_json["dependencies"]["typescript"].as_str();
                         let dev_deps = package_json["devDependencies"]["typescript"].as_str();
                         if let Some(deps_v) = deps {
-                            Some(format!("v{}", deps_v.to_owned())).map(Ok)
+                            Some(
+                                format!("v{}", deps_v.to_owned())
+                                    .trim()
+                                    .to_owned()
+                                    .replace(" ", ""),
+                            )
+                            .map(Ok)
                         } else if let Some(dev_deps_v) = dev_deps {
-                            Some(format!("v{}", dev_deps_v.to_owned())).map(Ok)
+                            Some(
+                                format!("v{}", dev_deps_v.to_owned())
+                                    .trim()
+                                    .to_owned()
+                                    .replace(" ", ""),
+                            )
+                            .map(Ok)
                         } else {
                             None
                         }
@@ -67,7 +80,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .parse(None)
     });
     module.set_segments(match parsed {
-        Ok(segments) => segments,
+        Ok(mut segments) => {
+            &segments.iter_mut().for_each(|seg| {
+                let mut n = 0;
+                seg.value.retain(|c| {
+                    if c.is_whitespace() {
+                        dbg!(n);
+                        n = n + 1;
+                        dbg!(n);
+                        if n == 3 {
+                            dbg!("n == 3");
+                            false
+                        } else {
+                            true
+                        }
+                    } else {
+                        true
+                    }
+                });
+            });
+            segments
+        },
         Err(error) => {
             log::warn!("Error in module `typescript`:\n{}", error);
             return None;
@@ -88,7 +121,9 @@ fn parse_deno_version(deno_version: &str) -> Option<String> {
         // split by whitespace
         .split_whitespace()
         // return "4.2.2"
-        .nth(1)?;
+        .nth(1)?
+        // trim
+        .trim();
 
     Some(format!("v{}", version))
 }
@@ -98,7 +133,9 @@ fn parse_tsc_version(supplied_version: &str) -> Option<String> {
         // split into ["Typescript", "4.2.2"]
         .split_whitespace()
         // get 2nd value
-        .nth(1)?;
+        .nth(1)?
+        // trim
+        .trim();
 
     Some(format!("v{}", version))
 }
@@ -110,6 +147,7 @@ mod tests {
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
+    use std::io::Write;
 
     #[test]
     fn test_parse_deno_version() {
@@ -133,11 +171,38 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_ts_files() -> io::Result<()> {
+    fn folder_with_deno_ts_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mod.ts"))?.sync_all()?;
         let actual = ModuleRenderer::new("typescript").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" ")));
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v4.2.2")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_package_json_ts_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("hi.ts"))?.sync_all()?;
+        let mut file = File::create(dir.path().join("package.json"))?;
+        file.sync_all()?;
+        file.write(
+            serde_json::json!({ "dependencies": { "typescript": "4.2.1" } })
+                .to_string()
+                .as_bytes(),
+        )?;
+        let actual = ModuleRenderer::new("typescript").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v4.2.1")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_ts_files_using_global() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("hi.ts"))?.sync_all()?;
+        let actual = ModuleRenderer::new("typescript").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v4.2.0")));
         assert_eq!(expected, actual);
         dir.close()
     }
