@@ -89,6 +89,13 @@ fn get_config_dir(context: &Context) -> Option<PathBuf> {
     Some(config_dir)
 }
 
+fn get_gcloud_project(context: &Context, current_config: &Path) -> Option<Project> {
+    match context.get_env("CLOUDSDK_CORE_PROJECT") {
+        Some(project) => Some(project),
+        None => get_gcloud_project_from_config(current_config),
+    }
+}
+
 fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     match aliases.get(&region) {
         None => region.to_string(),
@@ -102,7 +109,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let config_path = get_current_config_path(context)?;
     let gcloud_account = get_gcloud_account_from_config(&config_path);
-    let gcloud_project = get_gcloud_project_from_config(&config_path);
+    let gcloud_project = get_gcloud_project(context, &config_path);
     let gcloud_region = get_gcloud_region_from_config(&config_path);
     let config_dir = get_config_dir(context)?;
     let gcloud_active: Option<Active> = get_active_config(context, &config_dir);
@@ -299,6 +306,36 @@ project = abc
             })
             .collect();
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ abc")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn project_set_in_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations/config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"[core]
+project = abc
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CORE_PROJECT", "env_project")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ env_project")));
 
         assert_eq!(actual, expected);
         dir.close()
