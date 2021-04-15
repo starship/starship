@@ -220,6 +220,7 @@ $rust\
 $scala\
 $swift\
 $terraform\
+$typescript\
 $vagrant\
 $zig\
 $nix_shell\
@@ -2590,6 +2591,46 @@ format = "[🏎💨 $version$workspace]($style) "
 
 [terraform]
 format = "[🏎💨 $workspace]($style) "
+```
+
+## TypeScript
+
+The `typescript` module shows the currently installed version of TypeScript.
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory has `deps.ts` or `mod.ts` - this will get Deno version.
+- A locally installed version of `typescript` exists in the package.json
+- If not, a global version will be retrived if installed globally. 
+
+### Options
+
+| Option              | Default                                           | Description                                     |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
+| `symbol`            | `" "`                                           | A format string representing the symbol of TS |
+| `detect_extensions` | `['ts']`                                        | Which extensions should trigger this module.    |
+| `detect_files`      | `[]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
+| `style`             | `"cyan bold"`                                     | The style for the module.                       |
+| `disabled`          | `false`                                           | Disables the `dart` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v4.2.0` | The version of `typescript`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[typescript]
+format = "via [ $version](bold red) "
 ```
 
 ## Time
