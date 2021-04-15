@@ -81,24 +81,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
     module.set_segments(match parsed {
         Ok(mut segments) => {
-            &segments.iter_mut().for_each(|seg| {
-                let mut n = 0;
-                seg.value.retain(|c| {
-                    if c.is_whitespace() {
-                        dbg!(n);
-                        n = n + 1;
-                        dbg!(n);
-                        if n == 3 {
-                            dbg!("n == 3");
-                            false
-                        } else {
-                            true
-                        }
-                    } else {
-                        true
-                    }
-                });
-            });
+            let mut i = 0;
+            let keep = &segments.clone().into_iter().map(|_v| true).collect::<Vec<bool>>();
+            &segments.retain(|_| (keep[i], i += 1).0);
             segments
         },
         Err(error) => {
