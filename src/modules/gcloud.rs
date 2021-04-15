@@ -128,7 +128,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .unwrap_or(region)
                     })
                     .map(Ok),
-                "project" => gcloud_context.get_project().map(Ok),
+                "project" => context
+                    .get_env("CLOUDSDK_CORE_PROJECT")
+                    .or_else(|| gcloud_context.get_project())
+                    .map(Ok),
                 "active" => Some(Ok(gcloud_context.config_name.to_owned())),
                 _ => None,
             })
@@ -297,6 +300,40 @@ project = abc
             })
             .collect();
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  abc")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn project_set_in_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations").join("config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"\
+[core]
+project = abc
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CORE_PROJECT", "env_project")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Blue.bold().paint("☁️  env_project")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
