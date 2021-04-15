@@ -87,7 +87,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .into_iter()
                 .map(|_v| true)
                 .collect::<Vec<bool>>();
-            &segments.retain(|_| (keep[i], i += 1).0);
+            segments.retain(|_| -> bool {
+                let ret = keep[i];
+                i += 1;
+                ret
+            });
             segments
         }
         Err(error) => {
@@ -102,7 +106,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn parse_deno_version(deno_version: &str) -> Option<String> {
     let version = deno_version
         // split into multi lines
-        .split("\n")
+        .split('\n')
         // get 3rd line
         .nth(2)
         // unwrap
@@ -175,7 +179,7 @@ mod tests {
         File::create(dir.path().join("hi.ts"))?.sync_all()?;
         let mut file = File::create(dir.path().join("package.json"))?;
         file.sync_all()?;
-        file.write(
+        file.write_all(
             serde_json::json!({ "dependencies": { "typescript": "4.2.1" } })
                 .to_string()
                 .as_bytes(),
