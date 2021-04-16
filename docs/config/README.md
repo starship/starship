@@ -155,7 +155,7 @@ This is the list of prompt-wide configuration options.
 | -------------- | ------------------------------ | ----------------------------------------------------- |
 | `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
 | `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Inserts blank line between shell prompts.               |
+| `add_newline`  | `true`                         | Inserts blank line between shell prompts.             |
 
 ### Example
 
@@ -257,13 +257,13 @@ is read from the `AWSU_PROFILE` env var.
 
 ### Options
 
-| Option           | Default                                        | Description                                                     |
-| ---------------- | ---------------------------------------------- | --------------------------------------------------------------- |
+| Option           | Default                                           | Description                                                     |
+| ---------------- | ------------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current AWS profile.      |
-| `region_aliases` |                                                | Table of region aliases to display in addition to the AWS name. |
-| `style`          | `"bold yellow"`                                | The style for the module.                                       |
-| `disabled`       | `false`                                        | Disables the `aws` module.                                      |
+| `symbol`         | `"☁️ "`                                            | The symbol used before displaying the current AWS profile.      |
+| `region_aliases` |                                                   | Table of region aliases to display in addition to the AWS name. |
+| `style`          | `"bold yellow"`                                   | The style for the module.                                       |
+| `disabled`       | `false`                                           | Disables the `aws` module.                                      |
 
 ### Variables
 
@@ -459,7 +459,7 @@ the module will be activated if any of the following conditions are met:
 | Option              | Default                                | Description                                  |
 | ------------------- | -------------------------------------- | -------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                   |
-| `symbol`            | `"△ "`                                | The symbol used before the version of cmake. |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake. |
 | `detect_extensions` | `[]`                                   | Which extensions should trigger this module  |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
@@ -544,14 +544,14 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Options
 
-| Option              | Default                            | Description                                                                                                                                                                                                 |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"🅒 "`                             | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"`                     | The style for the module.                                                                                                                                                                                   |
+| Option              | Default                                | Description                                                                                                                                                                                                 |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"`                         | The style for the module.                                                                                                                                                                                   |
 | `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                                                                                  |
-| `ignore_base`       | `true`                             | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                            | Disables the `conda` module.                                                                                                                                                                                |
+| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
+| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Variables
 
@@ -663,10 +663,10 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------- | ----------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
 | `symbol`            | `"🦕 "`                                           | A format string representing the symbol of Deno |
-| `detect_extensions` | `[]`                                        | Which extensions should trigger this module.    |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
-| `style`             | `"green bold"`                                     | The style for the module.                       |
+| `detect_extensions` | `[]`                                              | Which extensions should trigger this module.    |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]`      | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                              | Which folders should trigger this module.       |
+| `style`             | `"green bold"`                                    | The style for the module.                       |
 | `disabled`          | `false`                                           | Disables the `deno` module.                     |
 
 ### Variables
@@ -712,15 +712,15 @@ it would have been `nixpkgs/pkgs`.
 | `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                           |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                               |
-| --------------------------- | ------- | ------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                          |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.  |
+| Advanced Option             | Default | Description                                                                                                                                                            |
+| --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
+| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
@@ -1030,7 +1030,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | Option           | Default                                        | Description                                                     |
 | ---------------- | ---------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                        | The symbol used before displaying the current GCP profile.      |
+| `symbol`         | `"☁️ "`                                         | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                | Table of region aliases to display in addition to the GCP name. |
 | `style`          | `"bold blue"`                                  | The style for the module.                                       |
 | `disabled`       | `false`                                        | Disables the `gcloud` module.                                   |
@@ -1087,26 +1087,26 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option              | Default                          | Description                                                                              |
-| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote`| `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
-| `symbol`            | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`             | `"bold purple"`                  | The style for the module.                                                                |
-| `truncation_length` | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                   |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`     | `false`                         | Only show the branch name when not in a detached `HEAD` state.                             |
-| `disabled`          | `false`                          | Disables the `git_branch` module.                                                        |
+| Option               | Default                          | Description                                                                              |
+| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
+| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
+| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
+| `style`              | `"bold purple"`                  | The style for the module.                                                                |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
+| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
+| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
-| Variable        | Example  | Description                                                                                          |
-| ----------------| -------- | ---------------------------------------------------------------------------------------------------- |
-| branch          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name     | `origin` | The remote name.                                                                                     |
-| remote_branch   | `master` | The name of the branch tracked on `remote_name`.                                                     |
-| symbol          |          | Mirrors the value of option `symbol`                                                                 |
-| style\*         |          | Mirrors the value of option `style`                                                                  |
+| Variable         | Example  | Description                                                                                            |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch           | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name      | `origin` | The remote name.                                                                                       |
+| remote_branch    | `master` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol           |          | Mirrors the value of option `symbol`                                                                   |
+| style\*          |          | Mirrors the value of option `style`                                                                    |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1127,15 +1127,15 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Options
 
-| Option               | Default                                        | Description                                           |
-| -------------------- | ---------------------------------------------- | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                                            | The length of the displayed git commit hash.          |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                            |
-| `style`              | `"bold green"`                                 | The style for the module.                             |
+| Option               | Default                                        | Description                                             |
+| -------------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| `commit_hash_length` | `7`                                            | The length of the displayed git commit hash.            |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                              |
+| `style`              | `"bold green"`                                 | The style for the module.                               |
 | `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
-| `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.     |
-| `tag_symbol`         | `"🏷 "`                                        | Tag symbol prefixing the info shown                   |
-| `disabled`           | `false`                                        | Disables the `git_commit` module.                     |
+| `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.       |
+| `tag_symbol`         | `"🏷 "`                                        | Tag symbol prefixing the info shown                     |
+| `disabled`           | `false`                                        | Disables the `git_commit` module.                       |
 
 ### Variables
 
@@ -1540,7 +1540,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
-| `symbol`            | `"🅺 "`                              | A format string representing the symbol of Kotlin.                            |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `"bold blue"`                        | The style for the module.                                                     |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
@@ -1694,13 +1694,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option      | Default                | Description                                              |
-| ----------- | ---------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                   | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "`                                     | The format for the module. |
-| `symbol`    | `"🐏"`                 | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`  | The style for the module.                                |
-| `disabled`  | `true`                 | Disables the `memory_usage` module.                      |
+| Option      | Default                                        | Description                                              |
+| ----------- | ---------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                          | The style for the module.                                |
+| `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -1739,7 +1739,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                    |
 | `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                  |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
@@ -1816,7 +1816,7 @@ The module will be shown when inside a nix-shell environment.
 | Option       | Default                                      | Description                                           |
 | ------------ | -------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
-| `symbol`     | `"❄️ "`                                      | A format string representing the symbol of nix-shell. |
+| `symbol`     | `"❄️ "`                                       | A format string representing the symbol of nix-shell. |
 | `style`      | `"bold blue"`                                | The style for the module.                             |
 | `impure_msg` | `"impure"`                                   | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                     | A format string shown when the shell is pure.         |
@@ -2040,15 +2040,15 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                              | Description                                           |
-| -------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`             | `"via [$symbol($version )]($style)"` | The format string for the module.                     |
-| `symbol`             | `"🐪 "`                              | The symbol used before displaying the version of Perl |
-| `detect_extensions`  | `["pl", "pm", "pod"]`                | Which extensions should trigger this module.          |
-| `detect_files`       | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module. |
-| `detect_folders`     | `[]`                                 | Which folders should trigger this module.             |
-| `style`              | `"bold 149"`                         | The style for the module.                             |
-| `disabled`           | `false`                              | Disables the `perl` module.                           |
+| Option               | Default                                                                                                  | Description                                           |
+| -------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `format`             | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
+| `symbol`             | `"🐪 "`                                                                                                  | The symbol used before displaying the version of Perl |
+| `detect_extensions`  | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this module.          |
+| `detect_files`       | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.           |
+| `detect_folders`     | `[]`                                                                                                     | Which folders should trigger this module.             |
+| `style`              | `"bold 149"`                                                                                             | The style for the module.                             |
+| `disabled`           | `false`                                                                                                  | Disables the `perl` module.                           |
 
 ### Variables
 
@@ -2328,15 +2328,15 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                    | Description                                      |
-| ------------------- | -------------------------------------------| -----------------------------------------------  |
-| `format`            | `"via [${symbol}(${version} )]($style)"`   | The format for the module.                       |
-| `detect_extensions` | `["sbt", "scala"]`                         | Which extensions should trigger this module.     |
-| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`    | Which filenames should trigger this module.      |
-| `detect_folders`    | `[".metals"]`                              | Which folders should trigger this modules.       |
-| `symbol`            | `"🆂 "`                                    | A format string representing the symbol of Scala.   |
-| `style`             | `"red dimmed"`                             | The style for the module.                        |
-| `disabled`          | `false`                                    | Disables the `scala` module.                     |
+| Option              | Default                                     | Description                                       |
+| ------------------- | ------------------------------------------- | ------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`    | The format for the module.                        |
+| `detect_extensions` | `["sbt", "scala"]`                          | Which extensions should trigger this module.      |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`     | Which filenames should trigger this module.       |
+| `detect_folders`    | `[".metals"]`                               | Which folders should trigger this modules.        |
+| `symbol`            | `"🆂 "`                                      | A format string representing the symbol of Scala. |
+| `style`             | `"red dimmed"`                              | The style for the module.                         |
+| `disabled`          | `false`                                     | Disables the `scala` module.                      |
 
 ### Variables
 
@@ -2370,7 +2370,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                 | Default       | Description |
+| Option                 | Default       | Description                                   |
 | ---------------------- | ------------- | --------------------------------------------- |
 | `bash_indicator`       | `bsh`         | A format string used to represent bash.       |
 | `fish_indicator`       | `fsh`         | A format string used to represent fish.       |
@@ -2406,20 +2406,20 @@ set to a number and meets or exceeds the specified threshold.
 
 ### Options
 
-| Option      | Default                      | Description                             |
-| ----------- | ---------------------------- | --------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                      |
-| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.              |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`. |
+| Option      | Default                      | Description                                                   |
+| ----------- | ---------------------------- | ------------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                            |
+| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
+| `symbol`    | `"↕️ "`                       | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
-| `style`     | `"bold yellow"`              | The style for the module.               |
-| `disabled`  | `true`                       | Disables the `shlvl` module.            |
+| `style`     | `"bold yellow"`              | The style for the module.                                     |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
 ### Variables
 
 | Variable | Example | Description                          |
 | -------- | ------- | ------------------------------------ |
-| shlvl    | `3`     | The current value of `SHLVL`           |
+| shlvl    | `3`     | The current value of `SHLVL`         |
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
@@ -2487,18 +2487,18 @@ This module is not supported on elvish shell.
 
 ### Options
 
-| Option                    | Default                     | Description                                            |
-| ------------------------- | --------------------------- | ------------------------------------------------------ |
+| Option                    | Default                       | Description                                            |
+| ------------------------- | ----------------------------- | ------------------------------------------------------ |
 | `format`                  | `"[$symbol$status]($style) "` | The format of the module                               |
-| `symbol`                  | `"✖"`                       | The symbol displayed on program error                  |
-| `not_executable_symbol`   | `"🚫"`                       | The symbol displayed when file isn't executable        |
-| `not_found_symbol`        | `"🔍"`                       | The symbol displayed when the command can't be found   |
-| `sigint_symbol`           | `"🧱"`                       | The symbol displayed on SIGINT (Ctrl + c)              |
-| `signal_symbol`           | `"⚡"`                       | The symbol displayed on any signal |
-| `style`                   | `"bold red"`                | The style for the module.                              |
-| `recognize_signal_code`   | `true`                      | Enable signal mapping from exit code                   |
-| `map_symbol`              | `false`                     | Enable symbols mapping from exit code                  |
-| `disabled`                | `true`                      | Disables the `status` module.                          |
+| `symbol`                  | `"✖"`                         | The symbol displayed on program error                  |
+| `not_executable_symbol`   | `"🚫"`                        | The symbol displayed when file isn't executable        |
+| `not_found_symbol`        | `"🔍"`                        | The symbol displayed when the command can't be found   |
+| `sigint_symbol`           | `"🧱"`                        | The symbol displayed on SIGINT (Ctrl + c)              |
+| `signal_symbol`           | `"⚡"`                        | The symbol displayed on any signal                     |
+| `style`                   | `"bold red"`                  | The style for the module.                              |
+| `recognize_signal_code`   | `true`                        | Enable signal mapping from exit code                   |
+| `map_symbol`              | `false`                       | Enable symbols mapping from exit code                  |
+| `disabled`                | `true`                        | Disables the `status` module.                          |
 
 ### Variables
 
@@ -2770,20 +2770,20 @@ The module will be shown only if a repository is currently in use.
 
 ### Options
 
-| Option     | Default                          | Description                                            |
-| ---------- | -------------------------------- | -------------------------------------------------------|
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
-| `style`    | `"bold yellow"`                  | The style for the module.                              |
-| `format`   | `"vcsh [$symbol$repo]($style) "` | The format for the module.                             |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+| Option     | Default                          | Description                                             |
+| ---------- | -------------------------------- | ------------------------------------------------------- |
+| `symbol`   |                                  | The symbol used before displaying the repository name.  |
+| `style`    | `"bold yellow"`                  | The style for the module.                               |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | The format for the module.                              |
+| `disabled` | `false`                          | Disables the `vcsh` module.                             |
 
 ### Variables
 
-| Variable | Example                                     | Description                          |
-| -------- | ------------------------------------------- | -------------------------------------|
-| repo     | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
-| symbol   |                                             | Mirrors the value of option `symbol` |
-| style\*  | `black bold dimmed`                         | Mirrors the value of option `style`  |
+| Variable | Example                                     | Description                           |
+| -------- | ------------------------------------------- | ------------------------------------- |
+| repo     | `dotfiles` if in a VCSH repo named dotfiles | The active repository name            |
+| symbol   |                                             | Mirrors the value of option `symbol`  |
+| style\*  | `black bold dimmed`                         | Mirrors the value of option `style`   |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2868,7 +2868,7 @@ If you have an interesting example not covered there, feel free to share it ther
 
 ### Options
 
-| Option        | Default                       | Description                                                                                                                |
+| Option        | Default                         | Description                                                                                                                |
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
