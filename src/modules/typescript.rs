@@ -80,20 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .parse(None)
     });
     module.set_segments(match parsed {
-        Ok(mut segments) => {
-            let mut i = 0;
-            let keep = &segments
-                .clone()
-                .into_iter()
-                .map(|_v| true)
-                .collect::<Vec<bool>>();
-            segments.retain(|_| -> bool {
-                let ret = keep[i];
-                i += 1;
-                ret
-            });
-            segments
-        }
+        Ok(segments) => segments[..3].to_vec(),
         Err(error) => {
             log::warn!("Error in module `typescript`:\n{}", error);
             return None;
