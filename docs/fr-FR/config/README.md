@@ -889,7 +889,7 @@ The `elm` module shows the currently installed version of Elm. Par défaut le mo
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## Variable d'environnement
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -1064,7 +1064,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Commit Git
 
 The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
@@ -1139,7 +1139,7 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git Status
+## Statut Git
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -1304,7 +1304,7 @@ The `helm` module shows the currently installed version of Helm. Par défaut le 
 format = "via [⎈ $version](bold white) "
 ```
 
-## Hostname
+## Nom d'hôte
 
 The `hostname` module shows the system hostname.
 
@@ -2511,7 +2511,7 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Temps
+## Date et Heure
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
