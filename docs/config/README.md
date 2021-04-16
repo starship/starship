@@ -1005,7 +1005,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | --------   | ----------------- | ------------------------------------------------------------------ |
 |   region   |   `us-central1`   | The current GCP region                                             |
 |   account  |      `foo`        | The current GCP profile                                            |
-| account_at |   `@example.com`  | The current GCP profile at                                         |
+|   domain   |   `example.com`   | The current GCP profile domain                                     |
 |   project  |                   | The current GCP project                                            |
 |   active   |     `default`     | The active config name written in `~/.config/gcloud/active_config` |
 |   symbol   |                   | Mirrors the value of option `symbol`                               |
