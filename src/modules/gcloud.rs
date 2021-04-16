@@ -1,5 +1,4 @@
-use once_cell::sync::Lazy;
-use std::ops::Deref;
+use once_cell::sync::OnceCell;
 use std::path::Path;
 use std::path::PathBuf;
 
@@ -9,37 +8,66 @@ use crate::configs::gcloud::GcloudConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
-fn get_gcloud_account_from_config(cloud_config: &str) -> Option<String> {
-    let account_line = cloud_config
-        .lines()
-        .skip_while(|line| *line != "[core]")
-        .skip(1)
-        .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("account"))?;
-    let account = account_line.splitn(2, '=').nth(1)?.trim();
-    Some(account.to_string())
+struct GcloudContext {
+    config_name: String,
+    config_path: PathBuf,
+    config: OnceCell<String>,
 }
 
-fn get_gcloud_project_from_config(cloud_config: &str) -> Option<String> {
-    let project_line = cloud_config
-        .lines()
-        .skip_while(|line| *line != "[core]")
-        .skip(1)
-        .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("project"))?;
-    let project = project_line.splitn(2, '=').nth(1)?.trim();
-    Some(project.to_string())
-}
+impl GcloudContext {
+    pub fn new(config_name: &str, config_path: &Path) -> Self {
+        Self {
+            config_name: config_name.to_string(),
+            config_path: PathBuf::from(config_path),
+            config: Default::default(),
+        }
+    }
 
-fn get_gcloud_region_from_config(cloud_config: &str) -> Option<String> {
-    let region_line = cloud_config
-        .lines()
-        .skip_while(|line| *line != "[compute]")
-        .skip(1)
-        .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("region"))?;
-    let region = region_line.splitn(2, '=').nth(1)?.trim();
-    Some(region.to_string())
+    fn get_config(&self) -> Option<&str> {
+        let config = self
+            .config
+            .get_or_try_init(|| utils::read_file(&self.config_path));
+        match config {
+            Ok(data) => Some(data),
+            Err(_) => None,
+        }
+    }
+
+    pub fn get_account(&self) -> Option<String> {
+        let config = self.get_config()?;
+        let account_line = config
+            .lines()
+            .skip_while(|line| *line != "[core]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("account"))?;
+        let account = account_line.splitn(2, '=').nth(1)?.trim();
+        Some(account.to_string())
+    }
+
+    pub fn get_project(&self) -> Option<String> {
+        let config = self.get_config()?;
+        let project_line = config
+            .lines()
+            .skip_while(|line| *line != "[core]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("project"))?;
+        let project = project_line.splitn(2, '=').nth(1)?.trim();
+        Some(project.to_string())
+    }
+
+    pub fn get_region(&self) -> Option<String> {
+        let config = self.get_config()?;
+        let region_line = config
+            .lines()
+            .skip_while(|line| *line != "[compute]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("region"))?;
+        let region = region_line.splitn(2, '=').nth(1)?.trim();
+        Some(region.to_string())
+    }
 }
 
 fn get_current_config(context: &Context) -> Option<(String, PathBuf)> {
@@ -75,11 +103,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("gcloud");
     let config: GcloudConfig = GcloudConfig::try_load(module.config);
 
-    let (active, config_path) = get_current_config(context)?;
-    let cloud_config = Lazy::new(|| match utils::read_file(config_path) {
-        Ok(data) => Some(data),
-        Err(_) => None,
-    });
+    let (config_name, config_path) = get_current_config(context)?;
+    let gcloud_context = GcloudContext::new(&config_name, &config_path);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -92,29 +117,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "account" => cloud_config
-                    .deref()
-                    .as_ref()
-                    .and_then(|cloud_config| get_gcloud_account_from_config(&cloud_config))
-                    .map(Ok),
-                "region" => cloud_config
-                    .deref()
-                    .as_ref()
-                    .and_then(|cloud_config| get_gcloud_region_from_config(&cloud_config))
-                    .and_then(|region| {
+                "account" => gcloud_context.get_account().map(Ok),
+                "region" => gcloud_context
+                    .get_region()
+                    .map(|region| {
                         config
                             .region_aliases
                             .get(&region)
-                            .map(|alias| String::from(*alias))
-                            .or(Some(region))
+                            .map(|alias| (*alias).to_owned())
+                            .unwrap_or(region)
                     })
                     .map(Ok),
-                "project" => cloud_config
-                    .deref()
-                    .as_ref()
-                    .and_then(|cloud_config| get_gcloud_project_from_config(&cloud_config))
-                    .map(Ok),
-                "active" => Some(Ok(active.to_owned())),
+                "project" => gcloud_context.get_project().map(Ok),
+                "active" => Some(Ok(gcloud_context.config_name.to_owned())),
                 _ => None,
             })
             .parse(None)
