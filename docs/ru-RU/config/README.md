@@ -1619,13 +1619,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Опции
 
-| Параметр    | По умолчанию                                  | Описание                                                 |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | Формат модуля.                                           |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | Стиль модуля.                                            |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Параметр    | По умолчанию                                    | Описание                                                 |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | Формат модуля.                                           |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | Стиль модуля.                                            |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
 ### Переменные
 
