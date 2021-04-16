@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# Migrer vers la v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+La version 0.45.0 de Starship contient des changements non rétro-compatibles, en préparation de la v1.0.0. Nous avons apporté des changements majeurs à la manière de configurer l'invite, afin de permettre une personnalisation bien plus poussée.
 
-This guide is intended to walk you through the breaking changes.
+Ce guide a pour but de vous guider à travers les changements majeurs qui ont eu lieu.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` a été remplacé par `format`, situé à la racine
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Avant la v0.45.0, `prompt_order` acceptait un tableau de noms de modules dans l'ordre dans lequel ils devaient être affichés par Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 accepte à la place une valeur de `format` permettant la personnalisation de l'invite en dehors des modules eux-mêmes.
 
-**Example pre-v0.45.0 configuration**
+**Exemple de configuration pré-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Exemple de configuration post-v0.45.0**
 
 ```toml
 format = """\
@@ -52,40 +52,40 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Les modules `prefix` et `suffix` ont été remplacés par `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Antérieurement à la v0.45.0, certains modules acceptaient un `prefix` et/ou un `suffix` afin de personnaliser la façon dont les modules sont affichés.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 accepte à la place une valeur de `format` permettant une personnalisation supplémentaire de la façon dont les modules sont rendus. Au lieu de définir un préfixe et un suffixe pour les variables contextuelles, les variables peuvent maintenant être remplacées dans une chaîne de format, qui représente la sortie du module.
 
-**Example pre-v0.45.0 configuration**
+**Exemple de configuration pré-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Exemple de configuration post-v0.45.0**
 
 ```toml
 [cmd_duration]
-# $duration – The command duration (e.g. "15s")
-# $style    – The default style of the module (e.g. "bold yellow")
+# $duration – La durée de la commande (p. ex. "15s")
+# $style    – Le style par défaut du module (p. ex. "bold yellow")
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Modules affectés
 
-#### Caractères
+#### Character
 
-| Removed Property        | Replacement      |
+| Propriété supprimée     | Remplacement     |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [character]
@@ -113,11 +113,11 @@ error_symbol = "[✖](bold red)"
 
 #### Temps d'exécution
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [cmd_duration]
@@ -127,11 +127,11 @@ error_symbol = "[✖](bold red)"
 
 #### Dossier
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [directory]
@@ -141,12 +141,12 @@ error_symbol = "[✖](bold red)"
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [env_var]
@@ -157,12 +157,12 @@ error_symbol = "[✖](bold red)"
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [git_commit]
@@ -173,13 +173,13 @@ error_symbol = "[✖](bold red)"
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
+| `show_sync_count`   | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `label`             | `format`     |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [singularity]
@@ -237,11 +237,11 @@ behind = "⇣${count}"
 
 #### Temps
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Propriété supprimée | Remplacement  |
+| ------------------- | ------------- |
+| `format`            | `time_format` |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [time]
@@ -252,12 +252,12 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [custom.example]
