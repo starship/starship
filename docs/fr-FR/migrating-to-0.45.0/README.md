@@ -98,18 +98,18 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Précédemment, la propriété `use_symbol_for_status` était utilisée pour configurer l'invite afin d'afficher le `error_symbol` lorsque la dernière commande aboutissait à un résultat non-nul.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+Depuis la version v0.45.0, nous utilisons désormais systématiquement `error_symbol` après une commande dont le résultat est non-nul, fusionnant ainsi les propriétés `use_symbol_for_status` et `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true`, ajoutez la ligne suivante à votre configuration:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*Note:* L'élément `character` est automatiquement suivi d'un espace, donc à la différence des autres valeurs `format`, nous n'en ajoutons pas dans les exemples précédents.
 
 #### Temps d'exécution
 
@@ -139,7 +139,7 @@ error_symbol = "[✖](bold red)"
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### Variable d'environnement
 
 | Propriété supprimée | Remplacement |
 | ------------------- | ------------ |
@@ -155,7 +155,7 @@ error_symbol = "[✖](bold red)"
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Commit Git
 
 | Propriété supprimée | Remplacement |
 | ------------------- | ------------ |
@@ -171,7 +171,7 @@ error_symbol = "[✖](bold red)"
 ++ format = '[\($hash\)]($style) '
 ```
 
-#### Git Status
+#### Statut Git
 
 | Propriété supprimée | Remplacement |
 | ------------------- | ------------ |
@@ -189,11 +189,11 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Précédemment, la propriété `show_sync_count` était utilisée pour configurer l'invite de manière à afficher le nombre de commits en avance ou en retard de la branche locale par rapport à la branche distante.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+Avec l'arrivée de la v0.45.0, cela a été séparé en trois propriétés distinctes, `ahead`, `behind`, et `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Pour que l'invite utilise l'ancienne configuration `show_sync_count = true`, ajoutez la ligne suivante à votre configuration:
 
 ```toml
 [git_status]
@@ -202,7 +202,7 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-#### Hostname
+#### Nom d'hôte
 
 | Propriété supprimée | Remplacement |
 | ------------------- | ------------ |
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Temps
+#### Date et Heure
 
 | Propriété supprimée | Remplacement  |
 | ------------------- | ------------- |
@@ -250,7 +250,7 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Commandes personnalisées
 
 | Propriété supprimée | Remplacement |
 | ------------------- | ------------ |
