@@ -588,7 +588,7 @@ Le module `dart` affiche la version courante installée de Dart. Par défaut le 
 
 - Le répertoire courant contient un fichier `.dart`
 - Le répertoire courant contient un répertoire `.dart_tool`
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- Le répertoire courant contient un fichier `pubspec.yaml`, `pubspec.yml` ou `pubspec.lock`
 
 ### Options
 
@@ -623,26 +623,26 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of Deno. By default the module will be shown if any of the following conditions are met:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+Le module `deno` vous montre votre version de Deno actuellement installée. Par défaut, le module sera affiché si l'une des conditions suivantes est remplie :
+- Le répertoire courant contient un fichier `mod.ts`, `mod.js`, `deps.ts` ou `deps.ts`
 
 ### Options
 
-| Option              | Défaut                                       | Description                                     |
-| ------------------- | -------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                               |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno |
-| `detect_extensions` | `[]`                                         | Quelles extensions devraient activer ce module. |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quels fichiers devraient activer ce module.     |
-| `detect_folders`    | `[]`                                         | Quels dossiers devraient activer ce module.     |
-| `style`             | `"green bold"`                               | Le style du module.                             |
-| `disabled`          | `false`                                      | Disables the `deno` module.                     |
+| Option              | Défaut                                       | Description                                              |
+| ------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                                        |
+| `symbol`            | `"🦕 "`                                       | Une chaîne de caractères représentant le symbole de Deno |
+| `detect_extensions` | `[]`                                         | Quelles extensions devraient activer ce module.          |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quels fichiers devraient activer ce module.              |
+| `detect_folders`    | `[]`                                         | Quels dossiers devraient activer ce module.              |
+| `style`             | `"green bold"`                               | Le style du module.                                      |
+| `disabled`          | `false`                                      | Désactive le module `deno`.                              |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.8.3` | The version of `deno`                  |
+| version   | `v1.8.3` | La version de `deno`                   |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -657,36 +657,36 @@ format = "via [🦕 $version](green bold) "
 
 ## Dossier
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Le module `Dossier` montre le chemin vers votre répertoire courant, tronqué à trois dossiers parents. Votre dossier sera également tronqué à la racine du repo git dans lequel vous vous trouvez actuellement.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Lorsque vous utilisez le style de pwd de fish, au lieu de cacher le chemin tronqué, vous verrez une abréviation du nome de chaque dossier, en fonction du nombre que vous avez utilisé comme valeur.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Par exemple, `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'option définie à `1`. Vous verrez maintenant `~/D/N/nixpkgs/pkgs`, alors que vous auriez vu `nixpkgs/pkgs` avant.
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                                      |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                |
-| `style`             | `"bold cyan"`                                      | Le style du module.                                                              |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| Option              | Défaut                                             | Description                                                                    |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `truncation_length` | `3`                                                | Le nombre de dossiers parents auquel tronquer le chemin du répertoire courant. |
+| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.  |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                              |
+| `style`             | `"bold cyan"`                                      | Le style du module.                                                            |
+| `disabled`          | `false`                                            | Désactive le module `directory`.                                               |
+| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.           |
+| `read_only_style`   | `"red"`                                            | Le style du symbole de lecture seule.                                          |
+| `truncation_symbol` | `""`                                               | Le symbole pour préfixer les chemins tronqués. ex: "…/"                        |
+| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                  |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
 
-| Advanced Option             | Défaut | Description                                                                                                                                                            |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | A table of substitutions to be made to the path.                                                                                                                       |
-| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
-| `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| Options avancées            | Défaut | Description                                                                                                                                                                              |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |        | Une table de substitutions à appliquer aux chemins.                                                                                                                                      |
+| `fish_style_pwd_dir_length` | `0`    | Le nombre de caractères à utiliser lors de l'application de la logique de troncature du pwd de fish.                                                                                     |
+| `use_logical_path`          | `true` | Si `true` affiche le chemin logique issu du shell via `PWD` ou `--logical-path`. Si `false` renvoie plutôt le chemin du système de fichiers physique avec les liens symboliques résolus. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+`substitutions` vous permet de définir des remplacements arbitraires pour les chaînes littérales qui apparaissent dans le chemin, par exemple pour de longs préfixes de réseau ou des répertoires de développement (ex. Java). Notez que cela désactivera la PWD de style fish.
 
 ```toml
 [directory.substitutions]
@@ -694,7 +694,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 "src/com/long/java/path" = "mypath"
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_leng` interagit avec les options de troncature d'une manière qui peut être surprenante au début : si elle n'est pas nulle, les composantes du chemin qui seraient normalement tronquées sont affichées à la place avec autant de caractères. Par exemple, le chemin `/built/this/city/on/rock/and/roll`, qui devrait normalement être affiché comme `rock/and/roll`, sera affiché sous la forme de `/b/t/c/o/rock/and/roll` avec `fish_style_pwd_dir_length = 1`--les composants de chemin qui seraient normalement supprimés sont affichés avec un caractère unique. Pour `fish_style_pwd_dir_length = 2`, ce serait `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -702,7 +702,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable  | Exemple               | Description                           |
 | --------- | --------------------- | ------------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path            |
+| path      | `"D:/Projects"`       | Le chemin du répertoire courant       |
 | style\* | `"black bold dimmed"` | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -717,7 +717,7 @@ truncation_length = 8
 truncation_symbol = "…/"
 ```
 
-## Docker Context
+## Contexte Docker
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
