@@ -357,6 +357,37 @@ license = "MIT"
     }
 
     #[test]
+    fn test_extract_nimble_package_version_for_nimble_directory_when_nimble_is_not_available(
+    ) -> io::Result<()> {
+        let config_name = "test_project.nimble";
+
+        let config_content = r##"
+version = "0.1.0"
+author = "Mr. nimble"
+description = "A new awesome nimble package"
+license = "MIT"
+"##;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd("nimble dump --json", None)
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        project_dir.close()
+    }
+
+    #[test]
     fn test_extract_nimble_package_version_for_non_nimble_directory() -> io::Result<()> {
         // Only create an empty directory. There's no .nibmle file for this case.
         let project_dir = create_project_dir()?;
