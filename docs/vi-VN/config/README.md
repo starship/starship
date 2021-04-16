@@ -1619,13 +1619,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn    | Mặc định                                      | Mô tả                                                    |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | Định dạng cho module.                                    |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | Kiểu cho module.                                         |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Tuỳ chọn    | Mặc định                                        | Mô tả                                                    |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | Định dạng cho module.                                    |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | Kiểu cho module.                                         |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
 ### Các biến
 
