@@ -359,7 +359,8 @@ impl StarshipConfig {
  - 'underline'
  - 'bold'
  - 'italic'
- - '<color>'        (see the parse_color_string doc for valid color strings)
+ - 'reverse'
+ - '<color>'       (see the parse_color_string doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
@@ -383,6 +384,7 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "bold" => Some(style.bold()),
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
+                    "reverse" => Some(style.reverse()),
                     // When the string is supposed to be a color:
                     // Decide if we yield none, reset background or set color.
                     color_string => {
@@ -675,13 +677,14 @@ mod tests {
     }
 
     #[test]
-    fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
-        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
+    fn table_get_styles_bold_italic_underline_green_dimmed_reverse_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD ReVeRSe");
         let mystyle = <Style>::from_config(&config).unwrap();
         assert!(mystyle.is_bold);
         assert!(mystyle.is_italic);
         assert!(mystyle.is_underline);
         assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_reverse);
         assert_eq!(
             mystyle,
             ansi_term::Style::new()
@@ -689,6 +692,7 @@ mod tests {
                 .italic()
                 .underline()
                 .dimmed()
+                .reverse()
                 .fg(Color::Green)
         );
     }
