@@ -1620,13 +1620,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| オプション       | デフォルト                                         | 説明                                                       |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | moduleのフォーマットです。                                         |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | モジュールのスタイルです。                                            |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| オプション       | デフォルト                                           | 説明                                                       |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | moduleのフォーマットです。                                         |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | モジュールのスタイルです。                                            |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
 ### 変数
 
