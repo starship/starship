@@ -1268,28 +1268,28 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `helm` muestra la versión instalada de Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `helmfile.yaml` file
-- The current directory contains a `Chart.yaml` file
+- El directorio actual contiene un fichero `helmfile.yaml`
+- El directorio actual contiene un archivo `Chart.yaml`
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                          |
-| ------------------- | ------------------------------------ | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
-| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.         |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.     |
-| `style`             | `"bold white"`                       | El estilo del módulo.                                |
-| `disabled`          | `false`                              | Disables the `helm` module.                          |
+| Opción              | Por defecto                          | Descripción                                              |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
+| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.            |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Qué nombres de archivo deberían activar este módulo.     |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.             |
+| `symbol`            | `"⎈ "`                               | Una cadena de formato que representa el símbolo de Helm. |
+| `style`             | `"bold white"`                       | El estilo del módulo.                                    |
+| `disabled`          | `false`                              | Deshabilita el módulo `helm`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v3.1.1` | The version of `helm`                  |
+| version   | `v3.1.1` | La versión de `helm`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1306,17 +1306,17 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
-| Opción     | Por defecto                 | Descripción                                                                                                                          |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                               |
-| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Opción     | Por defecto                 | Descripción                                                                                                                                                            |
+| ---------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                                 |
+| `trim_at`  | `"."`                       | Cadena en la que el nombre de host se corta, después de la primera coincidencia. `"."` se detendrá después del primer punto. `""` deshabilitará cualquier truncamiento |
+| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                                                                 |
+| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                                                  |
+| `disabled` | `false`                     | Deshabilita el módulo `hostname`.                                                                                                                                      |
 
 ### Variables
 
@@ -1341,7 +1341,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `java` muestra la versión actualmente instalada de Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
