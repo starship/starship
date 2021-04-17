@@ -334,7 +334,7 @@ discharging_symbol = "💀 "
 
 ### Hiển thị pin
 
-Tuỳ chọn cấu hình `display` được sử dụng để định nghĩa khi nào pin nên cho biết (threshold) và nó trông như thế nào (style). Nếu `display` không được cung cấp. Mặc định như sau:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Nếu `display` không được cung cấp. Mặc định như sau:
 
 ```toml
 [[battery.display]]
@@ -342,42 +342,47 @@ threshold = 10
 style = "bold red"
 ```
 
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
 #### Các tuỳ chọn
 
-Tuỳ chọn `display` là một mảng của của bảng sau.
+The `display` option is an array of the following table.
 
-| Tuỳ chọn    | Mô tả                                                      |
-| ----------- | ---------------------------------------------------------- |
-| `threshold` | Cận trên cho tuỳ chọn hiển thị.                            |
-| `style`     | Kiểu sử dụng nếu tuỳ chọn hiển thị được sử dụng bên trong. |
+| Tuỳ chọn             | Mặc định   | Mô tả                                                                                                     |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | The upper bound for the display option.                                                                   |
+| `style`              | `bold red` | The style used if the display option is in use.                                                           |
+| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Ví dụ
 
 ```toml
-[[battery.display]]  # "bold red" style khi lượng pin nằm giữa 0% và 10%
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style khi lượng pin nằm giữa 10% và 30%
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
-#khi lượng pin trên 30%, pin sẽ không được hiển thị
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## Character
 
-Module `character` cho biết một kí tự (thường là một mũi tên) bên cạnh nơi văn bản được nhập trong terminal của bạn.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất bại. Nó có thể làm điều này bằng hai cách:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - thay đổi màu(`đỏ`/`xanh lá`)
 - thay đổi hình dạng (`❯`/`✖`)
 
-Mặc định, nó chỉ thay đổi màu. Nếu bạn cũng muốn thay đổi hình dạng, tham khảo [ví dụ này](#with-custom-error-shape).
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
-::: warning `error_symbol` không được hỗ trợ trên elvish shell. :::
+::: warning `error_symbol` is not supported on elvish shell. :::
 
 ### Các tuỳ chọn
 
@@ -428,7 +433,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-`cmake` module cho biết phiên bản Cmake hiện tại đã được cài đặt. Mặc định module sẽ được kích hoạt nếu thoả mãn bất kì điều kiện nào dưới đây:
+The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
 
 - Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
 - Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
@@ -457,15 +462,15 @@ vicmd_symbol = "[V](bold green) "
 
 ## Command Duration
 
-Module `cmd_duration`. cho biết câu lệnh cuối cùng thực thi trong bao lâu. Module sẽ được hiện chỉ khi câu lệnh lấy nhiều hơn 2 giây, hoặc giá trị cấu hình `min_time`, nếu nó tồn tại.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: cảnh báo Không thể hook DEBUG trap trong Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Nếu bạn đang chạy Starship trong `bash`, không thể hook `DEBUG` trap sau khi chạy `eval $(starship init $0)`, hoặc module này **sẽ** ngắt.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Người dùng Bash, những người cần chức năng giống preexec có thể sử dụng [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Đơn giản là định nghĩa các mảng `preexec_functions` và `precmd_functions` trước khi chạy `eval $(starship init $0)`, và sau đó thực thi như bình thường.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Các tuỳ chọn
 
@@ -479,9 +484,9 @@ Người dùng Bash, những người cần chức năng giống preexec có th�
 | `show_notifications` | `false`                       | Hiện thông báo desktop khi câu lệnh hoàn thành.                        |
 | `min_time_to_notify` | `45_000`                      | Khoảng thời gian ngắn nhất để thông báo (tính bằng milliseconds).      |
 
-::: thử thuật
+::: tip
 
-Hiện thông báo desktop yêu cầu starship được built với sự hỗ trợ của `rust-notify`. Bạn kiểm tra nếu starship hỗ trợ các thông báo bằng cách chạy `STARSHIP_LOG=debug starship module cmd_duration -d 60000` khi `show_notifications` được thiết lập là `true`.
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
 
 :::
 
@@ -506,11 +511,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-Module `conda` cho biết môi trường conda hiện tại, nếu `$CONDA_DEFAULT_ENV` được thiết lập.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: thử thuật
+::: tip
 
-Cái này không loại bỏ conda's prompt mà nó sở hữu, bạn có thể muốn chạy `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -546,7 +551,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Module `crystal` cho biết phiên bản hiện tại của Crystal được đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `crystal` module shows the currently installed version of Crystal. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin `shard.yml`
 - Đường dẫn hiện tại chứa một tập tin `.cr`
@@ -584,7 +589,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Module `dart` cho biết phiên bản của Dart đã cài đặt. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `dart` module shows the currently installed version of Dart. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
 - Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
@@ -1507,7 +1512,7 @@ kotlin_binary = "kotlinc"
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: thử thuật
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1611,7 +1616,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: thử thuật
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2087,7 +2092,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | `detect_folders`     | `[]`                                                                                                         | Thư mục nào sẽ kích hoạt mô-đun này                                                    |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
-::: thử thuật
+::: tip
 
 The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
@@ -2253,7 +2258,7 @@ symbol = "🌟 "
 
 The `shell` module shows an indicator for currently used shell.
 
-::: thử thuật
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2362,7 +2367,7 @@ format = '[📦 \[$env\]]($style) '
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
-::: thử thuật
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2457,7 +2462,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected terraform workspace and version.
 
-::: thử thuật
+::: tip
 
 By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
 
@@ -2515,7 +2520,7 @@ format = "[🏎💨 $workspace]($style) "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: thử thuật
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2566,7 +2571,7 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-::: thử thuật
+::: tip
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
@@ -2719,19 +2724,19 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: thử thuật
+::: tip
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: thử thuật
+::: tip
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: thử thuật
+::: tip
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
