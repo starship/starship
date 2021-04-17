@@ -334,7 +334,7 @@ discharging_symbol = "💀 "
 
 ### Indicador de batería
 
-La opción de configuración de `display` se utiliza para definir cuándo se debe mostrar el indicador de batería (umbral) y cómo se ve (estilo). Si no se provee ningún valor para `display`. El valor por defecto es el siguiente:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Si no se provee ningún valor para `display`. El valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
@@ -342,42 +342,47 @@ threshold = 10
 style = "bold red"
 ```
 
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
 #### Opciones
 
-La opción `display` es un arreglo de la siguiente tabla.
+The `display` option is an array of the following table.
 
-| Opción      | Descripción                                                     |
-| ----------- | --------------------------------------------------------------- |
-| `threshold` | El umbral para la opción de visualización.                      |
-| `style`     | El estilo usado cuando si la opción <0>display</0> está activa. |
+| Opción               | Por defecto | Descripción                                                                                               |
+| -------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`        | The upper bound for the display option.                                                                   |
+| `style`              | `bold red`  | The style used if the display option is in use.                                                           |
+| `charging_symbol`    | `-`         | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` | `-`         | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Ejemplo
 
 ```toml
-[[battery.display]]  # "bold red" cuando la carga está entre 0% y 10%
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" cuando la carga está entre 10% y 30%
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
-# cuando la carga está por encima del 30% el indicador no se mostrará
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## Character
 
-El módulo `character` muestra un caracter (normalmente una flecha) tras el texto que introduces en el terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-El carácter mostrará si el último comando funcionó o no. Se puede hacer de dos maneras:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - Cambiando el color (`red`/`green`)
 - Cambiando la forma (`.`/`✖`)
 
-Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
-::: advertencia `error_symbol` no es compatible con el intérprete de comandos Elvish. :::
+::: warning `error_symbol` is not supported on elvish shell. :::
 
 ### Opciones
 
@@ -428,7 +433,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-El módulo `cmake` muestra la versión instalada de CMake. Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
+The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
@@ -457,15 +462,15 @@ El módulo `cmake` muestra la versión instalada de CMake. Por defecto el módul
 
 ## Tiempo de Ejecución
 
-El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. El módulo se mostrará solo si el comando tomó más de dos segundos, o si el valor de configuración de `min_time` existe.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: advertencia No utilizar la trampa DEBUG en Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Si estás usando Starship con `bash`, no uses `DEBUG` después de ejecutar `eval $(starship init $0)`, o el módulo **se romperá**.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Los usuarios de Bash que necesiten la funcionalidad como preexec pueden usar el [framework bash_preexec de rcaloras](https://github.com/rcaloras/bash-preexec). Basta con definir los arreglos `preexec_functions` y `precmd_functions` antes de ejecutar `eval $(starship init $0)`, y luego proceder como siempre.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Opciones
 
@@ -479,9 +484,9 @@ Los usuarios de Bash que necesiten la funcionalidad como preexec pueden usar el 
 | `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.    |
 | `min_time_to_notify` | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos). |
 
-::: consejo
+::: tip
 
-Mostrar notificaciones de escritorio requiere que se construya Starship con soporte de `rust-notify`. Comprueba si tu Starship soporta notificaciones ejecutando `STARSHIP_LOG=debug starship module cmd_duration -d 60000` cuando `show_notifications` está establecido en `true`.
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
 
 :::
 
@@ -506,11 +511,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-El módulo `conda` muestra el entorno conda actual, si `$CONDA_DEFAULT_ENV` está configurado.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: consejo
+::: tip
 
-Esto no modifica el propio prompt de conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -546,7 +551,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-El módulo `crystal` muestra la versión actualmente instalada de Crystal. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `crystal` module shows the currently installed version of Crystal. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `shard.yml`
 - El directorio actual contiene un fichero `.cr`
@@ -584,7 +589,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-El módulo `dart` muestra la versión actualmente instalada de Dart. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `dart` module shows the currently installed version of Dart. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con la extensión `.dart`
 - El directorio actual contiene un directorio `.dart_tool`
@@ -623,7 +628,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-El módulo `deno` muestra la versión instalada de Deno. Por defecto se mostrará el módulo si se cumplen cualquiera de las siguientes condiciones:
+The `deno` module shows you your currently installed version of Deno. By default the module will be shown if any of the following conditions are met:
 - El directorio actual contiene un archivo `mod.ts`, `mod.js`, `deps.ts` o `deps.js`
 
 ### Opciones
@@ -657,11 +662,11 @@ format = "via [🦕 $version](green bold) "
 
 ## Directory
 
-El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que te encuentres.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activaste para la opción.
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Opciones
 
@@ -678,7 +683,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio personal.                                  |
 
 <details>
-<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Opciones Avanzadas          | Por defecto | Descripción                                                                                                                                                            |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -719,7 +724,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.com/engine/context/working-with-contexts/) actualmente activo si no está establecido en `por defecto`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
 ### Opciones
 
@@ -755,9 +760,9 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-El módulo `dotnet` muestra la versión relevante de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
+The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-Por defecto, este módulo solo se mostrará en tu prompt cuando uno o más de los siguientes archivos estén presentes en el directorio actual:
+By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
 - `global.json`
 - `project.json`
@@ -769,11 +774,11 @@ Por defecto, este módulo solo se mostrará en tu prompt cuando uno o más de lo
 - `*.fsproj`
 - `*.xproj`
 
-También necesitarás tener instalado el SDK de .NET Core para poder usarlo correctamente.
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
-Internamente, este módulo utiliza su propio mecanismo para la detección de versiones. Normalmente es el doble de rápido que ejecutar `dotnet --version`, pero puede mostrar una versión incorrecta si tu proyecto .NET tiene un diseño de directorio inusual. Si la precisión es más importante que la velocidad, puedes desactivar el mecanismo estableciendo `heuristic = false` en las opciones del módulo.
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-El módulo también mostrará el Target Framework Moniker ([https://docs.microsoft. om/es/dotnet/standard/frameworks#supported-target-framework-versions](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)) cuando exista un archivo csproj en el directorio actual.
+The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
 ### Opciones
 
@@ -812,7 +817,7 @@ heuristic = false
 
 ## Elixir
 
-El módulo `elixir` muestra la versión instalada actualmente de Elixir y Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `mix.exs`.
 
@@ -850,7 +855,7 @@ symbol = "🔮 "
 
 ## Elm
 
-El módulo `elm` muestra la versión actualmente instalada de Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `elm` module shows the currently installed version of Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `elm.json`
 - El directorio actual contiene un archivo `elm-package.json`
@@ -891,7 +896,7 @@ format = "via [ $version](cyan bold) "
 
 ## Variable de entorno
 
-El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
+The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
 - La opción de configuración de `variable` coincide con una variable de entorno existente
 - La opción de configuración de `variable` no está definida, pero la opción de configuración se encuentra `por defecto`
@@ -928,7 +933,7 @@ default = "unknown shell"
 
 ## Erlang
 
-El módulo `erlang` muestra la versión instalada de Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `erlang` module shows the currently installed version of Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `rebar.config`.
 - El directorio actual contiene un fichero `erlang.mk`.
@@ -966,7 +971,7 @@ format = "via [e $version](bold red) "
 
 ## Google Cloud (`gcloud`)
 
-El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](https://cloud.google.com/sdk/gcloud). Esto se basa en el archivo `~/.config/gcloud/active_config`, el archivo `~/.config/gcloud/configurations/config_{CONFIG NAME}` y la variable de entorno `CLOUDSDK_CONFIG`.
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 ### Opciones
 
@@ -1026,7 +1031,7 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-El módulo `git_branch` muestra la rama activa del repositorio en tu directorio actual.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Opciones
 
@@ -1066,7 +1071,7 @@ truncation_symbol = ""
 
 ## Git commit
 
-El módulo `git_commit` muestra el hash de la confirmación actual y también la etiqueta (si existe) del repositorio en su directorio actual.
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### Opciones
 
@@ -1101,7 +1106,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-El módulo `git_state` se mostrará en directorios que son parte de un repositorio git, y donde hay una operación en curso, tales como: _REBASING_, _BISECTING_, etc. Si hay información de progreso (por ejemplo, REBASING 3/10), esa información será mostrada también.
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### Opciones
 
@@ -1141,7 +1146,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git status
 
-El módulo `git_status` muestra símbolos que representan el estado del repositorio en su directorio actual.
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### Opciones
 
@@ -1163,7 +1168,7 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 ### Variables
 
-Las siguientes variables se pueden utilizar en `format`:
+The following variables can be used in `format`:
 
 | Variable       | Descripción                                                                                              |
 | -------------- | -------------------------------------------------------------------------------------------------------- |
@@ -1180,14 +1185,14 @@ Las siguientes variables se pueden utilizar en `format`:
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-Las siguientes variables pueden ser usadas en `diverged`:
+The following variables can be used in `diverged`:
 
 | Variable       | Descripción                                                    |
 | -------------- | -------------------------------------------------------------- |
 | `ahead_count`  | Número de confirmaciones por delante de la rama de seguimiento |
 | `behind_count` | Número de confirmaciones detrás de la rama de seguimiento      |
 
-Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` y `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
 | Variable | Descripción                   |
 | -------- | ----------------------------- |
@@ -1211,7 +1216,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Mostrar el recuento delante/detrás de la rama que está siendo rastreada
+Show ahead/behind count of the branch being tracked
 
 ```toml
 # ~/.config/starship.toml
@@ -1224,7 +1229,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-El módulo `golang` muestra la versión actualmente instalada de Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `golang` module shows the currently installed version of Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `go.mod`
 - El directorio actual contiene un archivo `go.sum`
@@ -1268,7 +1273,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-El módulo `helm` muestra la versión instalada de Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `helm` module shows the currently installed version of Helm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
 - El directorio actual contiene un archivo `Chart.yaml`
@@ -1306,7 +1311,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-El módulo `hostname` muestra el nombre de host del sistema.
+The `hostname` module shows the system hostname.
 
 ### Opciones
 
@@ -1341,7 +1346,7 @@ disabled = false
 
 ## Java
 
-El módulo `java` muestra la versión actualmente instalada de Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+The `java` module shows the currently installed version of Java. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
@@ -1507,7 +1512,7 @@ kotlin_binary = "kotlinc"
 
 Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: consejo
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1611,7 +1616,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: consejo
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2087,7 +2092,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                           |
 
-::: consejo
+::: tip
 
 The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
@@ -2253,7 +2258,7 @@ symbol = "🌟 "
 
 The `shell` module shows an indicator for currently used shell.
 
-::: consejo
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2362,7 +2367,7 @@ format = '[📦 \[$env\]]($style) '
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
-::: consejo
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2457,7 +2462,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected terraform workspace and version.
 
-::: consejo
+::: tip
 
 By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
 
@@ -2515,7 +2520,7 @@ format = "[🏎💨 $workspace]($style) "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: consejo
+::: tip
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2566,7 +2571,7 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-::: consejo
+::: tip
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
@@ -2719,19 +2724,19 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
 
-::: consejo
+::: tip
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: consejo
+::: tip
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: consejo
+::: tip
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
