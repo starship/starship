@@ -2741,7 +2741,7 @@ By default the module will be shown if any of the following conditions are met:
 | `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
 | `symbol`            | `"V "`                                           | A format string representing the symbol of V |
 | `detect_extensions` | `["v"]`                                        | Which extensions should trigger this module.    |
-| `detect_files`      | `[]` | Which filenames should trigger this module.     |
+| `detect_files`      | `["v.mod"]` | Which filenames should trigger this module. |
 | `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
 | `style`             | `"blue bold"`                                     | The style for the module.                       |
 | `disabled`          | `false`                                           | Disables the `deno` module.                     |
