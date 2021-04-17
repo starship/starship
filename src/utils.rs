@@ -61,6 +61,11 @@ Default target: x86_64-apple-macosx\n",
             stdout: String::from("deno 1.8.3\n"),
             stderr: String::default()
         }),
+        "dmd --version" => Some(CommandOutput {
+            stdout: String::from("DMD32 D Compiler v2.096.0-dirty
+            Copyright (C) 1999-2021 by The D Language Foundation, All Rights Reserved written by Walter Bright\n"),
+            stderr: String::default()
+        }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),

@@ -35,6 +35,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "cmake",
     "dart",
     "deno",
+    "dlang",
     "dotnet",
     "elixir",
     "elm",

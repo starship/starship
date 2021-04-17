@@ -18,6 +18,7 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "dart",
     "deno",
+    "dlang",
     "directory",
     "docker_context",
     "dotnet",

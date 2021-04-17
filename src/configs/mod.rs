@@ -14,6 +14,7 @@ pub mod custom;
 pub mod dart;
 pub mod deno;
 pub mod directory;
+pub mod dlang;
 pub mod docker_context;
 pub mod dotnet;
 pub mod elixir;
@@ -82,6 +83,7 @@ pub struct FullConfig<'a> {
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
     deno: deno::DenoConfig<'a>,
+    dlang: dlang::DLangConfig<'a>,
     directory: directory::DirectoryConfig<'a>,
     docker_context: docker_context::DockerContextConfig<'a>,
     dotnet: dotnet::DotnetConfig<'a>,

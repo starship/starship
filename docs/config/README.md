@@ -686,6 +686,41 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [🦕 $version](green bold) "
 ```
 
+## DLang
+
+The `dlang` module shows you your currently installed version of D.
+By default the module will be shown if any of the following conditions are met:
+- The current directory contains a file ending with `.d` or `.di`
+
+### Options
+
+| Option              | Default                                           | Description                                     |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
+| `symbol`            | `" "`                                           | A format string representing the symbol of DLang |
+| `detect_extensions` | `["d", "di"]`                                              | Which extensions should trigger this module.    |
+| `detect_files`      | `[]`      | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                              | Which folders should trigger this module.       |
+| `style`             | `"#b03931"`                                    | The style for the module.                       |
+| `disabled`          | `false`                                           | Disables the `dlang` module.                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.8.3` | The version of `dlang`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dlang]
+format = "via [🇩 $version](green bold) "
+```
+
 ## Directory
 
 The `directory` module shows the path to your current directory, truncated to

@@ -9,6 +9,7 @@ pub(crate) mod custom;
 mod dart;
 mod deno;
 mod directory;
+mod dlang;
 mod docker_context;
 mod dotnet;
 mod elixir;
@@ -82,6 +83,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "conda" => conda::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
+            "dlang" => dlang::module(context),
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context),
             "dotnet" => dotnet::module(context),
@@ -165,6 +167,7 @@ pub fn description(module: &str) -> &'static str {
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
         "deno" => "The currently installed version of Deno",
+        "dlang" => "The currently installed version of D",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
