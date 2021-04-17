@@ -1171,27 +1171,27 @@ Las siguientes variables se pueden utilizar en `format`:
 | `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` basado en el estado actual del repositorio |
 | `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                        |
 | `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                        |
-| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                    |
+| `stashed`      | Muestra `stashed` cuando existe un archivo en el área de preparación para el repositorio local.          |
 | `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                     |
-| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                               |
-| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                       |
+| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                           |
+| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                   |
 | `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                              |
 | style\*      | Refleja el valor de la opción `style`                                                                    |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-The following variables can be used in `diverged`:
+Las siguientes variables pueden ser usadas en `diverged`:
 
-| Variable       | Descripción                                    |
-| -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| Variable       | Descripción                                                    |
+| -------------- | -------------------------------------------------------------- |
+| `ahead_count`  | Número de confirmaciones por delante de la rama de seguimiento |
+| `behind_count` | Número de confirmaciones detrás de la rama de seguimiento      |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` y `deleted`:
 
-| Variable | Descripción              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variable | Descripción                   |
+| -------- | ----------------------------- |
+| `count`  | Muestra el número de archivos |
 
 ### Ejemplo
 
@@ -1211,7 +1211,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Mostrar el recuento delante/detrás de la rama que está siendo rastreada
 
 ```toml
 # ~/.config/starship.toml
@@ -1224,34 +1224,34 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `golang` muestra la versión actualmente instalada de Golang. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- El directorio actual contiene un archivo `go.mod`
+- El directorio actual contiene un archivo `go.sum`
+- El directorio actual contiene un archivo `glide.yaml`
+- El directorio actual contiene un archivo `Gopkg.yml`
+- El directorio actual contiene un archivo `Gopkg.lock`
+- El directorio actual contiene un archivo `.go-version`
+- El directorio actual contiene un directorio `Godeps`
+- El directorio actual contiene un archivo con la extensión `.go`
 
 ### Opciones
 
-| Opción              | Por defecto                                                                    | Descripción                                          |
-| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | El formato del módulo.                               |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.       |
-| `detect_extensions` | `["go"]`                                                                       | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `["Godeps"]`                                                                   | Qué carpetas deberían activar este módulo.           |
-| `style`             | `"bold cyan"`                                                                  | El estilo del módulo.                                |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                        |
+| Opción              | Por defecto                                                                    | Descripción                                            |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | El formato del módulo.                                 |
+| `symbol`            | `"🐹 "`                                                                         | Una cadena de formato que representa el símbolo de Go. |
+| `detect_extensions` | `["go"]`                                                                       | Qué extensiones deberían activar este módulo.          |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Qué nombres de archivo deberían activar este módulo.   |
+| `detect_folders`    | `["Godeps"]`                                                                   | Qué carpetas deberían activar este módulo.             |
+| `style`             | `"bold cyan"`                                                                  | El estilo del módulo.                                  |
+| `disabled`          | `false`                                                                        | Deshabilita el módulo de `golang`.                     |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | The version of `go`                    |
+| version   | `v1.12.1` | La versión de `go`                     |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
