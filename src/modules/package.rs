@@ -46,6 +46,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn extract_vlang_version(file_contents: &str) -> Option<String> {
+    let mut splitted = file_contents.split('\n');
+    let found = splitted.find(|line| line.to_lowercase().contains("version:"))?;
+    let raw_version = found.split("version:").nth(1)?;
+    let version: String = raw_version
+        .chars()
+        .skip(2)
+        .take(raw_version.chars().count() - 3)
+        .collect();
+    Some(format!("v{}", version))
+}
+
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
     let cargo_toml: toml::Value = toml::from_str(file_contents).ok()?;
     let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
@@ -193,6 +205,8 @@ fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String
         extract_maven_version(&pom_file)
     } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
         extract_meson_version(&meson_build)
+    } else if let Ok(vlang_mod) = utils::read_file(base_dir.join("v.mod")) {
+        extract_vlang_version(&vlang_mod)
     } else {
         None
     }
@@ -765,6 +779,22 @@ end";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+
+    fn test_extract_vlang_version() -> io::Result<()> {
+        let config_name = "v.mod";
+        let config_content = "
+        Module {
+            name: 'starship',
+            author: 'matchai',
+            version: '1.2.3'
+        }";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
 
