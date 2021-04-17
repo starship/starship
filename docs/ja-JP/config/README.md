@@ -631,7 +631,7 @@ The `deno` module shows you your currently installed version of Deno. By default
 
 | オプション               | デフォルト                                        | 説明                          |
 | ------------------- | -------------------------------------------- | --------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | moduleのフォーマットです。            |
+| `format`            | `"via [$symbol($version )]($style)"`         | module のフォーマットです。           |
 | `symbol`            | `"🦕 "`                                       | Dart のシンボルを表すフォーマット文字列      |
 | `detect_extensions` | `[]`                                         | どの拡張子がこのモジュールをアクティブにするか     |
 | `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | どのファイル名がこのモジュールをアクティブにするか   |
@@ -658,11 +658,11 @@ format = "via [🦕 $version](green bold) "
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+`directory` モジュールは現在のディレクトリへのパスを表示します。親フォルダは3つまでに切り捨てられます。 git リポジトリ内にいる場合は、リポジトリのルートで切り捨てられます。
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+fish スタイルの pwd オプションを使用している場合、切り捨てられたパスを非表示にする代わりに、オプションで有効にした数値に基づいた各ディレクトリの短縮名が表示されます。
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+たとえば、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs` がリポジトリルートであり、オプションが `1` に設定されている場合を挙げます。 この場合、`nixpkgs/pkgs` の代わりに、`~/D/N/nixpkgs/pkgs` と表示されます。
 
 ### オプション
 
@@ -701,10 +701,10 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### 変数
 
-| 変数        | 設定例                   | 説明                         |
-| --------- | --------------------- | -------------------------- |
-| path      | `"D:/Projects"`       | The current directory path |
-| style\* | `"black bold dimmed"` | オプション `style` の値をミラーする     |
+| 変数        | 設定例                   | 説明                     |
+| --------- | --------------------- | ---------------------- |
+| path      | `"D:/Projects"`       | カレントディレクトリのパス          |
+| style\* | `"black bold dimmed"` | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -720,28 +720,28 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
+`docker_context` モジュールは、[Docker コンテキスト](https://docs.docker.com/engine/context/working-with-contexts/)が `default` に設定されていない場合、現在アクティブな Docker コンテキストを表示します。
 
 ### オプション
 
-| オプション               | デフォルト                                                         | 説明                                                                                |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | moduleのフォーマットです。                                                                  |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | モジュールのスタイルです。                                                                     |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| オプション               | デフォルト                              | 説明                                                                                |
+| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "` | moduleのフォーマットです。                                                                  |
+| `symbol`            | `"🐳 "`                             | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                             | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                               | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `The format for the module.`       | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                               | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                      | モジュールのスタイルです。                                                                     |
+| `disabled`          | `false`                            | Disables the `docker_context` module.                                             |
 
 ### 変数
 
-| 変数        | 設定例            | 説明                         |
-| --------- | -------------- | -------------------------- |
-| context   | `test_context` | The current docker context |
-| symbol    |                | オプション `記号` の値をミラーする        |
-| style\* |                | オプション `style` の値をミラーする     |
+| 変数        | 設定例            | 説明                     |
+| --------- | -------------- | ---------------------- |
+| context   | `test_context` | 現在の Docker コンテキスト      |
+| symbol    |                | オプション `記号` の値をミラーする    |
+| style\* |                | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -1067,7 +1067,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+`git_commit` モジュールは、カレントディレクトリのリポジトリの現在のコミットハッシュとタグ (もしあれば) を表示します。
 
 ### オプション
 
