@@ -21,7 +21,7 @@ impl<'a> Default for RedConfig<'a> {
             symbol: "🔴 ",
             style: "red bold",
             disabled: false,
-            detect_extensions: vec!["red"],
+            detect_extensions: vec!["red", "reds"],
             detect_files: vec![],
             detect_folders: vec![],
         }
