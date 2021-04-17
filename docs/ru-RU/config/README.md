@@ -334,7 +334,7 @@ discharging_symbol = "💀 "
 
 ### Отображение батареи
 
-Параметр `display` используется для определения того, когда индикатор батареи должен быть показан (threshhold) и как он выглядит (style). Если `display` не предоставлено. Значение по умолчанию:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Если `display` не предоставлено. Значение по умолчанию:
 
 ```toml
 [[battery.display]]
@@ -342,35 +342,40 @@ threshold = 10
 style = "bold red"
 ```
 
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
 #### Опции
 
-Опция `display` представляет собой массив следующей таблицы.
+The `display` option is an array of the following table.
 
-| Параметр    | Описание                                                 |
-| ----------- | -------------------------------------------------------- |
-| `threshold` | Верхняя граница опции отображения.                       |
-| `style`     | Используемый стиль, если используется опция отображения. |
+| Параметр             | По умолчанию | Описание                                                                                                  |
+| -------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`         | The upper bound for the display option.                                                                   |
+| `style`              | `bold red`   | The style used if the display option is in use.                                                           |
+| `charging_symbol`    | `-`          | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` | `-`          | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Пример
 
 ```toml
-[[battery.display]] # стиль "bold red" (жирный красный) если заряд между 0% и 10%
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # стиль "bold yellow" (жирный желтый) если заряд между 10% и 30%
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
-# когда заряд батареи больше 30%, индикатор батареи скрыт
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## Символ
 
-Модуль `character` показывает символ (обычно, стрелка) рядом с вводимым текстом в терминале.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Символ показывает, была ли последняя команда успешной или нет. It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -457,15 +462,15 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 ## Длительность команды
 
-Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Не подключайте ловушку DEBUG к Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Если вы испоьзуете Starship в `bash`, не подключайте ловушку `DEBUG` после запуска `eval $(starship init $0)`, иначе этот модуль сломается.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Пользователи Bash, которым нужна функциональность, подобная preexec, могут использовать [фреймворк bash_preexec от rcaloras](https://github.com/rcaloras/bash-preexec). Просто определите массивы `preexec_functions` и `precmd_functions` перед запуском `eval $(starship init $0)`, а затем продолжайте нормально.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Опции
 
@@ -506,11 +511,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Конда
 
-Модуль `conda` показывает текущее окружение conda, если `$CONDA_DEFAULT_ENV` присвоено значение.
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Это не подавляет модификатор командной строки самой conda. Возможно, вы захотите запустить `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -546,7 +551,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Модуль `crystal` показывает установленную версию Crystal. By default the module will be shown if any of the following conditions are met:
+The `crystal` module shows the currently installed version of Crystal. By default the module will be shown if any of the following conditions are met:
 
 - Текущий каталог содержит файл `shard.yml`
 - Текущий каталог содержит файл `.cr`
