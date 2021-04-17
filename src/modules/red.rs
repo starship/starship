@@ -61,7 +61,7 @@ mod tests {
     use std::io;
 
     #[test]
-    fn test_parse_v_version() {
+    fn test_parse_red_version() {
         const OUTPUT: &str = "0.6.4\n";
         assert_eq!(parse_red_version(OUTPUT.trim()), Some("v0.6.4".to_string()))
     }
