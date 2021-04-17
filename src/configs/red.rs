@@ -18,7 +18,7 @@ impl<'a> Default for RedConfig<'a> {
     fn default() -> Self {
         RedConfig {
             format: "via [$symbol($version )]($style)",
-            symbol: "🔴 ",
+            symbol: "🔺 ",
             style: "red bold",
             disabled: false,
             detect_extensions: vec!["red", "reds"],

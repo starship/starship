@@ -80,7 +80,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.red"))?.sync_all()?;
         let actual = ModuleRenderer::new("red").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔴 v0.6.4 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -90,7 +90,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.reds"))?.sync_all()?;
         let actual = ModuleRenderer::new("red").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔴 v0.6.4 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
