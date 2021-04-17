@@ -168,6 +168,10 @@ active boot switches: -d:release\n",
             stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
         }),
+        "red --version" => Some(CommandOutput {
+            stdout: String::from("0.6.4\n"),
+            stderr: String::default()
+        }),
         "ruby -v" => Some(CommandOutput {
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
