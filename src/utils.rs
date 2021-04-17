@@ -82,6 +82,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
         }),
+        "ghc --version" => Some(CommandOutput {
+            stdout: String::from("The Glorious Glasgow Haskell Compilation System, version 8.6.5\n"),
+            stderr: String::default()
+        }),
         "helm version --short --client" => Some(CommandOutput {
             stdout: String::from("v3.1.1+gafe7058\n"),
             stderr: String::default(),

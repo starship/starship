@@ -26,6 +26,7 @@ pub mod git_commit;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
+pub mod haskell;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -95,6 +96,7 @@ pub struct FullConfig<'a> {
     git_state: git_state::GitStateConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
     golang: go::GoConfig<'a>,
+    haskell: haskell::HaskellConfig<'a>,
     helm: helm::HelmConfig<'a>,
     hg_branch: hg_branch::HgBranchConfig<'a>,
     hostname: hostname::HostnameConfig<'a>,

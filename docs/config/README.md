@@ -1328,6 +1328,46 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [🏎💨 $version](bold cyan) "
 ```
 
+## Haskell
+
+The `haskell` module shows the currently installed version of Haskell.
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory has a file with the extension of `.hs`, `.hsc` or `.hs-boot`.
+
+### Options
+
+| Option              | Default                              | Description                                      |
+| ------------------- | ------------------------------------ | ------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                       |
+| `detect_extensions` | `["hs", "hsc", "hs-boot"]`                                 | Which extensions should trigger this module.     |
+| `detect_files`      | `[]`    | Which filenames should trigger this module.      |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.       |
+| `symbol`            | `" "`                               | A format string representing the symbol of Haskell. |
+| `style`             | `"bold purple"`                       | The style for the module.                        |
+| `disabled`          | `false`                              | Disables the `haskell` module.                      |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v8.6.5` | The version of `haskell`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[haskell]
+format = "via [🇭 $version](bold purple) "
+```
+
+
+
 ## Helm
 
 The `helm` module shows the currently installed version of Helm.
