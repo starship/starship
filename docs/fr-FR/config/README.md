@@ -348,12 +348,12 @@ La valeur par défaut pour les options `charging_symbol` et `discharging_symbol`
 
 L'option `display` est une tableau des propriétés suivantes.
 
-| Option               | Défaut     | Description                                                                                                                          |
-| -------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `threshold`          | `10`       | La limite supérieure pour l'option display.                                                                                          |
-| `style`              | `bold red` | Le style de l'option display si elle est utilisée.                                                                                   |
-| `charging_symbol`    | `-`        | Symbole optionnel affiché si l'option display est utilisée, la valeur par défaut est l'option `charging_symbol` du module "battery". |
-| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option.                            |
+| Option               | Défaut     | Description                                                                                                                             |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | La limite supérieure pour l'option display.                                                                                             |
+| `style`              | `bold red` | Le style de l'option display si elle est utilisée.                                                                                      |
+| `charging_symbol`    | `-`        | Symbole optionnel affiché si l'option display est utilisée, la valeur par défaut est l'option `charging_symbol` du module "battery".    |
+| `discharging_symbol` | `-`        | Symbole optionnel affiché si l'option display est utilisée, la valeur par défaut est l'option `discharging_symbol` du module "battery". |
 
 #### Exemple
 
