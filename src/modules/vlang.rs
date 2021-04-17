@@ -5,7 +5,7 @@ use crate::formatter::StringFormatter;
 
 /// Creates a module with the current V version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("v");
+    let mut module = context.new_module("vlang");
     let config = VLangConfig::try_load(module.config);
     let is_v_project = context
         .try_begin_scan()?
