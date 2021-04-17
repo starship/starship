@@ -334,7 +334,7 @@ discharging_symbol = "💀 "
 
 ### Indicateur de batterie
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Si aucun `display` n'est fourni. La valeur par défaut est la suivante :
+L'option de configuration `display` est utilisée pour définir quand l'indicateur de batterie doit être affiché (threshold), quel symbole doit être utilisé (symbol) et à quoi il ressemble (style). Si aucun `display` n'est fourni. La valeur par défaut est la suivante :
 
 ```toml
 [[battery.display]]
@@ -342,18 +342,18 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+La valeur par défaut pour les options `charging_symbol` et `discharging_symbol` est respectivement la valeur des options `charging_symbol` et `discharging_symbol` du module `battery`.
 
 #### Options
 
-The `display` option is an array of the following table.
+L'option `display` est une tableau des propriétés suivantes.
 
-| Option               | Défaut     | Description                                                                                               |
-| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | The upper bound for the display option.                                                                   |
-| `style`              | `bold red` | The style used if the display option is in use.                                                           |
-| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Option               | Défaut     | Description                                                                                                                          |
+| -------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `threshold`          | `10`       | La limite supérieure pour l'option display.                                                                                          |
+| `style`              | `bold red` | Le style de l'option display si elle est utilisée.                                                                                   |
+| `charging_symbol`    | `-`        | Symbole optionnel affiché si l'option display est utilisée, la valeur par défaut est l'option `charging_symbol` du module "battery". |
+| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option.                            |
 
 #### Exemple
 
