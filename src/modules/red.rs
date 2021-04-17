@@ -3,7 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::red::RedConfig;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the current  vRedersion
+/// Creates a module with the current  Red version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("red");
     let config = RedConfig::try_load(module.config);
