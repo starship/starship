@@ -1071,22 +1071,22 @@ truncation_symbol = ""
 
 ### オプション
 
-| オプション                | デフォルト                                                  | 説明                                                      |
-| -------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | moduleのフォーマットです。                                        |
-| `style`              | `"bold green"`                                         | モジュールのスタイルです。                                           |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                                                | Disables the `git_commit` module.                       |
+| オプション                | デフォルト                                                  | 説明                                        |
+| -------------------- | ------------------------------------------------------ | ----------------------------------------- |
+| `commit_hash_length` | `7`                                                    | 表示される git コミットハッシュの長さ。                    |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | moduleのフォーマットです。                          |
+| `style`              | `"bold green"`                                         | モジュールのスタイルです。                             |
+| `only_detached`      | `true`                                                 | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
+| `tag_disabled`       | `true`                                                 | `git_commit` モジュールのタグ情報の表示を無効にする。         |
+| `tag_symbol`         | `"🏷 "`                                                 | 表示される情報の前に追加されるタグシンボル                     |
+| `disabled`           | `false`                                                | `git_commit` モジュールを無効にします。                |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                          |
-| --------- | --------- | --------------------------- |
-| hash      | `b703eb3` | The current git commit hash |
-| style\* |           | オプション `style` の値をミラーする      |
+| 変数        | 設定例       | 説明                     |
+| --------- | --------- | ---------------------- |
+| hash      | `b703eb3` | 現在の git コミットハッシュ       |
+| style\* |           | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -1102,7 +1102,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. 進行状況の情報がある場合は (例:REBASING 3/10)、その情報も表示されます。
 
 ### オプション
 
@@ -1142,7 +1142,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status` モジュールは、カレントディレクトリのリポジトリの状態を表すシンボルを表示します。
 
 ### オプション
 
@@ -1164,7 +1164,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### 変数
 
-The following variables can be used in `format`:
+` format` 内では以下の変数が利用できます。
 
 | 変数             | 説明                                                                                            |
 | -------------- | --------------------------------------------------------------------------------------------- |
@@ -1225,7 +1225,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`golang` モジュールは、現在インストールされている Golang のバージョンを示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
@@ -1506,11 +1506,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+現在の Kubernetes コンテキスト名と、もし設定されている場合には、kubeconfig ファイルを元に namespace を表示します。 namespace は kubconfigで設定する必要があります。設定は、`kubectl config set-context starship-cluster --namespace astronaut` といったコマンド行えます。 `$KUBECONFIG` 環境変数が設定されている場合、このモジュールは環境変数を優先して使用し、`~/.kube/config` は使用しません。
 
-::: tip
+::: ヒント
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 :::
 
@@ -1614,7 +1614,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 :::
 
@@ -2256,7 +2256,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 :::
 
@@ -2365,7 +2365,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 :::
 
@@ -2518,7 +2518,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
 
 :::
 
