@@ -1046,8 +1046,8 @@ El módulo `git_branch` muestra la rama activa del repositorio en tu directorio 
 | Variable      | Ejemplo  | Descripción                                                                                                    |
 | ------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
 | branch        | `master` | El nombre de la rama actual, vuelve a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                               |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                               |
+| remote_name   | `origin` | El nombre remoto.                                                                                              |
+| remote_branch | `master` | El nombre de la rama rastreada en `remote_name`.                                                               |
 | symbol        |          | Refleja el valor de la opción `symbol`                                                                         |
 | style\*     |          | Refleja el valor de la opción `style`                                                                          |
 
@@ -1066,26 +1066,26 @@ truncation_symbol = ""
 
 ## Git commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+El módulo `git_commit` muestra el hash de la confirmación actual y también la etiqueta (si existe) del repositorio en su directorio actual.
 
 ### Opciones
 
-| Opción               | Por defecto                                            | Descripción                                             |
-| -------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                  |
-| `style`              | `"bold green"`                                         | El estilo del módulo.                                   |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                                                | Disables the `git_commit` module.                       |
+| Opción               | Por defecto                                            | Descripción                                                                            |
+| -------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | La longitud del hash de la confirmación de git mostrado.                               |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                                                 |
+| `style`              | `"bold green"`                                         | El estilo del módulo.                                                                  |
+| `only_detached`      | `true`                                                 | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`" |
+| `tag_disabled`       | `true`                                                 | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.                |
+| `tag_symbol`         | `"🏷 "`                                                 | Símbolo de etiqueta prefijando la información mostrada                                 |
+| `disabled`           | `false`                                                | Deshabilita el módulo `git_commit`.                                                    |
 
 ### Variables
 
-| Variable  | Ejemplo   | Descripción                           |
-| --------- | --------- | ------------------------------------- |
-| hash      | `b703eb3` | The current git commit hash           |
-| style\* |           | Refleja el valor de la opción `style` |
+| Variable  | Ejemplo   | Descripción                              |
+| --------- | --------- | ---------------------------------------- |
+| hash      | `b703eb3` | El hash actual de la confirmación de git |
+| style\* |           | Refleja el valor de la opción `style`    |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1101,22 +1101,22 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+El módulo `git_state` se mostrará en directorios que son parte de un repositorio git, y donde hay una operación en curso, tales como: _REBASING_, _BISECTING_, etc. Si hay información de progreso (por ejemplo, REBASING 3/10), esa información será mostrada también.
 
 ### Opciones
 
-| Opción         | Por defecto                                                     | Descripción                                                                             |
-| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | El estilo del módulo.                                                                   |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                  |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| Opción         | Por defecto                                                     | Descripción                                                                                |
+| -------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `rebase`       | `"REBASING"`                                                    | Una cadena de formato que se muestra cuando un `rebase` está en progreso.                  |
+| `merge`        | `"MERGING"`                                                     | Una cadena de formato que se muestra cuando un `merge` está en progreso.                   |
+| `revert`       | `"REVERTING"`                                                   | Una cadena de formato mostrada cuando un `revert` está en progreso.                        |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | Una cadena de formato que se muestra cuando un `cherry-pick` está en progreso.             |
+| `bisect`       | `"BISECTING"`                                                   | Una cadena de formato que se muestra cuando un `bisect` está en progreso.                  |
+| `am`           | `"AM"`                                                          | Una cadena de formato que se muestra cuando un `apply-mailbox` (`git am`) está en progeso. |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress.    |
+| `style`        | `"bold yellow"`                                                 | El estilo del módulo.                                                                      |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                     |
+| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                           |
 
 ### Variables
 
