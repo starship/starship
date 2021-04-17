@@ -1366,8 +1366,6 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [🇭 $version](bold purple) "
 ```
 
-
-
 ## Helm
 
 The `helm` module shows the currently installed version of Helm.
