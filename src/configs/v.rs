@@ -22,7 +22,7 @@ impl<'a> Default for VConfig<'a> {
             style: "blue bold",
             disabled: false,
             detect_extensions: vec!["v"],
-            detect_files: vec![],
+            detect_files: vec!["v.mod"],
             detect_folders: vec![],
         }
     }
