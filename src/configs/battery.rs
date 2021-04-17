@@ -2,7 +2,6 @@ use crate::config::ModuleConfig;
 
 use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
-use toml::Value;
 
 #[derive(Clone, ModuleConfig, Serialize)]
 pub struct BatteryConfig<'a> {
@@ -35,7 +34,8 @@ impl<'a> Default for BatteryConfig<'a> {
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,
     pub style: &'a str,
-    pub symbol: Option<&'a str>,
+    pub charging_symbol: Option<&'a str>,
+    pub discharging_symbol: Option<&'a str>,
 }
 
 impl<'a> Default for BatteryDisplayConfig<'a> {
@@ -43,7 +43,8 @@ impl<'a> Default for BatteryDisplayConfig<'a> {
         BatteryDisplayConfig {
             threshold: 10,
             style: "red bold",
-            symbol: None,
+            charging_symbol: None,
+            discharging_symbol: None,
         }
     }
 }

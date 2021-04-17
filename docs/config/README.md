@@ -356,17 +356,18 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `symbol` option is the value of `battery`'s `discharging_symbol` option.
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
 #### Options
 
 The `display` option is an array of the following table.
 
-| Option      | Default    | Description                                     |
-| ----------- | ---------- | ----------------------------------------------- |
-| `threshold` | `10`       | The upper bound for the display option.         |
-| `style`     | `bold red` | The style used if the display option is in use. |
-| `symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Option               | Default    | Description                                     |
+| -------------------- | ---------- | ----------------------------------------------- |
+| `threshold`          | `10`       | The upper bound for the display option.         |
+| `style`              | `bold red` | The style used if the display option is in use. |
+| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option. |
+| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Example
 
@@ -378,7 +379,7 @@ style = "bold red"
 [[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-symbol = 💦
+discharging_symbol = 💦
 
 # when capacity is over 30%, the battery indicator will not be displayed
 
