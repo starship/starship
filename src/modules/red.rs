@@ -84,4 +84,14 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+
+    #[test]
+    fn folder_with_reds_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("hello.reds"))?.sync_all()?;
+        let actual = ModuleRenderer::new("red").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🔴 v0.6.4 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }
