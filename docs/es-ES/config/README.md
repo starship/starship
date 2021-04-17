@@ -790,12 +790,12 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 ### Variables
 
-| Variable  | Ejemplo          | Descripción                                                        |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Refleja el valor de la opción `symbol`                             |
-| style\* |                  | Refleja el valor de la opción `style`                              |
+| Variable  | Ejemplo          | Descripción                                                     |
+| --------- | ---------------- | --------------------------------------------------------------- |
+| version   | `v3.1.201`       | La version del SDK de `dotnet`                                  |
+| tfm       | `netstandard2.0` | El Target Framework Moniker al que se dirige el proyecto actual |
+| symbol    |                  | Refleja el valor de la opción `symbol`                          |
+| style\* |                  | Refleja el valor de la opción `style`                           |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -812,28 +812,28 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `elixir` muestra la versión instalada actualmente de Elixir y Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `mix.exs` file.
+- El directorio actual contiene un archivo `mix.exs`.
 
 ### Opciones
 
-| Opción              | Por defecto                                                 | Descripción                                                     |
-| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `detect_extensions` | `[]`                                                        | Qué extensiones deberían activar este módulo.                   |
-| `detect_files`      | `["mix.exs"]`                                               | Qué nombres de archivo deberían activar este módulo.            |
-| `detect_folders`    | `[]`                                                        | Qué carpetas deberían activar estos módulos.                    |
-| `style`             | `"bold purple"`                                             | El estilo del módulo.                                           |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| Opción              | Por defecto                                                 | Descripción                                                    |
+| ------------------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| `symbol`            | `"💧 "`                                                      | El símbolo usado antes de mostrar la versión de Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Qué extensiones deberían activar este módulo.                  |
+| `detect_files`      | `["mix.exs"]`                                               | Qué nombres de archivo deberían activar este módulo.           |
+| `detect_folders`    | `[]`                                                        | Qué carpetas deberían activar estos módulos.                   |
+| `style`             | `"bold purple"`                                             | El estilo del módulo.                                          |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | El formato para el módulo elixir.                              |
+| `disabled`          | `false`                                                     | Deshabilita el módulo `elixir`.                                |
 
 ### Variables
 
 | Variable    | Ejemplo | Descripción                            |
 | ----------- | ------- | -------------------------------------- |
-| version     | `v1.10` | The version of `elixir`                |
-| otp_version |         | The otp version of `elixir`            |
+| version     | `v1.10` | La version de `elixir`                 |
+| otp_version |         | La versión de otp de `elixir`          |
 | symbol      |         | Refleja el valor de la opción `symbol` |
 | style\*   |         | Refleja el valor de la opción `style`  |
 
@@ -850,31 +850,31 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `elm` muestra la versión actualmente instalada de Elm. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- El directorio actual contiene un archivo `elm.json`
+- El directorio actual contiene un archivo `elm-package.json`
+- El directorio actual contiene un archivo `.elm-version`
+- El directorio actual contiene una carpeta `elm-stuff`
+- El directorio actual contiene archivos `*.elm`
 
 ### Opciones
 
-| Opción              | Por defecto                                        | Descripción                                          |
-| ------------------- | -------------------------------------------------- | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | El formato del módulo.                               |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.      |
-| `detect_extensions` | `["elm"]`                                          | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `["elm-stuff"]`                                    | Qué carpetas deberían activar estos módulos.         |
-| `style`             | `"cyan bold"`                                      | El estilo del módulo.                                |
-| `disabled`          | `false`                                            | Disables the `elm` module.                           |
+| Opción              | Por defecto                                        | Descripción                                             |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | El formato del módulo.                                  |
+| `symbol`            | `"🌳 "`                                             | Una cadena de formato que representa el símbolo de Elm. |
+| `detect_extensions` | `["elm"]`                                          | Qué extensiones deberían activar este módulo.           |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Qué nombres de archivo deberían activar este módulo.    |
+| `detect_folders`    | `["elm-stuff"]`                                    | Qué carpetas deberían activar estos módulos.            |
+| `style`             | `"cyan bold"`                                      | El estilo del módulo.                                   |
+| `disabled`          | `false`                                            | Deshabilita el módulo `elm`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.19.1` | The version of `elm`                   |
+| version   | `v0.19.1` | La versión de `elm`                    |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -891,16 +891,16 @@ format = "via [ $version](cyan bold) "
 
 ## Variable de entorno
 
-The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
+El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- La opción de configuración de `variable` coincide con una variable de entorno existente
+- La opción de configuración de `variable` no está definida, pero la opción de configuración se encuentra `por defecto`
 
 ### Opciones
 
 | Opción     | Por defecto                    | Descripción                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
+| `symbol`   |                                | El símbolo usado antes de mostrar el valor de la variable.                   |
 | `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | El formato del módulo.                                                       |
