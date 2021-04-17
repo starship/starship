@@ -723,22 +723,22 @@ El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.
 
 ### Opciones
 
-| Opción              | Por defecto                                                   | Descripción                                                                       |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | El formato del módulo.                                                            |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | El estilo del módulo.                                                             |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| Opción              | Por defecto                                                   | Descripción                                                                                                              |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol$context]($style) "`                            | El formato del módulo.                                                                                                   |
+| `symbol`            | `"🐳 "`                                                        | El símbolo usado antes de mostrar el contexto de Docker.                                                                 |
+| `only_with_files`   | `true`                                                        | Mostrar solo cuando haya una coincidencia                                                                                |
+| `detect_extensions` | `[]`                                                          | Qué extensiones deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true").        |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Qué nombres de archivo deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true"). |
+| `detect_folders`    | `[]`                                                          | Qué carpetas deberían activar este módulo (necesita que `only_with_files` sea verdadero, con un valor "true").           |
+| `style`             | `"blue bold"`                                                 | El estilo del módulo.                                                                                                    |
+| `disabled`          | `false`                                                       | Deshabilita el módulo `docker_context`.                                                                                  |
 
 ### Variables
 
 | Variable  | Ejemplo        | Descripción                            |
 | --------- | -------------- | -------------------------------------- |
-| context   | `test_context` | The current docker context             |
+| context   | `test_context` | El contexto actual de docker           |
 | symbol    |                | Refleja el valor de la opción `symbol` |
 | style\* |                | Refleja el valor de la opción `style`  |
 
@@ -755,9 +755,9 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+El módulo `dotnet` muestra la versión relevante de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Por defecto, este módulo solo se mostrará en tu prompt cuando uno o más de los siguientes archivos estén presentes en el directorio actual:
 
 - `global.json`
 - `project.json`
