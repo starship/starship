@@ -47,6 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+#[allow(clippy::clippy::unnecessary_wraps)]
 fn parse_red_version(red_version: &str) -> Option<String> {
     Some(format!("v{}", red_version))
 }
