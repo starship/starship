@@ -1516,22 +1516,22 @@ kotlin_binary = "kotlinc"
 
 ### オプション
 
-| オプション             | デフォルト                                                | 説明                                                                    |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | moduleのフォーマットです。                                                      |
-| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                                                         |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| オプション             | デフォルト                                                | 説明                              |
+| ----------------- | ---------------------------------------------------- | ------------------------------- |
+| `symbol`          | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。 |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | moduleのフォーマットです。                |
+| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                   |
+| `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。        |
+| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。       |
 
 ### 変数
 
-| 変数        | 設定例                  | 説明                                       |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | オプション `記号` の値をミラーする                      |
-| style\* |                      | オプション `style` の値をミラーする                   |
+| 変数        | 設定例                  | 説明                                     |
+| --------- | -------------------- | -------------------------------------- |
+| context   | `starship-cluster`   | 現在の Kubernetes のコンテキスト                 |
+| namespace | `starship-namespace` | 設定されている場合、現在の Kubernetes の namespace 名 |
+| symbol    |                      | オプション `記号` の値をミラーする                    |
+| style\* |                      | オプション `style` の値をミラーする                 |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -1549,13 +1549,13 @@ disabled = false
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+`line_break` モジュールは、プロンプトを2行に分割します。
 
 ### オプション
 
-| オプション      | デフォルト   | 説明                                                                 |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| オプション      | デフォルト   | 説明                                     |
+| ---------- | ------- | -------------------------------------- |
+| `disabled` | `false` | `line_break` モジュールを無効にして、プロンプトを1行にします。 |
 
 ### 設定例
 
@@ -1568,7 +1568,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+` lua ` モジュールは、現在インストールされている Lua のバージョンを示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1591,7 +1591,7 @@ The `lua` module shows the currently installed version of Lua. デフォルト�
 
 | 変数        | 設定例      | 説明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v5.4.0` | The version of `lua`   |
+| version   | `v5.4.0` | `lua` のバージョン           |
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
@@ -1608,7 +1608,7 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
@@ -2056,9 +2056,9 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
+`python` モジュールは、現在インストールされているPythonのバージョンと、アクティブ化されている場合は、現在の Python 仮想環境を表示します。
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+`pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
