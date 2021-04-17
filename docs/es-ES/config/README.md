@@ -898,21 +898,21 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 
 ### Opciones
 
-| Opción     | Por defecto                    | Descripción                                                                  |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | El símbolo usado antes de mostrar el valor de la variable.                   |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | El formato del módulo.                                                       |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Opción     | Por defecto                    | Descripción                                                                            |
+| ---------- | ------------------------------ | -------------------------------------------------------------------------------------- |
+| `symbol`   |                                | El símbolo usado antes de mostrar el valor de la variable.                             |
+| `variable` |                                | La variable de entorno a mostrar.                                                      |
+| `default`  |                                | El valor por defecto que se mostrará cuando la variable seleccionada no está definida. |
+| `format`   | `"with [$env_value]($style) "` | El formato del módulo.                                                                 |
+| `disabled` | `false`                        | Deshabilita el módulo `env_var`.                                                       |
 
 ### Variables
 
-| Variable  | Ejemplo                                     | Descripción                                |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Refleja el valor de la opción `symbol`     |
-| style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`      |
+| Variable  | Ejemplo                               | Descripción                                 |
+| --------- | ------------------------------------- | ------------------------------------------- |
+| env_value | `Windows NT` (si _variable_ es `$OS`) | El valor de entorno de la opción `variable` |
+| symbol    |                                       | Refleja el valor de la opción `symbol`      |
+| style\* | `black bold dimmed`                   | Refleja el valor de la opción `style`       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -928,28 +928,28 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `erlang` muestra la versión instalada de Erlang/OTP. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- El directorio actual contiene un fichero `rebar.config`.
+- El directorio actual contiene un fichero `erlang.mk`.
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                              |
-| ------------------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`             | `"bold red"`                         | El estilo del módulo.                                    |
-| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.            |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Qué nombres de archivo deberían activar este módulo.     |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.             |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                   |
-| `disabled`          | `false`                              | Disables the `erlang` module.                            |
+| Opción              | Por defecto                          | Descripción                                             |
+| ------------------- | ------------------------------------ | ------------------------------------------------------- |
+| `symbol`            | `" "`                               | El símbolo usado antes de mostrar la versión de Erlang. |
+| `style`             | `"bold red"`                         | El estilo del módulo.                                   |
+| `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.           |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Qué nombres de archivo deberían activar este módulo.    |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.            |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                  |
+| `disabled`          | `false`                              | Deshabilita el módulo `erlang`.                         |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v22.1.3` | The version of `erlang`                |
+| version   | `v22.1.3` | La versión de `erlang`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -966,25 +966,25 @@ format = "via [e $version](bold red) "
 
 ## Gcloud
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](https://cloud.google.com/sdk/gcloud). Esto se basa en el archivo `~/.config/gcloud/active_config`, el archivo `~/.config/gcloud/configurations/config_{CONFIG NAME}` y la variable de entorno `CLOUDSDK_CONFIG`.
 
 ### Opciones
 
-| Opción           | Por defecto                                      | Descripción                                                     |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | El formato del módulo.                                          |
-| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | El estilo del módulo.                                           |
-| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
+| Opción           | Por defecto                                      | Descripción                                                |
+| ---------------- | ------------------------------------------------ | ---------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(\($region\))]($style) '` | El formato del módulo.                                     |
+| `symbol`         | `"☁️ "`                                          | El símbolo usado antes de mostrar el perfil actual de GCP. |
+| `region_aliases` |                                                  | Tabla de alias de región a mostrar además del nombre GCP.  |
+| `style`          | `"bold blue"`                                    | El estilo del módulo.                                      |
+| `disabled`       | `false`                                          | Deshabilita el módulo `gcloud`.                            |
 
 ### Variables
 
 | Variable  | Ejemplo           | Descripción                                                        |
 | --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | The current GCP region                                             |
-| account   | `foo@example.com` | The current GCP profile                                            |
-| project   |                   | The current GCP project                                            |
+| region    | `us-central1`     | La región GCP actual                                               |
+| account   | `foo@example.com` | El perfil actual de GCP                                            |
+| project   |                   | El proyecto GCP actual                                             |
 | active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |                   | Refleja el valor de la opción `symbol`                             |
 | style\* |                   | Refleja el valor de la opción `style`                              |
