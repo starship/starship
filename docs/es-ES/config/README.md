@@ -173,7 +173,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# El cual es equivalente a
 format = """
 $username\
 $hostname\
@@ -623,26 +623,26 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of Deno. By default the module will be shown if any of the following conditions are met:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+El módulo `deno` muestra la versión instalada de Deno. Por defecto se mostrará el módulo si se cumplen cualquiera de las siguientes condiciones:
+- El directorio actual contiene un archivo `mod.ts`, `mod.js`, `deps.ts` o `deps.js`
 
 ### Opciones
 
-| Opción              | Por defecto                                  | Descripción                                          |
-| ------------------- | -------------------------------------------- | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | El formato del módulo.                               |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno      |
-| `detect_extensions` | `[]`                                         | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.           |
-| `style`             | `"green bold"`                               | El estilo del módulo.                                |
-| `disabled`          | `false`                                      | Disables the `deno` module.                          |
+| Opción              | Por defecto                                  | Descripción                                             |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | El formato del módulo.                                  |
+| `symbol`            | `"🦕 "`                                       | Una cadena de formato que representa el símbolo de Deno |
+| `detect_extensions` | `[]`                                         | Qué extensiones deberían activar este módulo.           |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo.    |
+| `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.              |
+| `style`             | `"green bold"`                               | El estilo del módulo.                                   |
+| `disabled`          | `false`                                      | Deshabilita el módulo `deno`.                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.8.3` | The version of `deno`                  |
+| version   | `v1.8.3` | La versión de `deno`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -657,25 +657,25 @@ format = "via [🦕 $version](green bold) "
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+El módulo `directory` muestra la ruta hasta el directorio actual, mostrando tres directorios padre como máximo. Tu directorio se truncará a la raíz del repositorio git en el que te encuentres.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activaste para la opción.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
 
 ### Opciones
 
-| Opción              | Por defecto                                        | Descripción                                                                      |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                           |
-| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                            |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| Opción              | Por defecto                                        | Descripción                                                                    |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `truncation_length` | `3`                                                | El número de directorios padre a los que se debe truncar el directorio actual. |
+| `truncate_to_repo`  | `true`                                             | Truncar o no hasta la raíz del repositorio git en el que se esté.              |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                         |
+| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                          |
+| `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                             |
+| `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.              |
+| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                     |
+| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. eg: "…/"                          |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                          |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
