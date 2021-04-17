@@ -777,16 +777,16 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 ### Opciones
 
-| Opción              | Por defecto                                                                                             | Descripción                                             |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                  |
-| `symbol`            | `".NET "`                                                                                               | El símbolo usado antes de mostrar la version de dotnet. |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.   |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Qué extensiones deberían activar este módulo.           |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Qué nombres de archivo deberían activar este módulo.    |
-| `detect_folders`    | `[]`                                                                                                    | Qué carpetas deberían activar estos módulos.            |
-| `style`             | `"bold blue"`                                                                                           | El estilo del módulo.                                   |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                           |
+| Opción              | Por defecto                                                                                             | Descripción                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                                          |
+| `symbol`            | `".NET "`                                                                                               | El símbolo usado antes de mostrar la version de dotnet.                         |
+| `heuristic`         | `true`                                                                                                  | Usa una detección de versiones más rápida para mantener la nave espacial veloz. |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Qué extensiones deberían activar este módulo.                                   |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Qué nombres de archivo deberían activar este módulo.                            |
+| `detect_folders`    | `[]`                                                                                                    | Qué carpetas deberían activar estos módulos.                                    |
+| `style`             | `"bold blue"`                                                                                           | El estilo del módulo.                                                           |
+| `disabled`          | `false`                                                                                                 | Deshabilita el módulo `dotnet`.                                                 |
 
 ### Variables
 
