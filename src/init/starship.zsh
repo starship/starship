@@ -7,15 +7,6 @@
 # after drawing the prompt. This ensures that the timing for one command is only
 # ever drawn once (for the prompt immediately after it is run).
 
-zmodload zsh/parameter  # Needed to access jobstates variable for NUM_JOBS
-
-starship_render() {
-    # Use length of jobstates array as number of jobs. Expansion fails inside
-    # quotes so we set it here and then use the value later on.
-    NUM_JOBS=$#jobstates
-    PROMPT="$(::STARSHIP:: prompt --keymap="${KEYMAP-}" --status=$STARSHIP_CMD_STATUS --cmd-duration=${STARSHIP_DURATION-} --jobs="$NUM_JOBS")"
-}
-
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
     # ZSH <= 5; Does not have a built-in variable so we will rely on Starship's inbuilt time function.
@@ -26,7 +17,7 @@ else
     zmodload zsh/datetime
     zmodload zsh/mathfunc
     __starship_get_time() {
-        ((STARSHIP_CAPTURED_TIME = int(rint($EPOCHREALTIME * 1000))))
+        (( STARSHIP_CAPTURED_TIME = int(rint(EPOCHREALTIME * 1000)) ))
     }
 fi
 
@@ -37,16 +28,12 @@ starship_precmd() {
 
     # Compute cmd_duration, if we have a time to consume, otherwise clear the
     # previous duration
-    if [[ -n "${STARSHIP_START_TIME+1}" ]]; then
-        __starship_get_time && STARSHIP_END_TIME=$STARSHIP_CAPTURED_TIME
-        ((STARSHIP_DURATION = STARSHIP_END_TIME - STARSHIP_START_TIME))
+    if (( ${+STARSHIP_START_TIME} )); then
+        __starship_get_time && (( STARSHIP_DURATION = STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
         unset STARSHIP_START_TIME
     else
         unset STARSHIP_DURATION
     fi
-
-    # Render the updated prompt
-    starship_render
 }
 starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
@@ -55,8 +42,8 @@ starship_preexec() {
 # If precmd/preexec arrays are not already set, set them. If we don't do this,
 # the code to detect whether starship_precmd is already in precmd_functions will
 # fail because the array doesn't exist (and same for starship_preexec)
-[[ -z "${precmd_functions+1}" ]] && precmd_functions=()
-[[ -z "${preexec_functions+1}" ]] && preexec_functions=()
+(( ! ${+precmd_functions} )) && precmd_functions=()
+(( ! ${+preexec_functions} )) && preexec_functions=()
 
 # If starship precmd/preexec functions are already hooked, don't double-hook them
 # to avoid unnecessary performance degradation in nested shells
@@ -69,7 +56,6 @@ fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
-    starship_render
     zle reset-prompt
 }
 
@@ -96,3 +82,8 @@ export STARSHIP_SHELL="zsh"
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
 STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
+
+VIRTUAL_ENV_DISABLE_PROMPT=1
+
+setopt prompt{percent,subst}
+PROMPT='$(::STARSHIP:: prompt --keymap=${KEYMAP} --status=${STARSHIP_CMD_STATUS} --cmd-duration=${STARSHIP_DURATION} --jobs=%j)'

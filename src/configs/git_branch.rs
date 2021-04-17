@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct GitBranchConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -14,8 +15,8 @@ pub struct GitBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for GitBranchConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for GitBranchConfig<'a> {
+    fn default() -> Self {
         GitBranchConfig {
             format: "on [$symbol$branch]($style)(:[$remote]($style)) ",
             symbol: " ",

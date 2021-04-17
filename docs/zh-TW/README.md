@@ -2,8 +2,8 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+tagline: 適合任何 shell 的最小、極速、無限客製化的提示字元！
+actionText: 馬上開始 →
 actionLink: ./guide/
 features:
   - 
@@ -17,8 +17,8 @@ features:
     details: 任何些微的細節都可以隨你喜愛地客製化，讓你的提示字元可以隨你所欲地最小化或是充滿各種特色。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+metaTitle: "Starship：跨 Shell 提示字元"
+description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 有針對 Bash、Fish、ZSH、Ion 與 Powershell 的快速安裝指南。
 ---
 
 <div class="center">
@@ -33,24 +33,25 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 1. 安裝 **starship** 執行檔：
 
 
-   #### Install Latest Version
+   #### 安裝最新版本
 
-   With Shell:
+   使用 Shell 安裝：
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
-   #### Install via Package Manager
+   #### 使用套件管理器安裝：
 
-   With [Homebrew](https://brew.sh/):
+   使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   使用 [Scoop](https://scoop.sh)：
 
    ```powershell
    scoop install starship
@@ -94,7 +95,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -103,7 +104,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   將以下內容放到 `~/.config/ion/initrc` 的結尾：
 
    ```sh
    # ~/.config/ion/initrc
@@ -113,9 +114,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning 只有 elvish v0.15 或以上版本才有支援 :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -123,3 +124,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   將以下內容放到 `~/.tcshrc` 的結尾：
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```

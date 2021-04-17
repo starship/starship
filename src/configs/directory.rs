@@ -1,9 +1,10 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 use indexmap::IndexMap;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
@@ -21,8 +22,8 @@ pub struct DirectoryConfig<'a> {
     pub home_symbol: &'a str,
 }
 
-impl<'a> RootModuleConfig<'a> for DirectoryConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for DirectoryConfig<'a> {
+    fn default() -> Self {
         DirectoryConfig {
             truncation_length: 3,
             truncate_to_repo: true,

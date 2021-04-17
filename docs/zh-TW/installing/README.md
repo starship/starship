@@ -9,6 +9,32 @@ For most users, the instructions on [the main page](/guide/#🚀-installation) w
 
 There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
 
+## [Chocolatey](https://chocolatey.org)
+
+### 先決要求
+
+Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+
+### Installation
+
+```powershell
+choco install starship
+```
+
+## [termux](https://termux.com)
+
+### 先決要求
+
+```sh
+pkg install getconf
+```
+
+### Installation
+
+```sh
+curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+```
+
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
 ### Getting the Binary
@@ -19,9 +45,31 @@ There are so many platforms out there that they didn't fit into the main README.
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](home-manager)
+#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
 
-Add `pkgs.starship` to your `home.packages` in your `home.nix` file, then run
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
+
+```nix
+{
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    # Configuration written to ~/.config/starship.toml
+    settings = {
+      # add_newline = false;
+
+      # character = {
+      #   success_symbol = "[➜](bold green)";
+      #   error_symbol = "[➜](bold red)";
+      # };
+
+      # package.disabled = true;
+    };
+  };
+}
+```
+
+then run
 
 ```sh
 home-manager switch
@@ -29,18 +77,8 @@ home-manager switch
 
 #### Declarative, system-wide, with NixOS
 
-Add `pkgs.starship` to `environment.packages` in your `configuration.nix`, then run
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch
-```
-
-### Modifying Init Scripts
-
-#### With Nix and home-manager, using zsh:
-
-Add the following to `programs.zsh.initExtra` in your `home.nix` file, then run
-
-```sh
-home-manager switch
 ```

@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct LuaConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -14,8 +15,8 @@ pub struct LuaConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for LuaConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for LuaConfig<'a> {
+    fn default() -> Self {
         LuaConfig {
             format: "via [$symbol($version )]($style)",
             symbol: "🌙 ",

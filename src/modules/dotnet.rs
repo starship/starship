@@ -15,28 +15,20 @@ type JValue = serde_json::Value;
 
 const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
-const DIRECTORY_BUILD_PROPS_FILE: &str = "Directory.Build.props";
-const DIRECTORY_BUILD_TARGETS_FILE: &str = "Directory.Build.targets";
-const PACKAGES_PROPS_FILE: &str = "Packages.props";
 
 /// A module which shows the latest (or pinned) version of the dotnet SDK
-///
-/// Will display if any of the following files are present in
-/// the current directory:
-/// global.json, project.json, *.sln, *.csproj, *.fsproj, *.xproj
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("dotnet");
+    let config = DotnetConfig::try_load(module.config);
+
     // First check if this is a DotNet Project before doing the O(n)
     // check for the version using the JSON files
     let is_dotnet_project = context
         .try_begin_scan()?
-        .set_files(&[
-            GLOBAL_JSON_FILE,
-            PROJECT_JSON_FILE,
-            DIRECTORY_BUILD_PROPS_FILE,
-            DIRECTORY_BUILD_TARGETS_FILE,
-            PACKAGES_PROPS_FILE,
-        ])
-        .set_extensions(&["sln", "csproj", "fsproj", "xproj"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_dotnet_project {
@@ -44,9 +36,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let dotnet_files = get_local_dotnet_files(context).ok()?;
-
-    let mut module = context.new_module("dotnet");
-    let config = DotnetConfig::try_load(module.config);
 
     // Internally, this module uses its own mechanism for version detection.
     // Typically it is twice as fast as running `dotnet --version`.
@@ -204,9 +193,7 @@ fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> 
         .iter()
         // repo_root may be the same as the current directory. We don't need to scan it again.
         .filter(|&&d| d != current_dir)
-        .filter_map(|d| check_directory_for_global_json(d))
-        // This will lazily evaluate the first directory with a global.json
-        .next()
+        .find_map(|d| check_directory_for_global_json(d))
 }
 
 fn check_directory_for_global_json(path: &Path) -> Option<Version> {
@@ -383,7 +370,7 @@ mod tests {
         touch_path(&workspace, "Directory.Build.props", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -394,7 +381,7 @@ mod tests {
         touch_path(&workspace, "Directory.Build.targets", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -405,7 +392,7 @@ mod tests {
         touch_path(&workspace, "Packages.props", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -416,7 +403,7 @@ mod tests {
         touch_path(&workspace, "solution.sln", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -430,7 +417,7 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0 ")
+                Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -442,7 +429,7 @@ mod tests {
         touch_path(&workspace, "project.fsproj", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -453,7 +440,7 @@ mod tests {
         touch_path(&workspace, "project.xproj", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -464,7 +451,7 @@ mod tests {
         touch_path(&workspace, "project.json", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v3.1.103 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
         );
         workspace.close()
     }
@@ -476,7 +463,7 @@ mod tests {
         touch_path(&workspace, "global.json", Some(&global_json))?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("•NET v1.2.3 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v1.2.3 "))),
         );
         workspace.close()
     }
@@ -492,7 +479,7 @@ mod tests {
             &workspace.path().join("project"),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0 ")
+                Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -513,7 +500,7 @@ mod tests {
             &workspace.path().join("deep/path/to/project"),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("•NET v1.2.3 🎯 netstandard2.0 ")
+                Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -528,7 +515,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("•NET v3.1.103 🎯 netstandard2.0 ")
+                Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -545,7 +532,7 @@ mod tests {
                 "{}",
                 Color::Blue
                     .bold()
-                    .paint("•NET v3.1.103 🎯 netstandard2.0;net461 ")
+                    .paint(".NET v3.1.103 🎯 netstandard2.0;net461 ")
             )),
         );
         workspace.close()

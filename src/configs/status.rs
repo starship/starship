@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -16,8 +17,8 @@ pub struct StatusConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for StatusConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for StatusConfig<'a> {
+    fn default() -> Self {
         StatusConfig {
             format: "[$symbol$status]($style) ",
             symbol: "✖",

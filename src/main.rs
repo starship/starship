@@ -41,7 +41,7 @@ fn main() {
     let shell_arg = Arg::with_name("shell")
         .value_name("SHELL")
         .help(
-            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion, elvish",
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion, elvish, tcsh",
         )
         .required(true);
 
@@ -132,6 +132,17 @@ fn main() {
                 .arg(Arg::with_name("value").help("Value to place into that key")),
         )
         .subcommand(
+            SubCommand::with_name("print-config")
+                .about("Prints the computed starship configuration")
+                .arg(
+                    Arg::with_name("default")
+                        .short("d")
+                        .long("default")
+                        .help("Print the default instead of the computed config")
+                        .takes_value(false),
+                ),
+        )
+        .subcommand(
             SubCommand::with_name("toggle")
                 .about("Toggle a given starship module")
                 .arg(
@@ -207,6 +218,10 @@ fn main() {
             } else {
                 configure::edit_configuration()
             }
+        }
+        ("print-config", Some(sub_m)) => {
+            let print_default = sub_m.is_present("default");
+            configure::print_configuration(print_default)
         }
         ("toggle", Some(sub_m)) => {
             if let Some(name) = sub_m.value_of("name") {

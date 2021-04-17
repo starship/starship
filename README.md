@@ -90,7 +90,7 @@
       alt="简体中文"
   /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
@@ -98,7 +98,7 @@
       alt="Español"
   /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
@@ -106,7 +106,7 @@
       alt="Français"
   /></a>
   &nbsp;
-  <a 
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -157,8 +157,9 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ##### From prebuilt binary, with Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
    #### Install via Package Manager
 
@@ -233,6 +234,16 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    # ~/.elvish/rc.elv
 
    eval (starship init elvish)
+   ```
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```
 
 ## 🤝 Contributing

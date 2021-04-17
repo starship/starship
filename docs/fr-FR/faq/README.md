@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-L' [implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée à Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module de durée de commande](https://starship.rs/config/#Command-Duration) et pour s'assurer que Starship est compatible avec les configurations Bash pré-installées.
+[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
 
 Pour une liste de tous les flags acceptés par `starship`, utilisez la commande suivante :
 
@@ -55,6 +55,10 @@ Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
+
+## I see symbols I don't understand or expect, what do they mean?
+
+If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
 
 ## Pourquoi ne vois-je pas de glyphe dans mon invite?
 
@@ -87,6 +91,6 @@ Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez v
 Si Starship a été installé en utilisant le script `curl | bash` , la commande suivante supprimera l'exécutable :
 
 ```sh
-# Localiser et supprimer l'exécutable de Starship
-rm "$(which starship)"
+# Locate and delete the starship binary
+sh -c 'rm "$(which starship)"'
 ```

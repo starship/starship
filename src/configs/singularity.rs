@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct SingularityConfig<'a> {
     pub symbol: &'a str,
     pub format: &'a str,
@@ -10,8 +11,8 @@ pub struct SingularityConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for SingularityConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for SingularityConfig<'a> {
+    fn default() -> Self {
         SingularityConfig {
             format: "[$symbol\\[$env\\]]($style) ",
             symbol: "",

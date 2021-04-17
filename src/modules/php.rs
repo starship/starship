@@ -4,23 +4,19 @@ use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current PHP version
-///
-/// Will display the PHP version if any of the following criteria are met:
-///     - Current directory contains a `.php` file
-///     - Current directory contains a `composer.json` or `.php-version` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("php");
+    let config: PhpConfig = PhpConfig::try_load(module.config);
     let is_php_project = context
         .try_begin_scan()?
-        .set_files(&["composer.json", ".php-version"])
-        .set_extensions(&["php"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_php_project {
         return None;
     }
-
-    let mut module = context.new_module("php");
-    let config: PhpConfig = PhpConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

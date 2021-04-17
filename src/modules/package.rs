@@ -165,7 +165,7 @@ fn extract_maven_version(file_contents: &str) -> Option<String> {
 fn extract_meson_version(file_contents: &str) -> Option<String> {
     let file_contents = file_contents.split_ascii_whitespace().collect::<String>();
 
-    let re = Regex::new(r#"project\([^())]*version:'(?P<version>[^']+)'[^())]*\)"#).unwrap();
+    let re = Regex::new(r#"project\([^())]*,version:'(?P<version>[^']+)'[^())]*\)"#).unwrap();
     let caps = re.captures(&file_contents)?;
 
     let formatted_version = format_version(&caps["version"]);
@@ -753,6 +753,18 @@ end";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_meson_version_with_meson_version() -> io::Result<()> {
+        let config_name = "meson.build";
+        let config_content =
+            "project('starship', 'rust', version: '0.1.0', meson_version: '>= 0.57.0')".to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 

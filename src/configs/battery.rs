@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct BatteryConfig<'a> {
     pub full_symbol: &'a str,
     pub charging_symbol: &'a str,
@@ -14,14 +15,14 @@ pub struct BatteryConfig<'a> {
     pub format: &'a str,
 }
 
-impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for BatteryConfig<'a> {
+    fn default() -> Self {
         BatteryConfig {
-            full_symbol: "",
-            charging_symbol: "",
-            discharging_symbol: "",
-            unknown_symbol: "",
-            empty_symbol: "",
+            full_symbol: " ",
+            charging_symbol: " ",
+            discharging_symbol: " ",
+            unknown_symbol: " ",
+            empty_symbol: " ",
             format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig {
                 threshold: 10,
@@ -32,7 +33,7 @@ impl<'a> RootModuleConfig<'a> for BatteryConfig<'a> {
     }
 }
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Default, Serialize)]
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,
     pub style: &'a str,

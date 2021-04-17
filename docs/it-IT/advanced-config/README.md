@@ -27,11 +27,11 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
-eval $(starship init bash)
+trap blastoff DEBUG # Trap DEBUG *prima* di eseguire starship
+eval $(starship bash)
 ```
 
-## Cambia il Titolo della Finestra
+## Cambia il titolo della finestra
 
 Alcune shell prompt cambieranno automaticamente il titolo della finestra (ad esempio per riflettere la directory di lavoro). Fish lo fa per impostazione predefinita. Starship non lo fa, ma è abbastanza semplice aggiungere questa funzionalità a `bash` o `zsh`.
 
@@ -39,7 +39,7 @@ Innanzitutto, bisogna definire una funzione per il cambio del titolo della fines
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+    echo -ne "\033]0; IL_TUO_TITOLO_QUI \007"
 }
 ```
 
@@ -63,12 +63,12 @@ Ad esempio, se desideri visualizzare la directory corrente nel titolo della sche
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
 
-## Stile delle Stringhe
+## Stringhe di stile
 
 Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le parole non sono sensibili alle maiuscole (cioè `grassetto` e `BoLd` sono considerate la stessa stringa). Ogni parola può essere una delle seguenti:
 

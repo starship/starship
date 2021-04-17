@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmd_duration",
     "conda",
     "dart",
+    "deno",
     "directory",
     "docker_context",
     "dotnet",
@@ -34,6 +35,7 @@ pub const ALL_MODULES: &[&str] = &[
     "hg_branch",
     "hostname",
     "java",
+    "scala",
     "jobs",
     "julia",
     "kotlin",
@@ -56,11 +58,13 @@ pub const ALL_MODULES: &[&str] = &[
     "php",
     "swift",
     "terraform",
+    "shell",
     "shlvl",
     "singularity",
     "status",
     "time",
     "username",
+    "vcsh",
     "vagrant",
     "zig",
 ];
@@ -143,6 +147,7 @@ impl<'a> Module<'a> {
         match shell {
             Shell::Bash => ansi_strings_modified(ansi_strings, shell),
             Shell::Zsh => ansi_strings_modified(ansi_strings, shell),
+            Shell::Tcsh => ansi_strings_modified(ansi_strings, shell),
             _ => ansi_strings,
         }
     }

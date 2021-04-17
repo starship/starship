@@ -35,11 +35,12 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Neueste Version installieren
 
-   With Shell:
+   Mit Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Installation mithilfe eines Paket-Managers
@@ -123,3 +124,13 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```

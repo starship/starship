@@ -2,6 +2,7 @@ use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
 use indexmap::IndexMap;
+use serde::Serialize;
 
 use std::clone::Clone;
 use std::collections::HashMap;
@@ -14,18 +15,14 @@ use toml::Value;
 /// Root config of a module.
 pub trait RootModuleConfig<'a>
 where
-    Self: ModuleConfig<'a>,
+    Self: ModuleConfig<'a> + Default,
 {
-    /// Create a new root module config with default values.
-    fn new() -> Self;
-
     /// Load root module config from given Value and fill unset variables with default
     /// values.
     fn load(config: &'a Value) -> Self {
-        if config.get("prompt_order").is_some() {
-            log::warn!("\"prompt_order\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
-        }
-        Self::new().load_config(config)
+        let mut out = Self::default();
+        out.load_config(config);
+        out
     }
 
     /// Helper function that will call RootModuleConfig::load(config) if config is Some,
@@ -34,10 +31,12 @@ where
         if let Some(config) = config {
             Self::load(config)
         } else {
-            Self::new()
+            Self::default()
         }
     }
 }
+
+impl<'a, T: ModuleConfig<'a> + Default> RootModuleConfig<'a> for T {}
 
 /// Parsable config.
 pub trait ModuleConfig<'a>
@@ -50,8 +49,10 @@ where
     }
 
     /// Merge `self` with config from a toml table.
-    fn load_config(&self, config: &'a Value) -> Self {
-        Self::from_config(config).unwrap_or_else(|| self.clone())
+    fn load_config(&mut self, config: &'a Value) {
+        if let Some(value) = Self::from_config(config) {
+            let _ = std::mem::replace(self, value);
+        }
     }
 }
 
@@ -175,7 +176,7 @@ where
 
 /// A wrapper around `Vec<T>` that implements `ModuleConfig`, and either
 /// accepts a value of type `T` or a list of values of type `T`.
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Serialize)]
 pub struct VecOr<T>(pub Vec<T>);
 
 impl<'a, T> ModuleConfig<'a> for VecOr<T>
@@ -346,7 +347,7 @@ impl StarshipConfig {
         if let Some(root_config) = &self.config {
             StarshipRootConfig::load(root_config)
         } else {
-            StarshipRootConfig::new()
+            StarshipRootConfig::default()
         }
     }
 }
@@ -480,7 +481,7 @@ mod tests {
 
     #[test]
     fn test_load_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig<'a> {
             pub symbol: &'a str,
             pub disabled: bool,
@@ -492,12 +493,12 @@ mod tests {
             disabled = true
             some_array = ["A"]
         };
-        let default_config = TestConfig {
+        let mut rust_config = TestConfig {
             symbol: "S ",
             disabled: false,
             some_array: vec!["A", "B", "C"],
         };
-        let rust_config = default_config.load_config(&config);
+        rust_config.load_config(&config);
 
         assert_eq!(rust_config.symbol, "T ");
         assert_eq!(rust_config.disabled, true);
@@ -506,13 +507,13 @@ mod tests {
 
     #[test]
     fn test_load_nested_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig<'a> {
             pub untracked: SegmentDisplayConfig<'a>,
             pub modified: SegmentDisplayConfig<'a>,
         }
 
-        #[derive(PartialEq, Debug, Clone, ModuleConfig)]
+        #[derive(PartialEq, Debug, Clone, Default, ModuleConfig)]
         struct SegmentDisplayConfig<'a> {
             pub value: &'a str,
             pub style: Style,
@@ -523,7 +524,7 @@ mod tests {
             modified = { value = "•", style = "red" }
         };
 
-        let default_config = TestConfig {
+        let mut git_status_config = TestConfig {
             untracked: SegmentDisplayConfig {
                 value: "?",
                 style: Color::Red.bold(),
@@ -533,7 +534,7 @@ mod tests {
                 style: Color::Red.bold(),
             },
         };
-        let git_status_config = default_config.load_config(&config);
+        git_status_config.load_config(&config);
 
         assert_eq!(
             git_status_config.untracked,
@@ -553,7 +554,7 @@ mod tests {
 
     #[test]
     fn test_load_optional_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig<'a> {
             pub optional: Option<&'a str>,
             pub hidden: Option<&'a str>,
@@ -562,11 +563,11 @@ mod tests {
         let config = toml::toml! {
             optional = "test"
         };
-        let default_config = TestConfig {
+        let mut rust_config = TestConfig {
             optional: None,
             hidden: None,
         };
-        let rust_config = default_config.load_config(&config);
+        rust_config.load_config(&config);
 
         assert_eq!(rust_config.optional, Some("test"));
         assert_eq!(rust_config.hidden, None);
@@ -574,7 +575,7 @@ mod tests {
 
     #[test]
     fn test_load_enum_config() {
-        #[derive(Clone, ModuleConfig)]
+        #[derive(Clone, Default, ModuleConfig)]
         struct TestConfig {
             pub switch_a: Switch,
             pub switch_b: Switch,
@@ -583,15 +584,21 @@ mod tests {
 
         #[derive(Debug, PartialEq, Clone)]
         enum Switch {
-            ON,
-            OFF,
+            On,
+            Off,
+        }
+
+        impl Default for Switch {
+            fn default() -> Self {
+                Self::Off
+            }
         }
 
         impl<'a> ModuleConfig<'a> for Switch {
             fn from_config(config: &'a Value) -> Option<Self> {
                 match config.as_str()? {
-                    "on" => Some(Self::ON),
-                    "off" => Some(Self::OFF),
+                    "on" => Some(Self::On),
+                    "off" => Some(Self::Off),
                     _ => None,
                 }
             }
@@ -601,16 +608,16 @@ mod tests {
             switch_a = "on"
             switch_b = "any"
         };
-        let default_config = TestConfig {
-            switch_a: Switch::OFF,
-            switch_b: Switch::OFF,
-            switch_c: Switch::OFF,
+        let mut rust_config = TestConfig {
+            switch_a: Switch::Off,
+            switch_b: Switch::Off,
+            switch_c: Switch::Off,
         };
-        let rust_config = default_config.load_config(&config);
+        rust_config.load_config(&config);
 
-        assert_eq!(rust_config.switch_a, Switch::ON);
-        assert_eq!(rust_config.switch_b, Switch::OFF);
-        assert_eq!(rust_config.switch_c, Switch::OFF);
+        assert_eq!(rust_config.switch_a, Switch::On);
+        assert_eq!(rust_config.switch_b, Switch::Off);
+        assert_eq!(rust_config.switch_c, Switch::Off);
     }
 
     #[test]

@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct CondaConfig<'a> {
     pub truncation_length: usize,
     pub format: &'a str,
@@ -12,8 +13,8 @@ pub struct CondaConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for CondaConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for CondaConfig<'a> {
+    fn default() -> Self {
         CondaConfig {
             truncation_length: 1,
             format: "via [$symbol$environment]($style) ",

@@ -4,6 +4,7 @@ use std::path::Path;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -40,10 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    let version = get_python_version(context, &config)?;
-                    Some(Ok(version.trim().to_string()))
-                }
+                "version" => get_python_version(context, &config).map(Ok),
                 "virtualenv" => {
                     let virtual_env = get_python_virtual_env(context);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
@@ -67,31 +65,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
     if config.pyenv_version_name {
-        return Some(context.exec_cmd("pyenv", &["version-name"])?.stdout);
+        let version_name = context.exec_cmd("pyenv", &["version-name"])?.stdout;
+        return Some(version_name.trim().to_string());
     };
-    let version = config.python_binary.0.iter().find_map(|binary| {
-        match context.exec_cmd(binary, &["--version"]) {
-            Some(output) => {
-                if output.stdout.is_empty() {
-                    Some(output.stderr)
-                } else {
-                    Some(output.stdout)
-                }
+    let version = config
+        .python_binary
+        .0
+        .iter()
+        .find_map(|binary| context.exec_cmd(binary, &["--version"]))
+        .map(|output| {
+            if output.stdout.is_empty() {
+                output.stderr
+            } else {
+                output.stdout
             }
-            None => None,
-        }
-    })?;
-    Some(format_python_version(&version))
+        })?;
+
+    format_python_version(&version, config.version_format)
 }
 
-fn format_python_version(python_stdout: &str) -> String {
-    format!(
-        "v{}",
-        python_stdout
-            .trim_start_matches("Python ")
-            .trim_end_matches(":: Anaconda, Inc.")
-            .trim()
-    )
+fn format_python_version(python_version: &str, version_format: &str) -> Option<String> {
+    let version = python_version
+        // split into ["Python", "3.8.6", ...]
+        .split_whitespace()
+        // get down to "3.8.6"
+        .nth(1)?;
+
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formating `python` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
@@ -108,7 +114,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
         .ok()?
         .general_section()
         .get("prompt")
-        .map(String::from)
+        .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
 }
 
 #[cfg(test)]
@@ -122,14 +128,50 @@ mod tests {
 
     #[test]
     fn test_format_python_version() {
-        let input = "Python 3.7.2";
-        assert_eq!(format_python_version(input), "v3.7.2");
+        assert_eq!(
+            format_python_version("Python 3.7.2", "v${major}.${minor}.${patch}"),
+            Some("v3.7.2".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_truncated() {
+        assert_eq!(
+            format_python_version("Python 3.7.2", "v${major}.${minor}"),
+            Some("v3.7".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_is_malformed() {
+        assert_eq!(
+            format_python_version("Python 3.7", "v${major}.${minor}.${patch}"),
+            Some("v3.7.".to_string())
+        );
     }
 
     #[test]
     fn test_format_python_version_anaconda() {
-        let input = "Python 3.6.10 :: Anaconda, Inc.";
-        assert_eq!(format_python_version(input), "v3.6.10");
+        assert_eq!(
+            format_python_version(
+                "Python 3.6.10 :: Anaconda, Inc.",
+                "v${major}.${minor}.${patch}"
+            ),
+            Some("v3.6.10".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_pypy() {
+        assert_eq!(
+            format_python_version(
+                "\
+Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
+[PyPy 7.3.3-beta0 with GCC 10.2.0]",
+                "v${major}.${minor}.${patch}"
+            ),
+            Some("v3.7.9".to_string())
+        );
     }
 
     #[test]
@@ -306,7 +348,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -324,7 +366,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -351,7 +393,34 @@ prompt = 'foo'
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (foo)")
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_dirty_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = '(foo)'
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
         ));
 
         assert_eq!(actual, expected);

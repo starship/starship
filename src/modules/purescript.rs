@@ -4,23 +4,19 @@ use crate::configs::purescript::PureScriptConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current PureScript version
-///
-/// Will display the PureScript version if any of the following criteria are met:
-///     - Current directory contains a `spago.dhall` file
-///     - Current directory contains a `*.purs` files
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("purescript");
+    let config: PureScriptConfig = PureScriptConfig::try_load(module.config);
     let is_purs_project = context
         .try_begin_scan()?
-        .set_files(&["spago.dhall"])
-        .set_extensions(&["purs"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_purs_project {
         return None;
     }
-
-    let mut module = context.new_module("purescript");
-    let config: PureScriptConfig = PureScriptConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter

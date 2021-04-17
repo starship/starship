@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct CrystalConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -13,8 +14,8 @@ pub struct CrystalConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for CrystalConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for CrystalConfig<'a> {
+    fn default() -> Self {
         CrystalConfig {
             format: "via [$symbol($version )]($style)",
             symbol: "🔮 ",

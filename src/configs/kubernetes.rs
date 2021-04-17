@@ -1,9 +1,10 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 use std::collections::HashMap;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct KubernetesConfig<'a> {
     pub symbol: &'a str,
     pub format: &'a str,
@@ -12,8 +13,8 @@ pub struct KubernetesConfig<'a> {
     pub context_aliases: HashMap<String, &'a str>,
 }
 
-impl<'a> RootModuleConfig<'a> for KubernetesConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for KubernetesConfig<'a> {
+    fn default() -> Self {
         KubernetesConfig {
             symbol: "☸ ",
             format: "[$symbol$context( \\($namespace\\))]($style) in ",

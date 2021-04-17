@@ -38,8 +38,9 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    Con Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   curl -fsSL https://starship.rs/install.sh <unk> bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Installa con Package Manager
@@ -115,7 +116,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Aggiungi quanto segue alla fine di `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -123,3 +124,13 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Aggiungi quanto segue alla fine di `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```

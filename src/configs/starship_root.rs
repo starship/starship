@@ -1,8 +1,10 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::{config::ModuleConfig, module::ALL_MODULES};
 
-use starship_module_config_derive::ModuleConfig;
+use serde::Serialize;
+use std::cmp::Ordering;
 
-#[derive(Clone, ModuleConfig)]
+// On changes please also update the `FullConfig` struct in `mod.rs`
+#[derive(Clone, Serialize)]
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
     pub scan_timeout: u64,
@@ -20,6 +22,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "singularity",
     "kubernetes",
     "directory",
+    "vcsh",
     "git_branch",
     "git_commit",
     "git_state",
@@ -31,6 +34,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     // (Let's keep these sorted alphabetically)
     "cmake",
     "dart",
+    "deno",
     "dotnet",
     "elixir",
     "elm",
@@ -50,6 +54,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "python",
     "ruby",
     "rust",
+    "scala",
     "swift",
     "terraform",
     "vagrant",
@@ -71,16 +76,66 @@ pub const PROMPT_ORDER: &[&str] = &[
     "battery",
     "time",
     "status",
+    "shell",
     "character",
 ];
 
-impl<'a> RootModuleConfig<'a> for StarshipRootConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for StarshipRootConfig<'a> {
+    fn default() -> Self {
         StarshipRootConfig {
             format: "$all",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
         }
+    }
+}
+
+impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
+    fn load_config(&mut self, config: &'a toml::Value) {
+        if let toml::Value::Table(config) = config {
+            config.iter().for_each(|(k, v)| match k.as_str() {
+                "format" => self.format.load_config(v),
+                "scan_timeout" => self.scan_timeout.load_config(v),
+                "command_timeout" => self.command_timeout.load_config(v),
+                "add_newline" => self.add_newline.load_config(v),
+                unknown => {
+                    if !ALL_MODULES.contains(&unknown) && unknown != "custom" {
+                        log::warn!("Unknown config key '{}'", unknown);
+
+                        let did_you_mean = &[
+                            // Root options
+                            "format",
+                            "scan_timeout",
+                            "command_timeout",
+                            "add_newline",
+                            // Modules
+                            "custom",
+                        ]
+                        .iter()
+                        .chain(ALL_MODULES.iter())
+                        .filter_map(|field| {
+                            let score = strsim::jaro_winkler(unknown, field);
+                            (score > 0.8).then(|| (score, field))
+                        })
+                        .max_by(
+                            |(score_a, _field_a), (score_b, _field_b)| {
+                                score_a.partial_cmp(score_b).unwrap_or(Ordering::Equal)
+                            },
+                        );
+
+                        if let Some((_score, field)) = did_you_mean {
+                            log::warn!("Did you mean '{}'?", field);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    fn from_config(config: &'a toml::Value) -> Option<Self> {
+        let mut out = Self::default();
+        out.load_config(config);
+        Some(out)
     }
 }
