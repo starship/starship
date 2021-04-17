@@ -964,7 +964,7 @@ El módulo `erlang` muestra la versión instalada de Erlang/OTP. Por defecto, el
 format = "via [e $version](bold red) "
 ```
 
-## Gcloud
+## Google Cloud (`gcloud`)
 
 El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](https://cloud.google.com/sdk/gcloud). Esto se basa en el archivo `~/.config/gcloud/active_config`, el archivo `~/.config/gcloud/configurations/config_{CONFIG NAME}` y la variable de entorno `CLOUDSDK_CONFIG`.
 
