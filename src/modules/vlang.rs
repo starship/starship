@@ -1,12 +1,12 @@
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::v::VConfig;
+use crate::configs::vlang::VLangConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current V version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("v");
-    let config = VConfig::try_load(module.config);
+    let config = VLangConfig::try_load(module.config);
     let is_v_project = context
         .try_begin_scan()?
         .set_extensions(&config.detect_extensions)
@@ -74,7 +74,7 @@ mod tests {
     #[test]
     fn folder_without_v_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("v").path(dir.path()).collect();
+        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -84,7 +84,7 @@ mod tests {
     fn folder_with_v_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.v"))?.sync_all()?;
-        let actual = ModuleRenderer::new("v").path(dir.path()).collect();
+        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);
         dir.close()

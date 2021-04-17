@@ -4,7 +4,7 @@ use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig, Serialize)]
-pub struct VConfig<'a> {
+pub struct VLangConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
@@ -14,9 +14,9 @@ pub struct VConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for VConfig<'a> {
+impl<'a> Default for VLangConfig<'a> {
     fn default() -> Self {
-        VConfig {
+        VLangConfig {
             format: "via [$symbol($version )]($style)",
             symbol: "V ",
             style: "blue bold",

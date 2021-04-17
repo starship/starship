@@ -220,7 +220,7 @@ $rust\
 $scala\
 $swift\
 $terraform\
-$v\
+$vlang\
 $vagrant\
 $zig\
 $nix_shell\
@@ -2728,7 +2728,7 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [⍱ $version](bold white) "
 ```
 
-## V
+## VLang
 
 The `v` module shows you your currently installed version of V.
 By default the module will be shown if any of the following conditions are met:

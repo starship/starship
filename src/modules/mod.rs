@@ -53,9 +53,9 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
-mod v;
 mod vagrant;
 mod vcsh;
+mod vlang;
 mod zig;
 
 #[cfg(feature = "battery")]
@@ -127,7 +127,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "time" => time::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
-            "v" => v::module(context),
+            "v" => vlang::module(context),
             "vagrant" => vagrant::module(context),
             "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),

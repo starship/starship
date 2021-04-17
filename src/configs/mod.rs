@@ -57,9 +57,9 @@ pub mod swift;
 pub mod terraform;
 pub mod time;
 pub mod username;
-pub mod v;
 pub mod vagrant;
 pub mod vcsh;
+pub mod vlang;
 pub mod zig;
 
 pub use starship_root::*;
@@ -125,7 +125,7 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
     username: username::UsernameConfig<'a>,
-    v: v::VConfig<'a>,
+    v: vlang::VLangConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,
