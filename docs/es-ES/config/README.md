@@ -769,24 +769,24 @@ Por defecto, este módulo solo se mostrará en tu prompt cuando uno o más de lo
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+También necesitarás tener instalado el SDK de .NET Core para poder usarlo correctamente.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Internamente, este módulo utiliza su propio mecanismo para la detección de versiones. Normalmente es el doble de rápido que ejecutar `dotnet --version`, pero puede mostrar una versión incorrecta si tu proyecto .NET tiene un diseño de directorio inusual. Si la precisión es más importante que la velocidad, puedes desactivar el mecanismo estableciendo `heuristic = false` en las opciones del módulo.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+El módulo también mostrará el Target Framework Moniker ([https://docs.microsoft. om/es/dotnet/standard/frameworks#supported-target-framework-versions](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)) cuando exista un archivo csproj en el directorio actual.
 
 ### Opciones
 
-| Opción              | Por defecto                                                                                             | Descripción                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                   |
-| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Qué extensiones deberían activar este módulo.            |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Qué nombres de archivo deberían activar este módulo.     |
-| `detect_folders`    | `[]`                                                                                                    | Qué carpetas deberían activar estos módulos.             |
-| `style`             | `"bold blue"`                                                                                           | El estilo del módulo.                                    |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
+| Opción              | Por defecto                                                                                             | Descripción                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                  |
+| `symbol`            | `".NET "`                                                                                               | El símbolo usado antes de mostrar la version de dotnet. |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.   |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Qué extensiones deberían activar este módulo.           |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Qué nombres de archivo deberían activar este módulo.    |
+| `detect_folders`    | `[]`                                                                                                    | Qué carpetas deberían activar estos módulos.            |
+| `style`             | `"bold blue"`                                                                                           | El estilo del módulo.                                   |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                           |
 
 ### Variables
 
