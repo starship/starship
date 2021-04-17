@@ -335,7 +335,7 @@ discharging_symbol = "💀 "
 
 ### バッテリーの表示
 
-`display` オプションを使用して、バッテリーインジケーターを表示するタイミング（閾値）と外観（スタイル）を定義します。 `display` が提供されない場合、 デフォルトは次のとおりです。
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). `display` が提供されない場合、 デフォルトは次のとおりです。
 
 ```toml
 [[battery.display]]
@@ -343,42 +343,47 @@ threshold = 10
 style = "bold red"
 ```
 
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
 #### オプション
 
-`display`オプションは、次の表の通りです。
+The `display` option is an array of the following table.
 
-| オプション       | 説明                             |
-| ----------- | ------------------------------ |
-| `threshold` | バッテリーが表示される上限です。               |
-| `style`     | displayオプションが使用されている場合のスタイルです。 |
+| オプション                | デフォルト      | 説明                                                                                                        |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | The upper bound for the display option.                                                                   |
+| `style`              | `bold red` | The style used if the display option is in use.                                                           |
+| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### 設定例
 
 ```toml
-[[battery.display]]  # バッテリー残量が0％〜10％の間は「太字の赤色」スタイルを利用する
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # バッテリー残量が10％〜30％の間は「太字の黄色」スタイルを利用する
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
-# 容量が30％を超えると、バッテリーインジケーターは表示されません
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## 文字
 
-`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-文字は、最後のコマンドが成功したかどうかを示します。 表し方は下記の2つです。
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-デフォルトでは、色だけが変更されます。 形も変更したい場合は、 [この例](#with-custom-error-shape) を見てください。
+By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
-::: warning `error_symbol` はelvishシェルではサポートされていません。 :::
+::: warning `error_symbol` is not supported on elvish shell. :::
 
 ### オプション
 
@@ -429,7 +434,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-`cmake` モジュールは、現在インストールされているCMakeのバージョンを表示します。 デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
+The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
 
 - カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
 - カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
@@ -458,15 +463,15 @@ vicmd_symbol = "[V](bold green) "
 
 ## コマンド実行時間
 
-`cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning BashでDEBUGトラップをhookしない
+::: warning Do not hook the DEBUG trap in Bash
 
-`bash`でStarshipを実行している場合、 `eval $(starship init $0)`実行した後に`DEBUG`トラップをフックしないでください。そうしないと、このモジュールが**おそらくですが**壊れます。
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-preexecのような機能を必要とするBashユーザーは、 [rcalorasのbash_preexecフレームワーク](https://github.com/rcaloras/bash-preexec)を使用できます。 `eval $(starship init $0)` を実行する前に、`preexec_functions`、および`precmd_functions`定義するだけで、通常どおり続行します。
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### オプション
 
@@ -482,7 +487,7 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ::: tip
 
-デスクトップ通知を表示するには、 `rust-notify` をサポートしているstarshipをビルドする必要があります。 `show_notifications` が `true` となっている状態で `STARSHIP_LOG=debug starship module cmd_duration -d 60000` を実行することにより、starshipが通知をサポートしているかを確認することができます。
+Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
 
 :::
 
@@ -507,11 +512,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-`$CONDA_DEFAULT_ENV`が設定されている場合、`conda`モジュールは現在のcondaの環境を表示します。
+The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Note: これはconda自身の プロンプト修飾子 を抑制しません。`conda config --set changeps1 False` で実行することができます。
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -547,7 +552,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-`crystal`モジュールには、現在インストールされているCrystalのバージョンが表示されます。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `crystal` module shows the currently installed version of Crystal. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`shard.yml`ファイルが含まれている
 - カレントディレクトリに`.cr`の拡張子のファイルが含まれている
@@ -585,7 +590,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-`dart`モジュールは、現在インストールされているDartのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `dart` module shows the currently installed version of Dart. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -658,11 +663,11 @@ format = "via [🦕 $version](green bold) "
 
 ## Directory
 
-`directory` モジュールは現在のディレクトリへのパスを表示します。親フォルダは3つまでに切り捨てられます。 git リポジトリ内にいる場合は、リポジトリのルートで切り捨てられます。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-fish スタイルの pwd オプションを使用している場合、切り捨てられたパスを非表示にする代わりに、オプションで有効にした数値に基づいた各ディレクトリの短縮名が表示されます。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-たとえば、`~/Dev/Nix/nixpkgs/pkgs`で、`nixpkgs` がリポジトリルートであり、オプションが `1` に設定されている場合を挙げます。 この場合、`nixpkgs/pkgs` の代わりに、`~/D/N/nixpkgs/pkgs` と表示されます。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### オプション
 
@@ -720,7 +725,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-`docker_context` モジュールは、[Docker コンテキスト](https://docs.docker.com/engine/context/working-with-contexts/)が `default` に設定されていない場合、現在アクティブな Docker コンテキストを表示します。
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
 ### オプション
 
@@ -1067,7 +1072,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-`git_commit` モジュールは、カレントディレクトリのリポジトリの現在のコミットハッシュとタグ (もしあれば) を表示します。
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### オプション
 
@@ -1102,7 +1107,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. 進行状況の情報がある場合は (例:REBASING 3/10)、その情報も表示されます。
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### オプション
 
@@ -1142,7 +1147,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Status
 
-`git_status` モジュールは、カレントディレクトリのリポジトリの状態を表すシンボルを表示します。
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ### オプション
 
@@ -1164,7 +1169,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ### 変数
 
-` format` 内では以下の変数が利用できます。
+The following variables can be used in `format`:
 
 | 変数             | 説明                                                                                            |
 | -------------- | --------------------------------------------------------------------------------------------- |
@@ -1225,7 +1230,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-`golang` モジュールは、現在インストールされている Golang のバージョンを示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `golang` module shows the currently installed version of Golang. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
@@ -1506,11 +1511,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-現在の Kubernetes コンテキスト名と、もし設定されている場合には、kubeconfig ファイルを元に namespace を表示します。 namespace は kubconfigで設定する必要があります。設定は、`kubectl config set-context starship-cluster --namespace astronaut` といったコマンド行えます。 `$KUBECONFIG` 環境変数が設定されている場合、このモジュールは環境変数を優先して使用し、`~/.kube/config` は使用しません。
+Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: ヒント
+::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1549,7 +1554,7 @@ disabled = false
 
 ## Line Break
 
-`line_break` モジュールは、プロンプトを2行に分割します。
+The `line_break` module separates the prompt into two lines.
 
 ### オプション
 
@@ -1568,7 +1573,7 @@ disabled = true
 
 ## Lua
 
-` lua ` モジュールは、現在インストールされている Lua のバージョンを示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `lua` module shows the currently installed version of Lua. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1608,13 +1613,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memory Usage
 
-`memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
+The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2056,9 +2061,9 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-`python` モジュールは、現在インストールされているPythonのバージョンと、アクティブ化されている場合は、現在の Python 仮想環境を表示します。
+The `python` module shows the currently installed version of Python and the current Python virtual environment if one is activated.
 
-`pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -2256,7 +2261,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2365,7 +2370,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2518,7 +2523,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで `disabled` を `false` に設定します。
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
