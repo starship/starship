@@ -980,14 +980,14 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 
 ### Variables
 
-| Variable  | Ejemplo           | Descripción                                                        |
-| --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | La región GCP actual                                               |
-| account   | `foo@example.com` | El perfil actual de GCP                                            |
-| project   |                   | El proyecto GCP actual                                             |
-| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | Refleja el valor de la opción `symbol`                             |
-| style\* |                   | Refleja el valor de la opción `style`                              |
+| Variable  | Ejemplo           | Descripción                                                                   |
+| --------- | ----------------- | ----------------------------------------------------------------------------- |
+| region    | `us-central1`     | La región GCP actual                                                          |
+| account   | `foo@example.com` | El perfil actual de GCP                                                       |
+| project   |                   | El proyecto GCP actual                                                        |
+| active    | `default`         | El nombre de configuración activo escrito en `~/.config/gcloud/active_config` |
+| symbol    |                   | Refleja el valor de la opción `symbol`                                        |
+| style\* |                   | Refleja el valor de la opción `style`                                         |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1026,30 +1026,30 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+El módulo `git_branch` muestra la rama activa del repositorio en tu directorio actual.
 
 ### Opciones
 
-| Opción               | Por defecto                      | Descripción                                                                              |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` to refer to the current branch name.              |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | El estilo del módulo.                                                                    |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
-| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
+| Opción               | Por defecto                      | Descripción                                                                                                   |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Muestra el nombre de la rama de seguimiento remoto, incluso si es igual al nombre de la rama local.           |
+| `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Usar `"$branch"` para referirse al nombre de la rama actual.                           |
+| `symbol`             | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                               |
+| `style`              | `"bold purple"`                  | El estilo del módulo.                                                                                         |
+| `truncation_length`  | `2^63 - 1`                       | Trunca el nombre de la rama a `N` grafemas.                                                                   |
+| `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Se puede utilizar `""` para ningún símbolo. |
+| `only_attached`      | `false`                          | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`"                        |
+| `disabled`           | `false`                          | Deshabilita el módulo `git_branch`.                                                                           |
 
 ### Variables
 
-| Variable      | Ejemplo  | Descripción                                                                                            |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Refleja el valor de la opción `symbol`                                                                 |
-| style\*     |          | Refleja el valor de la opción `style`                                                                  |
+| Variable      | Ejemplo  | Descripción                                                                                                    |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| branch        | `master` | El nombre de la rama actual, vuelve a `HEAD` si no hay ninguna rama actual (por ejemplo, git detached `HEAD`). |
+| remote_name   | `origin` | The remote name.                                                                                               |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                               |
+| symbol        |          | Refleja el valor de la opción `symbol`                                                                         |
+| style\*     |          | Refleja el valor de la opción `style`                                                                          |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1664,7 +1664,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | El estilo del módulo.                                                                        |
 | `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                       |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado.                            |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Variables
