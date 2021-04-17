@@ -674,13 +674,13 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 | `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                             |
 | `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.              |
 | `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                     |
-| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. eg: "…/"                          |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                          |
+| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. p. ej.: "…/"                      |
+| `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio personal.                                  |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
-| Advanced Option             | Por defecto | Descripción                                                                                                                                                            |
+| Opciones Avanzadas          | Por defecto | Descripción                                                                                                                                                            |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |             | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`         | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
