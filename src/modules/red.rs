@@ -7,12 +7,12 @@ use crate::formatter::StringFormatter;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("red");
     let config = RedConfig::try_load(module.config);
-    let is_v_project = context
+    let is_red_project = context
         .try_begin_scan()?
         .set_extensions(&config.detect_extensions)
         .is_match();
 
-    if !is_v_project {
+    if !is_red_project {
         return None;
     }
 
