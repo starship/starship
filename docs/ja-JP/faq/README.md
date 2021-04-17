@@ -88,9 +88,9 @@ Starshipのアンインストールはインストールと同じぐらい簡単
 
 パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
-If Starship was installed using the install script, the following command will delete the binary:
+Starship をインストールスクリプトを使用してインストールした場合、次のコマンドでバイナリが削除されます。
 
 ```sh
-# Locate and delete the starship binary
-sh -c 'rm "$(which starship)"'
+# starshipバイナリを見つけて削除
+sh -c 'rm "$(which starship)"''
 ```
