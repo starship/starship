@@ -142,11 +142,12 @@ format = '''
 
 ### 選項
 
-| Option         | 預設                           | 說明                                                    |
-| -------------- | ---------------------------- | ----------------------------------------------------- |
-| `format`       | [連結](#default-prompt-format) | Configure the format of the prompt.                   |
-| `scan_timeout` | `30`                         | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                       | Inserts blank line between shell prompts.             |
+| Option            | 預設                           | 說明                                                           |
+| ----------------- | ---------------------------- | ------------------------------------------------------------ |
+| `format`          | [連結](#default-prompt-format) | Configure the format of the prompt.                          |
+| `scan_timeout`    | `30`                         | Timeout for starship to scan files (in milliseconds).        |
+| `command_timeout` | `500`                        | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                       | Inserts blank line between shell prompts.                    |
 
 ### 範例
 
