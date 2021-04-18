@@ -50,13 +50,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_dlang_version(dlang_version: &str) -> Option<String> {
     let version = dlang_version
-        // split into lines
+        // split into ["DMD32 D Compiler v2.096.0-dirty", "Copyright (C) 1999-2021 by The D Language Foundation, All Rights Reserved written by Walter Bright"]
         .lines()
-        // first line
+        // get something along the lines of "DMD32 D Compiler v2.096.0-dirty"
         .next()?
-        // split by whitespace
+        // split into ["DMD32", "D", "Compiler", "v2.096.0-dirty"]
         .split_whitespace()
-        // get 3rd index once splitted
+        // return v2.096.0-dirty
         .nth(3)?;
 
     Some(version.to_owned())
