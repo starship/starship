@@ -699,7 +699,7 @@ By default the module will be shown if any of the following conditions are met:
 | `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
 | `symbol`            | `" "`                                           | A format string representing the symbol of DLang |
 | `detect_extensions` | `["d", "di"]`                                              | Which extensions should trigger this module.    |
-| `detect_files`      | `[]`      | Which filenames should trigger this module.     |
+| `detect_files`      | `["dub.json", "dub.sdl"]`      | Which filenames should trigger this module.     |
 | `detect_folders`    | `[]`                                              | Which folders should trigger this module.       |
 | `style`             | `"#b03931"`                                    | The style for the module.                       |
 | `disabled`          | `false`                                           | Disables the `dlang` module.                     |
