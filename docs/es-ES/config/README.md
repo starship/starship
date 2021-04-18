@@ -142,11 +142,12 @@ Esta es la lista de opciones de configuración del prompt.
 
 ### Opciones
 
-| Opción         | Por defecto                        | Descripción                                                                    |
-| -------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
-| `format`       | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                               |
-| `scan_timeout` | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos).  |
-| `add_newline`  | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
+| Opción            | Por defecto                        | Descripción                                                                   |
+| ----------------- | ---------------------------------- | ----------------------------------------------------------------------------- |
+| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                              |
+| `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos). |
+| `command_timeout` | `500`                              | Timeout for commands executed by starship (in milliseconds).                  |
+| `add_newline`     | `true`                             | Inserts blank line between shell prompts.                                     |
 
 ### Ejemplo
 
