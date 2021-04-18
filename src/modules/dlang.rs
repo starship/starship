@@ -10,6 +10,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_dlang_project = context
         .try_begin_scan()?
         .set_extensions(&config.detect_extensions)
+        .set_files(&config.detect_files)
         .is_match();
 
     if !is_dlang_project {
@@ -48,11 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_dlang_version(dlang_version: &str) -> Option<String> {
-    let version = dlang_version
-        .lines()
-        .next()?
-        .split_whitespace()
-        .nth(3)?;
+    let version = dlang_version.lines().next()?.split_whitespace().nth(3)?;
 
     Some(version.to_owned())
 }
@@ -85,7 +82,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_dlang_files() -> io::Result<()> {
+    fn folder_with_d_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.d"))?.sync_all()?;
         let actual = ModuleRenderer::new("dlang").path(dir.path()).collect();
@@ -101,6 +98,32 @@ mod tests {
     fn folder_with_di_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.di"))?.sync_all()?;
+        let actual = ModuleRenderer::new("dlang").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::RGB(176, 57, 49).paint(" v2.096.0-dirty ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_dub_json_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("dub.json"))?.sync_all()?;
+        let actual = ModuleRenderer::new("dlang").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::RGB(176, 57, 49).paint(" v2.096.0-dirty ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_dub_sdl_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("dub.sdl"))?.sync_all()?;
         let actual = ModuleRenderer::new("dlang").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",

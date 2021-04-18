@@ -691,6 +691,7 @@ format = "via [🦕 $version](green bold) "
 The `dlang` module shows you your currently installed version of D.
 By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file ending with `.d` or `.di`.
+- The current directory contains a `dub.json` or `dub.sdl`.
 
 ### Options
 
