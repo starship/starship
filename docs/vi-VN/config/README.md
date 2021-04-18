@@ -142,11 +142,12 @@ Cái này là danh sách các tuỳ chọn cho cấu hình prompt-wide.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn       | Mặc định                       | Mô tả                                                                    |
-| -------------- | ------------------------------ | ------------------------------------------------------------------------ |
-| `format`       | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                           |
-| `scan_timeout` | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds). |
-| `add_newline`  | `true`                         | Chèn dòng trắng giữa các dấu nhắc lệnh.                                  |
+| Tuỳ chọn          | Mặc định                       | Mô tả                                                                    |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------ |
+| `format`          | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                           |
+| `scan_timeout`    | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds). |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).             |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                |
 
 ### Ví dụ
 
