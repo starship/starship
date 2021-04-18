@@ -142,11 +142,12 @@ Voici la liste des options de configuration de l'invite en lui-même.
 
 ### Options
 
-| Option         | Défaut                         | Description                                                                |
-| -------------- | ------------------------------ | -------------------------------------------------------------------------- |
-| `format`       | [lien](#default-prompt-format) | Configure le format de l'invite.                                           |
-| `scan_timeout` | `30`                           | Délai d'attente avant que starship scanne les fichiers (en millisecondes). |
-| `add_newline`  | `true`                         | Insère une ligne vide entre les invites du shell.                          |
+| Option            | Défaut                         | Description                                                                |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------- |
+| `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                           |
+| `scan_timeout`    | `30`                           | Délai d'attente avant que starship scanne les fichiers (en millisecondes). |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).               |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                  |
 
 ### Exemple
 
