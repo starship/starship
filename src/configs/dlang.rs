@@ -22,7 +22,7 @@ impl<'a> Default for DLangConfig<'a> {
             style: "#b03931",
             disabled: false,
             detect_extensions: vec!["d", "di"],
-            detect_files: vec![],
+            detect_files: vec!["dub.sdl", "dub.json"],
             detect_folders: vec![],
         }
     }
