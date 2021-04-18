@@ -2272,7 +2272,7 @@ The module will be shown if any of the following conditions are met:
 ```toml
 # ~/.config/starship.toml
 
-[ruby]
+[red]
 symbol = "🔴 "
 ```
 
