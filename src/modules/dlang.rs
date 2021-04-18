@@ -49,7 +49,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_dlang_version(dlang_version: &str) -> Option<String> {
-    let version = dlang_version.lines().next()?.split_whitespace().nth(3)?;
+    let version = dlang_version
+        // split into lines
+        .lines()
+        // first line
+        .next()?
+        // split by whitespace
+        .split_whitespace()
+        // get 3rd index once splitted
+        .nth(3)?;
 
     Some(version.to_owned())
 }
