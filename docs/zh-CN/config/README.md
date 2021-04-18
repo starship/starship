@@ -142,11 +142,12 @@ format = '''
 
 ### 配置项
 
-| Option         | 默认值                           | 描述                                        |
-| -------------- | ----------------------------- | ----------------------------------------- |
-| `format`       | [见下文](#default-prompt-format) | Configure the format of the prompt.       |
-| `scan_timeout` | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                |
-| `add_newline`  | `true`                        | Inserts blank line between shell prompts. |
+| Option            | 默认值                           | 描述                                                           |
+| ----------------- | ----------------------------- | ------------------------------------------------------------ |
+| `format`          | [见下文](#default-prompt-format) | Configure the format of the prompt.                          |
+| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                   |
+| `command_timeout` | `500`                         | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                        | Inserts blank line between shell prompts.                    |
 
 ### 示例
 
