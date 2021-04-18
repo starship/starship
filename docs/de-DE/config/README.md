@@ -142,11 +142,12 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 
 ### Optionen
 
-| Option         | Standardwert                   | Beschreibung                                            |
-| -------------- | ------------------------------ | ------------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                     |
-| `scan_timeout` | `30`                           | Timeout für das Scannen von Dateien (in Millisekunden). |
-| `add_newline`  | `true`                         | Inserts blank line between shell prompts.               |
+| Option            | Standardwert                   | Beschreibung                                                 |
+| ----------------- | ------------------------------ | ------------------------------------------------------------ |
+| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                          |
+| `scan_timeout`    | `30`                           | Timeout für das Scannen von Dateien (in Millisekunden).      |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
 
 ### Beispiel
 
