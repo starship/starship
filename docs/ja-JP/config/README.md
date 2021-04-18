@@ -142,11 +142,12 @@ format = '''
 
 ### オプション
 
-| オプション          | デフォルト                          | 説明                                       |
-| -------------- | ------------------------------ | ---------------------------------------- |
-| `format`       | [link](#default-prompt-format) | プロンプトの形式を設定します。                          |
-| `scan_timeout` | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。 |
-| `add_newline`  | `true`                         | シェルプロンプトの間に空行を挿入します。                     |
+| オプション             | デフォルト                          | 説明                                                           |
+| ----------------- | ------------------------------ | ------------------------------------------------------------ |
+| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                              |
+| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。                     |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
 
 ### 設定例
 
