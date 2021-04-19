@@ -860,27 +860,27 @@ Le module `elm` affiche la version courante installée d'Elm. Par défaut le mod
 
 - Le répertoire courant contient un fichier `elm.json`
 - Le répertoire courant contient un fichier `elm-package.json`
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- Le répertoire courant contient un fichier `elm-version`
+- Le répertoire courant contient un dossier `elm-stuff`
+- Le répertoire courant contient des fichiers `*.elm`
 
 ### Options
 
-| Option              | Défaut                                             | Description                                     |
-| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                               |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
-| `detect_extensions` | `["elm"]`                                          | Quelles extensions devraient activer ce module. |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quels fichiers devraient activer ce module.     |
-| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
-| `style`             | `"cyan bold"`                                      | Le style du module.                             |
-| `disabled`          | `false`                                            | Disables the `elm` module.                      |
+| Option              | Défaut                                             | Description                                         |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                                   |
+| `symbol`            | `"🌳 "`                                             | Une chaîne de format représentant le symbole d'Elm. |
+| `detect_extensions` | `["elm"]`                                          | Quelles extensions devraient activer ce module.     |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quels fichiers devraient activer ce module.         |
+| `detect_folders`    | `["elm-stuff"]`                                    | Quels dossiers devraient activer ce module.         |
+| `style`             | `"cyan bold"`                                      | Le style du module.                                 |
+| `disabled`          | `false`                                            | Désactive le module `elm`.                          |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.19.1` | The version of `elm`                   |
+| version   | `v0.19.1` | La version de `elm`                    |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
