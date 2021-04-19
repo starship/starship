@@ -116,6 +116,7 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
+    r: r::RConfig<'a>,
     ruby: ruby::RubyConfig<'a>,
     rust: rust::RustConfig<'a>,
     scala: scala::ScalaConfig<'a>,

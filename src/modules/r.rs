@@ -4,7 +4,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::r::RConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 const R_VERSION_PATTERN: &str = r" (?P<rversion>\d+\.\d+\.\d+) ";
 
@@ -24,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let r_version = utils::exec_cmd("R", &["--version"])?.stderr;
+    let r_version = context.exec_cmd("R", &["--version"])?.stderr;
     let formatted_version = parse_version(&r_version)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
