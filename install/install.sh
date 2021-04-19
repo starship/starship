@@ -193,8 +193,34 @@ detect_platform() {
     cygwin_nt*) platform="pc-windows-msvc";;
     # mingw is Git-Bash
     mingw*) platform="pc-windows-msvc" ;;
-    # use the statically compiled musl bins on linux to avoid linking issues.
-    linux) platform="unknown-linux-musl" ;;
+    linux)
+      # default to the statically compiled musl bins on linux
+      # to avoid linking issues.
+      platform="unknown-linux-musl"
+      # musl's ldd from Alpine prints to stderr
+      ldd_verstr="$(ldd --version 2>&1 | head -n1)"
+      # glibc version string is inconsistent across distributions
+      # instead check if the string does not contain musl (case insensitive)
+      if echo "${ldd_verstr}" | grep -iv musl >/dev/null; then
+        glibc_version=$(echo "${ldd_verstr}" | awk 'NR==1 { print $NF }')
+        # on installations with a new enough glibc, use the dynamically compiled binary
+        #
+        # use this to see potential max versions
+        # strings $(which starship) | grep -i glibc
+        #
+        # then use https://gist.github.com/fasterthanlime/17e002a8f5e0f189861c with
+        # `MAX_VER` set to the version from earlier e.g. GLIBC_2.33 => 2.33
+        glibc_maj_ver=$(echo "${glibc_version}" | cut -d. -f1)
+        glibc_min_ver=$(echo "${glibc_version}" | cut -d. -f2)
+        min_maj_ver=2
+        min_min_ver=18
+        if [ "${glibc_maj_ver}" -gt "${min_maj_ver}" ] \
+          || { [ "${glibc_maj_ver}" -eq "${min_maj_ver}" ] \
+          && [ "${glibc_min_ver}" -ge "${min_min_ver}" ]; }; then
+          platform="unknown-linux-gnu"
+        fi
+      fi
+      ;;
     darwin) platform="apple-darwin" ;;
     freebsd) platform="unknown-freebsd" ;;
   esac
