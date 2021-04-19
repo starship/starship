@@ -67,7 +67,7 @@ notify-rust = { version = "4.3.0", optional = true }
 semver = "0.11.0"
 which = "4.1.0"
 shadow-rs = "0.5.25"
-versions = "2.1.0"
+versions = "3.0.0"
 strsim = "0.10.0"
 
 process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
