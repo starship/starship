@@ -2733,7 +2733,7 @@ format = "via [⍱ $version](bold white) "
 
 The `vlang` module shows you your currently installed version of V.
 By default the module will be shown if any of the following conditions are met:
-- The current directory contains a file with the extension of `.v`
+- The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod` file
 
 ### Options
