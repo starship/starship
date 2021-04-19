@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .trim()
         .parse::<i64>()
         .ok()?;
-    if num_of_jobs == 0 {
+    if num_of_jobs == 0 && config.threshold > 0 {
         return None;
     }
 
@@ -107,6 +107,20 @@ mod test {
             .collect();
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_n1_job_0() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = -1
+            })
+            .jobs(0)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
         assert_eq!(expected, actual);
     }
 }
