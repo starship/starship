@@ -142,12 +142,12 @@ Voici la liste des options de configuration de l'invite en lui-même.
 
 ### Options
 
-| Option            | Défaut                         | Description                                                                |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------- |
-| `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                           |
-| `scan_timeout`    | `30`                           | Délai d'attente avant que starship scanne les fichiers (en millisecondes). |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).               |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                  |
+| Option            | Défaut                         | Description                                                                 |
+| ----------------- | ------------------------------ | --------------------------------------------------------------------------- |
+| `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                            |
+| `scan_timeout`    | `30`                           | Délai maximal pour le scan des fichiers par starship (en millisecondes).    |
+| `command_timeout` | `500`                          | Délai maximal pour les commandes exécutées par starship (en millisecondes). |
+| `add_newline`     | `true`                         | Insère une ligne vide entre les invites du shell.                           |
 
 ### Exemple
 
@@ -359,29 +359,29 @@ L'option `display` est une tableau des propriétés suivantes.
 #### Exemple
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # Style "rouge gras" et affichage de discharging_symbol lorsque la batterie est entre 0% et 10% de sa capacité
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # Style "jaune gras" et affichage de💦 lorsque la batterie est entre 10% et 30% de sa capacité
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# Au-dessus de 30% de charge, l'indicateur de batterie ne sera pas affiché
 
 ```
 
 ## Caractères
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Le module `character` affiche un caractère (habituellement une flèche) à côté de l'endroit où le texte est entré dans votre terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Le caractère vous dira si la dernière commande a été réussie ou pas. Il y a deux façons de faire :
 
 - changement de couleur (`red`/`green`)
 - changement de forme (`❯`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+Par défaut, seule la couleur change. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
 
 ::: warning `error_symbol` is not supported on elvish shell. :::
 
