@@ -13,6 +13,9 @@ const R_VERSION_PATTERN: &str = r" (?P<rversion>\d+\.\d+\.\d+) ";
 /// Will display the R programming language version if any of the following criteria are met:
 ///     - Current directory contains a `.R` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("r");
+    let config: RConfig = RConfig::try_load(module.config);
+
     let is_r_project = context
         .try_begin_scan()?
         .set_extensions(&["R", "Rproj"])
@@ -23,8 +26,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let r_version = utils::exec_cmd("R", &["--version"])?.stderr;
     let formatted_version = parse_version(&r_version)?;
-    let mut module = context.new_module("r");
-    let config: RConfig = RConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
