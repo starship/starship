@@ -10,8 +10,8 @@ pub struct RConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for RConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for RConfig<'a> {
+    fn default() -> Self {
         RConfig {
             format: "via [${symbol}${version}]($style) ",
             style: "blue bold",
