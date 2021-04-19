@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct MemoryConfig<'a> {
     pub threshold: i64,
     pub format: &'a str,
@@ -11,8 +12,8 @@ pub struct MemoryConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for MemoryConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for MemoryConfig<'a> {
+    fn default() -> Self {
         MemoryConfig {
             threshold: 75,
             format: "via $symbol[$ram( | $swap)]($style) ",

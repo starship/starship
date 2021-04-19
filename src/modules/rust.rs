@@ -2,29 +2,29 @@ use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
 
+use serde::Deserialize;
+
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 
 /// Creates a module with the current Rust version
-///
-/// Will display the Rust version if any of the following criteria are met:
-///     - Current directory contains a file with a `.rs` extension
-///     - Current directory contains a `Cargo.toml` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("rust");
+    let config = RustConfig::try_load(module.config);
+
     let is_rs_project = context
         .try_begin_scan()?
-        .set_files(&["Cargo.toml"])
-        .set_extensions(&["rs"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_rs_project {
         return None;
     }
 
-    let mut module = context.new_module("rust");
-    let config = RustConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 // This may result in multiple calls to `get_module_version` when a user have
                 // multiple `$version` variables defined in `format`.
-                "version" => get_module_version(context).map(Ok),
+                "version" => get_module_version(context, &config).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_module_version(context: &Context) -> Option<String> {
+fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> {
     // `$CARGO_HOME/bin/rustc(.exe) --version` may attempt installing a rustup toolchain.
     // https://github.com/starship/starship/issues/417
     //
@@ -72,25 +72,25 @@ fn get_module_version(context: &Context) -> Option<String> {
     // - `rustup show`
     // - `rustup show active-toolchain`
     // - `rustup which`
-    let module_version = if let Some(toolchain) = env_rustup_toolchain(context)
+    if let Some(toolchain) = env_rustup_toolchain(context)
         .or_else(|| execute_rustup_override_list(&context.current_dir))
         .or_else(|| find_rust_toolchain_file(&context))
     {
         match execute_rustup_run_rustc_version(&toolchain) {
-            RustupRunRustcVersionOutcome::RustcVersion(stdout) => format_rustc_version(stdout),
-            RustupRunRustcVersionOutcome::ToolchainName(toolchain) => toolchain,
+            RustupRunRustcVersionOutcome::RustcVersion(rustc_version) => {
+                format_rustc_version(&rustc_version, config.version_format)
+            }
+            RustupRunRustcVersionOutcome::ToolchainName(toolchain) => Some(toolchain),
             RustupRunRustcVersionOutcome::RustupNotWorking => {
                 // If `rustup` is not in `$PATH` or cannot be executed for other reasons, we can
                 // safely execute `rustc --version`.
-                format_rustc_version(execute_rustc_version()?)
+                format_rustc_version(&execute_rustc_version()?, config.version_format)
             }
-            RustupRunRustcVersionOutcome::Err => return None,
+            RustupRunRustcVersionOutcome::Err => None,
         }
     } else {
-        format_rustc_version(execute_rustc_version()?)
-    };
-
-    Some(module_version)
+        format_rustc_version(&execute_rustc_version()?, config.version_format)
+    }
 }
 
 fn env_rustup_toolchain(context: &Context) -> Option<String> {
@@ -125,26 +125,47 @@ fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Opti
 
 fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     // Look for 'rust-toolchain' as rustup does.
-    // https://github.com/rust-lang/rustup.rs/blob/d84e6e50126bccd84649e42482fc35a11d019401/src/config.rs#L320-L358
+    // https://github.com/rust-lang/rustup/blob/89912c4cf51645b9c152ab7380fd07574fec43a3/src/config.rs#L546-L616
 
-    fn read_first_line(path: &Path) -> Option<String> {
-        let content = fs::read_to_string(path).ok()?;
-        let line = content.lines().next()?;
-        Some(line.trim().to_owned())
+    #[derive(Deserialize)]
+    struct OverrideFile {
+        toolchain: ToolchainSection,
+    }
+
+    #[derive(Deserialize)]
+    struct ToolchainSection {
+        channel: Option<String>,
+    }
+
+    fn read_channel(path: &Path) -> Option<String> {
+        let contents = fs::read_to_string(path).ok()?;
+
+        match contents.lines().count() {
+            0 => None,
+            1 => Some(contents),
+            _ => {
+                toml::from_str::<OverrideFile>(&contents)
+                    .ok()?
+                    .toolchain
+                    .channel
+            }
+        }
+        .filter(|c| !c.trim().is_empty())
+        .map(|c| c.trim().to_owned())
     }
 
     if let Ok(true) = context
         .dir_contents()
         .map(|dir| dir.has_file("rust-toolchain"))
     {
-        if let Some(toolchain) = read_first_line(Path::new("rust-toolchain")) {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain")) {
             return Some(toolchain);
         }
     }
 
     let mut dir = &*context.current_dir;
     loop {
-        if let Some(toolchain) = read_first_line(&dir.join("rust-toolchain")) {
+        if let Some(toolchain) = read_channel(&dir.join("rust-toolchain")) {
             return Some(toolchain);
         }
         dir = dir.parent()?;
@@ -182,11 +203,20 @@ fn execute_rustc_version() -> Option<String> {
     }
 }
 
-fn format_rustc_version(mut rustc_stdout: String) -> String {
-    let offset = &rustc_stdout.find('(').unwrap_or_else(|| rustc_stdout.len());
-    let formatted_version: String = rustc_stdout.drain(..offset).collect();
+fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<String> {
+    let version = rustc_version
+        // split into ["rustc", "1.34.0", ...]
+        .split_whitespace()
+        // get down to "1.34.0"
+        .nth(1)?;
 
-    format!("v{}", formatted_version.replace("rustc", "").trim())
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formating `rust` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -199,7 +229,9 @@ enum RustupRunRustcVersionOutcome {
 
 #[cfg(test)]
 mod tests {
+    use crate::context::Shell;
     use once_cell::sync::Lazy;
+    use std::io;
     use std::process::{ExitStatus, Output};
 
     use super::*;
@@ -297,16 +329,82 @@ mod tests {
 
     #[test]
     fn test_format_rustc_version() {
-        let nightly_input = String::from("rustc 1.34.0-nightly (b139669f3 2019-04-10)");
-        assert_eq!(format_rustc_version(nightly_input), "v1.34.0-nightly");
+        let config = RustConfig::default();
+        let rustc_stable = "rustc 1.34.0 (91856ed52 2019-04-10)";
+        let rustc_beta = "rustc 1.34.0-beta.1 (2bc1d406d 2019-04-10)";
+        let rustc_nightly = "rustc 1.34.0-nightly (b139669f3 2019-04-10)";
+        assert_eq!(
+            format_rustc_version(rustc_nightly, config.version_format),
+            Some("v1.34.0-nightly".to_string())
+        );
+        assert_eq!(
+            format_rustc_version(rustc_beta, config.version_format),
+            Some("v1.34.0-beta.1".to_string())
+        );
+        assert_eq!(
+            format_rustc_version(rustc_stable, config.version_format),
+            Some("v1.34.0".to_string())
+        );
+        assert_eq!(
+            format_rustc_version("rustc 1.34.0", config.version_format),
+            Some("v1.34.0".to_string())
+        );
+    }
 
-        let beta_input = String::from("rustc 1.34.0-beta.1 (2bc1d406d 2019-04-10)");
-        assert_eq!(format_rustc_version(beta_input), "v1.34.0-beta.1");
+    #[test]
+    fn test_find_rust_toolchain_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        fs::write(dir.path().join("rust-toolchain"), "1.34.0")?;
 
-        let stable_input = String::from("rustc 1.34.0 (91856ed52 2019-04-10)");
-        assert_eq!(format_rustc_version(stable_input), "v1.34.0");
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            dir.path().into(),
+        );
 
-        let version_without_hash = String::from("rustc 1.34.0");
-        assert_eq!(format_rustc_version(version_without_hash), "v1.34.0");
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        let dir = tempfile::tempdir()?;
+        fs::write(
+            dir.path().join("rust-toolchain"),
+            "[toolchain]\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            dir.path().into(),
+        );
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        let dir = tempfile::tempdir()?;
+        fs::write(
+            dir.path().join("rust-toolchain"),
+            "\n\n[toolchain]\n\n\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            dir.path().into(),
+        );
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()
     }
 }

@@ -12,7 +12,7 @@
 
 ## How do I get command completion as shown in the demo GIF?
 
-Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Completion support is provided by your shell of choice. In the case of the demo,
 - Disabling modules is more explicit than omitting them from the top level `format`
 - 当 Starship 升级后，新组件将能够自动被加入提示符中
 
-## 你们的文档说“Starship 是跨 shell 的”，但它不支持 X shell。 为什么？
+## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
 Starship 的构建方式决定了它应当能够增加对几乎所有 shell 的支持。 Starship 的二进制文件是无状态、不知道当前 shell 的，所以只要你的 shell 支持自定义提示符和 shell 扩展，就能使用 Starship。
 
@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-内置于 Starship 的 [Bash 适配](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微复杂一些，实现了像 [命令用时统计组件](https://starship.rs/config/#Command-Duration) 这样的功能，还确保 Starship 能与之前设置的 Bash 配置相兼容。
+内置于 Starship 的 [Bash 适配](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微复杂一些，实现了像 [命令用时统计组件](https://starship.rs/config/#command-duration) 这样的功能，还确保 Starship 能与之前设置的 Bash 配置相兼容。
 
 使用以下命令了解 `starship prompt` 所能接受的所有参数：
 
@@ -55,6 +55,10 @@ If you get an error like "_version 'GLIBC_2.18' not found (required by starship)
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
+
+## I see symbols I don't understand or expect, what do they mean?
+
+If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
 
 ## Why don't I see a glyph symbol in my prompt?
 
@@ -88,5 +92,5 @@ If Starship was installed using the `curl | bash` script, the following command 
 
 ```sh
 # Locate and delete the starship binary
-rm "$(which starship)"
+sh -c 'rm "$(which starship)"'
 ```

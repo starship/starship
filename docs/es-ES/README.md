@@ -2,23 +2,23 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: '¡El prompt minimalista, increíblemente rápido, e infinitamente personalizable para cualquier shell!'
+tagline: '¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!'
 actionText: Comenzar →
 actionLink: ./guide/
 features:
   - 
     title: Compatibilidad primero
-    details: Funciona en las shells más comunes en los sistemas operativos más comunes. ¡Úsalo en todas partes!
+    details: Funciona en los intérprete de comandos más comunes de los sistemas operativos más comunes. ¡Úsalo en todas partes!
   - 
     title: Desarrollado en Rust
     details: Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.
   - 
     title: Personalizable
-    details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener una interfaz minimalista o rica en funcionalidades.
+    details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener un prompt minimalista o rico en funcionalidades.
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: el indicador de comando multi-intérprete"
-description: Starship es el símbolo de sistema minimalista, ultrarápido e infinitamente customizable para cualquier intérprete de comandos. Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.
+metaTitle: "Starship: el prompt multi-intérprete"
+description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos! Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion y PowerShell.'
 ---
 
 <div class="center">
@@ -30,16 +30,17 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
 ### Instalación rápida
 
-1. Instalar el binario de **starship**:
+1. Instalar el binario de **Starship**:
 
 
    #### Instalar la última versión
 
-   Con la interfaz de línea de comandos:
+   Con el intérprete de comandos:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
 
    #### Instalar con un gestor de paquetes
@@ -56,7 +57,7 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
    scoop install starship
    ```
 
-1. Añade el script de inicio al archivo de configuración de tu interfaz de línea de comandos:
+1. Añade el guión de inicio al archivo de configuración de tu intérprete de comandos:
 
 
    #### Bash
@@ -94,11 +95,9 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
 
    #### Powershell
 
-   Añade el siguiente código al final de `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` (o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en sistemas *nix):
+   Añade lo siguiente al final de `Microsoft.PowerShell_profile.ps1`. Puedes comprobar la ubicación de este archivo consultando la variable `$PROFILE` en PowerShell. Normalmente la ruta es `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` o `~/.config/powershell/Microsoft.PowerShell_profile.ps1` en -Nix.
 
    ```sh
-   # ~\Documentos\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -111,4 +110,27 @@ description: Starship es el símbolo de sistema minimalista, ultrarápido e infi
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+   #### Elvish
+
+   ::: advertencia Solo se admite Elvish v0.15 o superior. :::
+
+   Añade el siguiente código al final de `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Añade el siguiente código al final de `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```

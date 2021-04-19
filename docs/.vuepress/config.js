@@ -10,25 +10,40 @@ module.exports = {
       title: "Starship",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
     },
+    "/es-ES/": {
+      lang: "es-ES",
+      title: "Starship",
+      description: "¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!"
+    },
+    "/fr-FR/": {
+      lang: "fr-FR",
+      title: "Starship",
+      description: "L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !"
+    },
     "/ru-RU/": {
       lang: "ru-RU",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!"
     },
     "/ja-JP/": {
       lang: "ja-JP",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！"
     },
     "/zh-CN/": {
       lang: "zh-CN",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "轻量级、反应迅速，可定制的高颜值终端！"
     },
     "/zh-TW/": {
       lang: "zh-TW",
       title: "Starship",
       description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+    },
+    "/vi-VN/": {
+      lang: "vi-VN",
+      title: "Starship",
+      description: "Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!"
     }
   },
   // prettier-ignore
@@ -44,17 +59,6 @@ module.exports = {
     ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
-
-    // Black Lives Matter
-    ["script", { type:"text/javascript", src:"https://makerbadge.s3.amazonaws.com/blmbadge.js" }],
-    ["script", {}, `BLMBadge.init({
-  layout:1,
-  theme:'dark',
-  promoText : 'Send a donation '+String.fromCodePoint(0x2192),
-  promoLink : 'https://minnesotafreedomfund.org/',
-  message : 'To be silent is to be complicit. Black lives matter.',
-  title : '#BlackLivesMatter'
-})`]
   ],
   theme: "default-prefers-color-scheme",
   themeConfig: {
@@ -72,11 +76,6 @@ module.exports = {
       apiKey: "107bdc34b894d5d1dd0824b420184c2d",
       indexName: "starship"
     },
-    postcss: {
-      plugins: [
-        require('css-prefers-color-scheme/postcss'),
-      ]
-    },
     locales: {
       "/": {
         // text for the language dropdown
@@ -91,6 +90,7 @@ module.exports = {
         sidebar: [
           "/",
           ["/guide/", "Guide"],
+          ["/installing/", "Advanced Installation"],
           ["/config/", "Configuration"],
           ["/advanced-config/", "Advanced Configuration"],
           ["/faq/", "Frequently Asked Questions"],
@@ -115,6 +115,44 @@ module.exports = {
           ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
           ["/de-DE/faq/", "Häufig gestellte Fragen"],
           ["/de-DE/presets/", "Konfigurations-Beispiele"]
+        ]
+      },
+      "/es-ES/": {
+        // text for the language dropdown
+        selectText: "Idiomas",
+        // label for this locale in the language dropdown
+        label: "Español",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Edita esta página en GitHub",
+        // Custom navbar values
+        nav: [{ text: "Configuración", link: "/es-ES/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/es-ES/",
+          ["/es-ES/guide/", "Guía"],
+          ["/es-ES/config/", "Configuración"],
+          ["/es-ES/advanced-config/", "Configuración Avanzada"],
+          ["/es-ES/faq/", "Preguntas frecuentes"],
+          ["/es-ES/presets/", "Ajustes predeterminados"]
+        ]
+      },
+      "/fr-FR/": {
+        // text for the language dropdown
+        selectText: "Langues",
+        // label for this locale in the language dropdown
+        label: "Français",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Éditez cette page sur GitHub",
+        // Custom navbar values
+        nav: [{ text: "Configuration", link: "/fr-FR/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/fr-FR/",
+          ["/fr-FR/guide/", "Guide"],
+          ["/fr-FR/config/", "Configuration"],
+          ["/fr-FR/advanced-config/", "Configuration avancée"],
+          ["/fr-FR/faq/", "Foire aux questions"],
+          ["/fr-FR/presets/", "Paramètres par défaut"]
         ]
       },
       "/ru-RU/": {
@@ -190,6 +228,25 @@ module.exports = {
           ["/zh-CN/advanced-config/", "高级配置"],
           ["/zh-CN/faq/", "常见问题"],
           ["/zh-CN/presets/", "社区配置分享"]
+        ]
+      },
+      "/vi-VN/": {
+        // text for the language dropdown
+        selectText: "Ngôn ngữ",
+        // label for this locale in the language dropdown
+        label: "Tiếng Việt",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Chỉnh sửa trang này trên GitHub",
+        // Custom navbar values
+        nav: [{ text: "Cấu hình", link: "/vi-VN/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/vi-VN/",
+          ["/vi-VN/guide/", "Hướng dẫn"],
+          ["/vi-VN/config/", "Cấu hình"],
+          ["/vi-VN/advanced-config/", "Cấu hình nâng cao"],
+          ["/vi-VN/faq/", "Các hỏi thường gặp"],
+          ["/vi-VN/presets/", "Mẫu thiết lập"]
         ]
       }
     }

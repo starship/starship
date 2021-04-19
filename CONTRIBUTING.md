@@ -37,7 +37,6 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -51,20 +50,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 ## External commands
 
-To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `utils::exec_cmd` function. Here's a quick example:
+To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `context.exec_cmd` function. Here's a quick example:
 
 ```rust
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-   // Here `my_env_var` will be either the stdout of the called command or the function
+   // Here `output` will be either the stdout of the called command or the function
    // will exit if the called program was not installed or could not be run.
-   let output = utils::exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
+   let output = context.exec_cmd("my_command", &["first_arg", "second_arg"])?.stdout;
 
    // Then you can happily use the output
 }
@@ -178,11 +176,24 @@ Any tests that depend on File I/O should use [`sync_all()`](https://doc.rust-lan
 
 Any tests that use `tempfile::tempdir` should take care to call `dir.close()` after usage to ensure the lifecycle of the directory can be reasoned about. This includes `fixture_repo()` as it returns a TempDir that should be closed.
 
-## Running the Documentation Website Locally
+## Documentation
 
-If you are contributing to the design of Starship's website, the following section will help you get started.
+### Crowdin Translated Pages
 
-### Setup
+Many documentation pages have versions in non-English languages. These
+translated pages are managed by
+[Crowdin](https://crowdin.com/project/starship-prompt). Please do not edit
+these pages directly, even for changes that do not need to be translated (e.g.
+whitespace or emoji changes), since this can cause merges to fail.
+
+If you would like to contribute translations or corrections to the Crowdin
+generated pages, please visit our Crowdin site.
+
+### Running the Documentation Website Locally
+
+Changes to documentation can be viewed in a rendered state from the GitHub PR page
+(go to the CI section at the bottom of the page and look for "deploy preview", then
+click on "details"). If you want to view changes locally as well, follow these steps.
 
 After cloning the project, you can do the following to run the VuePress website on your local machine:
 

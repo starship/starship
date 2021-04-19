@@ -12,7 +12,7 @@
 
 ## How do I get command completion as shown in the demo GIF?
 
-Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Ja, beide können benutzt werden, um Module in der Prompt zu deaktivieren. Wenn 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Mit der Aktualisierung von Starship werden neu erstellte Module an die Eingabezeile angefügt
 
-## Laut Dokumentation ist Starship cross-shell, aber es läuft nicht auf shell X. Warum?
+## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
 Starship ist auf so eine Weise gebaut, das die Unterstützung so gut wie jeder Shell möglch sein sollte. Die Starship Binärdatei läuft völlig unabhängig von der Shell, und sollte auf jeder benutzt werden können, die eine Anpassung des Stils erlaubt.
 
@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-Die [Bash Implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) ist etwas komplexer, um erweiterte Funktionen wie das [Befehlsdauer-Modul](https://starship.rs/config/#Command-Duration) zu ermöglichen und um sicherzustellen, dass Starship mit vorinstallierten Bash Konfigurationen kompatibel ist.
+Die [Bash Implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) ist etwas komplexer, um erweiterte Funktionen wie das [Befehlsdauer-Modul](https://starship.rs/config/#command-duration) zu ermöglichen und um sicherzustellen, dass Starship mit vorinstallierten Bash Konfigurationen kompatibel ist.
 
 Für eine Liste aller Flaggen, die von `Starship-Eingabeaufforderung` akzeptiert wird, verwenden Sie den folgenden Befehl:
 
@@ -55,6 +55,10 @@ If you get an error like "_version 'GLIBC_2.18' not found (required by starship)
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
+
+## I see symbols I don't understand or expect, what do they mean?
+
+If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
 
 ## Why don't I see a glyph symbol in my prompt?
 
@@ -88,5 +92,5 @@ If Starship was installed using the `curl | bash` script, the following command 
 
 ```sh
 # Locate and delete the starship binary
-rm "$(which starship)"
+sh -c 'rm "$(which starship)"'
 ```

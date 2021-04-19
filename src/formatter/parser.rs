@@ -1,3 +1,6 @@
+// Can't rename internal Pest names
+#![allow(clippy::upper_case_acronyms)]
+
 use pest::{error::Error, iterators::Pair, Parser};
 use pest_derive::*;
 

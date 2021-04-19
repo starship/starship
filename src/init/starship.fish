@@ -15,7 +15,7 @@ end
 set VIRTUAL_ENV_DISABLE_PROMPT 1
 
 function fish_mode_prompt; end
-export STARSHIP_SHELL="fish"
+set -gx STARSHIP_SHELL "fish"
 
 # Set up the session key that will be used to store logs
-export STARSHIP_SESSION_KEY=(::STARSHIP:: session)
+set -gx STARSHIP_SESSION_KEY (random 10000000000000 9999999999999999)

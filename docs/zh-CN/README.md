@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: 轻量级、反应迅速，可定制的高颜值终端！
 actionText: 入门 →
 actionLink: ./guide/
 features:
@@ -40,6 +40,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### 通过软件包管理器安装
@@ -94,11 +95,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` （对于 *nix 系统是`~/.config/powershell/Microsoft.PowerShell_profile.ps1`）的最后，添加以下内容：
+   将以下内容添加到 `Microsoft.PowerShell_profile.ps1`。 你可以在 PowerShell 通过 `$PROFILE` 变量来查询文件的位置。 对于 -Nix 来说，通常文件路径是 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -111,4 +110,27 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+   #### Elvish
+
+   ::: warning Only elvish v0.15 or higher is supported. :::
+
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```

@@ -4,22 +4,20 @@ use crate::configs::erlang::ErlangConfig;
 use crate::formatter::StringFormatter;
 
 /// Create a module with the current Erlang version
-///
-/// Will display the Erlang version if any of the following criteria are met:
-///     - Current directory contains a rebar.config file
-///     - Current directory contains a erlang.mk file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("erlang");
+    let config = ErlangConfig::try_load(module.config);
+
     let is_erlang_project = context
         .try_begin_scan()?
-        .set_files(&["rebar.config", "erlang.mk"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_erlang_project {
         return None;
     }
-
-    let mut module = context.new_module("erlang");
-    let config = ErlangConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -32,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_erlang_version().map(Ok),
+                "version" => get_erlang_version(context).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -49,10 +47,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_erlang_version() -> Option<String> {
-    use crate::utils;
-
-    Some(utils::exec_cmd(
+fn get_erlang_version(context: &Context) -> Option<String> {
+    Some(context.exec_cmd(
         "erl",
         &[
             "-noshell",
@@ -89,7 +85,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
-        let expected = Some(format!("via {} ", Color::Red.bold().paint(" 22.1.3")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint(" 22.1.3 ")));
         let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);

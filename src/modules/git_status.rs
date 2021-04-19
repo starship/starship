@@ -1,4 +1,5 @@
-use git2::{Repository, Status};
+use once_cell::sync::OnceCell;
+use regex::Regex;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -6,7 +7,8 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::sync::{Arc, RwLock};
+use std::path::Path;
+use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
 
@@ -26,7 +28,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
-    let info = Arc::new(GitStatusInfo::load(repo));
+    let info = Arc::new(GitStatusInfo::load(context, repo));
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
@@ -107,119 +109,52 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 struct GitStatusInfo<'a> {
+    context: &'a Context<'a>,
     repo: &'a Repo,
-    ahead_behind: RwLock<Option<Result<(usize, usize), git2::Error>>>,
-    repo_status: RwLock<Option<Result<RepoStatus, git2::Error>>>,
-    stashed_count: RwLock<Option<Result<usize, git2::Error>>>,
+    repo_status: OnceCell<Option<RepoStatus>>,
+    stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
-    pub fn load(repo: &'a Repo) -> Self {
+    pub fn load(context: &'a Context, repo: &'a Repo) -> Self {
         Self {
+            context,
             repo,
-            ahead_behind: RwLock::new(None),
-            repo_status: RwLock::new(None),
-            stashed_count: RwLock::new(None),
+            repo_status: OnceCell::new(),
+            stashed_count: OnceCell::new(),
         }
-    }
-
-    fn get_branch_name(&self) -> String {
-        self.repo
-            .branch
-            .clone()
-            .unwrap_or_else(|| String::from("master"))
-    }
-
-    fn get_repository(&self) -> Option<Repository> {
-        // bare repos don't have a branch name, so `repo.branch.as_ref` would return None,
-        // but git treats "master" as the default branch name
-        let repo_root = self.repo.root.as_ref()?;
-        Repository::open(repo_root).ok()
     }
 
     pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
-        {
-            let data = self.ahead_behind.read().unwrap();
-            if let Some(result) = data.as_ref() {
-                return match result.as_ref() {
-                    Ok(ahead_behind) => Some(*ahead_behind),
-                    Err(error) => {
-                        log::debug!("get_ahead_behind: {}", error);
-                        None
-                    }
-                };
-            };
-        }
-
-        {
-            let mut data = self.ahead_behind.write().unwrap();
-            let repo = self.get_repository()?;
-            let branch_name = self.get_branch_name();
-            *data = Some(get_ahead_behind(&repo, &branch_name));
-            match data.as_ref().unwrap() {
-                Ok(ahead_behind) => Some(*ahead_behind),
-                Err(error) => {
-                    log::debug!("get_ahead_behind: {}", error);
-                    None
-                }
-            }
-        }
+        self.get_repo_status().map(|data| (data.ahead, data.behind))
     }
 
-    pub fn get_repo_status(&self) -> Option<RepoStatus> {
-        {
-            let data = self.repo_status.read().unwrap();
-            if let Some(result) = data.as_ref() {
-                return match result.as_ref() {
-                    Ok(repo_status) => Some(*repo_status),
-                    Err(error) => {
-                        log::debug!("get_repo_status: {}", error);
-                        None
-                    }
-                };
-            };
-        }
+    pub fn get_repo_status(&self) -> &Option<RepoStatus> {
+        self.repo_status.get_or_init(|| {
+            let repo_root = self.repo.root.as_ref()?;
 
-        {
-            let mut data = self.repo_status.write().unwrap();
-            let mut repo = self.get_repository()?;
-            *data = Some(get_repo_status(&mut repo));
-            match data.as_ref().unwrap() {
-                Ok(repo_status) => Some(*repo_status),
-                Err(error) => {
-                    log::debug!(" get_repo_status: {}", error);
+            match get_repo_status(self.context, repo_root) {
+                Some(repo_status) => Some(repo_status),
+                None => {
+                    log::debug!("get_repo_status: git status execution failed");
                     None
                 }
             }
-        }
+        })
     }
 
-    pub fn get_stashed(&self) -> Option<usize> {
-        {
-            let data = self.stashed_count.read().unwrap();
-            if let Some(result) = data.as_ref() {
-                return match result.as_ref() {
-                    Ok(stashed_count) => Some(*stashed_count),
-                    Err(error) => {
-                        log::debug!("get_stashed_count: {}", error);
-                        None
-                    }
-                };
-            };
-        }
+    pub fn get_stashed(&self) -> &Option<usize> {
+        self.stashed_count.get_or_init(|| {
+            let repo_root = self.repo.root.as_ref()?;
 
-        {
-            let mut data = self.stashed_count.write().unwrap();
-            let mut repo = self.get_repository()?;
-            *data = Some(get_stashed_count(&mut repo));
-            match data.as_ref().unwrap() {
-                Ok(stashed_count) => Some(*stashed_count),
-                Err(error) => {
-                    log::debug!("get_stashed_count: {}", error);
+            match get_stashed_count(self.context, repo_root) {
+                Some(stashed_count) => Some(stashed_count),
+                None => {
+                    log::debug!("get_stashed_count: git stash execution failed");
                     None
                 }
             }
-        }
+        })
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
@@ -248,62 +183,53 @@ impl<'a> GitStatusInfo<'a> {
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Error> {
+fn get_repo_status(context: &Context, repo_root: &Path) -> Option<RepoStatus> {
     log::debug!("New repo status created");
-    let mut status_options = git2::StatusOptions::new();
 
     let mut repo_status = RepoStatus::default();
+    let status_output = context.exec_cmd(
+        "git",
+        &[
+            "-C",
+            &repo_root.to_string_lossy(),
+            "--no-optional-locks",
+            "status",
+            "--porcelain=2",
+            "--branch",
+        ],
+    )?;
+    let statuses = status_output.stdout.lines();
 
-    match repository.config()?.get_entry("status.showUntrackedFiles") {
-        Ok(entry) => status_options.include_untracked(entry.value() != Some("no")),
-        _ => status_options.include_untracked(true),
-    };
-    status_options
-        .renames_from_rewrites(true)
-        .renames_head_to_index(true)
-        .include_unmodified(true);
+    statuses.for_each(|status| {
+        if status.starts_with("# branch.ab ") {
+            repo_status.set_ahead_behind(status);
+        } else if !status.starts_with('#') {
+            repo_status.add(status);
+        }
+    });
 
-    let statuses = repository.statuses(Some(&mut status_options))?;
-
-    if statuses.is_empty() {
-        return Err(git2::Error::from_str("Repo has no status"));
-    }
-
-    statuses
-        .iter()
-        .map(|s| s.status())
-        .for_each(|status| repo_status.add(status));
-
-    Ok(repo_status)
+    Some(repo_status)
 }
 
-fn get_stashed_count(repository: &mut Repository) -> Result<usize, git2::Error> {
-    let mut count = 0;
-    repository.stash_foreach(|_, _, _| {
-        count += 1;
-        true
-    })?;
-    Result::Ok(count)
-}
+fn get_stashed_count(context: &Context, repo_root: &Path) -> Option<usize> {
+    let stash_output = context.exec_cmd(
+        "git",
+        &[
+            "-C",
+            &repo_root.to_string_lossy(),
+            "--no-optional-locks",
+            "stash",
+            "list",
+        ],
+    )?;
 
-/// Compares the current branch with the branch it is tracking to determine how
-/// far ahead or behind it is in relation
-fn get_ahead_behind(
-    repository: &Repository,
-    branch_name: &str,
-) -> Result<(usize, usize), git2::Error> {
-    let branch_object = repository.revparse_single(branch_name)?;
-    let tracking_branch_name = format!("{}@{{upstream}}", branch_name);
-    let tracking_object = repository.revparse_single(&tracking_branch_name)?;
-
-    let branch_oid = branch_object.id();
-    let tracking_oid = tracking_object.id();
-
-    repository.graph_ahead_behind(branch_oid, tracking_oid)
+    Some(stash_output.stdout.trim().lines().count())
 }
 
 #[derive(Default, Debug, Copy, Clone)]
 struct RepoStatus {
+    ahead: usize,
+    behind: usize,
     conflicted: usize,
     deleted: usize,
     renamed: usize,
@@ -313,37 +239,52 @@ struct RepoStatus {
 }
 
 impl RepoStatus {
-    fn is_conflicted(status: Status) -> bool {
-        status.is_conflicted()
+    fn is_conflicted(status: &str) -> bool {
+        status.starts_with("u ")
     }
 
-    fn is_deleted(status: Status) -> bool {
-        status.is_wt_deleted() || status.is_index_deleted()
+    fn is_deleted(status: &str) -> bool {
+        // is_wt_deleted || is_index_deleted
+        status.starts_with("1 .D") || status.starts_with("1 D")
     }
 
-    fn is_renamed(status: Status) -> bool {
-        status.is_wt_renamed() || status.is_index_renamed()
+    fn is_renamed(status: &str) -> bool {
+        // is_wt_renamed || is_index_renamed
+        // Potentially a copy and not a rename
+        status.starts_with("2 ")
     }
 
-    fn is_modified(status: Status) -> bool {
-        status.is_wt_modified()
+    fn is_modified(status: &str) -> bool {
+        // is_wt_modified
+        status.starts_with("1 .M")
     }
 
-    fn is_staged(status: Status) -> bool {
-        status.is_index_modified() || status.is_index_new()
+    fn is_staged(status: &str) -> bool {
+        // is_index_modified || is_index_new
+        status.starts_with("1 M") || status.starts_with("1 A")
     }
 
-    fn is_untracked(status: Status) -> bool {
-        status.is_wt_new()
+    fn is_untracked(status: &str) -> bool {
+        // is_wt_new
+        status.starts_with("? ")
     }
 
-    fn add(&mut self, s: Status) {
+    fn add(&mut self, s: &str) {
         self.conflicted += RepoStatus::is_conflicted(s) as usize;
         self.deleted += RepoStatus::is_deleted(s) as usize;
         self.renamed += RepoStatus::is_renamed(s) as usize;
         self.modified += RepoStatus::is_modified(s) as usize;
         self.staged += RepoStatus::is_staged(s) as usize;
         self.untracked += RepoStatus::is_untracked(s) as usize;
+    }
+
+    fn set_ahead_behind(&mut self, s: &str) {
+        let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
+
+        if let Some(caps) = re.captures(s) {
+            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().unwrap();
+            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().unwrap();
+        }
     }
 }
 
@@ -395,6 +336,7 @@ mod tests {
         std::thread::sleep(std::time::Duration::from_millis(500));
     }
 
+    #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
             "{} ",
@@ -417,7 +359,7 @@ mod tests {
 
     #[test]
     fn shows_behind() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         behind(&repo_dir.path())?;
 
@@ -432,7 +374,7 @@ mod tests {
 
     #[test]
     fn shows_behind_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         behind(&repo_dir.path())?;
 
@@ -451,7 +393,7 @@ mod tests {
 
     #[test]
     fn shows_ahead() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
         ahead(&repo_dir.path())?;
@@ -467,7 +409,7 @@ mod tests {
 
     #[test]
     fn shows_ahead_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
         ahead(&repo_dir.path())?;
@@ -487,7 +429,7 @@ mod tests {
 
     #[test]
     fn shows_diverged() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         diverge(&repo_dir.path())?;
 
@@ -502,7 +444,7 @@ mod tests {
 
     #[test]
     fn shows_diverged_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         diverge(&repo_dir.path())?;
 
@@ -521,7 +463,7 @@ mod tests {
 
     #[test]
     fn shows_conflicted() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_conflict(&repo_dir.path())?;
 
@@ -536,7 +478,7 @@ mod tests {
 
     #[test]
     fn shows_conflicted_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_conflict(&repo_dir.path())?;
 
@@ -555,7 +497,7 @@ mod tests {
 
     #[test]
     fn shows_untracked_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_untracked(&repo_dir.path())?;
 
@@ -570,7 +512,7 @@ mod tests {
 
     #[test]
     fn shows_untracked_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_untracked(&repo_dir.path())?;
 
@@ -589,7 +531,7 @@ mod tests {
 
     #[test]
     fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_untracked(&repo_dir.path())?;
 
@@ -610,7 +552,7 @@ mod tests {
 
     #[test]
     fn shows_stashed() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
         barrier();
 
         create_stash(&repo_dir.path())?;
@@ -632,7 +574,7 @@ mod tests {
 
     #[test]
     fn shows_stashed_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
         barrier();
 
         create_stash(&repo_dir.path())?;
@@ -659,7 +601,7 @@ mod tests {
 
     #[test]
     fn shows_modified() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_modified(&repo_dir.path())?;
 
@@ -674,7 +616,7 @@ mod tests {
 
     #[test]
     fn shows_modified_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_modified(&repo_dir.path())?;
 
@@ -693,7 +635,7 @@ mod tests {
 
     #[test]
     fn shows_staged_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(&repo_dir.path())?;
 
@@ -708,7 +650,7 @@ mod tests {
 
     #[test]
     fn shows_staged_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(&repo_dir.path())?;
 
@@ -734,7 +676,7 @@ mod tests {
 
     #[test]
     fn shows_renamed_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_renamed(&repo_dir.path())?;
 
@@ -749,7 +691,7 @@ mod tests {
 
     #[test]
     fn shows_renamed_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_renamed(&repo_dir.path())?;
 
@@ -768,7 +710,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_file() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_deleted(&repo_dir.path())?;
 
@@ -783,7 +725,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_deleted(&repo_dir.path())?;
 
@@ -806,7 +748,7 @@ mod tests {
     #[test]
     #[ignore]
     fn ignore_manually_renamed() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
         File::create(repo_dir.path().join("a"))?.sync_all()?;
         File::create(repo_dir.path().join("b"))?.sync_all()?;
         Command::new("git")

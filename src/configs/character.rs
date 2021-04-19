@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct CharacterConfig<'a> {
     pub format: &'a str,
     pub success_symbol: &'a str,
@@ -11,8 +12,8 @@ pub struct CharacterConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for CharacterConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for CharacterConfig<'a> {
+    fn default() -> Self {
         CharacterConfig {
             format: "$symbol ",
             success_symbol: "[❯](bold green)",

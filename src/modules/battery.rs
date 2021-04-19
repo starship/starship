@@ -33,10 +33,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .map_meta(|variable, _| match variable {
                     "symbol" => match state {
                         battery::State::Full => Some(config.full_symbol),
-                        battery::State::Charging => Some(config.charging_symbol),
-                        battery::State::Discharging => Some(config.discharging_symbol),
-                        battery::State::Unknown => config.unknown_symbol,
-                        battery::State::Empty => config.empty_symbol,
+                        battery::State::Charging => display_style
+                            .charging_symbol
+                            .or(Some(config.charging_symbol)),
+                        battery::State::Discharging => display_style
+                            .discharging_symbol
+                            .or(Some(config.discharging_symbol)),
+                        battery::State::Unknown => Some(config.unknown_symbol),
+                        battery::State::Empty => Some(config.empty_symbol),
                         _ => {
                             log::debug!("Unhandled battery state `{}`", state);
                             None
@@ -85,7 +89,12 @@ fn get_battery_status() -> Option<BatteryStatus> {
                 })
             }
             Err(e) => {
-                log::warn!("Unable to access battery information:\n{}", &e);
+                let level = if cfg!(target_os = "linux") {
+                    log::Level::Info
+                } else {
+                    log::Level::Warn
+                };
+                log::log!(level, "Unable to access battery information:\n{}", &e);
                 None
             }
         })

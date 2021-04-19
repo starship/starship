@@ -1,5 +1,6 @@
 use super::{Context, Module, RootModuleConfig};
 use git2::Repository;
+use git2::Time;
 
 use crate::configs::git_commit::GitCommitConfig;
 use crate::formatter::StringFormatter;
@@ -47,17 +48,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         let tag_names = git_repo.tag_names(None).ok()?;
         let tag_and_refs = tag_names.iter().flat_map(|name| {
             let full_tag = format!("refs/tags/{}", name.unwrap());
+            let tag_obj = git_repo.find_reference(&full_tag)?.peel_to_tag()?;
+            let sig_obj = tag_obj.tagger().unwrap();
             git_repo
                 .find_reference(&full_tag)
-                .map(|reference| (String::from(name.unwrap()), reference))
+                .map(|reference| (String::from(name.unwrap()), sig_obj.when(), reference))
         });
 
         let mut tag_name = String::new();
-        // Let's check if HEAD has some tag. If several, only gets first...
-        for (name, reference) in tag_and_refs {
-            if commit_oid == reference.peel_to_commit().ok()?.id() {
+        let mut oldest = Time::new(0, 0);
+        // Let's check if HEAD has some tag. If several, gets last created one...
+        for (name, timestamp, reference) in tag_and_refs.rev() {
+            if commit_oid == reference.peel_to_commit().ok()?.id() && timestamp > oldest {
                 tag_name = name;
-                break;
+                oldest = timestamp;
             }
         }
         // If we have tag...
@@ -131,7 +135,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_output = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -163,7 +167,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_len_override() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_output = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -196,7 +200,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let actual = ModuleRenderer::new("git_commit")
             .path(&repo_dir.path())
@@ -210,7 +214,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "@~1"])
@@ -243,7 +247,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_commit = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -286,7 +290,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_only_detached_on_detached_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "@~1"])
@@ -318,6 +322,78 @@ mod tests {
         let actual = ModuleRenderer::new("git_commit")
             .config(toml::toml! {
                 [git_commit]
+                    tag_disabled = false
+                    tag_symbol = ""
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", expected_output.trim()))
+                .to_string()
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn test_latest_tag_shown_with_tag_enabled() -> io::Result<()> {
+        use std::{thread, time};
+
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        let mut git_commit = Command::new("git")
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_commit.truncate(7);
+        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+
+        Command::new("git")
+            .args(&["tag", "v2", "-m", "Testing tags v2"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        // Wait one second between tags
+        thread::sleep(time::Duration::from_millis(1000));
+
+        Command::new("git")
+            .args(&["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        Command::new("git")
+            .args(&["tag", "v1", "-m", "Testing tags v1"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        let git_tag = Command::new("git")
+            .args(&[
+                "for-each-ref",
+                "--contains",
+                "HEAD",
+                "--sort=-taggerdate",
+                "--count=1",
+                "--format",
+                "%(refname:short)",
+                "refs/tags",
+            ])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+
+        let expected_output = format!("{} {}", commit_output, tag_output);
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
                     tag_disabled = false
                     tag_symbol = ""
             })

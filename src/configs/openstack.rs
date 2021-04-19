@@ -1,7 +1,8 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct OspConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -9,8 +10,8 @@ pub struct OspConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for OspConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for OspConfig<'a> {
+    fn default() -> Self {
         OspConfig {
             format: "on [$symbol$cloud(\\($project\\))]($style) ",
             symbol: "☁️  ",

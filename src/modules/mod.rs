@@ -7,6 +7,7 @@ mod conda;
 mod crystal;
 pub(crate) mod custom;
 mod dart;
+mod deno;
 mod directory;
 mod docker_context;
 mod dotnet;
@@ -26,6 +27,7 @@ mod hostname;
 mod java;
 mod jobs;
 mod julia;
+mod kotlin;
 mod kubernetes;
 mod line_break;
 mod lua;
@@ -43,6 +45,8 @@ mod python;
 mod r;
 mod ruby;
 mod rust;
+mod scala;
+mod shell;
 mod shlvl;
 mod singularity;
 mod status;
@@ -51,6 +55,8 @@ mod terraform;
 mod time;
 mod username;
 mod utils;
+mod vagrant;
+mod vcsh;
 mod zig;
 
 #[cfg(feature = "battery")]
@@ -76,6 +82,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cmd_duration" => cmd_duration::module(context),
             "conda" => conda::module(context),
             "dart" => dart::module(context),
+            "deno" => deno::module(context),
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context),
             "dotnet" => dotnet::module(context),
@@ -95,6 +102,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "java" => java::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
+            "kotlin" => kotlin::module(context),
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
             "lua" => lua::module(context),
@@ -112,6 +120,8 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "r" => r::module(context),
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
+            "scala" => scala::module(context),
+            "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
@@ -120,6 +130,8 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "time" => time::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
+            "vagrant" => vagrant::module(context),
+            "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),
             _ => {
                 eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
@@ -154,6 +166,7 @@ pub fn description(module: &str) -> &'static str {
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
+        "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
@@ -171,6 +184,7 @@ pub fn description(module: &str) -> &'static str {
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
+        "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
         "lua" => "The currently installed version of Lua",
@@ -188,12 +202,16 @@ pub fn description(module: &str) -> &'static str {
         "r" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
+        "scala" => "The currently installed version of Scala",
         "swift" => "The currently installed version of Swift",
+        "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "status" => "The status of the last command",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
+        "vagrant" => "The currently installed version of Vagrant",
+        "vcsh" => "The currently active VCSH repository",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",
     }

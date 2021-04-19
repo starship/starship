@@ -4,51 +4,26 @@ use std::path::Path;
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
+use crate::formatter::VersionFormatter;
 
-/// Creates a module with the current Python version
-///
-/// Will display the Python version if any of the following criteria are met:
-///     - Current directory contains a `.python-version` file
-///     - Current directory contains a `requirements.txt` file
-///     - Current directory contains a `pyproject.toml` file
-///     - Current directory contains a file with the `.py` extension
-///     - Current directory contains a `Pipfile` file
-///     - Current directory contains a `tox.ini` file
+/// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("python");
     let config: PythonConfig = PythonConfig::try_load(module.config);
 
-    let is_py_project = {
-        let base = context.try_begin_scan()?.set_files(&[
-            "requirements.txt",
-            ".python-version",
-            "pyproject.toml",
-            "Pipfile",
-            "tox.ini",
-            "setup.py",
-            "__init__.py",
-        ]);
-        if config.scan_for_pyfiles {
-            base.set_extensions(&["py"]).is_match()
-        } else {
-            base.is_match()
-        }
-    };
+    let is_py_project = context
+        .try_begin_scan()?
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
+        .is_match();
 
     let is_venv = context.get_env("VIRTUAL_ENV").is_some();
 
     if !is_py_project && !is_venv {
         return None;
-    }
-
-    let python_version = if config.pyenv_version_name {
-        utils::exec_cmd("pyenv", &["version-name"])?.stdout
-    } else {
-        let version = get_python_version(&config.python_binary)?;
-        format_python_version(&version)
     };
-    let virtual_env = get_python_virtual_env(context);
+
     let pyenv_prefix = if config.pyenv_version_name {
         config.pyenv_prefix
     } else {
@@ -66,9 +41,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(python_version.trim())),
-                "virtualenv" => virtual_env.as_ref().map(|e| Ok(e.trim())),
-                "pyenv_prefix" => Some(Ok(pyenv_prefix)),
+                "version" => get_python_version(context, &config).map(Ok),
+                "virtualenv" => {
+                    let virtual_env = get_python_virtual_env(context);
+                    virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
+                }
+                "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
                 _ => None,
             })
             .parse(None)
@@ -85,27 +63,41 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_python_version(python_binary: &str) -> Option<String> {
-    match utils::exec_cmd(python_binary, &["--version"]) {
-        Some(output) => {
+fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
+    if config.pyenv_version_name {
+        let version_name = context.exec_cmd("pyenv", &["version-name"])?.stdout;
+        return Some(version_name.trim().to_string());
+    };
+    let version = config
+        .python_binary
+        .0
+        .iter()
+        .find_map(|binary| context.exec_cmd(binary, &["--version"]))
+        .map(|output| {
             if output.stdout.is_empty() {
-                Some(output.stderr)
+                output.stderr
             } else {
-                Some(output.stdout)
+                output.stdout
             }
-        }
-        None => None,
-    }
+        })?;
+
+    format_python_version(&version, config.version_format)
 }
 
-fn format_python_version(python_stdout: &str) -> String {
-    format!(
-        "v{}",
-        python_stdout
-            .trim_start_matches("Python ")
-            .trim_end_matches(":: Anaconda, Inc.")
-            .trim()
-    )
+fn format_python_version(python_version: &str, version_format: &str) -> Option<String> {
+    let version = python_version
+        // split into ["Python", "3.8.6", ...]
+        .split_whitespace()
+        // get down to "3.8.6"
+        .nth(1)?;
+
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formating `python` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
@@ -122,7 +114,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
         .ok()?
         .general_section()
         .get("prompt")
-        .map(String::from)
+        .map(|prompt| String::from(prompt.trim_matches(&['(', ')'] as &[_])))
 }
 
 #[cfg(test)]
@@ -136,14 +128,50 @@ mod tests {
 
     #[test]
     fn test_format_python_version() {
-        let input = "Python 3.7.2";
-        assert_eq!(format_python_version(input), "v3.7.2");
+        assert_eq!(
+            format_python_version("Python 3.7.2", "v${major}.${minor}.${patch}"),
+            Some("v3.7.2".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_truncated() {
+        assert_eq!(
+            format_python_version("Python 3.7.2", "v${major}.${minor}"),
+            Some("v3.7".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_is_malformed() {
+        assert_eq!(
+            format_python_version("Python 3.7", "v${major}.${minor}.${patch}"),
+            Some("v3.7.".to_string())
+        );
     }
 
     #[test]
     fn test_format_python_version_anaconda() {
-        let input = "Python 3.6.10 :: Anaconda, Inc.";
-        assert_eq!(format_python_version(input), "v3.6.10");
+        assert_eq!(
+            format_python_version(
+                "Python 3.6.10 :: Anaconda, Inc.",
+                "v${major}.${minor}.${patch}"
+            ),
+            Some("v3.6.10".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_python_version_pypy() {
+        assert_eq!(
+            format_python_version(
+                "\
+Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
+[PyPy 7.3.3-beta0 with GCC 10.2.0]",
+                "v${major}.${minor}.${patch}"
+            ),
+            Some("v3.7.9".to_string())
+        );
     }
 
     #[test]
@@ -164,6 +192,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -175,6 +204,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -186,6 +216,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -197,6 +228,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -208,6 +240,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -219,6 +252,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -230,6 +264,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -241,6 +276,7 @@ mod tests {
         check_python2_renders(&dir, None);
         check_python3_renders(&dir, None);
         check_pyenv_renders(&dir, None);
+        check_multiple_binaries_renders(&dir, None);
         dir.close()
     }
 
@@ -252,7 +288,7 @@ mod tests {
         let expected = None;
         let config = toml::toml! {
             [python]
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
         let actual = ModuleRenderer::new("python")
             .path(dir.path())
@@ -269,7 +305,8 @@ mod tests {
 
         let config = toml::toml! {
             [python]
-            scan_for_pyfiles = false
+            python_binary = "python2"
+            detect_extensions = []
         };
 
         check_python2_renders(&dir, Some(config));
@@ -277,7 +314,7 @@ mod tests {
         let config_python3 = toml::toml! {
             [python]
             python_binary = "python3"
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
 
         check_python3_renders(&dir, Some(config_python3));
@@ -286,9 +323,17 @@ mod tests {
             [python]
             pyenv_version_name = true
             pyenv_prefix = "test_pyenv "
-            scan_for_pyfiles = false
+            detect_extensions = []
         };
         check_pyenv_renders(&dir, Some(config_pyenv));
+
+        let config_multi = toml::toml! {
+            [python]
+            python_binary = ["python", "python3"]
+            detect_extensions = []
+        };
+        check_multiple_binaries_renders(&dir, Some(config_multi));
+
         dir.close()
     }
 
@@ -302,8 +347,8 @@ mod tests {
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -320,8 +365,8 @@ mod tests {
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (my_venv)")
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -336,7 +381,7 @@ mod tests {
         venv_cfg.write_all(
             br#"
 home = something
-prompt = 'foo' 
+prompt = 'foo'
         "#,
         )?;
         venv_cfg.sync_all()?;
@@ -347,8 +392,35 @@ prompt = 'foo'
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 v2.7.17 (foo)")
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_active_venv_and_dirty_prompt() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = '(foo)'
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
         ));
 
         assert_eq!(actual, expected);
@@ -358,7 +430,7 @@ prompt = 'foo'
     fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
         let config = starship_config.unwrap_or(toml::toml! {
             [python]
-            python_binary = "python"
+            python_binary = "python2"
         });
 
         let actual = ModuleRenderer::new("python")
@@ -366,7 +438,7 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v2.7.17")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v2.7.17 ")));
         assert_eq!(expected, actual);
     }
 
@@ -381,7 +453,25 @@ prompt = 'foo'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐍 v3.8.0")));
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+        assert_eq!(expected, actual);
+    }
+
+    fn check_multiple_binaries_renders(
+        dir: &tempfile::TempDir,
+        starship_config: Option<toml::Value>,
+    ) {
+        let config = starship_config.unwrap_or(toml::toml! {
+             [python]
+             python_binary = ["python", "python3"]
+        });
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
     }
 
@@ -398,8 +488,8 @@ prompt = 'foo'
             .collect();
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Yellow.bold().paint("🐍 test_pyenv system")
+            "via {}",
+            Color::Yellow.bold().paint("🐍 test_pyenv system ")
         ));
         assert_eq!(expected, actual);
     }

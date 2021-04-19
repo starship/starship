@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct GitStatusConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
@@ -19,8 +20,8 @@ pub struct GitStatusConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for GitStatusConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for GitStatusConfig<'a> {
+    fn default() -> Self {
         GitStatusConfig {
             format: "([\\[$all_status$ahead_behind\\]]($style) )",
             style: "red bold",

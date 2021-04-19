@@ -64,52 +64,47 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
-    fn no_env_variables() -> io::Result<()> {
+    fn no_env_variables() {
         let actual = ModuleRenderer::new("nix_shell").collect();
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn invalid_env_variables() -> io::Result<()> {
+    fn invalid_env_variables() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "something_wrong")
             .collect();
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn pure_shell() -> io::Result<()> {
+    fn pure_shell() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "pure")
             .collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  pure")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn impure_shell() -> io::Result<()> {
+    fn impure_shell() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
             .collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn pure_shell_name() -> io::Result<()> {
+    fn pure_shell_name() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "pure")
             .env("name", "starship")
@@ -120,11 +115,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn impure_shell_name() -> io::Result<()> {
+    fn impure_shell_name() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
             .env("name", "starship")
@@ -135,6 +129,5 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

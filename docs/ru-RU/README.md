@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: Минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки!
+tagline: Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!
 actionText: Начало работы →
 actionLink: ./guide/
 features:
@@ -11,10 +11,10 @@ features:
     details: Работает на большинстве распространенных оболочек и наиболее распространенных операционных системах. Используйте везде!
   - 
     title: Основана на Rust
-    details: Приносит наилучшую в своем классе скорость и безопасность Rust, чтобы сделать вашу подсказку как можно быстрее и надежнее.
+    details: Приносит наилучшую в своем классе скорость и безопасность Rust, чтобы сделать вашу оболочку как можно быстрее и надежнее.
   - 
     title: Настраиваемая
-    details: Каждая маленькая деталь настраивается по вашему вкусу, чтобы сделать эту подсказку минимальной или функциональной, как вы захотите.
+    details: Каждая маленькая деталь настраивается по вашему вкусу, чтобы сделать эту оболочку минималистичной или функциональной, как вы захотите.
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
@@ -40,6 +40,7 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Установить через менеджер пакетов
@@ -94,11 +95,9 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### PowerShell
 
-   Добавьте следующее в конец `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix):
+   Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете проверить местоположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -111,4 +110,27 @@ description: Starship - минимальная, быстрая и бесконе
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+   #### Elvish
+
+   ::: warning Only elvish v0.15 or higher is supported. :::
+
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```

@@ -54,12 +54,11 @@ fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option
 mod test {
     use crate::test::ModuleRenderer;
     use ansi_term::{Color, Style};
-    use std::io;
 
     const TEST_VAR_VALUE: &str = "astronauts";
 
     #[test]
-    fn empty_config() -> io::Result<()> {
+    fn empty_config() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -68,11 +67,10 @@ mod test {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn defined_variable() -> io::Result<()> {
+    fn defined_variable() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -83,11 +81,10 @@ mod test {
         let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn undefined_variable() -> io::Result<()> {
+    fn undefined_variable() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -97,11 +94,10 @@ mod test {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn default_has_no_effect() -> io::Result<()> {
+    fn default_has_no_effect() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -113,11 +109,10 @@ mod test {
         let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn default_takes_effect() -> io::Result<()> {
+    fn default_takes_effect() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -128,11 +123,10 @@ mod test {
         let expected = Some(format!("with {} ", style().paint("N/A")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn symbol() -> io::Result<()> {
+    fn symbol() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -147,11 +141,10 @@ mod test {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn prefix() -> io::Result<()> {
+    fn prefix() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -166,11 +159,10 @@ mod test {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn suffix() -> io::Result<()> {
+    fn suffix() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var]
@@ -185,7 +177,6 @@ mod test {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     fn style() -> Style {

@@ -5,7 +5,6 @@ use std::borrow::Cow;
 use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
-use std::iter::FromIterator;
 
 use crate::config::parse_style_string;
 use crate::segment::Segment;
@@ -31,7 +30,7 @@ type VariableMapType<'a> =
 type StyleVariableMapType<'a> =
     BTreeMap<String, Option<Result<Cow<'a, str>, StringFormatterError>>>;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum StringFormatterError {
     Custom(String),
     Parse(PestError<Rule>),
@@ -65,31 +64,26 @@ impl<'a> StringFormatter<'a> {
     ///
     /// This method will throw an Error when the given format string fails to parse.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
-        parse(format)
-            .map(|format| {
-                // Cache all variables
-                let variables = VariableMapType::from_iter(
-                    format
-                        .get_variables()
-                        .into_iter()
-                        .map(|key| (key.to_string(), None))
-                        .collect::<Vec<(String, Option<_>)>>(),
-                );
-                let style_variables = StyleVariableMapType::from_iter(
-                    format
-                        .get_style_variables()
-                        .into_iter()
-                        .map(|key| (key.to_string(), None))
-                        .collect::<Vec<(String, Option<_>)>>(),
-                );
-                (format, variables, style_variables)
-            })
-            .map(|(format, variables, style_variables)| Self {
-                format,
-                variables,
-                style_variables,
-            })
-            .map_err(StringFormatterError::Parse)
+        let format = parse(format).map_err(StringFormatterError::Parse)?;
+
+        // Cache all variables
+        let variables = format
+            .get_variables()
+            .into_iter()
+            .map(|key| (key.to_string(), None))
+            .collect::<VariableMapType>();
+
+        let style_variables = format
+            .get_style_variables()
+            .into_iter()
+            .map(|key| (key.to_string(), None))
+            .collect::<StyleVariableMapType>();
+
+        Ok(Self {
+            format,
+            variables,
+            style_variables,
+        })
     }
 
     /// Maps variable name to its value
@@ -349,28 +343,31 @@ impl<'a> StringFormatter<'a> {
 
 impl<'a> VariableHolder<String> for StringFormatter<'a> {
     fn get_variables(&self) -> BTreeSet<String> {
-        BTreeSet::from_iter(self.variables.keys().cloned())
+        self.variables.keys().cloned().collect()
     }
 }
 
 impl<'a> StyleVariableHolder<String> for StringFormatter<'a> {
     fn get_style_variables(&self) -> BTreeSet<String> {
-        BTreeSet::from_iter(self.style_variables.keys().cloned())
+        self.style_variables.keys().cloned().collect()
     }
 }
 
 fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a> {
-    VariableMapType::from_iter(variables.iter().map(|(key, value)| {
-        let value = match value {
-            Some(Ok(value)) => match value {
-                VariableValue::Meta(_) => None,
-                other => Some(Ok(other.clone())),
-            },
-            Some(Err(e)) => Some(Err(e.clone())),
-            None => None,
-        };
-        (key.clone(), value)
-    }))
+    variables
+        .iter()
+        .map(|(key, value)| {
+            let value = match value {
+                Some(Ok(value)) => match value {
+                    VariableValue::Meta(_) => None,
+                    other => Some(Ok(other.clone())),
+                },
+                Some(Err(e)) => Some(Err(e.clone())),
+                None => None,
+            };
+            (key.clone(), value)
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -618,8 +615,10 @@ mod tests {
     #[test]
     fn test_variable_holder() {
         const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
-        let expected_variables =
-            BTreeSet::from_iter(vec!["a", "b", "c", "d"].into_iter().map(String::from));
+        let expected_variables = vec!["a", "b", "c", "d"]
+            .into_iter()
+            .map(String::from)
+            .collect();
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let variables = formatter.get_variables();
@@ -629,7 +628,7 @@ mod tests {
     #[test]
     fn test_style_variable_holder() {
         const FORMAT_STR: &str = "($a [($b) $c](none $s)) $d [t]($t)";
-        let expected_variables = BTreeSet::from_iter(vec!["s", "t"].into_iter().map(String::from));
+        let expected_variables = vec!["s", "t"].into_iter().map(String::from).collect();
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let variables = formatter.get_style_variables();

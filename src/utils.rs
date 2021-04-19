@@ -1,7 +1,9 @@
+use process_control::{ChildExt, Timeout};
 use std::fs::File;
 use std::io::{Read, Result};
 use std::path::Path;
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::time::{Duration, Instant};
 
 use crate::context::Shell;
 
@@ -14,7 +16,7 @@ pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
     Ok(data)
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CommandOutput {
     pub stdout: String,
     pub stderr: String,
@@ -28,12 +30,12 @@ impl PartialEq for CommandOutput {
 
 /// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
-    internal_exec_cmd(&cmd, &args)
+pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
+    internal_exec_cmd(&cmd, &args, time_limit)
 }
 
 #[cfg(test)]
-pub fn exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     let command = match args.len() {
         0 => String::from(cmd),
         _ => format!("{} {}", cmd, args.join(" ")),
@@ -54,6 +56,10 @@ Default target: x86_64-apple-macosx\n",
             stderr: String::from(
                 "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
             ),
+        }),
+        "deno -V" => Some(CommandOutput {
+            stdout: String::from("deno 1.8.3\n"),
+            stderr: String::default()
         }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
@@ -84,8 +90,20 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
             stderr: String::default(),
         }),
+        "scalac -version" => Some(CommandOutput {
+            stdout: String::from("Scala compiler version 2.13.5 -- Copyright 2002-2020, LAMP/EPFL and Lightbend, Inc."),
+            stderr: String::default(),
+        }),
         "julia --version" => Some(CommandOutput {
             stdout: String::from("julia version 1.4.0\n"),
+            stderr: String::default(),
+        }),
+        "kotlin -version" => Some(CommandOutput {
+            stdout: String::from("Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)\n"),
+            stderr: String::default(),
+        }),
+        "kotlinc -version" => Some(CommandOutput {
+            stdout: String::from("info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)\n"),
             stderr: String::default(),
         }),
         "lua -v" => Some(CommandOutput{
@@ -115,6 +133,10 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
+        "opam switch show --safe" => Some(CommandOutput {
+            stdout: String::from("default\n"),
+            stderr: String::default(),
+        }),
         "esy ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
@@ -137,7 +159,8 @@ active boot switches: -d:release\n",
             stdout: String::from("system\n"),
             stderr: String::default(),
         }),
-        "python --version" => Some(CommandOutput {
+        "python --version" => None,
+        "python2 --version" => Some(CommandOutput {
             stdout: String::default(),
             stderr: String::from("Python 2.7.17\n"),
         }),
@@ -155,6 +178,10 @@ active boot switches: -d:release\n",
 Apple Swift version 5.2.2 (swiftlang-1103.0.32.6 clang-1103.0.32.51)
 Target: x86_64-apple-darwin19.4.0\n",
             ),
+            stderr: String::default(),
+        }),
+        "vagrant --version" => Some(CommandOutput {
+            stdout: String::from("Vagrant 2.2.10\n"),
             stderr: String::default(),
         }),
         "zig version" => Some(CommandOutput {
@@ -187,12 +214,20 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args),
+        _ => internal_exec_cmd(&cmd, &args, time_limit),
     }
 }
 
 /// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
-pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
+pub fn wrap_colorseq_for_shell(mut ansi: String, shell: Shell) -> String {
+    // Bash might interepret baskslashes, backticks and $
+    // see #658 for more details
+    if shell == Shell::Bash {
+        ansi = ansi.replace('\\', r"\\");
+        ansi = ansi.replace('$', r"\$");
+        ansi = ansi.replace('`', r"\`");
+    }
+
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
     wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
@@ -211,6 +246,8 @@ pub fn wrap_seq_for_shell(
     const BASH_END: &str = "\u{5c}\u{5d}"; // \]
     const ZSH_BEG: &str = "\u{25}\u{7b}"; // %{
     const ZSH_END: &str = "\u{25}\u{7d}"; // %}
+    const TCSH_BEG: &str = "\u{25}\u{7b}"; // %{
+    const TCSH_END: &str = "\u{25}\u{7d}"; // %}
 
     // ANSI escape codes cannot be nested, so we can keep track of whether we're
     // in an escape or not with a single boolean variable
@@ -223,6 +260,7 @@ pub fn wrap_seq_for_shell(
                 match shell {
                     Shell::Bash => format!("{}{}", BASH_BEG, escape_begin),
                     Shell::Zsh => format!("{}{}", ZSH_BEG, escape_begin),
+                    Shell::Tcsh => format!("{}{}", TCSH_BEG, escape_begin),
                     _ => x.to_string(),
                 }
             } else if x == escape_end && escaped {
@@ -230,6 +268,7 @@ pub fn wrap_seq_for_shell(
                 match shell {
                     Shell::Bash => format!("{}{}", escape_end, BASH_END),
                     Shell::Zsh => format!("{}{}", escape_end, ZSH_END),
+                    Shell::Tcsh => format!("{}{}", escape_end, TCSH_END),
                     _ => x.to_string(),
                 }
             } else {
@@ -240,16 +279,60 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
-fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
-    match Command::new(cmd).args(args).output() {
-        Ok(output) => {
-            let stdout_string = String::from_utf8(output.stdout).unwrap();
-            let stderr_string = String::from_utf8(output.stderr).unwrap();
 
-            log::trace!("stdout: {:?}", stdout_string);
-            log::trace!("stderr: {:?}", stderr_string);
-            log::trace!("exit code: \"{:?}\"", output.status.code());
+    let full_path = match which::which(cmd) {
+        Ok(full_path) => {
+            log::trace!("Using {:?} as {:?}", full_path, cmd);
+            full_path
+        }
+        Err(error) => {
+            log::trace!("Unable to find {:?} in PATH, {:?}", cmd, error);
+            return None;
+        }
+    };
+
+    let start = Instant::now();
+
+    let process = match Command::new(full_path)
+        .args(args)
+        .stderr(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stdin(Stdio::null())
+        .spawn()
+    {
+        Ok(process) => process,
+        Err(error) => {
+            log::info!("Unable to run {:?}, {:?}", cmd, error);
+            return None;
+        }
+    };
+
+    match process.with_output_timeout(time_limit).terminating().wait() {
+        Ok(Some(output)) => {
+            let stdout_string = match String::from_utf8(output.stdout) {
+                Ok(stdout) => stdout,
+                Err(error) => {
+                    log::warn!("Unable to decode stdout: {:?}", error);
+                    return None;
+                }
+            };
+            let stderr_string = match String::from_utf8(output.stderr) {
+                Ok(stderr) => stderr,
+                Err(error) => {
+                    log::warn!("Unable to decode stderr: {:?}", error);
+                    return None;
+                }
+            };
+
+            log::trace!(
+                "stdout: {:?}, stderr: {:?}, exit code: \"{:?}\", took {:?}",
+                stdout_string,
+                stderr_string,
+                output.status.code(),
+                start.elapsed()
+            );
 
             if !output.status.success() {
                 return None;
@@ -260,6 +343,11 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
                 stderr: stderr_string,
             })
         }
+        Ok(None) => {
+            log::warn!("Executing command {:?} timed out.", cmd);
+            log::warn!("You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.");
+            None
+        }
         Err(error) => {
             log::info!("Executing command {:?} failed by: {:?}", cmd, error);
             None
@@ -268,13 +356,12 @@ fn internal_exec_cmd(cmd: &str, args: &[&str]) -> Option<CommandOutput> {
 }
 
 #[cfg(test)]
-#[cfg(not(windows))] // While the exec_cmd should work on Windows these tests assume a Unix-like environment.
 mod tests {
     use super::*;
 
     #[test]
     fn exec_mocked_command() {
-        let result = exec_cmd("dummy_command", &[]);
+        let result = exec_cmd("dummy_command", &[], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -283,9 +370,13 @@ mod tests {
         assert_eq!(result, expected)
     }
 
+    // While the exec_cmd should work on Windows some of these tests assume a Unix-like
+    // environment.
+
     #[test]
+    #[cfg(not(windows))]
     fn exec_no_output() {
-        let result = internal_exec_cmd("true", &[]);
+        let result = internal_exec_cmd("true", &[], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -295,8 +386,10 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_stdout() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello"]);
+        let result =
+            internal_exec_cmd("/bin/sh", &["-c", "echo hello"], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from(""),
@@ -306,8 +399,13 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_stderr() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello >&2"]);
+        let result = internal_exec_cmd(
+            "/bin/sh",
+            &["-c", "echo hello >&2"],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from("hello\n"),
@@ -317,8 +415,13 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_output_both() {
-        let result = internal_exec_cmd("/bin/sh", &["-c", "echo hello; echo world >&2"]);
+        let result = internal_exec_cmd(
+            "/bin/sh",
+            &["-c", "echo hello; echo world >&2"],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
             stderr: String::from("world\n"),
@@ -328,8 +431,18 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
     fn exec_with_non_zero_exit_code() {
-        let result = internal_exec_cmd("false", &[]);
+        let result = internal_exec_cmd("false", &[], Duration::from_millis(500));
+        let expected = None;
+
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    #[cfg(not(windows))]
+    fn exec_slow_command() {
+        let result = internal_exec_cmd("sleep", &["500"], Duration::from_millis(500));
         let expected = None;
 
         assert_eq!(result, expected)
@@ -371,5 +484,38 @@ mod tests {
         assert_eq!(&bresult3, "\\[OH NO\\]");
         assert_eq!(&bresult4, "herpaderp");
         assert_eq!(&bresult5, "");
+    }
+
+    #[test]
+    fn test_bash_escape() {
+        let test = "$(echo a)";
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
+            r"\$(echo a)"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"\$(echo a)";
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
+            r"\\\$(echo a)"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"`echo a`";
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
+            r"\`echo a\`"
+        );
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
+            test
+        );
     }
 }

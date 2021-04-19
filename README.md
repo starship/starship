@@ -22,7 +22,7 @@
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Packaging status"/></a
   ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
       alt="Chat on Discord"
@@ -90,18 +90,28 @@
       alt="简体中文"
   /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/es"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
       alt="Español"
   /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
       alt="Français"
+  /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt"
   /></a>
 </p>
 
@@ -114,9 +124,7 @@
   align="right"
 />
 
-
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
-
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -129,7 +137,6 @@
 <a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
-
 <a name="🚀-installation"></a>
 
 ## 🚀 Installation
@@ -140,6 +147,9 @@
 
 ### Getting Started
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are
+shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. Install the **starship** binary:
 
    #### Install Latest Version
@@ -147,18 +157,13 @@
    ##### From prebuilt binary, with Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-
-   ##### From source on [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
    #### Install via Package Manager
 
-   ##### With [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -170,7 +175,7 @@
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+2. Add the init script to your shell's config file:
 
    #### Bash
 
@@ -204,9 +209,9 @@
 
    #### PowerShell
 
-    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
-   ```sh
+   ```powershell
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -220,9 +225,32 @@
    eval $(starship init ion)
    ```
 
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported.
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+
 ## 🤝 Contributing
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 

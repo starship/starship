@@ -7,8 +7,7 @@ use crate::formatter::StringFormatter;
 ///
 /// Will display the Singularity image if `$SINGULARITY_NAME` is set.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let singularity_env = context.get_env("SINGULARITY_NAME");
-    singularity_env.as_ref()?;
+    let singularity_env = context.get_env("SINGULARITY_NAME")?;
 
     let mut module = context.new_module("singularity");
     let config: SingularityConfig = SingularityConfig::try_load(module.config);
@@ -24,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "env" => singularity_env.as_ref().map(Ok),
+                "env" => Some(Ok(&singularity_env)),
                 _ => None,
             })
             .parse(None)
@@ -45,18 +44,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
-    fn no_env_set() -> io::Result<()> {
+    fn no_env_set() {
         let actual = ModuleRenderer::new("singularity").collect();
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
     #[test]
-    fn env_set() -> io::Result<()> {
+    fn env_set() {
         let actual = ModuleRenderer::new("singularity")
             .env("SINGULARITY_NAME", "centos.img")
             .collect();
@@ -67,6 +64,5 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

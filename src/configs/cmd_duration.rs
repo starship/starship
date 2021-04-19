@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct CmdDurationConfig<'a> {
     pub min_time: i64,
     pub format: &'a str,
@@ -13,8 +14,8 @@ pub struct CmdDurationConfig<'a> {
     pub min_time_to_notify: i64,
 }
 
-impl<'a> RootModuleConfig<'a> for CmdDurationConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for CmdDurationConfig<'a> {
+    fn default() -> Self {
         CmdDurationConfig {
             min_time: 2_000,
             format: "took [$duration]($style) ",

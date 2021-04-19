@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     //rustc doesn't let you do an "if" and an "if let" in the same if statement
     // if this changes in the future this can become a lot cleaner
-    let host = if config.trim_at != "" {
+    let host = if !config.trim_at.is_empty() {
         if let Some(index) = host.find(config.trim_at) {
             host.split_at(index).0
         } else {
@@ -69,7 +69,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::{Color, Style};
-    use std::io;
 
     macro_rules! get_hostname {
         () => {
@@ -80,13 +79,13 @@ mod tests {
                     "hostname was not tested because gethostname failed! \
                      This could be caused by your hostname containing invalid UTF."
                 );
-                return Ok(());
+                return;
             }
         };
     }
 
     #[test]
-    fn ssh_only_false() -> io::Result<()> {
+    fn ssh_only_false() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
@@ -98,11 +97,10 @@ mod tests {
         let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn no_ssh() -> io::Result<()> {
+    fn no_ssh() {
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
                 [hostname]
@@ -112,11 +110,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn ssh() -> io::Result<()> {
+    fn ssh() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
@@ -129,11 +126,10 @@ mod tests {
         let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn no_trim_at() -> io::Result<()> {
+    fn no_trim_at() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
@@ -145,11 +141,10 @@ mod tests {
         let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn trim_at() -> io::Result<()> {
+    fn trim_at() {
         let hostname = get_hostname!();
         let (remainder, trim_at) = hostname.split_at(1);
         let actual = ModuleRenderer::new("hostname")
@@ -162,7 +157,6 @@ mod tests {
         let expected = Some(format!("{} in ", style().paint(remainder)));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     fn style() -> Style {

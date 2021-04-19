@@ -2,29 +2,28 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::elixir::ElixirConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
-use regex::Regex;
-const ELIXIR_VERSION_PATTERN: &str = "\
-Erlang/OTP (?P<otp>\\d+)[^\\n]+
-
-Elixir (?P<elixir>\\d[.\\d]+).*";
+use once_cell::sync::Lazy;
+use std::ops::Deref;
 
 /// Create a module with the current Elixir version
-///
-/// Will display the Elixir version if any of the following criteria are met:
-///     - Current directory contains a `mix.exs` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_elixir_project = context.try_begin_scan()?.set_files(&["mix.exs"]).is_match();
+    let mut module = context.new_module("elixir");
+    let config = ElixirConfig::try_load(module.config);
+
+    let is_elixir_project = context
+        .try_begin_scan()?
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
+        .is_match();
 
     if !is_elixir_project {
         return None;
     }
 
-    let (otp_version, elixir_version) = get_elixir_version()?;
+    let versions = Lazy::new(|| get_elixir_version(context));
 
-    let mut module = context.new_module("elixir");
-    let config = ElixirConfig::try_load(module.config);
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -36,8 +35,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&elixir_version)),
-                "otp_version" => Some(Ok(&otp_version)),
+                "version" => versions
+                    .deref()
+                    .as_ref()
+                    .map(|(_, elixir_version)| elixir_version)
+                    .map(Ok),
+                "otp_version" => versions
+                    .deref()
+                    .as_ref()
+                    .map(|(otp_version, _)| otp_version)
+                    .map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -54,20 +61,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_elixir_version() -> Option<(String, String)> {
-    let output = utils::exec_cmd("elixir", &["--version"])?.stdout;
+fn get_elixir_version(context: &Context) -> Option<(String, String)> {
+    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
 
     parse_elixir_version(&output)
 }
 
 fn parse_elixir_version(version: &str) -> Option<(String, String)> {
-    let version_regex = Regex::new(ELIXIR_VERSION_PATTERN).ok()?;
-    let captures = version_regex.captures(version)?;
+    let mut lines = version.lines();
+    // split line into ["Erlang/OTP", "22", "[erts-10.5]", ...], take "22"
+    let otp_version = lines.next()?.split_whitespace().nth(1)?;
+    // skip empty line
+    let _ = lines.next()?;
+    // split line into ["Elixir", "1.10", "(compiled", ...], take "1.10"
+    let elixir_version = lines.next()?.split_whitespace().nth(1)?;
 
-    let otp_version = captures["otp"].to_owned();
-    let elixir_version = captures["elixir"].to_owned();
-
-    Some((otp_version, elixir_version))
+    Some((otp_version.to_string(), elixir_version.to_string()))
 }
 
 #[cfg(test)]
@@ -80,15 +89,32 @@ mod tests {
 
     #[test]
     fn test_parse_elixir_version() {
-        const OUTPUT: &str = "\
-Erlang/OTP 22 [erts-10.5] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+        let stable_input = "\
+Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1]
 
-Elixir 1.10 (compiled with Erlang/OTP 22)
+Elixir 1.11.3 (compiled with Erlang/OTP 21)
 ";
+        let rc_input = "\
+Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1]
 
+Elixir 1.12.0-rc.0 (31d2b99) (compiled with Erlang/OTP 21)
+";
+        let dev_input = "\
+Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1]
+
+Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
+";
         assert_eq!(
-            parse_elixir_version(OUTPUT),
-            Some(("22".to_owned(), "1.10".to_owned()))
+            parse_elixir_version(stable_input),
+            Some(("23".to_string(), "1.11.3".to_string()))
+        );
+        assert_eq!(
+            parse_elixir_version(rc_input),
+            Some(("23".to_string(), "1.12.0-rc.0".to_string()))
+        );
+        assert_eq!(
+            parse_elixir_version(dev_input),
+            Some(("23".to_string(), "1.13.0-dev".to_string()))
         );
     }
 
@@ -110,8 +136,8 @@ Elixir 1.10 (compiled with Erlang/OTP 22)
         File::create(dir.path().join("mix.exs"))?.sync_all()?;
 
         let expected = Some(format!(
-            "via {} ",
-            Color::Purple.bold().paint("💧 1.10 (OTP 22)")
+            "via {}",
+            Color::Purple.bold().paint("💧 1.10 (OTP 22) ")
         ));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 

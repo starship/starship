@@ -74,11 +74,10 @@ fn create_offset_time_string(
     time_format: &str,
 ) -> Result<String, &'static str> {
     // Using floats to allow 30/45 minute offsets: https://www.timeanddate.com/time/time-zones-interesting.html
-    let utc_time_offset_in_hours = match utc_time_offset_str.parse::<f32>() {
-        Ok(parsed_value) => parsed_value,
+    let utc_time_offset_in_hours = utc_time_offset_str.parse::<f32>().unwrap_or(
         // Passing out of range value to force falling back to "local"
-        Err(_) => 25_f32,
-    };
+        25_f32,
+    );
     if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
         let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
         let timezone_offset = FixedOffset::east(utc_offset_in_seconds);
@@ -156,7 +155,6 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use chrono::offset::TimeZone;
-    use std::io;
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
@@ -471,7 +469,7 @@ mod tests {
     }
 
     #[test]
-    fn config_enabled() -> io::Result<()> {
+    fn config_enabled() {
         let actual = ModuleRenderer::new("time")
             .config(toml::toml! {
                 [time]
@@ -481,20 +479,18 @@ mod tests {
 
         // We can't test what it actually is...but we can assert that it is something
         assert!(actual.is_some());
-        Ok(())
     }
 
     #[test]
-    fn config_blank() -> io::Result<()> {
+    fn config_blank() {
         let actual = ModuleRenderer::new("time").collect();
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_check_prefix_and_suffix() -> io::Result<()> {
+    fn config_check_prefix_and_suffix() {
         let actual = ModuleRenderer::new("time")
             .config(toml::toml! {
                 [time]
@@ -513,6 +509,5 @@ mod tests {
 
         assert!(actual.starts_with(&col_prefix));
         assert!(actual.ends_with(&col_suffix));
-        Ok(())
     }
 }

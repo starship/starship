@@ -12,7 +12,7 @@
 
 ## Comment puis-je obtenir la complétion de commandes comme montré dans le GIF de démo?
 
-Le support de complétion est fourni par le shell de votre choix. Dans le cas de la démo, elle a été faite avec [Fish Shell](https://fishshell.com/), qui fournit des complétions par défaut. Si vous utilisez le Shell Z (zsh), vous pouvez jeter un œil à [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+L'aide à la complétion ou autocomplétion est fournie par le shell que vous avez choisi. Dans le cas de la démo, elle a été faite avec [Fish Shell](https://fishshell.com/), qui fournit des complétions par défaut. Si vous utilisez le Shell Z (zsh), vous pouvez jeter un œil à [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
 
@@ -21,7 +21,7 @@ Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'i
 - Désactiver les modules est plus explicite que de les omettre du `format global`
 - Les modules nouvellement créés seront ajoutés à l'invite de commande au fur et à mesure que Starship sera mis à jour
 
-## La doc dit que Starship est cross-shell, mais il ne supporte pas le shell X. Pourquoi ?
+## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
 Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion, Starship peut être utilisé.
 
@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-L' [implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée à Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module de durée de commande](https://starship.rs/config/#Command-Duration) et pour s'assurer que Starship est compatible avec les configurations Bash pré-installées.
+[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
 
 Pour une liste de tous les flags acceptés par `starship`, utilisez la commande suivante :
 
@@ -55,6 +55,10 @@ Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
 ```
+
+## I see symbols I don't understand or expect, what do they mean?
+
+If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
 
 ## Pourquoi ne vois-je pas de glyphe dans mon invite?
 
@@ -87,6 +91,6 @@ Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez v
 Si Starship a été installé en utilisant le script `curl | bash` , la commande suivante supprimera l'exécutable :
 
 ```sh
-# Localiser et supprimer l'exécutable de Starship
-rm "$(which starship)"
+# Locate and delete the starship binary
+sh -c 'rm "$(which starship)"'
 ```

@@ -8,23 +8,20 @@ use std::io;
 use std::path::PathBuf;
 
 /// Creates a module with the current Terraform version and workspace
-///
-/// Will display the Terraform version and workspace if any of the following criteria are met:
-///     - Current directory contains a `.terraform` directory
-///     - Current directory contains a file with the `.tf` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("terraform");
+    let config: TerraformConfig = TerraformConfig::try_load(module.config);
+
     let is_terraform_project = context
         .try_begin_scan()?
-        .set_folders(&[".terraform"])
-        .set_extensions(&["tf"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_terraform_project {
         return None;
     }
-
-    let mut module = context.new_module("terraform");
-    let config: TerraformConfig = TerraformConfig::try_load(module.config);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -38,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => format_terraform_version(
-                    &utils::exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                    &context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
                 )
                 .map(Ok),
                 "workspace" => get_terraform_workspace(context).map(Ok),

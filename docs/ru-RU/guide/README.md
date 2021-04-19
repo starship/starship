@@ -2,31 +2,36 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship - меж-оболочная командная строка" />
+    alt="Starship - меж-оболочная командная строка"
+ />
 </p>
 
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="Статус GitHub Actions" /></a>
+      alt="Статус GitHub Actions"
+ /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Версия Crates.io" /></a>
+      alt="Версия Crates.io"
+ /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Статус упаковки" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Чат в Discord" /></a>
+      alt="Чат в Discord"
+ /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Подпишитесь на @StarshipPrompt в Twitter" /></a>
+      alt="Подпишитесь на @StarshipPrompt в Twitter"
+ /></a>
 </p>
 
 <p align="center">
@@ -42,54 +47,72 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="English" /></a>
+      alt="English"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語" /></a>
+      alt="日本語"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文" /></a>
+      alt="繁體中文"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский" /></a>
+      alt="Русский"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch" /></a>
+      alt="Deutsch"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文" /></a>
+      alt="简体中文"
+ /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/es"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español" /></a>
+      alt="Español"
+ /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Français" /></a>
+      alt="Français"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt"
+ /></a>
 </p>
 
 <h1></h1>
@@ -98,11 +121,10 @@
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
   alt="Starship в iTerm2 с темой Snazzy"
   width="50%"
-  align="right" />
+  align="right"
+ />
 
-
-**Минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки!**
-
+**Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!**
 
 - **Быстрая:** она быстрая – _очень-очень_ быстрая! 🚀
 - **Настраиваемая:** настройте каждый элемент вашей командной строки.
@@ -121,9 +143,11 @@
 
 ### Требования
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Установленный и включённый [шрифт Powerline](https://www.nerdfonts.com/) (например, [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Начало работы
+
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
 1. Установите двоичный файл **starship**:
 
@@ -136,19 +160,13 @@
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
-
-
-   ##### Из источника на [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Установить через менеджер пакетов
 
 
-   ##### С [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +179,7 @@
    scoop install starship
    ```
 
-1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
+2. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 
 
    #### Bash
@@ -199,9 +217,9 @@
 
    #### PowerShell
 
-   Добавьте следующее в конец `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix):
+   Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете проверить местоположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
 
-   ```sh
+   ```powershell
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -216,9 +234,33 @@
    eval $(starship init ion)
    ```
 
+
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+
 ## 🤝 Помощь
 
 Мы всегда ищем помощь людей **всех уровней навыков**! Если вы хотите облегчить свой путь к проекту, посмотрите хорошие первые ошибки ([first good issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)).
+
+Если Вы свободно владеете иностранным языком отличным от английского, мы высоко оценим любую помощь в переводе нашей документации на другие языки и поддержании ее в актуальном состоянии. Если вы хотите помочь, переводы могут быть сделаны на платформе [Starship Crowdin](https://translate.starship.rs/).
 
 Если вы хотите помочь в создании Starship, пожалуйста, ознакомьтесь с нашим [Руководством по содействию](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Кроме того, заходите на наш [Discord сервер](https://discord.gg/8Jzqu3T) и поздоровайтесь. 👋
 
@@ -267,4 +309,4 @@
 
 ## 📝 Лицензия
 
-Авторское право © 2019-настоящее, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Этот проект [ISC](https://github.com/starship/starship/blob/master/LICENSE) лицензирован.
+Авторское право © 2019-настоящее, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Этот проект лицензирован под лицензией [ISC](https://github.com/starship/starship/blob/master/LICENSE).

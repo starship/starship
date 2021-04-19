@@ -63,7 +63,7 @@ For example, if you want to display your current directory in your terminal tab 
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
@@ -82,7 +82,7 @@ starship_precmd_user_func="set_win_title"
 
 其中 `<color>` 是指定顏色用的（下面解釋）。 `fg:<color>` 與 `<color>` 目前做一樣的事情，不過未來可能會改變。 單詞在字串中的順序不重要。
 
-`none` 符號覆寫字串中其他所有符號，所以像是 `fg:red none fg:blue` 會創造出一個沒有任何風格的字串。 未來可能會將 `none` 與其他符號一起使用的情形視為是一種錯誤。
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未來可能會將 `none` 與其他符號一起使用的情形視為是一種錯誤。
 
 一個顏色指定符號可以是下列其中之一：
 

@@ -14,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
         Insert,
-    };
+    }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
     // TODO: extend config to more modes
 
@@ -74,10 +74,9 @@ mod test {
     use crate::context::Shell;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
-    fn success_status() -> io::Result<()> {
+    fn success_status() {
         let expected = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // Status code 0
@@ -87,12 +86,10 @@ mod test {
         // No status code
         let actual = ModuleRenderer::new("character").collect();
         assert_eq!(expected, actual);
-
-        Ok(())
     }
 
     #[test]
-    fn failure_status() -> io::Result<()> {
+    fn failure_status() {
         let expected = Some(format!("{} ", Color::Red.bold().paint("❯")));
 
         let exit_values = [1, 54321, -5000];
@@ -101,12 +98,10 @@ mod test {
             let actual = ModuleRenderer::new("character").status(*status).collect();
             assert_eq!(expected, actual);
         }
-
-        Ok(())
     }
 
     #[test]
-    fn custom_symbol() -> io::Result<()> {
+    fn custom_symbol() {
         let expected_fail = Some(format!("{} ", Color::Red.bold().paint("✖")));
         let expected_success = Some(format!("{} ", Color::Green.bold().paint("➜")));
 
@@ -135,12 +130,10 @@ mod test {
             .status(0)
             .collect();
         assert_eq!(expected_success, actual);
-
-        Ok(())
     }
 
     #[test]
-    fn zsh_keymap() -> io::Result<()> {
+    fn zsh_keymap() {
         let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
@@ -169,12 +162,10 @@ mod test {
             .keymap("visual")
             .collect();
         assert_eq!(expected_other, actual);
-
-        Ok(())
     }
 
     #[test]
-    fn fish_keymap() -> io::Result<()> {
+    fn fish_keymap() {
         let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
@@ -203,7 +194,5 @@ mod test {
             .keymap("visual")
             .collect();
         assert_eq!(expected_other, actual);
-
-        Ok(())
     }
 }

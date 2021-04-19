@@ -2,31 +2,36 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt" />
+    alt="Starship – Cross-shell prompt"
+ />
 </p>
 
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="Status do workflow Actions do GitHub" /></a>
+      alt="Status do workflow Actions do GitHub"
+ /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Versão no Crates.io" /></a>
+      alt="Versão no Crates.io"
+ /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Status do pacote" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat no Discord" /></a>
+      alt="Chat no Discord"
+ /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Siga o @StarshipPrompt no Twitter" /></a>
+      alt="Siga o @StarshipPrompt no Twitter"
+ /></a>
 </p>
 
 <p align="center">
@@ -42,54 +47,72 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="English" /></a>
+      alt="English"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語" /></a>
+      alt="日本語"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文" /></a>
+      alt="繁體中文"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский" /></a>
+      alt="Русский"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch" /></a>
+      alt="Deutsch"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文" /></a>
+      alt="简体中文"
+ /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/es"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español" /></a>
+      alt="Español"
+ /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Français" /></a>
+      alt="Français"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt"
+ /></a>
 </p>
 
 <h1></h1>
@@ -98,11 +121,10 @@
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
   alt="Starship com iTerm2 e o tema Snazzy"
   width="50%"
-  align="right" />
-
+  align="right"
+ />
 
 **O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!**
-
 
 - **Rápido:** É rápido – _muito muito_ rápido! 🚀
 - **Personalizável:** Configure todos os detalhes do seu prompt.
@@ -125,6 +147,8 @@
 
 ### Primeiros passos
 
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+
 1. Instale o binário do **starship**:
 
 
@@ -136,19 +160,13 @@
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
-
-
-   ##### Código fonte via [crates.io](https://crates.io/):
-
-   ```sh
-   cargo install starship
-   ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Instalar via gerenciador de pacotes
 
 
-   ##### Com o [Homebrew](https://brew.sh/):
+   ##### Exemplo: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +179,7 @@
    scoop install starship
    ```
 
-1. Adicione o script de inicialização no arquivo de configuração do seu shell:
+2. Adicione o script de inicialização no arquivo de configuração do seu shell:
 
 
    #### Bash
@@ -199,9 +217,9 @@
 
    #### PowerShell
 
-   Adicione o seguinte comando no final do arquivo `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` em -Nix):
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
-   ```sh
+   ```powershell
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -216,9 +234,33 @@
    eval $(starship init ion)
    ```
 
+
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+
 ## 🤝 Contribuindo
 
 Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
 Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
 

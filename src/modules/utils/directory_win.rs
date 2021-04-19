@@ -101,7 +101,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'stati
     let mut priv_size = mem::size_of::<PRIVILEGE_SET>() as DWORD;
     let mut granted_access: DWORD = 0;
     let mut access_rights: DWORD = FILE_GENERIC_WRITE;
-    let mut result: BOOL = 0 as BOOL;
+    let mut result: BOOL = 0;
     unsafe { securitybaseapi::MapGenericMask(&mut access_rights, &mut mapping) };
     let rc = unsafe {
         securitybaseapi::AccessCheck(

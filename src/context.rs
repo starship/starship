@@ -1,8 +1,10 @@
 use crate::config::StarshipConfig;
 use crate::module::Module;
+use crate::utils::{exec_cmd, CommandOutput};
 
 use crate::modules;
 use clap::ArgMatches;
+use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
@@ -23,6 +25,11 @@ pub struct Context<'a> {
     /// The current working directory that starship is being called in.
     pub current_dir: PathBuf,
 
+    /// A logical directory path which should represent the same directory as current_dir,
+    /// though may appear different.
+    /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
+    pub logical_dir: PathBuf,
+
     /// A struct containing directory contents in a lookup-optimised format.
     dir_contents: OnceCell<DirContents>,
 
@@ -36,32 +43,53 @@ pub struct Context<'a> {
     pub shell: Shell,
 
     /// A HashMap of environment variable mocks
+    #[cfg(test)]
     pub env: HashMap<&'a str, String>,
+
+    /// A HashMap of command mocks
+    #[cfg(test)]
+    pub cmd: HashMap<&'a str, Option<CommandOutput>>,
+
+    /// Timeout for the execution of commands
+    cmd_timeout: Duration,
 }
 
 impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
-    /// for it.
+    /// for it. "logical-path" is used when a shell allows the "current working directory"
+    /// to be something other than a file system path (like powershell provider specific paths).
     pub fn new(arguments: ArgMatches) -> Context {
-        // Retrieve the "path" flag. If unavailable, use the current directory instead.
+        let shell = Context::get_shell();
+
+        // Retrieve the "current directory".
+        // If the path argument is not set fall back to the OS current directory.
         let path = arguments
             .value_of("path")
-            .map(From::from)
-            .unwrap_or_else(|| {
-                env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
-                    log::debug!("Unable to get path from $PWD: {}", err);
-                    env::current_dir().expect("Unable to identify current directory. Error")
-                })
-            });
+            .map(PathBuf::from)
+            .or_else(|| env::current_dir().ok())
+            .or_else(|| env::var("PWD").map(PathBuf::from).ok())
+            .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
+            .unwrap_or_default();
 
-        Context::new_with_dir(arguments, path)
+        // Retrive the "logical directory".
+        // If the path argument is not set fall back to the PWD env variable set by many shells
+        // or to the other path.
+        let logical_path = arguments
+            .value_of("logical_path")
+            .map(PathBuf::from)
+            .or_else(|| env::var("PWD").map(PathBuf::from).ok())
+            .unwrap_or_else(|| path.clone());
+
+        Context::new_with_shell_and_path(arguments, shell, path, logical_path)
     }
 
     /// Create a new instance of Context for the provided directory
-    pub fn new_with_dir<T>(arguments: ArgMatches, dir: T) -> Context
-    where
-        T: Into<PathBuf>,
-    {
+    pub fn new_with_shell_and_path(
+        arguments: ArgMatches,
+        shell: Shell,
+        path: PathBuf,
+        logical_path: PathBuf,
+    ) -> Context {
         let config = StarshipConfig::initialize();
 
         // Unwrap the clap arguments into a simple hashtable
@@ -74,38 +102,61 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // TODO: Currently gets the physical directory. Get the logical directory.
-        let current_dir = Context::expand_tilde(dir.into());
+        // Canonicalize the current path to resolve symlinks, etc.
+        // NOTE: On Windows this converts the path to extended-path syntax.
+        let current_dir = Context::expand_tilde(path);
+        let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
+        let logical_dir = logical_path;
 
-        let shell = Context::get_shell();
+        let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
 
         Context {
             config,
             properties,
             current_dir,
+            logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            #[cfg(test)]
             env: HashMap::new(),
+            #[cfg(test)]
+            cmd: HashMap::new(),
+            cmd_timeout,
         }
+    }
+
+    // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
+    pub fn get_home(&self) -> Option<PathBuf> {
+        if cfg!(test) {
+            return self.get_env("HOME").map(PathBuf::from).or_else(home_dir);
+        }
+
+        home_dir()
     }
 
     // Retrives a environment variable from the os or from a table if in testing mode
+    #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        if cfg!(test) {
-            self.env.get(key.as_ref()).map(|val| val.to_string())
-        } else {
-            env::var(key.as_ref()).ok()
-        }
+        self.env.get(key.as_ref()).map(|val| val.to_string())
+    }
+
+    #[cfg(not(test))]
+    #[inline]
+    pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
+        env::var(key.as_ref()).ok()
     }
 
     // Retrives a environment variable from the os or from a table if in testing mode (os version)
+    #[cfg(test)]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        if cfg!(test) {
-            self.env.get(key.as_ref()).map(OsString::from)
-        } else {
-            env::var_os(key.as_ref())
-        }
+        self.env.get(key.as_ref()).map(OsString::from)
+    }
+
+    #[cfg(not(test))]
+    #[inline]
+    pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
+        env::var_os(key.as_ref())
     }
 
     /// Convert a `~` in a path to the home directory
@@ -171,11 +222,14 @@ impl<'a> Context<'a> {
                     .as_ref()
                     .and_then(|repo| repo.workdir().map(Path::to_path_buf));
                 let state = repository.as_ref().map(|repo| repo.state());
-
+                let remote = repository
+                    .as_ref()
+                    .and_then(|repo| get_remote_repository_info(repo));
                 Ok(Repo {
                     branch,
                     root,
                     state,
+                    remote,
                 })
             })
     }
@@ -195,12 +249,30 @@ impl<'a> Context<'a> {
             "ion" => Shell::Ion,
             "powershell" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
+            "elvish" => Shell::Elvish,
+            "tcsh" => Shell::Tcsh,
             _ => Shell::Unknown,
         }
     }
 
     pub fn get_cmd_duration(&self) -> Option<u128> {
         self.properties.get("cmd_duration")?.parse::<u128>().ok()
+    }
+
+    /// Execute a command and return the output on stdout and stderr if successful
+    #[inline]
+    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+        #[cfg(test)]
+        {
+            let command = match args.len() {
+                0 => cmd.to_owned(),
+                _ => format!("{} {}", cmd, args.join(" ")),
+            };
+            if let Some(output) = self.cmd.get(command.as_str()) {
+                return output.clone();
+            }
+        }
+        exec_cmd(cmd, args, self.cmd_timeout)
     }
 }
 
@@ -218,11 +290,11 @@ pub struct DirContents {
 
 impl DirContents {
     #[cfg(test)]
-    fn from_path(base: &PathBuf) -> Result<Self, std::io::Error> {
+    fn from_path(base: &Path) -> Result<Self, std::io::Error> {
         Self::from_path_with_timeout(base, Duration::from_secs(30))
     }
 
-    fn from_path_with_timeout(base: &PathBuf, timeout: Duration) -> Result<Self, std::io::Error> {
+    fn from_path_with_timeout(base: &Path, timeout: Duration) -> Result<Self, std::io::Error> {
         let start = Instant::now();
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
@@ -259,9 +331,9 @@ impl DirContents {
         );
 
         Ok(DirContents {
-            folders,
             files,
             file_names,
+            folders,
             extensions,
         })
     }
@@ -310,6 +382,15 @@ pub struct Repo {
 
     /// State
     pub state: Option<RepositoryState>,
+
+    /// Remote repository
+    pub remote: Option<Remote>,
+}
+
+/// Remote repository
+pub struct Remote {
+    pub branch: Option<String>,
+    pub name: Option<String>,
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is
@@ -376,6 +457,27 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
     shorthand.map(std::string::ToString::to_string)
 }
 
+fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
+    if let Ok(head) = repository.head() {
+        if let Some(local_branch_ref) = head.name() {
+            let remote_ref = match repository.branch_upstream_name(local_branch_ref) {
+                Ok(remote_ref) => remote_ref.as_str()?.to_owned(),
+                Err(_) => return None,
+            };
+
+            let mut v = remote_ref.splitn(4, '/');
+            let remote_name = v.nth(2)?.to_owned();
+            let remote_branch = v.last()?.to_owned();
+
+            return Some(Remote {
+                branch: Some(remote_branch),
+                name: Some(remote_name),
+            });
+        }
+    }
+    None
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Shell {
     Bash,
@@ -383,12 +485,15 @@ pub enum Shell {
     Ion,
     PowerShell,
     Zsh,
+    Elvish,
+    Tcsh,
     Unknown,
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io;
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
         let dir = tempfile::tempdir()?;
@@ -405,7 +510,7 @@ mod tests {
     #[test]
     fn test_scan_dir() -> Result<(), Box<dyn std::error::Error>> {
         let empty = testdir(&[])?;
-        let empty_dc = DirContents::from_path(&PathBuf::from(empty.path()))?;
+        let empty_dc = DirContents::from_path(empty.path())?;
 
         assert_eq!(
             ScanDir {
@@ -420,7 +525,7 @@ mod tests {
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
-        let rust_dc = DirContents::from_path(&PathBuf::from(rust.path()))?;
+        let rust_dc = DirContents::from_path(rust.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &rust_dc,
@@ -434,7 +539,7 @@ mod tests {
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
-        let java_dc = DirContents::from_path(&PathBuf::from(java.path()))?;
+        let java_dc = DirContents::from_path(java.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &java_dc,
@@ -448,7 +553,7 @@ mod tests {
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
-        let node_dc = DirContents::from_path(&PathBuf::from(node.path()))?;
+        let node_dc = DirContents::from_path(node.path())?;
         assert_eq!(
             ScanDir {
                 dir_contents: &node_dc,
@@ -462,5 +567,84 @@ mod tests {
         node.close()?;
 
         Ok(())
+    }
+
+    #[test]
+    fn context_constructor_should_canonicalize_current_dir() -> io::Result<()> {
+        #[cfg(not(windows))]
+        use std::os::unix::fs::symlink as symlink_dir;
+        #[cfg(windows)]
+        use std::os::windows::fs::symlink_dir;
+
+        let tmp_dir = tempfile::TempDir::new()?;
+        let path = tmp_dir.path().join("a/xxx/yyy");
+        fs::create_dir_all(&path)?;
+
+        // Set up a mock symlink
+        let path_actual = tmp_dir.path().join("a/xxx");
+        let path_symlink = tmp_dir.path().join("a/symlink");
+        symlink_dir(&path_actual, &path_symlink).expect("create symlink");
+
+        // Mock navigation into the symlink path
+        let test_path = path_symlink.join("yyy");
+        let context = Context::new_with_shell_and_path(
+            ArgMatches::default(),
+            Shell::Unknown,
+            test_path.clone(),
+            test_path.clone(),
+        );
+
+        assert_ne!(context.current_dir, context.logical_dir);
+
+        let expected_current_dir = path_actual
+            .join("yyy")
+            .canonicalize()
+            .expect("canonicalize");
+        assert_eq!(expected_current_dir, context.current_dir);
+
+        let expected_logical_dir = test_path;
+        assert_eq!(expected_logical_dir, context.logical_dir);
+
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn context_constructor_should_fail_gracefully_when_canonicalization_fails() {
+        // Mock navigation to a directory which does not exist on disk
+        let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            ArgMatches::default(),
+            Shell::Unknown,
+            test_path.clone(),
+            test_path.clone(),
+        );
+
+        let expected_current_dir = &test_path;
+        assert_eq!(expected_current_dir, &context.current_dir);
+
+        let expected_logical_dir = &test_path;
+        assert_eq!(expected_logical_dir, &context.logical_dir);
+    }
+
+    #[test]
+    fn context_constructor_should_fall_back_to_tilde_replacement_when_canonicalization_fails() {
+        use dirs_next::home_dir;
+
+        // Mock navigation to a directory which does not exist on disk
+        let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            ArgMatches::default(),
+            Shell::Unknown,
+            test_path.clone(),
+            test_path.clone(),
+        );
+
+        let expected_current_dir = home_dir()
+            .expect("home_dir")
+            .join("path_which_does_not_exist");
+        assert_eq!(expected_current_dir, context.current_dir);
+
+        let expected_logical_dir = test_path;
+        assert_eq!(expected_logical_dir, context.logical_dir);
     }
 }

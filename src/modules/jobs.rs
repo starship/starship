@@ -57,37 +57,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod test {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
-    fn config_blank_job_0() -> io::Result<()> {
+    fn config_blank_job_0() {
         let actual = ModuleRenderer::new("jobs").jobs(0).collect();
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_blank_job_1() -> io::Result<()> {
+    fn config_blank_job_1() {
         let actual = ModuleRenderer::new("jobs").jobs(1).collect();
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_blank_job_2() -> io::Result<()> {
+    fn config_blank_job_2() {
         let actual = ModuleRenderer::new("jobs").jobs(2).collect();
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_2_job_2() -> io::Result<()> {
+    fn config_2_job_2() {
         let actual = ModuleRenderer::new("jobs")
             .config(toml::toml! {
                 [jobs]
@@ -98,11 +94,10 @@ mod test {
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_2_job_3() -> io::Result<()> {
+    fn config_2_job_3() {
         let actual = ModuleRenderer::new("jobs")
             .config(toml::toml! {
                 [jobs]
@@ -113,6 +108,5 @@ mod test {
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

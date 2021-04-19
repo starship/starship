@@ -9,9 +9,7 @@ use crate::formatter::StringFormatter;
 /// Will display the Conda environment iff `$CONDA_DEFAULT_ENV` is set.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Reference implementation: https://github.com/denysdovhan/spaceship-prompt/blob/master/sections/conda.zsh
-    let conda_env = context
-        .get_env("CONDA_DEFAULT_ENV")
-        .unwrap_or_else(|| "".into());
+    let conda_env = context.get_env("CONDA_DEFAULT_ENV").unwrap_or_default();
     if conda_env.trim().is_empty() {
         return None;
     }
@@ -57,20 +55,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
-    fn not_in_env() -> io::Result<()> {
+    fn not_in_env() {
         let actual = ModuleRenderer::new("conda").collect();
 
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn ignore_base() -> io::Result<()> {
+    fn ignore_base() {
         let actual = ModuleRenderer::new("conda")
             .env("CONDA_DEFAULT_ENV", "base")
             .config(toml::toml! {
@@ -82,11 +78,10 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn env_set() -> io::Result<()> {
+    fn env_set() {
         let actual = ModuleRenderer::new("conda")
             .env("CONDA_DEFAULT_ENV", "astronauts")
             .collect();
@@ -97,11 +92,10 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn truncate() -> io::Result<()> {
+    fn truncate() {
         let actual = ModuleRenderer::new("conda")
             .env("CONDA_DEFAULT_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/conda/my_env")
             .collect();
@@ -109,6 +103,5 @@ mod tests {
         let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
 
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

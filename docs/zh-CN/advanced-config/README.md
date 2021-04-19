@@ -1,4 +1,4 @@
-# Advanced Configuration
+# 高级配置
 
 `Starship 功能繁多，有时您必须在编辑 <code>starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
 
@@ -10,7 +10,7 @@
 
 ## 在 Bash 中自定义预提示和预执行命令
 
-Bash 没有像大多数其它 shell 一样的正式预执行/预命令框架。 因此，很难在 `bash` 中提供完全可自定义的 hook 机制。 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
+Bash 并没有类似大多数其它 shell 的正式预执行/预命令框架。 因此，很难在 `bash` 中提供完全可自定义的 hook 机制。 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
 
 - 若要在提示符显示之前运行自定义函数，需要定义此函数，然后将函数名赋值给 `starship_reserved_user_func`。 例如，要在提示符之前绘制一枚火箭，您应该写
 
@@ -63,7 +63,7 @@ For example, if you want to display your current directory in your terminal tab 
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
@@ -82,7 +82,7 @@ starship_precmd_user_func="set_win_title"
 
 `<color>` 是颜色说明符（下面解释）。 `fg:<color>` 和 `<color>` 当前产生一样的效果，尽管未来可能会改变。 字符串中的单词顺序不影响显示结果。
 
-`none` 标识符会覆盖字符串中所有其他标识符，比如 `fg:red none fg:blue` 将创建一个没有样式设置的字符串。 未来可能会将 `none` 与其它标识符一起使用视为一种错误。
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未来可能会将 `none` 与其它标识符一起使用视为一种错误。
 
 颜色说明符可以是以下内容之一：
 

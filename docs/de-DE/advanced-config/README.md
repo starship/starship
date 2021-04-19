@@ -57,13 +57,13 @@ Füge dies in `Zsh` zum `precmd_functions`-Array hinzu:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Wenn Sie das Resultat für gut empfinden, fügen Sie diese Zeilen zu ihrer Shell Konfigurationsdatei hinzu (`~/.bashrc` oder `~/.zshrc`) um das Ergebnis permanent zu machen.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Zum Beispiel, wenn sie ihr aktuelles Verzeichnis als Terminal Title anzeigen wollen, fügen Sie folgenden Code-Schnipsel zu ihrer `~/.bashrc` oder `~/.zshrc` hinzu:
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
@@ -82,7 +82,7 @@ Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben kein
 
 wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe , das kann sich in Zukunft aber ändern. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
 
-`None` überschreibt alle anderen Tokens in einem String, so dass z.B. der string `fg:red none fg:blue` kein Styling anzeigen wird. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
 
 Eine Farbspezifikation kann wie folgt aussehen:
 

@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Pour exécuter une fonction personnalisée juste avant l'exécution d'une commande, vous pouvez utiliser le [` DEBUG` mécanisme d'interruption ](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** pièger le signal DEBUG *avant* initialisation du Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
+- Pour exécuter une fonction personnalisée juste avant l'exécution d'une commande, vous pouvez utiliser le [` DEBUG` mécanisme d'interruption ](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** piéger le signal DEBUG *avant* initialisation du Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
 
 ```bash
 function blastoff(){
@@ -45,7 +45,7 @@ function set_titre_fenetre(){
 
 Vous pouvez utiliser des variables pour personnaliser ce titre (`$USER`, `$HOSTNAME`, et `$PWD` sont des choix populaires).
 
-Dans `bash`, définissez cette fonction comme la fonction précmd Starship :
+Dans `bash`, définissez cette fonction comme la fonction precmd Starship :
 
 ```bash
 starship_precmd_user_func="set_titre_gagnante"
@@ -63,7 +63,7 @@ Par exemple, si vous voulez afficher votre répertoire actuel dans votre titre d
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
@@ -82,7 +82,7 @@ Les chaînes de style sont une liste de mots, séparés par des espaces. Les mot
 
 où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, même si cela peut changer plus tard. L'ordre des mots dans le string n'a pas d'importance.
 
-Le jeton ` none ` remplace tous les autres jetons d'une string, de sorte que, par exemple, ` fg: red none fg: blue ` créera toujours une string sans style. Il peut devenir une erreur d'utiliser `none` en conjonction avec d'autres jetons dans le futur.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Il peut devenir une erreur d'utiliser `none` en conjonction avec d'autres jetons dans le futur.
 
 Un spécificateur de couleur peut être l'un des éléments suivants :
 

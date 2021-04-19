@@ -1,5 +1,7 @@
-use crate::config::StarshipConfig;
 use crate::context::{Context, Shell};
+use crate::logger::StarshipLogger;
+use crate::{config::StarshipConfig, utils::CommandOutput};
+use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
 use std::path::PathBuf;
@@ -12,6 +14,21 @@ static FIXTURE_DIR: Lazy<PathBuf> =
 static GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bundle"));
 static HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
+static LOGGER: Lazy<()> = Lazy::new(|| {
+    let mut logger = StarshipLogger::default();
+
+    // Don't log to files during tests
+    let nul = if cfg!(windows) { "nul" } else { "/dev/null" };
+    let nul = PathBuf::from(nul);
+
+    // Maxmimum log level
+    log::set_max_level(LevelFilter::Trace);
+    logger.set_log_level(Level::Trace);
+    logger.set_log_file_path(nul);
+
+    log::set_boxed_logger(Box::new(logger)).unwrap();
+});
+
 /// Render a specific starship module by name
 pub struct ModuleRenderer<'a> {
     name: &'a str,
@@ -21,8 +38,15 @@ pub struct ModuleRenderer<'a> {
 impl<'a> ModuleRenderer<'a> {
     /// Creates a new ModuleRenderer
     pub fn new(name: &'a str) -> Self {
-        let mut context = Context::new_with_dir(clap::ArgMatches::default(), PathBuf::new());
-        context.shell = Shell::Unknown;
+        // Start logger
+        Lazy::force(&LOGGER);
+
+        let mut context = Context::new_with_shell_and_path(
+            clap::ArgMatches::default(),
+            Shell::Unknown,
+            PathBuf::new(),
+            PathBuf::new(),
+        );
         context.config = StarshipConfig { config: None };
 
         Self { name, context }
@@ -33,6 +57,15 @@ impl<'a> ModuleRenderer<'a> {
         T: Into<PathBuf>,
     {
         self.context.current_dir = path.into();
+        self.context.logical_dir = self.context.current_dir.clone();
+        self
+    }
+
+    pub fn logical_path<T>(mut self, path: T) -> Self
+    where
+        T: Into<PathBuf>,
+    {
+        self.context.logical_dir = path.into();
         self
     }
 
@@ -47,6 +80,12 @@ impl<'a> ModuleRenderer<'a> {
     /// Adds the variable to the env_mocks of the underlying context
     pub fn env<V: Into<String>>(mut self, key: &'a str, val: V) -> Self {
         self.context.env.insert(key, val.into());
+        self
+    }
+
+    /// Adds the command to the commandv_mocks of the underlying context
+    pub fn cmd(mut self, key: &'a str, val: Option<CommandOutput>) -> Self {
+        self.context.cmd.insert(key, val);
         self
     }
 
@@ -89,18 +128,18 @@ impl<'a> ModuleRenderer<'a> {
         // convention was that there would be no module but None. This is nowadays not anymore
         // the case (to get durations for all modules). So here we make it so, that an empty
         // module returns None in the tests...
-        ret.filter(|s| s != "")
+        ret.filter(|s| !s.is_empty())
     }
 }
 
 pub enum FixtureProvider {
-    GIT,
-    HG,
+    Git,
+    Hg,
 }
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
-        FixtureProvider::GIT => {
+        FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 
             Command::new("git")
@@ -127,7 +166,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
 
             Ok(path)
         }
-        FixtureProvider::HG => {
+        FixtureProvider::Hg => {
             let path = tempfile::tempdir()?;
 
             Command::new("hg")

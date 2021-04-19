@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!
 actionText: Loslegen →
 actionLink: ./guide/
 features:
@@ -18,7 +18,7 @@ features:
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Shows the information you need, while staying sleek and minimal. Schnellinstallation verfügbar für Bash, Fish, ZSH, Ion und PowerShell.
 ---
 
 <div class="center">
@@ -35,11 +35,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Neueste Version installieren
 
-   With Shell:
+   Mit Shell:
 
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Installation mithilfe eines Paket-Managers
@@ -94,11 +95,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Trage folgendes in das Powershell-Profil ($Profile) ein. Standardmäßig gespeichert unter: `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` auf Windows, oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix:
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -111,4 +110,27 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+   #### Elvish
+
+   ::: warning Only elvish v0.15 or higher is supported. :::
+
+   Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```

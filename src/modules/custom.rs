@@ -20,19 +20,12 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     );
     let config = CustomConfig::load(toml_config);
 
-    let mut scan_dir = context.try_begin_scan()?;
-
-    if !config.files.0.is_empty() {
-        scan_dir = scan_dir.set_files(&config.files.0);
-    }
-    if !config.extensions.0.is_empty() {
-        scan_dir = scan_dir.set_extensions(&config.extensions.0);
-    }
-    if !config.directories.0.is_empty() {
-        scan_dir = scan_dir.set_folders(&config.directories.0);
-    }
-
-    let mut is_match = scan_dir.is_match();
+    let mut is_match = context
+        .try_begin_scan()?
+        .set_files(&config.files)
+        .set_extensions(&config.extensions)
+        .set_folders(&config.directories)
+        .is_match();
 
     if !is_match {
         if let Some(when) = config.when {
@@ -46,36 +39,38 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = Module::new(name, config.description, Some(toml_config));
 
-    let output = exec_command(config.command, &config.shell.0)?;
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "output" => {
+                    let output = exec_command(config.command, &config.shell.0)?;
+                    let trimmed = output.trim();
 
-    let trimmed = output.trim();
-    if !trimmed.is_empty() {
-        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-            formatter
-                .map_meta(|var, _| match var {
-                    "symbol" => Some(config.symbol),
-                    _ => None,
-                })
-                .map_style(|variable| match variable {
-                    "style" => Some(Ok(config.style)),
-                    _ => None,
-                })
-                .map(|variable| match variable {
-                    // This may result in multiple calls to `get_module_version` when a user have
-                    // multiple `$version` variables defined in `format`.
-                    "output" => Some(Ok(trimmed)),
-                    _ => None,
-                })
-                .parse(None)
-        });
+                    if trimmed.is_empty() {
+                        None
+                    } else {
+                        Some(Ok(trimmed.to_string()))
+                    }
+                }
+                _ => None,
+            })
+            .parse(None)
+    });
 
-        match parsed {
-            Ok(segments) => module.set_segments(segments),
-            Err(error) => {
-                log::warn!("Error in module `custom.{}`:\n{}", name, error);
-            }
-        };
-    }
+    match parsed {
+        Ok(segments) => module.set_segments(segments),
+        Err(error) => {
+            log::warn!("Error in module `custom.{}`:\n{}", name, error);
+        }
+    };
     let elapsed = start.elapsed();
     log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
     module.duration = elapsed;

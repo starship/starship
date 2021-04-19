@@ -40,6 +40,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### パッケージマネージャー経由でインストール
@@ -94,11 +95,9 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Powershell
 
-   `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (それか Nix上の `~/.config/powershell/Microsoft.PowerShell_profile.ps1` )の末尾に以下を追加してください。
+   `Microsoft.PowerShell_profile.ps1` の最後に以下を追記してください。 PowerShell 上で `$PROFILE` 変数を問い合わせると、ファイルの場所を確認できます。 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
 
    ```sh
-   # ~\Documents\PowerShell\Profile.ps1
-
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -111,4 +110,27 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
+   ```
+
+   #### Elvish
+
+   ::: warning Only elvish v0.15 or higher is supported. :::
+
+   `~/.elvish/rc.elv` の最後に以下を追記してください。
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   `~/.tcshrc` の最後に以下を追加します:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
    ```

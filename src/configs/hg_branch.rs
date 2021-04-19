@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct HgBranchConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
@@ -12,8 +13,8 @@ pub struct HgBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for HgBranchConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for HgBranchConfig<'a> {
+    fn default() -> Self {
         HgBranchConfig {
             symbol: " ",
             style: "bold purple",

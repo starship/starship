@@ -1,4 +1,4 @@
-use clap::{crate_authors, crate_version};
+use clap::crate_authors;
 use std::io;
 use std::time::SystemTime;
 
@@ -9,6 +9,9 @@ use starship::module::ALL_MODULES;
 use starship::*;
 
 fn main() {
+    // Configure the current terminal on windows to support ANSI escape sequences.
+    #[cfg(windows)]
+    let _ = ansi_term::enable_ansi_support();
     logger::init();
 
     let status_code_arg = Arg::with_name("status_code")
@@ -22,13 +25,23 @@ fn main() {
         .short("p")
         .long("path")
         .value_name("PATH")
-        .help("The path that the prompt should render for")
+        .help("The path that the prompt should render for.")
+        .takes_value(true);
+
+    let logical_path_arg = Arg::with_name("logical_path")
+        .short("P")
+        .long("logical-path")
+        .value_name("LOGICAL_PATH")
+        .help(concat!(
+            "The logical path that the prompt should render for. ",
+            "This path should be a virtual/logical representation of the PATH argument."
+        ))
         .takes_value(true);
 
     let shell_arg = Arg::with_name("shell")
         .value_name("SHELL")
         .help(
-            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion",
+            "The name of the currently running shell\nCurrently supported options: bash, zsh, fish, powershell, ion, elvish, tcsh",
         )
         .required(true);
 
@@ -58,10 +71,12 @@ fn main() {
         .long("print-full-init")
         .help("Print the main initialization script (as opposed to the init stub)");
 
+    let long_version = crate::shadow::clap_version();
     let mut app = App::new("starship")
         .about("The cross-shell prompt for astronauts. ☄🌌️")
         // pull the version number from Cargo.toml
-        .version(crate_version!())
+        .version(shadow::PKG_VERSION)
+        .long_version(long_version.as_str())
         // pull the authors from Cargo.toml
         .author(crate_authors!())
         .after_help("https://github.com/starship/starship")
@@ -77,6 +92,7 @@ fn main() {
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
                 .arg(&path_arg)
+                .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),
@@ -98,6 +114,7 @@ fn main() {
                 )
                 .arg(&status_code_arg)
                 .arg(&path_arg)
+                .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)
                 .arg(&keymap_arg)
                 .arg(&jobs_arg),
@@ -113,6 +130,32 @@ fn main() {
                         .requires("value"),
                 )
                 .arg(Arg::with_name("value").help("Value to place into that key")),
+        )
+        .subcommand(
+            SubCommand::with_name("print-config")
+                .about("Prints the computed starship configuration")
+                .arg(
+                    Arg::with_name("default")
+                        .short("d")
+                        .long("default")
+                        .help("Print the default instead of the computed config")
+                        .takes_value(false),
+                ),
+        )
+        .subcommand(
+            SubCommand::with_name("toggle")
+                .about("Toggle a given starship module")
+                .arg(
+                    Arg::with_name("name")
+                        .help("The name of the module to be toggled")
+                        .required(true),
+                )
+                .arg(
+                    Arg::with_name("key")
+                        .help("The key of the config to be toggled")
+                        .required(false)
+                        .required_unless("name"),
+                ),
         )
         .subcommand(
             SubCommand::with_name("bug-report").about(
@@ -176,6 +219,19 @@ fn main() {
                 configure::edit_configuration()
             }
         }
+        ("print-config", Some(sub_m)) => {
+            let print_default = sub_m.is_present("default");
+            configure::print_configuration(print_default)
+        }
+        ("toggle", Some(sub_m)) => {
+            if let Some(name) = sub_m.value_of("name") {
+                if let Some(value) = sub_m.value_of("key") {
+                    configure::toggle_configuration(name, value)
+                } else {
+                    configure::toggle_configuration(name, "disabled")
+                }
+            }
+        }
         ("bug-report", Some(_)) => bug_report::create(),
         ("time", _) => {
             match SystemTime::now()
@@ -202,6 +258,7 @@ fn main() {
             rand::thread_rng()
                 .sample_iter(&Alphanumeric)
                 .take(16)
+                .map(char::from)
                 .collect::<String>()
         ),
         (command, _) => unreachable!("Invalid subcommand: {}", command),

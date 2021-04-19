@@ -128,53 +128,50 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::io;
 
     #[test]
     fn test_500ms() {
-        assert_eq!(render_time(500 as u128, true), "500ms")
+        assert_eq!(render_time(500_u128, true), "500ms")
     }
     #[test]
     fn test_10s() {
-        assert_eq!(render_time(10_000 as u128, true), "10s")
+        assert_eq!(render_time(10_000_u128, true), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90_000 as u128, true), "1m30s")
+        assert_eq!(render_time(90_000_u128, true), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10_110_000 as u128, true), "2h48m30s")
+        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86_400_000 as u128, true), "1d")
+        assert_eq!(render_time(86_400_000_u128, true), "1d")
     }
 
     #[test]
-    fn config_blank_duration_1s() -> io::Result<()> {
+    fn config_blank_duration_1s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .cmd_duration(1000)
             .collect();
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_blank_duration_5s() -> io::Result<()> {
+    fn config_blank_duration_5s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .cmd_duration(5000)
             .collect();
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("5s")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_5s_duration_3s() -> io::Result<()> {
+    fn config_5s_duration_3s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .config(toml::toml! {
                 [cmd_duration]
@@ -185,11 +182,10 @@ mod tests {
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_5s_duration_10s() -> io::Result<()> {
+    fn config_5s_duration_10s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .config(toml::toml! {
                 [cmd_duration]
@@ -200,11 +196,10 @@ mod tests {
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_1s_duration_prefix_underwent() -> io::Result<()> {
+    fn config_1s_duration_prefix_underwent() {
         let actual = ModuleRenderer::new("cmd_duration")
             .config(toml::toml! {
                 [cmd_duration]
@@ -215,11 +210,10 @@ mod tests {
 
         let expected = None;
         assert_eq!(expected, actual);
-        Ok(())
     }
 
     #[test]
-    fn config_5s_duration_prefix_underwent() -> io::Result<()> {
+    fn config_5s_duration_prefix_underwent() {
         let actual = ModuleRenderer::new("cmd_duration")
             .config(toml::toml! {
                 [cmd_duration]
@@ -230,6 +224,5 @@ mod tests {
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
         assert_eq!(expected, actual);
-        Ok(())
     }
 }

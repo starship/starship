@@ -2,31 +2,36 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt" />
+    alt="Starship – Cross-shell prompt"
+ />
 </p>
 
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions workflow status" /></a>
+      alt="GitHub Actions workflow status"
+ /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version" /></a>
+      alt="Crates.io version"
+ /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
       alt="Packaging status" /></a
 ><br />
-  <a href="https://discord.gg/8Jzqu3T"
+  <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="加入 Discord" /></a>
+      alt="加入 Discord"
+ /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter" /></a>
+      alt="Follow @StarshipPrompt on Twitter"
+ /></a>
 </p>
 
 <p align="center">
@@ -42,54 +47,72 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="English" /></a>
+      alt="English"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語" /></a>
+      alt="日本語"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文" /></a>
+      alt="繁體中文"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский" /></a>
+      alt="Русский"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch" /></a>
+      alt="Deutsch"
+ /></a>
   &nbsp;
   <a
     href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文" /></a>
+      alt="简体中文"
+ /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/es"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/es-ES/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español" /></a>
+      alt="Español"
+ /></a>
   &nbsp;
-  <a href="https://translate.starship.rs/project/starship-prompt/fr"
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/fr-FR/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Français" /></a>
+      alt="Français"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
+      alt="Tiếng Việt"
+ /></a>
 </p>
 
 <h1></h1>
@@ -98,18 +121,17 @@
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
   alt="使用 iTerm 和 Snazz 主题的 Starship"
   width="50%"
-  align="right" />
+  align="right"
+ />
 
+**轻量级、反应迅速，可定制的高颜值终端！**
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
-
-
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **快：** 很快 —— 真的真的非常快！ 🚀
+- **定制化：** 可定制各种各样的提示符。
+- **通用：** 适用于任何 Shell、任何操作系统。
+- **智能：** 一目了然地显示相关信息。
+- **功能丰富：** 支持所有你喜欢的工具。
+- **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
@@ -121,9 +143,11 @@
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 安装一个 [Nerd Font](https://www.nerdfonts.com/) 的字体，并在终端启用（例如，可以尝试使用 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) 字体）。
 
 ### 开始安装
+
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
 1. 安装 **starship** 二进制文件：
 
@@ -136,19 +160,13 @@
    ```sh
    curl -fsSL https://starship.rs/install.sh | bash
    ```
-
-
-   ##### 直接从 [crates.io](https://crates.io/) 获取源代码编译：
-
-   ```sh
-   cargo install starship
-   ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### 通过软件包管理器安装
 
 
-   ##### 使用 [Homebrew](https://brew.sh/)
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -161,7 +179,7 @@
    scoop install starship
    ```
 
-1. 将初始化脚本添加到您的 shell 的配置文件：
+2. 将初始化脚本添加到您的 shell 的配置文件：
 
 
    #### Bash
@@ -199,9 +217,9 @@
 
    #### PowerShell
 
-   将以下内容添加到`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` (或`~/.config/powershell/Microsoft.PowerShell_profile.ps1`，对于 *nix 系统)：
+   将以下内容添加到 `Microsoft.PowerShell_profile.ps1`。 你可以在 PowerShell 通过 `$PROFILE` 变量来查询文件的位置。 对于 -Nix 来说，通常文件路径是 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
-   ```sh
+   ```powershell
    Invoke-Expression (&starship init powershell)
    ```
 
@@ -216,28 +234,52 @@
    eval $(starship init ion)
    ```
 
+
+   #### Elvish
+
+   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+
+   ```sh
+   # ~/.elvish/rc.elv
+
+   eval (starship init elvish)
+   ```
+
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```
+
 ## 🤝 贡献
 
 我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+
 如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
-### Code Contributors
+### 代码贡献者
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+这个项目的存在要感谢所有贡献者。 [[贡献说明](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### 项目资助者
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+成为项目资助者，并帮助我们维持我们的社区。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### 资助人
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 资助组织
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+与您的组织一起支持该项目。 您的组织的徽标将显示在此处，并带有指向您的组织的网站的链接。 [[成为项目资助者](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>

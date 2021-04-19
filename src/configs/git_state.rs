@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct GitStateConfig<'a> {
     pub rebase: &'a str,
     pub merge: &'a str,
@@ -16,8 +17,8 @@ pub struct GitStateConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for GitStateConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for GitStateConfig<'a> {
+    fn default() -> Self {
         GitStateConfig {
             rebase: "REBASING",
             merge: "MERGING",

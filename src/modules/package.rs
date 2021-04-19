@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
@@ -162,7 +162,17 @@ fn extract_maven_version(file_contents: &str) -> Option<String> {
     None
 }
 
-fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<String> {
+fn extract_meson_version(file_contents: &str) -> Option<String> {
+    let file_contents = file_contents.split_ascii_whitespace().collect::<String>();
+
+    let re = Regex::new(r#"project\([^())]*,version:'(?P<version>[^']+)'[^())]*\)"#).unwrap();
+    let caps = re.captures(&file_contents)?;
+
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
+fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
@@ -181,6 +191,8 @@ fn get_package_version(base_dir: &PathBuf, config: &PackageConfig) -> Option<Str
         extract_helm_package_version(&chart_file)
     } else if let Ok(pom_file) = utils::read_file(base_dir.join("pom.xml")) {
         extract_maven_version(&pom_file)
+    } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
+        extract_meson_version(&meson_build)
     } else {
         None
     }
@@ -232,7 +244,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -247,7 +259,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -261,7 +273,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -276,7 +288,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -291,7 +303,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -307,7 +319,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -327,7 +339,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), Some(starship_config))?;
+        expect_output(&project_dir, Some("v0.1.0"), Some(starship_config));
         project_dir.close()
     }
 
@@ -343,7 +355,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -358,7 +370,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -377,7 +389,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -396,7 +408,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -415,7 +427,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0-rc1"), None)?;
+        expect_output(&project_dir, Some("v0.1.0-rc1"), None);
         project_dir.close()
     }
 
@@ -433,7 +445,7 @@ java {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -466,7 +478,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v1.2.3"), None)?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
 
@@ -477,7 +489,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v3.2.1"), None)?;
+        expect_output(&project_dir, Some("v3.2.1"), None);
         project_dir.close()
     }
 
@@ -493,7 +505,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v1.0.0-alpha.3"), None)?;
+        expect_output(&project_dir, Some("v1.0.0-alpha.3"), None);
         project_dir.close()
     }
 
@@ -509,7 +521,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None)?;
+        expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None);
         project_dir.close()
     }
 
@@ -524,7 +536,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.2.0"), None)?;
+        expect_output(&project_dir, Some("v0.2.0"), None);
         project_dir.close()
     }
 
@@ -539,7 +551,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -553,7 +565,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -568,7 +580,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None)?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
@@ -582,7 +594,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -656,7 +668,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None)?;
+        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None);
         project_dir.close()
     }
 
@@ -680,7 +692,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -697,7 +709,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
         project_dir.close()
     }
 
@@ -718,12 +730,46 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(&pom))?;
-        expect_output(&project_dir, None, None)?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_meson_version() -> io::Result<()> {
+        let config_name = "meson.build";
+        let config_content = "project('starship', 'rust', version: '0.1.0')".to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_meson_version_without_version() -> io::Result<()> {
+        let config_name = "meson.build";
+        let config_content = "project('starship', 'rust')".to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_meson_version_with_meson_version() -> io::Result<()> {
+        let config_name = "meson.build";
+        let config_content =
+            "project('starship', 'rust', version: '0.1.0', meson_version: '>= 0.57.0')".to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
     fn create_project_dir() -> io::Result<TempDir> {
-        Ok(tempfile::tempdir()?)
+        tempfile::tempdir()
     }
 
     fn fill_config(
@@ -736,11 +782,7 @@ end";
         file.sync_all()
     }
 
-    fn expect_output(
-        project_dir: &TempDir,
-        contains: Option<&str>,
-        config: Option<toml::Value>,
-    ) -> io::Result<()> {
+    fn expect_output(project_dir: &TempDir, contains: Option<&str>, config: Option<toml::Value>) {
         let starship_config = config.unwrap_or(toml::toml! {
             [package]
             disabled = false
@@ -761,7 +803,5 @@ end";
         } else {
             assert_eq!(actual, None);
         }
-
-        Ok(())
     }
 }

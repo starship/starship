@@ -2,32 +2,23 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
-
-use regex::Regex;
-const LUA_VERSION_PATERN: &str = "(?P<version>[\\d\\.]+[a-z\\-]*[1-9]*)[^\\s]*";
 
 /// Creates a module with the current Lua version
-///
-/// Will display the Lua version if any of the following criteria are met:
-///     - Current directory contains a `.lua-version` file
-///     - Current directory contains a `lua` directory
-///     - Current directory contains a file with the `.lua` extension
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("lua");
+    let config = LuaConfig::try_load(module.config);
+
     let is_lua_project = context
         .try_begin_scan()?
-        .set_files(&[".lua-version"])
-        .set_folders(&["lua"])
-        .set_extensions(&["lua"])
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
         .is_match();
 
     if !is_lua_project {
         return None;
     }
 
-    let mut module = context.new_module("lua");
-    let config = LuaConfig::try_load(module.config);
-    let lua_version = format_lua_version(&get_lua_version(&config.lua_binary)?)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -39,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&lua_version)),
+                "version" => get_lua_version(context, &config.lua_binary).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -56,28 +47,31 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_lua_version(lua_binary: &str) -> Option<String> {
-    match utils::exec_cmd(lua_binary, &["-v"]) {
-        Some(output) => {
-            if output.stdout.is_empty() {
-                Some(output.stderr)
-            } else {
-                Some(output.stdout)
-            }
-        }
-        None => None,
-    }
+fn get_lua_version(context: &Context, lua_binary: &str) -> Option<String> {
+    let output = context.exec_cmd(lua_binary, &["-v"])?;
+    let lua_version = if output.stdout.is_empty() {
+        output.stderr
+    } else {
+        output.stdout
+    };
+
+    parse_lua_version(&lua_version)
 }
 
-fn format_lua_version(lua_stdout: &str) -> Option<String> {
+fn parse_lua_version(lua_version: &str) -> Option<String> {
     // lua -v output looks like this:
     // Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio
 
     // luajit -v output looks like this:
     // LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/
-    let re = Regex::new(LUA_VERSION_PATERN).ok()?;
-    let captures = re.captures(lua_stdout)?;
-    let version = &captures["version"];
+    let version = lua_version
+        // Lua: split into ["Lua", "5.4.0", "Copyright", ...]
+        // LuaJIT: split into ["LuaJIT", "2.0.5", "--", ...]
+        .split_whitespace()
+        // Lua: take "5.4.0"
+        // LuaJIT: take "2.0.5"
+        .nth(1)?;
+
     Some(format!("v{}", version))
 }
 
@@ -103,7 +97,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.lua"))?.sync_all()?;
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v5.4.0")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -114,7 +108,7 @@ mod tests {
         File::create(dir.path().join(".lua-version"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v5.4.0")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -126,7 +120,7 @@ mod tests {
         fs::create_dir_all(&lua_dir)?;
 
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v5.4.0")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -146,20 +140,20 @@ mod tests {
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🌙 v2.0.5")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v2.0.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
 
     #[test]
-    fn test_format_lua_version() {
+    fn test_parse_lua_version() {
         let lua_input = "Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio";
-        assert_eq!(format_lua_version(lua_input), Some("v5.4.0".to_string()));
+        assert_eq!(parse_lua_version(lua_input), Some("v5.4.0".to_string()));
 
         let luajit_input =
             "LuaJIT 2.1.0-beta3 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/";
         assert_eq!(
-            format_lua_version(luajit_input),
+            parse_lua_version(luajit_input),
             Some("v2.1.0-beta3".to_string())
         );
     }

@@ -18,12 +18,7 @@ If emojis aren't your thing, this might catch your eye!
 
 ```toml
 [aws]
-symbol = " "
-
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
+symbol = "  "
 
 [conda]
 symbol = " "
@@ -31,7 +26,10 @@ symbol = " "
 [dart]
 symbol = " "
 
-[docker]
+[directory]
+read_only = " "
+
+[docker_context]
 symbol = " "
 
 [elixir]
@@ -45,9 +43,6 @@ symbol = " "
 
 [golang]
 symbol = " "
-
-[haskell]
-symbol = " "
 
 [hg_branch]
 symbol = " "
@@ -67,9 +62,6 @@ symbol = " "
 [nix_shell]
 symbol = " "
 
-[nodejs]
-symbol = " "
-
 [package]
 symbol = " "
 
@@ -86,7 +78,10 @@ symbol = " "
 symbol = " "
 
 [rust]
-symbol = " "
+symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "

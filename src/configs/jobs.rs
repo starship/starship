@@ -1,8 +1,9 @@
-use crate::config::{ModuleConfig, RootModuleConfig};
+use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct JobsConfig<'a> {
     pub threshold: i64,
     pub format: &'a str,
@@ -11,8 +12,8 @@ pub struct JobsConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> RootModuleConfig<'a> for JobsConfig<'a> {
-    fn new() -> Self {
+impl<'a> Default for JobsConfig<'a> {
+    fn default() -> Self {
         JobsConfig {
             threshold: 1,
             format: "[$symbol$number]($style) ",

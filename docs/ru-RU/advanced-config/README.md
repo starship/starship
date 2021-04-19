@@ -57,13 +57,13 @@ starship_precmd_user_func="set_win_title"
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Если вам нравится результат, добавьте эти строки в конфигурационный файл оболочки (`~/.bashrc` или `~/.zsrhc`), чтобы оставить это навсегда.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Например, если вы хотите отобразить ваш текущий каталог в заголовке вкладки терминала, добавьте следующие строки в `~/. bashrc` или `~/.zshrc`:
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
@@ -82,11 +82,11 @@ starship_precmd_user_func="set_win_title"
 
 где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время делают одно и то же, хотя это может измениться в будущем. Порядок слов в строке не имеет значения.
 
-Токен `none` переопределяет все остальные токены в строке, например `fg:red none fg:blue` все равно создаст строку без стиля. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none`  устанавливает цвет фона по умолчанию, поэтому `fg:red bg:none` эквивалентен `red` или `fg:red` и `bg:green fg:red bg:none` тоже самое, что `fg:red` или `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
 
 Цветовой спецификатор может быть одним из следующих:
 
- - Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
+ - Некоторые из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
  - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
 

@@ -18,53 +18,64 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
     if let syn::Data::Struct(data) = dinput.data {
         if let syn::Fields::Named(fields_named) = data.fields {
             let mut load_tokens = quote! {};
-            let mut from_tokens = quote! {};
+            let mut fields = quote! {};
 
             for field in fields_named.named.iter() {
                 let ident = field.ident.as_ref().unwrap();
-                let ty = &field.ty;
 
                 let new_load_tokens = quote! {
-                    if let Some(config_str) = config.get(stringify!(#ident)) {
-                        new_module_config.#ident = new_module_config.#ident.load_config(config_str);
-                    }
+                    stringify!(#ident) => self.#ident.load_config(v),
                 };
-                let new_from_tokens = quote! {
-                    #ident: config.get(stringify!(#ident)).and_then(<#ty>::from_config)?,
+
+                let new_field = quote! {
+                    stringify!(#ident),
                 };
 
                 load_tokens = quote! {
                     #load_tokens
                     #new_load_tokens
                 };
-                from_tokens = quote! {
-                    #from_tokens
-                    #new_from_tokens
-                }
+
+                fields = quote! {
+                    #fields
+                    #new_field
+                };
             }
 
             load_config = quote! {
-                fn load_config(&self, config: &'a toml::Value) -> Self {
-                    let mut new_module_config = self.clone();
+                fn load_config(&mut self, config: &'a toml::Value) {
                     if let toml::Value::Table(config) = config {
-                        if config.get("prefix").is_some() {
-                            log::warn!("\"prefix\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
-                        }
-                        if config.get("suffix").is_some() {
-                            log::warn!("\"suffix\" has been removed in favor of \"format\". For more details, see: https://starship.rs/migrating-to-0.45.0/")
-                        }
-                        #load_tokens
+                        config.iter().for_each(|(k, v)| {
+                            match k.as_str() {
+                                #load_tokens
+                                unknown => {
+                                    ::log::warn!("Unknown config key '{}'", unknown);
+
+                                    let did_you_mean = ::std::array::IntoIter::new([#fields])
+                                    .filter_map(|field| {
+                                        let score = ::strsim::jaro_winkler(unknown, field);
+                                        (score > 0.8).then(|| (score, field))
+                                    })
+                                    .max_by(
+                                        |(score_a, _field_a), (score_b, _field_b)| {
+                                            score_a.partial_cmp(score_b).unwrap_or(::std::cmp::Ordering::Equal)
+                                        },
+                                    );
+
+                                    if let Some((_score, field)) = did_you_mean {
+                                        ::log::warn!("Did you mean '{}'?", field);
+                                    }
+                                },
+                            }
+                        });
                     }
-                    new_module_config
                 }
             };
             from_config = quote! {
                 fn from_config(config: &'a toml::Value) -> Option<Self> {
-                    let config = config.as_table()?;
-
-                    Some(#struct_ident {
-                        #from_tokens
-                    })
+                    let mut out = Self::default();
+                    out.load_config(config);
+                    Some(out)
                 }
             };
         }

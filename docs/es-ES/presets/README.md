@@ -1,12 +1,12 @@
-# Ajustes predeterminados
+# Ajustes por defecto
 
-Aqui hay una colección de ajustes predeterminados creados por la comunidad de Starship. ¡Si quieres compartir un ajuste predeterminado, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
+Aquí hay una colección de ajustes por defecto creados por la comunidad de Starship. ¡Si quieres compartir un ajuste por defecto, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
 
-## Símbolos Nerd Font
+## Símbolos de Nerd Font
 
-Este ajuste predeterminado no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
+Este ajuste por defecto no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
 
-![Captura de pantalla de los ajustes predeterminados de los Símbolos Nerd Font](/presets/nerd-font-symbols.png)
+![Captura de pantalla de los ajustes por defecto de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prerequisitos
 
@@ -16,12 +16,7 @@ Este ajuste predeterminado no modifica nada excepto los símbolos usados para ca
 
 ```toml
 [aws]
-symbol = " "
-
-[battery]
-full_symbol = ""
-charging_symbol = ""
-discharging_symbol = ""
+symbol = "  "
 
 [conda]
 symbol = " "
@@ -29,7 +24,10 @@ symbol = " "
 [dart]
 symbol = " "
 
-[docker]
+[directory]
+read_only = " "
+
+[docker_context]
 symbol = " "
 
 [elixir]
@@ -43,9 +41,6 @@ symbol = " "
 
 [golang]
 symbol = " "
-
-[haskell]
-symbol = " "
 
 [hg_branch]
 symbol = " "
@@ -65,9 +60,6 @@ symbol = " "
 [nix_shell]
 symbol = " "
 
-[nodejs]
-symbol = " "
-
 [package]
 symbol = " "
 
@@ -84,7 +76,10 @@ symbol = " "
 symbol = " "
 
 [rust]
-symbol = " "
+symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "
