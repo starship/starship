@@ -2242,7 +2242,7 @@ detect_extensions = []
 By default the `red` module shows the currently installed version of Red.
 The module will be shown if any of the following conditions are met:
 
-- The current directory contains a file ending with `.red` or `.reds`
+- The current directory contains a file with `.red` or `.reds` extension
 
 ### Options
 
