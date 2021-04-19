@@ -1,0 +1,5 @@
+# This file intentionally left almost blank
+#
+# The empty `rustfmt.toml` makes rustfmt use the default configuration,
+# overriding any which may be found in the contributor's home or parent
+# folders.

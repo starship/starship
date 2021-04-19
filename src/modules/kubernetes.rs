@@ -9,7 +9,9 @@ use crate::configs::kubernetes::KubernetesConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
-fn get_kube_context(contents: &str) -> Option<(String, String)> {
+fn get_kube_context(filename: path::PathBuf) -> Option<String> {
+    let contents = utils::read_file(filename).ok()?;
+
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
     if yaml_docs.is_empty() {
         return None;
@@ -21,200 +23,376 @@ fn get_kube_context(contents: &str) -> Option<(String, String)> {
     if current_ctx.is_empty() {
         return None;
     }
-
-    let ns = conf["contexts"]
-        .as_vec()
-        .and_then(|contexts| {
-            contexts
-                .iter()
-                .filter_map(|ctx| Some((ctx, ctx["name"].as_str()?)))
-                .find(|(_, name)| *name == current_ctx)
-                .and_then(|(ctx, _)| ctx["context"]["namespace"].as_str())
-        })
-        .unwrap_or("");
-
-    Some((current_ctx.to_string(), ns.to_string()))
+    Some(current_ctx.to_string())
 }
 
-fn parse_kubectl_file(filename: &path::PathBuf) -> Option<(String, String)> {
+fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
     let contents = utils::read_file(filename).ok()?;
-    get_kube_context(&contents)
+
+    let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
+    if yaml_docs.is_empty() {
+        return None;
+    }
+    let conf = &yaml_docs[0];
+
+    let ns = conf["contexts"].as_vec().and_then(|contexts| {
+        contexts
+            .iter()
+            .filter_map(|ctx| Some((ctx, ctx["name"].as_str()?)))
+            .find(|(_, name)| *name == current_ctx)
+            .and_then(|(ctx, _)| ctx["context"]["namespace"].as_str())
+    })?;
+
+    if ns.is_empty() {
+        return None;
+    }
+    Some(ns.to_owned())
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let kube_cfg = match context.get_env("KUBECONFIG") {
-        Some(paths) => env::split_paths(&paths)
-            .filter_map(|filename| parse_kubectl_file(&filename))
-            .next(),
-        None => {
-            let filename = dirs_next::home_dir()?.join(".kube").join("config");
-            parse_kubectl_file(&filename)
-        }
+    let mut module = context.new_module("kubernetes");
+    let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
+
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
+    if config.disabled {
+        return None;
     };
 
-    match kube_cfg {
-        Some(kube_cfg) => {
-            let (kube_ctx, kube_ns) = kube_cfg;
+    let default_config_file = dirs_next::home_dir()?.join(".kube").join("config");
 
-            let mut module = context.new_module("kubernetes");
-            let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
-            if config.disabled {
-                return None;
-            };
+    let kube_cfg = context
+        .get_env("KUBECONFIG")
+        .unwrap_or(default_config_file.to_str()?.to_string());
 
-            let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-                formatter
-                    .map_meta(|variable, _| match variable {
-                        "symbol" => Some(config.symbol),
-                        _ => None,
-                    })
-                    .map_style(|variable| match variable {
-                        "style" => Some(Ok(config.style)),
-                        _ => None,
-                    })
-                    .map(|variable| match variable {
-                        "context" => match config.context_aliases.get(&kube_ctx) {
-                            None => Some(Ok(kube_ctx.as_str())),
-                            Some(&alias) => Some(Ok(alias)),
-                        },
-                        _ => None,
-                    })
-                    .map(|variable| match variable {
-                        "namespace" => {
-                            if kube_ns != "" {
-                                Some(Ok(kube_ns.as_str()))
-                            } else {
-                                None
-                            }
-                        }
-                        _ => None,
-                    })
-                    .parse(None)
-            });
+    let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
 
-            module.set_segments(match parsed {
-                Ok(segments) => segments,
-                Err(error) => {
-                    log::warn!("Error in module `kubernetes`: \n{}", error);
-                    return None;
-                }
-            });
+    let kube_ns =
+        env::split_paths(&kube_cfg).find_map(|filename| get_kube_ns(filename, kube_ctx.clone()));
 
-            Some(module)
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "context" => match config.context_aliases.get(&kube_ctx) {
+                    None => Some(Ok(kube_ctx.as_str())),
+                    Some(&alias) => Some(Ok(alias)),
+                },
+                "namespace" => match &kube_ns {
+                    Some(kube_ns) => Some(Ok(kube_ns)),
+                    None => None,
+                },
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `kubernetes`: \n{}", error);
+            return None;
         }
-        None => None,
-    }
+    });
+
+    Some(module)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::env;
+    use std::fs::File;
+    use std::io::{self, Write};
 
     #[test]
-    fn parse_empty_config() {
-        let input = "";
-        let result = get_kube_context(&input);
-        let expected = None;
+    fn test_none_when_disabled() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
 
-        assert_eq!(result, expected);
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .collect();
+
+        assert_eq!(None, actual);
+
+        dir.close()
     }
 
     #[test]
-    fn parse_no_config() {
-        let input = r#"
+    fn test_ctx_alias() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
 apiVersion: v1
 clusters: []
 contexts: []
-current-context: ""
-kind: Config
-preferences: {}
-users: []
-"#;
-        let result = get_kube_context(&input);
-        let expected = None;
-
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn parse_only_context() {
-        let input = r#"
-apiVersion: v1
-clusters: []
-contexts:
-- context:
-    cluster: test_cluster
-    user: test_user
-  name: test_context
 current-context: test_context
 kind: Config
 preferences: {}
 users: []
-"#;
-        let result = get_kube_context(&input);
-        let expected = Some(("test_context".to_string(), "".to_string()));
+",
+        )?;
+        file.sync_all()?;
 
-        assert_eq!(result, expected);
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                [kubernetes.context_aliases]
+                "test_context" = "test_alias"
+            })
+            .collect();
+
+        let expected = Some(format!("{} in ", Color::Cyan.bold().paint("☸ test_alias")));
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 
     #[test]
-    fn parse_context_and_ns() {
-        let input = r#"
+    fn test_single_config_file_no_ns() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
 apiVersion: v1
 clusters: []
 contexts:
-- context:
-    cluster: test_cluster
-    user: test_user
-    namespace: test_namespace
-  name: test_context
+  - context:
+      cluster: test_cluster
+      user: test_user
+    name: test_context
 current-context: test_context
 kind: Config
 preferences: {}
 users: []
-"#;
-        let result = get_kube_context(&input);
-        let expected = Some(("test_context".to_string(), "test_namespace".to_string()));
+",
+        )?;
+        file.sync_all()?;
 
-        assert_eq!(result, expected);
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context")
+        ));
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 
     #[test]
-    fn parse_multiple_contexts() {
-        let input = r#"
+    fn test_single_config_file_with_ns() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
 apiVersion: v1
 clusters: []
 contexts:
-- context:
-    cluster: another_cluster
-    user: another_user
-    namespace: another_namespace
-  name: another_context
-- context:
-    cluster: test_cluster
-    user: test_user
-    namespace: test_namespace
-  name: test_context
+  - context:
+      cluster: test_cluster
+      user: test_user
+      namespace: test_namespace
+    name: test_context
 current-context: test_context
 kind: Config
 preferences: {}
 users: []
-"#;
-        let result = get_kube_context(&input);
-        let expected = Some(("test_context".to_string(), "test_namespace".to_string()));
+",
+        )?;
+        file.sync_all()?;
 
-        assert_eq!(result, expected);
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+        ));
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 
     #[test]
-    fn parse_broken_config() {
-        let input = r#"
----
-dummy_string
-"#;
-        let result = get_kube_context(&input);
-        let expected = None;
+    fn test_single_config_file_with_multiple_ctxs() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
 
-        assert_eq!(result, expected);
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: another_cluster
+      user: another_user
+      namespace: another_namespace
+    name: another_context
+  - context:
+      cluster: test_cluster
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+        ));
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_multiple_config_files_with_ns() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename_cc = dir.path().join("config_cc");
+
+        let mut file_cc = File::create(&filename_cc)?;
+        file_cc.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts: []
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file_cc.sync_all()?;
+
+        let filename_ctx = dir.path().join("config_ctx");
+        let mut file_ctx = File::create(&filename_ctx)?;
+        file_ctx.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster
+      user: test_user
+      namespace: test_namespace
+    name: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file_ctx.sync_all()?;
+
+        // Test current_context first
+        let actual_cc_first = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env(
+                "KUBECONFIG",
+                env::join_paths([&filename_cc, &filename_ctx].iter())
+                    .unwrap()
+                    .to_string_lossy(),
+            )
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+            })
+            .collect();
+
+        // And tes with context and namespace first
+        let actual_ctx_first = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env(
+                "KUBECONFIG",
+                env::join_paths([&filename_ctx, &filename_cc].iter())
+                    .unwrap()
+                    .to_string_lossy(),
+            )
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+        ));
+        assert_eq!(expected, actual_cc_first);
+        assert_eq!(expected, actual_ctx_first);
+
+        dir.close()
     }
 }

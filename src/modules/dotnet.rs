@@ -321,7 +321,7 @@ fn get_latest_sdk_from_cli() -> Option<Version> {
         None => {
             // Older versions of the dotnet cli do not support the --list-sdks command
             // So, if the status code indicates failure, fall back to `dotnet --version`
-            log::warn!(
+            log::debug!(
                 "Received a non-success exit code from `dotnet --list-sdks`. \
                  Falling back to `dotnet --version`.",
             );

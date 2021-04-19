@@ -38,6 +38,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "helm",
     "java",
     "julia",
+    "lua",
     "nim",
     "nodejs",
     "ocaml",
@@ -57,6 +58,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "memory_usage",
     "aws",
     "gcloud",
+    "openstack",
     "env_var",
     "crystal",
     "cmd_duration",
@@ -66,6 +68,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     #[cfg(feature = "battery")]
     "battery",
     "time",
+    "status",
     "character",
 ];
 

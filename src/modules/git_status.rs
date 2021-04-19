@@ -144,7 +144,7 @@ impl<'a> GitStatusInfo<'a> {
                 return match result.as_ref() {
                     Ok(ahead_behind) => Some(*ahead_behind),
                     Err(error) => {
-                        log::warn!("Warn: get_ahead_behind: {}", error);
+                        log::debug!("get_ahead_behind: {}", error);
                         None
                     }
                 };
@@ -152,14 +152,14 @@ impl<'a> GitStatusInfo<'a> {
         }
 
         {
+            let mut data = self.ahead_behind.write().unwrap();
             let repo = self.get_repository()?;
             let branch_name = self.get_branch_name();
-            let mut data = self.ahead_behind.write().unwrap();
             *data = Some(get_ahead_behind(&repo, &branch_name));
             match data.as_ref().unwrap() {
                 Ok(ahead_behind) => Some(*ahead_behind),
                 Err(error) => {
-                    log::warn!("Warn: get_ahead_behind: {}", error);
+                    log::debug!("get_ahead_behind: {}", error);
                     None
                 }
             }
@@ -173,7 +173,7 @@ impl<'a> GitStatusInfo<'a> {
                 return match result.as_ref() {
                     Ok(repo_status) => Some(*repo_status),
                     Err(error) => {
-                        log::warn!("Warn: get_repo_status: {}", error);
+                        log::debug!("get_repo_status: {}", error);
                         None
                     }
                 };
@@ -181,13 +181,13 @@ impl<'a> GitStatusInfo<'a> {
         }
 
         {
-            let mut repo = self.get_repository()?;
             let mut data = self.repo_status.write().unwrap();
+            let mut repo = self.get_repository()?;
             *data = Some(get_repo_status(&mut repo));
             match data.as_ref().unwrap() {
                 Ok(repo_status) => Some(*repo_status),
                 Err(error) => {
-                    log::warn!("Warn: get_repo_status: {}", error);
+                    log::debug!(" get_repo_status: {}", error);
                     None
                 }
             }
@@ -201,7 +201,7 @@ impl<'a> GitStatusInfo<'a> {
                 return match result.as_ref() {
                     Ok(stashed_count) => Some(*stashed_count),
                     Err(error) => {
-                        log::warn!("Warn: get_stashed_count: {}", error);
+                        log::debug!("get_stashed_count: {}", error);
                         None
                     }
                 };
@@ -209,13 +209,13 @@ impl<'a> GitStatusInfo<'a> {
         }
 
         {
-            let mut repo = self.get_repository()?;
             let mut data = self.stashed_count.write().unwrap();
+            let mut repo = self.get_repository()?;
             *data = Some(get_stashed_count(&mut repo));
             match data.as_ref().unwrap() {
                 Ok(stashed_count) => Some(*stashed_count),
                 Err(error) => {
-                    log::warn!("Warn: get_stashed_count: {}", error);
+                    log::debug!("get_stashed_count: {}", error);
                     None
                 }
             }
@@ -249,6 +249,7 @@ impl<'a> GitStatusInfo<'a> {
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(repository: &mut Repository) -> Result<RepoStatus, git2::Error> {
+    log::debug!("New repo status created");
     let mut status_options = git2::StatusOptions::new();
 
     let mut repo_status = RepoStatus::default();
@@ -356,7 +357,7 @@ where
             .parse(None)
             .ok()
     } else {
-        log::error!("Error parsing format string `{}`", &config_path);
+        log::warn!("Error parsing format string `{}`", &config_path);
         None
     }
 }
@@ -813,7 +814,7 @@ mod tests {
             .current_dir(&repo_dir.path())
             .output()?;
         Command::new("git")
-            .args(&["commit", "-m", "add new files"])
+            .args(&["commit", "-m", "add new files", "--no-gpg-sign"])
             .current_dir(&repo_dir.path())
             .output()?;
 
@@ -842,7 +843,7 @@ mod tests {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
         Command::new("git")
-            .args(&["commit", "-am", "Update readme"])
+            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(&repo_dir)
             .output()?;
         barrier();
@@ -870,7 +871,7 @@ mod tests {
         fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
         Command::new("git")
-            .args(&["commit", "-am", "Update readme"])
+            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
         barrier();
@@ -894,7 +895,7 @@ mod tests {
         barrier();
 
         Command::new("git")
-            .args(&["commit", "-m", "Change readme"])
+            .args(&["commit", "-m", "Change readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
         barrier();

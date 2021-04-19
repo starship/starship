@@ -5,16 +5,20 @@
 - **ターミナルエミュレータ**:[ iTerm2 ](https://iterm2.com/)
   - **テーマ**: Minimal
   - **カラースキーム**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **フォント**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **シェル**: [Fish Shell](https://fishshell.com/)
   - **設定**: [matchaiのDotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **プロンプト**: [Starship](https://starship.rs/)
 
-## `prompt_order` と `<module>.disabled` は同じことをしますか？
+## How do I get command completion as shown in the demo GIF?
+
+Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 はい、両方ともプロンプトでモジュールを無効にするために使用できます。 モジュールを無効にするだけの場合は、これらの理由から` <module> .disabled `を無効にする方法をお勧めします。
 
-- モジュールを無効にすると、prompt_orderからモジュールを省略するよりも明確になります。
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Starshipが更新されると、新しく作成されたモジュールがプロンプトに追加されます
 
 ## ドキュメントによると、Starshipはクロスシェル対応をしているようですが、Xシェルはサポートしていません。 なぜですか？
@@ -46,43 +50,43 @@ starship prompt --help
 
 ## 古いバージョンの glibc を使用する Linux ディストリビューションで Starship を実行するにはどうすればよいですか?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+"_version 'GLIBC_2のようなエラーが表示された場合。 8' が見つかりません (starshipで要求されます)_" プリビルドバイナリを使用しています（例えば、 CentOS 6 または 7 では、`glibc`の代わりに`musl`でコンパイルされたバイナリを使用できます。
 
 ```sh
 curl -fsSL https://starship.rs/install.sh | bash -s --- -platform unknown-linux-musl
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## プロンプトにグリフ記号が表示されないのはなぜですか?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+これの最も一般的な原因は、システムの設定ミスです。 いくつかのLinuxディストリビューション 特に、すぐに使用できるフォントサポートは付属していません。 次のことを確認する必要があります。
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- ロケールは、`de_DE.UTF-8`や` ja_JP.UTF-8</ 0>などのUTF-8値に設定されています。 <code>LC_ALL`がUTF-8値でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 絵文字フォントがインストールされています。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部(特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます--[noto emoji](https://www.google.com/get/noto/help/emoji/)は人気な選択肢です。
+- [Nerd Font](https://www.nerdfonts.com/)を使用しています。
 
-To test your system, run the following commands in a terminal:
+システムをテストするには、ターミナルで次のコマンドを実行します。
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+1行目は[snake emoji](https://emojipedia.org/snake/)を生成し、2行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)を生成するはずです。
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 両方の記号が正しく表示されているにもかかわらず、まだStarshipに表示されていない場合は、[バグ報告をしてください!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Starshipをアンインストールするにはどうすればいいですか?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starshipは、最初の場所にインストールするのと同じくらい簡単にアンインストールできます。
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Starshipを初期化するために使用されるシェル設定の行を削除します(例:`~/.bashrc`)。
+1. Starshipのバイナリを削除します。
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Starship がパッケージマネージャを使用してインストールされている場合は、アンインストール手順については、そのドキュメントを参照してください。
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+Starship が `curl | bash` スクリプトを使用してインストールされた場合、次のコマンドはバイナリを削除します:
 
 ```sh
-# Locate and delete the starship binary
+# starshipバイナリを見つけて削除します
 rm "$(which starship)"
 ```

@@ -170,19 +170,14 @@ detect_platform() {
   local platform
   platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-  # mingw is Git-Bash
-  if echo "${platform}" | grep -i mingw >/dev/null; then
-    platform=pc-windows-msvc
-  fi
-
-  if [ "${platform}" = "linux" ]; then
+  case "${platform}" in
+    msys_nt*) platform="pc-windows-msvc" ;;
+    # mingw is Git-Bash
+    mingw*) platform="pc-windows-msvc" ;;
     # use the statically compiled musl bins on linux to avoid linking issues.
-    platform=unknown-linux-musl
-  fi
-
-  if [ "${platform}" = "darwin" ]; then
-    platform=apple-darwin
-  fi
+    linux) platform="unknown-linux-musl" ;;
+    darwin) platform="apple-darwin" ;;
+  esac
 
   echo "${platform}"
 }
@@ -210,7 +205,7 @@ confirm() {
     rc=$?
     set -e
     if [ $rc -ne 0 ]; then
-      error 'Error reading from prompt (please re-run with the `--yes` option)'
+      error "Error reading from prompt (please re-run with the '--yes' option)"
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then

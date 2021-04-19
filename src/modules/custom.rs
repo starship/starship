@@ -1,5 +1,6 @@
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
+use std::time::Instant;
 
 use super::{Context, Module, RootModuleConfig};
 
@@ -13,6 +14,7 @@ use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
 ///
 /// Finally, the content of the module itself is also set by a command.
 pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
+    let start: Instant = Instant::now();
     let toml_config = context.config.get_custom_module_config(name).expect(
         "modules::custom::module should only be called after ensuring that the module exists",
     );
@@ -47,37 +49,36 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     let output = exec_command(config.command, &config.shell.0)?;
 
     let trimmed = output.trim();
-    if trimmed.is_empty() {
-        return None;
+    if !trimmed.is_empty() {
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_meta(|var, _| match var {
+                    "symbol" => Some(config.symbol),
+                    _ => None,
+                })
+                .map_style(|variable| match variable {
+                    "style" => Some(Ok(config.style)),
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    // This may result in multiple calls to `get_module_version` when a user have
+                    // multiple `$version` variables defined in `format`.
+                    "output" => Some(Ok(trimmed)),
+                    _ => None,
+                })
+                .parse(None)
+        });
+
+        match parsed {
+            Ok(segments) => module.set_segments(segments),
+            Err(error) => {
+                log::warn!("Error in module `custom.{}`:\n{}", name, error);
+            }
+        };
     }
-
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
-            .map_meta(|var, _| match var {
-                "symbol" => Some(config.symbol),
-                _ => None,
-            })
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                // This may result in multiple calls to `get_module_version` when a user have
-                // multiple `$version` variables defined in `format`.
-                "output" => Some(Ok(trimmed)),
-                _ => None,
-            })
-            .parse(None)
-    });
-
-    module.set_segments(match parsed {
-        Ok(segments) => segments,
-        Err(error) => {
-            log::warn!("Error in module `custom.{}`:\n{}", name, error);
-            return None;
-        }
-    });
-
+    let elapsed = start.elapsed();
+    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
+    module.duration = elapsed;
     Some(module)
 }
 

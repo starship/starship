@@ -10,11 +10,15 @@
   - **Konfiguration**: [Matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## Tun `prompt_order` und `<module>.disabled` dasselbe?
+## How do I get command completion as shown in the demo GIF?
+
+Completion support is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+
+## Do top level `format` and `<module>.disabled` do the same thing?
 
 Ja, beide können benutzt werden, um Module in der Prompt zu deaktivieren. Wenn nur Module deaktiviert werden wollen, sollte `<module>.disabled` benutzt werden, aus den folgenden Gründen:
 
-- Das Deaktivieren von Modulen ist expliziter als das Auslassen von Modulen in der prompt_order
+- Disabling modules is more explicit than omitting them from the top level `format`
 - Mit der Aktualisierung von Starship werden neu erstellte Module an die Eingabezeile angefügt
 
 ## Laut Dokumentation ist Starship cross-shell, aber es läuft nicht auf shell X. Warum?

@@ -46,19 +46,36 @@ starship_preexec() {
 
 # If starship precmd/preexec functions are already hooked, don't double-hook them
 # to avoid unnecessary performance degradation in nested shells
-if [[ ${precmd_functions[(ie)starship_precmd]} -gt ${#precmd_functions} ]]; then
+if [[ -z ${precmd_functions[(re)starship_precmd]} ]]; then
     precmd_functions+=(starship_precmd)
 fi
-if [[ ${preexec_functions[(ie)starship_preexec]} -gt ${#preexec_functions} ]]; then
+if [[ -z ${preexec_function[(re)starship_preexec]} ]]; then
     preexec_functions+=(starship_preexec)
 fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
-zle-keymap-select() {
+starship_zle-keymap-select() {
     starship_render
     zle reset-prompt
 }
 
+## Check for existing keymap-select widget.
+local existing_keymap_select_fn=$widgets[zle-keymap-select];
+# zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
+existing_keymap_select_fn=${existing_keymap_select_fn//user:};
+if [[ -z ${existing_keymap_select_fn} ]]; then
+    zle -N zle-keymap-select starship_zle-keymap-select;
+else
+    # Define a wrapper fn to call the original widget fn and then Starship's.
+    starship_zle-keymap-select-wrapped() {
+        ${existing_keymap_select_fn} "$@";
+        starship_zle-keymap-select "$@";
+    }
+    zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
+fi
+
 STARSHIP_START_TIME=$(::STARSHIP:: time)
-zle -N zle-keymap-select
 export STARSHIP_SHELL="zsh"
+
+# Set up the session key that will be used to store logs
+export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)

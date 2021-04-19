@@ -15,3 +15,6 @@ end
 
 # Export the correct name of the shell
 export STARSHIP_SHELL="ion"
+
+# Set up the session key that will be used to store logs
+export STARSHIP_SESSION_KEY=$(::STARSHIP:: session)

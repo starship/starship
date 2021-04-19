@@ -14,7 +14,7 @@ impl<'a> RootModuleConfig<'a> for ErlangConfig<'a> {
     fn new() -> Self {
         ErlangConfig {
             format: "via [$symbol$version]($style) ",
-            symbol: "🖧 ",
+            symbol: " ",
             style: "bold red",
             disabled: false,
         }

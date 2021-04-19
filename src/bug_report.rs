@@ -19,16 +19,19 @@ pub fn create() {
     };
 
     let link = make_github_issue_link(crate_version!(), environment);
+    let short_link = shorten_link(&link);
 
-    if open::that(&link).is_ok() {
-        print!("Take a look at your browser. A GitHub issue has been populated with your configuration")
+    if open::that(&link)
+        .map(|status| status.success())
+        .unwrap_or(false)
+    {
+        println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
+        println!("If your browser has failed to open, please click this link:\n");
     } else {
-        let link = shorten_link(&link).unwrap_or(link);
-        println!(
-            "Click this link to create a GitHub issue populated with your configuration:\n\n  {}",
-            link
-        );
+        println!("Click this link to create a GitHub issue populated with your configuration:\n");
     }
+
+    println!(" {}", short_link.unwrap_or(link));
 }
 
 #[cfg(feature = "http")]
@@ -173,7 +176,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
         match shell {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
-            "ion" => Some("~/.config/ion/initrc"),
+            "ion" => Some(".config/ion/initrc"),
             "powershell" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
@@ -212,7 +215,7 @@ mod tests {
         let starship_version = "0.1.2";
         let environment = Environment {
             os_type: os_info::Type::Linux,
-            os_version: os_info::Version::semantic(1, 2, 3, Some("test".to_string())),
+            os_version: os_info::Version::Semantic(1, 2, 3),
             shell_info: ShellInfo {
                 name: "test_shell".to_string(),
                 version: "2.3.4".to_string(),

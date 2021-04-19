@@ -18,8 +18,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hg_branch");
     let config: HgBranchConfig = HgBranchConfig::try_load(module.config);
 
-    // TODO: Once error handling is implemented, warn the user if their config
-    // truncation length is nonsensical
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
+    if config.disabled {
+        return None;
+    };
+
     let len = if config.truncation_length <= 0 {
         log::warn!(
             "\"truncation_length\" should be a positive value, found {}",
@@ -127,6 +131,24 @@ mod tests {
 
     #[test]
     #[ignore]
+    fn test_hg_disabled_per_default() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::HG)?;
+        let repo_dir = tempdir.path();
+        run_hg(&["whatever", "blubber"], &repo_dir)?;
+        expect_hg_branch_with_config(
+            &repo_dir,
+            // no "disabled=false" in config!
+            Some(toml::toml! {
+                [hg_branch]
+                truncation_length = 14
+            }),
+            &[Expect::Empty],
+        )?;
+        tempdir.close()
+    }
+
+    #[test]
+    #[ignore]
     fn test_hg_get_branch_fails() -> io::Result<()> {
         let tempdir = tempfile::tempdir()?;
 
@@ -186,6 +208,7 @@ mod tests {
             Some(toml::toml! {
                 [hg_branch]
                 truncation_length = 14
+                disabled = false
             }),
             &[Expect::BranchName(&"branch-name-10")],
         )?;
@@ -215,6 +238,7 @@ mod tests {
                 symbol = "B "
                 truncation_length = 14
                 truncation_symbol = "%"
+                disabled = false
             }),
             &[
                 Expect::BranchName(&"branch-name-12"),
@@ -247,6 +271,7 @@ mod tests {
             Some(toml::toml! {
                 [hg_branch]
                 style = "underline blue"
+                disabled = false
             }),
             &[
                 Expect::BranchName(&"branch-name-131"),
@@ -267,6 +292,7 @@ mod tests {
             .config(config.unwrap_or_else(|| {
                 toml::toml! {
                     [hg_branch]
+                    disabled = false
                 }
             }))
             .collect();

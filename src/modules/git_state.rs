@@ -135,18 +135,17 @@ fn describe_rebase<'a>(root: &'a PathBuf, rebase_config: &'a str) -> StateDescri
 
     let progress = if has_path("rebase-merge/msgnum") {
         paths_to_progress("rebase-merge/msgnum", "rebase-merge/end")
-    } else if has_path("rebase-merge/onto") {
-        Some((1, 1))
     } else if has_path("rebase-apply") {
         paths_to_progress("rebase-apply/next", "rebase-apply/last")
     } else {
         None
     };
+    let progress = progress.unwrap_or((1, 1));
 
     StateDescription {
         label: rebase_config,
-        current: Some(format!("{}", progress.unwrap().0)),
-        total: Some(format!("{}", progress.unwrap().1)),
+        current: Some(format!("{}", progress.0)),
+        total: Some(format!("{}", progress.1)),
     }
 }
 
@@ -190,7 +189,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(REBASING 1/1)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REBASING 1/1")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -205,7 +204,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(MERGING)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("MERGING")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -221,8 +220,8 @@ mod tests {
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
         let expected = Some(format!(
-            "{} ",
-            Color::Yellow.bold().paint("(CHERRY-PICKING)")
+            "({}) ",
+            Color::Yellow.bold().paint("CHERRY-PICKING")
         ));
 
         assert_eq!(expected, actual);
@@ -238,7 +237,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(BISECTING)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("BISECTING")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -253,7 +252,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("{} ", Color::Yellow.bold().paint("(REVERTING)")));
+        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REVERTING")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -321,16 +320,30 @@ mod tests {
             true,
         )?;
 
+        // Ensure on the expected branch.
+        // If build environment has `init.defaultBranch` global set
+        // it will default to an unknown branch, so neeed to make & change branch
+        run_git_cmd(
+            &["checkout", "-b", "master"],
+            Some(path),
+            // command expected to fail if already on the expected branch
+            false,
+        )?;
+
         // Write a file on master and commit it
         write_file("Version A")?;
         run_git_cmd(&["add", "the_file"], Some(path), true)?;
-        run_git_cmd(&["commit", "--message", "Commit A"], Some(path), true)?;
+        run_git_cmd(
+            &["commit", "--message", "Commit A", "--no-gpg-sign"],
+            Some(path),
+            true,
+        )?;
 
         // Switch to another branch, and commit a change to the file
         run_git_cmd(&["checkout", "-b", "other-branch"], Some(path), true)?;
         write_file("Version B")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit B"],
+            &["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
             Some(path),
             true,
         )?;
@@ -339,7 +352,7 @@ mod tests {
         run_git_cmd(&["checkout", "master"], Some(path), true)?;
         write_file("Version C")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit C"],
+            &["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
             Some(path),
             true,
         )?;

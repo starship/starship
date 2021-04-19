@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let host = match os_hostname.into_string() {
         Ok(host) => host,
         Err(bad) => {
-            log::debug!("hostname is not valid UTF!\n{:?}", bad);
+            log::warn!("hostname is not valid UTF!\n{:?}", bad);
             return None;
         }
     };
@@ -95,7 +95,7 @@ mod tests {
                 trim_at = ""
             })
             .collect();
-        let expected = Some(format!("on {} ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -126,7 +126,7 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("on {} ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -142,7 +142,7 @@ mod tests {
                 trim_at = ""
             })
             .collect();
-        let expected = Some(format!("on {} ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
         Ok(())
@@ -159,7 +159,7 @@ mod tests {
                 trim_at = trim_at
             })
             .collect();
-        let expected = Some(format!("on {} ", style().paint(remainder)));
+        let expected = Some(format!("{} in ", style().paint(remainder)));
 
         assert_eq!(expected, actual);
         Ok(())

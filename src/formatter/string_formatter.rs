@@ -229,7 +229,7 @@ impl<'a> StringFormatter<'a> {
                     StyleElement::Variable(name) => {
                         let variable = variables.get(name.as_ref()).unwrap_or(&None);
                         match variable {
-                            Some(style_string) => style_string.clone().map(|string| string),
+                            Some(style_string) => style_string.clone(),
                             None => Ok("".into()),
                         }
                     }

@@ -53,23 +53,26 @@ fn get_gcloud_region_from_config(current_config: &PathBuf) -> Option<Region> {
     Some(region.to_string())
 }
 
-fn get_active_config(config_root: &PathBuf) -> Option<String> {
-    let path = config_root.join("active_config");
-    let file = File::open(&path).ok()?;
-    let reader = BufReader::new(file);
-    let first_line = match reader.lines().next() {
-        Some(res) => res,
-        None => Err(Error::new(ErrorKind::NotFound, "empty")),
-    };
-    match first_line {
-        Ok(c) => Some(c),
-        Err(_) => None,
-    }
+fn get_active_config(context: &Context, config_root: &PathBuf) -> Option<String> {
+    let config_name = context.get_env("CLOUDSDK_ACTIVE_CONFIG_NAME").or_else(|| {
+        let path = config_root.join("active_config");
+        let file = File::open(&path).ok()?;
+        let reader = BufReader::new(file);
+        let first_line = match reader.lines().next() {
+            Some(res) => res,
+            None => Err(Error::new(ErrorKind::NotFound, "empty")),
+        };
+        match first_line {
+            Ok(c) => Some(c),
+            Err(_) => None,
+        }
+    })?;
+    Some(config_name)
 }
 
 fn get_current_config_path(context: &Context) -> Option<PathBuf> {
     let config_dir = get_config_dir(context)?;
-    let active_config = get_active_config(&config_dir)?;
+    let active_config = get_active_config(context, &config_dir)?;
     let current_config = config_dir.join(format!("configurations/config_{}", active_config));
     Some(current_config)
 }
@@ -102,7 +105,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let gcloud_project = get_gcloud_project_from_config(&config_path);
     let gcloud_region = get_gcloud_region_from_config(&config_path);
     let config_dir = get_config_dir(context)?;
-    let gcloud_active: Option<Active> = get_active_config(&config_dir);
+    let gcloud_active: Option<Active> = get_active_config(context, &config_dir);
 
     if gcloud_account.is_none()
         && gcloud_project.is_none()
@@ -314,6 +317,44 @@ project = abc
         let expected = None;
 
         assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn active_config_manually_overridden() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations/config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"[core]
+project = default
+",
+        )?;
+
+        let config_overridden_path = dir.path().join("configurations/config_overridden");
+        let mut config_overridden_file = File::create(&config_overridden_path)?;
+        config_overridden_file.write_all(
+            b"[core]
+project = overridden
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .env("CLOUDSDK_ACTIVE_CONFIG_NAME", "overridden")
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ overridden")));
+
+        assert_eq!(actual, expected);
         dir.close()
     }
 }
