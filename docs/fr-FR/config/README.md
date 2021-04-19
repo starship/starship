@@ -783,22 +783,22 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Options
 
-| Option              | Défaut                                                                                                  | Description                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                        |
-| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Quelles extensions devraient activer ce module.          |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quels fichiers devraient activer ce module.              |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
-| `style`             | `"bold blue"`                                                                                           | Le style du module.                                      |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
+| Option              | Défaut                                                                                                  | Description                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                                              |
+| `symbol`            | `".NET "`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                      |
+| `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané. |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Quelles extensions devraient activer ce module.                                |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quels fichiers devraient activer ce module.                                    |
+| `detect_folders`    | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                    |
+| `style`             | `"bold blue"`                                                                                           | Le style du module.                                                            |
+| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                                                  |
 
 ### Variables
 
 | Variable  | Exemple          | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| version   | `v3.1.201`       | La version du sdk `dotnet`                                         |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | Reflète la valeur de l'option `symbol`                             |
 | style\* |                  | Reflète la valeur de l'option `style`                              |
@@ -818,28 +818,28 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `elixir` affiche la version actuellement installé d'Elixir et Erlang/OTP. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `mix.exs` file.
+- Le répertoire courant contient un fichier `mix.exs`.
 
 ### Options
 
 | Option              | Défaut                                                      | Description                                                     |
 | ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `symbol`            | `"💧 "`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang. |
 | `detect_extensions` | `[]`                                                        | Quelles extensions devraient activer ce module.                 |
 | `detect_files`      | `["mix.exs"]`                                               | Quels fichiers devraient activer ce module.                     |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
+| `detect_folders`    | `[]`                                                        | Quels dossiers devraient activer ce module.                     |
 | `style`             | `"bold purple"`                                             | Le style du module.                                             |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                        |
+| `disabled`          | `false`                                                     | Désactive le module `elixir`.                                   |
 
 ### Variables
 
 | Variable    | Exemple | Description                            |
 | ----------- | ------- | -------------------------------------- |
-| version     | `v1.10` | The version of `elixir`                |
-| otp_version |         | The otp version of `elixir`            |
+| version     | `v1.10` | La version d' `elixir`                 |
+| otp_version |         | La version otp d' `elixir`             |
 | symbol      |         | Reflète la valeur de l'option `symbol` |
 | style\*   |         | Reflète la valeur de l'option `style`  |
 
@@ -856,10 +856,10 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `elm` affiche la version courante installée d'Elm. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
+- Le répertoire courant contient un fichier `elm.json`
+- Le répertoire courant contient un fichier `elm-package.json`
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
