@@ -47,15 +47,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn extract_vlang_version(file_contents: &str) -> Option<String> {
-    let mut splitted = file_contents.split('\n');
-    let found = splitted.find(|line| line.to_lowercase().contains("version:"))?;
-    let raw_version = found.split("version:").nth(1)?;
-    let version: String = raw_version
-        .chars()
-        .skip(2)
-        .take(raw_version.chars().count() - 3)
-        .collect();
-    Some(format!("v{}", version))
+    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
+    let caps = re.captures(file_contents)?;
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
 }
 
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
