@@ -15,11 +15,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .trim()
         .parse::<i64>()
         .ok()?;
-    if num_of_jobs == 0 {
+
+    if config.threshold < 0 {
+        log::warn!(
+            "threshold in [jobs] ({}) was less than zero",
+            config.threshold
+        );
         return None;
     }
 
-    let module_number = if num_of_jobs > config.threshold {
+    if num_of_jobs == 0 && config.threshold > 0 {
+        return None;
+    }
+
+    let module_number = if num_of_jobs > config.threshold || config.threshold == 0 {
         num_of_jobs.to_string()
     } else {
         "".to_string()
@@ -107,6 +116,34 @@ mod test {
             .collect();
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_0_job_0() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 0
+            })
+            .jobs(0)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_0_job_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 0
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
         assert_eq!(expected, actual);
     }
 }
