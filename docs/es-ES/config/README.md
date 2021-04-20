@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# El cual es equivalente a
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -208,6 +208,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
 $scala\
@@ -1386,7 +1387,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ::: aviso
 
@@ -2135,6 +2136,44 @@ python_binary = "python3"
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
+```
+
+## Red
+
+By default the `red` module shows the currently installed version of Red. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### Opciones
+
+| Opción              | Por defecto                          | Descripción                                                                             |
+| ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
+| `version_format`    | `v{raw}`                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                                         |
+| `detect_extensions` | `["red"]`                            | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `"red bold"`                         | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                              | Disables the `red` module.                                                              |
+
+### Variables
+
+| Variable  | Ejemplo  | Descripción                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v2.5.1` | The version of `red`                   |
+| symbol    |          | Refleja el valor de la opción `symbol` |
+| style\* |          | Refleja el valor de la opción `style`  |
+
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
 ```
 
 ## Ruby
