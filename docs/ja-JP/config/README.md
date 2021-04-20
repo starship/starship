@@ -175,7 +175,7 @@ add_newline = false
 ```toml
 format = "$all"
 
-# 上の設定は以下の設定と同等です。
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -209,6 +209,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
 $scala\
@@ -1387,7 +1388,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ::: warning
 
@@ -2136,6 +2137,44 @@ python_binary = "python3"
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
+```
+
+## Red
+
+By default the `red` module shows the currently installed version of Red. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                          |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
+| `detect_extensions` | `["red"]`                            | どの拡張子がこのモジュールをアクティブにするか                                                   |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                                                 |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                                 |
+| `style`             | `"red bold"`                         | モジュールのスタイルです。                                                             |
+| `disabled`          | `false`                              | Disables the `red` module.                                                |
+
+### 変数
+
+| 変数        | 設定例      | 説明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v2.5.1` | The version of `red`   |
+| symbol    |          | オプション `記号` の値をミラーする    |
+| style\* |          | オプション `style` の値をミラーする |
+
+\*: この変数はスタイル文字列の一部としてのみ使用できます
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
 ```
 
 ## Ruby
