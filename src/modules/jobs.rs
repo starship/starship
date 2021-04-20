@@ -15,6 +15,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .trim()
         .parse::<i64>()
         .ok()?;
+
+    if config.threshold < 0 {
+        log::warn!(
+            "threshold in [jobs] ({}) was less than zero",
+            config.threshold
+        );
+        return None;
+    }
+
     if num_of_jobs == 0 && config.threshold > 0 {
         return None;
     }
