@@ -257,6 +257,9 @@ is read from the `AWS_VAULT` env var.
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 is read from the `AWSU_PROFILE` env var.
 
+When using [AWSume](https://awsu.me) the profile
+is read from the `AWSUME_PROFILE` env var.
+
 ### Options
 
 | Option           | Default                                           | Description                                                     |
