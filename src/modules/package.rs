@@ -46,18 +46,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn extract_vlang_version(file_contents: &str) -> Option<String> {
-    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
-    let caps = re.captures(file_contents)?;
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
-}
-
 fn extract_cargo_version(file_contents: &str) -> Option<String> {
     let cargo_toml: toml::Value = toml::from_str(file_contents).ok()?;
     let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
 
     let formatted_version = format_version(raw_version);
+    Some(formatted_version)
+}
+
+fn extract_vlang_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
+    let caps = re.captures(file_contents)?;
+    let formatted_version = format_version(&caps["version"]);
     Some(formatted_version)
 }
 
@@ -778,7 +778,6 @@ end";
     }
 
     #[test]
-
     fn test_extract_vlang_version() -> io::Result<()> {
         let config_name = "v.mod";
         let config_content = "

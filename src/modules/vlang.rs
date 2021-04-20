@@ -1,6 +1,6 @@
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::vlang::VLangConfig;
+use crate::configs::v::VLangConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current V version
@@ -39,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `v`:\n{}", error);
+            log::warn!("Error in module `vlang`:\n{}", error);
             return None;
         }
     });
@@ -49,7 +49,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_v_version(v_version: &str) -> Option<String> {
     let version = v_version
-        // split into ["v", "0.2"]
+        // split into ["V", "0.2", "30c0659"]
         .split_whitespace()
         // return "0.2"
         .nth(1)?;
