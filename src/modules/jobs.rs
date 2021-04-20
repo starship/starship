@@ -21,6 +21,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let module_number = if num_of_jobs > config.threshold {
         num_of_jobs.to_string()
+    } else if num_of_jobs == 0 && config.threshold == 0 {
+        // Explicitly show when there are 0 background jobs
+        "0".to_string()
     } else {
         "".to_string()
     };
@@ -111,16 +114,30 @@ mod test {
     }
 
     #[test]
-    fn config_n1_job_0() {
+    fn config_0_job_0() {
         let actual = ModuleRenderer::new("jobs")
             .config(toml::toml! {
                 [jobs]
-                threshold = -1
+                threshold = 0
             })
             .jobs(0)
             .collect();
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_0_job_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 0
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
         assert_eq!(expected, actual);
     }
 }
