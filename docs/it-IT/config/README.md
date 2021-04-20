@@ -244,6 +244,8 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+
 ### Options
 
 | Option           | Default                                             | Description                                                     |
