@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => context
                     .exec_cmd("red", &["--version"])
-                    .and_then(|output| parse_red_version(output.stdout.trim()))
+                    .map(|output| parse_red_version(output.stdout.trim()))
                     .map(Ok),
                 _ => None,
             })
@@ -47,9 +47,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-#[allow(clippy::clippy::unnecessary_wraps)]
-fn parse_red_version(red_version: &str) -> Option<String> {
-    Some(format!("v{}", red_version))
+fn parse_red_version(red_version: &str) -> String {
+    format!("v{}", red_version)
 }
 
 #[cfg(test)]
@@ -63,7 +62,7 @@ mod tests {
     #[test]
     fn test_parse_red_version() {
         const OUTPUT: &str = "0.6.4\n";
-        assert_eq!(parse_red_version(OUTPUT.trim()), Some("v0.6.4".to_string()))
+        assert_eq!(parse_red_version(OUTPUT.trim()), "v0.6.4".to_string())
     }
 
     #[test]
