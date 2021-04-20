@@ -28,11 +28,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let module_number = if num_of_jobs > config.threshold {
+    let module_number = if num_of_jobs > config.threshold || config.threshold == 0 {
         num_of_jobs.to_string()
-    } else if num_of_jobs == 0 && config.threshold == 0 {
-        // Explicitly show when there are 0 background jobs
-        "0".to_string()
     } else {
         "".to_string()
     };
