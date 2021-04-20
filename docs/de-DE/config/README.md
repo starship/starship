@@ -244,6 +244,8 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+
 ### Optionen
 
 | Option           | Standardwert                                        | Beschreibung                                                    |
@@ -308,7 +310,7 @@ symbol = "🅰 "
 
 ## Akkustand
 
-Das `battery` Modul zeigt, wie hoch der Akku des Geräts geladen ist und den aktuellen Ladestatus. Das Modul ist nur sichtbar, wenn der Akku des Geräts unter 10% geladen ist.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Optionen
 
@@ -336,7 +338,7 @@ discharging_symbol = "💀 "
 
 ### Anzeige des Akkustandes
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Wenn `display` nicht angegeben ist. Die Standardwerte sind folgende:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. Die Standardwerte sind folgende:
 
 ```toml
 [[battery.display]]
