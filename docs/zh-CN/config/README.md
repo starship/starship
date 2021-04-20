@@ -244,6 +244,8 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+
 ### 配置项
 
 | Option           | 默认值                                                 | 描述                         |
@@ -308,7 +310,7 @@ symbol = "🅰 "
 
 ## Battery
 
-`battery` 组件显示电池充电情况和当前充电状态。 这个组件只会在当前电量低于 10% 时显示。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### 配置项
 
@@ -336,7 +338,7 @@ discharging_symbol = "💀 "
 
 ### Battery 组件的显示
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). 如果 `display` 没有设置， 默认设置如下：
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. 默认设置如下：
 
 ```toml
 [[battery.display]]
