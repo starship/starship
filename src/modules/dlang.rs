@@ -72,8 +72,7 @@ mod tests {
 
     #[test]
     fn test_parse_dlang_version() {
-        const OUTPUT: &str = "DMD32 D Compiler v2.096.0-dirty
-        Copyright (C) 1999-2021 by The D Language Foundation, All Rights Reserved written by Walter Bright\n";
+        const OUTPUT: &str = "DMD32 D Compiler v2.096.0-dirty\nCopyright (C) 1999-2021 by The D Language Foundation, All Rights Reserved written by Walter Bright\n";
         assert_eq!(
             parse_dlang_version(OUTPUT.trim()),
             Some("v2.096.0-dirty".to_string())
