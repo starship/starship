@@ -677,6 +677,25 @@ mod tests {
     }
 
     #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
+        let mystyle = <Style>::from_config(&config).unwrap();
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert_eq!(
+            mystyle,
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
     fn table_get_styles_bold_italic_underline_green_dimmed_reverse_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD ReVeRSe");
         let mystyle = <Style>::from_config(&config).unwrap();
