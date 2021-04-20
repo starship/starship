@@ -208,6 +208,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
 $scala\
@@ -1386,7 +1387,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ::: warning
 
@@ -2135,6 +2136,44 @@ python_binary = "python3"
 [python]
 # Don't trigger for files with the py extension
 detect_extensions = []
+```
+
+## Red
+
+By default the `red` module shows the currently installed version of Red. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### 配置项
+
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
+| `detect_extensions` | `["red"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"red bold"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `red` module.                                                |
+
+### Variables
+
+| 字段        | 示例       | 描述                   |
+| --------- | -------- | -------------------- |
+| version   | `v2.5.1` | The version of `red` |
+| symbol    |          | `symbol`对应值          |
+| style\* |          | `style`对应值           |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
 ```
 
 ## Ruby
