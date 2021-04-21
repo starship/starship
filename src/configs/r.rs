@@ -14,7 +14,7 @@ pub struct RConfig<'a> {
 impl<'a> Default for RConfig<'a> {
     fn default() -> Self {
         RConfig {
-            format: "via [${symbol}${version}]($style) ",
+            format: "via [$symbol($version )]($style)",
             style: "blue bold",
             symbol: "R ",
             disabled: false,
