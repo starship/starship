@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let swift_version =
                         parse_swift_version(&context.exec_cmd("swift", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &swift_version,
                         config.version_format,
                     )

@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let dart_version =
                         get_dart_version(&context.exec_cmd("dart", &["--version"])?.stderr)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &dart_version,
                         config.version_format,
                     )

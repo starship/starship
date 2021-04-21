@@ -40,7 +40,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         &context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
                     )?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &terraform_version,
                         config.version_format,
                     )

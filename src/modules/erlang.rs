@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let erlang_version = get_erlang_version(context)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &erlang_version,
                         config.version_format,
                     )

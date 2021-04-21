@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .stdout,
                     )?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &helm_version,
                         config.version_format,
                     )

@@ -65,7 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         get_version_from_cli(context)
                     };
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &version?,
                         config.version_format,
                     )

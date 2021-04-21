@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let vagrant_version =
                         get_vagrant_version(&context.exec_cmd("vagrant", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &vagrant_version,
                         config.version_format,
                     )

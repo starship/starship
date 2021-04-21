@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let lua_version = get_lua_version(context, &config.lua_binary)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &lua_version,
                         config.version_format,
                     )

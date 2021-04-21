@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let deno_version =
                         get_deno_version(&context.exec_cmd("deno", &["-V"])?.stdout)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &deno_version,
                         config.version_format,
                     )

@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let kotlin_version = get_kotlin_version(context, &config.kotlin_binary)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &kotlin_version,
                         config.version_format,
                     )

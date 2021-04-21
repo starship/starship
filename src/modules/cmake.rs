@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let cmake_version =
                         get_cmake_version(&context.exec_cmd("cmake", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &cmake_version,
                         config.version_format,
                     )

@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         get_go_version(&context.exec_cmd("go", &["version"])?.stdout)?;
 
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &golang_version,
                         config.version_format,
                     )

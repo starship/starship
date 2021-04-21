@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let crystal_version =
                         get_crystal_version(&context.exec_cmd("crystal", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &crystal_version,
                         config.version_format,
                     )

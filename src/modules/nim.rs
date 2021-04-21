@@ -36,7 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .and_then(|nim_version_output| {
                         let nim_version = parse_nim_version(&nim_version_output)?;
                         VersionFormatter::format_module_version(
-                            &module,
+                            module.get_name(),
                             nim_version,
                             config.version_format,
                         )

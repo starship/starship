@@ -65,7 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         context.exec_cmd("ocaml", &["-vnum"])?.stdout
                     };
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &ocaml_version.trim(),
                         config.version_format,
                     )

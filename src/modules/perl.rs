@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         .exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?
                         .stdout;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &perl_version,
                         config.version_format,
                     )

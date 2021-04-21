@@ -1,6 +1,5 @@
 use super::string_formatter::StringFormatterError;
 use super::StringFormatter;
-use crate::module::Module;
 use once_cell::sync::Lazy;
 use std::ops::Deref;
 use versions::Versioning;
@@ -63,18 +62,14 @@ impl<'a> VersionFormatter<'a> {
     }
 
     pub fn format_module_version(
-        module: &Module,
+        module_name: &str,
         version: &str,
         version_format: &str,
     ) -> Option<String> {
         match VersionFormatter::format_version(version, version_format) {
             Ok(formatted) => Some(formatted),
             Err(error) => {
-                log::warn!(
-                    "Error formatting `{}` version:\n{}",
-                    module.get_name(),
-                    error
-                );
+                log::warn!("Error formatting `{}` version:\n{}", module_name, error);
                 Some(format!("v{}", version))
             }
         }

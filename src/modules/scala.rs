@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let scala_version = get_scala_version(context)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &scala_version,
                         config.version_format,
                     )

@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let purs_version = context.exec_cmd("purs", &["--version"])?.stdout;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &purs_version.trim(),
                         config.version_format,
                     )

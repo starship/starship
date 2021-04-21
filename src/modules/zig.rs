@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => {
                     let zig_version = context.exec_cmd("zig", &["version"])?.stdout;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &zig_version.trim(),
                         config.version_format,
                     )

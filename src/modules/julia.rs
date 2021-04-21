@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let julia_version =
                         get_julia_version(&context.exec_cmd("julia", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
-                        &module,
+                        module.get_name(),
                         &julia_version,
                         config.version_format,
                     )
