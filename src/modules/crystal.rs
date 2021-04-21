@@ -34,7 +34,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => format_crystal_version(
                     context.exec_cmd("crystal", &["--version"])?.stdout.as_str(),
                     config.version_format,
-                ).map(Ok),
+                )
+                .map(Ok),
                 _ => None,
             })
             .parse(None)
