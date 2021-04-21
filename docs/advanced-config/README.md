@@ -92,7 +92,7 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `bold`
   - `underline`
   - `dimmed`
-  - `reverse`
+  - `inverted`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
