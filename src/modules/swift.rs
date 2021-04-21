@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::swift::SwiftConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Swift version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -31,8 +32,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let swift_version = context.exec_cmd("swift", &["--version"])?.stdout;
-                    parse_swift_version(&swift_version).map(Ok)
+                    let swift_version =
+                        parse_swift_version(&context.exec_cmd("swift", &["--version"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &swift_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -58,7 +65,7 @@ fn parse_swift_version(swift_version: &str) -> Option<String> {
     // return "5.2.2" or "5.3-dev"
     let version = splited.next()?;
 
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -72,13 +79,13 @@ mod tests {
     #[test]
     fn test_parse_swift_version() {
         let input = "Apple Swift version 5.2.2";
-        assert_eq!(parse_swift_version(input), Some(String::from("v5.2.2")));
+        assert_eq!(parse_swift_version(input), Some(String::from("5.2.2")));
     }
 
     #[test]
     fn test_parse_swift_version_without_org_name() {
         let input = "Swift version 5.3-dev (LLVM ..., Swift ...)";
-        assert_eq!(parse_swift_version(input), Some(String::from("v5.3-dev")));
+        assert_eq!(parse_swift_version(input), Some(String::from("5.3-dev")));
     }
 
     #[test]
