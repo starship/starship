@@ -62,7 +62,7 @@ fn format_crystal_version(crystal_version: &str, version_format: &str) -> Option
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
-            log::warn!("Error formating `crystal` version:\n{}", error);
+            log::warn!("Error formatting `crystal` version:\n{}", error);
             Some(format!("v{}", version))
         }
     }

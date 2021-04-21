@@ -94,7 +94,7 @@ fn format_python_version(python_version: &str, version_format: &str) -> Option<S
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
-            log::warn!("Error formating `python` version:\n{}", error);
+            log::warn!("Error formatting `python` version:\n{}", error);
             Some(format!("v{}", version))
         }
     }

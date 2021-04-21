@@ -213,7 +213,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
-            log::warn!("Error formating `rust` version:\n{}", error);
+            log::warn!("Error formatting `rust` version:\n{}", error);
             Some(format!("v{}", version))
         }
     }

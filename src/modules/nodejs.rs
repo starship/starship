@@ -112,7 +112,7 @@ fn format_node_version(node_version: &str, version_format: &str) -> String {
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => formatted,
         Err(error) => {
-            log::warn!("Error formating `node` version:\n{}", error);
+            log::warn!("Error formatting `node` version:\n{}", error);
             format!("v{}", version)
         }
     }
