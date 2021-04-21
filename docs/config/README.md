@@ -2395,15 +2395,16 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                     | Description                                       |
-| ------------------- | ------------------------------------------- | ------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`    | The format for the module.                        |
-| `detect_extensions` | `["sbt", "scala"]`                          | Which extensions should trigger this module.      |
-| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`     | Which filenames should trigger this module.       |
-| `detect_folders`    | `[".metals"]`                               | Which folders should trigger this modules.        |
-| `symbol`            | `"🆂 "`                                      | A format string representing the symbol of Scala. |
-| `style`             | `"red dimmed"`                              | The style for the module.                         |
-| `disabled`          | `false`                                     | Disables the `scala` module.                      |
+| Option              | Default                                  | Description                                                               |
+| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.                                |
+| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                         |
+| `style`             | `"red dimmed"`                           | The style for the module.                                                 |
+| `disabled`          | `false`                                  | Disables the `scala` module.                                              |
 
 ### Variables
 
