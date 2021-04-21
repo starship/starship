@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::deno::DenoConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Deno version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -27,10 +28,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => context
-                    .exec_cmd("deno", &["-V"])
-                    .and_then(|output| parse_deno_version(output.stdout.trim()))
-                    .map(Ok),
+                "version" => {
+                    let deno_version = context.exec_cmd("deno", &["-V"])?.stdout;
+                    format_deno_version(&deno_version, config.version_format).map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -47,31 +48,53 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_deno_version(deno_version: &str) -> Option<String> {
+fn format_deno_version(deno_version: &str, version_format: &str) -> Option<String> {
     let version = deno_version
         // split into ["deno", "1.8.3"]
         .split_whitespace()
         // return "1.8.3"
         .nth(1)?;
 
-    Some(format!("v{}", version))
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formatting `deno` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::parse_deno_version;
+    use super::format_deno_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
 
     #[test]
-    fn test_parse_deno_version() {
+    fn test_format_deno_version() {
         const OUTPUT: &str = "deno 1.8.3\n";
         assert_eq!(
-            parse_deno_version(OUTPUT.trim()),
+            format_deno_version(OUTPUT.trim(), "v${major}.${minor}.${patch}"),
             Some("v1.8.3".to_string())
         )
+    }
+
+    #[test]
+    fn test_format_deno_version_truncated() {
+        assert_eq!(
+            format_deno_version("deno 1.8.3\n", "v${major}.${minor}"),
+            Some("v1.8".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_deno_version_is_malformed() {
+        assert_eq!(
+            format_deno_version("deno 1.8\n", "v${major}.${minor}.${patch}"),
+            Some("v1.8.".to_string())
+        );
     }
 
     #[test]
