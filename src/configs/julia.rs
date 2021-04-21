@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig, Serialize)]
 pub struct JuliaConfig<'a> {
     pub format: &'a str,
+    pub version_format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
@@ -18,6 +19,7 @@ impl<'a> Default for JuliaConfig<'a> {
     fn default() -> Self {
         JuliaConfig {
             format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             symbol: "ஃ ",
             style: "bold purple",
             disabled: false,
