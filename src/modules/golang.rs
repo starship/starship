@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::go::GoConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Go version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,8 +31,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    format_go_version(&context.exec_cmd("go", &["version"])?.stdout.as_str())
-                        .map(Ok)
+                    let golang_version =
+                        get_go_version(&context.exec_cmd("go", &["version"])?.stdout)?;
+
+                    format_golang_version(&golang_version, config.version_format).map(Ok)
                 }
                 _ => None,
             })
@@ -49,7 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_go_version(go_stdout: &str) -> Option<String> {
+fn get_go_version(go_stdout: &str) -> Option<String> {
     // go version output looks like this:
     // go version go1.13.3 linux/amd64
 
@@ -64,6 +67,16 @@ fn format_go_version(go_stdout: &str) -> Option<String> {
         .next()?;
 
     Some(format!("v{}", version))
+}
+
+fn format_golang_version(golang_version: &str, version_format: &str) -> Option<String> {
+    match VersionFormatter::format_version(golang_version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formatting `golang` version:\n{}", error);
+            Some(format!("v{}", golang_version))
+        }
+    }
 }
 
 #[cfg(test)]
