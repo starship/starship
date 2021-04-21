@@ -83,7 +83,11 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
 }
 
 fn get_credentials_duration(context: &Context, aws_profile: Option<&Profile>) -> Option<i64> {
-    let expiration_date = if let Some(expiration_date) = context.get_env("AWS_SESSION_EXPIRATION") {
+    let expiration_env_vars = vec!["AWS_SESSION_EXPIRATION", "AWSUME_EXPIRATION"];
+    let expiration_date = if let Some(expiration_date) = expiration_env_vars
+        .iter()
+        .find_map(|env_var| context.get_env(env_var))
+    {
         chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
     } else {
         let credentials_location = get_credentials_file_path(context)?;
