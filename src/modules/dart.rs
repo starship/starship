@@ -93,7 +93,7 @@ mod tests {
     }
     #[test]
     fn test_format_dart_version_malformed() {
-        let input = "Dart VM version: 2.8. (stable)";
+        let input = "Dart VM version: 2.8 (stable)";
         assert_eq!(
             format_dart_version(input, "v${major}.${minor}.${patch}"),
             Some("v2.8.".to_string())
