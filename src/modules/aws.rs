@@ -108,7 +108,7 @@ fn get_credentials_duration(context: &Context, aws_profile: Option<&Profile>) ->
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("expiration"))?;
 
-        let expiration_date = expiration_date_line.split('=').nth(1)?;
+        let expiration_date = expiration_date_line.split('=').nth(1)?.trim();
         DateTime::parse_from_rfc3339(expiration_date).ok()
     }?;
 
