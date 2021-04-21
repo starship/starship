@@ -3,6 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::elixir::ElixirConfig;
 use crate::formatter::StringFormatter;
 
+use crate::formatter::VersionFormatter;
 use once_cell::sync::Lazy;
 use std::ops::Deref;
 
@@ -39,11 +40,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .deref()
                     .as_ref()
                     .map(|(_, elixir_version)| elixir_version)
+                    .map(|elixir_version| {
+                        VersionFormatter::format_module_version(
+                            &module,
+                            &elixir_version,
+                            config.version_format,
+                        )
+                    })?
                     .map(Ok),
                 "otp_version" => versions
                     .deref()
                     .as_ref()
-                    .map(|(otp_version, _)| otp_version)
+                    .map(|(otp_version, _)| otp_version.to_string())
                     .map(Ok),
                 _ => None,
             })
@@ -137,7 +145,7 @@ Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("💧 1.10 (OTP 22) ")
+            Color::Purple.bold().paint("💧 v1.10 (OTP 22) ")
         ));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 
