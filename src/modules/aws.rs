@@ -47,7 +47,7 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
 }
 
 fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
-    let profile_env_vars = vec!["AWSU_PROFILE", "AWS_VAULT", "AWS_PROFILE"];
+    let profile_env_vars = vec!["AWSU_PROFILE", "AWS_VAULT", "AWSUME_PROFILE", "AWS_PROFILE"];
     let profile = profile_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var));
@@ -209,6 +209,20 @@ mod tests {
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-awsu ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_from_awsume() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWSUME_PROFILE", "astronauts-awsume")
+            .env("AWS_PROFILE", "astronauts-profile")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts-awsume ")
         ));
 
         assert_eq!(expected, actual);

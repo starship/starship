@@ -217,6 +217,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
 $scala\
@@ -255,6 +256,9 @@ is read from the `AWS_VAULT` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 is read from the `AWSU_PROFILE` env var.
+
+When using [AWSume](https://awsu.me) the profile
+is read from the `AWSUME_PROFILE` env var.
 
 ### Options
 
@@ -1453,7 +1457,8 @@ symbol = "🌟 "
 The `jobs` module shows the current number of jobs running.
 The module will be shown only if there are background jobs running.
 The module will show the number of jobs running if there is more than 1 job, or
-more than the `threshold` config value, if it exists.
+more than the `threshold` config value, if it exists. If `threshold` is set to 0,
+then the module will also show when there are 0 jobs running.
 
 ::: warning
 
@@ -2276,7 +2281,46 @@ The module will be shown if any of the following conditions are met:
 # ~/.config/starship.toml
 
 [r]
-format = "with [® $version](blue bold) "
+format = "with [📐 $version](blue bold) "
+```
+
+## Red
+
+By default the `red` module shows the currently installed version of Red.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                              | A format string representing the symbol of Red.                          |
+| `detect_extensions` | `["red"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"red bold"`                         | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `red` module.                                               |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.5.1` | The version of `red`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
 ```
 
 ## Ruby
