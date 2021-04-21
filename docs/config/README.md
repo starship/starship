@@ -247,14 +247,14 @@ $character"""
 ## AWS
 
 The `aws` module shows the current AWS region and profile. This is based on
-`AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
-`~/.aws/config` file.
+`AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` environment variable with
+the `~/.aws/config` file.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
-is read from the `AWS_VAULT` env var.
+is read from the `AWS_VAULT` environment variable.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile
-is read from the `AWSU_PROFILE` env var.
+is read from the `AWSU_PROFILE` environment variable.
 
 ### Options
 
@@ -1406,6 +1406,44 @@ ssh_only = false
 format =  "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
+```
+
+## Imba
+
+By default the `imba` module shows the currently installed version of Imba.
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.imba` extension
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐤 "`                              | A format string representing the symbol of Imba.                          |
+| `detect_extensions` | `["imba"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"yellow bold"`                         | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `imba` module.                                               |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.0.0` | The version of `imba`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+[imba]
+symbol = "🐣 "
 ```
 
 ## Java
