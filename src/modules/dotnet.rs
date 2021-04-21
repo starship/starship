@@ -11,6 +11,7 @@ use crate::formatter::StringFormatter;
 use crate::utils;
 
 type JValue = serde_json::Value;
+use crate::formatter::VersionFormatter;
 
 const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
@@ -63,7 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         get_version_from_cli(context)
                     };
-                    version.map(|v| Ok(v))
+                    format_dotnet_version(version, config.version_format).map(Ok)
                 }
                 "tfm" => find_current_tfm(&dotnet_files).map(Ok),
                 _ => None,
@@ -80,6 +81,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn format_dotnet_version(version: Option<String>, version_format: &str) -> Option<String> {
+    match version {
+        Some(dotnet_version) => {
+            match VersionFormatter::format_version(&dotnet_version, version_format) {
+                Ok(formatted) => Some(formatted),
+                Err(error) => {
+                    log::warn!("Error formatting `dotnet` version:\n{}", error);
+                    Some(format!("v{}", dotnet_version))
+                }
+            }
+        }
+        None => None,
+    }
 }
 
 fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
@@ -229,7 +245,6 @@ fn get_pinned_sdk_version(json: &str) -> Option<String> {
                     match version {
                         JValue::String(version_string) => {
                             let mut buffer = String::with_capacity(version_string.len() + 1);
-                            buffer.push('v');
                             buffer.push_str(version_string);
                             Some(buffer)
                         }
@@ -304,7 +319,6 @@ fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
             if take_until > 1 {
                 let version = &latest_sdk[..take_until];
                 let mut buffer = String::with_capacity(version.len() + 1);
-                buffer.push('v');
                 buffer.push_str(version);
                 Some(buffer)
             } else {
@@ -337,7 +351,6 @@ enum FileType {
     MsBuildFile,
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -347,6 +360,30 @@ mod tests {
     use std::io::{self, Write};
     use std::process::Command;
     use tempfile::{self, TempDir};
+
+    #[test]
+    fn test_format_dotnet_version() {
+        assert_eq!(
+            format_dotnet_version(Some("3.1.103".to_string()), "v${major}.${minor}.${patch}"),
+            Some("v3.1.103".to_string())
+        )
+    }
+
+    #[test]
+    fn test_format_dotnet_version_truncated() {
+        assert_eq!(
+            format_dotnet_version(Some("3.1.103".to_string()), "v${major}.${minor}"),
+            Some("v3.1".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_dotnet_version_is_malformed() {
+        assert_eq!(
+            format_dotnet_version(Some("3.1".to_string()), "v${major}.${minor}.${patch}"),
+            Some("v3.1.".to_string())
+        );
+    }
 
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
@@ -604,7 +641,7 @@ mod tests {
     "#;
 
         let version = get_pinned_sdk_version(json_text).unwrap();
-        assert_eq!("v1.2.3", version);
+        assert_eq!("1.2.3", version);
     }
 
     #[test]
