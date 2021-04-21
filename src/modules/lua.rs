@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Lua version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,7 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_lua_version(context, &config.lua_binary).map(Ok),
+                "version" => {
+                    let lua_version = get_lua_version(context, &config.lua_binary)?;
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &lua_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -72,7 +81,7 @@ fn parse_lua_version(lua_version: &str) -> Option<String> {
         // LuaJIT: take "2.0.5"
         .nth(1)?;
 
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -148,13 +157,13 @@ mod tests {
     #[test]
     fn test_parse_lua_version() {
         let lua_input = "Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio";
-        assert_eq!(parse_lua_version(lua_input), Some("v5.4.0".to_string()));
+        assert_eq!(parse_lua_version(lua_input), Some("5.4.0".to_string()));
 
         let luajit_input =
             "LuaJIT 2.1.0-beta3 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/";
         assert_eq!(
             parse_lua_version(luajit_input),
-            Some("v2.1.0-beta3".to_string())
+            Some("2.1.0-beta3".to_string())
         );
     }
 }
