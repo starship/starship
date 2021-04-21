@@ -54,12 +54,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_version(version: &str) -> Option<String> {
-    let version_regex = Regex::new(R_VERSION_PATTERN).ok()?;
-    let captures = version_regex.captures(version)?;
-    let r_version = captures["rversion"].to_owned();
-    let r_formatted = format!("v{}", r_version);
-    Some(r_formatted.trim().to_owned())
+fn parse_version(r_version: &str) -> Option<String> {
+    let version = r_version
+        .lines()
+        // take first line
+        .next()
+        // split into ["R", "version", "3.6.3", "(2020-02-29)", ...]
+        .split_whitespace()
+        // return "3.6.3"
+        .nth(2)?;
+
+    Some(format!("v{}", r_version))
 }
 
 #[cfg(test)]
