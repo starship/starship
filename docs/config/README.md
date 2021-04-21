@@ -1927,17 +1927,18 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option                    | Default                                                                  | Description                                             |
-| ------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------- |
-| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                       |
-| `symbol`                  | `"🐫 "`                                                                  | The symbol used before displaying the version of OCaml. |
-| `global_switch_indicator` | `""`                                                                     | The format string used to represent global OPAM switch. |
-| `local_switch_indicator`  | `"*"`                                                                    | The format string used to represent local OPAM switch.  |
-| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                     | Which extensions should trigger this module.            |
-| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`         | Which filenames should trigger this module.             |
-| `detect_folders`          | `["_opam", "esy.lock"]`                                                  | Which folders should trigger this module.               |
-| `style`                   | `"bold yellow"`                                                          | The style for the module.                               |
-| `disabled`                | `false`                                                                  | Disables the `ocaml` module.                            |
+| Option                    | Default                                                                  | Description                                                               |
+| ------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
+| `version_format`          | `v{raw}`                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`                  | `"🐫 "`                                                                   | The symbol used before displaying the version of OCaml.                   |
+| `global_switch_indicator` | `""`                                                                     | The format string used to represent global OPAM switch.                   |
+| `local_switch_indicator`  | `"*"`                                                                    | The format string used to represent local OPAM switch.                    |
+| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                     | Which extensions should trigger this module.                              |
+| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`         | Which filenames should trigger this module.                               |
+| `detect_folders`          | `["_opam", "esy.lock"]`                                                  | Which folders should trigger this module.                                 |
+| `style`                   | `"bold yellow"`                                                          | The style for the module.                                                 |
+| `disabled`                | `false`                                                                  | Disables the `ocaml` module.                                              |
 
 ### Variables
 
