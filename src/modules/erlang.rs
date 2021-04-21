@@ -33,7 +33,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let erlang_version = get_erlang_version(context)?;
-                    format_erlang_version(&erlang_version, config.version_format).map(Ok)
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &erlang_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -65,47 +70,12 @@ fn get_erlang_version(context: &Context) -> Option<String> {
     )?.stdout.trim().to_string())
 }
 
-fn format_erlang_version(erlang_version: &str, version_format: &str) -> Option<String> {
-    match VersionFormatter::format_version(erlang_version, version_format) {
-        Ok(formatted) => Some(formatted),
-        Err(error) => {
-            log::warn!("Error formatting `erlang` version:\n{}", error);
-            Some(format!("v{}", erlang_version))
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use super::format_erlang_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_format_erlang_version() {
-        assert_eq!(
-            format_erlang_version("22.1.3", "v${major}.${minor}.${patch}"),
-            Some("v22.1.3".to_string())
-        )
-    }
-
-    #[test]
-    fn test_format_erlang_version_truncated() {
-        assert_eq!(
-            format_erlang_version("22.1.3", "v${major}.${minor}"),
-            Some("v22.1".to_string())
-        );
-    }
-
-    #[test]
-    fn test_format_erlang_version_is_malformed() {
-        assert_eq!(
-            format_erlang_version("22.1", "v${major}.${minor}.${patch}"),
-            Some("v22.1.".to_string())
-        );
-    }
 
     #[test]
     fn test_without_config() -> io::Result<()> {

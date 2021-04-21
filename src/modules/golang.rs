@@ -34,7 +34,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let golang_version =
                         get_go_version(&context.exec_cmd("go", &["version"])?.stdout)?;
 
-                    format_golang_version(&golang_version, config.version_format).map(Ok)
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &golang_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -66,17 +71,7 @@ fn get_go_version(go_stdout: &str) -> Option<String> {
         // return "1.12.4"
         .next()?;
 
-    Some(format!("v{}", version))
-}
-
-fn format_golang_version(golang_version: &str, version_format: &str) -> Option<String> {
-    match VersionFormatter::format_version(golang_version, version_format) {
-        Ok(formatted) => Some(formatted),
-        Err(error) => {
-            log::warn!("Error formatting `golang` version:\n{}", error);
-            Some(format!("v{}", golang_version))
-        }
-    }
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -194,6 +189,6 @@ mod tests {
     #[test]
     fn test_format_go_version() {
         let input = "go version go1.12 darwin/amd64";
-        assert_eq!(format_go_version(input), Some("v1.12".to_string()));
+        assert_eq!(get_go_version(input), Some("1.12".to_string()));
     }
 }

@@ -32,8 +32,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let cmake_version = context.exec_cmd("cmake", &["--version"])?.stdout;
-                    format_cmake_version(&cmake_version, config.version_format).map(Ok)
+                    let cmake_version =
+                        get_cmake_version(&context.exec_cmd("cmake", &["--version"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &cmake_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -51,53 +57,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_cmake_version(cmake_version: &str, version_format: &str) -> Option<String> {
-    let version = cmake_version
-        //split into ["cmake" "version" "3.10.2", ...]
-        .split_whitespace()
-        // get down to "3.10.2"
-        .nth(2)?;
-
-    match VersionFormatter::format_version(version, version_format) {
-        Ok(formatted) => Some(formatted),
-        Err(error) => {
-            log::warn!("Error formatting `cmake` version:\n{}", error);
-            Some(format!("v{}", version))
-        }
-    }
+fn get_cmake_version(cmake_version: &str) -> Option<String> {
+    Some(
+        cmake_version
+            //split into ["cmake" "version" "3.10.2", ...]
+            .split_whitespace()
+            // get down to "3.10.2"
+            .nth(2)?
+            .to_string(),
+    )
 }
 
 #[cfg(test)]
 mod tests {
-    use super::format_cmake_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_format_cmake_version() {
-        assert_eq!(
-            format_cmake_version("cmake version 3.10.2", "v${major}.${minor}.${patch}"),
-            Some("v3.10.2".to_string())
-        );
-    }
-
-    #[test]
-    fn test_format_cmake_version_truncated() {
-        assert_eq!(
-            format_cmake_version("cmake version 3.10.2", "v${major}.${minor}"),
-            Some("v3.10".to_string())
-        );
-    }
-
-    #[test]
-    fn test_format_cmake_version_is_malformed() {
-        assert_eq!(
-            format_cmake_version("cmake version 3.10", "v${major}.${minor}.${patch}"),
-            Some("v3.10.".to_string())
-        );
-    }
 
     #[test]
     fn folder_without_cmake_lists() -> io::Result<()> {

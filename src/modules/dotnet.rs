@@ -64,7 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         get_version_from_cli(context)
                     };
-                    format_dotnet_version(version, config.version_format).map(Ok)
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &version?,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 "tfm" => find_current_tfm(&dotnet_files).map(Ok),
                 _ => None,
@@ -81,21 +86,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn format_dotnet_version(version: Option<String>, version_format: &str) -> Option<String> {
-    match version {
-        Some(dotnet_version) => {
-            match VersionFormatter::format_version(&dotnet_version, version_format) {
-                Ok(formatted) => Some(formatted),
-                Err(error) => {
-                    log::warn!("Error formatting `dotnet` version:\n{}", error);
-                    Some(format!("v{}", dotnet_version))
-                }
-            }
-        }
-        None => None,
-    }
 }
 
 fn find_current_tfm(files: &[DotNetFile]) -> Option<String> {
@@ -360,30 +350,6 @@ mod tests {
     use std::io::{self, Write};
     use std::process::Command;
     use tempfile::{self, TempDir};
-
-    #[test]
-    fn test_format_dotnet_version() {
-        assert_eq!(
-            format_dotnet_version(Some("3.1.103".to_string()), "v${major}.${minor}.${patch}"),
-            Some("v3.1.103".to_string())
-        )
-    }
-
-    #[test]
-    fn test_format_dotnet_version_truncated() {
-        assert_eq!(
-            format_dotnet_version(Some("3.1.103".to_string()), "v${major}.${minor}"),
-            Some("v3.1".to_string())
-        );
-    }
-
-    #[test]
-    fn test_format_dotnet_version_is_malformed() {
-        assert_eq!(
-            format_dotnet_version(Some("3.1".to_string()), "v${major}.${minor}.${patch}"),
-            Some("v3.1.".to_string())
-        );
-    }
 
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
