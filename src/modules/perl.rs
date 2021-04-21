@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::perl::PerlConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current perl version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -33,7 +34,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let perl_version = context
                         .exec_cmd("perl", &["-e", "printf q#%vd#,$^V;"])?
                         .stdout;
-                    Some(Ok(format!("v{}", perl_version)))
+                    VersionFormatter::format_module_version(
+                        &module,
+                        &perl_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })

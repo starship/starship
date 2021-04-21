@@ -5,9 +5,10 @@ use starship_module_config_derive::ModuleConfig;
 
 #[derive(Clone, ModuleConfig, Serialize)]
 pub struct PerlConfig<'a> {
+    pub format: &'a str,
+    pub version_format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
-    pub format: &'a str,
     pub disabled: bool,
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
@@ -17,9 +18,10 @@ pub struct PerlConfig<'a> {
 impl<'a> Default for PerlConfig<'a> {
     fn default() -> Self {
         PerlConfig {
+            format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             symbol: "🐪 ",
             style: "149 bold",
-            format: "via [$symbol($version )]($style)",
             disabled: false,
             detect_extensions: vec!["pl", "pm", "pod"],
             detect_files: vec![
