@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Dart version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -32,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let dart_version = context.exec_cmd("dart", &["--version"])?.stderr;
-                    parse_dart_version(&dart_version).map(Ok)
+                    format_dart_version(&dart_version, config.version_format).map(Ok)
                 }
                 _ => None,
             })
@@ -50,28 +51,53 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_dart_version(dart_version: &str) -> Option<String> {
+fn format_dart_version(dart_version: &str, version_format: &str) -> Option<String> {
     let version = dart_version
         // split into ["Dart", "VM", "version:", "2.8.4", "(stable)", ...]
         .split_whitespace()
         // return "2.8.4"
         .nth(3)?;
 
-    Some(format!("v{}", version))
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formatting `dart` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::parse_dart_version;
+    use super::format_dart_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 
     #[test]
-    fn test_parse_dart_version() {
+    fn test_format_dart_version() {
         let input = "Dart VM version: 2.8.4 (stable)";
-        assert_eq!(parse_dart_version(input), Some("v2.8.4".to_string()));
+        assert_eq!(
+            format_dart_version(input, "v${major}.${minor}.${patch}"),
+            Some("v2.8.4".to_string())
+        );
+    }
+    #[test]
+    fn test_format_dart_version_truncated() {
+        let input = "Dart VM version: 2.8.4 (stable)";
+        assert_eq!(
+            format_dart_version(input, "v${major}.${minor}"),
+            Some("v2.8".to_string())
+        );
+    }
+    #[test]
+    fn test_format_dart_version_malformed() {
+        let input = "Dart VM version: 2.8. (stable)";
+        assert_eq!(
+            format_dart_version(input, "v${major}.${minor}.${patch}"),
+            Some("v2.8.".to_string())
+        );
     }
 
     #[test]
