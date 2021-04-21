@@ -9,6 +9,9 @@ pub struct RConfig<'a> {
     pub style: &'a str,
     pub symbol: &'a str,
     pub disabled: bool,
+    pub detect_extensions: Vec<&'a str>,
+    pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> Default for RConfig<'a> {
@@ -16,8 +19,11 @@ impl<'a> Default for RConfig<'a> {
         RConfig {
             format: "via [$symbol($version )]($style)",
             style: "blue bold",
-            symbol: "R ",
+            symbol: "📐",
             disabled: false,
+            detect_extensions: vec!["R", "Rd", "Rmd", "Rproj", "Rsx"],
+            detect_files: vec![".Rprofile"],
+            detect_folders: vec![".Rproj.user"],
         }
     }
 }

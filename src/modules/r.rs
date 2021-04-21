@@ -1,30 +1,21 @@
-use regex::Regex;
-
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::r::RConfig;
 use crate::formatter::StringFormatter;
 
-const R_VERSION_PATTERN: &str = r" (?P<rversion>\d+\.\d+\.\d+) ";
-
-/// Creates a module with the current R programming language version.
-///
-/// Will display the R programming language version if any of the following criteria are met:
-///     - Current directory contains a `.R` file
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("r");
     let config: RConfig = RConfig::try_load(module.config);
 
     let is_r_project = context
         .try_begin_scan()?
-        .set_extensions(&["R", "Rproj"])
+        .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
     if !is_r_project {
         return None;
     }
-
-    let r_version = context.exec_cmd("R", &["--version"])?.stderr;
-    let formatted_version = parse_version(&r_version)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -37,7 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => Some(Ok(&formatted_version)),
+                "version" => get_r_version(context).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -54,17 +45,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn get_r_version(context: &Context) -> Option<String> {
+    let r_version = context.exec_cmd("R", &["--version"])?.stderr;
+    parse_version(&r_version)
+}
+
 fn parse_version(r_version: &str) -> Option<String> {
     let version = r_version
         .lines()
         // take first line
         .next()
         // split into ["R", "version", "3.6.3", "(2020-02-29)", ...]
-        .split_whitespace()
-        // return "3.6.3"
-        .nth(2)?;
+        // and pick version entry at index 2, i.e. "3.6.3".
+        .and_then(|s| s.split_whitespace().nth(2));
 
-    Some(format!("v{}", r_version))
+    version.map(|ver| format!("v{}", ver))
 }
 
 #[cfg(test)]
