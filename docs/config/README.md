@@ -2144,15 +2144,16 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                              | Description                                                  |
-| -------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`             | `"via [$symbol($version )]($style)"` | The format for the module.                                   |
-| `symbol`             | `"<=> "`                             | The symbol used before displaying the version of PureScript. |
-| `detect_extensions`  | `["purs"]`                           | Which extensions should trigger this module.                 |
-| `detect_files`       | `["spago.dhall"]`                    | Which filenames should trigger this module.                  |
-| `detect_folders`     | `[]`                                 | Which folders should trigger this module.                    |
-| `style`              | `"bold white"`                       | The style for the module.                                    |
-| `disabled`           | `false`                              | Disables the `purescript` module.                            |
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"<=> "`                             | The symbol used before displaying the version of PureScript.              |
+| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold white"`                       | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `purescript` module.                                         |
 
 ### Variables
 
