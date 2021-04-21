@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Crystal version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -32,8 +33,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => format_crystal_version(
                     context.exec_cmd("crystal", &["--version"])?.stdout.as_str(),
-                )
-                .map(Ok),
+                    config.version_format,
+                ).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -50,25 +51,53 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_crystal_version(crystal_version: &str) -> Option<String> {
+fn format_crystal_version(crystal_version: &str, version_format: &str) -> Option<String> {
     let version = crystal_version
         // split into ["Crystal", "0.35.1", ...]
         .split_whitespace()
         // return "0.35.1"
         .nth(1)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formating `crystal` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::format_crystal_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
+
+    #[test]
+    fn test_format_crystal_version() {
+        assert_eq!(
+            format_crystal_version("Crystal 0.35.1", "v${major}.${minor}.${patch}"),
+            Some("v0.35.1".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_crystal_version_truncated() {
+        assert_eq!(
+            format_crystal_version("Crystal 0.35.1", "v${major}.${minor}"),
+            Some("v0.35".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_crystal_version_is_malformed() {
+        assert_eq!(
+            format_crystal_version("Crystal 0.35", "v${major}.${minor}.${patch}"),
+            Some("v0.35.".to_string())
+        );
+    }
 
     #[test]
     fn folder_without_crystal_files() -> io::Result<()> {
