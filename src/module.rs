@@ -34,6 +34,7 @@ pub const ALL_MODULES: &[&str] = &[
     "helm",
     "hg_branch",
     "hostname",
+    "imba",
     "java",
     "scala",
     "jobs",

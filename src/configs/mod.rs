@@ -29,6 +29,7 @@ pub mod go;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
+pub mod imba;
 pub mod java;
 pub mod jobs;
 pub mod julia;
@@ -98,6 +99,7 @@ pub struct FullConfig<'a> {
     helm: helm::HelmConfig<'a>,
     hg_branch: hg_branch::HgBranchConfig<'a>,
     hostname: hostname::HostnameConfig<'a>,
+    imba: imba::ImbaConfig<'a>,
     java: java::JavaConfig<'a>,
     jobs: jobs::JobsConfig<'a>,
     julia: julia::JuliaConfig<'a>,

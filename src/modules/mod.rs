@@ -24,6 +24,7 @@ mod golang;
 mod helm;
 mod hg_branch;
 mod hostname;
+mod imba;
 mod java;
 mod jobs;
 mod julia;
@@ -98,6 +99,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
+            "imba" => imba::module(context),
             "java" => java::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
@@ -179,6 +181,7 @@ pub fn description(module: &str) -> &'static str {
         "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
+        "imba" => "The currently installed version of Imba",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",

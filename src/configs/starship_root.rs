@@ -41,6 +41,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "erlang",
     "golang",
     "helm",
+    "imba",
     "java",
     "julia",
     "kotlin",
