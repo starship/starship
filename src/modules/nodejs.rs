@@ -171,7 +171,7 @@ mod tests {
     }
 
     #[test]
-    fn folder_with_node_version() -> io::Result<()> {
+    fn folder_with_nvmrc() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".nvmrc"))?.sync_all()?;
 
