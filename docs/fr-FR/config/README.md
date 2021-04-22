@@ -437,7 +437,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
+Le module `cmake` affiche la version actuellement installée de CMake. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire actuel contient un fichier `CMakeLists.txt`
 - Le répertoire actuel contient un fichier ` CMakeCache.txt`
@@ -466,15 +466,15 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 ## Temps d'exécution
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Le module `cmd_duration` montre combien de temps la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou plus que la valeur `min_time`, si elle existe.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: warning N'interceptez pas le signal DEBUG avec Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Si vous utilisez starship avec `bash`, n'interceptez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **ne fonctionnera pas**.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent utiliser [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les array `preexec_functions` et `precmd_functions` avant d'exécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
 
 ### Options
 
@@ -490,7 +490,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ::: tip
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+L'affichage des notifications de bureau nécessite que starship soit compilé avec la prise en charge de `rust-notify`. Vérifiez si starship supporte les notifications en exécutant `STARSHIP_LOG=debug starship module cmd_duration -d 60000` lorsque `show_notifications` est défini à `true`.
 
 :::
 
@@ -515,7 +515,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Le module `conda` affiche l'environnement conda actuel, si `$CONDA_DEFAULT_ENV` est défini.
 
 ::: tip
 
