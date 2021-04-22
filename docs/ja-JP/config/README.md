@@ -1783,6 +1783,7 @@ The `nodejs` module shows the currently installed version of NodeJS. デフォ�
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
+- The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
