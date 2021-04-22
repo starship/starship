@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Pour exécuter une fonction personnalisée juste avant l'exécution d'une commande, vous pouvez utiliser le [ mécanisme d'interruption du signal ` DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** piéger le signal DEBUG *avant* l'initialisation de Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Cependant, vous **devez** piéger le signal DEBUG *avant* l'initialisation de Starship ! Starship peut préserver la valeur du piège DEBUG, mais si le piège est écrasé après le démarrage de Starship, certaines fonctionnalités vont casser.
 
 ```bash
 function blastoff(){
@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Modifier le titre des fenêtres
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter votre répertoire de travail). Fish le fait même par défaut. Starship ne le fait pas, mais il est assez simple d'ajouter cette fonctionnalité à `bash` ou `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish le fait même par défaut. Starship ne le fait pas, mais il est assez simple d'ajouter cette fonctionnalité à `bash` ou `zsh`.
 
 Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
@@ -57,7 +57,7 @@ Dans `zsh`, ajoutez ceci au tableau `precmd_functions` :
 precmd_functions+=(set_titre_fenetre)
 ```
 
-Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
 Par exemple, si vous voulez afficher votre répertoire actuel dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
 
@@ -75,14 +75,15 @@ Les chaînes de style sont une liste de mots, séparés par des espaces. Les mot
   - `bold`
   - `underline`
   - `dimmed`
-  - `bg:<couleur>`
-  - `fg:<couleur>`
-  - `<couleur>`
+  - `inverted`
+  - `bg:<color>`
+  - `fg:<color>`
+  - `<color>`
   - `none`
 
-où `<couleur>` est un spécificateur de couleur (discuté ci-dessous). `fg:<couleur>` et `<couleur>` font actuellement la même chose, mais cela pourrait changer ultérieurement. L'ordre des mots dans la chaîne n'a pas d'importance.
+où `<couleur>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-La valeur `none` remplace toutes les autres valeurs si elle n'est pas incluse dans un spécificateur `bg:`, de sorte que par exemple `fg: red none fg:blue` créera une chaîne sans style. `bg:none` définit l'arrière plan sur la couleur par défaut, donc `fg:red bg:none` est équivalent à `red` ou `fg:red` et `bg:green fg:red bg:none` est aussi équivalent à `fg:red` ou `red`. Utiliser `none` avec d'autres valeurs peut éventuellement devenir une erreur dans le futur.
+La valeur `none` remplace toutes les autres valeurs si elle n'est pas incluse dans un spécificateur `bg:`, de sorte que par exemple `fg: red none fg:blue` créera une chaîne sans style. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Utiliser `none` avec d'autres valeurs peut éventuellement devenir une erreur dans le futur.
 
 Un spécificateur de couleur peut être l'un des éléments suivants :
 
