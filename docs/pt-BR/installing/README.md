@@ -32,7 +32,7 @@ pkg install getconf
 ### Installation
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)

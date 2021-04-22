@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# Migrer vers la v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+La version 0.45.0 de Starship contient des changements non rétro-compatibles, en préparation de la v1.0.0. Nous avons apporté des changements majeurs à la manière de configurer l'invite, afin de permettre une personnalisation bien plus poussée.
 
-This guide is intended to walk you through the breaking changes.
+Ce guide a pour but de vous guider à travers les changements majeurs qui ont eu lieu.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` a été remplacé par `format`, situé à la racine
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Avant la v0.45.0, `prompt_order` acceptait un tableau de noms de modules dans l'ordre dans lequel ils devaient être affichés par Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 accepte à la place une valeur de `format` permettant la personnalisation de l'invite en dehors des modules eux-mêmes.
 
-**Example pre-v0.45.0 configuration**
+**Exemple de configuration pré-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Exemple de configuration post-v0.45.0**
 
 ```toml
 format = """\
@@ -52,40 +52,40 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Les modules `prefix` et `suffix` ont été remplacés par `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Antérieurement à la v0.45.0, certains modules acceptaient un `prefix` et/ou un `suffix` afin de personnaliser la façon dont les modules sont affichés.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 accepte à la place une valeur de `format` permettant une personnalisation supplémentaire de la façon dont les modules sont rendus. Au lieu de définir un préfixe et un suffixe pour les variables contextuelles, les variables peuvent maintenant être remplacées dans une chaîne de format, qui représente la sortie du module.
 
-**Example pre-v0.45.0 configuration**
+**Exemple de configuration pré-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Exemple de configuration post-v0.45.0**
 
 ```toml
 [cmd_duration]
-# $duration – The command duration (e.g. "15s")
-# $style    – The default style of the module (e.g. "bold yellow")
+# $duration – La durée de la commande (p. ex. "15s")
+# $style    – Le style par défaut du module (p. ex. "bold yellow")
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Modules affectés
 
-#### Caractères
+#### Character
 
-| Removed Property        | Replacement      |
+| Propriété supprimée     | Remplacement     |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Précédemment, la propriété `use_symbol_for_status` était utilisée pour configurer l'invite afin d'afficher le `error_symbol` lorsque la dernière commande aboutissait à un résultat non-nul.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+Depuis la version v0.45.0, nous utilisons désormais systématiquement `error_symbol` après une commande dont le résultat est non-nul, fusionnant ainsi les propriétés `use_symbol_for_status` et `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true`, ajoutez la ligne suivante à votre configuration:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*Note:* L'élément `character` est automatiquement suivi d'un espace, donc à la différence des autres valeurs `format`, nous n'en ajoutons pas dans les exemples précédents.
 
 #### Temps d'exécution
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [cmd_duration]
@@ -127,11 +127,11 @@ error_symbol = "[✖](bold red)"
 
 #### Dossier
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [directory]
@@ -139,14 +139,14 @@ error_symbol = "[✖](bold red)"
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### Variable d'environnement
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [env_var]
@@ -155,14 +155,14 @@ error_symbol = "[✖](bold red)"
 ++ format = "with [$env_value]($style) "
 ```
 
-#### Git Commit
+#### Commit Git
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [git_commit]
@@ -171,15 +171,15 @@ error_symbol = "[✖](bold red)"
 ++ format = '[\($hash\)]($style) '
 ```
 
-#### Git Status
+#### Statut Git
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
+| `show_sync_count`   | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [git_status]
@@ -189,11 +189,11 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Précédemment, la propriété `show_sync_count` était utilisée pour configurer l'invite de manière à afficher le nombre de commits en avance ou en retard de la branche locale par rapport à la branche distante.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+Avec l'arrivée de la v0.45.0, cela a été séparé en trois propriétés distinctes, `ahead`, `behind`, et `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Pour que l'invite utilise l'ancienne configuration `show_sync_count = true`, ajoutez la ligne suivante à votre configuration:
 
 ```toml
 [git_status]
@@ -202,14 +202,14 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-#### Hostname
+#### Nom d'hôte
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `label`             | `format`     |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [singularity]
@@ -235,13 +235,13 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Temps
+#### Date et Heure
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Propriété supprimée | Remplacement  |
+| ------------------- | ------------- |
+| `format`            | `time_format` |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [time]
@@ -250,14 +250,14 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Commandes personnalisées
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriété supprimée | Remplacement |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Modifications de la configuration par défaut**
 
 ```diff
 [custom.example]

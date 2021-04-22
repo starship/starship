@@ -28,6 +28,10 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
   </video>
 </div>
 
+### Voraussetzungen
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
 ### Schnellinstallation
 
 1. Installiere die Binärversion von **starship**:
@@ -38,7 +42,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    Mit Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
