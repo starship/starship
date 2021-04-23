@@ -606,7 +606,7 @@ The `dart` module shows the currently installed version of Dart. デフォルト
 | ------------------- | ------------------------------------------------- | ------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | moduleのフォーマットです。          |
 | `symbol`            | `"🎯 "`                                            | Dartのシンボルを表すフォーマット文字列     |
-| `detect_extensions` | `['dart']`                                        | どの拡張子がこのモジュールをアクティブにするか   |
+| `detect_extensions` | `["dart"]`                                        | どの拡張子がこのモジュールをアクティブにするか   |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | どのファイル名がこのモジュールをアクティブにするか |
 | `detect_folders`    | `[".dart_tool"]`                                  | どのフォルダーがこのモジュールをアクティブにするか |
 | `style`             | `"bold blue"`                                     | モジュールのスタイルです。             |
@@ -2093,7 +2093,7 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | どの拡張子がこのモジュールをアクティブにするか                                                                |
+| `detect_extensions`  | `["py"]`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | どのファイル名がこのモジュールをアクティブにするか                                                              |
 | `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                              |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
