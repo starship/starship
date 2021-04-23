@@ -605,7 +605,7 @@ Le module `dart` affiche la version actuellement installée de Dart. Par défaut
 | ------------------- | ------------------------------------------------- | -------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | Format du module.                                        |
 | `symbol`            | `"🎯 "`                                            | Une chaîne de caractères représentant le symbole de Dart |
-| `detect_extensions` | `['dart']`                                        | Quelles extensions devraient activer ce module.          |
+| `detect_extensions` | `["dart"]`                                        | Quelles extensions devraient activer ce module.          |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Quels fichiers devraient activer ce module.              |
 | `detect_folders`    | `[".dart_tool"]`                                  | Quels dossiers devraient activer ce module.              |
 | `style`             | `"bold blue"`                                     | Le style du module.                                      |
@@ -2092,7 +2092,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Quelles extensions devraient activer ce module                                         |
+| `detect_extensions`  | `["py"]`                                                                                                     | Quelles extensions devraient activer ce module                                         |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Quels fichiers devraient activer ce module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Quels dossiers devraient activer ce module                                             |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
