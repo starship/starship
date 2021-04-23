@@ -26,7 +26,7 @@ else
     zmodload zsh/datetime
     zmodload zsh/mathfunc
     __starship_get_time() {
-        ((STARSHIP_CAPTURED_TIME = int(rint($EPOCHREALTIME * 1000))))
+        (( STARSHIP_CAPTURED_TIME = int(rint(EPOCHREALTIME * 1000)) ))
     }
 fi
 
@@ -37,9 +37,8 @@ starship_precmd() {
 
     # Compute cmd_duration, if we have a time to consume, otherwise clear the
     # previous duration
-    if [[ -n "${STARSHIP_START_TIME+1}" ]]; then
-        __starship_get_time && STARSHIP_END_TIME=$STARSHIP_CAPTURED_TIME
-        ((STARSHIP_DURATION = STARSHIP_END_TIME - STARSHIP_START_TIME))
+    if (( ${+STARSHIP_START_TIME} )); then
+        __starship_get_time && (( STARSHIP_DURATION = STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
         unset STARSHIP_START_TIME
     else
         unset STARSHIP_DURATION
@@ -55,8 +54,8 @@ starship_preexec() {
 # If precmd/preexec arrays are not already set, set them. If we don't do this,
 # the code to detect whether starship_precmd is already in precmd_functions will
 # fail because the array doesn't exist (and same for starship_preexec)
-[[ -z "${precmd_functions+1}" ]] && precmd_functions=()
-[[ -z "${preexec_functions+1}" ]] && preexec_functions=()
+(( ! ${+precmd_functions} )) && precmd_functions=()
+(( ! ${+preexec_functions} )) && preexec_functions=()
 
 # If starship precmd/preexec functions are already hooked, don't double-hook them
 # to avoid unnecessary performance degradation in nested shells
