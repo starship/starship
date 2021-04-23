@@ -5,14 +5,14 @@ function fish_prompt
         case '*'
             set keymap insert
     end
-    set -l exit_code $status
+    set exit_code $status
     # Account for changes in variable name between v2.7 and v3.0
-    set -l starship_duration "$CMD_DURATION$cmd_duration"
+    set starship_duration "$CMD_DURATION$cmd_duration"
     ::STARSHIP:: prompt --status=$exit_code --keymap=$keymap --cmd-duration=$starship_duration --jobs=(count (jobs -p))
 end
 
 # disable virtualenv prompt, it breaks starship
-set VIRTUAL_ENV_DISABLE_PROMPT 1
+set -g VIRTUAL_ENV_DISABLE_PROMPT 1
 
 function fish_mode_prompt; end
 set -gx STARSHIP_SHELL "fish"
