@@ -1,7 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::vagrant::VagrantConfig;
 use crate::formatter::StringFormatter;
+use crate::{configs::vagrant::VagrantConfig, formatter::VersionFormatter};
 
 /// Creates a module with the current Vagrant version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -32,6 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => format_vagrant_version(
                     &context.exec_cmd("vagrant", &["--version"])?.stdout.as_str(),
+                    config.version_format,
                 )
                 .map(Ok),
                 _ => None,
@@ -50,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_vagrant_version(vagrant_stdout: &str) -> Option<String> {
+fn format_vagrant_version(vagrant_stdout: &str, version_format: &str) -> Option<String> {
     // `vagrant --version` output looks like this:
     // Vagrant 2.2.10
     let version = vagrant_stdout
@@ -59,10 +60,13 @@ fn format_vagrant_version(vagrant_stdout: &str) -> Option<String> {
         // return "2.2.10"
         .nth(1)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formating `vagrant` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 #[cfg(test)]
@@ -99,6 +103,9 @@ mod tests {
     #[test]
     fn test_format_vagrant_version() {
         let vagrant = "Vagrant 2.2.10\n";
-        assert_eq!(format_vagrant_version(vagrant), Some("v2.2.10".to_string()));
+        assert_eq!(
+            format_vagrant_version(vagrant, "v${major}.${minor}.${patch}"),
+            Some("v2.2.10".to_string())
+        );
     }
 }
