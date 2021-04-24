@@ -53,7 +53,7 @@ Prompt sẽ sử dụng nhiều ngữ cảnh được cung câos, nhưng không 
 Nếu bạn nhận được một lỗi giống như "_version 'GLIBC_2.18' not found (required by starship)_" khi sử dụng prebuilt binary (ví dụ trên CentOS 6 hoặc 7), bạn có thể sử dụng tập tin đã được dịch với `musl` thay vì `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
 ## Tôi thấy các biểu tượng tôi không hiểu hoặc không mong muốn, chúng có nghĩa là gì?
@@ -88,7 +88,7 @@ Starship thì dễ dàng gỡ cài đặt như cài đặt ngay từ đầu.
 
 Nếu Starship đã được cài đặt bằng việc sử dụng một trình quản lí gói, vui lòng tham khảo tài liệu của chúng để gỡ cài đặt.
 
-Nếu Starship đã được cài đặt bằng việc sử dụng `curl | bash`, theo câu lệnh sau để xoá tập tin nhị phân:
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Locate and delete the starship binary

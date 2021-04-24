@@ -1,21 +1,21 @@
-# 🚀 Advanced Installation
+# 🚀 高度なインストール
 
-To install starship, you need to do two things:
+Starship をインストールするには、以下の2つのことを行う必要があります。
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. ** starship ** のバイナリをコンピューター上に取得する
+1. Init スクリプトを修正することで、Starship バイナリをプロンプトとして使用するようシェルに指示する
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+ほとんどのユーザーの場合、[メインページ](/guide/#🚀-installation)の説明でうまく動作します。 しかし、より特殊なプラットフォームでは、別の操作が必要になることがあります。
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+プラットフォームは無数に存在するため、メインの README.md ファイルには書ききれません。そこで、このページでは、コミュニティにより提供された他のプラットフォーム向けのインストール方法について紹介します。 あなたが使用しているプラットフォームが見当たりませんか？ その場合は是非、見つけた方法をここに追加してください。
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### 必要なもの
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+[Chocolatey インストールページ](https://chocolatey.org/install)にアクセスし、Chocolatey のインストール手順に従ってください。
 
-### Installation
+### インストール
 
 ```powershell
 choco install starship
@@ -29,15 +29,15 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### インストール
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### バイナリの取得
 
 #### Imperatively
 
