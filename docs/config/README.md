@@ -809,7 +809,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/download) for the current directory. If
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If
 the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
 shows the latest installed version of the SDK.
 
@@ -1991,20 +1991,20 @@ The `package` module is shown when the current directory is the repository for a
 package, and shows its current version. The module currently supports `npm`, `cargo`,
 `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** – The `npm` package version is extracted from the `package.json` present
+- [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
-- **cargo** – The `cargo` package version is extracted from the `Cargo.toml` present
+- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present
   in the current directory
-- **poetry** – The `poetry` package version is extracted from the `pyproject.toml` present
+- [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
-- **composer** – The `composer` package version is extracted from the `composer.json` present
+- [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
   in the current directory
-- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
-- **julia** - The package version is extracted from the `Project.toml` present
-- **mix** - The `mix` package version is extracted from the `mix.exs` present
-- **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
-- **maven** - The `maven` package version is extracted from the `pom.xml` present
-- **meson** - The `meson` package version is extracted from the `meson.build` present
+- [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
+- [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
+- [**mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
+- [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
+- [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
+- [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -2160,7 +2160,7 @@ format = "via [$symbol$version](bold white)"
 ## Python
 
 The `python` module shows the currently installed version of [Python](https://www.python.org/) and the
-current [Python virtual environment](https://docs.python.org/3/tutorial/venv.html) if one is activated.
+current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version
 name. Otherwise, it will display the version number from `python --version`.
@@ -2288,7 +2288,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/en/).
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
