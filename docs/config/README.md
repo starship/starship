@@ -50,9 +50,9 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 ### Terminology
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via ` in "nodejs") and an empty space as a suffix.
 
@@ -458,7 +458,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake. By default
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default
 the module will be activated if any of the following conditions are met:
 
 - The current directory contains a `CMakeLists.txt` file
@@ -584,7 +584,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal.
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `shard.yml` file
@@ -623,7 +623,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart.
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
@@ -663,7 +663,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of Deno.
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/).
 By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -809,7 +809,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the .NET Core SDK for the current directory. If
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/download) for the current directory. If
 the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module
 shows the latest installed version of the SDK.
 
@@ -874,7 +874,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP.
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `mix.exs` file.
@@ -913,7 +913,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm.
+The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `elm.json` file
@@ -993,7 +993,7 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP.
+The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `rebar.config` file.
@@ -1295,7 +1295,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang.
+The `golang` module shows the currently installed version of [Golang](https://golang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `go.mod` file
@@ -1340,7 +1340,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm.
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `helmfile.yaml` file
@@ -1414,7 +1414,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java.
+The `java` module shows the currently installed version of [Java](https://www.java.com/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
@@ -1498,7 +1498,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia.
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
@@ -1538,7 +1538,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin.
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.kt` or a `.kts` file
@@ -1585,7 +1585,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file.
 The namespace needs to be set in the kubeconfig file, this can be done via
 `kubectl config set-context starship-cluster --namespace astronaut`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
@@ -1651,7 +1651,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua.
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
@@ -1777,7 +1777,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim.
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `nim.cfg` file
@@ -1819,7 +1819,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment.
 The module will be shown when inside a nix-shell environment.
 
 ### Options
@@ -1856,9 +1856,9 @@ pure_msg = "[pure shell](bold green)"
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
-## NodeJS
+## Node.js
 
-The `nodejs` module shows the currently installed version of NodeJS.
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `package.json` file
@@ -1869,17 +1869,17 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                                                          |
-| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                           |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                         |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                          |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                            |
-| `style`             | `"bold green"`                       | The style for the module.                                                                            |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                        |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the NodeJS version. |
+| Option              | Default                              | Description                                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
+| `style`             | `"bold green"`                       | The style for the module.                                                                             |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
@@ -1902,7 +1902,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml.
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
@@ -2040,7 +2040,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl.
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
@@ -2080,7 +2080,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP.
+The `php` module shows the currently installed version of [PHP](https://www.php.net/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `composer.json` file
@@ -2120,7 +2120,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version.
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version.
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `spago.dhall` file
@@ -2159,8 +2159,8 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of Python and the
-current Python virtual environment if one is activated.
+The `python` module shows the currently installed version of [Python](https://www.python.org/) and the
+current [Python virtual environment](https://docs.python.org/3/tutorial/venv.html) if one is activated.
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version
 name. Otherwise, it will display the version number from `python --version`.
@@ -2249,7 +2249,7 @@ detect_extensions = []
 
 ## Red
 
-By default the `red` module shows the currently installed version of Red.
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
@@ -2288,7 +2288,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby.
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/en/).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
@@ -2329,7 +2329,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust.
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
@@ -2369,7 +2369,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of Scala.
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
@@ -2488,7 +2488,7 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current singularity image, if inside a container
+The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container
 and `$SINGULARITY_NAME` is set.
 
 ### Options
@@ -2504,7 +2504,7 @@ and `$SINGULARITY_NAME` is set.
 
 | Variable | Example      | Description                          |
 | -------- | ------------ | ------------------------------------ |
-| env      | `centos.img` | The current singularity image        |
+| env      | `centos.img` | The current Singularity image        |
 | symbol   |              | Mirrors the value of option `symbol` |
 | style\*  |              | Mirrors the value of option `style`  |
 
@@ -2582,7 +2582,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift.
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
@@ -2621,12 +2621,12 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use.
-If you still want to enable it, [follow the example shown below](#with-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use.
+If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
@@ -2640,7 +2640,7 @@ By default the module will be shown if any of the following conditions are met:
 | Option              | Default                              | Description                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`            | `"💠"`                               | A format string shown before the terraform workspace. |
+| `symbol`            | `"💠"`                               | A format string shown before the Terraform workspace. |
 | `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
@@ -2652,7 +2652,7 @@ By default the module will be shown if any of the following conditions are met:
 | Variable  | Example    | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current terraform workspace      |
+| workspace | `default`  | The current Terraform workspace      |
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\*   |            | Mirrors the value of option `style`  |
 
@@ -2660,7 +2660,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Example
 
-#### With Version
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -2669,7 +2669,7 @@ By default the module will be shown if any of the following conditions are met:
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Without version
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -2777,7 +2777,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant.
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
@@ -2815,7 +2815,7 @@ format = "via [⍱ $version](bold white) "
 
 ## VCSH
 
-The `vcsh` module displays the current active VCSH repository.
+The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository.
 The module will be shown only if a repository is currently in use.
 
 ### Options
@@ -2848,7 +2848,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig.
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/).
 The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
