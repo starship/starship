@@ -2250,11 +2250,16 @@ detect_extensions = []
 
 ## R
 
-The `r` module shows the currently installed version of R.
-The module will be shown if any of the following conditions are met:
+The `rlang` module shows the currently installed version of R. The module will be shown if 
+any of the following conditions are met:
 
-- The current directory contains a <span class="x x-first x-last">file with `.r` extension</span>
-- The current directory contains a `.Rproj` file
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
 
 ### Options
 
@@ -2272,7 +2277,7 @@ The module will be shown if any of the following conditions are met:
 
 | Variable | Example       | Description                          |
 | -------- | ------------- | ------------------------------------ |
-| version  | `v4.0.0`      | The version of `R`                   |
+| version  | `v4.0.5`      | The version of `R`                   |
 | symbol   |               | Mirrors the value of option `symbol` |
 | style    | `"blue bold"` | Mirrors the value of option `style`  |
 
