@@ -168,6 +168,15 @@ active boot switches: -d:release\n",
             stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
         }),
+        "R --version" => Some(CommandOutput {
+            stdout: String::default(),
+            stderr: String::from(
+                "\
+R version 4.0.5 (2021-03-31) -- \"Shake and Throw\"\n
+Copyright (C) 2021 The R Foundation for Statistical Computing\n
+Platform: x86_64-w64-mingw32/x64 (64-bit)\n"
+            ),
+        }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),
             stderr: String::default()

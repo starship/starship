@@ -19,7 +19,7 @@ impl<'a> Default for RLangConfig<'a> {
         RLangConfig {
             format: "via [$symbol($version )]($style)",
             style: "blue bold",
-            symbol: "📐",
+            symbol: "📐 ",
             disabled: false,
             detect_extensions: vec!["R", "Rd", "Rmd", "Rproj", "Rsx"],
             detect_files: vec![".Rprofile"],

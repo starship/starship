@@ -63,12 +63,11 @@ fn parse_version(r_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    // use crate::modules::utils::test::render_module;
-    // use ansi_term::Color;
-    // use std::fs::{self, File};
-    // use std::io;
-    // use tempfile;
-    use super::*;
+    use super::parse_version;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
 
     #[test]
     fn test_parse_r_version() {
@@ -85,16 +84,13 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_r_invalid_semantic_version() {
-        let r_invalid = r#"r_version=R version 3.6.5.2 (2020-02-29) -- "Holding the Windsock"
-        Copyright (C) 2020 The R Foundation for Statistical Computing
-        Platform: x86_64-w64-mingw32/x64 (64-bit)
-        
-        R is free software and comes with ABSOLUTELY NO WARRANTY.
-        You are welcome to redistribute it under the terms of the
-        GNU General Public License versions 2 or 3.
-        For more information about these matters see
-        https://www.gnu.org/licenses/."#;
-        assert_eq!(parse_version(r_invalid), None);
+    fn folder_with_r_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("analysis.R"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("rlang").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.0.5 ")));
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }
