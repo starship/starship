@@ -53,7 +53,7 @@ The prompt will use as much context as is provided, but no flags are "required".
 Se si ottiene un errore come "_versione 'GLIBC_2. 8' non trovato (richiesta da Starship)_" quando si utilizza il binario precostruito (per esempio, su CentOS 6 o 7), puoi usare un binario compilato con `musl` invece di `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
 ## I see symbols I don't understand or expect, what do they mean?
@@ -88,7 +88,7 @@ Starship è altrettanto facile da disinstallare come lo è da installare.
 
 Se Starship è stato installato utilizzando un gestore di pacchetti, fai riferimento alla documentazione per le istruzioni di disinstallazione.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Locate and delete the starship binary

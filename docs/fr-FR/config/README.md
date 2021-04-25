@@ -9,19 +9,19 @@ mkdir -p ~/.config && starship print-config --default > ~/.config/starship.toml
 Toute la configuration de starship est faite dans ce fichier [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Inserts a blank line between shell prompts
+# Insérer une ligne vide entre deux invites
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Remplacer le "❯" dans l'invite par "➜"
+[character]                            # On configure le module appelé "character"
+success_symbol = "[➜](bold green)"     # Le segment "success_symbol" est configuré sur la valeur "➜" avec la couleur "bold green" (vert, gras)
 
-# Disable the package module, hiding it from the prompt completely
+# Désactiver le module "package", pour le supprimer totalement de l'invite
 [package]
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Vous pouvez changer l'emplacement par défaut du fichier  avec la variable d'environnement `STARSHIP_CONFIG` :
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
@@ -80,7 +80,7 @@ La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#sty
 Par exemple :
 
 - `[on](red bold)` affichera une chaîne de caractères `on` avec un texte gras de couleur rouge.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` affichera le symbole `⌘` suivi par le contenu de la variable `version`, en texte gras de couleur verte.
 - `[a [b](red) c](green)` affichera `a b c` avec `b` rouge, et `a` et `c` vert.
 
 #### Chaînes de style
@@ -142,11 +142,12 @@ Voici la liste des options de configuration de l'invite en lui-même.
 
 ### Options
 
-| Option         | Défaut                         | Description                                                                |
-| -------------- | ------------------------------ | -------------------------------------------------------------------------- |
-| `format`       | [lien](#default-prompt-format) | Configure le format de l'invite.                                           |
-| `scan_timeout` | `30`                           | Délai d'attente avant que starship scanne les fichiers (en millisecondes). |
-| `add_newline`  | `true`                         | Inserts blank line between shell prompts.                                  |
+| Option            | Défaut                         | Description                                                                 |
+| ----------------- | ------------------------------ | --------------------------------------------------------------------------- |
+| `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                            |
+| `scan_timeout`    | `30`                           | Délai maximal pour le scan des fichiers par starship (en millisecondes).    |
+| `command_timeout` | `500`                          | Délai maximal pour les commandes exécutées par starship (en millisecondes). |
+| `add_newline`     | `true`                         | Insère une ligne vide entre les invites du shell.                           |
 
 ### Exemple
 
@@ -162,7 +163,7 @@ format = """
 # Attendez 10 millisecondes pour que starship vérifie les fichiers dans le répertoire de travail.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Désactive la nouvelle ligne au début de l'invite
 add_newline = false
 ```
 
@@ -173,7 +174,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Est équivalent à
 format = """
 $username\
 $hostname\
@@ -190,6 +191,7 @@ $docker_context\
 $package\
 $cmake\
 $dart\
+$deno\
 $dotnet\
 $elixir\
 $elm\
@@ -206,6 +208,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
 $scala\
@@ -239,7 +242,9 @@ Le module `aws` affiche la région et le profil AWS courant. Ces informations so
 
 Quand [aws-vault](https://github.com/99designs/aws-vault) est utilisé, la valeur du profil est lu dans la variable d'environnement: `AWS_VAULT`.
 
-When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+Lorsque vous utilisez [awsu](https://github.com/kreuzwerker/awsu) le profil est lu depuis la variable d'environnement `AWSU_PROFILE`.
+
+Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu depuis la variable d'environnement `AWSUME_PROFILE`.
 
 ### Options
 
@@ -249,7 +254,7 @@ When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from 
 | `symbol`         | `"☁️ "`                                             | Le symbole affiché avant le profil AWS actuel.           |
 | `region_aliases` |                                                     | Table des alias de région à afficher en plus du nom AWS. |
 | `style`          | `"bold yellow"`                                     | Le style du module.                                      |
-| `disabled`       | `false`                                             | Disables the `aws` module.                               |
+| `disabled`       | `false`                                             | Désactive le module `aws`.                               |
 
 ### Variables
 
@@ -333,7 +338,7 @@ discharging_symbol = "💀 "
 
 ### Indicateur de batterie
 
-L'option de configuration `display` est utilisée pour définir quand l'indicateur de batterie doit être affiché (seuil) et à quoi il ressemble (style). Si aucun `display` n'est fourni. La valeur par défaut est la suivante :
+L'option de configuration `display` est utilisée pour définir quand l'indicateur de batterie doit être affiché (threshold), quel symbole doit être utilisé (symbol) et à quoi il ressemble (style). Si aucun `display` n'est fourni. La valeur par défaut est la suivante :
 
 ```toml
 [[battery.display]]
@@ -341,27 +346,32 @@ threshold = 10
 style = "bold red"
 ```
 
+La valeur par défaut pour les options `charging_symbol` et `discharging_symbol` est respectivement la valeur des options `charging_symbol` et `discharging_symbol` du module `battery`.
+
 #### Options
 
-L'option `display` est une array de la table suivante.
+L'option `display` est un tableau des propriétés suivantes.
 
-| Option      | Description                                        |
-| ----------- | -------------------------------------------------- |
-| `threshold` | La limite supérieure pour l'option d'affichage.    |
-| `style`     | Le style de l'option display si elle est utilisée. |
+| Option               | Défaut     | Description                                                                                                                             |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | La limite supérieure pour l'option display.                                                                                             |
+| `style`              | `bold red` | Le style de l'option display si elle est utilisée.                                                                                      |
+| `charging_symbol`    | `-`        | Symbole optionnel affiché si l'option display est utilisée, la valeur par défaut est l'option `charging_symbol` du module "battery".    |
+| `discharging_symbol` | `-`        | Symbole optionnel affiché si l'option display est utilisée, la valeur par défaut est l'option `discharging_symbol` du module "battery". |
 
 #### Exemple
 
 ```toml
-[[battery.display]]  # le style "bold red" lorsque la capacité est comprise entre 0% et 10% 
+[[battery.display]]  # Style "rouge gras" et affichage de discharging_symbol lorsque la batterie est entre 0% et 10% de sa capacité
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # le style "bold yellow" quand la capacité est comprise entre 10% et 30%
+[[battery.display]]  # Style "jaune gras" et affichage de💦 lorsque la batterie est entre 10% et 30% de sa capacité
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
-# lorsque la capacité est supérieure à 30%, l'indicateur de batterie ne sera pas affiché
+# Au-dessus de 30% de charge, l'indicateur de batterie ne sera pas affiché
 
 ```
 
@@ -369,14 +379,14 @@ style = "bold yellow"
 
 Le module `character` affiche un caractère (habituellement une flèche) à côté de l'endroit où le texte est entré dans votre terminal.
 
-Le caractère vous dira si la dernière commande a été réussie ou pas. Cela peut être fait de deux manières:
+Le caractère vous dira si la dernière commande a été réussie ou pas. Il y a deux façons de faire :
 
 - changement de couleur (`red`/`green`)
 - changement de forme (`❯`/`✖`)
 
-Par défaut, il ne change que la couleur. Si vous voulez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
+Par défaut, seule la couleur change. Si vous désirez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: warning `error_symbol` n'est pas supporté avec elvish. :::
 
 ### Options
 
@@ -427,22 +437,22 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
+Le module `cmake` affiche la version actuellement installée de CMake. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire actuel contient un fichier `CMakeLists.txt`
 - Le répertoire actuel contient un fichier ` CMakeCache.txt`
 
 ### Options
 
-| Option              | Défaut                                 | Description                                   |
-| ------------------- | -------------------------------------- | --------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                             |
-| `symbol`            | `"△ "`                                 | Le symbole utilisé avant la version de cmake. |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module   |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module    |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module      |
-| `style`             | `"bold blue"`                          | Le style du module.                           |
-| `disabled`          | `false`                                | Désactive le module `cmake`.                  |
+| Option              | Défaut                                 | Description                                    |
+| ------------------- | -------------------------------------- | ---------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                              |
+| `symbol`            | `"△ "`                                 | Le symbole utilisé avant la version de cmake.  |
+| `detect_extensions` | `[]`                                   | Quelles extensions devraient activer ce module |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Quels fichiers devraient activer ce module     |
+| `detect_folders`    | `[]`                                   | Quels dossiers devraient activer ce module     |
+| `style`             | `"bold blue"`                          | Le style du module.                            |
+| `disabled`          | `false`                                | Désactive le module `cmake`.                   |
 
 ### Variables
 
@@ -456,27 +466,27 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 ## Temps d'exécution
 
-Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
+Le module `cmd_duration` montre combien de temps la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou plus que la valeur `min_time`, si elle existe.
 
-::: attention, n'accrochez pas la trappe DEBUG en Bash
+::: warning N'interceptez pas le signal DEBUG avec Bash
 
-Si vous utilisez starship en `bash`, n'accrochez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **cassera**.
+Si vous utilisez starship avec `bash`, n'interceptez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **ne fonctionnera pas**.
 
 :::
 
-Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent utiliser [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les array `preexec_functions` et `precmd_functions` avant d'éxécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
+Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent utiliser [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Définissez simplement les array `preexec_functions` et `precmd_functions` avant d'exécuter `eval $(starship init $0)`, puis procédez comme d'habitude.
 
 ### Options
 
-| Option               | Défaut                        | Description                                                            |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).       |
-| `show_milliseconds`  | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.      |
-| `format`             | `"took [$duration]($style) "` | Format du module.                                                      |
-| `style`              | `"bold yellow"`               | Le style du module.                                                    |
-| `disabled`           | `false`                       | Désactive le module `cmd_duration`.                                    |
-| `show_notifications` | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée. |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                  |
+| Option               | Défaut                        | Description                                                               |
+| -------------------- | ----------------------------- | ------------------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).          |
+| `show_milliseconds`  | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.         |
+| `format`             | `"took [$duration]($style) "` | Format du module.                                                         |
+| `style`              | `"bold yellow"`               | Le style du module.                                                       |
+| `disabled`           | `false`                       | Désactive le module `cmd_duration`.                                       |
+| `show_notifications` | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée.    |
+| `min_time_to_notify` | `45_000`                      | Durée minimale après laquelle activer la notification (en millisecondes). |
 
 ::: tip
 
@@ -509,7 +519,7 @@ Le module `conda` affiche l'environnement conda actuel, si `$CONDA_DEFAULT_ENV` 
 
 ::: tip
 
-Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `conda config --set changeps1 False`.
+Cela ne supprime pas le modificateur d'invite de conda, vous pourriez vouloir exécuter `conda config --set changeps1 False` pour le désactiver.
 
 :::
 
@@ -545,22 +555,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-Le module `crystal` affiche la version actuellement installée de Crystal. By default the module will be shown if any of the following conditions are met:
+Le module `crystal` affiche la version actuellement installée de Crystal. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `shard.yml`
 - Le répertoire courant contient un fichier `.cr`
 
 ### Options
 
-| Option              | Défaut                               | Description                                                |
-| ------------------- | ------------------------------------ | ---------------------------------------------------------- |
-| `symbol`            | `"🔮 "`                               | Le symbole utilisé avant d'afficher la version de crystal. |
-| `style`             | `"bold green"`                       | Le style du module.                                        |
-| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.               |
-| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                  |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                          |
-| `disabled`          | `false`                              | Désactive le module `crystal`.                             |
+| Option                               | Défaut                               | Description                                                |
+| ------------------------------------ | ------------------------------------ | ---------------------------------------------------------- |
+| `symbol`                             | `"🔮 "`                               | Le symbole utilisé avant d'afficher la version de crystal. |
+| `style`                              | `"bold green"`                       | Le style du module.                                        |
+| `detect_extensionsdetect_extensions` | `["cr"]`                             | Quelles extensions devraient activer ce module.            |
+| `detect_files`                       | `["shard.yml"]`                      | Quels fichiers devraient activer ce module.                |
+| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                |
+| `format`                             | `"via [$symbol($version )]($style)"` | Format du module.                                          |
+| `disabled`                           | `false`                              | Désactive le module `crystal`.                             |
 
 ### Variables
 
@@ -583,11 +593,11 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Le module `dart` affiche la version courante installée de Dart. By default the module will be shown if any of the following conditions are met:
+Le module `dart` affiche la version actuellement installée de Dart. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `.dart`
 - Le répertoire courant contient un répertoire `.dart_tool`
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- Le répertoire courant contient un fichier `pubspec.yaml`, `pubspec.yml` ou `pubspec.lock`
 
 ### Options
 
@@ -595,9 +605,9 @@ Le module `dart` affiche la version courante installée de Dart. By default the 
 | ------------------- | ------------------------------------------------- | -------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | Format du module.                                        |
 | `symbol`            | `"🎯 "`                                            | Une chaîne de caractères représentant le symbole de Dart |
-| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this module.             |
-| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.              |
-| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.                |
+| `detect_extensions` | `['dart']`                                        | Quelles extensions devraient activer ce module.          |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Quels fichiers devraient activer ce module.              |
+| `detect_folders`    | `[".dart_tool"]`                                  | Quels dossiers devraient activer ce module.              |
 | `style`             | `"bold blue"`                                     | Le style du module.                                      |
 | `disabled`          | `false`                                           | Désactive le module `dart`.                              |
 
@@ -620,36 +630,70 @@ Le module `dart` affiche la version courante installée de Dart. By default the 
 format = "via [🔰 $version](bold red) "
 ```
 
-## Dossier
+## Deno
 
-Le mode `directory` montre le chemin de votre dossier actuel, tronqué aux 3 dossiers parents. Votre répertoire sera également tronqué à la racine du repo git dans lequel vous vous trouvez actuellement.
-
-Quand vous utilisez le style pwd de fish, au lieu de cacher le chemin qui est tronqué, vous verrez un nom raccourci de chaque dossier basé sur le nombre établi pour l'option.
-
-Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'option définie à `1`. Vous verrez maintenant `~/D/N/nixpkgs/pkgs`, alors que vous auriez vu `nixpkgs/pkgs` avant.
+Le module `deno` vous montre votre version de Deno actuellement installée. Par défaut, le module sera affiché si l'une des conditions suivantes est remplie :
+- Le répertoire courant contient un fichier `mod.ts`, `mod.js`, `deps.ts` ou `deps.ts`
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                                           |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué. |
-| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.         |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                     |
-| `style`             | `"bold cyan"`                                      | Le style du module.                                                                   |
-| `disabled`          | `false`                                            | Désactive le module `directory`.                                                      |
-| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                  |
-| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                 |
-| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                  |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                 |
+| Option              | Défaut                                       | Description                                              |
+| ------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                                        |
+| `symbol`            | `"🦕 "`                                       | Une chaîne de caractères représentant le symbole de Deno |
+| `detect_extensions` | `[]`                                         | Quelles extensions devraient activer ce module.          |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quels fichiers devraient activer ce module.              |
+| `detect_folders`    | `[]`                                         | Quels dossiers devraient activer ce module.              |
+| `style`             | `"green bold"`                               | Le style du module.                                      |
+| `disabled`          | `false`                                      | Désactive le module `deno`.                              |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v1.8.3` | La version de `deno`                   |
+| symbol    |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[deno]
+format = "via [🦕 $version](green bold) "
+```
+
+## Dossier
+
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+
+### Options
+
+| Option              | Défaut                                             | Description                                                                    |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `truncation_length` | `3`                                                | Le nombre de dossiers parents auquel tronquer le chemin du répertoire courant. |
+| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.  |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                              |
+| `style`             | `"bold cyan"`                                      | Le style du module.                                                            |
+| `disabled`          | `false`                                            | Désactive le module `directory`.                                               |
+| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.           |
+| `read_only_style`   | `"red"`                                            | Le style du symbole de lecture seule.                                          |
+| `truncation_symbol` | `""`                                               | Le symbole pour préfixer les chemins tronqués. ex: "…/"                        |
+| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                  |
 
 <details>
-<summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Options avancées            | Défaut | Description                                                                                                                                                            |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | Table de substitutions à faire au chemin.                                                                                                                              |
-| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
-| `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| Options avancées            | Défaut | Description                                                                                                                                                                              |
+| --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |        | Une table de substitutions à appliquer aux chemins.                                                                                                                                      |
+| `fish_style_pwd_dir_length` | `0`    | Le nombre de caractères à utiliser lors de l'application de la logique de troncature du pwd de fish.                                                                                     |
+| `use_logical_path`          | `true` | Si `true` affiche le chemin logique issu du shell via `PWD` ou `--logical-path`. Si `false` renvoie plutôt le chemin du système de fichiers physique avec les liens symboliques résolus. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -682,22 +726,22 @@ truncation_length = 8
 truncation_symbol = "…/"
 ```
 
-## Docker Context
+## Contexte Docker
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default`.
 
 ### Options
 
-| Option              | Défaut                                                        | Description                                                                       |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | Format du module.                                                                 |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | Le style du module.                                                               |
-| `disabled`          | `false`                                                       | Désactive le module `docker_context`.                                             |
+| Option              | Défaut                                                        | Description                                                                                            |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol$context]($style) "`                            | Format du module.                                                                                      |
+| `symbol`            | `"🐳 "`                                                        | Le symbole utilisé avant d'afficher le contexte Docker.                                                |
+| `only_with_files`   | `true`                                                        | Afficher uniquement quand il y a une correspondance                                                    |
+| `detect_extensions` | `[]`                                                          | Quelles extensions devraient activer ce module (il faut que `only_with_files` soit réglé sur true).    |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Quels noms de fichier devraient activer ce module (il faut que `only_with_files` soit réglé sur true). |
+| `detect_folders`    | `[]`                                                          | Quels dossiers devraient activer ce module (il faut que `only_with_files` soit réglé sur true).        |
+| `style`             | `"blue bold"`                                                 | Le style du module.                                                                                    |
+| `disabled`          | `false`                                                       | Désactive le module `docker_context`.                                                                  |
 
 ### Variables
 
@@ -742,16 +786,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Options
 
-| Option              | Défaut                                                                                                  | Description                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                        |
-| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.             |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.              |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
-| `style`             | `"bold blue"`                                                                                           | Le style du module.                                      |
-| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                            |
+| Option              | Défaut                                                                                                  | Description                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                                              |
+| `symbol`            | `".NET "`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                      |
+| `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané. |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Quelles extensions devraient activer ce module.                                |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quels fichiers devraient activer ce module.                                    |
+| `detect_folders`    | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                    |
+| `style`             | `"bold blue"`                                                                                           | Le style du module.                                                            |
+| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                                                  |
 
 ### Variables
 
@@ -777,7 +821,7 @@ heuristic = false
 
 ## Elixir
 
-Le module `elixir` affiche la version actuellement installé d'Elixir et Erlang/OTP. By default the module will be shown if any of the following conditions are met:
+The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `mix.exs`.
 
@@ -785,20 +829,20 @@ Le module `elixir` affiche la version actuellement installé d'Elixir et Erlang/
 
 | Option              | Défaut                                                      | Description                                                     |
 | ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                    |
-| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                     |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
+| `symbol`            | `"💧 "`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang. |
+| `detect_extensions` | `[]`                                                        | Quelles extensions devraient activer ce module.                 |
+| `detect_files`      | `["mix.exs"]`                                               | Quels fichiers devraient activer ce module.                     |
+| `detect_folders`    | `[]`                                                        | Quels dossiers devraient activer ce module.                     |
 | `style`             | `"bold purple"`                                             | Le style du module.                                             |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                        |
+| `disabled`          | `false`                                                     | Désactive le module `elixir`.                                   |
 
 ### Variables
 
 | Variable    | Exemple | Description                            |
 | ----------- | ------- | -------------------------------------- |
-| version     | `v1.10` | The version of `elixir`                |
-| otp_version |         | The otp version of `elixir`            |
+| version     | `v1.10` | La version d' `elixir`                 |
+| otp_version |         | La version otp d' `elixir`             |
 | symbol      |         | Reflète la valeur de l'option `symbol` |
 | style\*   |         | Reflète la valeur de l'option `style`  |
 
@@ -815,31 +859,31 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. By default the module will be shown if any of the following conditions are met:
+The `elm` module shows the currently installed version of Elm. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `elm.json`
 - Le répertoire courant contient un fichier `elm-package.json`
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- Le répertoire courant contient un fichier `elm-version`
+- Le répertoire courant contient un dossier `elm-stuff`
+- Le répertoire courant contient des fichiers `*.elm`
 
 ### Options
 
-| Option              | Défaut                                             | Description                                     |
-| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                               |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
-| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
-| `style`             | `"cyan bold"`                                      | Le style du module.                             |
-| `disabled`          | `false`                                            | Disables the `elm` module.                      |
+| Option              | Défaut                                             | Description                                         |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                                   |
+| `symbol`            | `"🌳 "`                                             | Une chaîne de format représentant le symbole d'Elm. |
+| `detect_extensions` | `["elm"]`                                          | Quelles extensions devraient activer ce module.     |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quels fichiers devraient activer ce module.         |
+| `detect_folders`    | `["elm-stuff"]`                                    | Quels dossiers devraient activer ce module.         |
+| `style`             | `"cyan bold"`                                      | Le style du module.                                 |
+| `disabled`          | `false`                                            | Désactive le module `elm`.                          |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.19.1` | The version of `elm`                   |
+| version   | `v0.19.1` | La version de `elm`                    |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -854,12 +898,12 @@ The `elm` module shows the currently installed version of Elm. By default the mo
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## Variable d'environnement
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- L'option `variable` correspond à une variable d'environnement existante
+- L'option `variable` n'est pas définie, mais l'option `default` l'est
 
 ### Options
 
@@ -867,7 +911,7 @@ The `env_var` module displays the current value of a selected environment variab
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   |                                | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
-| `défaut`   |                                | The default value to be displayed when the selected variable is not defined. |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | Format du module.                                                            |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
@@ -893,10 +937,10 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. By default the module will be shown if any of the following conditions are met:
+The `erlang` module shows the currently installed version of Erlang/OTP. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `rebar.config`.
-- Le répertoire courant contient un fichier `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Options
 
@@ -904,8 +948,8 @@ The `erlang` module shows the currently installed version of Erlang/OTP. By defa
 | ------------------- | ------------------------------------ | -------------------------------------------------------- |
 | `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
 | `style`             | `"bold green"`                       | Le style du module.                                      |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
+| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.          |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Quels fichiers devraient activer ce module.              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                        |
 | `disabled`          | `false`                              | Disables the `erlang` module.                            |
@@ -929,7 +973,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. By defa
 format = "via [e $version](bold red) "
 ```
 
-## Gcloud
+## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
@@ -950,7 +994,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | region    | `us-central1`     | The current GCP region                                             |
 | account   | `foo@example.com` | The current GCP profile                                            |
 | project   |                   | The current GCP project                                            |
-| active    | `défaut`          | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |                   | Reflète la valeur de l'option `symbol`                             |
 | style\* |                   | Reflète la valeur de l'option `style`                              |
 
@@ -1029,7 +1073,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Commit Git
 
 The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
@@ -1104,7 +1148,7 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git Status
+## Statut Git
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
@@ -1189,11 +1233,11 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of Golang. By default the module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of Golang. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `go.mod`
-- Le répertoire courant contient un fichier `go.sum`
-- Le répertoire courant contient un fichier `glide.yaml`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
@@ -1202,15 +1246,15 @@ The `golang` module shows the currently installed version of Golang. By default 
 
 ### Options
 
-| Option              | Défaut                                                                         | Description                                    |
-| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | Format du module.                              |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
-| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.   |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
-| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
-| `style`             | `"bold cyan"`                                                                  | Le style du module.                            |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                  |
+| Option              | Défaut                                                                         | Description                                     |
+| ------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Format du module.                               |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.  |
+| `detect_extensions` | `["go"]`                                                                       | Quelles extensions devraient activer ce module. |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quels fichiers devraient activer ce module.     |
+| `detect_folders`    | `["Godeps"]`                                                                   | Quels dossiers devraient activer ce module.     |
+| `style`             | `"bold cyan"`                                                                  | Le style du module.                             |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                   |
 
 ### Variables
 
@@ -1233,9 +1277,9 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. By default the module will be shown if any of the following conditions are met:
+The `helm` module shows the currently installed version of Helm. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `helmfile.yaml`
+- The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
 ### Options
@@ -1243,8 +1287,8 @@ The `helm` module shows the currently installed version of Helm. By default the 
 | Option              | Défaut                               | Description                                      |
 | ------------------- | ------------------------------------ | ------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.     |
-| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.      |
+| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.  |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Quels fichiers devraient activer ce module.      |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.       |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm. |
 | `style`             | `"bold white"`                       | Le style du module.                              |
@@ -1269,7 +1313,7 @@ The `helm` module shows the currently installed version of Helm. By default the 
 format = "via [⎈ $version](bold white) "
 ```
 
-## Hostname
+## Nom d'hôte
 
 The `hostname` module shows the system hostname.
 
@@ -1306,22 +1350,23 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of Java. By default the module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of Java. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Options
 
-| Option              | Défaut                                                                                                    | Description                                     |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Format du module.                               |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
-| `style`             | `"red dimmed"`                                                                                            | Le style du module.                             |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
+| Option              | Défaut                                                                                                    | Description                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Format du module.                                                         |
+| `version_format`    | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Quelles extensions devraient activer ce module.                           |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Quels fichiers devraient activer ce module.                               |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
+| `style`             | `"red dimmed"`                                                                                            | Le style du module.                                                       |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
 
 ### Variables
 
@@ -1344,7 +1389,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ::: warning
 
@@ -1384,7 +1429,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. By default the module will be shown if any of the following conditions are met:
+The `julia` module shows the currently installed version of Julia. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1395,8 +1440,8 @@ The `julia` module shows the currently installed version of Julia. By default th
 | Option              | Défaut                               | Description                                       |
 | ------------------- | ------------------------------------ | ------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                 |
-| `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.      |
-| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.       |
+| `detect_extensions` | `["jl"]`                             | Quelles extensions devraient activer ce module.   |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Quels fichiers devraient activer ce module.       |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.        |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia. |
 | `style`             | `"bold purple"`                      | Le style du module.                               |
@@ -1423,7 +1468,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. By default the module will be shown if any of the following conditions are met:
+The `kotlin` module shows the currently installed version of Kotlin. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `.kt` or a `.kts` file
 
@@ -1432,8 +1477,8 @@ The `kotlin` module shows the currently installed version of Kotlin. By default 
 | Option              | Défaut                               | Description                                                                   |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                             |
-| `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
+| `detect_extensions` | `["kt", "kts"]`                      | Quelles extensions devraient activer ce module.                               |
+| `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                   |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `"bold blue"`                        | Le style du module.                                                           |
@@ -1473,7 +1518,7 @@ Displays the current Kubernetes context name and, if set, the namespace from the
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1531,7 +1576,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
+The `lua` module shows the currently installed version of Lua. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1543,9 +1588,9 @@ The `lua` module shows the currently installed version of Lua. By default the mo
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                          |
 | `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this module.                               |
-| `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
-| `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
+| `detect_extensions` | `["lua"]`                            | Quelles extensions devraient activer ce module.                            |
+| `detect_files`      | `[".lua-version"]`                   | Quels fichiers devraient activer ce module.                                |
+| `detect_folders`    | `["lua"]`                            | Quels dossiers devraient activer ce module.                                |
 | `style`             | `"bold blue"`                        | Le style du module.                                                        |
 | `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `lua` module.                                                 |
@@ -1577,19 +1622,19 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Options
 
-| Option      | Défaut                                        | Description                                              |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | Format du module.                                        |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | Le style du module.                                      |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Option      | Défaut                                          | Description                                              |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | Format du module.                                        |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | Le style du module.                                      |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -1654,9 +1699,9 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. By default the module will be shown if any of the following conditions are met:
+The `nim` module shows the currently installed version of Nim. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1665,11 +1710,11 @@ The `nim` module shows the currently installed version of Nim. By default the mo
 
 | Option              | Défaut                               | Description                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module                                      |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                             |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this module.          |
-| `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Quelles extensions devraient activer ce module.       |
+| `detect_files`      | `["nim.cfg"]`                        | Quels fichiers devraient activer ce module.           |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.           |
 | `style`             | `"bold yellow"`                      | Le style du module.                                   |
 | `disabled`          | `false`                              | Disables the `nim` module.                            |
 
@@ -1733,26 +1778,28 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## NodeJS
 
-The `nodejs` module shows the currently installed version of NodeJS. By default the module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of NodeJS. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
+- The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
 ### Options
 
-| Option              | Défaut                               | Description                                                                                            |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                                      |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                     |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                           |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                            |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                              |
-| `style`             | `"bold green"`                       | Le style du module.                                                                                    |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                          |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
+| Option              | Défaut                               | Description                                                                                          |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                                    |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quelles extensions devraient activer ce module.                                                      |
+| `detect_files`      | `["package.json", ".node-version"]`  | Quels fichiers devraient activer ce module.                                                          |
+| `detect_folders`    | `["node_modules"]`                   | Quels dossiers devraient activer ce module.                                                          |
+| `style`             | `"bold green"`                       | Le style du module.                                                                                  |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                        |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the NodeJS version. |
 
 ### Variables
 
@@ -1775,7 +1822,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. By default the module will be shown if any of the following conditions are met:
+The `ocaml` module shows the currently installed version of OCaml. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1792,9 +1839,9 @@ The `ocaml` module shows the currently installed version of OCaml. By default th
 | `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml. |
 | `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch. |
 | `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.  |
-| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Which extensions should trigger this module.            |
-| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Which filenames should trigger this module.             |
-| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Which folders should trigger this module.               |
+| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Quelles extensions devraient activer ce module.         |
+| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Quels fichiers devraient activer ce module.             |
+| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Quels dossiers devraient activer ce module.             |
 | `style`                   | `"bold yellow"`                                                            | Le style du module.                                     |
 | `disabled`                | `false`                                                                    | Disables the `ocaml` module.                            |
 
@@ -1902,7 +1949,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. By default the module will be shown if any of the following conditions are met:
+The `perl` module shows the currently installed version of Perl. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1916,9 +1963,9 @@ The `perl` module shows the currently installed version of Perl. By default the 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
 | `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
-| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this module.          |
-| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.             |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Quelles extensions devraient activer ce module.       |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Quels fichiers devraient activer ce module.           |
+| `detect_folders`    | `[]`                                                                                                     | Quels dossiers devraient activer ce module.           |
 | `style`             | `"bold 149"`                                                                                             | Le style du module.                                   |
 | `disabled`          | `false`                                                                                                  | Disables the `perl` module.                           |
 
@@ -1941,9 +1988,9 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of PHP. By default the module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of PHP. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -1953,9 +2000,9 @@ The `php` module shows the currently installed version of PHP. By default the mo
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                     |
 | `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
-| `detect_extensions` | `["php"]`                            | Which extensions should trigger this module.          |
-| `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `detect_extensions` | `["php"]`                            | Quelles extensions devraient activer ce module.       |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Quels fichiers devraient activer ce module.           |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.           |
 | `style`             | `"147 bold"`                         | Le style du module.                                   |
 | `disabled`          | `false`                              | Disables the `php` module.                            |
 
@@ -1980,22 +2027,22 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-Le module `purescript` affiche la version courante de Purescript installée. By default the module will be shown if any of the following conditions are met:
+The `purescript` module shows the currently installed version of PureScript version. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Options
 
-| Option              | Défaut                               | Description                                                   |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                             |
-| `symbol`            | `"<=> "`                       | Le symbole utilisé avant d'afficher la version de PureScript. |
-| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this module.                  |
-| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                   |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                     |
-| `style`             | `"bold white"`                       | Le style du module.                                           |
-| `disabled`          | `false`                              | Désactive le module `purescript`.                             |
+| Option              | Défaut                               | Description                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                            |
+| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
+| `detect_extensions` | `["purs"]`                           | Quelles extensions devraient activer ce module.              |
+| `detect_files`      | `["spago.dhall"]`                    | Quels fichiers devraient activer ce module.                  |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                  |
+| `style`             | `"bold white"`                       | Le style du module.                                          |
+| `disabled`          | `false`                              | Disables the `purescript` module.                            |
 
 ### Variables
 
@@ -2022,15 +2069,15 @@ The `python` module shows the currently installed version of Python and the curr
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-By default the module will be shown if any of the following conditions are met:
+Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- Le répertoire courant contient un fichier `pyproject.toml`
-- Le répertoire courant contient un fichier `requirements.txt`
-- Le répertoire courant contient un fichier `setup.py`
-- Le répertoire courant contient un fichier `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -2039,14 +2086,15 @@ By default the module will be shown if any of the following conditions are met:
 | Option               | Défaut                                                                                                       | Description                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Format du module.                                                                      |
+| `version_format`     | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | Le style du module.                                                                    |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this module                                            |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `detect_extensions`  | `[".py"]`                                                                                                    | Quelles extensions devraient activer ce module                                         |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Quels fichiers devraient activer ce module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Quels dossiers devraient activer ce module                                             |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
@@ -2093,9 +2141,47 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+## Red
+
+By default the `red` module shows the currently installed version of Red. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### Options
+
+| Option              | Défaut                               | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
+| `detect_extensions` | `["red"]`                            | Quelles extensions devraient activer ce module.                           |
+| `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                               |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
+| `style`             | `"red bold"`                         | Le style du module.                                                       |
+| `disabled`          | `false`                              | Disables the `red` module.                                                |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v2.5.1` | The version of `red`                   |
+| symbol    |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
+```
+
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby. Le module est affiché si l'une de ces conditions est remplie :
+By default the `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -2103,15 +2189,16 @@ By default the `ruby` module shows the currently installed version of Ruby. Le m
 
 ### Options
 
-| Option              | Défaut                               | Description                                      |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
-| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
-| `style`             | `"bold green"`                       | Le style du module.                              |
-| `disabled`          | `false`                              | Disables the `ruby` module.                      |
+| Option              | Défaut                               | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
+| `detect_extensions` | `["rb"]`                             | Quelles extensions devraient activer ce module.                           |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Quels fichiers devraient activer ce module.                               |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
+| `style`             | `"bold green"`                       | Le style du module.                                                       |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
 ### Variables
 
@@ -2134,22 +2221,23 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust. Le module est affiché si l'une de ces conditions est remplie :
+By default the `rust` module shows the currently installed version of Rust. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
 ### Options
 
-| Option              | Défaut                               | Description                                     |
-| ------------------- | ------------------------------------ | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                               |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
-| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
-| `style`             | `"bold green"`                       | Le style du module.                             |
-| `disabled`          | `false`                              | Disables the `rust` module.                     |
+| Option              | Défaut                               | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
+| `detect_extensions` | `["rs"]`                             | Quelles extensions devraient activer ce module.                           |
+| `detect_files`      | `["Cargo.toml"]`                     | Quels fichiers devraient activer ce module.                               |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
+| `style`             | `"bold green"`                       | Le style du module.                                                       |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
 ### Variables
 
@@ -2172,7 +2260,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of Scala. By default the module will be shown if any of the following conditions are met:
+The `scala` module shows the currently installed version of Scala. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
 - The current directory contains a file with the `.scala` or `.sbt` extension
@@ -2183,8 +2271,8 @@ The `scala` module shows the currently installed version of Scala. By default th
 | Option              | Défaut                                   | Description                                       |
 | ------------------- | ---------------------------------------- | ------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"` | Format du module.                                 |
-| `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.      |
-| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.       |
+| `detect_extensions` | `["sbt", "scala"]`                       | Quelles extensions devraient activer ce module.   |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Quels fichiers devraient activer ce module.       |
 | `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.        |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala. |
 | `style`             | `"red dimmed"`                           | Le style du module.                               |
@@ -2215,7 +2303,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2324,7 +2412,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2377,7 +2465,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. Le module est affiché si l'une de ces conditions est remplie :
+By default the `swift` module shows the currently installed version of Swift. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2388,9 +2476,9 @@ By default the `swift` module shows the currently installed version of Swift. Le
 | ------------------- | ------------------------------------ | ------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                |
 | `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this module.     |
-| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
+| `detect_extensions` | `["swift"]`                          | Quelles extensions devraient activer ce module.  |
+| `detect_files`      | `["Package.swift"]`                  | Quels fichiers devraient activer ce module.      |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.      |
 | `style`             | `"bold 202"`                         | Le style du module.                              |
 | `disabled`          | `false`                              | Disables the `swift` module.                     |
 
@@ -2423,7 +2511,7 @@ By default the terraform version is not shown, since this is slow for current ve
 
 :::
 
-By default the module will be shown if any of the following conditions are met:
+Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
@@ -2434,9 +2522,9 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ----------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
-| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
+| `detect_extensions` | `["tf", "hcl"]`                      | Quelles extensions devraient activer ce module.       |
+| `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.           |
+| `detect_folders`    | `[".terraform"]`                     | Quels dossiers devraient activer ce module.           |
 | `style`             | `"bold 105"`                         | Le style du module.                                   |
 | `disabled`          | `false`                              | Disables the `terraform` module.                      |
 
@@ -2445,7 +2533,7 @@ By default the module will be shown if any of the following conditions are met:
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`             |
-| workspace | `défaut`   | The current terraform workspace        |
+| workspace | `default`  | The current terraform workspace        |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
@@ -2471,35 +2559,35 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Temps
+## Date et Heure
 
-Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
 ### Options
 
-| Option            | Défaut                  | Description                                                                                                                                                        |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                                                  |
-| `use_12hr`        | `false`                 | Activer le format 12h                                                                                                                                              |
-| `time_format`     | voir plus bas           | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                                  |
-| `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                     |
-| `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Range from -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
-| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
+| Option            | Défaut                  | Description                                                                                                                        |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
 | Variable  | Exemple    | Description                           |
 | --------- | ---------- | ------------------------------------- |
-| temps     | `13:08:10` | The current time.                     |
+| time      | `13:08:10` | The current time.                     |
 | style\* |            | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -2517,14 +2605,14 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Nom d'utilisateur
+## Username
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- L'utilisateur courant est root
-- L'utilisateur courant est différent de celui connecté
-- L'utilisateur est actuellement connecté à une session SSH
-- La variable `show_always` a comme valeur true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -2534,13 +2622,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Défaut                  | Description                                      |
-| ------------- | ----------------------- | ------------------------------------------------ |
-| `style_root`  | `"bold green"`          | Le style utilisé quand l'utilisateur est root.   |
-| `style_user`  | `"bold yellow"`         | Le style utilisé pour les utilisateurs non-root. |
-| `format`      | `"[$user]($style) in "` | Format du module.                                |
-| `show_always` | `false`                 | Toujours afficher le module `username`.          |
-| `disabled`    | `false`                 | Désactiver le module `username`.                 |
+| Option        | Défaut                  | Description                           |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold green"`          | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | Format du module.                     |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
@@ -2564,7 +2652,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant. By default the module will be shown if any of the following conditions are met:
+The `vagrant` module shows the currently installed version of Vagrant. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `Vagrantfile` file
 
@@ -2574,9 +2662,9 @@ The `vagrant` module shows the currently installed version of Vagrant. By defaul
 | ------------------- | ------------------------------------ | --------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                   |
 | `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.        |
-| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
+| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.     |
+| `detect_files`      | `["Vagrantfile"]`                    | Quels fichiers devraient activer ce module.         |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.         |
 | `style`             | `"cyan bold"`                        | Le style du module.                                 |
 | `disabled`          | `false`                              | Disables the `vagrant` module.                      |
 
@@ -2633,7 +2721,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig. Le module est affiché si l'une de ces conditions est remplie :
+By default the the `zig` module shows the currently installed version of Zig. The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -2645,9 +2733,9 @@ By default the the `zig` module shows the currently installed version of Zig. Le
 | `style`             | `"bold yellow"`                      | Le style du module.                                   |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                     |
 | `disabled`          | `false`                              | Disables the `zig` module.                            |
-| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| `detect_extensions` | `["zig"]`                            | Quelles extensions devraient activer ce module.       |
+| `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.           |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.           |
 
 ### Variables
 
@@ -2725,9 +2813,9 @@ The order in which custom modules are shown can be individually set by including
 
 #### Commandes shell personnalisées
 
-`shell` accepte une liste de chaînes non vide, où:
+`shell` accepts a non-empty list of strings, where:
 
-- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
+- The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.

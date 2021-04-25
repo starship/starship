@@ -142,11 +142,12 @@ This is the list of prompt-wide configuration options.
 
 ### Opções
 
-| Option         | Padrão                         | Descrição                                             |
-| -------------- | ------------------------------ | ----------------------------------------------------- |
-| `format`       | [link](#default-prompt-format) | Configure the format of the prompt.                   |
-| `scan_timeout` | `30`                           | Timeout for starship to scan files (in milliseconds). |
-| `add_newline`  | `true`                         | Inserts blank line between shell prompts.             |
+| Option            | Padrão                         | Descrição                                                    |
+| ----------------- | ------------------------------ | ------------------------------------------------------------ |
+| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                          |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).        |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
 
 ### Exemplo
 
@@ -190,6 +191,7 @@ $docker_context\
 $package\
 $cmake\
 $dart\
+$deno\
 $dotnet\
 $elixir\
 $elm\
@@ -206,6 +208,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
 $scala\
@@ -240,6 +243,8 @@ The `aws` module shows the current AWS region and profile. This is based on `AWS
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
 
 ### Opções
 
@@ -333,7 +338,7 @@ discharging_symbol = "💀 "
 
 ### Indicador de bateria
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold) and what it looks like (style). If no `display` is provided. Os valores padrão são os seguintes:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. Os valores padrão são os seguintes:
 
 ```toml
 [[battery.display]]
@@ -341,25 +346,30 @@ threshold = 10
 style = "bold red"
 ```
 
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
 #### Opções
 
 The `display` option is an array of the following table.
 
-| Option      | Descrição                                       |
-| ----------- | ----------------------------------------------- |
-| `threshold` | The upper bound for the display option.         |
-| `style`     | The style used if the display option is in use. |
+| Option               | Padrão     | Descrição                                                                                                 |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | The upper bound for the display option.                                                                   |
+| `style`              | `bold red` | The style used if the display option is in use.                                                           |
+| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### Exemplo
 
 ```toml
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
 # when capacity is over 30%, the battery indicator will not be displayed
 
@@ -458,7 +468,7 @@ The `cmake` module shows the currently installed version of CMake. By default th
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Não utilize o DEBUG-trap no Bash
+::: warning Do not hook the DEBUG trap in Bash
 
 If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
@@ -618,6 +628,40 @@ The `dart` module shows the currently installed version of Dart. By default the 
 
 [dart]
 format = "via [🔰 $version](bold red) "
+```
+
+## Deno
+
+The `deno` module shows you your currently installed version of Deno. By default the module will be shown if any of the following conditions are met:
+- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+
+### Opções
+
+| Option              | Padrão                                       | Descrição                                       |
+| ------------------- | -------------------------------------------- | ----------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                      |
+| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno |
+| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.    |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.     |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.       |
+| `style`             | `"green bold"`                               | O estilo do módulo.                             |
+| `disabled`          | `false`                                      | Disables the `deno` module.                     |
+
+### Variables
+
+| Variável  | Exemplo  | Descrição                            |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.8.3` | The version of `deno`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[deno]
+format = "via [🦕 $version](green bold) "
 ```
 
 ## Diretório
@@ -929,7 +973,7 @@ The `erlang` module shows the currently installed version of Erlang/OTP. By defa
 format = "via [e $version](bold red) "
 ```
 
-## Gcloud
+## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
@@ -1313,15 +1357,16 @@ The `java` module shows the currently installed version of Java. By default the 
 
 ### Opções
 
-| Option              | Padrão                                                                                                    | Descrição                                       |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                      |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
-| `style`             | `"red dimmed"`                                                                                            | O estilo do módulo.                             |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
+| Option              | Padrão                                                                                                    | Descrição                                                                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                                                |
+| `version_format`    | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
+| `style`             | `"red dimmed"`                                                                                            | O estilo do módulo.                                                       |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
 
 ### Variables
 
@@ -1344,7 +1389,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 ::: warning
 
@@ -1510,7 +1555,7 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ```
 
-## Quebra de linha
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
@@ -1569,7 +1614,7 @@ The `lua` module shows the currently installed version of Lua. By default the mo
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Uso de memória
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -1583,13 +1628,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opções
 
-| Option      | Padrão                                        | Descrição                                                |
-| ----------- | --------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                          | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | The format for the module.                               |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                         | O estilo do módulo.                                      |
-| `disabled`  | `true`                                        | Disables the `memory_usage` module.                      |
+| Option      | Padrão                                          | Descrição                                                |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | The format for the module.                               |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | O estilo do módulo.                                      |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
 ### Variables
 
@@ -1737,22 +1782,24 @@ The `nodejs` module shows the currently installed version of NodeJS. By default 
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
+- The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
 ### Opções
 
-| Option              | Padrão                               | Descrição                                                                                              |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                             |
-| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                     |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                           |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                            |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                              |
-| `style`             | `"bold green"`                       | O estilo do módulo.                                                                                    |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                          |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in `package.json` does not match the NodeJS version. |
+| Option              | Padrão                               | Descrição                                                                                            |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                           |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                            |
+| `symbol`            | `" "`                               | A format string representing the symbol of NodeJS.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                         |
+| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                          |
+| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                            |
+| `style`             | `"bold green"`                       | O estilo do módulo.                                                                                  |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                        |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the NodeJS version. |
 
 ### Variables
 
@@ -2039,6 +2086,7 @@ By default the module will be shown if any of the following conditions are met:
 | Option               | Padrão                                                                                                       | Descrição                                                                              |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | The format for the module.                                                             |
+| `version_format`     | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | O estilo do módulo.                                                                    |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
@@ -2093,6 +2141,44 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+## Red
+
+By default the `red` module shows the currently installed version of Red. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### Opções
+
+| Option              | Padrão                               | Descrição                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
+| `detect_extensions` | `["red"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"red bold"`                         | O estilo do módulo.                                                       |
+| `disabled`          | `false`                              | Disables the `red` module.                                                |
+
+### Variables
+
+| Variável  | Exemplo  | Descrição                            |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.5.1` | The version of `red`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
+```
+
 ## Ruby
 
 By default the `ruby` module shows the currently installed version of Ruby. The module will be shown if any of the following conditions are met:
@@ -2103,15 +2189,16 @@ By default the `ruby` module shows the currently installed version of Ruby. The 
 
 ### Opções
 
-| Option              | Padrão                               | Descrição                                        |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                       |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
-| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
-| `style`             | `"bold red"`                         | O estilo do módulo.                              |
-| `disabled`          | `false`                              | Disables the `ruby` module.                      |
+| Option              | Padrão                               | Descrição                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
 ### Variables
 
@@ -2141,15 +2228,16 @@ By default the `rust` module shows the currently installed version of Rust. The 
 
 ### Opções
 
-| Option              | Padrão                               | Descrição                                       |
-| ------------------- | ------------------------------------ | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                      |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
-| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
-| `style`             | `"bold red"`                         | O estilo do módulo.                             |
-| `disabled`          | `false`                              | Disables the `rust` module.                     |
+| Option              | Padrão                               | Descrição                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
 ### Variables
 

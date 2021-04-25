@@ -171,6 +171,17 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_nvmrc() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".nvmrc"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_js_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.js"))?.sync_all()?;

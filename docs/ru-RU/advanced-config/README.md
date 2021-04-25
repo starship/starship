@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Чтобы запустить пользовательскую функцию перед запуском команды, вы можете использовать [механизм ловушки `DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Тем не менее, вы **должны** поймать сигнал DEBUG *перед* инициализацией Starship! Starship может сохранить значение ловушки DEBUG, но если ловушка перезаписана после запуска Starship, некоторая функциональность сломается.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Тем не менее, вы **должны** поймать сигнал DEBUG *перед* инициализацией Starship! Starship может сохранить значение ловушки DEBUG, но если ловушка перезаписана после запуска Starship, некоторая функциональность сломается.
 
 ```bash
 function blastoff(){
@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Изменение заголовка окна
 
-Некоторые подсказки к оболочке автоматически меняют заголовок окна для вас (например, отражая ваш рабочий каталог). Fish даже делает это по умолчанию. Starship не делает этого, но достаточно легко добавить эту функциональность к `bash` или `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish даже делает это по умолчанию. Starship не делает этого, но достаточно легко добавить эту функциональность к `bash` или `zsh`.
 
 Сначала задайте функцию изменения заголовка окна (идентичную в bash и zsh):
 
@@ -57,7 +57,7 @@ starship_precmd_user_func="set_win_title"
 precmd_functions+=(set_win_title)
 ```
 
-Если вам нравится результат, добавьте эти строки в конфигурационный файл оболочки (`~/.bashrc` или `~/.zsrhc`), чтобы оставить это навсегда.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
 Например, если вы хотите отобразить ваш текущий каталог в заголовке вкладки терминала, добавьте следующие строки в `~/. bashrc` или `~/.zshrc`:
 
@@ -75,14 +75,15 @@ starship_precmd_user_func="set_win_title"
   - `bold`
   - `underline`
   - `dimmed`
+  - `inverted`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
   - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` и `<color>` в настоящее время делают одно и то же, хотя это может измениться в будущем. Порядок слов в строке не имеет значения.
+где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none`  устанавливает цвет фона по умолчанию, поэтому `fg:red bg:none` эквивалентен `red` или `fg:red` и `bg:green fg:red bg:none` тоже самое, что `fg:red` или `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
 
 Цветовой спецификатор может быть одним из следующих:
 
