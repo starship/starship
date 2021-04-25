@@ -2281,7 +2281,7 @@ The module will be shown if any of the following conditions are met:
 ```toml
 # ~/.config/starship.toml
 
-[r]
+[rlang]
 format = "with [📐 $version](blue bold) "
 ```
 

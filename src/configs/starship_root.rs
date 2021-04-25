@@ -52,7 +52,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "php",
     "purescript",
     "python",
-    "r",
+    "rlang",
     "red",
     "ruby",
     "rust",

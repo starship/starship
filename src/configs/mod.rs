@@ -46,8 +46,8 @@ pub mod perl;
 pub mod php;
 pub mod purescript;
 pub mod python;
-pub mod r;
 pub mod red;
+pub mod rlang;
 pub mod ruby;
 pub mod rust;
 pub mod scala;
@@ -117,7 +117,7 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
-    r: r::RConfig<'a>,
+    rlang: rlang::RLangConfig<'a>,
     red: red::RedConfig<'a>,
     ruby: ruby::RubyConfig<'a>,
     rust: rust::RustConfig<'a>,

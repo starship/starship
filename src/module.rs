@@ -52,7 +52,7 @@ pub const ALL_MODULES: &[&str] = &[
     "perl",
     "purescript",
     "python",
-    "r",
+    "rlang",
     "red",
     "ruby",
     "crystal",

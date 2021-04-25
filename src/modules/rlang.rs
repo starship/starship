@@ -1,11 +1,11 @@
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::r::RConfig;
+use crate::configs::rlang::RLangConfig;
 use crate::formatter::StringFormatter;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("r");
-    let config: RConfig = RConfig::try_load(module.config);
+    let mut module = context.new_module("rlang");
+    let config: RLangConfig = RLangConfig::try_load(module.config);
 
     let is_r_project = context
         .try_begin_scan()?
@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `r`:\n{}", error);
+            log::warn!("Error in module `rlang`:\n{}", error);
             return None;
         }
     });
@@ -51,15 +51,14 @@ fn get_r_version(context: &Context) -> Option<String> {
 }
 
 fn parse_version(r_version: &str) -> Option<String> {
-    let version = r_version
+    r_version
         .lines()
         // take first line
         .next()
         // split into ["R", "version", "3.6.3", "(2020-02-29)", ...]
         // and pick version entry at index 2, i.e. "3.6.3".
-        .and_then(|s| s.split_whitespace().nth(2));
-
-    version.map(|ver| format!("v{}", ver))
+        .and_then(|s| s.split_whitespace().nth(2))
+        .map(|ver| format!("v{}", ver))
 }
 
 #[cfg(test)]
