@@ -16,7 +16,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Insert,
         Root,
     }
-    const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
+
+    let assumed_mode: ShellEditMode = if !cfg!(windows) && is_root_euid(&context) {
+        ShellEditMode::Root
+    } else {
+        ShellEditMode::Insert
+    };
     // TODO: extend config to more modes
 
     let mut module = context.new_module("character");
@@ -36,13 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // The result: in non-vi fish, keymap is always reported as "insert"
     let mode = match (&context.shell, keymap.as_str()) {
         (Shell::Fish, "default") | (Shell::Zsh, "vicmd") => ShellEditMode::Normal,
-        _ => ASSUMED_MODE,
-    };
-
-    let mode = if !cfg!(windows) && is_root_euid(&context) {
-        ShellEditMode::Root
-    } else {
-        mode
+        _ => assumed_mode,
     };
 
     let symbol = match mode {
@@ -156,6 +155,7 @@ mod test {
                 .config(toml::toml! {
                     [character]
                     success_symbol = "[➜](bold green)"
+                    root_symbol = "[➜](bold green)"
                     error_symbol = "[✖](bold red)"
                 })
                 .status(*status)
@@ -168,6 +168,7 @@ mod test {
             .config(toml::toml! {
                 [character]
                 success_symbol = "[➜](bold green)"
+                root_symbol = "[➜](bold green)"
                 error_symbol = "[✖](bold red)"
             })
             .status(0)
