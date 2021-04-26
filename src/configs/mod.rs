@@ -183,6 +183,7 @@ impl<'a> Default for FullConfig<'a> {
             php: Default::default(),
             purescript: Default::default(),
             python: Default::default(),
+            red: Default::default(),
             ruby: Default::default(),
             rust: Default::default(),
             scala: Default::default(),
