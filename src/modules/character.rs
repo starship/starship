@@ -14,6 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
         Insert,
+        Root,
     }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
     // TODO: extend config to more modes
@@ -38,11 +39,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ASSUMED_MODE,
     };
 
+    let mode = if !cfg!(windows) && is_root_euid(&context) {
+        ShellEditMode::Root
+    } else {
+        mode
+    };
+
     let symbol = match mode {
         ShellEditMode::Normal => config.vicmd_symbol,
         ShellEditMode::Insert => {
             if exit_success {
                 config.success_symbol
+            } else {
+                config.error_symbol
+            }
+        }
+        ShellEditMode::Root => {
+            if exit_success {
+                config.root_symbol
             } else {
                 config.error_symbol
             }
@@ -67,6 +81,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn is_root_euid(context: &Context) -> bool {
+    let root_uid: usize = 0;
+    let euid: Option<usize> = match context.exec_cmd("id", &["-u"]) {
+        Some(output) => match output.stdout.parse() {
+            Ok(euid) => Some(euid),
+            _ => None,
+        },
+        None => None,
+    };
+
+    match euid {
+        Some(euid) => {
+            log::debug!("You are the root");
+            euid == root_uid
+        },
+        None => {
+            log::debug!("You are not root");
+            log::debug!("I dont know why this doesnt always pop up");
+            false
+        }
+    }
 }
 
 #[cfg(test)]

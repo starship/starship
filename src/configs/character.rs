@@ -9,6 +9,7 @@ pub struct CharacterConfig<'a> {
     pub success_symbol: &'a str,
     pub error_symbol: &'a str,
     pub vicmd_symbol: &'a str,
+    pub root_symbol: &'a str,
     pub disabled: bool,
 }
 
@@ -19,6 +20,7 @@ impl<'a> Default for CharacterConfig<'a> {
             success_symbol: "[❯](bold green)",
             error_symbol: "[❯](bold red)",
             vicmd_symbol: "[❮](bold green)",
+            root_symbol: "[#](bold green)",
             disabled: false,
         }
     }
