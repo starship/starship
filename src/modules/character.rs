@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Root,
     }
 
-    let assumed_mode: ShellEditMode = if !cfg!(windows) && is_root_euid(&context) {
+    let assumed_mode: ShellEditMode = if cfg!(linux) && is_root_euid(&context) {
         ShellEditMode::Root
     } else {
         ShellEditMode::Insert
