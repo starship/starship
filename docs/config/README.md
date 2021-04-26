@@ -2421,17 +2421,18 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                 | Default       | Description                                   |
-| ---------------------- | ------------- | --------------------------------------------- |
-| `bash_indicator`       | `bsh`         | A format string used to represent bash.       |
-| `fish_indicator`       | `fsh`         | A format string used to represent fish.       |
-| `zsh_indicator`        | `zsh`         | A format string used to represent zsh.        |
-| `powershell_indicator` | `psh`         | A format string used to represent powershell. |
-| `ion_indicator`        | `ion`         | A format string used to represent ion.        |
-| `elvish_indicator`     | `esh`         | A format string used to represent elvish.     |
-| `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.       |
-| `format`               | `$indicator ` | The format for the module.                    |
-| `disabled`             | `true`        | Disables the `shell` module.                  |
+| Option                 | Default       | Description                                                  |
+| ---------------------- | ------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`         | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`         | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`         | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`         | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`         | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`         | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.                      |
+| `default`              |               | The default value to be displayed when the shell is unknown. |
+| `format`               | `$indicator ` | The format for the module.                                   |
+| `disabled`             | `true`        | Disables the `shell` module.                                 |
 
 ### Variables
 
@@ -2447,6 +2448,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 [shell]
 fish_indicator = ""
 powershell_indicator = "_"
+default = "mystery shell"
 disabled = false
 ```
 
