@@ -1,16 +1,16 @@
 # 常见问题
 
-## 主页 GIF 示例中的效果用的是什么配置？
+## 主页示例图中的效果用的是什么配置？
 
 - **终端模拟器**：[iTerm2](https://iterm2.com/)
   - **主题**：Minimal
   - **颜色方案**：[Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **字体**：[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**：[Fish Shell](https://fishshell.com/)
   - **fish 配置**：[matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **提示符工具**：[Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## 如何实现示例图中自动补全的功能？
 
 Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
