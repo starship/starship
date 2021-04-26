@@ -86,16 +86,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn is_root_euid(context: &Context) -> bool {
     let root_uid: usize = 0;
     let euid: Option<usize> = match context.exec_cmd("id", &["-u"]) {
-        Some(output) => match output.stdout.parse() {
+        Some(output) => match output.stdout.trim().parse() {
             Ok(euid) => Some(euid),
-            _ => None,
+            Err(e) => {
+                log::warn!("Error parsing {} with error {}", output.stdout, e);
+                None
+            }
         },
-        None => None,
+        None => {
+            log::warn!("Error running id -u");
+            None
+        }
     };
 
     match euid {
         Some(euid) => {
-            log::debug!("You are the root");
+            log::debug!("You are euid: {}", euid);
             euid == root_uid
         },
         None => {
