@@ -92,22 +92,12 @@ fn is_root_euid(context: &Context) -> bool {
                 None
             }
         },
-        None => {
-            log::warn!("Error running id -u");
-            None
-        }
+        None => None,
     };
 
     match euid {
-        Some(euid) => {
-            log::debug!("You are euid: {}", euid);
-            euid == root_uid
-        },
-        None => {
-            log::debug!("You are not root");
-            log::debug!("I dont know why this doesnt always pop up");
-            false
-        }
+        Some(euid) => euid == root_uid,
+        None => false,
     }
 }
 

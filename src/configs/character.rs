@@ -15,7 +15,7 @@ pub struct CharacterConfig<'a> {
 
 impl<'a> Default for CharacterConfig<'a> {
     fn default() -> Self {
-        const DEFAULT_SUCCESS_SYMBOL:&str = "[❯](bold green)";
+        const DEFAULT_SUCCESS_SYMBOL: &str = "[❯](bold green)";
         CharacterConfig {
             format: "$symbol ",
             success_symbol: DEFAULT_SUCCESS_SYMBOL,
