@@ -62,10 +62,10 @@ If you see symbols that you don't recognise you can use `starship explain` to ex
 
 ## Why don't I see a glyph symbol in my prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+最常见的原因是系统配置有问题。 有个别Linux发行版不自带对字体的支持。 请确保：
 
 - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+- 安装了 emoji 字体。 大部分系统都会自带 emoji 字体，但有些系统（例如 Arch Linux）则没有。 字体一般可以用系统的包管理器安装，常见的字体有 [Noto emoji](https://www.google.com/get/noto/help/emoji/) 等。
 - You are using a [Nerd Font](https://www.nerdfonts.com/).
 
 To test your system, run the following commands in a terminal:
@@ -75,7 +75,7 @@ echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+第一行应该显示出一个[蛇的 emoji](https://emojipedia.org/snake/)，第二行应该显示出 [powerline 的分支符号（e0a0）。](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
