@@ -81,6 +81,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "character",
 ];
 
+// On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
 impl<'a> Default for StarshipRootConfig<'a> {
     fn default() -> Self {
         StarshipRootConfig {
