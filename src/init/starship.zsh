@@ -7,14 +7,7 @@
 # after drawing the prompt. This ensures that the timing for one command is only
 # ever drawn once (for the prompt immediately after it is run).
 
-zmodload zsh/parameter  # Needed to access jobstates variable for NUM_JOBS
-
-starship_render() {
-    # Use length of jobstates array as number of jobs. Expansion fails inside
-    # quotes so we set it here and then use the value later on.
-    NUM_JOBS=$#jobstates
-    PROMPT="$(::STARSHIP:: prompt --keymap="${KEYMAP-}" --status=$STARSHIP_CMD_STATUS --cmd-duration=${STARSHIP_DURATION-} --jobs="$NUM_JOBS")"
-}
+zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
 
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
@@ -44,8 +37,9 @@ starship_precmd() {
         unset STARSHIP_DURATION
     fi
 
-    # Render the updated prompt
-    starship_render
+    # Use length of jobstates array as number of jobs. Expansion fails inside
+    # quotes so we set it here and then use the value later on.
+    STARSHIP_JOBS_COUNT=${#jobstates}
 }
 starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
@@ -68,7 +62,6 @@ fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
-    starship_render
     zle reset-prompt
 }
 
@@ -76,12 +69,12 @@ starship_zle-keymap-select() {
 local existing_keymap_select_fn=$widgets[zle-keymap-select];
 # zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
 existing_keymap_select_fn=${existing_keymap_select_fn//user:};
-if [[ -z ${existing_keymap_select_fn} ]]; then
+if [[ -z $existing_keymap_select_fn ]]; then
     zle -N zle-keymap-select starship_zle-keymap-select;
 else
     # Define a wrapper fn to call the original widget fn and then Starship's.
     starship_zle-keymap-select-wrapped() {
-        ${existing_keymap_select_fn} "$@";
+        $existing_keymap_select_fn "$@";
         starship_zle-keymap-select "$@";
     }
     zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
@@ -97,3 +90,6 @@ STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ c
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
+
+setopt promptsubst
+PROMPT='$(::STARSHIP:: prompt --keymap="$KEYMAP" --status="$STARSHIP_CMD_STATUS" --cmd-duration="$STARSHIP_DURATION" --jobs="$STARSHIP_JOBS_COUNT")'
