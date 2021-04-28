@@ -243,7 +243,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ```sh
    # ~/.tcshrc
 
-   eval `starship init tcsh`
+   eval "`starship init tcsh`"
    ```
 
 ## 🤝 Contributing

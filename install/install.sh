@@ -446,5 +446,5 @@ info "Please follow the steps for your shell to complete the installation:
   ${BOLD}${UNDERLINE}Tcsh${NO_COLOR}
   Add the following to the end of ${BOLD}~/.tcshrc${NO_COLOR}:
 
-      eval \`starship init tcsh\`
+      eval \"\`starship init tcsh\`\"
 "
