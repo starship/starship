@@ -4,6 +4,7 @@ setenv STARSHIP_SESSION_KEY `::STARSHIP:: session`;
 set USER_PRECMD = `alias precmd`;
 set USER_POSTCMD = `alias postcmd`;
 
+# Runs just before each prompt is printed
 set STARSHIP_PRECMD = '\
     set STARSHIP_CMD_STATUS = $status; \
     set STARSHIP_DURATION = 0; \
@@ -13,6 +14,7 @@ set STARSHIP_PRECMD = '\
         unset STARSHIP_START_TIME; \
     endif'
 
+# Runs before each command gets executed
 set STARSHIP_POSTCMD = '\
     set STARSHIP_START_TIME = `::STARSHIP:: time`';
 
