@@ -22,10 +22,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
 
     let props = &context.properties;
-    let exit_code_default = String::from("0");
-    let exit_code = props.get("status_code").unwrap_or(&exit_code_default);
-    let keymap_default = String::from("viins");
-    let keymap = props.get("keymap").unwrap_or(&keymap_default);
+    let exit_code = props.get("status_code").map(String::as_str).unwrap_or("0");
+    let keymap = props.get("keymap").map(String::as_str).unwrap_or("viins");
     let exit_success = exit_code == "0";
 
     // Match shell "keymap" names to normalized vi modes
@@ -33,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Unfortunately, this is also the name of the non-vi default mode.
     // We do some environment detection in src/init.rs to translate.
     // The result: in non-vi fish, keymap is always reported as "insert"
-    let mode = match (&context.shell, keymap.as_str()) {
+    let mode = match (&context.shell, keymap) {
         (Shell::Fish, "default") | (Shell::Zsh, "vicmd") => ShellEditMode::Normal,
         _ => ASSUMED_MODE,
     };
