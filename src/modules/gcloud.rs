@@ -177,7 +177,7 @@ account = foo@example.com
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️ foo@example.com")
+            Color::Blue.bold().paint("☁️  foo@example.com")
         ));
 
         assert_eq!(actual, expected);
@@ -209,7 +209,7 @@ region = us-central1
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️ foo@example.com(us-central1)")
+            Color::Blue.bold().paint("☁️  foo@example.com(us-central1)")
         ));
 
         assert_eq!(actual, expected);
@@ -245,7 +245,7 @@ region = us-central1
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️ foo@example.com(uc1)")
+            Color::Blue.bold().paint("☁️  foo@example.com(uc1)")
         ));
 
         assert_eq!(actual, expected);
@@ -266,7 +266,7 @@ region = us-central1
                 format = "on [$symbol$active]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ default1")));
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  default1")));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -296,7 +296,7 @@ project = abc
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ abc")));
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  abc")));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -352,7 +352,7 @@ project = overridden
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ overridden")));
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
 
         assert_eq!(actual, expected);
         dir.close()
