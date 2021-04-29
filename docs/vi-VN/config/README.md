@@ -444,15 +444,16 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                               | Mô tả                                              |
-| ------------------- | -------------------------------------- | -------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                              |
-| `symbol`            | `"△ "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.         |
-| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                |
-| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                |
-| `style`             | `"bold blue"`                          | Kiểu cho module.                                   |
-| `disabled`          | `false`                                | Vô hiệu hoá `cmake` module.                        |
+| Tuỳ chọn            | Mặc định                               | Mô tả                                                                     |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                              |
+| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                        |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                                       |
+| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                                       |
+| `style`             | `"bold blue"`                          | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
 
 ### Các biến
 
@@ -562,15 +563,16 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Options
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`            | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal. |
-| `style`             | `"bold red"`                         | Kiểu cho module.                                      |
-| `detect_extensions` | `["cr"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `["shard.yml"]`                      | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled`          | `false`                              | Vô hiệu hoá module `crystal`.                         |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal.                     |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                                          |
+| `detect_extensions` | `["cr"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["shard.yml"]`                      | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
 ### Các biến
 
@@ -601,15 +603,16 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                          | Mô tả                                               |
-| ------------------- | ------------------------------------------------- | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | Định dạng cho module.                               |
-| `symbol`            | `"🎯 "`                                            | Một chuỗi định dạng hiển thị biểu tượng của Dart    |
-| `detect_extensions` | `["dart"]`                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.          |
-| `detect_folders`    | `[".dart_tool"]`                                  | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"bold blue"`                                     | Kiểu cho module.                                    |
-| `disabled`          | `false`                                           | Vô hiệu `dart` module.                              |
+| Tuỳ chọn            | Mặc định                                          | Mô tả                                                                     |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart                           |
+| `detect_extensions` | `["dart"]`                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[".dart_tool"]`                                  | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold blue"`                                     | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
 ### Các biến
 
@@ -637,15 +640,16 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                     | Mô tả                                               |
-| ------------------- | -------------------------------------------- | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                               |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno     |
-| `detect_extensions` | `[]`                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"green bold"`                               | Kiểu cho module.                                    |
-| `disabled`          | `false`                                      | Disables the `deno` module.                         |
+| Tuỳ chọn            | Mặc định                                     | Mô tả                                                                     |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                           |
+| `detect_extensions` | `[]`                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"green bold"`                               | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                      | Disables the `deno` module.                                               |
 
 ### Các biến
 
@@ -786,16 +790,17 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                    |
-| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.      |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                     |
-| `detect_folders`    | `[]`                                                                                                    | Những thư mục nào nên kích hoạt các mô đun này.          |
-| `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                         |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
+| Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                                                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                                                                                    | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
 ### Các biến
 
@@ -827,15 +832,16 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                    | Mô tả                                                           |
-| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `detect_extensions` | `[]`                                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.             |
-| `detect_files`      | `["mix.exs"]`                                               | Tên tệp nào sẽ kích hoạt mô-đun này.                            |
-| `detect_folders`    | `[]`                                                        | Những thư mục nào nên kích hoạt các mô đun này.                 |
-| `style`             | `"bold purple"`                                             | Kiểu cho module.                                                |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| Tuỳ chọn            | Mặc định                                                    | Mô tả                                                                     |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
+| `version_format`    | `v{raw}`                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
+| `detect_extensions` | `[]`                                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["mix.exs"]`                                               | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                                        | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `style`             | `"bold purple"`                                             | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
 ### Các biến
 
@@ -869,15 +875,16 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                           | Mô tả                                               |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | Định dạng cho module.                               |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.     |
-| `detect_extensions` | `["elm"]`                                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `["elm-stuff"]`                                    | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `style`             | `"cyan bold"`                                      | Kiểu cho module.                                    |
-| `disabled`          | `false`                                            | Disables the `elm` module.                          |
+| Tuỳ chọn            | Mặc định                                           | Mô tả                                                                     |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                           |
+| `detect_extensions` | `["elm"]`                                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `["elm-stuff"]`                                    | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `style`             | `"cyan bold"`                                      | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
 ### Các biến
 
@@ -944,15 +951,16 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                    |
-| ------------------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`             | `"bold red"`                         | Kiểu cho module.                                         |
-| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.      |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                     |
-| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.          |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                    |
-| `disabled`          | `false`                              | Disables the `erlang` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
+| `style`             | `"bold red"`                         | Kiểu cho module.                                                          |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Các biến
 
@@ -1246,15 +1254,16 @@ The `golang` module shows the currently installed version of [Golang](https://go
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                       | Mô tả                                               |
-| ------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | Định dạng cho module.                               |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.      |
-| `detect_extensions` | `["go"]`                                                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `["Godeps"]`                                                                   | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"bold cyan"`                                                                  | Kiểu cho module.                                    |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                       |
+| Tuỳ chọn            | Mặc định                                                                       | Mô tả                                                                     |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                                                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
+| `detect_extensions` | `["go"]`                                                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `["Godeps"]`                                                                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold cyan"`                                                                  | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                                             |
 
 ### Các biến
 
@@ -1284,15 +1293,16 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
-| ------------------- | ------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
-| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.    |
-| `style`             | `"bold white"`                       | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `helm` module.                         |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
+| `style`             | `"bold white"`                       | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
 ### Các biến
 
@@ -1437,15 +1447,16 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
-| ------------------- | ------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
-| `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.   |
-| `style`             | `"bold purple"`                      | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `julia` module.                        |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
+| `style`             | `"bold purple"`                      | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
 ### Các biến
 
@@ -1477,6 +1488,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                         |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                           |
 | `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                          |
 | `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                               |
@@ -1587,6 +1599,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                      |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                      |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
 | `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
 | `detect_extensions` | `["lua"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                        |
 | `detect_files`      | `[".lua-version"]`                   | Tên tệp nào sẽ kích hoạt mô-đun này.                                       |
@@ -1708,15 +1721,16 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                             |
-| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `detect_extensions` | `["nim", "nims", "nimble"]`          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `["nim.cfg"]`                        | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
-| `style`             | `"bold yellow"`                      | Kiểu cho module.                                      |
-| `disabled`          | `false`                              | Disables the `nim` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                     |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["nim.cfg"]`                        | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold yellow"`                      | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `nim` module.                                                |
 
 ### Các biến
 
@@ -1833,17 +1847,18 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn                  | Mặc định                                                                   | Mô tả                                                   |
-| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                       |
-| `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml. |
-| `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch. |
-| `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.  |
-| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.     |
-| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Tên tệp nào sẽ kích hoạt mô-đun này.                    |
-| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Những thư mục nào sẽ kích hoạt mô-đun này.              |
-| `style`                   | `"bold yellow"`                                                            | Kiểu cho module.                                        |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                            |
+| Tuỳ chọn                  | Mặc định                                                                   | Mô tả                                                                     |
+| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
+| `version_format`          | `v{raw}`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml.                   |
+| `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch.                   |
+| `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.                    |
+| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`                   | `"bold yellow"`                                                            | Kiểu cho module.                                                          |
+| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
 
 ### Các biến
 
@@ -1959,15 +1974,16 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                                                 | Mô tả                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
-| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
-| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
-| `detect_folders`    | `[]`                                                                                                     | Những thư mục nào sẽ kích hoạt mô-đun này.            |
-| `style`             | `"bold 149"`                                                                                             | Kiểu cho module.                                      |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                           |
+| Tuỳ chọn            | Mặc định                                                                                                 | Mô tả                                                                     | **** |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |      |
+| `version_format`    | `v{raw}`                                                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |      |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                     |      |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |      |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |      |
+| `detect_folders`    | `[]`                                                                                                     | Những thư mục nào sẽ kích hoạt mô-đun này.                                |      |
+| `style`             | `"bold 149"`                                                                                             | Kiểu cho module.                                                          |      |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |      |
 
 ### Các biến
 
@@ -1996,15 +2012,16 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP. |
-| `detect_extensions` | `["php"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `["composer.json", ".php-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
-| `style`             | `"147 bold"`                         | Kiểu cho module.                                      |
-| `disabled`          | `false`                              | Disables the `php` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                     |
+| `detect_extensions` | `["php"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"147 bold"`                         | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `php` module.                                                |
 
 ### Các biến
 
@@ -2034,15 +2051,16 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                        |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                        |
-| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
-| `detect_extensions` | `["purs"]`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.          |
-| `detect_files`      | `["spago.dhall"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                         |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                   |
-| `style`             | `"bold white"`                       | Kiểu cho module.                                             |
-| `disabled`          | `false`                              | Disables the `purescript` module.                            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript.              |
+| `detect_extensions` | `["purs"]`                           | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["spago.dhall"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold white"`                       | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `purescript` module.                                         |
 
 ### Các biến
 
@@ -2268,15 +2286,16 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                 | Mô tả                                               |
-| ------------------- | ---------------------------------------- | --------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"` | Định dạng cho module.                               |
-| `detect_extensions` | `["sbt", "scala"]`                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[".metals"]`                            | Những thư mục nào nên kích hoạt các mô đun này.     |
-| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.   |
-| `style`             | `"red dimmed"`                           | Kiểu cho module.                                    |
-| `disabled`          | `false`                                  | Disables the `scala` module.                        |
+| Tuỳ chọn            | Mặc định                                 | Mô tả                                                                     |
+| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["sbt", "scala"]`                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[".metals"]`                            | Những thư mục nào nên kích hoạt các mô đun này.                           |
+| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                         |
+| `style`             | `"red dimmed"`                           | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                  | Disables the `scala` module.                                              |
 
 ### Các biến
 
@@ -2472,15 +2491,16 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
-| ------------------- | ------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
-| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift    |
-| `detect_extensions` | `["swift"]`                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["Package.swift"]`                  | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"bold 202"`                         | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `swift` module.                        |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                          |
+| `detect_extensions` | `["swift"]`                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["Package.swift"]`                  | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold 202"`                         | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `swift` module.                                              |
 
 ### Các biến
 
@@ -2518,15 +2538,16 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`            | `"💠"`                                | A format string shown before the Terraform workspace. |
-| `detect_extensions` | `["tf", "hcl"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
-| `detect_folders`    | `[".terraform"]`                     | Những thư mục nào sẽ kích hoạt mô-đun này.            |
-| `style`             | `"bold 105"`                         | Kiểu cho module.                                      |
-| `disabled`          | `false`                              | Disables the `terraform` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `["tf", "hcl"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[".terraform"]`                     | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold 105"`                         | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
 ### Các biến
 
@@ -2658,15 +2679,16 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
-| ------------------- | ------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
-| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["Vagrantfile"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"cyan bold"`                        | Kiểu cho module.                                    |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                      |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                       |
+| `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["Vagrantfile"]`                    | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"cyan bold"`                        | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
 ### Các biến
 
@@ -2727,15 +2749,16 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `"bold yellow"`                      | Kiểu cho module.                                      |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                 |
-| `disabled`          | `false`                              | Disables the `zig` module.                            |
-| `detect_extensions` | `["zig"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                  |
-| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                     |
+| `style`             | `"bold yellow"`                      | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables the `zig` module.                                                |
+| `detect_extensions` | `["zig"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
 
 ### Các biến
 
