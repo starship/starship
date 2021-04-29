@@ -1,10 +1,11 @@
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::linux_netns::LinuxNetNsConfig;
-use crate::formatter::StringFormatter;
 use procfs::process::Process;
 use std::fs;
+use crate::formatter::StringFormatter;
 
-/// Creates a module giving the current network namespace
+
+/// Creates a module with the giving the current network namespace
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let netns_name = get_netns_name()?;
 
