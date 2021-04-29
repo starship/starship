@@ -93,6 +93,10 @@ nix = "0.21.0"
 libc = "0.2.80"
 procfs = "0.9.1"
 
+#[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2.80"
+procfs = "0.9.1"
+
 [build-dependencies]
 shadow-rs = "0.5.25"
 
