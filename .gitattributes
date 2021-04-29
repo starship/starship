@@ -1,3 +1,2 @@
-/src/init/starship.* text eol=lf
-/src/init/mod.rs text eol=lf
+/src/init/ text eol=lf
 *.sh text eol=lf
