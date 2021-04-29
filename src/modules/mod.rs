@@ -64,6 +64,9 @@ mod zig;
 #[cfg(feature = "battery")]
 mod battery;
 
+#[cfg(target_os = "linux")]
+mod linux_netns;
+
 use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
@@ -101,6 +104,8 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
+            #[cfg(target_os = "linux")]
+            "linux_netns" => linux_netns::module(context),
             "java" => java::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
@@ -191,6 +196,8 @@ pub fn description(module: &str) -> &'static str {
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
+        #[cfg(target_os = "linux")]
+        "linux_netns" => "The current network namespace",
         "lua" => "The currently installed version of Lua",
         "memory_usage" => "Current system memory and swap usage",
         "nim" => "The currently installed version of Nim",

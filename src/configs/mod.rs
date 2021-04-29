@@ -29,6 +29,7 @@ pub mod go;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
+pub mod linux_netns;
 pub mod java;
 pub mod jobs;
 pub mod julia;
@@ -107,6 +108,7 @@ pub struct FullConfig<'a> {
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
     lua: lua::LuaConfig<'a>,
+    linux_netns: linux_netns::LinuxNetNsConfig<'a>,
     memory_usage: memory_usage::MemoryConfig<'a>,
     nim: nim::NimConfig<'a>,
     nix_shell: nix_shell::NixShellConfig<'a>,
@@ -175,6 +177,7 @@ impl<'a> Default for FullConfig<'a> {
             julia: Default::default(),
             kotlin: Default::default(),
             kubernetes: Default::default(),
+            linux_netns: Default::default(),
             lua: Default::default(),
             memory_usage: Default::default(),
             nim: Default::default(),

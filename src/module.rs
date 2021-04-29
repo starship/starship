@@ -35,6 +35,8 @@ pub const ALL_MODULES: &[&str] = &[
     "hg_branch",
     "hostname",
     "java",
+    #[cfg(target_os = "linux")]
+    "linux_netns",
     "scala",
     "jobs",
     "julia",

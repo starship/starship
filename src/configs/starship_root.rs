@@ -71,6 +71,8 @@ pub const PROMPT_ORDER: &[&str] = &[
     "openstack",
     "env_var",
     "crystal",
+    #[cfg(target_os = "linux")]
+    "linux_netns",
     "custom",
     "cmd_duration",
     "line_break",
