@@ -1040,7 +1040,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | Option           | Default                                        | Description                                                     |
 | ---------------- | ---------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                         | The symbol used before displaying the current GCP profile.      |
+| `symbol`         | `"☁️  "`                                        | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                | Table of region aliases to display in addition to the GCP name. |
 | `style`          | `"bold blue"`                                  | The style for the module.                                       |
 | `disabled`       | `false`                                        | Disables the `gcloud` module.                                   |
