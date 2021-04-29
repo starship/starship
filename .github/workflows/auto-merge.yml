@@ -1,9 +1,10 @@
-name: Merge Dependabot
+name: Dependabot
 
 on: [pull_request]
 
 jobs:
-  auto-merge:
+  auto_merge:
+    name: Auto-merge Dependabot PRs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
