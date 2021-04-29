@@ -11,7 +11,7 @@ function fish_prompt
     ::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=(count (jobs -p))
 end
 
-# disable virtualenv prompt, it breaks starship
+# Disable virtualenv prompt, it breaks starship
 set -g VIRTUAL_ENV_DISABLE_PROMPT 1
 
 # Remove default mode prompt
