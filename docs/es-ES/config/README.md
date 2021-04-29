@@ -384,7 +384,7 @@ The character will tell you whether the last command was successful or not. It c
 - Cambiando el color (`red`/`green`)
 - Cambiando la forma (`.`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 ::: warning `error_symbol` is not supported on elvish shell. :::
 
