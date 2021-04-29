@@ -402,7 +402,7 @@ can do this in two ways:
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a
+By default it only changes color. If you also want to change its shape take a
 look at [this example](#with-custom-error-shape).
 
 ::: warning
