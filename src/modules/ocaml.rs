@@ -5,6 +5,7 @@ use std::path::Path;
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 #[derive(Debug, PartialEq)]
 enum SwitchType {
@@ -63,7 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         context.exec_cmd("ocaml", &["-vnum"])?.stdout
                     };
-                    Some(Ok(format!("v{}", &ocaml_version.trim())))
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &ocaml_version.trim(),
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })

@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::vagrant::VagrantConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Vagrant version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,9 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_vagrant_version(
-                    &context.exec_cmd("vagrant", &["--version"])?.stdout.as_str(),
-                )
+                "version" => {
+                    let vagrant_version =
+                        get_vagrant_version(&context.exec_cmd("vagrant", &["--version"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &vagrant_version,
+                        config.version_format,
+                    )
+                }
                 .map(Ok),
                 _ => None,
             })
@@ -50,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_vagrant_version(vagrant_stdout: &str) -> Option<String> {
+fn get_vagrant_version(vagrant_stdout: &str) -> Option<String> {
     // `vagrant --version` output looks like this:
     // Vagrant 2.2.10
     let version = vagrant_stdout
@@ -59,10 +66,7 @@ fn format_vagrant_version(vagrant_stdout: &str) -> Option<String> {
         // return "2.2.10"
         .nth(1)?;
 
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -97,8 +101,8 @@ mod tests {
     }
 
     #[test]
-    fn test_format_vagrant_version() {
+    fn test_get_vagrant_version() {
         let vagrant = "Vagrant 2.2.10\n";
-        assert_eq!(format_vagrant_version(vagrant), Some("v2.2.10".to_string()));
+        assert_eq!(get_vagrant_version(vagrant), Some("2.2.10".to_string()));
     }
 }

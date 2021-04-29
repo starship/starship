@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig, Serialize)]
 pub struct LuaConfig<'a> {
     pub format: &'a str,
+    pub version_format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub lua_binary: &'a str,
@@ -19,6 +20,7 @@ impl<'a> Default for LuaConfig<'a> {
     fn default() -> Self {
         LuaConfig {
             format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             symbol: "🌙 ",
             style: "bold blue",
             lua_binary: "lua",

@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::erlang::ErlangConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Create a module with the current Erlang version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,7 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_erlang_version(context).map(Ok),
+                "version" => {
+                    let erlang_version = get_erlang_version(context)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &erlang_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -85,7 +94,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint(" 22.1.3 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint(" v22.1.3 ")));
         let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);

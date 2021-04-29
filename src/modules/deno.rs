@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::deno::DenoConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Deno version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -27,10 +28,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => context
-                    .exec_cmd("deno", &["-V"])
-                    .and_then(|output| parse_deno_version(output.stdout.trim()))
-                    .map(Ok),
+                "version" => {
+                    let deno_version =
+                        get_deno_version(&context.exec_cmd("deno", &["-V"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &deno_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -47,32 +54,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_deno_version(deno_version: &str) -> Option<String> {
-    let version = deno_version
-        // split into ["deno", "1.8.3"]
-        .split_whitespace()
-        // return "1.8.3"
-        .nth(1)?;
-
-    Some(format!("v{}", version))
+fn get_deno_version(deno_version: &str) -> Option<String> {
+    Some(
+        deno_version
+            // split into ["deno", "1.8.3"]
+            .split_whitespace()
+            // return "1.8.3"
+            .nth(1)?
+            .to_string(),
+    )
 }
 
 #[cfg(test)]
 mod tests {
-    use super::parse_deno_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_parse_deno_version() {
-        const OUTPUT: &str = "deno 1.8.3\n";
-        assert_eq!(
-            parse_deno_version(OUTPUT.trim()),
-            Some("v1.8.3".to_string())
-        )
-    }
 
     #[test]
     fn folder_without_deno_files() -> io::Result<()> {
