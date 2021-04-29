@@ -27,7 +27,7 @@ jobs:
     name: Update Brew Formula
     runs-on: ubuntu-latest
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v1.6
+      - uses: mislav/bump-homebrew-formula-action@v1.12
         with:
           formula-name: starship
         env:
