@@ -982,7 +982,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | Opción           | Por defecto                                      | Descripción                                                |
 | ---------------- | ------------------------------------------------ | ---------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(\($region\))]($style) '` | El formato del módulo.                                     |
-| `symbol`         | `"☁️ "`                                          | El símbolo usado antes de mostrar el perfil actual de GCP. |
+| `symbol`         | `"☁️  "`                                         | El símbolo usado antes de mostrar el perfil actual de GCP. |
 | `region_aliases` |                                                  | Tabla de alias de región a mostrar además del nombre GCP.  |
 | `style`          | `"bold blue"`                                    | El estilo del módulo.                                      |
 | `disabled`       | `false`                                          | Deshabilita el módulo `gcloud`.                            |
