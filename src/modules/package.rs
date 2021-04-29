@@ -68,7 +68,7 @@ fn extract_package_version(file_contents: &str, display_private: bool) -> Option
     };
 
     let formatted_version = format_version(raw_version);
-    if formatted_version == "v0.0.0-development" || formatted_version.find("semantic").is_some()
+    if formatted_version == "v0.0.0-development" || formatted_version.starts_with("v0.0.0-semantic")
     {
         return Some("semantic".to_string());
     };
@@ -359,7 +359,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("semantic"), None)?;
+        expect_output(&project_dir, Some("semantic"), None);
         project_dir.close()
     }
 
@@ -374,7 +374,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("semantic"), None)?;
+        expect_output(&project_dir, Some("semantic"), None);
         project_dir.close()
     }
 
@@ -389,7 +389,7 @@ mod tests {
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.0.0-alpha"), None)?;
+        expect_output(&project_dir, Some("v0.0.0-alpha"), None);
         project_dir.close()
     }
 
