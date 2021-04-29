@@ -1,0 +1,14 @@
+name: Auto-merge minor/patch
+on:
+  schedule:
+    - cron: "0 * * * *"
+jobs:
+  auto_merge:
+    name: Auto-merge Dependabot PRs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: koj-co/dependabot-pr-action@v1
+        with:
+          token: ${{ secrets.DEPENDABOT_GITHUB_API_TOKEN }}
+          merge-minor: true
+          merge-patch: true
