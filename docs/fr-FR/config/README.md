@@ -384,7 +384,7 @@ Le caractère vous dira si la dernière commande a été réussie ou pas. Il y a
 - changement de couleur (`red`/`green`)
 - changement de forme (`❯`/`✖`)
 
-Par défaut, seule la couleur change. Si vous désirez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
+Par défaut, seule la couleur change. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 ::: warning `error_symbol` n'est pas supporté avec elvish. :::
 
