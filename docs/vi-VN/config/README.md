@@ -987,24 +987,25 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                         | Mô tả                                                           |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | Định dạng cho module.                                           |
-| `symbol`         | `"☁️  "`                                         | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | Kiểu cho module.                                                |
-| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
+| Tuỳ chọn         | Mặc định                                                   | Mô tả                                                           |
+| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Định dạng cho module.                                           |
+| `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                              | Kiểu cho module.                                                |
+| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
 
 ### Các biến
 
-| Biến      | Ví dụ             | Mô tả                                                              |
-| --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | The current GCP region                                             |
-| account   | `foo@example.com` | The current GCP profile                                            |
-| project   |                   | The current GCP project                                            |
-| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`                                   |
-| style\* |                   | Giá trị ghi đè của `style`                                         |
+| Biến      | Ví dụ         | Mô tả                                                              |
+| --------- | ------------- | ------------------------------------------------------------------ |
+| region    | `us-central1` | The current GCP region                                             |
+| account   | `foo`         | The current GCP profile                                            |
+| domain    | `example.com` | The current GCP profile domain                                     |
+| project   |               | The current GCP project                                            |
+| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |               | Giá trị ghi đè tuỳ chọn `symbol`                                   |
+| style\* |               | Giá trị ghi đè của `style`                                         |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1016,7 +1017,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
 #### Chỉ hiển thị tên cấu hình hiệu lực
