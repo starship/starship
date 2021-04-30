@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::zig::ZigConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Zig version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -31,9 +32,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let zig_version_output = context.exec_cmd("zig", &["version"])?.stdout;
-                    let zig_version = format!("v{}", zig_version_output.trim());
-                    Some(Ok(zig_version))
+                    let zig_version = context.exec_cmd("zig", &["version"])?.stdout;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &zig_version.trim(),
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })

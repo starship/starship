@@ -1,4 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
+use crate::formatter::VersionFormatter;
 
 use crate::configs::cmake::CMakeConfig;
 use crate::formatter::StringFormatter;
@@ -30,11 +31,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => context
-                    .exec_cmd("cmake", &["--version"])
-                    .map(|output| format_cmake_version(&output.stdout))
-                    .flatten()
-                    .map(Ok),
+                "version" => {
+                    let cmake_version =
+                        get_cmake_version(&context.exec_cmd("cmake", &["--version"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &cmake_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -51,9 +57,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_cmake_version(cmake_version: &str) -> Option<String> {
-    let version = cmake_version.split_whitespace().nth(2)?;
-    Some(format!("v{}", version))
+fn get_cmake_version(cmake_version: &str) -> Option<String> {
+    Some(
+        cmake_version
+            //split into ["cmake" "version" "3.10.2", ...]
+            .split_whitespace()
+            // get down to "3.10.2"
+            .nth(2)?
+            .to_string(),
+    )
 }
 
 #[cfg(test)]

@@ -54,7 +54,7 @@ yaml-rust = "0.4.5"
 pest = "2.1.3"
 pest_derive = "2.1.0"
 regex = "1.4.6"
-os_info = "3.0.2"
+os_info = "3.0.4"
 urlencoding = "1.1.1"
 open = "1.7.0"
 unicode-width = "0.1.8"
@@ -63,7 +63,7 @@ quick-xml = "0.22.0"
 rand = "0.8.3"
 serde = { version = "1.0.125", features = ["derive"] }
 indexmap = { version ="1.6.2", features = ["serde"] }
-notify-rust = { version = "4.3.0", optional = true }
+notify-rust = { version = "4.4.0", optional = true }
 semver = "0.11.0"
 which = "4.1.0"
 shadow-rs = "0.5.25"
