@@ -1045,24 +1045,25 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Options
 
-| Option           | Default                                        | Description                                                     |
-| ---------------- | ---------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️  "`                                        | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                  | The style for the module.                                       |
-| `disabled`       | `false`                                        | Disables the `gcloud` module.                                   |
+| Option           | Default                                                  | Description                                                     |
+| ---------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
+| `symbol`         | `"☁️  "`                                                  | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                          | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                            | The style for the module.                                       |
+| `disabled`       | `false`                                                  | Disables the `gcloud` module.                                   |
 
 ### Variables
 
-| Variable | Example           | Description                                                        |
-| -------- | ----------------- | ------------------------------------------------------------------ |
-| region   | `us-central1`     | The current GCP region                                             |
-| account  | `foo@example.com` | The current GCP profile                                            |
-| project  |                   | The current GCP project                                            |
-| active   | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol   |                   | Mirrors the value of option `symbol`                               |
-| style\*  |                   | Mirrors the value of option `style`                                |
+| Variable | Example       | Description                                                        |
+| -------- | ------------- | ------------------------------------------------------------------ |
+| region   | `us-central1` | The current GCP region                                             |
+| account  | `foo`         | The current GCP profile                                            |
+| domain   | `example.com` | The current GCP profile domain                                     |
+| project  |               | The current GCP project                                            |
+| active   | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| symbol   |               | Mirrors the value of option `symbol`                               |
+| style\*  |               | Mirrors the value of option `style`                                |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1074,7 +1075,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
 #### Display active config name only
