@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Ion => Some(config.ion_indicator),
                     Shell::Elvish => Some(config.elvish_indicator),
                     Shell::Tcsh => Some(config.tcsh_indicator),
-                    Shell::Unknown => None,
+                    Shell::Unknown => Some(config.unknown_indicator),
                 },
                 _ => None,
             })
@@ -36,6 +36,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "ion_indicator" => Some(Ok(config.ion_indicator)),
                 "elvish_indicator" => Some(Ok(config.elvish_indicator)),
                 "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
+                "unknown_indicator" => Some(Ok(config.unknown_indicator)),
                 _ => None,
             })
             .parse(None)
