@@ -16,6 +16,43 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 
+pub struct Grapheme<'a>(&'a str);
+
+impl<'a> Grapheme<'a> {
+    pub fn width(&self) -> usize {
+        self.0
+            .chars()
+            .filter_map(UnicodeWidthChar::width)
+            .max()
+            .unwrap_or(0)
+    }
+}
+
+pub trait UnicodeWidthGraphemes {
+    fn width_graphemes(&self) -> usize;
+}
+
+impl<T> UnicodeWidthGraphemes for T
+where
+    T: AsRef<str>,
+{
+    fn width_graphemes(&self) -> usize {
+        self.as_ref()
+            .graphemes(true)
+            .map(Grapheme)
+            .map(|g| g.width())
+            .sum()
+    }
+}
+
+#[test]
+fn test_grapheme_aware_width() {
+    // UnicodeWidthStr::width would return 8
+    assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
+    assert_eq!(1, "Ü".width_graphemes());
+    assert_eq!(11, "normal text".width_graphemes());
+}
+
 pub fn prompt(args: ArgMatches) {
     let context = Context::new(args);
     let stdout = io::stdout();
@@ -123,12 +160,12 @@ pub fn timings(args: ArgMatches) {
         .filter(|module| !module.is_empty() || module.duration.as_millis() > 0)
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
-            name_len: better_width(module.get_name().as_str()),
+            name_len: module.get_name().width_graphemes(),
             value: ansi_term::ANSIStrings(&module.ansi_strings())
                 .to_string()
                 .replace('\n', "\\n"),
             duration: module.duration,
-            duration_len: better_width(format_duration(&module.duration).as_str()),
+            duration_len: format_duration(&module.duration).width_graphemes(),
         })
         .collect::<Vec<ModuleTiming>>();
 
@@ -174,8 +211,8 @@ pub fn explain(args: ArgMatches) {
             let value = module.get_segments().join("");
             ModuleInfo {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
-                value_len: better_width(value.as_str())
-                    + better_width(format_duration(&module.duration).as_str()),
+                value_len: value.width_graphemes()
+                    + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().to_owned(),
                 duration: format_duration(&module.duration),
             }
@@ -218,7 +255,7 @@ pub fn explain(args: ArgMatches) {
                 }
 
                 // Handle normal wrapping
-                current_pos += grapheme_width(g);
+                current_pos += Grapheme(g).width();
                 // Wrap when hitting max width or newline
                 if g == "\n" || current_pos > desc_width {
                     // trim spaces on linebreak
@@ -358,10 +395,6 @@ fn should_add_implicit_custom_module(
         .unwrap_or(false)
 }
 
-fn better_width(s: &str) -> usize {
-    s.graphemes(true).map(grapheme_width).sum()
-}
-
 pub fn format_duration(duration: &Duration) -> String {
     let milis = duration.as_millis();
     if milis == 0 {
@@ -369,17 +402,4 @@ pub fn format_duration(duration: &Duration) -> String {
     } else {
         format!("{:?}ms", &milis)
     }
-}
-
-// Assume that graphemes have width of the first character in the grapheme
-fn grapheme_width(g: &str) -> usize {
-    g.chars().next().and_then(|i| i.width()).unwrap_or(0)
-}
-
-#[test]
-fn test_grapheme_aware_better_width() {
-    // UnicodeWidthStr::width would return 8
-    assert_eq!(2, better_width("👩‍👩‍👦‍👦"));
-    assert_eq!(1, better_width("Ü"));
-    assert_eq!(11, better_width("normal text"));
 }
