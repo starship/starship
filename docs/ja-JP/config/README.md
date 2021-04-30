@@ -988,24 +988,25 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### オプション
 
-| オプション            | デフォルト                                            | 説明                                                              |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | moduleのフォーマットです。                                                |
-| `symbol`         | `"☁️  "`                                         | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | モジュールのスタイルです。                                                   |
-| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
+| オプション            | デフォルト                                                      | 説明                                                              |
+| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | moduleのフォーマットです。                                                |
+| `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                              | モジュールのスタイルです。                                                   |
+| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
 
 ### 変数
 
-| 変数        | 設定例               | 説明                                                                 |
-| --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | The current GCP region                                             |
-| account   | `foo@example.com` | The current GCP profile                                            |
-| project   |                   | The current GCP project                                            |
-| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | オプション `記号` の値をミラーする                                                |
-| style\* |                   | オプション `style` の値をミラーする                                             |
+| 変数        | 設定例           | 説明                                                                 |
+| --------- | ------------- | ------------------------------------------------------------------ |
+| region    | `us-central1` | The current GCP region                                             |
+| account   | `foo`         | The current GCP profile                                            |
+| domain    | `example.com` | The current GCP profile domain                                     |
+| project   |               | The current GCP project                                            |
+| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |               | オプション `記号` の値をミラーする                                                |
+| style\* |               | オプション `style` の値をミラーする                                             |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1017,7 +1018,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
 #### アクティブな設定名のみ表示
