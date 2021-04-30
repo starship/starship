@@ -2330,17 +2330,18 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| オプション                  | デフォルト        | 説明                                            |
-| ---------------------- | ------------ | --------------------------------------------- |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.       |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.       |
-| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.        |
-| `powershell_indicator` | `psh`        | A format string used to represent powershell. |
-| `ion_indicator`        | `ion`        | A format string used to represent ion.        |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
-| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.       |
-| `format`               | `$indicator` | moduleのフォーマットです。                              |
-| `disabled`             | `true`       | Disables the `shell` module.                  |
+| オプション                  | デフォルト        | 説明                                                           |
+| ---------------------- | ------------ | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`        | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`        | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
+| `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
+| `format`               | `$indicator` | moduleのフォーマットです。                                             |
+| `disabled`             | `true`       | Disables the `shell` module.                                 |
 
 ### 変数
 
@@ -2356,6 +2357,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 [shell]
 fish_indicator = ""
 powershell_indicator = "_"
+unknown_indicator = "mystery shell"
 disabled = false
 ```
 
