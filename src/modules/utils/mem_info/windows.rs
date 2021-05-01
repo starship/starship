@@ -19,8 +19,13 @@ impl MemoryInfo {
             total: mem_info.PhysicalTotal * mem_info.PageSize / 1024,
             avail: Some(mem_info.PhysicalAvailable * mem_info.PageSize / 1024),
             free: None,
-            swap_total: (mem_info.CommitLimit - mem_info.PhysicalTotal) * mem_info.PageSize / 1024,
-            swap_free: (mem_info.CommitLimit - mem_info.CommitTotal - mem_info.PhysicalAvailable)
+            swap_total: mem_info.CommitLimit.saturating_sub(mem_info.PhysicalTotal)
+                * mem_info.PageSize
+                / 1024,
+            swap_free: mem_info
+                .CommitLimit
+                .saturating_sub(mem_info.CommitTotal)
+                .saturating_sub(mem_info.PhysicalAvailable)
                 * mem_info.PageSize
                 / 1024,
         })
