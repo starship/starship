@@ -32,7 +32,7 @@ description: Starship - минимальная, быстрая и бесконе
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
-### Quick Install
+### Быстрая установка
 
 1. Установите двоичный файл **starship**:
 

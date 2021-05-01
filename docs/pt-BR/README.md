@@ -32,7 +32,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
-### Quick Install
+### Instalação
 
 1. Instale o binário do **starship**:
 

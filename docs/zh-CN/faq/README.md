@@ -1,16 +1,16 @@
 # 常见问题
 
-## 主页 GIF 示例中的效果用的是什么配置？
+## 主页示例图中的效果用的是什么配置？
 
 - **终端模拟器**：[iTerm2](https://iterm2.com/)
   - **主题**：Minimal
   - **颜色方案**：[Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  - **字体**：[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**：[Fish Shell](https://fishshell.com/)
   - **fish 配置**：[matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **提示符工具**：[Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## 如何实现示例图中自动补全的功能？
 
 Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
@@ -62,10 +62,10 @@ If you see symbols that you don't recognise you can use `starship explain` to ex
 
 ## Why don't I see a glyph symbol in my prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+最常见的原因是系统配置有问题。 有个别Linux发行版不自带对字体的支持。 请确保：
 
 - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
+- 安装了 emoji 字体。 大部分系统都会自带 emoji 字体，但有些系统（例如 Arch Linux）则没有。 字体一般可以用系统的包管理器安装，常见的字体有 [Noto emoji](https://www.google.com/get/noto/help/emoji/) 等。
 - You are using a [Nerd Font](https://www.nerdfonts.com/).
 
 To test your system, run the following commands in a terminal:
@@ -75,20 +75,20 @@ echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+第一行应该显示出一个[蛇的 emoji](https://emojipedia.org/snake/)，第二行应该显示出 [powerline 的分支符号（e0a0）。](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## 如何卸载 Starship？
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship 的卸载过程与安装过程一样简单。
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. 将 shell 的配置文件（比如 `~/.bashrc`）中初始化 Starship 的部分全部删除。
+1. 删除 Starship 的二进制文件。
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+如果 Starship 是用包管理器安装的，请到包管理器的文档中查找卸载的步骤。
 
-If Starship was installed using the install script, the following command will delete the binary:
+如果 Starship 是用安装脚本安装的，可以用以下命令删除二进制文件：
 
 ```sh
 # Locate and delete the starship binary

@@ -141,7 +141,7 @@
 
 ## 🚀 Installation
 
-### Prerequisites
+### Ön koşullar
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 

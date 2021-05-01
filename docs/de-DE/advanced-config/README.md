@@ -81,7 +81,7 @@ Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben kein
   - `<color>`
   - `none`
 
-wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
 
