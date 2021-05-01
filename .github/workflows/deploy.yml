@@ -183,10 +183,18 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
+
+      - name: Setup | Install dependencies
+        run: cd docs && npm install
+
+      - name: Build | Build docs site
+        run: npm run build
 
       - name: Publish
-        uses: netlify/actions/build@master
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod --dir=.vuepress/dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
