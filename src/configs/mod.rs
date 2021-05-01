@@ -198,6 +198,7 @@ impl<'a> Default for FullConfig<'a> {
             time: Default::default(),
             username: Default::default(),
             vagrant: Default::default(),
+            vlang: Default::default(),
             zig: Default::default(),
             custom: Default::default(),
         }
