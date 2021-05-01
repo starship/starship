@@ -28,6 +28,10 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
   </video>
 </div>
 
+### 必要なもの
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
 ### クイックインストール
 
 1. **Starship** のバイナリをインストール
@@ -38,7 +42,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    Shellを利用する
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 

@@ -141,7 +141,7 @@
 
 ## 🚀 Installation
 
-### Prerequisites
+### Ön koşullar
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
@@ -158,7 +158,7 @@
    ##### From prebuilt binary, with Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 

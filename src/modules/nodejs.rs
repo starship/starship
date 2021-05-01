@@ -112,7 +112,7 @@ fn format_node_version(node_version: &str, version_format: &str) -> String {
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => formatted,
         Err(error) => {
-            log::warn!("Error formating `node` version:\n{}", error);
+            log::warn!("Error formatting `node` version:\n{}", error);
             format!("v{}", version)
         }
     }
@@ -163,6 +163,17 @@ mod tests {
     fn folder_with_node_version() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".node-version"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_nvmrc() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".nvmrc"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));

@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Dart version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -31,8 +32,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let dart_version = context.exec_cmd("dart", &["--version"])?.stderr;
-                    parse_dart_version(&dart_version).map(Ok)
+                    let dart_version =
+                        get_dart_version(&context.exec_cmd("dart", &["--version"])?.stderr)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &dart_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -50,29 +57,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_dart_version(dart_version: &str) -> Option<String> {
-    let version = dart_version
-        // split into ["Dart", "VM", "version:", "2.8.4", "(stable)", ...]
-        .split_whitespace()
-        // return "2.8.4"
-        .nth(3)?;
-
-    Some(format!("v{}", version))
+fn get_dart_version(dart_version: &str) -> Option<String> {
+    Some(
+        dart_version
+            // split into ["Dart", "VM", "version:", "2.8.4", "(stable)", ...]
+            .split_whitespace()
+            // return "2.8.4"
+            .nth(3)?
+            .to_string(),
+    )
 }
 
 #[cfg(test)]
 mod tests {
-    use super::parse_dart_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
-
-    #[test]
-    fn test_parse_dart_version() {
-        let input = "Dart VM version: 2.8.4 (stable)";
-        assert_eq!(parse_dart_version(input), Some("v2.8.4".to_string()));
-    }
 
     #[test]
     fn folder_without_dart_file() -> io::Result<()> {

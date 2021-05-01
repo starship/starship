@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::helm::HelmConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Helm version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,13 +31,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_helm_version(
-                    &context
-                        .exec_cmd("helm", &["version", "--short", "--client"])?
-                        .stdout
-                        .as_str(),
-                )
-                .map(Ok),
+                "version" => {
+                    let helm_version = get_helm_version(
+                        &context
+                            .exec_cmd("helm", &["version", "--short", "--client"])?
+                            .stdout,
+                    )?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &helm_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -53,24 +60,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_helm_version(helm_stdout: &str) -> Option<String> {
+fn get_helm_version(helm_stdout: &str) -> Option<String> {
     // `helm version --short --client` output looks like this:
     // v3.1.1+gafe7058
     // `helm version --short --client` output looks like this for Helm 2:
     // Client: v2.16.9+g8ad7037
-
-    Some(
-        helm_stdout
-            // split into ["v3.1.1","gafe7058"] or ["Client: v3.1.1","gafe7058"]
-            .splitn(2, '+')
-            // return "v3.1.1" or "Client: v3.1.1"
-            .next()?
-            // return "v3.1.1" or " v3.1.1"
-            .trim_start_matches("Client: ")
-            // return "v3.1.1"
-            .trim()
-            .to_owned(),
-    )
+    let version = helm_stdout
+        // split into ["v3.1.1","gafe7058"] or ["Client: v3.1.1","gafe7058"]
+        .splitn(2, '+')
+        // return "v3.1.1" or "Client: v3.1.1"
+        .next()?
+        // return "v3.1.1" or " v3.1.1"
+        .trim_start_matches("Client: ")
+        // return "v3.1.1"
+        .trim_start_matches('v')
+        .trim()
+        .to_string();
+    Some(version)
 }
 
 #[cfg(test)]
@@ -117,10 +123,10 @@ mod tests {
     }
 
     #[test]
-    fn test_format_helm_version() {
+    fn test_get_helm_version() {
         let helm_2 = "Client: v2.16.9+g8ad7037";
         let helm_3 = "v3.1.1+ggit afe7058";
-        assert_eq!(format_helm_version(helm_2), Some("v2.16.9".to_string()));
-        assert_eq!(format_helm_version(helm_3), Some("v3.1.1".to_string()));
+        assert_eq!(get_helm_version(helm_2), Some("2.16.9".to_string()));
+        assert_eq!(get_helm_version(helm_3), Some("3.1.1".to_string()));
     }
 }

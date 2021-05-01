@@ -28,6 +28,10 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
   </video>
 </div>
 
+### 先決要求
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
 ### 快速安裝
 
 1. 安裝 **starship** 執行檔：
@@ -38,7 +42,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    使用 Shell 安裝：
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 

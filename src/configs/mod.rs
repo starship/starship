@@ -12,6 +12,7 @@ pub mod conda;
 pub mod crystal;
 pub mod custom;
 pub mod dart;
+pub mod deno;
 pub mod directory;
 pub mod docker_context;
 pub mod dotnet;
@@ -45,6 +46,7 @@ pub mod perl;
 pub mod php;
 pub mod purescript;
 pub mod python;
+pub mod red;
 pub mod ruby;
 pub mod rust;
 pub mod scala;
@@ -64,7 +66,7 @@ pub mod zig;
 
 pub use starship_root::*;
 
-#[derive(Default, Serialize, ModuleConfig, Clone)]
+#[derive(Serialize, ModuleConfig, Clone)]
 #[serde(default)]
 pub struct FullConfig<'a> {
     // Root config
@@ -81,6 +83,7 @@ pub struct FullConfig<'a> {
     conda: conda::CondaConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
+    deno: deno::DenoConfig<'a>,
     directory: directory::DirectoryConfig<'a>,
     docker_context: docker_context::DockerContextConfig<'a>,
     dotnet: dotnet::DotnetConfig<'a>,
@@ -114,6 +117,7 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
+    red: red::RedConfig<'a>,
     ruby: ruby::RubyConfig<'a>,
     rust: rust::RustConfig<'a>,
     scala: scala::ScalaConfig<'a>,
@@ -129,4 +133,73 @@ pub struct FullConfig<'a> {
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,
+}
+
+impl<'a> Default for FullConfig<'a> {
+    fn default() -> Self {
+        Self {
+            format: "$all",
+            scan_timeout: 30,
+            command_timeout: 500,
+            add_newline: true,
+
+            aws: Default::default(),
+            battery: Default::default(),
+            character: Default::default(),
+            cmake: Default::default(),
+            cmd_duration: Default::default(),
+            conda: Default::default(),
+            crystal: Default::default(),
+            dart: Default::default(),
+            deno: Default::default(),
+            directory: Default::default(),
+            docker_context: Default::default(),
+            dotnet: Default::default(),
+            elixir: Default::default(),
+            elm: Default::default(),
+            env_var: Default::default(),
+            erlang: Default::default(),
+            gcloud: Default::default(),
+            git_branch: Default::default(),
+            git_commit: Default::default(),
+            git_state: Default::default(),
+            git_status: Default::default(),
+            golang: Default::default(),
+            helm: Default::default(),
+            hg_branch: Default::default(),
+            hostname: Default::default(),
+            java: Default::default(),
+            jobs: Default::default(),
+            julia: Default::default(),
+            kotlin: Default::default(),
+            kubernetes: Default::default(),
+            lua: Default::default(),
+            memory_usage: Default::default(),
+            nim: Default::default(),
+            nix_shell: Default::default(),
+            nodejs: Default::default(),
+            ocaml: Default::default(),
+            openstack: Default::default(),
+            package: Default::default(),
+            perl: Default::default(),
+            php: Default::default(),
+            purescript: Default::default(),
+            python: Default::default(),
+            red: Default::default(),
+            ruby: Default::default(),
+            rust: Default::default(),
+            scala: Default::default(),
+            shell: Default::default(),
+            shlvl: Default::default(),
+            singularity: Default::default(),
+            status: Default::default(),
+            swift: Default::default(),
+            terraform: Default::default(),
+            time: Default::default(),
+            username: Default::default(),
+            vagrant: Default::default(),
+            zig: Default::default(),
+            custom: Default::default(),
+        }
+    }
 }

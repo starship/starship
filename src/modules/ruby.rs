@@ -69,7 +69,7 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
-            log::warn!("Error formating `ruby` version:\n{}", error);
+            log::warn!("Error formatting `ruby` version:\n{}", error);
             Some(format!("v{}", version))
         }
     }

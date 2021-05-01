@@ -34,6 +34,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     // (Let's keep these sorted alphabetically)
     "cmake",
     "dart",
+    "deno",
     "dotnet",
     "elixir",
     "elm",
@@ -51,6 +52,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "php",
     "purescript",
     "python",
+    "red",
     "ruby",
     "rust",
     "scala",
@@ -80,6 +82,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "character",
 ];
 
+// On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
 impl<'a> Default for StarshipRootConfig<'a> {
     fn default() -> Self {
         StarshipRootConfig {

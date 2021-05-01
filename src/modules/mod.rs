@@ -7,6 +7,7 @@ mod conda;
 mod crystal;
 pub(crate) mod custom;
 mod dart;
+mod deno;
 mod directory;
 mod docker_context;
 mod dotnet;
@@ -41,6 +42,7 @@ mod perl;
 mod php;
 mod purescript;
 mod python;
+mod red;
 mod ruby;
 mod rust;
 mod scala;
@@ -81,6 +83,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cmd_duration" => cmd_duration::module(context),
             "conda" => conda::module(context),
             "dart" => dart::module(context),
+            "deno" => deno::module(context),
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context),
             "dotnet" => dotnet::module(context),
@@ -115,6 +118,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "php" => php::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
+            "red" => red::module(context),
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
             "scala" => scala::module(context),
@@ -164,6 +168,7 @@ pub fn description(module: &str) -> &'static str {
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
+        "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
@@ -196,6 +201,7 @@ pub fn description(module: &str) -> &'static str {
         "php" => "The currently installed version of PHP",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "red" => "The currently installed version of Red",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "scala" => "The currently installed version of Scala",
