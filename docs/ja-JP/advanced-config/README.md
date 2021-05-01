@@ -81,7 +81,7 @@ starship_precmd_user_func="set_win_title"
   - `<color>`
   - `none`
 
-ここで、 `<color>` は色を指定します（以下で述べます）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+ここで、 `<color>` は色を指定します（以下で述べます）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. 文字列中の単語の順序は関係ありません。
 
 `none` トークンは、文字列中の`bg:` 指定子の一部でない場合、他のすべてのトークンをオーバーライドします。そのため、たとえば、`fg:red none fg:blue` と指定した場合、スタイルなしの文字列が作られます。 `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 将来 `none` を他の単語と一緒に使用することはエラーになるかもしれません。
 
