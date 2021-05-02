@@ -447,7 +447,7 @@ Le module `cmake` affiche la version actuellement installée de [CMake](https://
 | Option              | Défaut                                 | Description                                                               |
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                                                         |
-| `version_format`    | `v{raw}`                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"△ "`                                 | Le symbole utilisé avant la version de cmake.                             |
 | `detect_extensions` | `[]`                                   | Quelles extensions devraient activer ce module                            |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Quels fichiers devraient activer ce module                                |
@@ -567,7 +567,7 @@ Le module `crystal` affiche la version actuellement installée de [Crystal](http
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `symbol`            | `"🔮 "`                               | Le symbole utilisé avant d'afficher la version de crystal.                |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `"bold green"`                       | Le style du module.                                                       |
 | `detect_extensions` | `["cr"]`                             | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["shard.yml"]`                      | Quels fichiers devraient activer ce module.                               |
@@ -606,7 +606,7 @@ Le module `dart` affiche la version actuellement installée de [Dart](https://da
 | Option              | Défaut                                            | Description                                                               |
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | Format du module.                                                         |
-| `version_format`    | `v{raw}`                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🎯 "`                                            | Une chaîne de caractères représentant le symbole de Dart                  |
 | `detect_extensions` | `["dart"]`                                        | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Quels fichiers devraient activer ce module.                               |
@@ -643,7 +643,7 @@ Le module `deno` affiche la version actuellement installée de [Deno](https://de
 | Option              | Défaut                                       | Description                                                               |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                                                         |
-| `version_format`    | `v{raw}`                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦕 "`                                       | Une chaîne de caractères représentant le symbole de Deno                  |
 | `detect_extensions` | `[]`                                         | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quels fichiers devraient activer ce module.                               |
@@ -793,7 +793,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | Option              | Défaut                                                                                                  | Description                                                                    |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                                              |
-| `version_format`    | `v{raw}`                                                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`      |
+| `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`      |
 | `symbol`            | `".NET "`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                      |
 | `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané. |
 | `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Quelles extensions devraient activer ce module.                                |
@@ -835,7 +835,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | Option              | Défaut                                                      | Description                                                               |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                  |
-| `version_format`    | `v{raw}`                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💧 "`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                        | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["mix.exs"]`                                               | Quels fichiers devraient activer ce module.                               |
@@ -878,7 +878,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | Option              | Défaut                                             | Description                                                               |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                                                         |
-| `version_format`    | `v{raw}`                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🌳 "`                                             | Une chaîne de format représentant le symbole d'Elm.                       |
 | `detect_extensions` | `["elm"]`                                          | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quels fichiers devraient activer ce module.                               |
@@ -954,7 +954,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
 | `style`             | `"bold green"`                       | Le style du module.                                                       |
 | `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                           |
@@ -1258,7 +1258,7 @@ The `golang` module shows the currently installed version of [Golang](https://go
 | Option              | Défaut                                                                         | Description                                                               |
 | ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                           | Format du module.                                                         |
-| `version_format`    | `v{raw}`                                                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
 | `detect_extensions` | `["go"]`                                                                       | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quels fichiers devraient activer ce module.                               |
@@ -1297,7 +1297,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Quels fichiers devraient activer ce module.                               |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
@@ -1371,7 +1371,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | Option              | Défaut                                                                                                    | Description                                                               |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Format du module.                                                         |
-| `version_format`    | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Quels fichiers devraient activer ce module.                               |
 | `detect_folders`    | `[]`                                                                                                      | Quels dossiers devraient activer ce module.                               |
@@ -1451,7 +1451,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["jl"]`                             | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Quels fichiers devraient activer ce module.                               |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
@@ -1489,7 +1489,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | Option              | Défaut                               | Description                                                                   |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                             |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `["kt", "kts"]`                      | Quelles extensions devraient activer ce module.                               |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                   |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                   |
@@ -1600,7 +1600,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | Option              | Défaut                               | Description                                                                |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                          |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
 | `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
 | `detect_extensions` | `["lua"]`                            | Quelles extensions devraient activer ce module.                            |
 | `detect_files`      | `[".lua-version"]`                   | Quels fichiers devraient activer ce module.                                |
@@ -1725,7 +1725,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module                                                          |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                     |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["nim.cfg"]`                        | Quels fichiers devraient activer ce module.                               |
@@ -1807,7 +1807,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | Option              | Défaut                               | Description                                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                                     |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
 | `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quelles extensions devraient activer ce module.                                                       |
 | `detect_files`      | `["package.json", ".node-version"]`  | Quels fichiers devraient activer ce module.                                                           |
@@ -1851,7 +1851,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | Option                    | Défaut                                                                     | Description                                                               |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
-| `version_format`          | `v{raw}`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`          | `"v${raw}"`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml.                   |
 | `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch.                   |
 | `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.                    |
@@ -1975,16 +1975,16 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Options
 
-| Option              | Défaut                                                                                                   | Description                                                               | **** |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---- |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |      |
-| `version_format`    | `v{raw}`                                                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |      |
-| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                     |      |
-| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Quelles extensions devraient activer ce module.                           |      |
-| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Quels fichiers devraient activer ce module.                               |      |
-| `detect_folders`    | `[]`                                                                                                     | Quels dossiers devraient activer ce module.                               |      |
-| `style`             | `"bold 149"`                                                                                             | Le style du module.                                                       |      |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |      |
+| Option              | Défaut                                                                                                   | Description                                                               |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                     |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Quelles extensions devraient activer ce module.                           |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Quels fichiers devraient activer ce module.                               |
+| `detect_folders`    | `[]`                                                                                                     | Quels dossiers devraient activer ce module.                               |
+| `style`             | `"bold 149"`                                                                                             | Le style du module.                                                       |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
 
 ### Variables
 
@@ -2016,7 +2016,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                     |
 | `detect_extensions` | `["php"]`                            | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["composer.json", ".php-version"]`  | Quels fichiers devraient activer ce module.                               |
@@ -2055,7 +2055,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"<=> "`                       | Le symbole utilisé avant d'afficher la version de PureScript.             |
 | `detect_extensions` | `["purs"]`                           | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["spago.dhall"]`                    | Quels fichiers devraient activer ce module.                               |
@@ -2105,7 +2105,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | Option               | Défaut                                                                                                       | Description                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Format du module.                                                                      |
-| `version_format`     | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
+| `version_format`     | `"v${raw}"`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | Le style du module.                                                                    |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
@@ -2171,7 +2171,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
 | `detect_extensions` | `["red"]`                            | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                               |
@@ -2211,7 +2211,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
 | `detect_extensions` | `["rb"]`                             | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Quels fichiers devraient activer ce module.                               |
@@ -2250,7 +2250,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
 | `detect_extensions` | `["rs"]`                             | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["Cargo.toml"]`                     | Quels fichiers devraient activer ce module.                               |
@@ -2290,7 +2290,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | Option              | Défaut                                   | Description                                                               |
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["sbt", "scala"]`                       | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Quels fichiers devraient activer ce module.                               |
 | `detect_folders`    | `[".metals"]`                            | Quels dossiers devraient activer ce module.                               |
@@ -2497,7 +2497,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                          |
 | `detect_extensions` | `["swift"]`                          | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["Package.swift"]`                  | Quels fichiers devraient activer ce module.                               |
@@ -2544,7 +2544,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
 | `detect_extensions` | `["tf", "hcl"]`                      | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                               |
@@ -2685,7 +2685,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                       |
 | `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                           |
 | `detect_files`      | `["Vagrantfile"]`                    | Quels fichiers devraient activer ce module.                               |
@@ -2755,7 +2755,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | Option              | Défaut                               | Description                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                     |
 | `style`             | `"bold yellow"`                      | Le style du module.                                                       |
 | `disabled`          | `false`                              | Disables the `zig` module.                                                |
