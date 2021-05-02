@@ -3,93 +3,90 @@
 # can cause timing issues, as a user who presses "ENTER" without running a command
 # will see the time to the start of the last command, which may be very large.
 
-# To fix this, we create STARSHIP_START_TIME upon preexec() firing, and destroy it
+# To fix this, we create STARSHIP_CMD_START_TIME upon preexec() firing, and destroy it
 # after drawing the prompt. This ensures that the timing for one command is only
 # ever drawn once (for the prompt immediately after it is run).
 
-zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
+autoload is-at-least
+zmodload zsh/parameter # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
 
-# Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
-if [[ $ZSH_VERSION == ([1-4]*) ]]; then
-    # ZSH <= 5; Does not have a built-in variable so we will rely on Starship's inbuilt time function.
-    __starship_get_time() {
-        STARSHIP_CAPTURED_TIME=$(::STARSHIP:: time)
-    }
-else
+if is-at-least 4.3.13; then
     zmodload zsh/datetime
     zmodload zsh/mathfunc
-    __starship_get_time() {
-        (( STARSHIP_CAPTURED_TIME = int(rint(EPOCHREALTIME * 1000)) ))
+    __starship_time() {
+        echo $(( int(rint(EPOCHREALTIME * 1000)) ))
+    }
+else
+    __starship_time() {
+        ::STARSHIP:: time
     }
 fi
 
 # Will be run before every prompt draw
-starship_precmd() {
+__starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$?
 
     # Compute cmd_duration, if we have a time to consume, otherwise clear the
     # previous duration
-    if (( ${+STARSHIP_START_TIME} )); then
-        __starship_get_time && (( STARSHIP_DURATION = STARSHIP_CAPTURED_TIME - STARSHIP_START_TIME ))
-        unset STARSHIP_START_TIME
+    if (( ${+STARSHIP_CMD_START_TIME} )); then
+        STARSHIP_CMD_DURATION=$(( $(__starship_time) - STARSHIP_CMD_START_TIME ))
+        unset STARSHIP_CMD_START_TIME
     else
-        unset STARSHIP_DURATION
+        unset STARSHIP_CMD_DURATION
     fi
 
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
 }
-starship_preexec() {
-    __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
+__starship_preexec() {
+    STARSHIP_CMD_START_TIME="$(__starship_time)"
 }
 
 # If precmd/preexec arrays are not already set, set them. If we don't do this,
-# the code to detect whether starship_precmd is already in precmd_functions will
-# fail because the array doesn't exist (and same for starship_preexec)
+# the code to detect whether __starship_precmd is already in precmd_functions will
+# fail because the array doesn't exist (and same for __starship_preexec)
 (( ! ${+precmd_functions} )) && precmd_functions=()
 (( ! ${+preexec_functions} )) && preexec_functions=()
 
 # If starship precmd/preexec functions are already hooked, don't double-hook them
 # to avoid unnecessary performance degradation in nested shells
-if [[ -z ${precmd_functions[(re)starship_precmd]} ]]; then
-    precmd_functions+=(starship_precmd)
-fi
-if [[ -z ${preexec_function[(re)starship_preexec]} ]]; then
-    preexec_functions+=(starship_preexec)
-fi
+(( ! ${precmd_functions[(Ie)__starship_precmd]} )) && precmd_functions+=(__starship_precmd)
+(( ! ${preexec_functions[(Ie)__starship_preexec]} )) && preexec_functions+=(__starship_preexec)
 
 # Set up a function to redraw the prompt if the user switches vi modes
-starship_zle-keymap-select() {
-    zle reset-prompt
-}
-
-## Check for existing keymap-select widget.
-local existing_keymap_select_fn=$widgets[zle-keymap-select];
-# zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
-existing_keymap_select_fn=${existing_keymap_select_fn//user:};
-if [[ -z $existing_keymap_select_fn ]]; then
-    zle -N zle-keymap-select starship_zle-keymap-select;
-else
-    # Define a wrapper fn to call the original widget fn and then Starship's.
-    starship_zle-keymap-select-wrapped() {
-        $existing_keymap_select_fn "$@";
-        starship_zle-keymap-select "$@";
+# zle-keymap-select is a special widget named like "user:handler-name"
+zle_keymap_select=${${widgets[zle-keymap-select]}//user:}
+if [[ -n $zle_keymap_select ]]; then
+    __starship-zle-keymap-select() {
+        $zle_keymap_select "$@"
+        zle reset-prompt
     }
-    zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
+else
+    __starship-zle-keymap-select() {
+        zle reset-prompt
+    }
 fi
+zle -N zle-keymap-select __starship-zle-keymap-select
 
-__starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
+STARSHIP_CMD_START_TIME="$(__starship_time)"
+
+# Disable virtualenv prompt, it breaks starship
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 export STARSHIP_SHELL="zsh"
 
 # Set up the session key that will be used to store logs
-STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
-STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
-export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
+export STARSHIP_SESSION_KEY=${(r:16::0:)"$(repeat 4 echo -n $RANDOM)"}
 
-VIRTUAL_ENV_DISABLE_PROMPT=1
+__starship_prompt() {
+    ::STARSHIP:: prompt \
+        --keymap=$KEYMAP \
+        --status=$STARSHIP_CMD_STATUS \
+        --cmd-duration=$STARSHIP_CMD_DURATION \
+        --jobs=$STARSHIP_JOBS_COUNT
+}
 
 setopt promptsubst
-PROMPT='$(::STARSHIP:: prompt --keymap="$KEYMAP" --status="$STARSHIP_CMD_STATUS" --cmd-duration="$STARSHIP_DURATION" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='$(__starship_prompt)'
