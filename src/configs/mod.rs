@@ -59,6 +59,7 @@ pub mod swift;
 pub mod terraform;
 pub mod time;
 pub mod username;
+pub mod v;
 pub mod vagrant;
 pub mod vcsh;
 pub mod zig;
@@ -128,6 +129,7 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
     username: username::UsernameConfig<'a>,
+    vlang: v::VLangConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,
@@ -196,6 +198,7 @@ impl<'a> Default for FullConfig<'a> {
             time: Default::default(),
             username: Default::default(),
             vagrant: Default::default(),
+            vlang: Default::default(),
             zig: Default::default(),
             custom: Default::default(),
         }
