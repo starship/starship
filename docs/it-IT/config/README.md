@@ -214,6 +214,7 @@ $rust\
 $scala\
 $swift\
 $terraform\
+$vlang\
 $vagrant\
 $zig\
 $nix_shell\
@@ -1931,6 +1932,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
 - [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
 - [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
+- [**vlang**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -2710,6 +2712,40 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 [vagrant]
 format = "via [⍱ $version](bold white) "
+```
+
+## VLang
+
+The `vlang` module shows you your currently installed version of V. By default the module will be shown if any of the following conditions are met:
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod` file
+
+### Options
+
+| Option              | Default                              | Description                                  |
+| ------------------- | ------------------------------------ | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                   |
+| `symbol`            | `"V "`                               | A format string representing the symbol of V |
+| `detect_extensions` | `["v"]`                              | Which extensions should trigger this module. |
+| `detect_files`      | `["v.mod"]`                          | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.    |
+| `style`             | `"blue bold"`                        | The style for the module.                    |
+| `disabled`          | `false`                              | Disables the `vlang` module.                 |
+
+### Variables
+
+| Variable  | Example | Description                          |
+| --------- | ------- | ------------------------------------ |
+| version   | `v0.2`  | The version of `v`                   |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\* |         | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+[v]
+format = "via [V $version](blue bold) "
 ```
 
 ## VCSH
