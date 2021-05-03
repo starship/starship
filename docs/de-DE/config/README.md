@@ -214,6 +214,7 @@ $rust\
 $scala\
 $swift\
 $terraform\
+$vlang\
 $vagrant\
 $zig\
 $nix_shell\
@@ -1931,6 +1932,7 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 - [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
 - [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
 - [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
+- [**vlang**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
@@ -2712,6 +2714,40 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 format = "via [⍱ $version](bold white) "
 ```
 
+## VLang
+
+The `vlang` module shows you your currently installed version of V. By default the module will be shown if any of the following conditions are met:
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod` file
+
+### Optionen
+
+| Option              | Standardwert                         | Beschreibung                                 |
+| ------------------- | ------------------------------------ | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                   |
+| `symbol`            | `"V "`                               | A format string representing the symbol of V |
+| `detect_extensions` | `["v"]`                              | Which extensions should trigger this module. |
+| `detect_files`      | `["v.mod"]`                          | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.    |
+| `style`             | `"blue bold"`                        | Stil für dieses Modul.                       |
+| `disabled`          | `false`                              | Disables the `vlang` module.                 |
+
+### Variables
+
+| Variable  | Beispiel | Beschreibung                         |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.2`   | The version of `v`                   |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+[v]
+format = "via [V $version](blue bold) "
+```
+
 ## VCSH
 
 The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
@@ -2813,19 +2849,19 @@ The order in which custom modules are shown can be individually set by including
 
 ### Optionen
 
-| Option         | Standardwert                    | Beschreibung                                                                                                               |
-| -------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`      |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`         |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`        |                                 | [See below](#custom-command-shell)                                                                                         |
-| `beschreibung` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`        | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories`  | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`   | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`       | `""`                            | The symbol used before displaying the command output.                                                                      |
-| `style`        | `"bold green"`                  | Stil für dieses Modul.                                                                                                     |
-| `format`       | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
-| `disabled`     | `false`                         | Disables this `custom` module.                                                                                             |
+| Option        | Standardwert                    | Beschreibung                                                                                                               |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
+| `style`       | `"bold green"`                  | Stil für dieses Modul.                                                                                                     |
+| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
 
 ### Variables
 
