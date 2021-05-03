@@ -215,6 +215,7 @@ $rust\
 $scala\
 $swift\
 $terraform\
+$vlang\
 $vagrant\
 $zig\
 $nix_shell\
@@ -1933,6 +1934,7 @@ symbol = "☁️ "
 - [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
 - [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
 - [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
+- [**vlang**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
 
@@ -2714,6 +2716,40 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 format = "via [⍱ $version](bold white) "
 ```
 
+## VLang
+
+The `vlang` module shows you your currently installed version of V. By default the module will be shown if any of the following conditions are met:
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod` file
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                           |
+| ------------------- | ------------------------------------ | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                             |
+| `symbol`            | `"V "`                               | A format string representing the symbol of V |
+| `detect_extensions` | `["v"]`                              | どの拡張子がこのモジュールをアクティブにするか                      |
+| `detect_files`      | `["v.mod"]`                          | どのファイル名がこのモジュールをアクティブにするか                    |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                    |
+| `style`             | `"blue bold"`                        | モジュールのスタイルです。                                |
+| `disabled`          | `false`                              | Disables the `vlang` module.                 |
+
+### 変数
+
+| 変数        | 設定例    | 説明                     |
+| --------- | ------ | ---------------------- |
+| version   | `v0.2` | The version of `v`     |
+| symbol    |        | オプション `記号` の値をミラーする    |
+| style\* |        | オプション `style` の値をミラーする |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+[v]
+format = "via [V $version](blue bold) "
+```
+
 ## VCSH
 
 The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
@@ -2819,8 +2855,8 @@ The order in which custom modules are shown can be individually set by including
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                    |
-| `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
