@@ -53,6 +53,7 @@ pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
+pub mod spotify;
 mod starship_root;
 pub mod status;
 pub mod swift;
@@ -123,6 +124,7 @@ pub struct FullConfig<'a> {
     shell: shell::ShellConfig<'a>,
     shlvl: shlvl::ShLvlConfig<'a>,
     singularity: singularity::SingularityConfig<'a>,
+    spotify: spotify::SpotifyConfig<'a>,
     status: status::StatusConfig<'a>,
     swift: swift::SwiftConfig<'a>,
     terraform: terraform::TerraformConfig<'a>,
@@ -190,6 +192,7 @@ impl<'a> Default for FullConfig<'a> {
             shell: Default::default(),
             shlvl: Default::default(),
             singularity: Default::default(),
+            spotify: Default::default(),
             status: Default::default(),
             swift: Default::default(),
             terraform: Default::default(),

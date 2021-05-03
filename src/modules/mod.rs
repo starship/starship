@@ -49,6 +49,7 @@ mod scala;
 mod shell;
 mod shlvl;
 mod singularity;
+mod spotify;
 mod status;
 mod swift;
 mod terraform;
@@ -124,6 +125,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
+            "spotify" => spotify::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
             "terraform" => terraform::module(context),
@@ -207,6 +209,7 @@ pub fn description(module: &str) -> &'static str {
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "status" => "The status of the last command",
+        "spotify" => "Displays the song currently playing on Spotify",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
