@@ -4,13 +4,31 @@ use crate::configs::spotify::SpotifyConfig;
 use crate::formatter::StringFormatter;
 use std::env;
 
+static OS: &str = env::consts::OS;
+
 pub fn eval_apple_script(script: &str, context: &Context<'_>) -> Option<String> {
     let cmd = context.exec_cmd("osascript", &["-e", &*format!("\"{}\"", script)])?;
     Some(cmd.stdout)
 }
 
-pub fn is_running_on_macos(context: &Context<'_>) -> bool {
+pub fn is_spotify_running_on_macos(context: &Context<'_>) -> bool {
     eval_apple_script("application \"Spotify\" is running", context).unwrap() == "true"
+}
+
+pub fn artist(context: &Context<'_>) -> Option<String> {
+    if OS == "macos" && is_spotify_running_on_macos(context) {
+        let artist = eval_apple_script(
+            "tell application \"Spotify\" to artist of current track as string",
+            context,
+        );
+        if let Some(art) = artist {
+            Some(art)
+        } else {
+            None
+        }
+    } else {
+        None
+    }
 }
 
 /// Creates a module which will display the song currently playing on Spotify
@@ -29,27 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "artist" => {
-                    let artist = if env::consts::OS == "macos" {
-                        if is_running_on_macos(context) {
-                            let artist_pre = eval_apple_script(
-                                "tell application \"Spotify\" to artist of current track as string",
-                                context,
-                            );
-                            if let Some(v) = artist_pre {
-                                Some(v)
-                            } else {
-                                None
-                            }
-                        } else {
-                            None
-                        }
-                    } else {
-                        Some("yes".to_owned())
-                    };
-
-                    artist.map(Ok)
-                }
+                "artist" => artist(context).map(Ok),
                 _ => None,
             })
             .map_style(|variable| match variable {
