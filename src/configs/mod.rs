@@ -129,7 +129,7 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
     username: username::UsernameConfig<'a>,
-    vlang: v::VLangConfig<'a>,
+    vlang: v::VConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,

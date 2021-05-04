@@ -54,13 +54,6 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn extract_vlang_version(file_contents: &str) -> Option<String> {
-    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
-    let caps = re.captures(file_contents)?;
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
-}
-
 fn extract_package_version(file_contents: &str, display_private: bool) -> Option<String> {
     let package_json: json::Value = json::from_str(file_contents).ok()?;
 
@@ -184,6 +177,23 @@ fn extract_meson_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
+fn extract_vmod_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
+    let caps = re.captures(file_contents)?;
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
+fn extract_vpkg_version(file_contents: &str) -> Option<String> {
+    let vpkg_json: json::Value = json::from_str(file_contents).ok()?;
+    let version = vpkg_json.get("version")?.as_str()?;
+    if version == "null" {
+        return None;
+    }
+    let formatted_version = format_version(&version);
+    Some(formatted_version)
+}
+
 fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
@@ -206,7 +216,9 @@ fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String
     } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
         extract_meson_version(&meson_build)
     } else if let Ok(vlang_mod) = utils::read_file(base_dir.join("v.mod")) {
-        extract_vlang_version(&vlang_mod)
+        extract_vmod_version(&vlang_mod)
+    } else if let Ok(vlang_vpkg) = utils::read_file(base_dir.join("vpkg.json")) {
+        extract_vpkg_version(&vlang_vpkg)
     } else {
         None
     }
@@ -828,17 +840,31 @@ end";
     }
 
     #[test]
-    fn test_extract_vlang_version() -> io::Result<()> {
+    fn test_extract_vmod_version() -> io::Result<()> {
         let config_name = "v.mod";
-        let config_content = "
-        Module {
-            name: 'starship',
-            author: 'matchai',
-            version: '1.2.3'
-        }";
+        let config_content = "\
+Module {
+    name: 'starship',
+    author: 'matchai',
+    version: '1.2.3'
+}";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_vpkg_version() -> io::Result<()> {
+        let config_name = "vpkg.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 
