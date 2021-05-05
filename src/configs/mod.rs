@@ -188,6 +188,7 @@ impl<'a> Default for FullConfig<'a> {
             purescript: Default::default(),
             python: Default::default(),
             red: Default::default(),
+            rlang: Default::default(),
             ruby: Default::default(),
             rust: Default::default(),
             scala: Default::default(),
