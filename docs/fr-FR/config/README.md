@@ -174,7 +174,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Est équivalent à
 format = """
 $username\
 $hostname\
@@ -385,7 +385,7 @@ Le caractère vous dira si la dernière commande a été réussie ou pas. Il y a
 - changement de couleur (`red`/`green`)
 - changement de forme (`❯`/`✖`)
 
-Par défaut, seule la couleur change. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Par défaut, seule la couleur change. Si vous désirez également changer sa forme, jetez un œil à [cet exemple](#with-custom-error-shape).
 
 ::: warning `error_symbol` n'est pas supporté avec elvish. :::
 
@@ -445,16 +445,16 @@ Le module `cmake` affiche la version actuellement installée de [CMake](https://
 
 ### Options
 
-| Option              | Défaut                                 | Description                                                               |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"△ "`                                 | Le symbole utilisé avant la version de cmake.                             |
-| `detect_extensions` | `[]`                                   | Quelles extensions devraient activer ce module                            |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Quels fichiers devraient activer ce module                                |
-| `detect_folders`    | `[]`                                   | Quels dossiers devraient activer ce module                                |
-| `style`             | `"bold blue"`                          | Le style du module.                                                       |
-| `disabled`          | `false`                                | Désactive le module `cmake`.                                              |
+| Option              | Défaut                                 | Description                                                                                |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`   | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                            | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"△ "`                                 | Le symbole utilisé avant la version de cmake.                                              |
+| `detect_extensions` | `[]`                                   | Quelles extensions devraient activer ce module                                             |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Quels fichiers devraient activer ce module                                                 |
+| `detect_folders`    | `[]`                                   | Quels dossiers devraient activer ce module                                                 |
+| `style`             | `"bold blue"`                          | Le style du module.                                                                        |
+| `disabled`          | `false`                                | Désactive le module `cmake`.                                                               |
 
 ### Variables
 
@@ -564,16 +564,16 @@ Le module `crystal` affiche la version actuellement installée de [Crystal](http
 
 ### Options
 
-| Option              | Défaut                               | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `symbol`            | `"🔮 "`                               | Le symbole utilisé avant d'afficher la version de crystal.                |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `"bold green"`                       | Le style du module.                                                       |
-| `detect_extensions` | `["cr"]`                             | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["shard.yml"]`                      | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
-| `disabled`          | `false`                              | Désactive le module `crystal`.                                            |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `symbol`            | `"🔮 "`                               | Le symbole utilisé avant d'afficher la version de crystal.                                 |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `style`             | `"bold green"`                       | Le style du module.                                                                        |
+| `detect_extensions` | `["cr"]`                             | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["shard.yml"]`                      | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `disabled`          | `false`                              | Désactive le module `crystal`.                                                             |
 
 ### Variables
 
@@ -604,16 +604,16 @@ Le module `dart` affiche la version actuellement installée de [Dart](https://da
 
 ### Options
 
-| Option              | Défaut                                            | Description                                                               |
-| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🎯 "`                                            | Une chaîne de caractères représentant le symbole de Dart                  |
-| `detect_extensions` | `["dart"]`                                        | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[".dart_tool"]`                                  | Quels dossiers devraient activer ce module.                               |
-| `style`             | `"bold blue"`                                     | Le style du module.                                                       |
-| `disabled`          | `false`                                           | Désactive le module `dart`.                                               |
+| Option              | Défaut                                            | Description                                                                                |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`              | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                                       | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🎯 "`                                            | Une chaîne de caractères représentant le symbole de Dart                                   |
+| `detect_extensions` | `["dart"]`                                        | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[".dart_tool"]`                                  | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"bold blue"`                                     | Le style du module.                                                                        |
+| `disabled`          | `false`                                           | Désactive le module `dart`.                                                                |
 
 ### Variables
 
@@ -641,16 +641,16 @@ Le module `deno` affiche la version actuellement installée de [Deno](https://de
 
 ### Options
 
-| Option              | Défaut                                       | Description                                                               |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                       | Une chaîne de caractères représentant le symbole de Deno                  |
-| `detect_extensions` | `[]`                                         | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                         | Quels dossiers devraient activer ce module.                               |
-| `style`             | `"green bold"`                               | Le style du module.                                                       |
-| `disabled`          | `false`                                      | Désactive le module `deno`.                                               |
+| Option              | Défaut                                       | Description                                                                                |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                       | Une chaîne de caractères représentant le symbole de Deno                                   |
+| `detect_extensions` | `[]`                                         | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                         | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"green bold"`                               | Le style du module.                                                                        |
+| `disabled`          | `false`                                      | Désactive le module `deno`.                                                                |
 
 ### Variables
 
@@ -769,7 +769,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. Si le SDK a été épinglé dans le répertoire courant, la version épinglée est affichée. Sinon, le module affiche la dernière version installée du SDK.
+Le module `dotnet` montre la version pertinente du [SDK .NET Core](https://dotnet.microsoft.com/) pour le répertoire courant. Si le SDK a été épinglé dans le répertoire courant, la version épinglée est affichée. Sinon, le module affiche la dernière version installée du SDK.
 
 Par défaut, ce module ne sera affiché dans votre invite que lorsqu'un ou plusieurs des fichiers suivants sont présents dans le répertoire courant :
 
@@ -791,17 +791,17 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Options
 
-| Option              | Défaut                                                                                                  | Description                                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                                              |
-| `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`      |
-| `symbol`            | `".NET "`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                      |
-| `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané. |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Quelles extensions devraient activer ce module.                                |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quels fichiers devraient activer ce module.                                    |
-| `detect_folders`    | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                    |
-| `style`             | `"bold blue"`                                                                                           | Le style du module.                                                            |
-| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                                                  |
+| Option              | Défaut                                                                                                  | Description                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                                                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `".NET "`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                                  |
+| `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané.             |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"bold blue"`                                                                                           | Le style du module.                                                                        |
+| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                                                              |
 
 ### Variables
 
@@ -827,22 +827,22 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `elixir` montre la version actuellement installée de [Elixir](https://elixir-lang.org/) et [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `mix.exs`.
 
 ### Options
 
-| Option              | Défaut                                                      | Description                                                               |
-| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                  |
-| `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang.           |
-| `detect_extensions` | `[]`                                                        | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["mix.exs"]`                                               | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                                        | Quels dossiers devraient activer ce module.                               |
-| `style`             | `"bold purple"`                                             | Le style du module.                                                       |
-| `disabled`          | `false`                                                     | Désactive le module `elixir`.                                             |
+| Option              | Défaut                                                      | Description                                                                                |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                                   |
+| `version_format`    | `"v${raw}"`                                                 | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💧 "`                                                      | Le symbole utilisé avant d'afficher la version d'Elixir/Erlang.                            |
+| `detect_extensions` | `[]`                                                        | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["mix.exs"]`                                               | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                                        | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"bold purple"`                                             | Le style du module.                                                                        |
+| `disabled`          | `false`                                                     | Désactive le module `elixir`.                                                              |
 
 ### Variables
 
@@ -866,7 +866,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `elm` montre la version actuellement installée de [Elm](https://elm-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `elm.json`
 - Le répertoire courant contient un fichier `elm-package.json`
@@ -876,16 +876,16 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                               |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🌳 "`                                             | Une chaîne de format représentant le symbole d'Elm.                       |
-| `detect_extensions` | `["elm"]`                                          | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `["elm-stuff"]`                                    | Quels dossiers devraient activer ce module.                               |
-| `style`             | `"cyan bold"`                                      | Le style du module.                                                       |
-| `disabled`          | `false`                                            | Désactive le module `elm`.                                                |
+| Option              | Défaut                                             | Description                                                                                |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                                        | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🌳 "`                                             | Une chaîne de format représentant le symbole d'Elm.                                        |
+| `detect_extensions` | `["elm"]`                                          | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `["elm-stuff"]`                                    | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"cyan bold"`                                      | Le style du module.                                                                        |
+| `disabled`          | `false`                                            | Désactive le module `elm`.                                                                 |
 
 ### Variables
 
