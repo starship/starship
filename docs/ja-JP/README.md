@@ -32,7 +32,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
-### Quick Install
+### クイックインストール
 
 1. **Starship** のバイナリをインストール
 

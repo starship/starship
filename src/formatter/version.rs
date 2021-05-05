@@ -60,6 +60,20 @@ impl<'a> VersionFormatter<'a> {
                 .collect::<String>()
         })
     }
+
+    pub fn format_module_version(
+        module_name: &str,
+        version: &str,
+        version_format: &str,
+    ) -> Option<String> {
+        match VersionFormatter::format_version(version, version_format) {
+            Ok(formatted) => Some(formatted),
+            Err(error) => {
+                log::warn!("Error formatting `{}` version:\n{}", module_name, error);
+                Some(format!("v{}", version))
+            }
+        }
+    }
 }
 
 #[cfg(test)]

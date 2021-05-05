@@ -32,7 +32,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
-### Quick Install
+### 快速安裝
 
 1. 安裝 **starship** 執行檔：
 

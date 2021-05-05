@@ -82,7 +82,7 @@ fn format_java_version(java_version: &str, version_format: &str) -> Option<Strin
     match VersionFormatter::format_version(version, version_format) {
         Ok(formatted) => Some(formatted),
         Err(error) => {
-            log::warn!("Error formating `java` version:\n{}", error);
+            log::warn!("Error formatting `java` version:\n{}", error);
             Some(format!("v{}", version))
         }
     }

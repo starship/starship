@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Crystal version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,9 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_crystal_version(
-                    context.exec_cmd("crystal", &["--version"])?.stdout.as_str(),
-                )
+                "version" => {
+                    let crystal_version =
+                        get_crystal_version(&context.exec_cmd("crystal", &["--version"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &crystal_version,
+                        config.version_format,
+                    )
+                }
                 .map(Ok),
                 _ => None,
             })
@@ -50,17 +57,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_crystal_version(crystal_version: &str) -> Option<String> {
-    let version = crystal_version
-        // split into ["Crystal", "0.35.1", ...]
-        .split_whitespace()
-        // return "0.35.1"
-        .nth(1)?;
-
-    let mut formatted_version = String::with_capacity(version.len() + 1);
-    formatted_version.push('v');
-    formatted_version.push_str(version);
-    Some(formatted_version)
+fn get_crystal_version(crystal_version: &str) -> Option<String> {
+    Some(
+        crystal_version
+            // split into ["Crystal", "0.35.1", ...]
+            .split_whitespace()
+            // return "0.35.1"
+            .nth(1)?
+            .to_string(),
+    )
 }
 
 #[cfg(test)]
