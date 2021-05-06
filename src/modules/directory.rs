@@ -392,7 +392,10 @@ impl StyleString {
         let mut last_end = 0;
         let str_repr = self.to_string();
         for (start, part) in str_repr.match_indices(from) {
-            result.extend_from_slice(&self.chars[last_end..start]);
+            // Each part of the chars vector is a char so we have to convert from bytes to chars
+            let start = str_repr[..start].chars().count();
+            let slice = &self.chars[last_end..start];
+            result.extend_from_slice(slice);
             result.extend_from_slice(to);
             last_end = start + part.chars().count();
         }
@@ -1912,6 +1915,51 @@ mod tests {
                 Color::Cyan.bold().paint("fuel-gauge"),
             ])
         ));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn substituted_formatted_unicode() {
+        use ansi_term::ANSIStrings;
+        let actual = ModuleRenderer::new("directory")
+            .path("/some/long/network/path/starship/a/b/c/🦀")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitutions]
+                "/some/long/network/path" = "/some/net"
+                "a/b/c" = "[d](red underline)"
+                "/" = "[/](green bold)"
+                "starship" = "🚀"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&vec![
+                Color::Cyan.bold().paint("net"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("🚀"),
+                Color::Green.bold().paint("/"),
+                Color::Red.underline().paint("d"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("🦀"),
+            ])
+        ))
+        .unwrap();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn style_string_replacement() {
+        let source = "/some/long/network/path/workspace/a/b/c/dev";
+        let ss: StyleString = Segment::new(None, source).into();
+        let from = "/some/long/network/path";
+        let to = "/some/net";
+        let to_styled: StyleString = Segment::new(None, to).into();
+        let actual = ss.replace(from, &to_styled.chars).to_string();
+        let expected = source.replace(from, to);
         assert_eq!(expected, actual);
     }
 }
