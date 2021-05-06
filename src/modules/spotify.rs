@@ -22,6 +22,7 @@ pub fn artist(context: &Context<'_>) -> Option<String> {
             context,
         )
     } else {
+        // TODO: add windows & linux support
         None
     }
 }
@@ -33,6 +34,7 @@ pub fn song(context: &Context<'_>) -> Option<String> {
             context,
         )
     } else {
+        // TODO: add windows & linux support
         None
     }
 }
