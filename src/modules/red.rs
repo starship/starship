@@ -9,7 +9,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config = RedConfig::try_load(module.config);
     let is_red_project = context
         .try_begin_scan()?
+        .set_files(&config.detect_files)
         .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_red_project {

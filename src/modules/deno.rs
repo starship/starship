@@ -11,6 +11,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_deno_project = context
         .try_begin_scan()?
         .set_files(&config.detect_files)
+        .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_deno_project {
