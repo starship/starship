@@ -1856,7 +1856,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            ANSIStrings(&vec![
+            ANSIStrings(&[
                 Color::Cyan.bold().paint("meters"),
                 Color::Green.bold().paint("/"),
                 Color::Cyan.bold().paint("fuel-gauge"),
@@ -1909,7 +1909,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            ANSIStrings(&vec![
+            ANSIStrings(&[
                 Color::Cyan.bold().paint("[meters](red bold)"),
                 Color::Green.bold().paint("/"),
                 Color::Cyan.bold().paint("fuel-gauge"),
