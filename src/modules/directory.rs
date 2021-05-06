@@ -3,18 +3,21 @@ use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
+use ansi_term::Style;
 use indexmap::IndexMap;
 use path_slash::PathExt;
+use std::convert::TryInto;
+use std::fmt;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
-use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
+use crate::segment::Segment;
 
 /// Creates a module with the current logical or physical directory
 ///
@@ -69,21 +72,66 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = remove_extended_path_prefix(dir_string);
 
     // Apply path substitutions
-    let dir_string = substitute_path(dir_string, &config.substitutions);
+    let dir_styled = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let dir_string = truncate(dir_string, config.truncation_length as usize);
+    let dir_segment_truncated = {
+        let length: usize = config
+            .truncation_length
+            .try_into()
+            .expect("Unable to convert truncation_length to usize");
+        if length == 0 {
+            dir_styled
+        } else {
+            let chunks = {
+                let mut chunks = vec![];
+                let mut this_chunk = vec![];
+                for c in dir_styled.iter() {
+                    if c.value == '/' && !this_chunk.is_empty() {
+                        chunks.push((Some(*c), this_chunk.clone()));
+                        this_chunk.clear();
+                    } else {
+                        this_chunk.push(*c)
+                    }
+                }
+                if !this_chunk.is_empty() {
+                    chunks.push((None, this_chunk));
+                }
+                chunks
+            };
+            if chunks.len() <= length {
+                dir_styled
+            } else {
+                chunks[chunks.len() - length..]
+                    .iter()
+                    .flat_map(|x| {
+                        let (sep, chunk) = x;
+                        let mut container = vec![];
+                        container.extend(chunk);
+                        if let Some(sep) = sep {
+                            container.push(sep);
+                        }
+                        container
+                    })
+                    .cloned()
+                    .collect()
+            }
+        }
+    };
 
-    let prefix = if is_truncated(&dir_string, &home_symbol) {
+    let prefix = if is_truncated(&dir_segment_truncated.to_string(), &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
             let contracted_home_dir = contract_path(&display_dir, &home_dir, &home_symbol);
             to_fish_style(
-                config.fish_style_pwd_dir_length as usize,
+                config
+                    .fish_style_pwd_dir_length
+                    .try_into()
+                    .expect("Unable to convert fish_style_pwd_dir_length to usize"),
                 contracted_home_dir,
-                &dir_string,
+                &dir_segment_truncated.to_string(),
             )
         } else {
             String::from(config.truncation_symbol)
@@ -92,18 +140,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = prefix + &dir_string;
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
+            .map_variables_to_segments(|variable| match variable {
+                "path" => {
+                    let path: StyleString = Segment::new(None, prefix.as_str()).into();
+                    let mut path: Vec<&StyledChar> = path.iter().collect();
+                    path.extend(dir_segment_truncated.iter());
+                    let path: Vec<Segment> = path.iter().copied().collect();
+                    Some(Ok(path))
+                }
+                _ => None,
+            })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&displayed_path)),
                 "read_only" => {
                     if is_readonly_dir(&physical_dir) {
                         Some(Ok(&lock_symbol))
@@ -251,10 +307,20 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
 ///
 /// Given a list of (from, to) pairs, this will perform the string
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
-fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
-    let mut substituted_dir = dir_string;
-    for substitution_pair in substitutions.iter() {
-        substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
+fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> StyleString {
+    fn get_formatted(text: &str) -> Option<StyleString> {
+        let formatter = StringFormatter::new(text).ok()?;
+        let segments = formatter.parse(None).ok()?;
+        Some(segments.iter().collect())
+    }
+    let mut substituted_dir: StyleString = Segment::new(None, dir_string).into();
+    for (from, to) in substitutions.iter() {
+        let to = if let Some(repl) = get_formatted(to) {
+            repl
+        } else {
+            Segment::new(None, String::from(*to)).into()
+        };
+        substituted_dir = substituted_dir.replace(from, &to.chars)
     }
     substituted_dir
 }
@@ -292,6 +358,148 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
         })
         .collect::<Vec<_>>()
         .join("/")
+}
+
+#[derive(Clone, Copy)]
+struct StyledChar {
+    style: Option<Style>,
+    value: char,
+}
+
+struct StyleString {
+    chars: Vec<StyledChar>,
+}
+
+struct IterStyleString<'a> {
+    inner: &'a StyleString,
+    pos: usize,
+}
+
+impl StyleString {
+    fn new(chars: &[StyledChar]) -> Self {
+        StyleString {
+            chars: chars.to_vec(),
+        }
+    }
+    fn iter(&self) -> IterStyleString {
+        IterStyleString {
+            inner: self,
+            pos: 0,
+        }
+    }
+    fn replace(&self, from: &str, to: &[StyledChar]) -> StyleString {
+        let mut result: Vec<StyledChar> = vec![];
+        let mut last_end = 0;
+        let str_repr = self.to_string();
+        for (start, part) in str_repr.match_indices(from) {
+            result.extend_from_slice(&self.chars[last_end..start]);
+            result.extend_from_slice(to);
+            last_end = start + part.chars().count();
+        }
+        result.extend_from_slice(&self.chars[last_end..]);
+        StyleString { chars: result }
+    }
+}
+
+impl From<Segment> for StyleString {
+    fn from(other: Segment) -> Self {
+        (&other).into()
+    }
+}
+
+impl From<&Segment> for StyleString {
+    fn from(other: &Segment) -> Self {
+        StyleString::new(
+            &other
+                .value
+                .chars()
+                .map(|c| StyledChar {
+                    style: other.style,
+                    value: c,
+                })
+                .collect::<Vec<StyledChar>>(),
+        )
+    }
+}
+
+impl<'a> FromIterator<&'a Segment> for StyleString {
+    fn from_iter<I: IntoIterator<Item = &'a Segment>>(iter: I) -> Self {
+        iter.into_iter()
+            .flat_map(move |x| {
+                x.value
+                    .chars()
+                    .map(|c| StyledChar {
+                        style: x.style,
+                        value: c,
+                    })
+                    .collect::<Vec<StyledChar>>()
+            })
+            .collect()
+    }
+}
+
+impl FromIterator<StyledChar> for StyleString {
+    fn from_iter<I: IntoIterator<Item = StyledChar>>(iter: I) -> Self {
+        let mut style_string = StyleString { chars: vec![] };
+        for c in iter {
+            style_string.chars.push(c);
+        }
+        style_string
+    }
+}
+
+impl<'a> FromIterator<&'a StyledChar> for Vec<Segment> {
+    fn from_iter<I: IntoIterator<Item = &'a StyledChar>>(iter: I) -> Self {
+        let mut chars = vec![];
+        for c in iter {
+            chars.push(c);
+        }
+        if let Some(_c) = chars.get(0) {
+            let mut groups = vec![];
+            let mut iter = chars.iter().peekable();
+            while let Some(StyledChar { style, .. }) = iter.peek() {
+                let mut group = vec![];
+                while let Some(StyledChar {
+                    style: otherstyle,
+                    value,
+                }) = iter.peek()
+                {
+                    if otherstyle != style {
+                        break;
+                    }
+                    group.push(*value);
+                    iter.next();
+                }
+                let group: String = group.iter().collect();
+                groups.push(Segment::new(*style, group));
+            }
+            groups
+        } else {
+            return vec![];
+        }
+    }
+}
+
+impl<'a> Iterator for IterStyleString<'a> {
+    type Item = &'a StyledChar;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.pos >= self.inner.chars.len() {
+            None
+        } else {
+            self.pos += 1;
+            self.inner.chars.get(self.pos - 1)
+        }
+    }
+}
+
+impl fmt::Display for StyleString {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            self.chars.iter().map(|x| x.value).collect::<String>()
+        )
+    }
 }
 
 #[cfg(test)]
@@ -394,7 +602,7 @@ mod tests {
         substitutions.insert("/absolute/path".to_string(), "");
         substitutions.insert("/bar/".to_string(), "/");
 
-        let output = substitute_path(full_path.to_string(), &substitutions);
+        let output = substitute_path(full_path.to_string(), &substitutions).to_string();
         assert_eq!(output, "/foo/baz");
     }
 
@@ -719,6 +927,7 @@ mod tests {
 
     #[test]
     fn truncated_directory_config_large() -> io::Result<()> {
+        use crate::modules::utils::directory::truncate;
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
@@ -1546,6 +1755,163 @@ mod tests {
 
         let actual = ModuleRenderer::new("directory").path(path).collect();
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn combine_style_string_one() {
+        let chars = vec![
+            StyledChar {
+                style: None,
+                value: 'a',
+            },
+            StyledChar {
+                style: None,
+                value: 'b',
+            },
+            StyledChar {
+                style: None,
+                value: 'c',
+            },
+        ];
+        let style_string = StyleString::new(&chars);
+        let segs: Vec<Segment> = style_string.iter().collect();
+        assert_eq!(segs.len(), 1);
+        assert_eq!(segs[0].value, "abc");
+    }
+    #[test]
+    fn combine_style_string_multiple() {
+        let chars = vec![
+            StyledChar {
+                style: None,
+                value: 'a',
+            },
+            StyledChar {
+                style: None,
+                value: 'b',
+            },
+            StyledChar {
+                style: None,
+                value: 'c',
+            },
+            StyledChar {
+                style: Some(Color::Cyan.normal()),
+                value: '1',
+            },
+            StyledChar {
+                style: Some(Color::Cyan.normal()),
+                value: '2',
+            },
+            StyledChar {
+                style: Some(Color::Cyan.normal()),
+                value: '3',
+            },
+            StyledChar {
+                style: Some(Color::Cyan.bold()),
+                value: 'd',
+            },
+            StyledChar {
+                style: Some(Color::Cyan.bold()),
+                value: 'e',
+            },
+            StyledChar {
+                style: Some(Color::Cyan.bold()),
+                value: 'f',
+            },
+        ];
+        let style_string = StyleString::new(&chars);
+        let segs: Vec<Segment> = style_string.iter().collect();
+        assert_eq!(segs.len(), 3);
+        assert_eq!(segs[0].value, "abc");
+        assert_eq!(segs[1].value, "123");
+        assert_eq!(segs[2].value, "def");
+        assert_eq!(segs[0].style, None);
+        assert_eq!(segs[1].style, Some(Color::Cyan.normal()));
+        assert_eq!(segs[2].style, Some(Color::Cyan.bold()));
+    }
+    #[test]
+    fn combine_style_string_from_segments() {
+        let segments = vec![
+            Segment::new(None, "abc"),
+            Segment::new(Some(Color::Cyan.normal()), "123"),
+        ];
+        let style_string: StyleString = segments.iter().collect();
+        let segments_new: Vec<Segment> = style_string.iter().collect();
+        assert_eq!(segments[0].value, segments_new[0].value);
+        assert_eq!(segments[1].value, segments_new[1].value);
+    }
+    #[test]
+    fn substituted_formatted_separator() {
+        use ansi_term::ANSIStrings;
+        let actual = ModuleRenderer::new("directory")
+            .path("meters/fuel-gauge")
+            .config(toml::toml! {
+                [directory]
+                [directory.substitutions]
+                "/" = "[/](green bold)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&vec![
+                Color::Cyan.bold().paint("meters"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("fuel-gauge"),
+            ])
+        ));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substituted_formatted_multiple() {
+        use ansi_term::ANSIStrings;
+        let actual = ModuleRenderer::new("directory")
+            .path("/some/long/network/path/workspace/a/b/c/dev")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitutions]
+                "/some/long/network/path" = "/some/net"
+                "a/b/c" = "[d](red underline)"
+                "/" = "[/](green bold)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&vec![
+                Color::Cyan.bold().paint("net"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("workspace"),
+                Color::Green.bold().paint("/"),
+                Color::Red.underline().paint("d"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("dev"),
+            ])
+        ));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn path_looks_like_style() {
+        // Test that directories that look like style strings
+        // don't get formatted like style strings themselves;
+        // only substitutions are valid targets for styling
+        use ansi_term::ANSIStrings;
+        let actual = ModuleRenderer::new("directory")
+            .path("[meters](red bold)/fuel-gauge")
+            .config(toml::toml! {
+                [directory]
+                [directory.substitutions]
+                "/" = "[/](green bold)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&vec![
+                Color::Cyan.bold().paint("[meters](red bold)"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("fuel-gauge"),
+            ])
+        ));
         assert_eq!(expected, actual);
     }
 }
