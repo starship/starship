@@ -213,6 +213,18 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("Terraform v0.12.14\n"),
             stderr: String::default(),
         }),
+        "application \"Spotify\" is running" => Some(CommandOutput {
+            stdout: String::from("true"),
+            stderr: String::default()
+        }),
+        "tell application \"Spotify\" to artist of current track as string" => Some(CommandOutput {
+            stdout: String::from("David bowie"),
+            stderr: String::default()
+        }),
+        "tell application \"Spotify\" to name of current track as string" => Some(CommandOutput {
+            stdout: String::from("Starman - 2012 remaster"),
+            stderr: String::default()
+        }),
         s if s.starts_with("erl -noshell -eval") => Some(CommandOutput {
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
