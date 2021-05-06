@@ -17,15 +17,21 @@ pub fn is_spotify_running_on_macos(context: &Context<'_>) -> bool {
 
 pub fn artist(context: &Context<'_>) -> Option<String> {
     if OS == "macos" && is_spotify_running_on_macos(context) {
-        let artist = eval_apple_script(
+        eval_apple_script(
             "tell application \"Spotify\" to artist of current track as string",
             context,
-        );
-        if let Some(art) = artist {
-            Some(art)
-        } else {
-            None
-        }
+        )
+    } else {
+        None
+    }
+}
+
+pub fn song(context: &Context<'_>) -> Option<String> {
+    if OS == "macos" && is_spotify_running_on_macos(context) {
+        eval_apple_script(
+            "tell application \"Spotify\" to name of current track as string",
+            context,
+        )
     } else {
         None
     }
@@ -51,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "song" => Some(Ok(config.style)),
+                "song" => song(context).map(Ok),
                 _ => None,
             })
             .parse(None)
