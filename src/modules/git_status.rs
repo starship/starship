@@ -256,7 +256,7 @@ impl RepoStatus {
 
     fn is_modified(status: &str) -> bool {
         // is_wt_modified
-        status.starts_with("1 .M")
+        status.starts_with("1 .M") || status.starts_with("1 .A")
     }
 
     fn is_staged(status: &str) -> bool {
@@ -634,6 +634,21 @@ mod tests {
     }
 
     #[test]
+    fn shows_added() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_added(&repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("!");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_staged_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -866,6 +881,18 @@ mod tests {
 
     fn create_untracked(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("license"))?.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_added(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("license"))?.sync_all()?;
+
+        Command::new("git")
+            .args(&["add", "-A", "-N"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
 
         Ok(())
     }
