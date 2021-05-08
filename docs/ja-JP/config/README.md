@@ -142,12 +142,12 @@ format = '''
 
 ### オプション
 
-| オプション             | デフォルト                          | 説明                                                           |
-| ----------------- | ------------------------------ | ------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                              |
-| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。                     |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                                         |
+| オプション             | デフォルト                          | 説明                                                |
+| ----------------- | ------------------------------ | ------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                   |
+| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。          |
+| `command_timeout` | `500`                          | Starshipによって実行されたコマンドのタイムアウト時間 (milliseconds) です。 |
+| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                              |
 
 ### 設定例
 
@@ -246,7 +246,7 @@ $character"""
 
 [awsu](https://github.com/kreuzwerker/awsu) を使う場合、そのプロファイルは環境変数 `AWSU_PROFILE` から読まれます。
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+[AWSume](https://awsu.me) を使う場合、そのプロファイルは環境変数 `AWSUME_PROFILE` から読まれます。
 
 ### オプション
 
@@ -907,7 +907,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## 環境変数
 
 `env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -1044,7 +1044,7 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-## Git ブランチ
+## Git Branch
 
 `git_branch`モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを表示します。
 
@@ -1630,16 +1630,15 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Memory Usage
+## メモリ使用量
 
-`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
+`memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
 
-<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
+デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
 
-<p spaces-before="0">::: tip</p>
+::: tip
 
-<p spaces-before="0">このモジュールはデフォルトで無効になっています。
-有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -1678,7 +1677,7 @@ symbol = " "
 style = "bold dimmed green"
 ```
 
-## Mercurial ブランチ
+## Mercurial Branch
 
 ` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
 
