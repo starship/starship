@@ -1096,7 +1096,7 @@ Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) 
 | `style`              | `"bold green"`                                         | Kiểu cho module.                                          |
 | `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state   |
 | `tag_disabled`       | `true`                                                 | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`. |
-| `tag_symbol`         | `"🏷 "`                                                 | Biểu tượng tag trước thông tin được hiển thị              |
+| `tag_symbol`         | `" 🏷 "`                                                | Biểu tượng tag trước thông tin được hiển thị              |
 | `disabled`           | `false`                                                | Vô hiệu mô đun `git_commit`.                              |
 
 ### Các biến
