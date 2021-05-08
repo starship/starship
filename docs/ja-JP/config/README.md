@@ -14,7 +14,7 @@ add_newline = true
 
 # "❯" 記号を "➜" 記号に置き換えます
 [character]                            # 設定しようとしているモジュールの名前は "character" です。
-success_symbol = "[➜](bold green)"     # "success_symbol" セグメントが「太字の緑色」スタイルの "➜"に設定されています
+success_symbol = "[➜](bold green)"     # "success_symbol" セグメントが「太字の緑色」スタイルの "➜" に設定されています
 
 # packageモジュールを無効にし、プロンプトから完全に隠します
 [package]
@@ -27,7 +27,7 @@ disabled = true
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
+PowerShell (Windows) で同様に `$PROFILE` にこの行を追加します。
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
@@ -41,7 +41,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
+PowerShell (Windows) で同様に `$PROFILE` にこの行を追加します。
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
