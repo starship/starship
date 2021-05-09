@@ -52,13 +52,6 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn extract_vlang_version(file_contents: &str) -> Option<String> {
-    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
-    let caps = re.captures(file_contents)?;
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
-}
-
 fn extract_nimble_version(context: &Context) -> Option<String> {
     let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
 
