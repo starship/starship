@@ -915,13 +915,13 @@ Le module `env_var` affiche la valeur actuelle d'une variable d'environnement s�
 
 ### Options
 
-| Option     | Défaut                         | Description                                                                  |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | Format du module.                                                            |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Option     | Défaut                         | Description                                                                         |
+| ---------- | ------------------------------ | ----------------------------------------------------------------------------------- |
+| `symbol`   |                                | Le symbole utilisé avant d'afficher la valeur de la variable.                       |
+| `variable` |                                | La variable d'environnement à afficher.                                             |
+| `default`  |                                | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie. |
+| `format`   | `"with [$env_value]($style) "` | Format du module.                                                                   |
+| `disabled` | `false`                        | Disables the `env_var` module.                                                      |
 
 ### Variables
 
