@@ -89,6 +89,20 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval "$(starship init zsh)"
    ```
 
+   #### Xonsh
+   
+   Install the xontrib:
+   
+   ```python
+   xpip install xontrib-prompt-starship
+   ```
+
+   Add the following to the `~/.xonshrc`:
+   
+   ```python
+   xontrib load prompt_starship
+   ```
+
    #### Powershell
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
