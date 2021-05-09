@@ -921,15 +921,15 @@ Le module `env_var` affiche la valeur actuelle d'une variable d'environnement s�
 | `variable` |                                | La variable d'environnement à afficher.                                             |
 | `default`  |                                | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie. |
 | `format`   | `"with [$env_value]($style) "` | Format du module.                                                                   |
-| `disabled` | `false`                        | Disables the `env_var` module.                                                      |
+| `disabled` | `false`                        | Désactive le module `env_var`.                                                      |
 
 ### Variables
 
-| Variable  | Exemple                                     | Description                                |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Reflète la valeur de l'option `symbol`     |
-| style\* | `black bold dimmed`                         | Reflète la valeur de l'option `style`      |
+| Variable  | Exemple                                  | Description                                      |
+| --------- | ---------------------------------------- | ------------------------------------------------ |
+| env_value | `Windows NT` (si _variable_ était `$OS`) | La valeur d'environnement de l'option `variable` |
+| symbol    |                                          | Reflète la valeur de l'option `symbol`           |
+| style\* | `black bold dimmed`                      | Reflète la valeur de l'option `style`            |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -945,29 +945,29 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `erlang` montre la version actuellement installée de [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `rebar.config`.
 - Le répertoire courant contient un fichier `erlang.mk`.
 
 ### Options
 
-| Option              | Défaut                               | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
-| `style`             | `"bold green"`                       | Le style du module.                                                       |
-| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `" "`                               | Le symbole utilisé avant d'afficher la version d'erlang.                                   |
+| `style`             | `"bold green"`                       | Le style du module.                                                                        |
+| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `disabled`          | `false`                              | Désactive le module `erlang`.                                                              |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v22.1.3` | The version of `erlang`                |
+| version   | `v22.1.3` | La version d'`erlang`                  |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -984,35 +984,35 @@ format = "via [e $version](bold red) "
 
 ## Google Cloud (`gcloud`)
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+Le module `gcloud` affiche la configuration actuelle pour [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Ceci est basé sur les fichiers `~/.config/gcloud/active_config` et `~/.config/gcloud/configurations/config_{CONFIG NAME}` et la variable d'environnement `CLOUDSDK_CONFIG`.
 
 ### Options
 
-| Option           | Défaut                                                     | Description                                                     |
-| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                               |
-| `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                              | Le style du module.                                             |
-| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
+| Option           | Défaut                                                     | Description                                                 |
+| ---------------- | ---------------------------------------------------------- | ----------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                           |
+| `symbol`         | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.              |
+| `region_aliases` |                                                            | Table des alias de région à afficher en plus du nom du GCP. |
+| `style`          | `"bold blue"`                                              | Le style du module.                                         |
+| `disabled`       | `false`                                                    | Désactive le module `gcloud`.                               |
 
 ### Variables
 
-| Variable  | Exemple       | Description                                                        |
-| --------- | ------------- | ------------------------------------------------------------------ |
-| region    | `us-central1` | The current GCP region                                             |
-| account   | `foo`         | The current GCP profile                                            |
-| domain    | `example.com` | The current GCP profile domain                                     |
-| project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |               | Reflète la valeur de l'option `symbol`                             |
-| style\* |               | Reflète la valeur de l'option `style`                              |
+| Variable  | Exemple       | Description                                                                   |
+| --------- | ------------- | ----------------------------------------------------------------------------- |
+| region    | `us-central1` | La région GCP actuelle                                                        |
+| account   | `foo`         | Le profil GCP actuel                                                          |
+| domain    | `exemple.com` | Le domaine du profil GCP actuel                                               |
+| project   |               | Le projet GCP actuel                                                          |
+| active    | `default`     | Le nom de la configuration active écrit dans `~/.config/gcloud/active_config` |
+| symbol    |               | Reflète la valeur de l'option `symbol`                                        |
+| style\* |               | Reflète la valeur de l'option `style`                                         |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
 ### Exemples
 
-#### Display account and project
+#### Afficher le compte et le projet
 
 ```toml
 # ~/.config/starship.toml
@@ -1021,7 +1021,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Afficher uniquement le nom de la configuration active
 
 ```toml
 # ~/.config/starship.toml
@@ -1031,7 +1031,7 @@ format = "[$symbol$active]($style) "
 style = "bold yellow"
 ```
 
-#### Display account and aliased region
+#### Afficher le compte et la région aliasée
 
 ```toml
 # ~/.config/starship.toml
@@ -1043,22 +1043,22 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-## Git Branch
+## Branche Git
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Le module `git_branch` affiche la branche active du dépôt dans votre répertoire courant.
 
 ### Options
 
-| Option               | Défaut                           | Description                                                                              |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | Format du module. Use `"$branch"` to refer to the current branch name.                   |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | Le style du module.                                                                      |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
-| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
+| Option               | Défaut                           | Description                                                                                                                     |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Affiche le nom de la branche suivie distante, même si elle est égale au nom de la branche locale.                               |
+| `format`             | `"on [$symbol$branch]($style) "` | Format du module. Utilisez `"$branch"` pour vous référer au nom de la branche courante.                                         |
+| `symbol`             | `" "`                           | Une chaîne de format représentant le symbole de la branche git.                                                                 |
+| `style`              | `"bold purple"`                  | Le style du module.                                                                                                             |
+| `truncation_length`  | `2^63 - 1`                       | Tronque une branche git à `N` graphèmes.                                                                                        |
+| `truncation_symbol`  | `"…"`                            | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué. Vous pouvez utiliser `""` pour ne pas afficher de symbole. |
+| `only_attached`      | `false`                          | Ne montrer le nom de la branche que si elle n'est pas dans un état `HEAD` détachée.                                             |
+| `disabled`           | `false`                          | Désactive le module `git_branch`.                                                                                               |
 
 ### Variables
 
@@ -1688,7 +1688,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | Le style du module.                                                                          |
 | `format`            | `"on [$symbol$branch]($style) "` | Format du module.                                                                            |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`                            | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué.                         |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Variables
