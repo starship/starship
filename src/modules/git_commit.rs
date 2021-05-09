@@ -80,7 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         _ => None,
                     })
                     .map(|variable| match variable {
-                        "tag" => Some(Ok(format!(" {}{}", &config.tag_symbol, &tag_name))),
+                        "tag" => Some(Ok(format!("{}{}", &config.tag_symbol, &tag_name))),
                         _ => None,
                     })
                     .parse(None)
@@ -323,7 +323,7 @@ mod tests {
             .config(toml::toml! {
                 [git_commit]
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();
@@ -395,7 +395,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();

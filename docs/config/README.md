@@ -1154,7 +1154,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `style`              | `"bold green"`                                 | The style for the module.                               |
 | `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `"🏷 "`                                        | Tag symbol prefixing the info shown                     |
+| `tag_symbol`         | `" 🏷 "`                                        | Tag symbol prefixing the info shown                     |
 | `disabled`           | `false`                                        | Disables the `git_commit` module.                       |
 
 ### Variables
@@ -2006,13 +2006,13 @@ symbol = "☁️ "
 ## Package Version
 
 The `package` module is shown when the current directory is the repository for a
-package, and shows its current version. The module currently supports `npm`, `cargo`,
+package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`,
 `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
-- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present
-  in the current directory
+- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
@@ -2888,19 +2888,19 @@ format = "via [⍱ $version](bold white) "
 The `vlang` module shows you your currently installed version of V.
 By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod` file
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Options
 
-| Option              | Default                                           | Description                                     |
-| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
-| `symbol`            | `"V "`                                           | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                        | Which extensions should trigger this module.    |
-| `detect_files`      | `["v.mod"]` | Which filenames should trigger this module. |
-| `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
-| `style`             | `"blue bold"`                                     | The style for the module.                       |
-| `disabled`          | `false`                                           | Disables the `vlang` module.                    |
+| Option              | Default                                      | Description                                  |
+| ------------------- | -------------------------------------------- | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                   |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module. |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.    |
+| `style`             | `"blue bold"`                                | The style for the module.                    |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
 
 ### Variables
 
