@@ -1,4 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
+use crate::formatter::VersionFormatter;
 
 use crate::configs::rlang::RLangConfig;
 use crate::formatter::StringFormatter;
@@ -28,7 +29,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_r_version(context).map(Ok),
+                "version" => {
+                    let r_version = get_r_version(context)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &r_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -58,7 +67,7 @@ fn parse_version(r_version: &str) -> Option<String> {
         // split into ["R", "version", "3.6.3", "(2020-02-29)", ...]
         // and pick version entry at index 2, i.e. "3.6.3".
         .and_then(|s| s.split_whitespace().nth(2))
-        .map(|ver| format!("v{}", ver))
+        .map(ToString::to_string)
 }
 
 #[cfg(test)]
@@ -80,7 +89,7 @@ mod tests {
         GNU General Public License versions 2 or 3.
         For more information about these matters see
         https://www.gnu.org/licenses/."#;
-        assert_eq!(parse_version(r_v3), Some(String::from("v3.6.3")));
+        assert_eq!(parse_version(r_v3), Some(String::from("3.6.3")));
     }
 
     #[test]

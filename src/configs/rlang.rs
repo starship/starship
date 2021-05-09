@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 #[derive(Clone, ModuleConfig, Serialize)]
 pub struct RLangConfig<'a> {
     pub format: &'a str,
+    pub version_format: &'a str,
     pub style: &'a str,
     pub symbol: &'a str,
     pub disabled: bool,
@@ -18,6 +19,7 @@ impl<'a> Default for RLangConfig<'a> {
     fn default() -> Self {
         RLangConfig {
             format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             style: "blue bold",
             symbol: "📐 ",
             disabled: false,
