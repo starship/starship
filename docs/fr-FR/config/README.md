@@ -1062,13 +1062,13 @@ Le module `git_branch` affiche la branche active du dépôt dans votre répertoi
 
 ### Variables
 
-| Variable      | Exemple  | Description                                                                                            |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Reflète la valeur de l'option `symbol`                                                                 |
-| style\*     |          | Reflète la valeur de l'option `style`                                                                  |
+| Variable      | Exemple  | Description                                                                                                          |
+| ------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| branch        | `master` | Le nom de la branche actuelle, par défaut à `HEAD` s'il n'y a pas de branche actuelle (par exemple `HEAD` détachée). |
+| remote_name   | `origin` | Le nom du dépôt distant.                                                                                             |
+| remote_branch | `master` | Le nom de la branche suivie sur `remote_name`.                                                                       |
+| symbol        |          | Reflète la valeur de l'option `symbol`                                                                               |
+| style\*     |          | Reflète la valeur de l'option `style`                                                                                |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -1085,25 +1085,25 @@ truncation_symbol = ""
 
 ## Commit Git
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+Le module `git_commit` affiche le hash du commit actuel ainsi que le tag (le cas échéant) du dépôt dans votre répertoire courant.
 
 ### Options
 
-| Option               | Défaut                                                 | Description                                             |
-| -------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Format du module.                                       |
-| `style`              | `"bold green"`                                         | Le style du module.                                     |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `" 🏷 "`                                                | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                                                | Disables the `git_commit` module.                       |
+| Option               | Défaut                                                 | Description                                                                |
+| -------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | La longueur du hash affiché du commit git.                                 |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Format du module.                                                          |
+| `style`              | `"bold green"`                                         | Le style du module.                                                        |
+| `only_detached`      | `true`                                                 | Ne montrer le hash du commit qu'en mode `HEAD` détachée.                   |
+| `tag_disabled`       | `true`                                                 | Désactive l'affichage des informations du tag dans le module `git_commit`. |
+| `tag_symbol`         | `" 🏷 "`                                                | Symbole préfixant les informations affichées concernant le tag             |
+| `disabled`           | `false`                                                | Désactive le module `git_commit`.                                          |
 
 ### Variables
 
 | Variable  | Exemple   | Description                           |
 | --------- | --------- | ------------------------------------- |
-| hash      | `b703eb3` | The current git commit hash           |
+| hash      | `b703eb3` | Le hash du commit git actuel          |
 | style\* |           | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -1118,20 +1118,20 @@ commit_hash_length = 4
 tag_symbol = "🔖 "
 ```
 
-## Git State
+## État Git
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Le module `git_state` s'affichera dans les répertoires qui font partie d'un dépôt git, dans lesquels une opération est en cours, comme : _REBASING_, _BISECTING_, etc. S'il y a des informations de progression (par exemple, REBASING 3/10), ces informations seront également affichées.
 
 ### Options
 
 | Option         | Défaut                                                          | Description                                                                             |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `rebase`       | `"REBASING"`                                                    | Une chaîne de format affichée lorsqu'un `rebase` est en cours.                          |
+| `merge`        | `"MERGING"`                                                     | Une chaîne de format affichée quand un `merge` est en cours.                            |
+| `revert`       | `"REVERTING"`                                                   | Une chaîne de format affichée quand un `revert` est en cours.                           |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | Une chaîne de format affichée quand un `cherry-pick` est en cours.                      |
+| `bisect`       | `"BISECTING"`                                                   | Une chaîne de format affichée quand un `bisect` est en cours.                           |
+| `am`           | `"AM"`                                                          | Une chaîne de format affichée lorsqu'un `apply-mailbox` (`git am`) est en cours.        |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | Le style du module.                                                                     |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Format du module.                                                                       |
@@ -1141,9 +1141,9 @@ The `git_state` module will show in directories which are part of a git reposito
 
 | Variable         | Exemple    | Description                           |
 | ---------------- | ---------- | ------------------------------------- |
-| state            | `REBASING` | The current state of the repo         |
-| progress_current | `1`        | The current operation progress        |
-| progress_total   | `2`        | The total operation progress          |
+| state            | `REBASING` | L'état actuel du dépôt                |
+| progress_current | `1`        | Progression de l'opération en cours   |
+| progress_total   | `2`        | Progression maximale de l'opération   |
 | style\*        |            | Reflète la valeur de l'option `style` |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
@@ -1160,7 +1160,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Statut Git
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+Le module `git_status` affiche des symboles représentant l'état du dépôt dans votre répertoire courant.
 
 ### Options
 
