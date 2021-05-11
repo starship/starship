@@ -252,30 +252,30 @@
    eval `starship init tcsh`
    ```
 
-## 🤝 Contributing
+## 🤝 بەژداریکردن
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+ئێمە هەموو کات ئەگەڕێین بۆ بەژداریکەرێک لە هەر **ئاست و توانایەکدا بێت**! ئەگەر بەدوای ئەوەوەی کە بێیتە ئەم پڕۆژەیەوە [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) تاقیبکەرەوە.
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+ئەگەر پاراویت لە زمانێک جگە لە ئینگلیزی، ئێمە زۆر خۆشحاڵدەبین بە هەر یارمەتییەک کە بەڵگەنامەکانمان بە وەرگێڕدراوی بهێڵێتەوە و نوێکراوی بهێڵێتەوە بە زمانەکانی دیکە. ئەگەر نیازت هەیە یارمەتی بدەیت، ئەتوانی بەژداری لە وەرگێڕاندا بکەیت لەسەر [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+ئەگەر حەزئەکەیت یارمەتی بدەیت بە بەژداریکردن لە starship، تکایە سەیری [ڕێبەری بەژداریکردن](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)ـەکەمان بکە. هەروەها، شەرم مەکە وەرە نێوە [ڕاژەی Discord](https://discord.gg/8Jzqu3T)ـەکەمانەوە و سڵاوێک بکە. 👋
 
-### Code Contributors
+### بەژداریکردن بە کۆد
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+سوپاس بۆ هەموو ئەو کەسانەی کە بەژدارییان کردووە تا ئەم پڕۆژەیە هەبێت. [[بەژداربە](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### بەژداریکەرە داراییەکان
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+ببە بەژداریکەرێکی دارایی و یارمەتیمان بدە بەردەوامبین لە کۆمەڵگەکەماندا. [[بەژداربە](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### تاکە کەسەکان
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### ڕێکخراوەکان
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+پشتگیری ئەم پڕۆژەیە بکە لەڕێی ڕێکخراوەکەتەوە. لۆگۆکەت لێرە دەردەکەوێ لەگەڵ بەستەرێک بۆ ماڵپەڕەکەت. [[بەژداربە](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -288,11 +288,11 @@ Support this project with your organization. Your logo will show up here with a 
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspired By
+## 💭 ئیلهامبەخشەکان
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+تکایە ئەم کارە کۆنانە سەیربکەوە کە ئیلهامی دروستکردنی starship دا. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - promptـێکی ZSH بۆ ئاسمانەوانان.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
