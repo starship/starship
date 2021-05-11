@@ -44,10 +44,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. It will replace the current version without touching Starship's configuration.
+   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
 
 
-   #### Install via Package Manager
+   #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
    With [Homebrew](https://brew.sh/):
 
@@ -55,18 +55,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   لەگەڵ [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -99,7 +99,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. ئاسایی ڕێڕەوەکە بریتیە لە `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` یان `/.config/powershell/Microsoft.PowerShell_profile.ps1` لەسەر -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -120,7 +120,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -131,7 +131,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
