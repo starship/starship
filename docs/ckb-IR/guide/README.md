@@ -35,11 +35,7 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
-  ·
-  <a href="#🚀-installation">Installation</a>
-  ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs">ماڵپەڕ</a>  ·  <a href="#🚀-installation">دامەزراندن</a>  ·  <a href="https://starship.rs/config/">رێکخستن</a>
 </p>
 
 <p align="center">
@@ -124,17 +120,17 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**promptـێکی سوکەڵە، خێرا، و بێسنور دڵخوازکراو بۆ هەر شێڵێک!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **خێرا:** خێرایە – _زۆر زۆر_ خێرایە! 🚀
+- **دڵخوازکراو:** هەموو سوچێکی promptـەکەت ڕێکبخە.
+- **گشتگیر:** لەسەر هەر شێڵێک، هەر سیستەمێک ئیش ئەکات.
+- **زیرەک:** زانیاری پەیوەندیدار لە چاوتروکانێک نیشان دەدات.
+- **دەوڵەمەند بە تایبەتمەندی:** پشتگیری هەموو ئامرازە دڵخوازەکانت ئەکات.
+- **ئاسان:** خێرا لە دامەزراندن – دەست ئەکەیت بە بەکارهێنانی لە چەند خولەکێکدا.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>بەڵگەنامەکانی Starship بگەڕێ&nbsp;&nbsp;◀</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
