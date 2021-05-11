@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship - یەکێ لە promptـە شێڵ نەناسەکان"
  />
 </p>
 
@@ -292,17 +292,17 @@
 
 تکایە ئەم کارە کۆنانە سەیربکەوە کە ئیلهامی دروستکردنی starship دا. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - promptـێکی ZSH بۆ ئاسمانەوانان.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - یەکێ لە promptـەکانی ZSH بۆ ئاسمانەوانان.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - ڕووکاری robbyrussellـی شێڵ نەناس کە بە جاڤاسکریپت نووسراوە.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - یەکێ لە promptـە شێڵ نەناسە دڵخوازکراوەکان کە لە powerline دەچێ لەگەڵ ئایکۆندا.
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 مۆڵەتنامە
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+هەموو مافێکی پارێزراوە © 2019-ئێستا، [بەژداریکەرانی Starship](https://github.com/starship/starship/graphs/contributors). <br />ئەم پڕۆژەیە لە ژێر مۆڵەتنامەی [ISC](https://github.com/starship/starship/blob/master/LICENSE)ـە.
