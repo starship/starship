@@ -18,7 +18,7 @@ features:
 footer: لەژێر مۆڵەتی ISCـە | مافی پارێزراوە © 2019-ئێستا بەژداریکەرانی Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: یەکێ لە Promptـە شێڵ نەناسەکان"
-description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.'
+description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! ئەو زانیارییانە پشان دەدات کە پێویستە، لەوکاتەیا بە ئارامی و سوکەڵەیی ئەمێنێتەوە. دامەزراندنی خێرا بەردەستە بۆ Bash, Fish, ZSH, Ion و PowerShell.'
 ---
 
 <div class="center">
@@ -30,16 +30,16 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
 ### پێشمەرجەکان
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- [فۆنتێکی Nerd](https://www.nerdfonts.com/) دامەزراوە و چالاککراوە لە تێرمیناڵەکەتا.
 
-### Quick Install
+### دامەزراندنی خێرا
 
 1. باینەری **starship** دابمەزرێنە:
 
 
    #### کۆتا وەشان دابمەزرێنە
 
-   With Shell:
+   لەگەڵ شێڵ:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
@@ -49,7 +49,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
-   With [Homebrew](https://brew.sh/):
+   لەگەڵ [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -99,7 +99,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. ئاسایی ڕێڕەوەکە بریتیە لە `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` یان `/.config/powershell/Microsoft.PowerShell_profile.ps1` لەسەر -Nix.
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `Microsoft.PowerShell_profile.ps1`. ئەتوانی شوێنی ئەم فایلە ببینیتەوە بە سەیرکردنی گۆڕاوی `$PROFILE` لە PowerShell. ئاسایی ڕێڕەوەکە بریتیە لە `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` یان `/.config/powershell/Microsoft.PowerShell_profile.ps1` لەسەر -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -118,7 +118,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: ئاگادارکردنەوە تەنها elvish v0.15 یان بەرزتر پشتگیری کراوە. :::
 
    ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
