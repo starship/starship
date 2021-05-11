@@ -138,7 +138,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
 
-    let duration = if config.show_duration {
+    let duration = {
         get_credentials_duration(context, aws_profile.as_ref()).map(|duration| {
             if duration > 0 {
                 render_time((duration * 1000) as u128,  false)
@@ -146,8 +146,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 config.expiration_symbol.to_string()
             }
         })
-    } else {
-        None
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
