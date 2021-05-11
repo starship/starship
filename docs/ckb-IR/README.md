@@ -3,22 +3,22 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: promptـێکی سوکەڵە، خێرا، و بێسنور دڵخوازکراو بۆ هەر شێڵێک!
-actionText: Get Started →
+actionText: دەستپێبکە ←
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: سەرەتا گونجان
+    details: کاردەکات لەسەر زۆربەی شێڵە باوەکان لەسەر زۆربەی سیستەمە باوەکان. لە هەموو شوێنێک بەکاری بهێنە!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Rust لە پشتە
+    details: باشترینی هاوتاکانی لە خێرایی و سەلامەتی Rust بەکارئەهێنێ بۆ ئەوەی promptـەکەت خێراترین و پشت پێبەستراوین بێ.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+    title: دڵخوازکراو
+    details: هەموو وردەکارییەکی دڵخواز ئەکرێ بەوجۆرەی حەزت لێیە، بۆ ئەوەی promptـەکە سوکەڵە بێ و پڕ تایبەتمەندی بێت بەوجۆرەی حەزت لێیە ببێ.
+footer: لەژێر مۆڵەتی ISCـە | مافی پارێزراوە © 2019-ئێستا بەژداریکەرانی Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+metaTitle: "Starship: یەکێ لە Promptـە شێڵ نەناسەکان"
+description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.'
 ---
 
 <div class="center">
