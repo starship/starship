@@ -10,6 +10,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::aws::AwsConfig;
 use crate::formatter::StringFormatter;
+use crate::modules::cmd_duration::render_time;
 
 type Profile = String;
 type Region = String;
@@ -140,7 +141,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let duration = if config.show_duration {
         get_credentials_duration(context, aws_profile.as_ref()).map(|duration| {
             if duration > 0 {
-                format!("{}s", duration.to_string())
+                render_time((duration * 1000) as u128,  false)
             } else {
                 config.expiration_symbol.to_string()
             }
@@ -470,7 +471,7 @@ region = us-east-2
             "on {}",
             Color::Yellow
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [1800s]")
+                .paint("☁️  astronauts (ap-northeast-2) [30m]")
         ));
 
         assert_eq!(expected, actual);
@@ -519,7 +520,7 @@ expiration={}
             "on {}",
             Color::Yellow
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [1800s]")
+                .paint("☁️  astronauts (ap-northeast-2) [30m]")
         ));
 
         assert_eq!(expected, actual);

@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 // Render the time into a nice human-readable string
-fn render_time(raw_millis: u128, show_millis: bool) -> String {
+pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
     let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
