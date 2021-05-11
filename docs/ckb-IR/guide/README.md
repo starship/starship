@@ -156,31 +156,31 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. It will replace the current version without touching Starship's configuration.
+   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
 
 
-   #### Install via Package Manager
+   #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### نموونە: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### لەگەڵ [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -191,7 +191,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -202,7 +202,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -213,7 +213,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `Microsoft.PowerShell_profile.ps1`. ئەتوانی شوێنی ئەم فایلە ببینیتەوە بە سەیرکردنی گۆڕاوی `$PROFILE` لە PowerShell. ئاسایی ڕێڕەوەکە بریتیە لە `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` یان `/.config/powershell/Microsoft.PowerShell_profile.ps1` لەسەر -Nix.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -222,7 +222,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -233,7 +233,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **ئاگادارکردنەوە** تەنها elvish v0.15 یان بەرزتر پشتگیری کراوە. ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -244,7 +244,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
