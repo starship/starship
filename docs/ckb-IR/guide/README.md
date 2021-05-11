@@ -135,28 +135,28 @@
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 دامەزراندن
 
-### Prerequisites
+### پێشمەرجەکان
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- فۆنتێکی [Nerd](https://www.nerdfonts.com/) دامەزرابێ و چالاککرابێ لە تێرمیناڵەکەتدا (بۆ نموونە، [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) تاقی بکەرەوە).
 
-### Getting Started
+### دەستپێکردن
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**تێبینی**: بەهۆی خێرا گۆڕانی سەکۆ جیاوازەکان، تەنها بەشێک لە سەکۆ پشتگیری کراوەکان لە خوارەوە پشاندراون. ناتوانی ئەو سەکۆیە ببینیت کە ئەتەوێ؟ سەیری [ڕێنماییەکانی سەکۆکانی تر](https://starship.rs/installing/) بکە.
 
-1. Install the **starship** binary:
-
-
-   #### Install Latest Version
+1. باینەری **starship** دابمەزرێنە:
 
 
-   ##### From prebuilt binary, with Shell:
+   #### کۆتا وەشان دابمەزرێنە
+
+
+   ##### لە باینەرییە پێشوەخت دروستکراوەکانەوە، لەگەڵ شێڵی:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. It will replace the current version without touching Starship's configuration.
 
 
    #### Install via Package Manager
