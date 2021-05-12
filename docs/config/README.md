@@ -277,12 +277,13 @@ date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Variables
 
-| Variable | Example          | Description                          |
-| -------- | ---------------- | ------------------------------------ |
-| region   | `ap-northeast-1` | The current AWS region               |
-| profile  | `astronauts`     | The current AWS profile              |
-| symbol   |                  | Mirrors the value of option `symbol` |
-| style\*  |                  | Mirrors the value of option `style`  |
+| Variable | Example          | Description                                 |
+| -------- | ---------------- | ------------------------------------------- |
+| region   | `ap-northeast-1` | The current AWS region                      |
+| profile  | `astronauts`     | The current AWS profile                     |
+| duration | `2h27m20s`       | The temporary credentials validity duration |
+| symbol   |                  | Mirrors the value of option `symbol`        |
+| style\*  |                  | Mirrors the value of option `style`         |
 
 \*: This variable can only be used as a part of a style string
 
