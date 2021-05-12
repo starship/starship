@@ -10,7 +10,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::aws::AwsConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::cmd_duration::render_time;
+use crate::utils::render_time;
 
 type Profile = String;
 type Region = String;

@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::cmd_duration::CmdDurationConfig;
 use crate::formatter::StringFormatter;
+use crate::utils::render_time;
 
 /// Outputs the time it took the last command to execute
 ///
@@ -48,36 +49,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(undistract_me(module, &config, elapsed))
-}
-
-// Render the time into a nice human-readable string
-pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
-    // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
-    let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
-    let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
-    let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
-    let (hours, days) = (raw_hours % 24, raw_hours / 24);
-
-    let components = [days, hours, minutes, seconds];
-    let suffixes = ["d", "h", "m", "s"];
-
-    let mut rendered_components: Vec<String> = components
-        .iter()
-        .zip(&suffixes)
-        .map(render_time_component)
-        .collect();
-    if show_millis || raw_millis < 1000 {
-        rendered_components.push(render_time_component((&millis, &"ms")));
-    }
-    rendered_components.join("")
-}
-
-/// Render a single component of the time string, giving an empty string if component is zero
-fn render_time_component((component, suffix): (&u128, &&str)) -> String {
-    match component {
-        0 => String::new(),
-        n => format!("{}{}", n, suffix),
-    }
 }
 
 #[cfg(not(feature = "notify-rust"))]
