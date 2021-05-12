@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -41,7 +41,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       # Cache files between builds
       # - name: Setup | Cache Cargo
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       # Cache files between builds
       # - name: Setup | Cache Cargo
@@ -112,7 +112,7 @@ jobs:
         rust: [stable, nightly]
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Setup | libdbus (ubuntu)
         if: matrix.os == 'ubuntu-latest'
