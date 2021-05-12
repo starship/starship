@@ -133,13 +133,13 @@ impl<'a> ModuleRenderer<'a> {
 }
 
 pub enum FixtureProvider {
-    GIT,
-    HG,
+    Git,
+    Hg,
 }
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
-        FixtureProvider::GIT => {
+        FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 
             Command::new("git")
@@ -166,7 +166,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
 
             Ok(path)
         }
-        FixtureProvider::HG => {
+        FixtureProvider::Hg => {
             let path = tempfile::tempdir()?;
 
             Command::new("hg")

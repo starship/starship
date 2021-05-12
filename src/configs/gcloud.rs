@@ -1,8 +1,9 @@
 use crate::config::ModuleConfig;
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 use std::collections::HashMap;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct GcloudConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -14,8 +15,8 @@ pub struct GcloudConfig<'a> {
 impl<'a> Default for GcloudConfig<'a> {
     fn default() -> Self {
         GcloudConfig {
-            format: "on [$symbol$account(\\($region\\))]($style) ",
-            symbol: "☁️ ",
+            format: "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
+            symbol: "☁️  ",
             style: "bold blue",
             disabled: false,
             region_aliases: HashMap::new(),

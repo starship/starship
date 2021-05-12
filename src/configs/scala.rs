@@ -1,11 +1,13 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct ScalaConfig<'a> {
-    pub disabled: bool,
     pub format: &'a str,
+    pub version_format: &'a str,
+    pub disabled: bool,
     pub style: &'a str,
     pub symbol: &'a str,
     pub detect_extensions: Vec<&'a str>,
@@ -17,6 +19,7 @@ impl<'a> Default for ScalaConfig<'a> {
     fn default() -> Self {
         ScalaConfig {
             format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             disabled: false,
             style: "red bold",
             symbol: "🆂 ",

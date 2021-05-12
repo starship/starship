@@ -36,7 +36,7 @@ pkg install getconf
 ### Installation
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
@@ -49,7 +49,7 @@ curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](home-manager)
+#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
 
 Enable the `programs.starship` module in your `home.nix` file, and add your settings
 

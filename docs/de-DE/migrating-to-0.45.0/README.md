@@ -1,4 +1,4 @@
-# Migrating to v0.45.0
+# Migration auf v0.45.0
 
 Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
 

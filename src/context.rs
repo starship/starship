@@ -66,7 +66,10 @@ impl<'a> Context<'a> {
         let path = arguments
             .value_of("path")
             .map(PathBuf::from)
-            .unwrap_or_else(|| env::current_dir().expect("Unable to identify current directory"));
+            .or_else(|| env::current_dir().ok())
+            .or_else(|| env::var("PWD").map(PathBuf::from).ok())
+            .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
+            .unwrap_or_default();
 
         // Retrive the "logical directory".
         // If the path argument is not set fall back to the PWD env variable set by many shells
@@ -74,12 +77,8 @@ impl<'a> Context<'a> {
         let logical_path = arguments
             .value_of("logical_path")
             .map(PathBuf::from)
-            .unwrap_or_else(|| {
-                env::var("PWD").map(PathBuf::from).unwrap_or_else(|err| {
-                    log::debug!("Unable to get path from $PWD: {}", err);
-                    path.clone()
-                })
-            });
+            .or_else(|| env::var("PWD").map(PathBuf::from).ok())
+            .unwrap_or_else(|| path.clone());
 
         Context::new_with_shell_and_path(arguments, shell, path, logical_path)
     }
@@ -332,9 +331,9 @@ impl DirContents {
         );
 
         Ok(DirContents {
-            folders,
             files,
             file_names,
+            folders,
             extensions,
         })
     }

@@ -28,6 +28,10 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
   </video>
 </div>
 
+### 必要なもの
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
 ### クイックインストール
 
 1. **Starship** のバイナリをインストール
@@ -38,8 +42,9 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    Shellを利用する
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### パッケージマネージャー経由でインストール
@@ -94,7 +99,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   `Microsoft.PowerShell_profile.ps1` の最後に以下を追記してください。 PowerShell 上で `$PROFILE` 変数を問い合わせると、ファイルの場所を確認できます。 通常、パスは `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` または -Nix 上では `~/.config/powershell/Microsoft.PowerShell_profile.ps1` です。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -115,7 +120,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   `~/.elvish/rc.elv` の最後に以下を追記してください。
 
    ```sh
    # ~/.elvish/rc.elv
@@ -123,3 +128,13 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   `~/.tcshrc` の最後に以下を追加します:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```

@@ -24,8 +24,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Ion => Some(config.ion_indicator),
                     Shell::Elvish => Some(config.elvish_indicator),
                     Shell::Tcsh => Some(config.tcsh_indicator),
-                    Shell::Unknown => None,
+                    Shell::Unknown => Some(config.unknown_indicator),
                 },
+                _ => None,
+            })
+            .map(|var| match var {
+                "bash_indicator" => Some(Ok(config.bash_indicator)),
+                "fish_indicator" => Some(Ok(config.fish_indicator)),
+                "zsh_indicator" => Some(Ok(config.zsh_indicator)),
+                "powershell_indicator" => Some(Ok(config.powershell_indicator)),
+                "ion_indicator" => Some(Ok(config.ion_indicator)),
+                "elvish_indicator" => Some(Ok(config.elvish_indicator)),
+                "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
+                "unknown_indicator" => Some(Ok(config.unknown_indicator)),
                 _ => None,
             })
             .parse(None)
@@ -231,6 +242,38 @@ mod tests {
             .config(toml::toml! {
                 [shell]
                 elvish_indicator = "[elvish](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_custom_format_conditional_indicator_match() {
+        let expected = Some(format!("{} ", "B"));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Bash)
+            .config(toml::toml! {
+                [shell]
+                bash_indicator = "B"
+                format = "($bash_indicator )"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_custom_format_conditional_indicator_no_match() {
+        let expected = None;
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Fish)
+            .config(toml::toml! {
+                [shell]
+                bash_indicator = "B"
+                format = "($indicator )"
                 disabled = false
             })
             .collect();

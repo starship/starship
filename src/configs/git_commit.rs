@@ -1,8 +1,9 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct GitCommitConfig<'a> {
     pub commit_hash_length: usize,
     pub format: &'a str,
@@ -22,7 +23,7 @@ impl<'a> Default for GitCommitConfig<'a> {
             style: "green bold",
             only_detached: true,
             disabled: false,
-            tag_symbol: "🏷  ",
+            tag_symbol: " 🏷  ",
             tag_disabled: true,
         }
     }

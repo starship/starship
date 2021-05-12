@@ -81,12 +81,15 @@ init code. The stub produces the main init script, then evaluates it with
 pub fn init_stub(shell_name: &str) -> io::Result<()> {
     log::debug!("Shell name: {}", shell_name);
 
-    let shell_basename = Path::new(shell_name).file_stem().and_then(OsStr::to_str);
+    let shell_basename = Path::new(shell_name)
+        .file_stem()
+        .and_then(OsStr::to_str)
+        .unwrap_or(shell_name);
 
     let starship = StarshipPath::init()?;
 
-    let setup_stub = match shell_basename {
-        Some("bash") => {
+    match shell_basename {
+        "bash" => print!(
             /*
              * The standard bash bootstrap is:
              *      `source <(starship init bash --print-full-init)`
@@ -118,91 +121,62 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
              * https://github.com/starship/starship/pull/241
              * https://github.com/starship/starship/pull/278
              */
-            let script = {
-                format!(
-                    r#"if [ "${{BASH_VERSINFO[0]}}" -gt 4 ] || ([ "${{BASH_VERSINFO[0]}}" -eq 4 ] && [ "${{BASH_VERSINFO[1]}}" -ge 1 ])
-then
-source <("{0}" init bash --print-full-init)
-else
-source /dev/stdin <<<"$("{0}" init bash --print-full-init)"
-fi"#,
-                    starship.sprint_posix()?
-                )
-            };
+            r#"
+            __main() {{
+                local major="${{BASH_VERSINFO[0]}}"
+                local minor="${{BASH_VERSINFO[1]}}"
 
-            Some(script)
-        }
-        Some("zsh") => {
-            let script = format!(
-                "source <(\"{}\" init zsh --print-full-init)",
-                starship.sprint_posix()?
-            );
-            Some(script)
-        }
-        Some("fish") => {
+                if ((major > 4)) || {{ ((major == 4)) && ((minor >= 1)); }}; then
+                    source <("{0}" init bash --print-full-init)
+                else
+                    source /dev/stdin <<<"$("{0}" init bash --print-full-init)"
+                fi
+            }}
+            __main
+            unset -f __main
+            "#,
+            starship.sprint_posix()?
+        ),
+        "zsh" => print!(
+            r#"source <("{}" init zsh --print-full-init)"#,
+            starship.sprint_posix()?
+        ),
+        "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
-            let script = format!(
-                "source (\"{}\" init fish --print-full-init | psub)",
-                starship.sprint_posix()?
-            );
-            Some(script)
-        }
-        Some("powershell") => {
-            // Explanation of syntax:
-            // &: Explicitly tells powershell to execute path with starship executable.
-            //
-            // @: multi-line stdout is returned as an array, but a single line or no lines
-            //    are returned as-is. @ ensures it's always an array.
-            //
-            // -join "`n": Joins the stdout array together as a string with newlines.
-            //             Powershell escapes with ` instead of \ thus `n translates to a newline.
-            let script = format!(
-                "Invoke-Expression (@(&\"{}\" init powershell --print-full-init) -join \"`n\")",
-                starship.sprint()?
-            );
-            Some(script)
-        }
-        Some("ion") => {
-            let script = format!("eval $({} init ion --print-full-init)", starship.sprint()?);
-            Some(script)
-        }
-        Some("elvish") => {
-            let script = format!(
-                "eval (\"{}\" init elvish --print-full-init | slurp)",
-                starship.sprint_posix()?
-            );
-            Some(script)
-        }
-        Some("tcsh") => {
-            let script = format!(
-                r#"eval "`("{}" init tcsh --print-full-init)`""#,
-                starship.sprint_posix()?
-            );
-            Some(script)
-        }
-        None => {
+            r#"source ("{}" init fish --print-full-init | psub)"#,
+            starship.sprint_posix()?
+        ),
+        "powershell" => print!(
+            r#"Invoke-Expression (& "{}" init powershell --print-full-init | Out-String)"#,
+            starship.sprint()?
+        ),
+        "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
+        "elvish" => print!(
+            r#"eval ("{}" init elvish --print-full-init | slurp)"#,
+            starship.sprint_posix()?
+        ),
+        "tcsh" => print!(
+            r#"eval `("{}" init tcsh --print-full-init)`"#,
+            starship.sprint_posix()?
+        ),
+        _ => {
+            let quoted_arg = shell_words::quote(shell_basename);
             println!(
-                "Invalid shell name provided: {}\\n\
-                 If this issue persists, please open an \
-                 issue in the starship repo: \\n\
-                 https://github.com/starship/starship/issues/new\\n\"",
-                shell_name
-            );
-            None
-        }
-        Some(shell_basename) => {
-            println!(
-                "printf \"\\n{0} is not yet supported by starship.\\n\
-                 For the time being, we support bash, zsh, fish, and ion.\\n\
+                "printf \"\\n%s is not yet supported by starship.\\n\
+                 For the time being, we support the following shells:\\n\
+                 * bash\\n\
+                 * elvish\\n\
+                 * fish\\n\
+                 * ion\\n\
+                 * powershell\\n\
+                 * tcsh\\n\
+                 * zsh\\n\
+                 \\n\
                  Please open an issue in the starship repo if you would like to \
-                 see support for {0}:\\nhttps://github.com/starship/starship/issues/new\"\\n\\n",
-                shell_basename
-            );
-            None
+                 see support for %s:\\nhttps://github.com/starship/starship/issues/new\\n\\n\" {0} {0}",
+                quoted_arg
+            )
         }
-    };
-    if let Some(script) = setup_stub {
-        print!("{}", script);
     };
     Ok(())
 }

@@ -20,6 +20,8 @@ mod normalize {
     use std::ffi::OsStr;
     use std::path::{Component, Path, Prefix};
 
+    // allow because this mirrors std
+    #[allow(clippy::upper_case_acronyms)]
     #[derive(Debug, PartialEq, Eq)]
     pub enum NormalizedPrefix<'a> {
         // No prefix, e.g. `\cat_pics` or `/cat_pics`

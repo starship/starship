@@ -20,19 +20,12 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     );
     let config = CustomConfig::load(toml_config);
 
-    let mut scan_dir = context.try_begin_scan()?;
-
-    if !config.files.0.is_empty() {
-        scan_dir = scan_dir.set_files(&config.files.0);
-    }
-    if !config.extensions.0.is_empty() {
-        scan_dir = scan_dir.set_extensions(&config.extensions.0);
-    }
-    if !config.directories.0.is_empty() {
-        scan_dir = scan_dir.set_folders(&config.directories.0);
-    }
-
-    let mut is_match = scan_dir.is_match();
+    let mut is_match = context
+        .try_begin_scan()?
+        .set_files(&config.files)
+        .set_extensions(&config.extensions)
+        .set_folders(&config.directories)
+        .is_match();
 
     if !is_match {
         if let Some(when) = config.when {

@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-L'implementazione [Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) integrata in Starship è leggermente più complessa per consentire funzionalità avanzate come il [modulo di durata dei comandi](https://starship.rs/config/#Command-Duration) e per garantire che Starship sia compatibile con le configurazioni Bash preinstallate.
+L'implementazione [Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) integrata in Starship è leggermente più complessa per consentire funzionalità avanzate come il [modulo di durata dei comandi](https://starship.rs/config/#command-duration) e per garantire che Starship sia compatibile con le configurazioni Bash preinstallate.
 
 Per un elenco di tutti i flag accettati da `starship prompt`, utilizzare il seguente comando:
 
@@ -53,8 +53,12 @@ The prompt will use as much context as is provided, but no flags are "required".
 Se si ottiene un errore come "_versione 'GLIBC_2. 8' non trovato (richiesta da Starship)_" quando si utilizza il binario precostruito (per esempio, su CentOS 6 o 7), puoi usare un binario compilato con `musl` invece di `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
+
+## I see symbols I don't understand or expect, what do they mean?
+
+If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
 
 ## Perché non vedo un simbolo di glifo nel mio prompt?
 
@@ -84,9 +88,9 @@ Starship è altrettanto facile da disinstallare come lo è da installare.
 
 Se Starship è stato installato utilizzando un gestore di pacchetti, fai riferimento alla documentazione per le istruzioni di disinstallazione.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
-# Individua ed elimina il binario di Starship
-rm "$(che starship)"
+# Locate and delete the starship binary
+sh -c 'rm "$(which starship)"'
 ```

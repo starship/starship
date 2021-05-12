@@ -9,8 +9,8 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
-# Don't print a new line at the start of the prompt
-add_newline = false
+# Inserts a blank line between shell prompts
+add_newline = true
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
@@ -49,9 +49,9 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 ### 术语
 
-**组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 比如“nodejs”组件会在当前目录是一个 NodeJS 项目时显示您当前安装的 NodeJS 版本。
+**组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of NodeJS.
+**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
@@ -80,7 +80,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⬢ $version](bold green)` will print a symbol `⬢` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### 样式设定
@@ -142,11 +142,12 @@ format = '''
 
 ### 配置项
 
-| Option         | 默认值                           | 描述                                  |
-| -------------- | ----------------------------- | ----------------------------------- |
-| `format`       | [见下文](#default-prompt-format) | Configure the format of the prompt. |
-| `scan_timeout` | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。          |
-| `add_newline`  | `true`                        | 在提示符与提示信息间换行。                       |
+| Option            | 默认值                           | 描述                                                           |
+| ----------------- | ----------------------------- | ------------------------------------------------------------ |
+| `format`          | [见下文](#default-prompt-format) | Configure the format of the prompt.                          |
+| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                   |
+| `command_timeout` | `500`                         | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                        | Inserts blank line between shell prompts.                    |
 
 ### 示例
 
@@ -162,7 +163,7 @@ format = """
 # Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Disable the newline at the start of the prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
@@ -180,6 +181,7 @@ $hostname\
 $shlvl\
 $kubernetes\
 $directory\
+$vcsh\
 $git_branch\
 $git_commit\
 $git_state\
@@ -189,6 +191,7 @@ $docker_context\
 $package\
 $cmake\
 $dart\
+$deno\
 $dotnet\
 $elixir\
 $elm\
@@ -205,8 +208,10 @@ $perl\
 $php\
 $purescript\
 $python\
+$red\
 $ruby\
 $rust\
+$scala\
 $swift\
 $terraform\
 $vagrant\
@@ -237,15 +242,19 @@ $character"""
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
 
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+
 ### 配置项
 
-| Option           | 默认值                                              | 描述                        |
-| ---------------- | ------------------------------------------------ | ------------------------- |
-| `format`         | `'on [$symbol$profile(\($region\))]($style) '` | 组件格式化模板。                  |
-| `symbol`         | `"☁️ "`                                          | 这个字段的内容会显示在当前 AWS 配置信息之前。 |
-| `region_aliases` |                                                  | 地区缩写列表，用来显示在 AWS 主机名之后。   |
-| `style`          | `"bold yellow"`                                  | 此组件的样式。                   |
-| `disabled`       | `false`                                          | 禁用 `AWS` 组件。              |
+| Option           | 默认值                                                 | 描述                         |
+| ---------------- | --------------------------------------------------- | -------------------------- |
+| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | 组件格式化模板。                   |
+| `symbol`         | `"☁️ "`                                             | 这个字段的内容会显示在当前 AWS 配置信息之前。  |
+| `region_aliases` |                                                     | 地区缩写列表，用来显示在 AWS 主机名之后。    |
+| `style`          | `"bold yellow"`                                     | 此组件的样式。                    |
+| `disabled`       | `false`                                             | Disables the `aws` module. |
 
 ### Variables
 
@@ -266,7 +275,7 @@ When using [aws-vault](https://github.com/99designs/aws-vault) the profile is re
 # ~/.config/starship.toml
 
 [aws]
-format = 'on [$symbol$profile(\($region\))]($style) '
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -307,15 +316,14 @@ symbol = "🅰 "
 
 | Option               | 默认值                               | 描述               |
 | -------------------- | --------------------------------- | ---------------- |
-| `full_symbol`        | `""`                             | 显示于电池充满时。        |
-| `charging_symbol`    | `""`                             | 显示于正在充电时。        |
-| `discharging_symbol` | `""`                             | 显示于电池放电时。        |
-| `unknown_symbol`     | `""`                             | 显示于电池状态未知时       |
-| `empty_symbol`       | `""`                             | 显示于电池状态为空时       |
+| `full_symbol`        | `" "`                            | 显示于电池充满时。        |
+| `charging_symbol`    | `" "`                            | 显示于正在充电时。        |
+| `discharging_symbol` | `" "`                            | 显示于电池放电时。        |
+| `unknown_symbol`     | `" "`                            | 显示于电池状态未知时       |
+| `empty_symbol`       | `" "`                            | 显示于电池状态为空时       |
 | `format`             | `"[$symbol$percentage]($style) "` | 组件格式化模板。         |
 | `display`            | [见下文](#battery-display)           | 电量显示阈值和样式。       |
 | `disabled`           | `false`                           | 禁用 `battery` 组件。 |
-
 
 ### 示例
 
@@ -323,14 +331,14 @@ symbol = "🅰 "
 # ~/.config/starship.toml
 
 [battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
 ```
 
 ### Battery 组件的显示
 
-`display` 选项用于定义电池指示器的显示阈值（threshold）和显示效果（style）。 如果 `display` 没有设置， 默认设置如下：
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). 如果 `display` 没有设置， 默认设置如下：
 
 ```toml
 [[battery.display]]
@@ -338,27 +346,32 @@ threshold = 10
 style = "bold red"
 ```
 
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+
 #### 配置项
 
 `display` 字段的子字段如下：
 
-| Option      | 描述               |
-| ----------- | ---------------- |
-| `threshold` | 当前显示设置的电量上限（见示例） |
-| `style`     | 若组件被显示，则使用此样式    |
+| Option               | 默认值        | 描述                                                                                                        |
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | 当前显示设置的电量上限（见示例）                                                                                          |
+| `style`              | `bold red` | 若组件被显示，则使用此样式                                                                                             |
+| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
+| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
 #### 示例
 
 ```toml
-[[battery.display]]  # 当电量在 0% 到 10% 时以 "bold red" 样式显示
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # 当电量在 10% 到 30% 时以 "bold yellow" 样式显示
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+discharging_symbol = 💦
 
-# 当电量在 30% 时以上时，电池指示器组件将不会显示出来
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
@@ -371,7 +384,7 @@ style = "bold yellow"
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
 
-By default it only changes color. If you also want to change it's shape take a look at [this example](#with-custom-error-shape).
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 ::: warning `error_symbol` is not supported on elvish shell. :::
 
@@ -424,22 +437,23 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of CMake. By default the module will be activated if any of the following conditions are met:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
 
 ### 配置项
 
-| Option              | 默认值                                    | 描述                                           |
-| ------------------- | -------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | 组件格式化模板。                                     |
-| `symbol`            | `"喝 "`                                 | The symbol used before the version of cmake. |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this moudle  |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module   |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module     |
-| `style`             | `"bold blue"`                          | 此组件的样式。                                      |
-| `disabled`          | `false`                                | Disables the `cmake` module.                 |
+| Option              | 默认值                                    | 描述                                                                        |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                              |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
+| `style`             | `"bold blue"`                          | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
 
 ### Variables
 
@@ -542,22 +556,23 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of Crystal. By default the module will be shown if any of the following conditions are met:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `shard.yml` 文件
 - The current directory contains a `.cr` file
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                        |
-| ------------------- | ------------------------------------ | --------------------------------------------------------- |
-| `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal. |
-| `style`             | `"bold red"`                         | 此组件的样式。                                                   |
-| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.              |
-| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                 |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                  |
-| `disabled`          | `false`                              | Disables the `crystal` module.                            |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal.                 |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `"bold red"`                         | 此组件的样式。                                                                   |
+| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
 ### Variables
 
@@ -580,23 +595,24 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of Dart. By default the module will be shown if any of the following conditions are met:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- 当前目录包含 `pubspec.yaml`，`pubspec.yml` 或 `pubspec.lock` 文件
 
 ### 配置项
 
-| Option              | 默认值                                               | 描述                                              |
-| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | 组件格式化模板。                                        |
-| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart |
-| `detect_extensions` | `['dart']`                                        | Which extensions should trigger this moudle.    |
-| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.       |
-| `style`             | `"bold blue"`                                     | 此组件的样式。                                         |
-| `disabled`          | `false`                                           | Disables the `dart` module.                     |
+| Option              | 默认值                                               | 描述                                                                        |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`              | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart                           |
+| `detect_extensions` | `["dart"]`                                        | Which extensions should trigger this module.                              |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.                                 |
+| `style`             | `"bold blue"`                                     | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
 ### Variables
 
@@ -615,6 +631,41 @@ The `dart` module shows the currently installed version of Dart. By default the 
 
 [dart]
 format = "via [🔰 $version](bold red) "
+```
+
+## Deno
+
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
+- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+
+### 配置项
+
+| Option              | 默认值                                          | 描述                                                                        |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                           |
+| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `"green bold"`                               | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                      | Disables the `deno` module.                                               |
+
+### Variables
+
+| 字段        | 示例       | 描述                    |
+| --------- | -------- | --------------------- |
+| version   | `v1.8.3` | The version of `deno` |
+| symbol    |          | `symbol`对应值           |
+| style\* |          | `style`对应值            |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[deno]
+format = "via [🦕 $version](green bold) "
 ```
 
 ## Directory
@@ -717,7 +768,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-`dotnet` 模块显示与当前目录下使用的 .NET Core SDK 相关联的版本。 如果当前目录已被绑定了一个版本的 SDK，则显示被帮定的版本。 否则此组件将显示最新安装的 SDK 版本。
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. 如果当前目录已被绑定了一个版本的 SDK，则显示被帮定的版本。 否则此组件将显示最新安装的 SDK 版本。
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -739,16 +790,17 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 配置项
 
-| Option              | 默认值                                                                                                     | 描述                                           |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | 组件格式化模板。                                     |
-| `symbol`            | `"•NET "`                                                                                               | 这个字段的内容会显示在当前 .NET 版本之前。                     |
-| `heuristic`         | `true`                                                                                                  | 使用更快的版本探测机制以保证 starship 的运行速度。               |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module. |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.   |
-| `style`             | `"bold blue"`                                                                                           | 此组件的样式。                                      |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                |
+| Option              | 默认值                                                                                                     | 描述                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `".NET "`                                                                                               | 这个字段的内容会显示在当前 .NET 版本之前。                                                  |
+| `heuristic`         | `true`                                                                                                  | 使用更快的版本探测机制以保证 starship 的运行速度。                                            |
+| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
+| `style`             | `"bold blue"`                                                                                           | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                                                                                 | 禁用 `dotnet` 组件。                                                           |
 
 ### Variables
 
@@ -774,21 +826,22 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of Elixir and Erlang/OTP. By default the module will be shown if any of the following conditions are met:
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `mix.exs` 文件.
 
 ### 配置项
 
-| Option              | 默认值                                                         | 描述                                                              |
-| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                    |
-| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                     |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
-| `style`             | `"bold purple"`                                             | 此组件的样式。                                                         |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| Option              | 默认值                                                         | 描述                                                                        |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
+| `version_format`    | `v{raw}`                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
+| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
+| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
+| `style`             | `"bold purple"`                                             | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
 ### Variables
 
@@ -812,7 +865,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of Elm. By default the module will be shown if any of the following conditions are met:
+The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `elm.json` 文件
 - 当前目录包含 `elm-package.json` 文件
@@ -822,15 +875,16 @@ The `elm` module shows the currently installed version of Elm. By default the mo
 
 ### 配置项
 
-| Option              | 默认值                                                | 描述                                              |
-| ------------------- | -------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | 组件格式化模板。                                        |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm. |
-| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.    |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.      |
-| `style`             | `"cyan bold"`                                      | 此组件的样式。                                         |
-| `disabled`          | `false`                                            | Disables the `elm` module.                      |
+| Option              | 默认值                                                | 描述                                                                        |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`               | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                           | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                           |
+| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.                              |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.                                |
+| `style`             | `"cyan bold"`                                      | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
 ### Variables
 
@@ -890,22 +944,23 @@ default = "unknown shell"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of Erlang/OTP. By default the module will be shown if any of the following conditions are met:
+The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `rebar.config` 文件.
 - 当前目录包含一个 `erlang.mk` 文件.
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                       |
-| ------------------- | ------------------------------------ | -------------------------------------------------------- |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`             | `"bold red"`                         | 此组件的样式。                                                  |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.             |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.              |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                 |
-| `disabled`          | `false`                              | Disables the `erlang` module.                            |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
+| `style`             | `"bold red"`                         | 此组件的样式。                                                                   |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Variables
 
@@ -926,30 +981,31 @@ The `erlang` module shows the currently installed version of Erlang/OTP. By defa
 format = "via [e $version](bold red) "
 ```
 
-## Gcloud
+## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 ### 配置项
 
-| Option           | 默认值                                              | 描述                                                              |
-| ---------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(\($region\))]($style) '` | 组件格式化模板。                                                        |
-| `symbol`         | `"☁️ "`                                          | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                  | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                    | 此组件的样式。                                                         |
-| `disabled`       | `false`                                          | Disables the `gcloud` module.                                   |
+| Option           | 默认值                                                        | 描述                                                              |
+| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | 组件格式化模板。                                                        |
+| `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
+| `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
+| `style`          | `"bold blue"`                                              | 此组件的样式。                                                         |
+| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
 
 ### Variables
 
-| 字段        | 示例                | 描述                                                                 |
-| --------- | ----------------- | ------------------------------------------------------------------ |
-| region    | `us-central1`     | The current GCP region                                             |
-| account   | `foo@example.com` | The current GCP profile                                            |
-| project   |                   | The current GCP project                                            |
-| active    | `default`         | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |                   | `symbol`对应值                                                        |
-| style\* |                   | `style`对应值                                                         |
+| 字段        | 示例            | 描述                                                                 |
+| --------- | ------------- | ------------------------------------------------------------------ |
+| region    | `us-central1` | The current GCP region                                             |
+| account   | `foo`         | The current GCP profile                                            |
+| domain    | `example.com` | The current GCP profile domain                                     |
+| project   |               | The current GCP project                                            |
+| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |               | `symbol`对应值                                                        |
+| style\* |               | `style`对应值                                                         |
 
 \*: This variable can only be used as a part of a style string
 
@@ -961,7 +1017,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
 #### Display active config name only
@@ -998,20 +1054,20 @@ asia-northeast1 = "an1"
 | `format`             | `"on [$symbol$branch]($style) "` | 组件格式化模板。 Use `"$branch"` to refer to the current branch name.                        |
 | `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
 | `style`              | `"bold purple"`                  | 此组件的样式。                                                                              |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to X graphemes.                                               |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                             |
 | `truncation_symbol`  | `"…"`                            | 此字段的内容用来表示分支名称被截断。 You can use `""` for no symbol.                                   |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached HEAD state.                         |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                       |
 | `disabled`           | `false`                          | 禁用 `git_branch` 组件。                                                                  |
 
 ### Variables
 
-| 字段            | 示例       | 描述                                                                                                   |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached HEAD). |
-| remote_name   | `origin` | The remote name.                                                                                     |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                     |
-| symbol        |          | `symbol`对应值                                                                                          |
-| style\*     |          | `style`对应值                                                                                           |
+| 字段            | 示例       | 描述                                                                                                     |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | The remote name.                                                                                       |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol        |          | `symbol`对应值                                                                                            |
+| style\*     |          | `style`对应值                                                                                             |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1032,15 +1088,15 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### 配置项
 
-| Option               | 默认值                                                    | 描述                                                    |
-| -------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | 显示的 git 提交哈希值的长度。                                     |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | 组件格式化模板。                                              |
-| `style`              | `"bold green"`                                         | 此组件的样式。                                               |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached HEAD state |
-| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.     |
-| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                   |
-| `disabled`           | `false`                                                | 禁用 `git_commit` 组件。                                   |
+| Option               | 默认值                                                    | 描述                                                      |
+| -------------------- | ------------------------------------------------------ | ------------------------------------------------------- |
+| `commit_hash_length` | `7`                                                    | 显示的 git 提交哈希值的长度。                                       |
+| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | 组件格式化模板。                                                |
+| `style`              | `"bold green"`                                         | 此组件的样式。                                                 |
+| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state |
+| `tag_disabled`       | `true`                                                 | Disables showing tag info in `git_commit` module.       |
+| `tag_symbol`         | `"🏷 "`                                                 | Tag symbol prefixing the info shown                     |
+| `disabled`           | `false`                                                | 禁用 `git_commit` 组件。                                     |
 
 ### Variables
 
@@ -1186,7 +1242,7 @@ behind = "⇣${count}"
 
 ## Golang
 
-`golang` 组件显示当前安装的 Golang 版本。 By default the module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of [Golang](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `go.mod` 文件
 - 当前目录包含 `go.sum` 文件
@@ -1199,15 +1255,16 @@ behind = "⇣${count}"
 
 ### 配置项
 
-| Option              | 默认值                                                                            | 描述                                             |
-| ------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | 组件格式化模板。                                       |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go. |
-| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this moudle.   |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.    |
-| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.      |
-| `style`             | `"bold cyan"`                                                                  | 此组件的样式。                                        |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                  |
+| Option              | 默认值                                                                            | 描述                                                                        |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
+| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.                                 |
+| `style`             | `"bold cyan"`                                                                  | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                                                        | 禁用 `golang` 组件。                                                           |
 
 ### Variables
 
@@ -1230,22 +1287,23 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of Helm. By default the module will be shown if any of the following conditions are met:
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `helmfile.yaml` 文件
 - The current directory contains a `Chart.yaml` file
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.     |
-| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.       |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm. |
-| `style`             | `"bold white"`                       | 此组件的样式。                                          |
-| `disabled`          | `false`                              | Disables the `helm` module.                      |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
+| `style`             | `"bold white"`                       | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
 ### Variables
 
@@ -1303,22 +1361,23 @@ disabled = false
 
 ## Java
 
-`java` 组件显示当前安装的 Java 版本。 By default the module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### 配置项
 
-| Option              | 默认值                                                                                                       | 描述                                              |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | 组件格式化模板。                                        |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.    |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.      |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java |
-| `style`             | `"red dimmed"`                                                                                            | 此组件的样式。                                         |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                     |
+| Option              | 默认值                                                                                                       | 描述                                                                        |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
+| `style`             | `"red dimmed"`                                                                                            | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                                                                                   | 禁用 `java` 组件。                                                             |
 
 ### Variables
 
@@ -1341,7 +1400,13 @@ symbol = "🌟 "
 
 ## Jobs
 
-`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 如果有超过 1 个作业，模块将显示正在运行的作业数量，如果配置了 `threshold` 字段，则使用它作为显示作业数量的下限。
+`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 如果有超过 1 个作业，模块将显示正在运行的作业数量，如果配置了 `threshold` 字段，则使用它作为显示作业数量的下限。 If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+::: warning
+
+This module is not supported on tcsh.
+
+:::
 
 ### 配置项
 
@@ -1375,7 +1440,7 @@ threshold = 4
 
 ## Julia
 
-The `julia` module shows the currently installed version of Julia. By default the module will be shown if any of the following conditions are met:
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
@@ -1383,15 +1448,16 @@ The `julia` module shows the currently installed version of Julia. By default th
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                |
-| ------------------- | ------------------------------------ | ------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                          |
-| `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.      |
-| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.       |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.        |
-| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia. |
-| `style`             | `"bold purple"`                      | 此组件的样式。                                           |
-| `disabled`          | `false`                              | Disables the `julia` module.                      |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
+| `style`             | `"bold purple"`                      | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
 ### Variables
 
@@ -1414,7 +1480,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of Kotlin. By default the module will be shown if any of the following conditions are met:
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.kt` or a `.kts` file
 
@@ -1423,6 +1489,7 @@ The `kotlin` module shows the currently installed version of Kotlin. By default 
 | Option              | 默认值                                  | 描述                                                                            |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                      |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
@@ -1460,7 +1527,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current Kubernetes context name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -1522,7 +1589,7 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of Lua. By default the module will be shown if any of the following conditions are met:
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1533,8 +1600,9 @@ The `lua` module shows the currently installed version of Lua. By default the mo
 | Option              | 默认值                                  | 描述                                                                         |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                   |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
 | `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this moudle.                               |
+| `detect_extensions` | `["lua"]`                            | Which extensions should trigger this module.                               |
 | `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
 | `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
 | `style`             | `"bold blue"`                        | 此组件的样式。                                                                    |
@@ -1574,13 +1642,13 @@ format = "via [🌕 $version](bold blue) "
 
 ### 配置项
 
-| Option      | 默认值                                           | 描述                     |
-| ----------- | --------------------------------------------- | ---------------------- |
-| `threshold` | `75`                                          | 隐藏内存使用情况，除非它超过这个百分比。   |
-| `format`    | `"via $symbol [${ram}( | ${swap})]($style) "` | 组件格式化模板。               |
-| `symbol`    | `"🐏"`                                         | 这个字段的内容会显示在当前内存使用情况之前。 |
-| `style`     | `"bold dimmed white"`                         | 此组件的样式。                |
-| `disabled`  | `true`                                        | 禁用 `memory_usage` 模块   |
+| Option      | 默认值                                             | 描述                     |
+| ----------- | ----------------------------------------------- | ---------------------- |
+| `threshold` | `75`                                            | 隐藏内存使用情况，除非它超过这个百分比。   |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | 组件格式化模板。               |
+| `symbol`    | `"🐏"`                                           | 这个字段的内容会显示在当前内存使用情况之前。 |
+| `style`     | `"bold dimmed white"`                           | 此组件的样式。                |
+| `disabled`  | `true`                                          | 禁用 `memory_usage` 模块   |
 
 ### Variables
 
@@ -1613,14 +1681,14 @@ style = "bold dimmed green"
 
 ### 配置项
 
-| Option              | 默认值                              | 描述                              |
-| ------------------- | -------------------------------- | ------------------------------- |
-| `symbol`            | `" "`                           | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。   |
-| `style`             | `"bold purple"`                  | 此组件的样式。                         |
-| `format`            | `"on [$symbol$branch]($style) "` | 组件格式化模板。                        |
-| `truncation_length` | `2^63 - 1`                       | 将显示的 hg 分支名截断到该数量的字素（graphemes） |
-| `truncation_symbol` | `"…"`                            | 此字段的内容用来表示分支名称被截断。              |
-| `disabled`          | `true`                           | 禁用 `hg_branch` 组件。              |
+| Option              | 默认值                              | 描述                                            |
+| ------------------- | -------------------------------- | --------------------------------------------- |
+| `symbol`            | `" "`                           | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。                 |
+| `style`             | `"bold purple"`                  | 此组件的样式。                                       |
+| `format`            | `"on [$symbol$branch]($style) "` | 组件格式化模板。                                      |
+| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes |
+| `truncation_symbol` | `"…"`                            | 此字段的内容用来表示分支名称被截断。                            |
+| `disabled`          | `true`                           | 禁用 `hg_branch` 组件。                            |
 
 ### Variables
 
@@ -1645,7 +1713,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of Nim. By default the module will be shown if any of the following conditions are met:
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `nim.cfg` 文件
 - The current directory contains a file with the `.nim` extension
@@ -1654,15 +1722,16 @@ The `nim` module shows the currently installed version of Nim. By default the mo
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                             |
-| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim. |
-| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this moudle.          |
-| `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
-| `style`             | `"bold yellow"`                      | 此组件的样式。                                               |
-| `disabled`          | `false`                              | Disables the `nim` module.                            |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                     |
+| `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this module.                              |
+| `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold yellow"`                      | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `nim` module.                                                |
 
 ### Variables
 
@@ -1686,7 +1755,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell` 组件显示 nix-shell 环境。 当处于一个 nix-shell 环境中时，此组件会被显示。
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. 当处于一个 nix-shell 环境中时，此组件会被显示。
 
 ### 配置项
 
@@ -1722,12 +1791,13 @@ pure_msg = "[pure shell](bold green)"
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
-## NodeJS
+## Node.js
 
-`nodejs` 组件显示当前安装的 NodeJS 版本。 By default the module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `package.json` 文件
 - The current directory contains a `.node-version` file
+- The current directory contains a `.nvmrc` file
 - 当前目录包含 `node_modules` 目录
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
@@ -1737,15 +1807,16 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | Option              | 默认值                                  | 描述                                                                                                    |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                                              |
-| `symbol`            | `"⬢ "`                               | A format string representing the symbol of NodeJS.                                                    |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this moudle.                                                          |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
 | `style`             | `"bold green"`                       | 此组件的样式。                                                                                               |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in Packages.json does not match the NodeJS version. |
+| `disabled`          | `false`                              | 禁用 `nodejs` 组件。                                                                                       |
+| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
 
-###  Variables
+### Variables
 
 | 字段        | 示例         | 描述                    |
 | --------- | ---------- | --------------------- |
@@ -1766,7 +1837,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of OCaml. By default the module will be shown if any of the following conditions are met:
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -1777,23 +1848,28 @@ The `ocaml` module shows the currently installed version of OCaml. By default th
 
 ### 配置项
 
-| Option              | 默认值                                                              | 描述                                                      |
-| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                             | The format string for the module.                       |
-| `symbol`            | `"🐫 "`                                                           | The symbol used before displaying the version of OCaml. |
-| `detect_extensions` | `["opam", "ml", "mli", "re", "rei"]`                             | Which extensions should trigger this moudle.            |
-| `detect_files`      | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]` | Which filenames should trigger this module.             |
-| `detect_folders`    | `["_opam", "esy.lock"]`                                          | Which folders should trigger this module.               |
-| `style`             | `"bold yellow"`                                                  | 此组件的样式。                                                 |
-| `disabled`          | `false`                                                          | Disables the `ocaml` module.                            |
+| Option                    | 默认值                                                                        | 描述                                                                        |
+| ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
+| `version_format`          | `v{raw}`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml.                   |
+| `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch.                   |
+| `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.                    |
+| `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Which extensions should trigger this module.                              |
+| `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Which filenames should trigger this module.                               |
+| `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Which folders should trigger this module.                                 |
+| `style`                   | `"bold yellow"`                                                            | 此组件的样式。                                                                   |
+| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
 
 ### Variables
 
-| 字段        | 示例        | 描述                     |
-| --------- | --------- | ---------------------- |
-| version   | `v4.10.0` | The version of `ocaml` |
-| symbol    |           | `symbol`对应值            |
-| style\* |           | `style`对应值             |
+| 字段               | 示例           | 描述                                                                |
+| ---------------- | ------------ | ----------------------------------------------------------------- |
+| version          | `v4.10.0`    | The version of `ocaml`                                            |
+| switch_name      | `my-project` | The active OPAM switch                                            |
+| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
+| symbol           |              | `symbol`对应值                                                       |
+| style\*        |              | `style`对应值                                                        |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1817,7 +1893,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | 组件格式化模板。                                                       |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | 此组件的样式。                                                        |
-| `disabled` | `false`                                             | Disables the `OpenStack` module.                               |
+| `disabled` | `false`                                             | Disables the `openstack` module.                               |
 
 ### Variables
 
@@ -1845,16 +1921,16 @@ symbol = "☁️ "
 
 当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
-- **npm** —— `npm` 软件包版本从当前目录下的 `package.json` 中得到
-- **cargo** —— `cargo` 软件包的版本从当前目录下的 `Cargo.toml` 中得到
-- **poetry** —— `poetry` 软件包版本从当前目录下的 `pyproject.toml` 中得到
-- **composer** —— `composer` 软件包版本从当前目录下的 `composer.json` 中得到
-- **gradle** – The `gradle` package version is extracted from the `build.gradle` present
-- **julia** - The package version is extracted from the `Project.toml` present
-- **mix** - The `mix` package version is extracted from the `mix.exs` present
-- **helm** - The `helm` chart version is extracted from the `Chart.yaml` present
-- **maven** - The `maven` package version is extracted from the `pom.xml` present
-- **meson** - The `meson` package version is extracted from the `meson.build` present
+- [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
+- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
+- [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
+- [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
+- [**mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
+- [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
+- [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
+- [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 
 > ⚠ 此组件显示的是源代码在当前目录中的软件包的版本，而不是包管理器的版本。
 
@@ -1889,7 +1965,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of Perl. By default the module will be shown if any of the following conditions are met:
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -1899,15 +1975,16 @@ The `perl` module shows the currently installed version of Perl. By default the 
 
 ### 配置项
 
-| Option              | 默认值                                                                                                      | 描述                                                    |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                     |
-| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl |
-| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this moudle.          |
-| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.             |
-| `style`             | `"bold 149"`                                                                                             | 此组件的样式。                                               |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                           |
+| Option              | 默认值                                                                                                      | 描述                                                                        | **** |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |      |
+| `version_format`    | `v{raw}`                                                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |      |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                     |      |
+| `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this module.                              |      |
+| `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.                               |      |
+| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                                 |      |
+| `style`             | `"bold 149"`                                                                                             | 此组件的样式。                                                                   |      |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |      |
 
 ### Variables
 
@@ -1928,7 +2005,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-`php` 组件显示当前安装的 PHP 版本。 By default the module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `composer.json` 文件
 - The current directory contains a `.php-version` file
@@ -1936,15 +2013,16 @@ format = "via [🦪 $version]($style) "
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                           |
-| ------------------- | ------------------------------------ | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                     |
-| `symbol`            | `"🐘 "`                               | 这个字段的内容会显示在当前 PHP 版本之前。                      |
-| `detect_extensions` | `["php"]`                            | Which extensions should trigger this moudle. |
-| `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.    |
-| `style`             | `"147 bold"`                         | 此组件的样式。                                      |
-| `disabled`          | `false`                              | Disables the `php` module.                   |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐘 "`                               | 这个字段的内容会显示在当前 PHP 版本之前。                                                   |
+| `detect_extensions` | `["php"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"147 bold"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | 禁用 `php` 组件。                                                              |
 
 ### Variables
 
@@ -1967,22 +2045,23 @@ format = "via [🔹 $version](147 bold) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of PureScript version. By default the module will be shown if any of the following conditions are met:
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含一个 `spago.dhall` 文件
 - The current directory contains a file with the `.purs` extension
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                           |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                     |
-| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript. |
-| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this moudle.                 |
-| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                  |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                    |
-| `style`             | `"bold white"`                       | 此组件的样式。                                                      |
-| `disabled`          | `false`                              | Disables the `purescript` module.                            |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript.              |
+| `detect_extensions` | `["purs"]`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold white"`                       | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `purescript` module.                                         |
 
 ### Variables
 
@@ -2005,36 +2084,37 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-`python` 组件组件展示已经安装了的Python版本以及如果虚拟环境被激活则会显示当前Python虚拟环境
+The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
 如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名。 否则则显示通过`python --version`获得的版本号
 
 By default the module will be shown if any of the following conditions are met:
 
 - 当前目录包含 `.python-version` 文件
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
+- 当前目录包含 `Pipfile` 文件
+- 当前目录包含一个名为`__init__.py`的文件
+- 当前目录包含 `pyproject.toml` 文件
+- 当前目录包含 `requirements.txt` 文件
+- 当前目录包含一个 `setup.py` 文件
+- 当前目录包含一个 `tox.ini` 文件
+- 当前目录包含一个使用 `.py` 扩展名的文件.
 - 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
 | Option               | 默认值                                                                                                          | 描述                                                                                     |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'`                                   | 组件格式化模板。                                                                               |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | 组件格式化模板。                                                                               |
+| `version_format`     | `v{raw}`                                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | 用于表示Python的格式化字符串。                                                                     |
 | `style`              | `"yellow bold"`                                                                                              | 此组件的样式。                                                                                |
 | `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 获取 Python 版本                                                                  |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `[".py"]`                                                                                                    | Which extensions should trigger this moudle                                            |
+| `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| `disabled`           | `false`                                                                                                      | 禁用 `python` 组件。                                                                        |
 
 ::: tip
 
@@ -2053,7 +2133,6 @@ The default values and order for `python_binary` was chosen to first identify th
 | style        | `"yellow bold"` | `style`对应值                                 |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | 当前`virtualenv`名称                           |
-
 
 ### 示例
 
@@ -2081,9 +2160,47 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+## Red
+
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 此组件将在符合以下任意条件之一时显示：
+
+- The current directory contains a file with `.red` or `.reds` extension
+
+### 配置项
+
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
+| `detect_extensions` | `["red"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"red bold"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `red` module.                                                |
+
+### Variables
+
+| 字段        | 示例       | 描述                   |
+| --------- | -------- | -------------------- |
+| version   | `v2.5.1` | The version of `red` |
+| symbol    |          | `symbol`对应值          |
+| style\* |          | `style`对应值           |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[red]
+symbol = "🔴 "
+```
+
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of Ruby. 此组件将在符合以下任意条件之一时显示：
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Gemfile` 文件
 - The current directory contains a `.ruby-version` file
@@ -2091,15 +2208,16 @@ By default the `ruby` module shows the currently installed version of Ruby. 此�
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby. |
-| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.     |
-| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
-| `style`             | `"bold red"`                         | 此组件的样式。                                          |
-| `disabled`          | `false`                              | Disables the `ruby` module.                      |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
+| `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | 禁用 `ruby` 组件。                                                             |
 
 ### Variables
 
@@ -2122,22 +2240,23 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of Rust. 此组件将在符合以下任意条件之一时显示：
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 此组件将在符合以下任意条件之一时显示：
 
 - 当前目录包含 `Cargo.toml` 文件
 - 当前目录包含一个使用 `.rs` 扩展名的文件
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                              |
-| ------------------- | ------------------------------------ | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                        |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust |
-| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.    |
-| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.     |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.       |
-| `style`             | `"bold red"`                         | 此组件的样式。                                         |
-| `disabled`          | `false`                              | Disables the `rust` module.                     |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
+| `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | 禁用 `rust` 组件。                                                             |
 
 ### Variables
 
@@ -2158,6 +2277,46 @@ By default the `rust` module shows the currently installed version of Rust. 此�
 format = "via [⚙️ $version](red bold)"
 ```
 
+## Scala
+
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- The current directory contains a file with the `.scala` or `.sbt` extension
+- The current directory contains a directory named `.metals`
+
+### 配置项
+
+| Option              | 默认值                                      | 描述                                                                        |
+| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.                                |
+| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                         |
+| `style`             | `"red dimmed"`                           | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                  | Disables the `scala` module.                                              |
+
+### Variables
+
+| 字段        | 示例       | 描述                     |
+| --------- | -------- | ---------------------- |
+| version   | `2.13.5` | The version of `scala` |
+| symbol    |          | `symbol`对应值            |
+| style\* |          | `style`对应值             |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[scala]
+symbol = "🌟 "
+```
+
 ## Shell
 
 The `shell` module shows an indicator for currently used shell.
@@ -2170,16 +2329,18 @@ The `shell` module shows an indicator for currently used shell.
 
 ### 配置项
 
-| Option                 | 默认值          | 描述                                            |
-| ---------------------- | ------------ | --------------------------------------------- |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.       |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.       |
-| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.        |
-| `powershell_indicator` | `psh`        | A format string used to represent powershell. |
-| `ion_indicator`        | `ion`        | A format string used to represent ion.        |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.     |
-| `format`               | `$indicator` | 组件格式化模板。                                      |
-| `disabled`             | `true`       | Disables the `shell` module.                  |
+| Option                 | 默认值          | 描述                                                           |
+| ---------------------- | ------------ | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`        | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`        | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
+| `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
+| `format`               | `$indicator` | 组件格式化模板。                                                     |
+| `disabled`             | `true`       | Disables the `shell` module.                                 |
 
 ### Variables
 
@@ -2188,37 +2349,39 @@ The `shell` module shows an indicator for currently used shell.
 | indicator |     | Mirrors the value of `indicator` for currently used shell. |
 
 ### Examples
+
 ```toml
 # ~/.config/starship.toml
 
 [shell]
 fish_indicator = ""
 powershell_indicator = "_"
+unknown_indicator = "mystery shell"
 disabled = false
 ```
 
 ## SHLVL
 
-The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
 ### 配置项
 
-| Option      | 默认值                          | 描述                                                          |
-| ----------- | ---------------------------- | ----------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                          |
-| `format`    | `"[$symbol$shlvl]($style) "` | 组件格式化模板。                                                    |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the SHLVL.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current SHLVL amount. |
-| `style`     | `"bold yellow"`              | 此组件的样式。                                                     |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                |
+| Option      | 默认值                          | 描述                                                            |
+| ----------- | ---------------------------- | ------------------------------------------------------------- |
+| `threshold` | `2`                          | Display threshold.                                            |
+| `format`    | `"[$symbol$shlvl]($style) "` | 组件格式化模板。                                                      |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
+| `style`     | `"bold yellow"`              | 此组件的样式。                                                       |
+| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
 ### Variables
 
-| 字段        | 示例  | 描述                         |
-| --------- | --- | -------------------------- |
-| shlvl     | `3` | The current value of SHLVL |
-| symbol    |     | `symbol`对应值                |
-| style\* |     | `style`对应值                 |
+| 字段        | 示例  | 描述                           |
+| --------- | --- | ---------------------------- |
+| shlvl     | `3` | The current value of `SHLVL` |
+| symbol    |     | `symbol`对应值                  |
+| style\* |     | `style`对应值                   |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2235,7 +2398,7 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current singularity image, if inside a container and `$SINGULARITY_NAME` is set.
+The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
 
 ### 配置项
 
@@ -2250,7 +2413,7 @@ The `singularity` module shows the current singularity image, if inside a contai
 
 | 字段        | 示例           | 描述                            |
 | --------- | ------------ | ----------------------------- |
-| env       | `centos.img` | The current singularity image |
+| env       | `centos.img` | The current Singularity image |
 | symbol    |              | `symbol`对应值                   |
 | style\* |              | `style`对应值                    |
 
@@ -2324,22 +2487,23 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of Swift. 此组件将在符合以下任意条件之一时显示：
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 此组件将在符合以下任意条件之一时显示：
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                         |
-| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift |
-| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this moudle.     |
-| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.      |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.        |
-| `style`             | `"bold 202"`                         | 此组件的样式。                                          |
-| `disabled`          | `false`                              | Disables the `swift` module.                     |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                          |
+| `detect_extensions` | `["swift"]`                          | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold 202"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `swift` module.                                              |
 
 ### Variables
 
@@ -2362,11 +2526,11 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected terraform workspace and version.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-By default the terraform version is not shown, since this is slow for current versions of terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
@@ -2377,22 +2541,23 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                     |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace. |
-| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.             |
-| `style`             | `"bold 105"`                         | 此组件的样式。                                               |
-| `disabled`          | `false`                              | Disables the `terraform` module.                      |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
+| `style`             | `"bold 105"`                         | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | 禁用 `terraform` 组件。                                                        |
 
 ### Variables
 
 | 字段        | 示例         | 描述                              |
 | --------- | ---------- | ------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`      |
-| workspace | `default`  | The current terraform workspace |
+| workspace | `default`  | The current Terraform workspace |
 | symbol    |            | `symbol`对应值                     |
 | style\* |            | `style`对应值                      |
 
@@ -2400,7 +2565,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 示例
 
-#### With Version
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -2409,7 +2574,7 @@ By default the module will be shown if any of the following conditions are met:
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Without version
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -2420,7 +2585,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
 ::: tip
 
@@ -2430,17 +2595,17 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ### 配置项
 
-| Option            | 默认值                     | 描述                                                                                                                                 |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Option            | 默认值                     | 描述                                                                                                    |
+| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
+| `use_12hr`        | `false`                 | 启用 12 小时格式                                                                                            |
+| `time_format`     | 见下文解释                   | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)             |
+| `style`           | `"bold yellow"`         | 显示时间的样式。                                                                                              |
+| `utc_time_offset` | `"local"`               | 设置所用 UTC 偏移量。 Range from -24 &lt; x &lt; 24. 允许使用浮点数来得到 30/45 分钟的时区偏移。                    |
+| `disabled`        | `true`                  | 禁用 `time` 组件。                                                                                         |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默认值为 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2466,7 +2631,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. 此组件将在符合以下任意条件之一时显示：
+`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件之一时显示：
 
 - 当前用户是 root
 - 当前用户与登录用户不相同
@@ -2481,13 +2646,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 配置项
 
-| Option        | 默认值                     | 描述                                    |
-| ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | 组件格式化模板。                              |
-| `show_always` | `false`                 | Always shows the `username` module.   |
-| `disabled`    | `false`                 | Disables the `username` module.       |
+| Option        | 默认值                     | 描述                  |
+| ------------- | ----------------------- | ------------------- |
+| `style_root`  | `"bold red"`            | 当前用户为 root 时使用的样式。  |
+| `style_user`  | `"bold yellow"`         | 非 root 用户使用的样式。     |
+| `format`      | `"[$user]($style) in "` | 组件格式化模板。            |
+| `show_always` | `false`                 | 总是显示 `username` 组件。 |
+| `disabled`    | `false`                 | 禁用 `username` 组件。   |
 
 ### Variables
 
@@ -2511,21 +2676,22 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of Vagrant. By default the module will be shown if any of the following conditions are met:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                  |
-| ------------------- | ------------------------------------ | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                            |
-| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant. |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.        |
-| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.           |
-| `style`             | `"cyan bold"`                        | 此组件的样式。                                             |
-| `disabled`          | `false`                              | Disables the `Vagrant` module.                      |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                       |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"cyan bold"`                        | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
 ### Variables
 
@@ -2546,23 +2712,56 @@ The `vagrant` module shows the currently installed version of Vagrant. By defaul
 format = "via [⍱ $version](bold white) "
 ```
 
+## VCSH
+
+The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+
+### 配置项
+
+| Option     | 默认值                              | 描述                                                     |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `style`    | `"bold yellow"`                  | 此组件的样式。                                                |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | 组件格式化模板。                                               |
+| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+
+### Variables
+
+| 字段        | 示例                                          | 描述                         |
+| --------- | ------------------------------------------- | -------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name |
+| symbol    |                                             | `symbol`对应值                |
+| style\* | `black bold dimmed`                         | `style`对应值                 |
+
+\*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[vcsh]
+format = "[🆅 $repo](bold blue) "
+```
+
 ## Zig
 
-By default the the `zig` module shows the currently installed version of Zig. 此组件将在符合以下任意条件之一时显示：
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 此组件将在符合以下任意条件之一时显示：
 
 - The current directory contains a `.zig` file
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                    |
-| ------------------- | ------------------------------------ | ----------------------------------------------------- |
-| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig. |
-| `style`             | `"bold yellow"`                      | 此组件的样式。                                               |
-| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                              |
-| `disabled`          | `false`                              | Disables the `zig` module.                            |
-| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.          |
-| `detect_files`      | `[]`                                 | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.             |
+| Option              | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `v{raw}`                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                     |
+| `style`             | `"bold yellow"`                      | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables the `zig` module.                                                |
+| `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 
 ### Variables
 
@@ -2619,7 +2818,7 @@ The order in which custom modules are shown can be individually set by including
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
+| `描述`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |

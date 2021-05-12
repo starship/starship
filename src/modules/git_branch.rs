@@ -27,12 +27,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
 
-    let repo_root = repo.root.as_ref()?;
-    let git_repo = Repository::open(repo_root).ok()?;
-    let is_detached = git_repo.head_detached().ok()?;
-    if config.only_attached && is_detached {
-        return None;
-    };
+    if let Some(repo_root) = repo.root.as_ref() {
+        let git_repo = Repository::open(repo_root).ok()?;
+        let is_detached = git_repo.head_detached().ok()?;
+        if config.only_attached && is_detached {
+            return None;
+        }
+    }
 
     let branch_name = repo.branch.as_ref()?;
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
@@ -294,7 +295,7 @@ mod tests {
 
     #[test]
     fn test_render_branch_only_attached_on_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "-b", "test_branch"])
@@ -322,7 +323,7 @@ mod tests {
 
     #[test]
     fn test_render_branch_only_attached_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "@~1"])
@@ -338,6 +339,33 @@ mod tests {
             .collect();
 
         let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_works_in_bare_repo() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        Command::new("git")
+            .args(&["init", "--bare"])
+            .current_dir(&repo_dir)
+            .output()?;
+
+        Command::new("git")
+            .args(&["symbolic-ref", "HEAD", "refs/heads/main"])
+            .current_dir(&repo_dir)
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+        ));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -394,7 +422,7 @@ mod tests {
         truncation_symbol: &str,
         config_options: &str,
     ) -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "-b", branch_name])
@@ -433,7 +461,7 @@ mod tests {
         config_options: &str,
         expected: T,
     ) -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "-b", branch_name])

@@ -1,125 +1,118 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader, Error, ErrorKind};
+use once_cell::sync::{Lazy, OnceCell};
+use std::ops::Deref;
+use std::path::Path;
 use std::path::PathBuf;
-use std::str::FromStr;
-use std::{collections::HashMap, path::Path};
 
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::gcloud::GcloudConfig;
 use crate::formatter::StringFormatter;
+use crate::utils;
 
-type Account = String;
-type Project = String;
-type Region = String;
-type Active = String;
+type Account = (String, Option<String>);
 
-fn get_gcloud_account_from_config(current_config: &Path) -> Option<Account> {
-    let file = File::open(&current_config).ok()?;
-    let reader = BufReader::new(file);
-    let lines = reader.lines().filter_map(Result::ok);
-    let account_line = lines
-        .skip_while(|line| line != "[core]")
-        .skip(1)
-        .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("account"))?;
-    let account = account_line.split('=').nth(1)?.trim();
-    Some(account.to_string())
+struct GcloudContext {
+    config_name: String,
+    config_path: PathBuf,
+    config: OnceCell<String>,
 }
 
-fn get_gcloud_project_from_config(current_config: &Path) -> Option<Project> {
-    let file = File::open(&current_config).ok()?;
-    let reader = BufReader::new(file);
-    let lines = reader.lines().filter_map(Result::ok);
-    let project_line = lines
-        .skip_while(|line| line != "[core]")
-        .skip(1)
-        .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("project"))?;
-    let project = project_line.split('=').nth(1)?.trim();
-    Some(project.to_string())
-}
+impl GcloudContext {
+    pub fn new(config_name: &str, config_path: &Path) -> Self {
+        Self {
+            config_name: config_name.to_string(),
+            config_path: PathBuf::from(config_path),
+            config: Default::default(),
+        }
+    }
 
-fn get_gcloud_region_from_config(current_config: &Path) -> Option<Region> {
-    let file = File::open(&current_config).ok()?;
-    let reader = BufReader::new(file);
-    let lines = reader.lines().filter_map(Result::ok);
-    let region_line = lines
-        .skip_while(|line| line != "[compute]")
-        .skip(1)
-        .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("region"))?;
-    let region = region_line.split('=').nth(1)?.trim();
-    Some(region.to_string())
-}
-
-fn get_active_config(context: &Context, config_root: &Path) -> Option<String> {
-    let config_name = context.get_env("CLOUDSDK_ACTIVE_CONFIG_NAME").or_else(|| {
-        let path = config_root.join("active_config");
-        let file = File::open(&path).ok()?;
-        let reader = BufReader::new(file);
-        let first_line = match reader.lines().next() {
-            Some(res) => res,
-            None => Err(Error::new(ErrorKind::NotFound, "empty")),
-        };
-        match first_line {
-            Ok(c) => Some(c),
+    fn get_config(&self) -> Option<&str> {
+        let config = self
+            .config
+            .get_or_try_init(|| utils::read_file(&self.config_path));
+        match config {
+            Ok(data) => Some(data),
             Err(_) => None,
         }
-    })?;
-    Some(config_name)
+    }
+
+    pub fn get_account(&self) -> Option<Account> {
+        let config = self.get_config()?;
+        let account_line = config
+            .lines()
+            .skip_while(|line| *line != "[core]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("account"))?;
+        let account = account_line.splitn(2, '=').nth(1)?.trim();
+        let mut segments = account.splitn(2, '@');
+        Some((
+            segments.next().map(String::from)?,
+            segments.next().map(String::from),
+        ))
+    }
+
+    pub fn get_project(&self) -> Option<String> {
+        let config = self.get_config()?;
+        let project_line = config
+            .lines()
+            .skip_while(|line| *line != "[core]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("project"))?;
+        let project = project_line.splitn(2, '=').nth(1)?.trim();
+        Some(project.to_string())
+    }
+
+    pub fn get_region(&self) -> Option<String> {
+        let config = self.get_config()?;
+        let region_line = config
+            .lines()
+            .skip_while(|line| *line != "[compute]")
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("region"))?;
+        let region = region_line.splitn(2, '=').nth(1)?.trim();
+        Some(region.to_string())
+    }
 }
 
-fn get_current_config_path(context: &Context) -> Option<PathBuf> {
+fn get_current_config(context: &Context) -> Option<(String, PathBuf)> {
     let config_dir = get_config_dir(context)?;
-    let active_config = get_active_config(context, &config_dir)?;
-    let current_config = config_dir.join(format!("configurations/config_{}", active_config));
-    Some(current_config)
+    let name = get_active_config(context, &config_dir)?;
+    let path = config_dir
+        .join("configurations")
+        .join(format!("config_{}", name));
+    Some((name, path))
 }
 
 fn get_config_dir(context: &Context) -> Option<PathBuf> {
-    let config_dir = context
+    context
         .get_env("CLOUDSDK_CONFIG")
-        .and_then(|path| PathBuf::from_str(&path).ok())
+        .map(PathBuf::from)
         .or_else(|| {
-            let mut home = context.get_home()?;
-            home.push(".config/gcloud");
-            Some(home)
-        })?;
-    Some(config_dir)
+            let home = context.get_home()?;
+            Some(home.join(".config").join("gcloud"))
+        })
 }
 
-fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
-    match aliases.get(&region) {
-        None => region.to_string(),
-        Some(alias) => (*alias).to_string(),
-    }
+fn get_active_config(context: &Context, config_dir: &Path) -> Option<String> {
+    context.get_env("CLOUDSDK_ACTIVE_CONFIG_NAME").or_else(|| {
+        let path = config_dir.join("active_config");
+        match utils::read_file(path) {
+            Ok(data) => data.lines().next().map(String::from),
+            Err(_) => None,
+        }
+    })
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("gcloud");
     let config: GcloudConfig = GcloudConfig::try_load(module.config);
 
-    let config_path = get_current_config_path(context)?;
-    let gcloud_account = get_gcloud_account_from_config(&config_path);
-    let gcloud_project = get_gcloud_project_from_config(&config_path);
-    let gcloud_region = get_gcloud_region_from_config(&config_path);
-    let config_dir = get_config_dir(context)?;
-    let gcloud_active: Option<Active> = get_active_config(context, &config_dir);
-
-    if gcloud_account.is_none()
-        && gcloud_project.is_none()
-        && gcloud_region.is_none()
-        && gcloud_active.is_none()
-    {
-        return None;
-    }
-
-    let mapped_region = if let Some(gcloud_region) = gcloud_region {
-        Some(alias_region(gcloud_region, &config.region_aliases))
-    } else {
-        None
-    };
+    let (config_name, config_path) = get_current_config(context)?;
+    let gcloud_context = GcloudContext::new(&config_name, &config_path);
+    let account: Lazy<Option<Account>, _> = Lazy::new(|| gcloud_context.get_account());
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -132,10 +125,31 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "account" => gcloud_account.as_ref().map(Ok),
-                "project" => gcloud_project.as_ref().map(Ok),
-                "region" => mapped_region.as_ref().map(Ok),
-                "active" => gcloud_active.as_ref().map(Ok),
+                "account" => account
+                    .deref()
+                    .as_ref()
+                    .map(|(account, _)| (*account).to_owned())
+                    .map(Ok),
+                "domain" => account
+                    .deref()
+                    .as_ref()
+                    .and_then(|(_, domain)| (*domain).to_owned())
+                    .map(Ok),
+                "region" => gcloud_context
+                    .get_region()
+                    .map(|region| {
+                        config
+                            .region_aliases
+                            .get(&region)
+                            .map(|alias| (*alias).to_owned())
+                            .unwrap_or(region)
+                    })
+                    .map(Ok),
+                "project" => context
+                    .get_env("CLOUDSDK_CORE_PROJECT")
+                    .or_else(|| gcloud_context.get_project())
+                    .map(Ok),
+                "active" => Some(Ok(gcloud_context.config_name.to_owned())),
                 _ => None,
             })
             .parse(None)
@@ -169,10 +183,11 @@ mod tests {
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
-        let config_default_path = dir.path().join("configurations/config_default");
+        let config_default_path = dir.path().join("configurations").join("config_default");
         let mut config_default_file = File::create(&config_default_path)?;
         config_default_file.write_all(
-            b"[core]
+            b"\
+[core]
 account = foo@example.com
 ",
         )?;
@@ -182,8 +197,38 @@ account = foo@example.com
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️ foo@example.com")
+            Color::Blue.bold().paint("☁️  foo@example.com")
         ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn account_with_custom_format_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations").join("config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"\
+[core]
+account = foo@example.com
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$account(\\($region\\))]($style) "
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  foo")));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -197,10 +242,11 @@ account = foo@example.com
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
-        let config_default_path = dir.path().join("configurations/config_default");
+        let config_default_path = dir.path().join("configurations").join("config_default");
         let mut config_default_file = File::create(&config_default_path)?;
         config_default_file.write_all(
-            b"[core]
+            b"\
+[core]
 account = foo@example.com
 
 [compute]
@@ -213,7 +259,7 @@ region = us-central1
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️ foo@example.com(us-central1)")
+            Color::Blue.bold().paint("☁️  foo@example.com(us-central1)")
         ));
 
         assert_eq!(actual, expected);
@@ -228,10 +274,11 @@ region = us-central1
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
-        let config_default_path = dir.path().join("configurations/config_default");
+        let config_default_path = dir.path().join("configurations").join("config_default");
         let mut config_default_file = File::create(&config_default_path)?;
         config_default_file.write_all(
-            b"[core]
+            b"\
+[core]
 account = foo@example.com
 
 [compute]
@@ -248,7 +295,7 @@ region = us-central1
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️ foo@example.com(uc1)")
+            Color::Blue.bold().paint("☁️  foo@example.com(uc1)")
         ));
 
         assert_eq!(actual, expected);
@@ -269,7 +316,7 @@ region = us-central1
                 format = "on [$symbol$active]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ default1")));
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  default1")));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -283,10 +330,11 @@ region = us-central1
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
-        let config_default_path = dir.path().join("configurations/config_default");
+        let config_default_path = dir.path().join("configurations").join("config_default");
         let mut config_default_file = File::create(&config_default_path)?;
         config_default_file.write_all(
-            b"[core]
+            b"\
+[core]
 project = abc
 ",
         )?;
@@ -298,7 +346,41 @@ project = abc
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ abc")));
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  abc")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn project_set_in_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations").join("config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"\
+[core]
+project = abc
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CORE_PROJECT", "env_project")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Blue.bold().paint("☁️  env_project")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -328,18 +410,20 @@ project = abc
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
-        let config_default_path = dir.path().join("configurations/config_default");
+        let config_default_path = dir.path().join("configurations").join("config_default");
         let mut config_default_file = File::create(&config_default_path)?;
         config_default_file.write_all(
-            b"[core]
+            b"\
+[core]
 project = default
 ",
         )?;
 
-        let config_overridden_path = dir.path().join("configurations/config_overridden");
+        let config_overridden_path = dir.path().join("configurations").join("config_overridden");
         let mut config_overridden_file = File::create(&config_overridden_path)?;
         config_overridden_file.write_all(
-            b"[core]
+            b"\
+[core]
 project = overridden
 ",
         )?;
@@ -352,7 +436,7 @@ project = overridden
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️ overridden")));
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
 
         assert_eq!(actual, expected);
         dir.close()

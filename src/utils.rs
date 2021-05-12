@@ -57,6 +57,10 @@ Default target: x86_64-apple-macosx\n",
                 "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
             ),
         }),
+        "deno -V" => Some(CommandOutput {
+            stdout: String::from("deno 1.8.3\n"),
+            stderr: String::default()
+        }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -129,6 +133,10 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
+        "opam switch show --safe" => Some(CommandOutput {
+            stdout: String::from("default\n"),
+            stderr: String::default(),
+        }),
         "esy ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
@@ -160,6 +168,10 @@ active boot switches: -d:release\n",
             stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
         }),
+        "red --version" => Some(CommandOutput {
+            stdout: String::from("0.6.4\n"),
+            stderr: String::default()
+        }),
         "ruby -v" => Some(CommandOutput {
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
@@ -175,6 +187,10 @@ Target: x86_64-apple-darwin19.4.0\n",
         "vagrant --version" => Some(CommandOutput {
             stdout: String::from("Vagrant 2.2.10\n"),
             stderr: String::default(),
+        }),
+        "v version" => Some(CommandOutput {
+            stdout: String::from("V 0.2 30c0659"),
+            stderr: String::default()
         }),
         "zig version" => Some(CommandOutput {
             stdout: String::from("0.6.0\n"),

@@ -80,7 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         _ => None,
                     })
                     .map(|variable| match variable {
-                        "tag" => Some(Ok(format!(" {}{}", &config.tag_symbol, &tag_name))),
+                        "tag" => Some(Ok(format!("{}{}", &config.tag_symbol, &tag_name))),
                         _ => None,
                     })
                     .parse(None)
@@ -135,7 +135,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_output = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -167,7 +167,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_len_override() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_output = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -200,7 +200,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let actual = ModuleRenderer::new("git_commit")
             .path(&repo_dir.path())
@@ -214,7 +214,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "@~1"])
@@ -247,7 +247,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_commit = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -290,7 +290,7 @@ mod tests {
 
     #[test]
     fn test_render_commit_hash_only_detached_on_detached_with_tag_enabled() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         Command::new("git")
             .args(&["checkout", "@~1"])
@@ -323,7 +323,7 @@ mod tests {
             .config(toml::toml! {
                 [git_commit]
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();
@@ -344,7 +344,7 @@ mod tests {
     fn test_latest_tag_shown_with_tag_enabled() -> io::Result<()> {
         use std::{thread, time};
 
-        let repo_dir = fixture_repo(FixtureProvider::GIT)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_commit = Command::new("git")
             .args(&["rev-parse", "HEAD"])
@@ -395,7 +395,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();

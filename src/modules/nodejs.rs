@@ -1,7 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nodejs::NodejsConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils;
 
 use once_cell::sync::Lazy;
@@ -57,11 +57,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => nodejs_version
-                    .deref()
-                    .as_ref()
-                    .map(|version| version.trim())
-                    .map(Ok),
+                "version" => Some(Ok(format_node_version(
+                    nodejs_version.deref().as_ref()?,
+                    config.version_format,
+                ))),
                 _ => None,
             })
             .parse(None)
@@ -105,6 +104,18 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
         Err(_e) => return true,
     };
     r.matches(&v)
+}
+
+fn format_node_version(node_version: &str, version_format: &str) -> String {
+    let version = node_version.trim_start_matches('v').trim();
+
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => formatted,
+        Err(error) => {
+            log::warn!("Error formatting `node` version:\n{}", error);
+            format!("v{}", version)
+        }
+    }
 }
 
 #[cfg(test)]
@@ -152,6 +163,17 @@ mod tests {
     fn folder_with_node_version() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".node-version"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_nvmrc() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".nvmrc"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));

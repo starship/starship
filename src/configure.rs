@@ -4,6 +4,7 @@ use std::io::ErrorKind;
 use std::process;
 use std::process::Command;
 
+use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
 use std::fs::File;
 use std::io::Write;
@@ -50,6 +51,27 @@ pub fn update_configuration(name: &str, value: &str) {
 
         write_configuration(table);
     }
+}
+
+pub fn print_configuration(use_default: bool) {
+    let config = if use_default {
+        // Get default config
+        let default_config = crate::configs::FullConfig::default();
+        // Convert back to Value because toml can't serialize FullConfig directly
+        toml::value::Value::try_from(default_config).unwrap()
+    } else {
+        // Get config as toml::Value
+        let user_config = get_configuration();
+        // Convert into FullConfig and fill in default values
+        let user_config = crate::configs::FullConfig::try_load(Some(&user_config));
+        // Convert back to Value because toml can't serialize FullConfig directly
+        toml::value::Value::try_from(user_config).unwrap()
+    };
+
+    let string_config = toml::to_string_pretty(&config).unwrap();
+
+    println!("# Warning: This config does not include keys that have an unset value");
+    println!("{}", string_config);
 }
 
 pub fn toggle_configuration(name: &str, key: &str) {
@@ -113,8 +135,9 @@ pub fn write_configuration(table: &mut Table) {
 pub fn edit_configuration() {
     let config_path = get_config_path();
     let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
+    let editor_path = which::which(&editor_cmd[0]).expect("Unable to locate editor in $PATH.");
 
-    let command = Command::new(&editor_cmd[0])
+    let command = Command::new(editor_path)
         .args(&editor_cmd[1..])
         .arg(config_path)
         .status();
@@ -140,11 +163,11 @@ fn get_editor() -> String {
 }
 
 fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
-    let editor_name = visual.unwrap_or_else(|| "".into());
+    let editor_name = visual.unwrap_or_default();
     if !editor_name.is_empty() {
         return editor_name;
     }
-    let editor_name = editor.unwrap_or_else(|| "".into());
+    let editor_name = editor.unwrap_or_default();
     if !editor_name.is_empty() {
         return editor_name;
     }

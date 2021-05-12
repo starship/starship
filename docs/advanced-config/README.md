@@ -28,7 +28,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the 
+- To run a custom function right before a command runs, you can use the
   [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
   However, you **must** trap the DEBUG signal *before* initializing Starship!
   Starship can preserve the value of the DEBUG trap, but if the trap is overwritten
@@ -44,7 +44,7 @@ eval $(starship init bash)
 
 ## Change Window Title
 
-Some shell prompts will automatically change the window title for you (e.g. to 
+Some shell prompts will automatically change the window title for you (e.g. to
 reflect your working directory). Fish even does it by default.
 Starship does not do this, but it's fairly straightforward to add this
 functionality to `bash` or `zsh`.
@@ -72,7 +72,7 @@ In `zsh`, add this to the `precmd_functions` array:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file 
+If you like the result, add these lines to your shell configuration file
 (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
 For example, if you want to display your current directory in your terminal tab title,
@@ -80,7 +80,7 @@ add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; $(basename $PWD) \007"
+    echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
 ```
@@ -92,14 +92,15 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `bold`
   - `underline`
   - `dimmed`
+  - `inverted`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing , though this may change in the future. The order of words in the string does not matter.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none`  sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
 A color specifier can be one of the following:
 

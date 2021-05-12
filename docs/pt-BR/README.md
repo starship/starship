@@ -28,6 +28,10 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
   </video>
 </div>
 
+### Pré-requisitos
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
 ### Instalação
 
 1. Instale o binário do **starship**:
@@ -38,8 +42,9 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    Com o Shell:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### Instalar via Gerenciador de Pacotes
@@ -123,3 +128,13 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```

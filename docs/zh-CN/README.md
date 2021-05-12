@@ -28,6 +28,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
+### 前置要求
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+
 ### 快速安装
 
 1. 安装 **starship** 二进制文件：
@@ -38,8 +42,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    使用 Shell 命令：
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
    #### 通过软件包管理器安装
@@ -123,3 +128,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval (starship init elvish)
    ```
 
+
+   #### Tcsh
+
+   Add the following to the end of `~/.tcshrc`:
+
+   ```sh
+   # ~/.tcshrc
+
+   eval `starship init tcsh`
+   ```

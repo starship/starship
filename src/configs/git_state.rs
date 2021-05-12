@@ -1,8 +1,9 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct GitStateConfig<'a> {
     pub rebase: &'a str,
     pub merge: &'a str,

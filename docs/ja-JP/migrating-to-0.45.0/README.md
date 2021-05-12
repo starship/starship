@@ -6,9 +6,9 @@ Starship v0.45.0は、v1.0.0の準備として互換性の無い変更を含む�
 
 ## `prompt_order`をルートレベルの`format`に置換
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+v0.45.0までは、`prompt_order` はStarshipによってレンダリングされる順序でモジュール名の配列を指定できるようになっていました。
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 では代わりに  `format` を指定できるようになり、モジュール外でプロンプトをカスタマイズ可能になります。
 
 **v0.45.0以前の設定例**
 
@@ -52,11 +52,11 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## モジュールの `prefix`と `suffix` を `format`に置換
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+v0.45.0以前では、モジュールのレンダリング方法をのスタイルを設定するために、 `prefix` や`suffix` を指定可能なモジュールがありました。
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 は代わりに `format` の値を受け付け、モジュールのレンダリング方法をさらにカスタマイズすることができます。 prefix とsuffix を定義する代わりに、コンテキストベースの変数については、モジュールの出力を表現するフォーマット文字列の中から変数を置き換えることができるようになりました。
 
 **v0.45.0以前の設定例**
 
@@ -109,7 +109,7 @@ v0.45.0 のリリースでは、ステータスコードがゼロでないとき
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*注意:* `character` 要素は自動的にスペースを後ろに追加するため、他の `format` 文字列とは異なり、上記の例では特にスペースを追加していません。
 
 #### Command Duration
 

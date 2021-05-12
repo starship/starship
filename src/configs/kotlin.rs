@@ -1,10 +1,12 @@
 use crate::config::ModuleConfig;
 
+use serde::Serialize;
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig)]
+#[derive(Clone, ModuleConfig, Serialize)]
 pub struct KotlinConfig<'a> {
     pub format: &'a str,
+    pub version_format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub kotlin_binary: &'a str,
@@ -18,6 +20,7 @@ impl<'a> Default for KotlinConfig<'a> {
     fn default() -> Self {
         KotlinConfig {
             format: "via [$symbol($version )]($style)",
+            version_format: "v${raw}",
             symbol: "🅺 ",
             style: "bold blue",
             kotlin_binary: "kotlin",

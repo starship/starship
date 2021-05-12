@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmd_duration",
     "conda",
     "dart",
+    "deno",
     "directory",
     "docker_context",
     "dotnet",
@@ -51,6 +52,7 @@ pub const ALL_MODULES: &[&str] = &[
     "perl",
     "purescript",
     "python",
+    "red",
     "ruby",
     "crystal",
     "rust",
@@ -63,7 +65,9 @@ pub const ALL_MODULES: &[&str] = &[
     "status",
     "time",
     "username",
+    "vcsh",
     "vagrant",
+    "vlang",
     "zig",
 ];
 

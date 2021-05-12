@@ -7,7 +7,7 @@ use serde::Deserialize;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 
 /// Creates a module with the current Rust version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 // This may result in multiple calls to `get_module_version` when a user have
                 // multiple `$version` variables defined in `format`.
-                "version" => get_module_version(context).map(Ok),
+                "version" => get_module_version(context, &config).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_module_version(context: &Context) -> Option<String> {
+fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> {
     // `$CARGO_HOME/bin/rustc(.exe) --version` may attempt installing a rustup toolchain.
     // https://github.com/starship/starship/issues/417
     //
@@ -72,25 +72,25 @@ fn get_module_version(context: &Context) -> Option<String> {
     // - `rustup show`
     // - `rustup show active-toolchain`
     // - `rustup which`
-    let module_version = if let Some(toolchain) = env_rustup_toolchain(context)
+    if let Some(toolchain) = env_rustup_toolchain(context)
         .or_else(|| execute_rustup_override_list(&context.current_dir))
         .or_else(|| find_rust_toolchain_file(&context))
     {
         match execute_rustup_run_rustc_version(&toolchain) {
-            RustupRunRustcVersionOutcome::RustcVersion(stdout) => format_rustc_version(stdout),
-            RustupRunRustcVersionOutcome::ToolchainName(toolchain) => toolchain,
+            RustupRunRustcVersionOutcome::RustcVersion(rustc_version) => {
+                format_rustc_version(&rustc_version, config.version_format)
+            }
+            RustupRunRustcVersionOutcome::ToolchainName(toolchain) => Some(toolchain),
             RustupRunRustcVersionOutcome::RustupNotWorking => {
                 // If `rustup` is not in `$PATH` or cannot be executed for other reasons, we can
                 // safely execute `rustc --version`.
-                format_rustc_version(execute_rustc_version()?)
+                format_rustc_version(&execute_rustc_version()?, config.version_format)
             }
-            RustupRunRustcVersionOutcome::Err => return None,
+            RustupRunRustcVersionOutcome::Err => None,
         }
     } else {
-        format_rustc_version(execute_rustc_version()?)
-    };
-
-    Some(module_version)
+        format_rustc_version(&execute_rustc_version()?, config.version_format)
+    }
 }
 
 fn env_rustup_toolchain(context: &Context) -> Option<String> {
@@ -203,11 +203,20 @@ fn execute_rustc_version() -> Option<String> {
     }
 }
 
-fn format_rustc_version(mut rustc_stdout: String) -> String {
-    let offset = &rustc_stdout.find('(').unwrap_or_else(|| rustc_stdout.len());
-    let formatted_version: String = rustc_stdout.drain(..offset).collect();
+fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<String> {
+    let version = rustc_version
+        // split into ["rustc", "1.34.0", ...]
+        .split_whitespace()
+        // get down to "1.34.0"
+        .nth(1)?;
 
-    format!("v{}", formatted_version.replace("rustc", "").trim())
+    match VersionFormatter::format_version(version, version_format) {
+        Ok(formatted) => Some(formatted),
+        Err(error) => {
+            log::warn!("Error formatting `rust` version:\n{}", error);
+            Some(format!("v{}", version))
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -320,17 +329,26 @@ mod tests {
 
     #[test]
     fn test_format_rustc_version() {
-        let nightly_input = String::from("rustc 1.34.0-nightly (b139669f3 2019-04-10)");
-        assert_eq!(format_rustc_version(nightly_input), "v1.34.0-nightly");
-
-        let beta_input = String::from("rustc 1.34.0-beta.1 (2bc1d406d 2019-04-10)");
-        assert_eq!(format_rustc_version(beta_input), "v1.34.0-beta.1");
-
-        let stable_input = String::from("rustc 1.34.0 (91856ed52 2019-04-10)");
-        assert_eq!(format_rustc_version(stable_input), "v1.34.0");
-
-        let version_without_hash = String::from("rustc 1.34.0");
-        assert_eq!(format_rustc_version(version_without_hash), "v1.34.0");
+        let config = RustConfig::default();
+        let rustc_stable = "rustc 1.34.0 (91856ed52 2019-04-10)";
+        let rustc_beta = "rustc 1.34.0-beta.1 (2bc1d406d 2019-04-10)";
+        let rustc_nightly = "rustc 1.34.0-nightly (b139669f3 2019-04-10)";
+        assert_eq!(
+            format_rustc_version(rustc_nightly, config.version_format),
+            Some("v1.34.0-nightly".to_string())
+        );
+        assert_eq!(
+            format_rustc_version(rustc_beta, config.version_format),
+            Some("v1.34.0-beta.1".to_string())
+        );
+        assert_eq!(
+            format_rustc_version(rustc_stable, config.version_format),
+            Some("v1.34.0".to_string())
+        );
+        assert_eq!(
+            format_rustc_version("rustc 1.34.0", config.version_format),
+            Some("v1.34.0".to_string())
+        );
     }
 
     #[test]

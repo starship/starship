@@ -1,22 +1,22 @@
-# Presets
+# Hazır Ayarlar
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Topluluk tarafından gönderilen Starship için yapılandırma ön ayarları koleksiyonu. Paylaşacak bir ön ayarınız varsa, lütfen bu dosyayı güncelleyerek [PR gönderin](https://github.com/starship/starship/edit/master/docs/presets/README.md)! 😊
 
-## Nerd Font Symbols
+## Nerd Yazı Tipi Sembolleri
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+Bu ön ayar, her modül için kullanılan semboller dışında hiçbir şeyi değiştirmez. Emojiler size göre değilse, bunlar dikkatinizi çekebilir!
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
-### Prerequisites
+### Ön koşullar
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Terminalinizde kurulu ve etkinleştirilmiş bir [Nerd Yazı Tipi](https://www.nerdfonts.com/) (örnekte Fira Code Nerd Yazı Tipi kullanılır)
 
-### Configuration
+### Yapılandırma
 
 ```toml
 [aws]
-symbol = " "
+symbol = "  "
 
 [conda]
 symbol = " "
@@ -27,7 +27,7 @@ symbol = " "
 [directory]
 read_only = " "
 
-[docker]
+[docker_context]
 symbol = " "
 
 [elixir]
@@ -41,9 +41,6 @@ symbol = " "
 
 [golang]
 symbol = " "
-
-[haskell]
-symbol = " "
 
 [hg_branch]
 symbol = " "
@@ -63,9 +60,6 @@ symbol = " "
 [nix_shell]
 symbol = " "
 
-[nodejs]
-symbol = " "
-
 [package]
 symbol = " "
 
@@ -83,6 +77,9 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[scala]
+symbol = " "
 
 [swift]
 symbol = "ﯣ "
