@@ -251,7 +251,7 @@ $character"""
 The `aws` module shows the current AWS region and profile. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
-credentials. w
+credentials.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
