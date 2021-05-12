@@ -96,30 +96,8 @@ fn undistract_me<'a, 'b>(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-
-    #[test]
-    fn test_500ms() {
-        assert_eq!(render_time(500_u128, true), "500ms")
-    }
-    #[test]
-    fn test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s")
-    }
-    #[test]
-    fn test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s")
-    }
-    #[test]
-    fn test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s")
-    }
-    #[test]
-    fn test_1d() {
-        assert_eq!(render_time(86_400_000_u128, true), "1d")
-    }
 
     #[test]
     fn config_blank_duration_1s() {
