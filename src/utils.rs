@@ -363,9 +363,60 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
     }
 }
 
+// Render the time into a nice human-readable string
+pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
+    // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
+    let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
+    let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
+    let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
+    let (hours, days) = (raw_hours % 24, raw_hours / 24);
+
+    let components = [days, hours, minutes, seconds];
+    let suffixes = ["d", "h", "m", "s"];
+
+    let mut rendered_components: Vec<String> = components
+        .iter()
+        .zip(&suffixes)
+        .map(render_time_component)
+        .collect();
+    if show_millis || raw_millis < 1000 {
+        rendered_components.push(render_time_component((&millis, &"ms")));
+    }
+    rendered_components.join("")
+}
+
+/// Render a single component of the time string, giving an empty string if component is zero
+fn render_time_component((component, suffix): (&u128, &&str)) -> String {
+    match component {
+        0 => String::new(),
+        n => format!("{}{}", n, suffix),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_500ms() {
+        assert_eq!(render_time(500_u128, true), "500ms")
+    }
+    #[test]
+    fn test_10s() {
+        assert_eq!(render_time(10_000_u128, true), "10s")
+    }
+    #[test]
+    fn test_90s() {
+        assert_eq!(render_time(90_000_u128, true), "1m30s")
+    }
+    #[test]
+    fn test_10110s() {
+        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s")
+    }
+    #[test]
+    fn test_1d() {
+        assert_eq!(render_time(86_400_000_u128, true), "1d")
+    }
 
     #[test]
     fn exec_mocked_command() {
