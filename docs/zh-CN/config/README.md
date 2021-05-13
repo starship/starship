@@ -239,32 +239,34 @@ $character"""
 
 ## AWS
 
-`aws` 组件显示当前 AWS 主机所在区域与配置信息。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。
+`aws` 组件显示当前 AWS 主机所在区域与配置信息。 各组件基于 `AWS_REGION`，`AWS_DEFAULT_REGION` 和 `AWS_PROFILE` 环境变量与 `~/.aws/config` 文件。 This module also shows an expiration timer when using temporary credentials.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 ### 配置项
 
-| Option           | 默认值                                                 | 描述                         |
-| ---------------- | --------------------------------------------------- | -------------------------- |
-| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | 组件格式化模板。                   |
-| `symbol`         | `"☁️ "`                                             | 这个字段的内容会显示在当前 AWS 配置信息之前。  |
-| `region_aliases` |                                                     | 地区缩写列表，用来显示在 AWS 主机名之后。    |
-| `style`          | `"bold yellow"`                                     | 此组件的样式。                    |
-| `disabled`       | `false`                                             | Disables the `aws` module. |
+| Option              | 默认值                                                                  | 描述                                                                |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | 组件格式化模板。                                                          |
+| `symbol`            | `"☁️ "`                                                              | 这个字段的内容会显示在当前 AWS 配置信息之前。                                         |
+| `region_aliases`    |                                                                      | 地区缩写列表，用来显示在 AWS 主机名之后。                                           |
+| `style`             | `"bold yellow"`                                                      | 此组件的样式。                                                           |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
+| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
 
 ### Variables
 
-| 字段        | 示例               | 描述                      |
-| --------- | ---------------- | ----------------------- |
-| region    | `ap-northeast-1` | The current AWS region  |
-| profile   | `astronauts`     | The current AWS profile |
-| symbol    |                  | `symbol`对应值             |
-| style\* |                  | `style`对应值              |
+| 字段        | 示例               | 描述                                          |
+| --------- | ---------------- | ------------------------------------------- |
+| region    | `ap-northeast-1` | The current AWS region                      |
+| profile   | `astronauts`     | The current AWS profile                     |
+| duration  | `2h27m20s`       | The temporary credentials validity duration |
+| symbol    |                  | `symbol`对应值                                 |
+| style\* |                  | `style`对应值                                  |
 
 \*: This variable can only be used as a part of a style string
 
