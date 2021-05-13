@@ -240,32 +240,34 @@ $character"""
 
 ## AWS
 
-`aws` モジュールは現在のAWSプロファイルが表示されます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。
+`aws` モジュールは現在のAWSプロファイルが表示されます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
 
-[aws-vault](https://github.com/99designs/aws-vault)を使用する場合、プロファイル は`AWS_VAULT`env varから読み取られます。
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
 [awsu](https://github.com/kreuzwerker/awsu) を使う場合、そのプロファイルは環境変数 `AWSU_PROFILE` から読まれます。
 
-[AWSume](https://awsu.me) を使う場合、そのプロファイルは環境変数 `AWSUME_PROFILE` から読まれます。
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 ### オプション
 
-| オプション            | デフォルト                                               | 説明                            |
-| ---------------- | --------------------------------------------------- | ----------------------------- |
-| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | moduleのフォーマットです。              |
-| `symbol`         | `"☁️ "`                                             | 現在のAWSプロファイルを表示する前に表示される記号です。 |
-| `region_aliases` |                                                     | AWS名に加えて表示するリージョンのエイリアスです。    |
-| `style`          | `"bold yellow"`                                     | モジュールのスタイルです。                 |
-| `disabled`       | `false`                                             | `aws` モジュールを無効にします。           |
+| オプション               | デフォルト                                                                | 説明                                                                |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | moduleのフォーマットです。                                                  |
+| `symbol`            | `"☁️ "`                                                              | 現在のAWSプロファイルを表示する前に表示される記号です。                                     |
+| `region_aliases`    |                                                                      | AWS名に加えて表示するリージョンのエイリアスです。                                        |
+| `style`             | `"bold yellow"`                                                      | モジュールのスタイルです。                                                     |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
+| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
 
 ### 変数
 
-| 変数        | 設定例              | 説明                     |
-| --------- | ---------------- | ---------------------- |
-| region    | `ap-northeast-1` | 現在のAWSリージョン            |
-| profile   | `astronauts`     | 現在のAWSプロファイル           |
-| symbol    |                  | オプション `記号` の値をミラーする    |
-| style\* |                  | オプション `style` の値をミラーする |
+| 変数        | 設定例              | 説明                                          |
+| --------- | ---------------- | ------------------------------------------- |
+| region    | `ap-northeast-1` | 現在のAWSリージョン                                 |
+| profile   | `astronauts`     | 現在のAWSプロファイル                                |
+| duration  | `2h27m20s`       | The temporary credentials validity duration |
+| symbol    |                  | オプション `記号` の値をミラーする                         |
+| style\* |                  | オプション `style` の値をミラーする                      |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
