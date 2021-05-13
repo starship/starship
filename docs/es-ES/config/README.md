@@ -239,32 +239,34 @@ $character"""
 
 ## AWS
 
-El módulo `aws` muestra la región y el perfil actual de AWS. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`.
+El módulo `aws` muestra la región y el perfil actual de AWS. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
 
-Cuando uses [aws-vault](https://github.com/99designs/aws-vault) el perfil se obtiene de la variable de entorno `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
 Cuando uses [awsu](https://github.com/kreuzwerker/awsu) el perfil se obtiene de la variable de entorno `AWSU_PROFILE`.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Opciones
 
-| Opción           | Por defecto                                         | Descripción                                                  |
-| ---------------- | --------------------------------------------------- | ------------------------------------------------------------ |
-| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | El formato del módulo.                                       |
-| `symbol`         | `"☁️ "`                                             | El símbolo que se muestra antes del perfil de AWS.           |
-| `region_aliases` |                                                     | Tabla de alias de región para mostrar además del nombre AWS. |
-| `style`          | `"bold yellow"`                                     | El estilo del módulo.                                        |
-| `disabled`       | `false`                                             | Deshabilita el módulo `aws`.                                 |
+| Opción              | Por defecto                                                          | Descripción                                                       |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                            |
+| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                |
+| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.      |
+| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                             |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
+| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
 
 ### Variables
 
-| Variable  | Ejemplo          | Descripción                            |
-| --------- | ---------------- | -------------------------------------- |
-| region    | `ap-northeast-1` | La región actual de AWS                |
-| profile   | `astronauts`     | El perfil actual de AWS                |
-| symbol    |                  | Refleja el valor de la opción `symbol` |
-| style\* |                  | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo          | Descripción                                 |
+| --------- | ---------------- | ------------------------------------------- |
+| region    | `ap-northeast-1` | La región actual de AWS                     |
+| profile   | `astronauts`     | El perfil actual de AWS                     |
+| duration  | `2h27m20s`       | The temporary credentials validity duration |
+| symbol    |                  | Refleja el valor de la opción `symbol`      |
+| style\* |                  | Refleja el valor de la opción `style`       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
