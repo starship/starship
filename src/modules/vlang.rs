@@ -1,15 +1,17 @@
 use super::{Context, Module, RootModuleConfig};
 
-use crate::configs::v::VLangConfig;
+use crate::configs::v::VConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the current V version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("vlang");
-    let config = VLangConfig::try_load(module.config);
+    let config = VConfig::try_load(module.config);
     let is_v_project = context
         .try_begin_scan()?
+        .set_files(&config.detect_files)
         .set_extensions(&config.detect_extensions)
+        .set_folders(&config.detect_folders)
         .is_match();
 
     if !is_v_project {
@@ -84,6 +86,36 @@ mod tests {
     fn folder_with_v_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.v"))?.sync_all()?;
+        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_vmod_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("v.mod"))?.sync_all()?;
+        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_vpkg_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("vpkg.json"))?.sync_all()?;
+        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_vpkg_lockfile() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".vpkg-lock.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);

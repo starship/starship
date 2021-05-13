@@ -23,7 +23,7 @@ impl<'a> Default for GitCommitConfig<'a> {
             style: "green bold",
             only_detached: true,
             disabled: false,
-            tag_symbol: "🏷  ",
+            tag_symbol: " 🏷  ",
             tag_disabled: true,
         }
     }

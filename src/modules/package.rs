@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::StringFormatter;
@@ -16,7 +14,7 @@ use serde_json as json;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
-    let module_version = get_package_version(&context.current_dir, &config)?;
+    let module_version = get_package_version(context, &config)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -54,10 +52,13 @@ fn extract_cargo_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn extract_vlang_version(file_contents: &str) -> Option<String> {
-    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
-    let caps = re.captures(file_contents)?;
-    let formatted_version = format_version(&caps["version"]);
+fn extract_nimble_version(context: &Context) -> Option<String> {
+    let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
+
+    let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
+    let raw_version = nimble_json.get("version")?.as_str()?;
+
+    let formatted_version = format_version(raw_version);
     Some(formatted_version)
 }
 
@@ -184,9 +185,34 @@ fn extract_meson_version(file_contents: &str) -> Option<String> {
     Some(formatted_version)
 }
 
-fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String> {
+fn extract_vmod_version(file_contents: &str) -> Option<String> {
+    let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
+    let caps = re.captures(file_contents)?;
+    let formatted_version = format_version(&caps["version"]);
+    Some(formatted_version)
+}
+
+fn extract_vpkg_version(file_contents: &str) -> Option<String> {
+    let vpkg_json: json::Value = json::from_str(file_contents).ok()?;
+    let version = vpkg_json.get("version")?.as_str()?;
+    if version == "null" {
+        return None;
+    }
+    let formatted_version = format_version(&version);
+    Some(formatted_version)
+}
+
+fn get_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let base_dir = &context.current_dir;
+
     if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
         extract_cargo_version(&cargo_toml)
+    } else if context
+        .try_begin_scan()?
+        .set_extensions(&["nimble"])
+        .is_match()
+    {
+        extract_nimble_version(context)
     } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
         extract_package_version(&package_json, config.display_private)
     } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
@@ -206,7 +232,9 @@ fn get_package_version(base_dir: &Path, config: &PackageConfig) -> Option<String
     } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
         extract_meson_version(&meson_build)
     } else if let Ok(vlang_mod) = utils::read_file(base_dir.join("v.mod")) {
-        extract_vlang_version(&vlang_mod)
+        extract_vmod_version(&vlang_mod)
+    } else if let Ok(vlang_vpkg) = utils::read_file(base_dir.join("vpkg.json")) {
+        extract_vpkg_version(&vlang_vpkg)
     } else {
         None
     }
@@ -224,7 +252,7 @@ fn format_version(version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -259,6 +287,117 @@ mod tests {
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_nimble_package_version() -> io::Result<()> {
+        let config_name = "test_project.nimble";
+
+        let config_content = r##"
+version = "0.1.0"
+author = "Mr. nimble"
+description = "A new awesome nimble package"
+license = "MIT"
+"##;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "nimble dump --json",
+                Some(CommandOutput {
+                    stdout: r##"
+{
+  "name": "test_project.nimble",
+  "version": "0.1.0",
+  "author": "Mr. nimble",
+  "desc": "A new awesome nimble package",
+  "license": "MIT",
+  "skipDirs": [],
+  "skipFiles": [],
+  "skipExt": [],
+  "installDirs": [],
+  "installFiles": [],
+  "installExt": [],
+  "requires": [],
+  "bin": [],
+  "binDir": "",
+  "srcDir": "",
+  "backend": "c"
+}
+"##
+                    .to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+
+        let expected = Some(format!(
+            "is {} ",
+            Color::Fixed(208).bold().paint(format!("📦 {}", "v0.1.0"))
+        ));
+
+        assert_eq!(actual, expected);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_nimble_package_version_for_nimble_directory_when_nimble_is_not_available(
+    ) -> io::Result<()> {
+        let config_name = "test_project.nimble";
+
+        let config_content = r##"
+version = "0.1.0"
+author = "Mr. nimble"
+description = "A new awesome nimble package"
+license = "MIT"
+"##;
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd("nimble dump --json", None)
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_nimble_package_version_for_non_nimble_directory() -> io::Result<()> {
+        // Only create an empty directory. There's no .nibmle file for this case.
+        let project_dir = create_project_dir()?;
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd("nimble dump --json", None)
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(actual, expected);
         project_dir.close()
     }
 
@@ -828,17 +967,31 @@ end";
     }
 
     #[test]
-    fn test_extract_vlang_version() -> io::Result<()> {
+    fn test_extract_vmod_version() -> io::Result<()> {
         let config_name = "v.mod";
-        let config_content = "
-        Module {
-            name: 'starship',
-            author: 'matchai',
-            version: '1.2.3'
-        }";
+        let config_content = "\
+Module {
+    name: 'starship',
+    author: 'matchai',
+    version: '1.2.3'
+}";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_vpkg_version() -> io::Result<()> {
+        let config_name = "vpkg.json";
+        let config_content = json::json!({
+            "name": "starship",
+            "version": "0.1.0"
+        })
+        .to_string();
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
 

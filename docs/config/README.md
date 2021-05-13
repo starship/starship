@@ -250,35 +250,40 @@ $character"""
 
 The `aws` module shows the current AWS region and profile. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
-`~/.aws/config` file.
+`~/.aws/config` file. This module also shows an expiration timer when using temporary
+credentials.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
-is read from the `AWS_VAULT` env var.
+is read from the `AWS_VAULT` env var and the credentials expiration date
+is read from the `AWS_SESSION_EXPIRATION` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 is read from the `AWSU_PROFILE` env var.
 
 When using [AWSume](https://awsu.me) the profile
-is read from the `AWSUME_PROFILE` env var.
+is read from the `AWSUME_PROFILE` env var and the credentials expiration
+date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Options
 
-| Option           | Default                                           | Description                                                     |
-| ---------------- | ------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                            | The symbol used before displaying the current AWS profile.      |
-| `region_aliases` |                                                   | Table of region aliases to display in addition to the AWS name. |
-| `style`          | `"bold yellow"`                                   | The style for the module.                                       |
-| `disabled`       | `false`                                           | Disables the `aws` module.                                      |
+| Option              | Default                                                          | Description                                                       |
+| ------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
+| `symbol`            | `"☁️ "`                                                           | The symbol used before displaying the current AWS profile.        |
+| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.   |
+| `style`             | `"bold yellow"`                                                  | The style for the module.                                         |
+| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired. |
+| `disabled`          | `false`                                                          | Disables the `AWS` module.                                        |
 
 ### Variables
 
-| Variable | Example          | Description                          |
-| -------- | ---------------- | ------------------------------------ |
-| region   | `ap-northeast-1` | The current AWS region               |
-| profile  | `astronauts`     | The current AWS profile              |
-| symbol   |                  | Mirrors the value of option `symbol` |
-| style\*  |                  | Mirrors the value of option `style`  |
+| Variable | Example          | Description                                 |
+| -------- | ---------------- | ------------------------------------------- |
+| region   | `ap-northeast-1` | The current AWS region                      |
+| profile  | `astronauts`     | The current AWS profile                     |
+| duration | `2h27m20s`       | The temporary credentials validity duration |
+| symbol   |                  | Mirrors the value of option `symbol`        |
+| style\*  |                  | Mirrors the value of option `style`         |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1154,7 +1159,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `style`              | `"bold green"`                                 | The style for the module.                               |
 | `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `"🏷 "`                                        | Tag symbol prefixing the info shown                     |
+| `tag_symbol`         | `" 🏷 "`                                        | Tag symbol prefixing the info shown                     |
 | `disabled`           | `false`                                        | Disables the `git_commit` module.                       |
 
 ### Variables
@@ -2006,13 +2011,13 @@ symbol = "☁️ "
 ## Package Version
 
 The `package` module is shown when the current directory is the repository for a
-package, and shows its current version. The module currently supports `npm`, `cargo`,
+package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`,
 `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
-- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present
-  in the current directory
+- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
@@ -2846,19 +2851,19 @@ format = "via [⍱ $version](bold white) "
 The `vlang` module shows you your currently installed version of V.
 By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod` file
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Options
 
-| Option              | Default                                           | Description                                     |
-| ------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                      |
-| `symbol`            | `"V "`                                           | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                        | Which extensions should trigger this module.    |
-| `detect_files`      | `["v.mod"]` | Which filenames should trigger this module. |
-| `detect_folders`    | `[]`                                  | Which folders should trigger this module.       |
-| `style`             | `"blue bold"`                                     | The style for the module.                       |
-| `disabled`          | `false`                                           | Disables the `vlang` module.                    |
+| Option              | Default                                      | Description                                  |
+| ------------------- | -------------------------------------------- | -------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                   |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module. |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.  |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.    |
+| `style`             | `"blue bold"`                                | The style for the module.                    |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
 
 ### Variables
 
