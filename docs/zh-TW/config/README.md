@@ -239,32 +239,34 @@ $character"""
 
 ## AWS
 
-`aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。
+`aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。 This module also shows an expiration timer when using temporary credentials.
 
-從 `AWS_VAULT`讀取而使用 [aws-vault](https://github.com/99designs/aws-vault) 這個設定檔
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 ### 選項
 
-| Option           | 預設                                                  | 說明                         |
-| ---------------- | --------------------------------------------------- | -------------------------- |
-| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | The format for the module. |
-| `symbol`         | `"☁️ "`                                             | 顯示在目前 AWS 配置之前的符號。         |
-| `region_aliases` |                                                     | 除了AWS名稱外，顯示區域別名表           |
-| `style`          | `"bold yellow"`                                     | 這個模組的風格。                   |
-| `disabled`       | `false`                                             | Disables the `aws` module. |
+| Option              | 預設                                                                   | 說明                                                                |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
+| `symbol`            | `"☁️ "`                                                              | 顯示在目前 AWS 配置之前的符號。                                                |
+| `region_aliases`    |                                                                      | 除了AWS名稱外，顯示區域別名表                                                  |
+| `style`             | `"bold yellow"`                                                      | 這個模組的風格。                                                          |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
+| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
 
 ### Variables
 
-| 變數        | 範例               | 說明                                   |
-| --------- | ---------------- | ------------------------------------ |
-| region    | `ap-northeast-1` | The current AWS region               |
-| profile   | `astronauts`     | The current AWS profile              |
-| symbol    |                  | Mirrors the value of option `symbol` |
-| style\* |                  | Mirrors the value of option `style`  |
+| 變數        | 範例               | 說明                                          |
+| --------- | ---------------- | ------------------------------------------- |
+| region    | `ap-northeast-1` | The current AWS region                      |
+| profile   | `astronauts`     | The current AWS profile                     |
+| duration  | `2h27m20s`       | The temporary credentials validity duration |
+| symbol    |                  | Mirrors the value of option `symbol`        |
+| style\* |                  | Mirrors the value of option `style`         |
 
 \*: This variable can only be used as a part of a style string
 
