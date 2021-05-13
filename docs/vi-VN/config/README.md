@@ -239,32 +239,34 @@ $character"""
 
 ## AWS
 
-`aws` module cho biết region và profile hiện tại của AWS. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`.
+`aws` module cho biết region và profile hiện tại của AWS. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
 
-Khi sử dụng [aws-vault](https://github.com/99designs/aws-vault) profile được đọc từ biến môt trường `AWS_VAULT`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var.
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                            | Mô tả                                                |
-| ---------------- | --------------------------------------------------- | ---------------------------------------------------- |
-| `format`         | `'on [$symbol($profile )(\($region\) )]($style)'` | Định dạng cho module.                                |
-| `symbol`         | `"☁️ "`                                             | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại. |
-| `region_aliases` |                                                     | Bảng của các region alias để hiển thị ngoài tên AWS. |
-| `style`          | `"bold yellow"`                                     | Kiểu cho module.                                     |
-| `disabled`       | `false`                                             | Disables the `aws` module.                           |
+| Tuỳ chọn            | Mặc định                                                             | Mô tả                                                             |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Định dạng cho module.                                             |
+| `symbol`            | `"☁️ "`                                                              | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.              |
+| `region_aliases`    |                                                                      | Bảng của các region alias để hiển thị ngoài tên AWS.              |
+| `style`             | `"bold yellow"`                                                      | Kiểu cho module.                                                  |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
+| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
 
 ### Các biến
 
-| Biến      | Ví dụ            | Mô tả                            |
-| --------- | ---------------- | -------------------------------- |
-| region    | `ap-northeast-1` | Region AWS hiện tại              |
-| profile   | `astronauts`     | Profile AWS hiện tại             |
-| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |                  | Giá trị ghi đè của `style`       |
+| Biến      | Ví dụ            | Mô tả                                       |
+| --------- | ---------------- | ------------------------------------------- |
+| region    | `ap-northeast-1` | Region AWS hiện tại                         |
+| profile   | `astronauts`     | Profile AWS hiện tại                        |
+| duration  | `2h27m20s`       | The temporary credentials validity duration |
+| symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol`            |
+| style\* |                  | Giá trị ghi đè của `style`                  |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
