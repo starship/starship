@@ -94,10 +94,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = &context.get_repo().ok()?;
     let path_vec = match &repo.root {
-        Some(repo_root) if !config.truncate_to_repo => {
+        Some(repo_root) if config.repo_root_style.is_some() => {
             let repo_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = repo_path.split('/').collect();
-            let after_str = repo_path.replace(repo_path_vec[0], "");
+            let after_str = repo_path.replacen(repo_path_vec[0], "", 1);
             let after_dir_num: Vec<&str> = after_str.split('/').collect();
 
             if ((after_dir_num.len() - 1) as i64) < config.truncation_length {
@@ -117,13 +117,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         config.highlight_repo_root_format
     };
+    let repo_root_style = config.repo_root_style.unwrap_or(config.style);
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
-                "highlight_repo_root_style" => Some(Ok(config.highlight_repo_root_style)),
+                "repo_root_style" => Some(Ok(repo_root_style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -1550,13 +1551,13 @@ mod tests {
             .config(toml::toml! {
                 [directory]
                 truncation_length = 5
-                truncation_symbol = "…/"
-                truncate_to_repo = false
+                truncate_to_repo = true
+                repo_root_style = "bold red"
             })
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}…/above/{}repo{} ",
+            "{}{}repo{} ",
             Color::Cyan.bold().prefix(),
             Color::Red.prefix(),
             Color::Cyan.paint("/src/sub/path")
@@ -1579,7 +1580,7 @@ mod tests {
                 truncation_length = 5
                 truncation_symbol = "…/"
                 truncate_to_repo = false
-                highlight_repo_root_style = "green"
+                repo_root_style = "green"
             })
             .path(dir)
             .collect();
