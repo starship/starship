@@ -3,6 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::spotify::SpotifyConfig;
 use crate::formatter::StringFormatter;
 use std::env;
+use window_titles::{Connection, ConnectionTrait};
 
 static OS: &str = env::consts::OS;
 
@@ -13,6 +14,11 @@ pub fn eval_apple_script(script: &str, context: &Context<'_>) -> Option<String> 
 
 pub fn is_spotify_running_on_macos(context: &Context<'_>) -> bool {
     eval_apple_script("application \"Spotify\" is running", context).unwrap() == "true"
+}
+
+pub fn is_spotify_running_on_windows() -> bool {
+    // todo: write code
+    true
 }
 
 pub fn artist(context: &Context<'_>) -> Option<String> {

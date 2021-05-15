@@ -1643,6 +1643,7 @@ dependencies = [
  "versions",
  "which",
  "winapi",
+ "window_titles",
  "yaml-rust",
 ]
 
@@ -1993,6 +1994,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
+name = "window_titles"
+version = "0.1.0"
+source = "git+https://github.com/HiruNya/window_titles?branch=process-support#4eec3ad70700c23d71264e1f44441266aaf67e16"
+dependencies = [
+ "winapi",
+ "xcb",
+]
+
+[[package]]
 name = "winrt"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2019,6 +2029,16 @@ name = "wyz"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85e60b0d1b5f99db2556934e21937020776a5d31520bf169e851ac44e6420214"
+
+[[package]]
+name = "xcb"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "62056f63138b39116f82a540c983cc11f1c90cd70b3d492a70c25eaa50bd22a6"
+dependencies = [
+ "libc",
+ "log",
+]
 
 [[package]]
 name = "xml-rs"
