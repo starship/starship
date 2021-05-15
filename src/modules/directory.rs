@@ -913,10 +913,10 @@ mod tests {
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}above-repo/{}rocket-controls{} ",
-            Color::Cyan.bold().prefix(),
-            Color::Red.prefix(),
-            Color::Cyan.paint("/src/meters/fuel-gauge")
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint("above-repo/rocket-controls/src/meters/fuel-gauge")
         ));
 
         assert_eq!(expected, actual);
@@ -943,14 +943,11 @@ mod tests {
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}{}{}rocket-controls{} ",
-            Color::Cyan.bold().prefix(),
-            format!(
-                "{}/above-repo/",
+            "{} ",
+            Color::Cyan.bold().paint(format!(
+                "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
-            ),
-            Color::Red.prefix(),
-            Color::Cyan.paint("/src/meters/fuel-gauge")
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1110,10 +1107,10 @@ mod tests {
             .path(symlink_src_dir)
             .collect();
         let expected = Some(format!(
-            "{}above-repo/{}rocket-controls-symlink{} ",
-            Color::Cyan.bold().prefix(),
-            Color::Red.prefix(),
-            Color::Cyan.paint("/src/meters/fuel-gauge")
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint("above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
         ));
 
         assert_eq!(expected, actual);
@@ -1146,14 +1143,11 @@ mod tests {
             .path(symlink_src_dir)
             .collect();
         let expected = Some(format!(
-            "{}{}{}rocket-controls-symlink{} ",
-            Color::Cyan.bold().prefix(),
-            format!(
-                "{}/above-repo/",
+            "{} ",
+            Color::Cyan.bold().paint(format!(
+                "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
-            ),
-            Color::Red.prefix(),
-            Color::Cyan.paint("/src/meters/fuel-gauge")
+            ))
         ));
 
         assert_eq!(expected, actual);
