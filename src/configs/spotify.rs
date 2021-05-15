@@ -14,7 +14,7 @@ pub struct SpotifyConfig<'a> {
 impl<'a> Default for SpotifyConfig<'a> {
     fn default() -> Self {
         SpotifyConfig {
-            format: "[$symbol ($artist - $song)]($style) ",
+            format: "[$symbol($song )]($style)",
             symbol: "阮",
             style: "green bold",
             disabled: false,

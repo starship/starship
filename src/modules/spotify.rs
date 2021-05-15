@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::spotify::SpotifyConfig;
 use crate::formatter::StringFormatter;
+use regex::Regex;
 use std::env;
 use window_titles::{Connection, ConnectionTrait};
 
@@ -16,9 +17,29 @@ pub fn is_spotify_running_on_macos(context: &Context<'_>) -> bool {
     eval_apple_script("application \"Spotify\" is running", context).unwrap() == "true"
 }
 
+pub fn sanitize_vec(vec: Vec<String>) -> Vec<String> {
+    vec.into_iter()
+        .filter(|string| !string.trim().is_empty())
+        .collect::<Vec<String>>()
+}
+
 pub fn is_spotify_running_on_windows() -> bool {
-    // todo: write code
-    true
+    if sanitize_vec(
+        Connection::new()
+            .unwrap()
+            .windows()
+            .into_iter()
+            .filter(|window| window.process().name() == "Spotify.exe")
+            .map(|window| window.name().unwrap())
+            .collect::<Vec<String>>(),
+    )
+    .len()
+        == 0
+    {
+        false
+    } else {
+        true
+    }
 }
 
 pub fn artist(context: &Context<'_>) -> Option<String> {
@@ -39,8 +60,23 @@ pub fn song(context: &Context<'_>) -> Option<String> {
             "tell application \"Spotify\" to name of current track as string",
             context,
         )
+    } else if OS == "windows" && is_spotify_running_on_windows() {
+        let re = Regex::new(r"(Spotify.*)|(.*\\s-\\s.*)").unwrap();
+        let raw_song = sanitize_vec(
+            Connection::new()
+                .unwrap()
+                .windows()
+                .into_iter()
+                .filter(|window| window.process().name() == "Spotify.exe")
+                .map(|window| window.name().unwrap())
+                .collect::<Vec<String>>(),
+        )
+        .first()
+        .unwrap()
+        .to_owned();
+        let caps = re.captures(&raw_song).unwrap();
+        Some("hi".to_string())
     } else {
-        // TODO: add windows & linux support
         None
     }
 }
@@ -49,7 +85,6 @@ pub fn song(context: &Context<'_>) -> Option<String> {
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("spotify");
     let config = SpotifyConfig::try_load(module.config);
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -74,7 +109,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `deno`:\n{}", error);
+            log::warn!("Error in module `spotify`:\n{}", error);
             return None;
         }
     });
