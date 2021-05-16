@@ -2,26 +2,6 @@
 
 # shellcheck disable=SC2039
 
-# Options
-#
-#   -V, --verbose
-#     Enable verbose output for the installer
-#
-#   -f, -y, --force, --yes
-#     Skip the confirmation prompt during installation
-#
-#   -p, --platform
-#     Override the platform identified by the installer
-#
-#   -b, --bin-dir
-#     Override the bin installation directory
-#
-#   -a, --arch
-#     Override the architecture identified by the installer
-#
-#   -B, --base-url
-#     Override the base URL used for downloading releases
-
 set -eu
 printf '\n'
 
@@ -138,6 +118,39 @@ unpack() {
   return 1
 }
 
+usage() {
+    cat <<EOT
+install.sh [option]
+
+Fetch and install the latest version of starship, if starship is already
+installed it will be updated to the latest version.
+
+Options
+
+  -V, --verbose
+    Enable verbose output for the installer
+
+  -f, -y, --force, --yes
+    Skip the confirmation prompt during installation
+
+  -p, --platform
+    Override the platform identified by the installer [default: ${PLATFORM}]
+
+  -b, --bin-dir
+    Override the bin installation directory [default: ${BIN_DIR}]
+
+  -a, --arch
+    Override the architecture identified by the installer [default: ${ARCH}]
+
+  -B, --base-url
+    Override the base URL used for downloading releases [default: ${BASE_URL}]
+
+  -h, --help
+    Dispays this help message
+
+EOT
+}
+
 elevate_priv() {
   if ! has sudo; then
     error 'Could not find the command "sudo", needed to get permissions for install.'
@@ -205,6 +218,8 @@ detect_platform() {
 # Currently supporting:
 #   - x86_64
 #   - i386
+#   - arm
+#   - arm64
 detect_arch() {
   local arch
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
@@ -262,6 +277,7 @@ check_bin_dir() {
   if [ ! -d "$BIN_DIR" ]; then
     error "Installation location $BIN_DIR does not appear to be a directory"
     info "Make sure the location exists and is a directory, then try again."
+    usage
     exit 1
   fi
 
@@ -355,6 +371,10 @@ while [ "$#" -gt 0 ]; do
     FORCE=1
     shift 1
     ;;
+  -h | --help)
+    usage
+    exit
+    ;;
 
   -p=* | --platform=*)
     PLATFORM="${1#*=}"
@@ -383,6 +403,7 @@ while [ "$#" -gt 0 ]; do
 
   *)
     error "Unknown option: $1"
+    usage
     exit 1
     ;;
   esac

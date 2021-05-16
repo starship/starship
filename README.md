@@ -161,6 +161,13 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ```
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
+
+   **Note** - The defaults of the install script can be overridden see the build in help.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
+
    #### Install via Package Manager
 
    ##### Example: [Homebrew](https://brew.sh/):
