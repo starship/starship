@@ -163,6 +163,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
 
    **Note** - The defaults of the install script can be overridden see the build in help.
+  **Note** - The defaults of the install script can be overridden see the built-in help.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
