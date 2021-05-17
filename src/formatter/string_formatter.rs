@@ -310,9 +310,9 @@ impl<'a> StringFormatter<'a> {
                                                     VariableValue::Plain(plain_value) => {
                                                         !plain_value.is_empty()
                                                     }
-                                                    VariableValue::Styled(segments) => segments
-                                                        .into_iter()
-                                                        .any(|x| !x.value.is_empty()),
+                                                    VariableValue::Styled(segments) => {
+                                                        segments.iter().any(|x| !x.value.is_empty())
+                                                    }
                                                 })
                                                 // The variable is None or Err, or a meta variable
                                                 // that shouldn't show
@@ -610,7 +610,6 @@ mod tests {
         let result = formatter.parse(None).unwrap();
         assert_eq!(result.len(), 0);
     }
-
 
     #[test]
     fn test_nested_conditional() {
