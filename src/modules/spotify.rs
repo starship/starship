@@ -77,6 +77,7 @@ pub fn song(context: &Context<'_>) -> Option<String> {
         let caps = re.captures(&raw_song).unwrap();
         Some("hi".to_string())
     } else {
+        // todo: add linux support
         None
     }
 }
@@ -95,12 +96,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
-                "artist" => artist(context).map(Ok),
+            .map_meta(|variable, _| match variable {
+                "artist" => {
+                    let value = artist(context).as_deref().unwrap_or("na").clone();
+                    Some(value)
+                },
                 _ => None,
             })
-            .map_style(|variable| match variable {
-                "song" => song(context).map(Ok),
+            .map_meta(|variable, _| match variable {
+                "song" => {
+                    let value = song(context).as_deref().unwrap_or("na").clone();
+                    Some(value)
+                },
                 _ => None,
             })
             .parse(None)
