@@ -159,6 +159,13 @@
    بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
 
 
+   **Note** - The defaults of the install script can be overridden see the built-in help.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
+
+
    #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
 
