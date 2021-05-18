@@ -1,6 +1,7 @@
 use process_control::{ChildExt, Timeout};
-use std::fs::File;
-use std::io::{Read, Result};
+use std::fmt::Debug;
+use std::fs::read_to_string;
+use std::io::Result;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -8,12 +9,18 @@ use std::time::{Duration, Instant};
 use crate::context::Shell;
 
 /// Return the string contents of a file
-pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
-    let mut file = File::open(file_name)?;
-    let mut data = String::new();
+pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
+    log::trace!("Trying to read from {:?}", file_name);
 
-    file.read_to_string(&mut data)?;
-    Ok(data)
+    let result = read_to_string(file_name);
+
+    if result.is_err() {
+        log::debug!("Error reading file: {:?}", result);
+    } else {
+        log::trace!("File read sucessfully");
+    };
+
+    result
 }
 
 #[derive(Debug, Clone)]
