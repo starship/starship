@@ -37,7 +37,7 @@ git2 = { version = "0.13.19", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
 serde_json = "1.0.64"
-rayon = "1.5.0"
+rayon = "1.5.1"
 log = { version = "0.4.14", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
