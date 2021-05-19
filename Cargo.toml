@@ -77,6 +77,10 @@ attohttpc = { version = "0.17.0", optional = true, default-features = false, fea
 native-tls = { version = "0.2.7", optional = true }
 shell-words = "1.0.0"
 
+[dependencies.promptly]
+git = "https://github.com/Jason-S-Ross/stylish-stringlike.git"
+rev = "ee0d133e8ec7599f06f9469de0b93ac9e1a4bcee"
+
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = [
   "winuser",

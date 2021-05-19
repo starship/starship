@@ -3,11 +3,18 @@ use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
+use crate::segment::Segment;
 use ansi_term::Style;
 use indexmap::IndexMap;
 use path_slash::PathExt;
+use promptly::{
+    HBox, RawText, Replaceable, Spans, Split, Splitable, StyledGrapheme, TextWidget,
+    TruncationStyle,
+};
+use regex::Regex;
+use std::cmp::PartialEq;
 use std::convert::TryInto;
-use std::fmt;
+use std::fmt::Debug;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -17,7 +24,6 @@ use super::{Context, Module};
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
-use crate::segment::Segment;
 
 /// Creates a module with the current logical or physical directory
 ///
@@ -34,6 +40,7 @@ use crate::segment::Segment;
 /// **Truncation**
 /// Paths will be limited in length to `3` path components by default.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let default_sep: String = String::from(std::path::MAIN_SEPARATOR);
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
@@ -52,74 +59,39 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("Physical dir: {:?}", &physical_dir);
     log::debug!("Display dir: {:?}", &display_dir);
 
-    // Attempt repository path contraction (if we are in a git repository)
-    let repo = if config.truncate_to_repo {
-        context.get_repo().ok()
-    } else {
-        None
-    };
-    let dir_string = repo
-        .and_then(|r| r.root.as_ref())
-        .filter(|root| *root != &home_dir)
-        .and_then(|root| contract_repo_path(&display_dir, root));
-
-    // Otherwise use the logical path, automatically contracting
-    // the home directory if required.
-    let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
-
-    #[cfg(windows)]
-    let dir_string = remove_extended_path_prefix(dir_string);
-
-    // Apply path substitutions
-    let dir_styled = substitute_path(dir_string, &config.substitutions);
-
-    // Truncate the dir string to the maximum number of path components
-    let dir_segment_truncated = {
-        let length: usize = config
-            .truncation_length
-            .try_into()
-            .expect("Unable to convert truncation_length to usize");
-        if length == 0 {
-            dir_styled
+    let dir_string = {
+        // Attempt repository path contraction (if we are in a git repository)
+        let repo = if config.truncate_to_repo {
+            context.get_repo().ok()
         } else {
-            let chunks = {
-                let mut chunks = vec![];
-                let mut this_chunk = vec![];
-                for c in dir_styled.iter() {
-                    if c.value == '/' && !this_chunk.is_empty() {
-                        chunks.push((Some(*c), this_chunk.clone()));
-                        this_chunk.clear();
-                    } else {
-                        this_chunk.push(*c)
-                    }
-                }
-                if !this_chunk.is_empty() {
-                    chunks.push((None, this_chunk));
-                }
-                chunks
-            };
-            if chunks.len() <= length {
-                dir_styled
-            } else {
-                chunks[chunks.len() - length..]
-                    .iter()
-                    .flat_map(|x| {
-                        let (sep, chunk) = x;
-                        let mut container = vec![];
-                        container.extend(chunk);
-                        if let Some(sep) = sep {
-                            container.push(sep);
-                        }
-                        container
-                    })
-                    .cloned()
-                    .collect()
-            }
-        }
-    };
+            None
+        };
+        let repo_string = repo
+            .and_then(|r| r.root.as_ref())
+            .filter(|root| *root != &home_dir)
+            .and_then(|root| contract_repo_path(&display_dir, root));
 
-    let prefix = if is_truncated(&dir_segment_truncated.to_string(), &home_symbol) {
+        // Otherwise use the logical path, automatically contracting
+        // the home directory if required.
+        let dir_string =
+            repo_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
+
+        #[cfg(windows)]
+        let dir_string = remove_extended_path_prefix(dir_string);
+
+        // Apply path substitutions
+        let mut dir_spans = substitute_path(&dir_string, &config.substitutions);
+
+        substitute_path_regex(&mut dir_spans, &config.substitution_regexes);
+        // Truncate the dir string to the maximum number of path components
+
+        truncate::<_, Spans<Option<Style>>>(
+            &dir_spans,
+            config.truncation_length as usize,
+            &default_sep,
+        )
+    };
+    let prefix = if is_truncated(&dir_string.raw(), &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
@@ -131,7 +103,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .try_into()
                     .expect("Unable to convert fish_style_pwd_dir_length to usize"),
                 contracted_home_dir,
-                &dir_segment_truncated.to_string(),
+                &dir_string.raw(),
             )
         } else {
             String::from(config.truncation_symbol)
@@ -139,18 +111,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         String::from("")
     };
-
+    let prefix_spans = get_styled(&prefix).unwrap_or_else(|| prefix.as_str().into());
+    let displayed_path = (&prefix_spans + &dir_string).replace(&default_sep, config.delimiter);
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_variables_to_segments(|variable| match variable {
                 "path" => {
-                    let path: StyleString = Segment::new(None, prefix.as_str()).into();
-                    let mut path: Vec<&StyledChar> = path.iter().collect();
-                    path.extend(dir_segment_truncated.iter());
-                    let path: Vec<Segment> = path.iter().copied().collect();
-                    Some(Ok(path))
+                    let to_show = if config.width > 0 {
+                        let ellipsis_span: Spans<Option<Style>> = "…".into();
+                        shrink(
+                            &displayed_path,
+                            &ellipsis_span,
+                            config.width as usize,
+                            TruncationStyle::Inner,
+                            config.delimiter,
+                        )
+                    } else {
+                        displayed_path.clone()
+                    };
+                    Some(Ok(to_show
+                        .spans()
+                        .map(|span| {
+                            let style: Option<Style> = span.style().clone().into_owned();
+                            let content: String = span.content().clone().into_owned();
+                            Segment::new(style, content)
+                        })
+                        .collect()))
                 }
                 _ => None,
             })
@@ -181,6 +169,68 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn truncate<'a, S, U>(dir_string: &'a S, length: usize, delimiter: &'a str) -> S
+where
+    S: Splitable<'a, &'a str, Delim = U, Segment = U> + Clone + 'a + FromIterator<U>,
+    U: 'a,
+{
+    if length == 0 {
+        dir_string.clone()
+    } else {
+        // Have to iterate through this twice to get lifetimes to work
+        let num_components: usize = dir_string.split_style(delimiter).count();
+        let start = num_components.saturating_sub(length);
+        // return an iterator referencing the input argument for lifetime reasons
+        dir_string
+            .split_style(delimiter)
+            .enumerate()
+            .map(|(count, Split { segment, delim })| {
+                if count < start && !((num_components == length + 1) && segment.is_none()) {
+                    None
+                } else {
+                    Some(vec![segment, delim])
+                }
+            })
+            // Flatten Option to eliminate None
+            .flatten()
+            // Flatten Vec
+            .flatten()
+            // Flatten Option to eliminate None
+            .flatten()
+            // filter_map to eliminate None
+            .collect::<S>()
+    }
+}
+
+fn shrink<T>(
+    path: &Spans<T>,
+    truncation_symbol: &Spans<T>,
+    max_width: usize,
+    style: TruncationStyle,
+    delim: &str,
+) -> Spans<T>
+where
+    T: Clone + Debug + PartialEq + Default,
+{
+    let split = path.split_style(delim).collect::<Vec<_>>();
+    let widget_container = split
+        .iter()
+        .filter_map(|Split { segment, delim }| match (segment, delim) {
+            (Some(segment), Some(delim)) => Some(vec![
+                TextWidget::new(segment, style, truncation_symbol),
+                TextWidget::new(delim, style, truncation_symbol),
+            ]),
+            (Some(segment), None) => Some(vec![TextWidget::new(segment, style, truncation_symbol)]),
+            (None, Some(delim)) => Some(vec![TextWidget::new(delim, style, truncation_symbol)]),
+            (None, None) => None,
+        })
+        .flatten()
+        .collect::<Vec<_>>();
+    let widgets = widget_container.iter().collect::<Vec<_>>();
+    let hbox = HBox::new(&widgets);
+    hbox.truncate(max_width as usize).collect()
 }
 
 #[cfg(windows)]
@@ -303,26 +353,51 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
     buf.canonicalize().unwrap_or_else(|_| path.into())
 }
 
+/// Convert a string into a Spans object
+fn get_styled(text: &str) -> Option<Spans<Option<Style>>> {
+    let formatter = StringFormatter::new(text).ok()?;
+    let segments = formatter.parse(None).ok()?;
+    Some(
+        segments
+            .iter()
+            .flat_map(|Segment { style, value }| {
+                value
+                    .graphemes(true)
+                    .map(move |grapheme| StyledGrapheme::borrowed(style, grapheme))
+            })
+            .collect(),
+    )
+}
+
 /// Perform a list of string substitutions on the path
 ///
 /// Given a list of (from, to) pairs, this will perform the string
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
-fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> StyleString {
-    fn get_formatted(text: &str) -> Option<StyleString> {
-        let formatter = StringFormatter::new(text).ok()?;
-        let segments = formatter.parse(None).ok()?;
-        Some(segments.iter().collect())
-    }
-    let mut substituted_dir: StyleString = Segment::new(None, dir_string).into();
+fn substitute_path(
+    dir_string: &str,
+    substitutions: &IndexMap<String, &str>,
+) -> Spans<Option<Style>> {
+    let mut substituted_dir: Spans<Option<Style>> = dir_string.into();
     for (from, to) in substitutions.iter() {
-        let to = if let Some(repl) = get_formatted(to) {
-            repl
+        if let Some(to_spans) = get_styled(to) {
+            substituted_dir = substituted_dir.replace(from, &to_spans);
         } else {
-            Segment::new(None, String::from(*to)).into()
-        };
-        substituted_dir = substituted_dir.replace(from, &to.chars)
+            substituted_dir = substituted_dir.replace(from, *to);
+        }
     }
     substituted_dir
+}
+
+fn substitute_path_regex(dir: &mut Spans<Option<Style>>, substitutions: &IndexMap<String, &str>) {
+    for (from, to) in substitutions.iter() {
+        if let Ok(rx) = Regex::new(from) {
+            if let Some(to_spans) = get_styled(to) {
+                *dir = dir.replace_regex(&rx, &to_spans);
+            } else {
+                *dir = dir.replace_regex(&rx, *to)
+            }
+        }
+    }
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -358,151 +433,6 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
         })
         .collect::<Vec<_>>()
         .join("/")
-}
-
-#[derive(Clone, Copy)]
-struct StyledChar {
-    style: Option<Style>,
-    value: char,
-}
-
-struct StyleString {
-    chars: Vec<StyledChar>,
-}
-
-struct IterStyleString<'a> {
-    inner: &'a StyleString,
-    pos: usize,
-}
-
-impl StyleString {
-    fn new(chars: &[StyledChar]) -> Self {
-        StyleString {
-            chars: chars.to_vec(),
-        }
-    }
-    fn iter(&self) -> IterStyleString {
-        IterStyleString {
-            inner: self,
-            pos: 0,
-        }
-    }
-    fn replace(&self, from: &str, to: &[StyledChar]) -> StyleString {
-        let mut result: Vec<StyledChar> = vec![];
-        let mut last_end = 0;
-        let str_repr = self.to_string();
-        for (start, part) in str_repr.match_indices(from) {
-            // Each part of the chars vector is a char so we have to convert from bytes to chars
-            let start = str_repr[..start].chars().count();
-            let slice = &self.chars[last_end..start];
-            result.extend_from_slice(slice);
-            result.extend_from_slice(to);
-            last_end = start + part.chars().count();
-        }
-        result.extend_from_slice(&self.chars[last_end..]);
-        StyleString { chars: result }
-    }
-}
-
-impl From<Segment> for StyleString {
-    fn from(other: Segment) -> Self {
-        (&other).into()
-    }
-}
-
-impl From<&Segment> for StyleString {
-    fn from(other: &Segment) -> Self {
-        StyleString::new(
-            &other
-                .value
-                .chars()
-                .map(|c| StyledChar {
-                    style: other.style,
-                    value: c,
-                })
-                .collect::<Vec<StyledChar>>(),
-        )
-    }
-}
-
-impl<'a> FromIterator<&'a Segment> for StyleString {
-    fn from_iter<I: IntoIterator<Item = &'a Segment>>(iter: I) -> Self {
-        iter.into_iter()
-            .flat_map(move |x| {
-                x.value
-                    .chars()
-                    .map(|c| StyledChar {
-                        style: x.style,
-                        value: c,
-                    })
-                    .collect::<Vec<StyledChar>>()
-            })
-            .collect()
-    }
-}
-
-impl FromIterator<StyledChar> for StyleString {
-    fn from_iter<I: IntoIterator<Item = StyledChar>>(iter: I) -> Self {
-        let mut style_string = StyleString { chars: vec![] };
-        for c in iter {
-            style_string.chars.push(c);
-        }
-        style_string
-    }
-}
-
-impl<'a> FromIterator<&'a StyledChar> for Vec<Segment> {
-    fn from_iter<I: IntoIterator<Item = &'a StyledChar>>(iter: I) -> Self {
-        let mut chars = vec![];
-        for c in iter {
-            chars.push(c);
-        }
-        if let Some(_c) = chars.get(0) {
-            let mut groups = vec![];
-            let mut iter = chars.iter().peekable();
-            while let Some(StyledChar { style, .. }) = iter.peek() {
-                let mut group = vec![];
-                while let Some(StyledChar {
-                    style: otherstyle,
-                    value,
-                }) = iter.peek()
-                {
-                    if otherstyle != style {
-                        break;
-                    }
-                    group.push(*value);
-                    iter.next();
-                }
-                let group: String = group.iter().collect();
-                groups.push(Segment::new(*style, group));
-            }
-            groups
-        } else {
-            return vec![];
-        }
-    }
-}
-
-impl<'a> Iterator for IterStyleString<'a> {
-    type Item = &'a StyledChar;
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.pos >= self.inner.chars.len() {
-            None
-        } else {
-            self.pos += 1;
-            self.inner.chars.get(self.pos - 1)
-        }
-    }
-}
-
-impl fmt::Display for StyleString {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "{}",
-            self.chars.iter().map(|x| x.value).collect::<String>()
-        )
-    }
 }
 
 #[cfg(test)]
@@ -605,8 +535,8 @@ mod tests {
         substitutions.insert("/absolute/path".to_string(), "");
         substitutions.insert("/bar/".to_string(), "/");
 
-        let output = substitute_path(full_path.to_string(), &substitutions).to_string();
-        assert_eq!(output, "/foo/baz");
+        let output = substitute_path(&full_path.to_string(), &substitutions);
+        assert_eq!(output.raw(), "/foo/baz");
     }
 
     #[test]
@@ -678,7 +608,6 @@ mod tests {
         use super::*;
 
         #[test]
-        #[ignore]
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -700,7 +629,6 @@ mod tests {
         }
 
         #[test]
-        #[ignore]
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
@@ -725,7 +653,6 @@ mod tests {
         }
 
         #[test]
-        #[ignore]
         fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
@@ -930,7 +857,6 @@ mod tests {
 
     #[test]
     fn truncated_directory_config_large() -> io::Result<()> {
-        use crate::modules::utils::directory::truncate;
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
@@ -946,7 +872,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(truncate(dir.to_slash_lossy(), 100))
+                .paint(truncate(&dir.to_slash_lossy(), 100, &"/"))
         ));
 
         assert_eq!(expected, actual);
@@ -1027,7 +953,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn git_repo_root() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1042,7 +967,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn directory_in_git_repo() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1061,7 +985,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn truncated_directory_in_git_repo() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1080,7 +1003,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1109,7 +1031,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1140,7 +1061,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1171,7 +1091,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1200,7 +1119,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn symlinked_git_repo_root() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1220,7 +1138,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn directory_in_symlinked_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1244,7 +1161,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1268,7 +1184,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1303,7 +1218,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1340,7 +1254,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1377,7 +1290,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1412,7 +1324,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn symlinked_directory_in_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1762,88 +1673,6 @@ mod tests {
     }
 
     #[test]
-    fn combine_style_string_one() {
-        let chars = vec![
-            StyledChar {
-                style: None,
-                value: 'a',
-            },
-            StyledChar {
-                style: None,
-                value: 'b',
-            },
-            StyledChar {
-                style: None,
-                value: 'c',
-            },
-        ];
-        let style_string = StyleString::new(&chars);
-        let segs: Vec<Segment> = style_string.iter().collect();
-        assert_eq!(segs.len(), 1);
-        assert_eq!(segs[0].value, "abc");
-    }
-    #[test]
-    fn combine_style_string_multiple() {
-        let chars = vec![
-            StyledChar {
-                style: None,
-                value: 'a',
-            },
-            StyledChar {
-                style: None,
-                value: 'b',
-            },
-            StyledChar {
-                style: None,
-                value: 'c',
-            },
-            StyledChar {
-                style: Some(Color::Cyan.normal()),
-                value: '1',
-            },
-            StyledChar {
-                style: Some(Color::Cyan.normal()),
-                value: '2',
-            },
-            StyledChar {
-                style: Some(Color::Cyan.normal()),
-                value: '3',
-            },
-            StyledChar {
-                style: Some(Color::Cyan.bold()),
-                value: 'd',
-            },
-            StyledChar {
-                style: Some(Color::Cyan.bold()),
-                value: 'e',
-            },
-            StyledChar {
-                style: Some(Color::Cyan.bold()),
-                value: 'f',
-            },
-        ];
-        let style_string = StyleString::new(&chars);
-        let segs: Vec<Segment> = style_string.iter().collect();
-        assert_eq!(segs.len(), 3);
-        assert_eq!(segs[0].value, "abc");
-        assert_eq!(segs[1].value, "123");
-        assert_eq!(segs[2].value, "def");
-        assert_eq!(segs[0].style, None);
-        assert_eq!(segs[1].style, Some(Color::Cyan.normal()));
-        assert_eq!(segs[2].style, Some(Color::Cyan.bold()));
-    }
-    #[test]
-    fn combine_style_string_from_segments() {
-        let segments = vec![
-            Segment::new(None, "abc"),
-            Segment::new(Some(Color::Cyan.normal()), "123"),
-        ];
-        let style_string: StyleString = segments.iter().collect();
-        let segments_new: Vec<Segment> = style_string.iter().collect();
-        assert_eq!(segments[0].value, segments_new[0].value);
-        assert_eq!(segments[1].value, segments_new[1].value);
-    }
-    #[test]
     fn substituted_formatted_separator() {
         use ansi_term::ANSIStrings;
         let actual = ModuleRenderer::new("directory")
@@ -1950,16 +1779,58 @@ mod tests {
         .unwrap();
         assert_eq!(expected, actual);
     }
-
     #[test]
-    fn style_string_replacement() {
-        let source = "/some/long/network/path/workspace/a/b/c/dev";
-        let ss: StyleString = Segment::new(None, source).into();
-        let from = "/some/long/network/path";
-        let to = "/some/net";
-        let to_styled: StyleString = Segment::new(None, to).into();
-        let actual = ss.replace(from, &to_styled.chars).to_string();
-        let expected = source.replace(from, to);
+    fn substituted_regex_simple() {
+        use ansi_term::ANSIStrings;
+        let actual = ModuleRenderer::new("directory")
+            .path("foooooooo/bar")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitution_regexes]
+                "fo+" = "foo"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&[Color::Cyan.bold().paint("foo/bar"),])
+        ))
+        .unwrap();
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substituted_regex_backref() {
+        use ansi_term::ANSIStrings;
+        let actual = ModuleRenderer::new("directory")
+            .path("rocket-controls/src/loop/loop")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitution_regexes]
+                "(\\w)([^/]+)" = "[\\$1](red bold)[\\$2](red)"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = Some(format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Red.bold().paint("r"),
+                Color::Red.normal().paint("ocket-controls"),
+                Color::Cyan.bold().paint("/"),
+                Color::Red.bold().paint("s"),
+                Color::Red.normal().paint("rc"),
+                Color::Cyan.bold().paint("/"),
+                Color::Red.bold().paint("l"),
+                Color::Red.normal().paint("oop"),
+                Color::Cyan.bold().paint("/"),
+                Color::Red.bold().paint("l"),
+                Color::Red.normal().paint("oop"),
+            ])
+        ))
+        .unwrap();
         assert_eq!(expected, actual);
     }
 }
