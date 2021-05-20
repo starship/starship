@@ -94,8 +94,7 @@ fn get_terraform_version(version: &str) -> Option<String> {
             .trim_start_matches("Terraform ")
             .trim()
             .trim_start_matches('v')
-            .to_owned()
-            + " ",
+            .to_owned(),
     )
 }
 
@@ -110,7 +109,7 @@ mod tests {
     #[test]
     fn test_get_terraform_version_release() {
         let input = "Terraform v0.12.14";
-        assert_eq!(get_terraform_version(input), Some("0.12.14 ".to_string()));
+        assert_eq!(get_terraform_version(input), Some("0.12.14".to_string()));
     }
 
     #[test]
@@ -118,7 +117,7 @@ mod tests {
         let input = "Terraform v0.12.14-rc1";
         assert_eq!(
             get_terraform_version(input),
-            Some("0.12.14-rc1 ".to_string())
+            Some("0.12.14-rc1".to_string())
         );
     }
 
@@ -127,7 +126,7 @@ mod tests {
         let input = "Terraform v0.12.14-dev (cca89f74)";
         assert_eq!(
             get_terraform_version(input),
-            Some("0.12.14-dev (cca89f74) ".to_string())
+            Some("0.12.14-dev (cca89f74)".to_string())
         );
     }
 
@@ -139,7 +138,7 @@ Your version of Terraform is out of date! The latest version
 is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
 
 ";
-        assert_eq!(get_terraform_version(input), Some("0.12.13 ".to_string()));
+        assert_eq!(get_terraform_version(input), Some("0.12.13".to_string()));
     }
 
     #[test]
@@ -152,7 +151,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             .path(dir.path())
             .config(toml::toml! {
                 [terraform]
-                format = "via [$symbol$version$workspace]($style) "
+                format = "via [$symbol$version $workspace]($style) "
             })
             .collect();
 
@@ -177,7 +176,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             .path(dir.path())
             .config(toml::toml! {
                 [terraform]
-                format = "via [$symbol$version$workspace]($style) "
+                format = "via [$symbol$version $workspace]($style) "
             })
             .collect();
 

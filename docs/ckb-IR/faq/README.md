@@ -1,13 +1,13 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## ئەو ڕێکخستنە چییە لە GIF پێشاندانەکەدا بەکارهاتووە؟
 
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **ڕووکار**:‌ Minimal
+  - **شێوازی ڕەنگەکان**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **فۆنت**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **شێڵ**: [شێڵی Fish](https://fishshell.com/)
+  - **ڕێکخستن**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
 ## How do I get command completion as shown in the demo GIF?
