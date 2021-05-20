@@ -49,9 +49,9 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 ### Terminología
 
-**Módulo**: un componente en el promt que provee información basada en información contextual de tu sistema operativo. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Módulo**: un componente en el promt que provee información basada en información contextual de tu sistema operativo. Por ejemplo, el módulo "nodejs" muestra la versión de NodeJS que tienes actualmente instalada en tu ordenador, si el directorio actual es un proyecto NodeJS.
 
-**Variable**: subcomponentes más pequeños que contienen información proporcionada por el módulo. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Variable**: subcomponentes más pequeños que contienen información proporcionada por el módulo. Por ejemplo, la variable "version" en el módulo "nodejs" contiene la versión actual de NodeJS.
 
 Por convención, la mayoría de los módulos tienen un prefijo del color por defecto de la terminal (por ejemplo, `vía` en "nodejs") y un espacio vacío como sufijo.
 
@@ -146,7 +146,7 @@ Esta es la lista de opciones de configuración del prompt.
 | ----------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
 | `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                               |
 | `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea los archivos (en milisegundos).  |
-| `command_timeout` | `500`                              | Timeout for commands executed by starship (in milliseconds).                   |
+| `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por starship (en milisegundos).  |
 | `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
 
 ### Ejemplo
@@ -239,7 +239,7 @@ $character"""
 
 ## AWS
 
-El módulo `aws` muestra la región y el perfil actual de AWS. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
+El módulo `aws` muestra la región y el perfil actual de AWS. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`. Este módulo también muestra un temporizador de caducidad al usar credenciales temporales.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -249,24 +249,24 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Opciones
 
-| Opción              | Por defecto                                                          | Descripción                                                       |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                            |
-| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                |
-| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.      |
-| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                             |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
+| Opción              | Por defecto                                                          | Descripción                                                          |
+| ------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                               |
+| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                   |
+| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.         |
+| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                                |
+| `expiration_symbol` | `X`                                                                  | El símbolo mostrado cuando las credenciales temporales han caducado. |
+| `disabled`          | `false`                                                              | Desactiva el módulo AWS.                                             |
 
 ### Variables
 
-| Variable  | Ejemplo          | Descripción                                 |
-| --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | La región actual de AWS                     |
-| profile   | `astronauts`     | El perfil actual de AWS                     |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | Refleja el valor de la opción `symbol`      |
-| style\* |                  | Refleja el valor de la opción `style`       |
+| Variable  | Ejemplo          | Descripción                                              |
+| --------- | ---------------- | -------------------------------------------------------- |
+| region    | `ap-northeast-1` | La región actual de AWS                                  |
+| profile   | `astronauts`     | El perfil actual de AWS                                  |
+| duration  | `2h27m20s`       | La duración de la validez de las credenciales temporales |
+| symbol    |                  | Refleja el valor de la opción `symbol`                   |
+| style\* |                  | Refleja el valor de la opción `style`                    |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -341,7 +341,7 @@ discharging_symbol = "💀 "
 
 ### Indicador de batería
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Si no se provee ningún valor para `display`  El valor por defecto es el siguiente:
+La opción de configuración `display` se utiliza para definir cuándo debe mostrarse el indicador de batería (threshold), qué symbol se utilizaría (symbol), y cómo sería (style). Si no se provee ningún valor para `display`  El valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
@@ -387,7 +387,7 @@ El carácter te dirá si el último comando funcionó o no. Se puede hacer de do
 - Cambiando el color (`red`/`green`)
 - Cambiando la forma (`.`/`✖`)
 
-Por defecto sólo cambia el color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
 ::: advertencia `error_symbol` no es compatible con el intérprete de comandos Elvish. :::
 
@@ -598,7 +598,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `dart` muestra la versión instalada de [Dart](https://dart.dev/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con la extensión `.dart`
 - El directorio actual contiene un directorio `.dart_tool`
@@ -771,7 +771,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
+El módulo `dotnet` muestra la versión usada de .NET Core SDK para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. De lo contrario, el módulo muestra la última versión instalada del SDK.
 
 Por defecto, este módulo solo se mostrará en tu prompt cuando uno o más de de los siguientes archivos estén presentes en el directorio actual:
 
