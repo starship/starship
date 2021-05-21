@@ -99,7 +99,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -120,7 +120,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -131,7 +131,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Adicione ao final do arquivo `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
