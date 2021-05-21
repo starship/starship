@@ -256,7 +256,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `region_aliases`    |                                                                      | Tabela de aleases de regiões a serem exibidas, além do nome da AWS.  |
 | `style`             | `"bold yellow"`                                                      | O estilo do módulo.                                                  |
 | `expiration_symbol` | `X`                                                                  | O simbolo exibido quando as credenciais temporárias estão expiradas. |
-| `disabled`          | `false`                                                              | Disables the `AWS` module.                                           |
+| `disabled`          | `false`                                                              | Desabilita o modulo `AWS`.                                           |
 
 ### Variables
 
