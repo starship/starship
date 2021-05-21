@@ -1,9 +1,9 @@
-# 🚀 Advanced Installation
+# 🚀 Instalação Avançada
 
-To install starship, you need to do two things:
+Para instalar o Starship, você precisa de duas coisas:
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. O binário do **Starship** em seu computador
+1. Altere seu shell para usar o binário do starship como seu prompt alterando os scripts init
 
 For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
 
@@ -69,7 +69,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+então execute
 
 ```sh
 home-manager switch
