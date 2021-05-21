@@ -153,7 +153,7 @@ https://www.gnu.org/licenses/."#;
 
     fn check_r_render(dir: &tempfile::TempDir) {
         let actual = ModuleRenderer::new("rlang").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.0.5 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.1.0 ")));
         assert_eq!(expected, actual);
     }
 }
