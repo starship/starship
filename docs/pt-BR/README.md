@@ -44,7 +44,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Para atualizar o Starship de maneira manual, execute novamente o script acima. Isto irá substituir a versão atual sem alterar as configurações do Starship.
 
 
    #### Instalar via Gerenciador de Pacotes
