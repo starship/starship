@@ -87,7 +87,7 @@ symbol = "ﯣ "
 
 ## Seguimentos entre colchetes
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Está configuração altera o formato de todos os módulos integrados para que usem colchetes ao mostrar o seguimento ao invés de usar texto padrão do Starship ("via", "on", etc.).
 
 Antes:
 
