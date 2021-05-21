@@ -85,17 +85,17 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## Seguimentos entre colchetes
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
-Before:
+Antes:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![Captura de tela da configuração padrão do Starship](/presets/bracketed-segments-before.png)
 
-After:
+Depois:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![Captura de tela de segmentos predefinidos](/presets/bracketed-segments-after.png)
 
 ### Configuração
 
