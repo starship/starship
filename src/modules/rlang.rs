@@ -91,7 +91,7 @@ You are welcome to redistribute it under the terms of the
 GNU General Public License versions 2 or 3.
 For more information about these matters see
 https://www.gnu.org/licenses/."#;
-        assert_eq!(parse_version(r_v3), Some(String::from("3.6.3")));
+        assert_eq!(parse_version(r_v3), Some(String::from("4.1.0")));
     }
 
     #[test]
