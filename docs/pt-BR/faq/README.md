@@ -28,13 +28,13 @@ The way Starship is built, it should be possible to add support for virtually an
 Here's a small example getting Starship working with bash:
 
 ```sh
-# Get the status code from the last command executed
+# Recupera o status do último comando executado
 STATUS=$?
 
-# Get the number of jobs running.
+# Recupera o número de jobs que estão rodando.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Define a saída do prompt para ´starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
@@ -79,18 +79,18 @@ The first line should produce a [snake emoji](https://emojipedia.org/snake/), wh
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Como eu desinstalo o Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+O Starship é tão fácil de desinstalar tão como é para instalar.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Remova qualquer linha da configuração do seu shell (ex: `~/.bashrc`) usada para iniciar o Starship.
+1. Delete o binário do Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Se o Starship foi instalando usando algum gerenciador de pacotes, por favor consulte as documentações do mesmo para instruções de desinstalação.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Se o Starship foi instalado usando o script de instalação, o comando abaixo irá remover o binário:
 
 ```sh
-# Locate and delete the starship binary
+# Localiza e deleta o binario do starship
 sh -c 'rm "$(which starship)"'
 ```
