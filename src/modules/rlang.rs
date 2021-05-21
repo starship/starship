@@ -63,10 +63,11 @@ fn parse_version(r_version: &str) -> Option<String> {
     r_version
         .lines()
         // take first line
-        .next()
+        .next()?
         // split into ["R", "version", "3.6.3", "(2020-02-29)", ...]
+        .split_whitespace()
         // and pick version entry at index 2, i.e. "3.6.3".
-        .and_then(|s| s.split_whitespace().nth(2))
+        .nth(2)
         .map(ToString::to_string)
 }
 
@@ -75,20 +76,21 @@ mod tests {
     use super::parse_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
+    use std::fs;
     use std::fs::File;
     use std::io;
 
     #[test]
     fn test_parse_r_version() {
-        let r_v3 = r#"R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
-        Copyright (C) 2020 The R Foundation for Statistical Computing
-        Platform: x86_64-w64-mingw32/x64 (64-bit)
-        
-        R is free software and comes with ABSOLUTELY NO WARRANTY.
-        You are welcome to redistribute it under the terms of the
-        GNU General Public License versions 2 or 3.
-        For more information about these matters see
-        https://www.gnu.org/licenses/."#;
+        let r_v3 = r#"R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)\n
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+https://www.gnu.org/licenses/."#;
         assert_eq!(parse_version(r_v3), Some(String::from("3.6.3")));
     }
 
@@ -96,10 +98,62 @@ mod tests {
     fn folder_with_r_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("analysis.R"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
 
+    #[test]
+    fn folder_with_rd_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("analysis.Rd"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_rmd_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("analysis.Rmd"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_rproj_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("analysis.Rproj"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_rsx_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("analysis.Rsx"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_rprofile_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".Rprofile"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_rproj_user_folder() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rprofile = dir.path().join(".Rproj.user");
+        fs::create_dir_all(&rprofile)?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
+    fn check_r_render(dir: &tempfile::TempDir) {
         let actual = ModuleRenderer::new("rlang").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.0.5 ")));
         assert_eq!(expected, actual);
-        dir.close()
     }
 }

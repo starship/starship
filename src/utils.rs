@@ -171,10 +171,15 @@ active boot switches: -d:release\n",
         "R --version" => Some(CommandOutput {
             stdout: String::default(),
             stderr: String::from(
-                "\
-R version 4.0.5 (2021-03-31) -- \"Shake and Throw\"\n
-Copyright (C) 2021 The R Foundation for Statistical Computing\n
-Platform: x86_64-w64-mingw32/x64 (64-bit)\n"
+                r#"R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)\n
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+https://www.gnu.org/licenses/."#
             ),
         }),
         "red --version" => Some(CommandOutput {
