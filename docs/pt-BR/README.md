@@ -30,7 +30,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
 ### Pré-requisitos
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Uma fonte [Nerd Font](https://www.nerdfonts.com/) instalada e ativada em seu terminal.
 
 ### Instalação
 
@@ -99,7 +99,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
+   Adicione o comando a seguir ao final do arquivo `Microsoft.PowerShell_profile.ps1`. Você pode conferir a localização do arquivo consultando a varável `$PROFILE` no PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -118,7 +118,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: Atenção Apenas a versão v0.15 ou superior do elvish é suportada. :::
 
    Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
