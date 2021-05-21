@@ -77,7 +77,7 @@ echo -e "\xee\x82\xa0"
 
 A primeira linha deve produzir um [emoji de cobra](https://emojipedia.org/snake/), enquanto a segunda linha deve produzir um [um simbolo de bifurcação (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Se um dos símbolos acima falhar seu sistema ainda está configurado de forma errada. Infelizmente, obter a configuração de fontes correta as vezes é difícil. Usuários no Discord podem te ajudar. Se os dois símbolos acima exibirem de forma correta, mas você ainda continua sem visualizar no Starship, [registre um erro!](https://github.com/starship/starship/issues/new/choose)
 
 ## Como eu desinstalo o Starship?
 
