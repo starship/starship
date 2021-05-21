@@ -147,7 +147,7 @@
 
 ### Primeiros passos
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Nota:** Devido ao suporte a diversas plataformas, apenas um subconjunto de plataformas são demonstradas abaixo. Não achou a sua? Dê uma olhada nas [instruções extras das plataformas](https://starship.rs/installing/).
 
 1. Instale o binário do **starship**:
 
@@ -160,7 +160,7 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Para atualizar o Starship de maneira manual, execute novamente o script acima. Isto irá substituir a versão atual sem alterar as configurações do Starship.
 
 
    **Note** - The defaults of the install script can be overridden see the built-in help.
