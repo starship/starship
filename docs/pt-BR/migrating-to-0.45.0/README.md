@@ -1,4 +1,4 @@
-# Migrating to v0.45.0
+# Migrando para V0.45.0
 
 Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
 
@@ -241,7 +241,7 @@ behind = "⇣${count}"
 | ---------------- | ------------- |
 | `format`         | `time_format` |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [time]
@@ -250,14 +250,14 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Comandos Personalizados
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Remover Propriedade | Substituição |
+| ------------------- | ------------ |
+| `prefix`            | `format`     |
+| `suffix`            | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na configuração padrão**
 
 ```diff
 [custom.example]
