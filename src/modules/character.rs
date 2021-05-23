@@ -1,4 +1,5 @@
 use super::{Context, Module, RootModuleConfig, Shell};
+use crate::modules::username::is_root_user;
 use crate::configs::character::CharacterConfig;
 use crate::formatter::StringFormatter;
 
@@ -17,11 +18,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Root,
     }
 
-    let assumed_mode: ShellEditMode = if cfg!(target_os = "linux") && is_root_euid(&context) {
-        ShellEditMode::Root
-    } else {
-        ShellEditMode::Insert
-    };
+    let assumed_mode = ShellEditMode::Insert;
+
     // TODO: extend config to more modes
 
     let mut module = context.new_module("character");
@@ -33,6 +31,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let keymap_default = String::from("viins");
     let keymap = props.get("keymap").unwrap_or(&keymap_default);
     let exit_success = exit_code == "0";
+
+    let assumed_mode = match config.root_symbol_enabled && cfg!(target_os = "linux") && is_root_user() {
+        true => ShellEditMode::Root,
+        false => assumed_mode
+    };
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -55,9 +58,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
         ShellEditMode::Root => {
             if exit_success {
-                config.root_symbol
+                config.root_success_symbol
             } else {
-                config.error_symbol
+                config.root_error_symbol
             }
         }
     };
@@ -80,25 +83,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn is_root_euid(context: &Context) -> bool {
-    let root_uid: usize = 0;
-    let euid: Option<usize> = match context.exec_cmd("id", &["-u"]) {
-        Some(output) => match output.stdout.trim().parse() {
-            Ok(euid) => Some(euid),
-            Err(e) => {
-                log::warn!("Error parsing {} with error {}", output.stdout, e);
-                None
-            }
-        },
-        None => None,
-    };
-
-    match euid {
-        Some(euid) => euid == root_uid,
-        None => false,
-    }
 }
 
 #[cfg(test)]
@@ -145,7 +129,6 @@ mod test {
                 .config(toml::toml! {
                     [character]
                     success_symbol = "[➜](bold green)"
-                    root_symbol = "[➜](bold green)"
                     error_symbol = "[✖](bold red)"
                 })
                 .status(*status)
@@ -158,7 +141,6 @@ mod test {
             .config(toml::toml! {
                 [character]
                 success_symbol = "[➜](bold green)"
-                root_symbol = "[➜](bold green)"
                 error_symbol = "[✖](bold red)"
             })
             .status(0)

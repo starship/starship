@@ -74,7 +74,7 @@ fn is_root_user() -> bool {
 }
 
 #[cfg(not(target_os = "windows"))]
-fn is_root_user() -> bool {
+pub fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
 }
 

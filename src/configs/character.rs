@@ -9,19 +9,22 @@ pub struct CharacterConfig<'a> {
     pub success_symbol: &'a str,
     pub error_symbol: &'a str,
     pub vicmd_symbol: &'a str,
-    pub root_symbol: &'a str,
+    pub root_success_symbol: &'a str,
+    pub root_error_symbol: &'a str,
+    pub root_symbol_enabled: bool,
     pub disabled: bool,
 }
 
 impl<'a> Default for CharacterConfig<'a> {
     fn default() -> Self {
-        const DEFAULT_SUCCESS_SYMBOL: &str = "[❯](bold green)";
         CharacterConfig {
             format: "$symbol ",
-            success_symbol: DEFAULT_SUCCESS_SYMBOL,
+            success_symbol: "[❯](bold green)",
             error_symbol: "[❯](bold red)",
             vicmd_symbol: "[❮](bold green)",
-            root_symbol: DEFAULT_SUCCESS_SYMBOL,
+            root_success_symbol: "[#](bold green)",
+            root_error_symbol: "[#](bold red)",
+            root_symbol_enabled: false,
             disabled: false,
         }
     }
