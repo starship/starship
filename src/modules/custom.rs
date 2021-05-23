@@ -1,3 +1,4 @@
+use std::env;
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
@@ -30,6 +31,10 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     if !is_match {
         if let Some(when) = config.when {
             is_match = exec_when(when, &config.shell.0);
+        }
+
+        if let Some(so) = config.so {
+            is_match = so == env::consts::OS;
         }
 
         if !is_match {

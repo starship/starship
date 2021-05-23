@@ -17,6 +17,8 @@ pub struct CustomConfig<'a> {
     pub files: Vec<&'a str>,
     pub extensions: Vec<&'a str>,
     pub directories: Vec<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub so: Option<&'a str>,
 }
 
 impl<'a> Default for CustomConfig<'a> {
@@ -33,6 +35,7 @@ impl<'a> Default for CustomConfig<'a> {
             files: Vec::default(),
             extensions: Vec::default(),
             directories: Vec::default(),
+            so: None,
         }
     }
 }
