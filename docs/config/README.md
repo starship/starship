@@ -2974,6 +2974,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `directories`
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matchs with `so` field if defined.
 
 ::: tip
 
@@ -3010,7 +3011,8 @@ If you have an interesting example not covered there, feel free to share it ther
 | `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
 | `style`       | `"bold green"`                  | The style for the module.                                                                                                  |
 | `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| `disabled`    | `false`                         | Disables this `custom` module.                      |
+| `so`          |                                 | Operating System name on which the module will be shown. |
 
 ### Variables
 
