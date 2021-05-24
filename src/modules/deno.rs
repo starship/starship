@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let deno_version =
-                        get_deno_version(&context.exec_cmd("deno", &["-V"])?.stdout)?;
+                        parse_deno_version(&context.exec_cmd("deno", &["-V"])?.stdout)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &deno_version,
@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_deno_version(deno_version: &str) -> Option<String> {
+fn parse_deno_version(deno_version: &str) -> Option<String> {
     Some(
         deno_version
             // split into ["deno", "1.8.3"]
