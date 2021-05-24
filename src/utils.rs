@@ -23,6 +23,14 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     result
 }
 
+pub fn get_command_string_output(command: CommandOutput) -> String {
+    if command.stdout.is_empty() {
+        command.stderr
+    } else {
+        command.stdout
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct CommandOutput {
     pub stdout: String,
