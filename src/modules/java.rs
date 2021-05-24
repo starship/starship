@@ -1,8 +1,8 @@
+use super::{Context, Module, RootModuleConfig};
 use crate::configs::java::JavaConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::get_command_string_output;
 use std::path::PathBuf;
-
-use super::{Context, Module, RootModuleConfig};
 
 use regex::Regex;
 const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
@@ -36,8 +36,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let java_version_string = get_java_version(context)?;
-                    format_java_version(module.get_name(), &java_version_string, config.version_format)
-                        .map(Ok)
+                    format_java_version(
+                        module.get_name(),
+                        &java_version_string,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -69,11 +73,7 @@ fn get_java_version(context: &Context) -> Option<String> {
         .unwrap_or_else(|| String::from("java"));
 
     let output = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
-    let java_version_string = if output.stdout.is_empty() {
-        output.stderr
-    } else {
-        output.stdout
-    };
+    let java_version_string = get_command_string_output(output);
     Some(java_version_string)
 }
 
