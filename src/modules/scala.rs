@@ -3,6 +3,7 @@ use crate::formatter::StringFormatter;
 
 use super::{Context, Module, RootModuleConfig};
 use crate::formatter::VersionFormatter;
+use crate::utils::get_command_string_output;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("scala");
@@ -56,14 +57,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_scala_version(context: &Context) -> Option<String> {
-    let output = context.exec_cmd("scalac", &["-version"])?;
-    let scala_version = if output.stdout.is_empty() {
-        output.stderr
-    } else {
-        output.stdout
-    };
-
-    parse_scala_version(&scala_version)
+    let command = context.exec_cmd("scalac", &["-version"])?;
+    let scala_version_string = get_command_string_output(command);
+    parse_scala_version(&scala_version_string)
 }
 
 fn parse_scala_version(scala_version: &str) -> Option<String> {
