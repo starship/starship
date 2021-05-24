@@ -214,15 +214,15 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Símbolos de texto simples
 
-Esta predefinição altera os símbolos em texto simples. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+Esta predefinição altera os símbolos em texto simples. Se seu terminal/fonte não consegue renderizar os NerdFonts/emojis, talvez você pode tentar esta predefinição!
 
-Before (default setting with Fixedsys font):
+Antes( configuração padrão com fonte ajustada):
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![Captura de tela do padrão da configuração Starship com fonte Fixedsys ](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+Após(Símbolos de Textos Simples):
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![Captura de tela da predefinição de símbolos de texto simples](/presets/plain-text-symbols-after.png)
 
 ### Configuração
 
