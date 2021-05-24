@@ -17,7 +17,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     if result.is_err() {
         log::debug!("Error reading file: {:?}", result);
     } else {
-        log::trace!("File read sucessfully");
+        log::trace!("File read successfully");
     };
 
     result
@@ -591,5 +591,19 @@ mod tests {
             wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
             test
         );
+    }
+
+    #[test]
+    fn test_get_command_string_output() {
+        let case1 = CommandOutput {
+            stdout: String::from("stdout"),
+            stderr: String::from("stderr"),
+        };
+        assert_eq!(get_command_string_output(case1), "stdout");
+        let case2 = CommandOutput {
+            stdout: String::from(""),
+            stderr: String::from("stderr"),
+        };
+        assert_eq!(get_command_string_output(case2), "stderr");
     }
 }
