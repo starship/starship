@@ -33,8 +33,8 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             is_match = exec_when(when, &config.shell.0);
         }
 
-        if let Some(so) = config.so {
-            is_match = so == env::consts::OS;
+        if let Some(os) = config.os {
+            is_match = os == env::consts::OS;
         }
 
         if !is_match {
