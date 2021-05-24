@@ -23,7 +23,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let versions = Lazy::new(|| get_elixir_version(context));
+    let versions = Lazy::new(|| {
+        let output = context.exec_cmd("elixir", &["--version"])?.stdout;
+
+        parse_elixir_version(&output)
+    });
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -67,12 +71,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn get_elixir_version(context: &Context) -> Option<(String, String)> {
-    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
-
-    parse_elixir_version(&output)
 }
 
 fn parse_elixir_version(version: &str) -> Option<(String, String)> {
