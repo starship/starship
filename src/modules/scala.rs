@@ -58,12 +58,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_scala_version(context: &Context) -> Option<String> {
     let command = context.exec_cmd("scalac", &["-version"])?;
-    let scala_version = get_command_string_output(command);
-    parse_scala_version(&scala_version)
+    let scala_version_string = get_command_string_output(command);
+
+    parse_scala_version(&scala_version_string)
 }
 
-fn parse_scala_version(scala_version: &str) -> Option<String> {
-    let version = scala_version
+fn parse_scala_version(scala_version_string: &str) -> Option<String> {
+    let version = scala_version_string
         // split into ["Scala", "compiler", "version", "2.13.5", "--", ...]
         .split_whitespace()
         // take "2.13.5"
