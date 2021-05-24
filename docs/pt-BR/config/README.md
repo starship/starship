@@ -908,7 +908,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## Variáveis de Ambiente
 
 The `env_var` module displays the current value of a selected environment variable. The module will be shown only if any of the following conditions are met:
 
@@ -2412,7 +2412,7 @@ format = "$shlvl level(s) down"
 threshold = 3
 ```
 
-## Singularity
+## Singularidade
 
 The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
 
@@ -2599,7 +2599,7 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Time
+## Horário
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
