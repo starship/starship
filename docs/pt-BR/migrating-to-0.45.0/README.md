@@ -6,11 +6,11 @@ Este guia tem a intenção de conduzi-lo através das grandes mudanças.
 
 ## `prompt_order` foi substituido por um formato padrão `format`
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Antes da v0.45.0, `prompt_order` aceitaria um array de módulos com a ordem em que seriam renderizados pelo Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 aceita um valor `format`, permitindo uma customização do prompt fora dos módulos.
 
-**Example pre-v0.45.0 configuration**
+**Exemplo de configuração pre-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Exemplo de configuração v0.45.0**
 
 ```toml
 format = """\
@@ -58,14 +58,14 @@ Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in ord
 
 Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
-**Example pre-v0.45.0 configuration**
+**Exemplo de configuração pre-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Exemplo de configuração v0.45.0**
 
 ```toml
 [cmd_duration]
@@ -78,7 +78,7 @@ format = "took [$duration]($style) "
 
 #### Caractere
 
-| Removed Property        | Replacement      |
+| Propriedades Removidas  | Substituição     |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
@@ -113,9 +113,9 @@ error_symbol = "[✖](bold red)"
 
 #### Tempo de execução do comando
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -127,9 +127,9 @@ error_symbol = "[✖](bold red)"
 
 #### Diretório
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -141,10 +141,10 @@ error_symbol = "[✖](bold red)"
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
+| `suffix`               | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -157,10 +157,10 @@ error_symbol = "[✖](bold red)"
 
 #### Git commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
+| `suffix`               | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -173,11 +173,11 @@ error_symbol = "[✖](bold red)"
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
+| `suffix`               | `format`     |
+| `show_sync_count`      | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -204,10 +204,10 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
+| `suffix`               | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -220,11 +220,11 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `label`                | `format`     |
+| `prefix`               | `format`     |
+| `suffix`               | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -237,9 +237,9 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Propriedades Removidas | Substituição  |
+| ---------------------- | ------------- |
+| `format`               | `time_format` |
 
 **Alterações na Configuração Padrão**
 
