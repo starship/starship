@@ -52,9 +52,9 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Modulo `prefix` e `suffix` foram substituídos por `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Antes da v0.45.0, alguns módulos aceitavam `prefix` e/ou `suffix` com o objetivo de estilizar a forma que o modulo seria renderizado.
 
 Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
@@ -74,7 +74,7 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Módulos Afetados
 
 #### Caractere
 
@@ -85,7 +85,7 @@ format = "took [$duration]($style) "
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [character]
@@ -98,18 +98,18 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Anteriormente, a propriedade `use_symbol_for_status` era usada para configurar o prompt para exibir o `error_symbol` quando o ultimo comando resultou em um status diferente de zero.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+Com a versão v0.45.0, nós agora sempre usamos `error_symbol` após status diferentes de zero, unificando as propriedades `use_symbol_for_status` e `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Para configurar o prompt para usar a configuração antiga `use_symbol_for_status = true`, adicione o seguinte em seu arquivo de configuração:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*Nota:* O elemento `charactere` adiciona automaticamente um espaço depois do mesmo, portanto ao contrario strings `format`, nós não adicionamos o espaço nos exemplos acima.
 
 #### Tempo de execução do comando
 
@@ -117,7 +117,7 @@ error_symbol = "[✖](bold red)"
 | ---------------------- | ------------ |
 | `prefix`               | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [cmd_duration]
@@ -131,7 +131,7 @@ error_symbol = "[✖](bold red)"
 | ---------------------- | ------------ |
 | `prefix`               | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [directory]
@@ -139,14 +139,14 @@ error_symbol = "[✖](bold red)"
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### Variáveis de Ambiente
 
 | Propriedades Removidas | Substituição |
 | ---------------------- | ------------ |
 | `prefix`               | `format`     |
 | `suffix`               | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [env_var]
@@ -162,7 +162,7 @@ error_symbol = "[✖](bold red)"
 | `prefix`               | `format`     |
 | `suffix`               | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [git_commit]
@@ -179,7 +179,7 @@ error_symbol = "[✖](bold red)"
 | `suffix`               | `format`     |
 | `show_sync_count`      | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [git_status]
@@ -209,7 +209,7 @@ behind = "⇣${count}"
 | `prefix`               | `format`     |
 | `suffix`               | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [hostname]
@@ -218,7 +218,7 @@ behind = "⇣${count}"
 ++ format = "[$hostname]($style) in "
 ```
 
-#### Singularity
+#### Singularidade
 
 | Propriedades Removidas | Substituição |
 | ---------------------- | ------------ |
@@ -226,7 +226,7 @@ behind = "⇣${count}"
 | `prefix`               | `format`     |
 | `suffix`               | `format`     |
 
-**Changes to the Default Configuration**
+**Alterações na Configuração Padrão**
 
 ```diff
 [singularity]
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### Horário
 
 | Propriedades Removidas | Substituição  |
 | ---------------------- | ------------- |
