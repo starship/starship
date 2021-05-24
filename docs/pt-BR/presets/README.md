@@ -2,7 +2,7 @@
 
 Aqui tem uma coleção de predefinições de configuração criadas pela comunidade de Starship. Se você tem uma predefinição para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
 
-## Nerd Font Symbols
+## Símbolos Nerd Font
 
 Essa predefinição não altera nada exceto os símbolos usados para cada módulo. Se você não gosta de emojis, isso pode chamar sua atenção!
 
@@ -212,9 +212,9 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## Símbolos de texto simples
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+Esta predefinição altera os símbolos em texto simples. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
 
 Before (default setting with Fixedsys font):
 
