@@ -5,6 +5,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
+use crate::utils::get_command_string_output;
 
 /// Creates a module with the current Python version and, if active, virtual environment.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -73,13 +74,7 @@ fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String
         .0
         .iter()
         .find_map(|binary| context.exec_cmd(binary, &["--version"]))
-        .map(|output| {
-            if output.stdout.is_empty() {
-                output.stderr
-            } else {
-                output.stdout
-            }
-        })?;
+        .map(|command| get_command_string_output(command))?;
 
     format_python_version(&version, config.version_format)
 }
