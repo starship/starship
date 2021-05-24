@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let crystal_version =
-                        get_crystal_version(&context.exec_cmd("crystal", &["--version"])?.stdout)?;
+                        parse_crystal_version(&context.exec_cmd("crystal", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &crystal_version,
@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_crystal_version(crystal_version: &str) -> Option<String> {
+fn parse_crystal_version(crystal_version: &str) -> Option<String> {
     Some(
         crystal_version
             // split into ["Crystal", "0.35.1", ...]
