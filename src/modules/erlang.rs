@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let erlang_version = get_erlang_version(context)?;
+                    let erlang_version = parse_erlang_version(context)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &erlang_version,
@@ -56,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_erlang_version(context: &Context) -> Option<String> {
+fn parse_erlang_version(context: &Context) -> Option<String> {
     Some(context.exec_cmd(
         "erl",
         &[
