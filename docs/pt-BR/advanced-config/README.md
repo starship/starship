@@ -1,4 +1,4 @@
-# Advanced Configuration
+# Configuração avançada
 
 Ainda que Starship se`ja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo <code>starship.toml`. Esta página detalha algumas das configurações mais avançadas usadas em starship.
 
