@@ -32,8 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let crystal_version =
-                        parse_crystal_version(&context.exec_cmd("crystal", &["--version"])?.stdout)?;
+                    let crystal_version = parse_crystal_version(
+                        &context.exec_cmd("crystal", &["--version"])?.stdout,
+                    )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &crystal_version,
