@@ -43,6 +43,7 @@ mod php;
 mod purescript;
 mod python;
 mod red;
+mod rlang;
 mod ruby;
 mod rust;
 mod scala;
@@ -118,6 +119,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "php" => php::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
+            "rlang" => rlang::module(context),
             "red" => red::module(context),
             "ruby" => ruby::module(context),
             "rust" => rust::module(context),
@@ -201,6 +203,7 @@ pub fn description(module: &str) -> &'static str {
         "php" => "The currently installed version of PHP",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "rlang" => "The currently installed version of R",
         "red" => "The currently installed version of Red",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
