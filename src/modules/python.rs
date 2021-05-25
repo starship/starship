@@ -74,7 +74,7 @@ fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String
         .0
         .iter()
         .find_map(|binary| context.exec_cmd(binary, &["--version"]))
-        .map(|command| get_command_string_output(command))?;
+        .map(get_command_string_output)?;
 
     format_python_version(&version, config.version_format)
 }
