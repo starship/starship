@@ -2176,9 +2176,51 @@ detect_extensions = []
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
+## R
+
+The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
+
+### Опции
+
+| Параметр            | По умолчанию                         | Описание                                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                            |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
+| `style`             | `"blue bold"`                        | Стиль модуля.                                                             |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                               |
+| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                |
+| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
+| `disabled`          | `false`                              | Disables the `r` module.                                                  |
+
+### Переменные
+
+| Переменная | Пример        | Описание                             |
+| ---------- | ------------- | ------------------------------------ |
+| version    | `v4.0.5`      | The version of `R`                   |
+| symbol     |               | Отражает значение параметра `symbol` |
+| style      | `"blue bold"` | Отражает значение параметра `style`  |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[rlang]
+format = "with [📐 $version](blue bold) "
+```
+
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2216,11 +2258,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Текущий каталог содержит файл `Gemfile`
-- Текущий каталог содержит файл `.ruby-version`
-- Текущий каталог содержит файл `.rb`
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
+- The current directory contains a `.rb` file
 
 ### Опции
 
@@ -2233,7 +2275,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `"bold red"`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Отключает модуль `ruby`.                                                  |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
 ### Переменные
 
@@ -2256,10 +2298,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Текущий каталог содержит файл `Cargo.toml`
-- Текущий каталог содержит файл с расширением `.rs`
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Опции
 
@@ -2272,7 +2314,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `"bold red"`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Отключает модуль `rust`.                                                  |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
 ### Переменные
 
@@ -2503,7 +2545,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Модуль будет показан, если любое из следующих условий соблюдено:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2552,7 +2594,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- Текущий каталог содержит папку `.terraform`
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Опции
@@ -2566,7 +2608,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Отключает модуль `terraform`.                                             |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
 ### Переменные
 
@@ -2601,7 +2643,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Время
 
-Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2611,23 +2653,23 @@ format = "[🏎💨 $workspace]($style) "
 
 ### Опции
 
-| Параметр          | По умолчанию            | Описание                                                                                                                                                      |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                                             |
-| `use_12hr`        | `false`                 | Включить 12-часовое форматирование                                                                                                                            |
-| `time_format`     | см. ниже                | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.                             |
-| `style`           | `"bold yellow"`         | Стиль модуля времени                                                                                                                                          |
-| `utc_time_offset` | `"local"`               | Устанавливает смещение UTC. Range from -24 &lt; x &lt; 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
-| `disabled`        | `true`                  | Отключает модуль `time`.                                                                                                                                      |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                         |
+| Параметр          | По умолчанию            | Описание                                                                                                                           |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Иначе по умолчанию используется `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Переменные
 
 | Переменная | Пример     | Описание                            |
 | ---------- | ---------- | ----------------------------------- |
-| время      | `13:08:10` | The current time.                   |
+| time       | `13:08:10` | The current time.                   |
 | style\*  |            | Отражает значение параметра `style` |
 
 \*: Эта переменная может использоваться только в качестве части строки style
@@ -2645,14 +2687,14 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Имя пользователя
+## Username
 
-Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- Текущий пользователь - root
-- Текущий пользователь отличается от залогиненного
-- Пользователь подключен к SSH-сессии
-- Переменная `show_always` равна true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -2662,13 +2704,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Опции
 
-| Параметр      | По умолчанию            | Описание                                                |
-| ------------- | ----------------------- | ------------------------------------------------------- |
-| `style_root`  | `"bold red"`            | Стиль, используемый для пользователя root.              |
-| `style_user`  | `"bold yellow"`         | Стиль, используемый для всех пользователей, кроме root. |
-| `format`      | `"[$user]($style) in "` | Формат модуля.                                          |
-| `show_always` | `false`                 | Всегда показывать модуль `username`.                    |
-| `disabled`    | `false`                 | Отключает модуль `username`.                            |
+| Параметр      | По умолчанию            | Описание                              |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | Формат модуля.                        |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Переменные
 
@@ -2796,7 +2838,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
