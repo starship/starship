@@ -9,8 +9,6 @@ use regex::Regex;
 use serde_json as json;
 
 /// Creates a module with the current package version
-///
-/// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
