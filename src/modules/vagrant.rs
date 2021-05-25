@@ -32,8 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let vagrant_version =
-                        parse_vagrant_version(&context.exec_cmd("vagrant", &["--version"])?.stdout)?;
+                    let vagrant_version = parse_vagrant_version(
+                        &context.exec_cmd("vagrant", &["--version"])?.stdout,
+                    )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &vagrant_version,

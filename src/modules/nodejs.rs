@@ -58,7 +58,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let version = nodejs_version.deref().as_ref()?.trim_start_matches('v').trim();
+                    let version = nodejs_version
+                        .deref()
+                        .as_ref()?
+                        .trim_start_matches('v')
+                        .trim();
 
                     VersionFormatter::format_module_version(
                         module.get_name(),
