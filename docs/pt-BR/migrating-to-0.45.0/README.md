@@ -191,9 +191,9 @@ error_symbol = "[✖](bold red)"
 
 Anteriormente, a propriedade `show_sync_count` era usada para configurar o prompt para exibir o numero de commits que o branch estava a frente ou atrás do branch remoto.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+Com a versão v0.45.0, isto foi substituído em propriedades separadas, `ahead`, `behind`, e `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Para configurar o prompt para utilizar a configuração antiga, altere a seguinte propriedade no seu arquivo de configuração: `show_sync_count = true`:
 
 ```toml
 [git_status]
