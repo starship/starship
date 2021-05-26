@@ -56,7 +56,7 @@ format = """\
 
 Antes da v0.45.0, alguns módulos aceitavam `prefix` e/ou `suffix` com o objetivo de estilizar a forma que o modulo seria renderizado.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 aceita um valor `format`, que permite customizar como o modulo será renderizado. Em vez de definir um sufix e um prefix como variáveis de contexto, agora elas são substituídas por uma string que será a representação de como será a renderização do módulo.
 
 **Exemplo de configuração pre-v0.45.0**
 
@@ -189,7 +189,7 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Anteriormente, a propriedade `show_sync_count` era usada para configurar o prompt para exibir o numero de commits que o branch estava a frente ou atrás do branch remoto.
 
 With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
 
