@@ -30,7 +30,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let r_version = get_r_version(context)?;
+                    let r_version_string = context.exec_cmd("R", &["--version"])?.stderr;
+                    let r_version = parse_r_version(&r_version_string)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &r_version,
@@ -54,12 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_r_version(context: &Context) -> Option<String> {
-    let r_version = context.exec_cmd("R", &["--version"])?.stderr;
-    parse_version(&r_version)
-}
-
-fn parse_version(r_version: &str) -> Option<String> {
+fn parse_r_version(r_version: &str) -> Option<String> {
     r_version
         .lines()
         // take first line
@@ -73,7 +69,7 @@ fn parse_version(r_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use super::parse_version;
+    use super::parse_r_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs;
@@ -91,7 +87,7 @@ You are welcome to redistribute it under the terms of the
 GNU General Public License versions 2 or 3.
 For more information about these matters see
 https://www.gnu.org/licenses/."#;
-        assert_eq!(parse_version(r_v3), Some(String::from("4.1.0")));
+        assert_eq!(parse_r_version(r_v3), Some(String::from("4.1.0")));
     }
 
     #[test]
