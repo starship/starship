@@ -16,12 +16,12 @@ O suporte de autocompletar, é provido pelo shell que você escolher. No caso da
 
 ## De forma geral `format` e `<module>.disabled` fazem a mesma coisa?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Sim, ambos podem ser usados para desativar os mulos no prompt. Se seu objetivo geral é desativar modulos, `<module>.disabled` é o mais recomendado pelas seguintes razões:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
-- Newly created modules will be added to the prompt as Starship is updated
+- Desabilitar módulos é mais explícito do que omiti-lo através do `format`
+- Modulos recém-criados serão adicionados quando o Starship for atualizado
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## As documentações dizem que o Starship é cross-shell. Porque minha shell preferida não é suportada?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
