@@ -1920,7 +1920,7 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Package Version
+## Version du package
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
@@ -2018,16 +2018,16 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Options
 
-| Option              | Défaut                               | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                     |
-| `detect_extensions` | `["php"]`                            | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["composer.json", ".php-version"]`  | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
-| `style`             | `"147 bold"`                         | Le style du module.                                                       |
-| `disabled`          | `false`                              | Disables the `php` module.                                                |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                                      |
+| `detect_extensions` | `["php"]`                            | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["composer.json", ".php-version"]`  | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"147 bold"`                         | Le style du module.                                                                        |
+| `disabled`          | `false`                              | Disables the `php` module.                                                                 |
 
 ### Variables
 
@@ -2153,7 +2153,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# N'utilisez que le binaire `python3` pour obtenir la version.
 python_binary = "python3"
 ```
 
@@ -2161,7 +2161,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Ne pas déclencher pour les fichiers avec l'extension py
 detect_extensions = []
 ```
 
@@ -2169,10 +2169,11 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Affiche la version de python depuis l'intérieur d'un venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Notez que cela ne fonctionnera que lorsque le venv est à l'intérieur du projet,
+# et uniquement lorsque vous vous situez dans le répertoire contenant le dossier du venv
+# mais peut-être que c'est suffisant?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
