@@ -241,32 +241,32 @@ $character"""
 
 Le module `aws` affiche la région et le profil AWS courant. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`. Ce module affiche également un minuteur d'expiration lorsque vous utilisez des identifiants temporaires.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+Lorsque vous utilisez [aws-vault](https://github.com/99designs/aws-vault) le profil est lu à partir de la variable d'environnement `AWS_VAULT` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWS_SESSION_EXPIRATION`.
 
 Lorsque vous utilisez [awsu](https://github.com/kreuzwerker/awsu) le profil est lu depuis la variable d'environnement `AWSU_PROFILE`.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
+Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la variable d'environnement `AWSUME_PROFILE` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWSUME_EXPIRATION`.
 
 ### Options
 
-| Option              | Default                                                              | Description                                                       |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                 |
-| `symbol`            | `"☁️ "`                                                              | Le symbole affiché avant le profil AWS actuel.                    |
-| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.          |
-| `style`             | `"bold yellow"`                                                      | Le style du module.                                               |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
+| Option              | Default                                                              | Description                                                         |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                   |
+| `symbol`            | `"☁️ "`                                                              | Le symbole affiché avant le profil AWS actuel.                      |
+| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.            |
+| `style`             | `"bold yellow"`                                                      | Le style du module.                                                 |
+| `expiration_symbol` | `X`                                                                  | Le symbole affiché lorsque les identifiants temporaires ont expiré. |
+| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                          |
 
 ### Variables
 
-| Variable  | Exemple          | Description                                 |
-| --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | La région AWS actuelle                      |
-| profile   | `astronauts`     | Le profil AWS actuel                        |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | Reflète la valeur de l'option `symbol`      |
-| style\* |                  | Reflète la valeur de l'option `style`       |
+| Variable  | Exemple          | Description                                    |
+| --------- | ---------------- | ---------------------------------------------- |
+| region    | `ap-northeast-1` | La région AWS actuelle                         |
+| profile   | `astronauts`     | Le profil AWS actuel                           |
+| duration  | `2h27m20s`       | Durée de validité des identifiants temporaires |
+| symbol    |                  | Reflète la valeur de l'option `symbol`         |
+| style\* |                  | Reflète la valeur de l'option `style`          |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -1166,25 +1166,25 @@ Le module `git_status` affiche des symboles représentant l'état du dépôt dan
 
 ### Options
 
-| Option       | Défaut                                          | Description                         |
-| ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
-| `behind`     | `"⇣"`                                           | The format of `behind`              |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold green"`                                  | Le style du module.                 |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| Option       | Défaut                                          | Description                                 |
+| ------------ | ----------------------------------------------- | ------------------------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status` |
+| `conflicted` | `"="`                                           | Cette branche a des conflits de fusion.     |
+| `ahead`      | `"⇡"`                                           | Le format de `ahead`                        |
+| `behind`     | `"⇣"`                                           | Le format de `behind`                       |
+| `diverged`   | `"⇕"`                                           | Le format de `diverged`                     |
+| `untracked`  | `"?"`                                           | Le format de `untracked`                    |
+| `stashed`    | `"$"`                                           | Le format de `stashed`                      |
+| `modified`   | `"!"`                                           | Le format de `modified`                     |
+| `staged`     | `"+"`                                           | Le format de `staged`                       |
+| `renamed`    | `"»"`                                           | Le format de `renamed`                      |
+| `deleted`    | `"✘"`                                           | Le format de `deleted`                      |
+| `style`      | `"bold green"`                                  | Le style du module.                         |
+| `disabled`   | `false`                                         | Désactive le module `git_status`.           |
 
 ### Variables
 
-The following variables can be used in `format`:
+Les variables suivantes peuvent être utilisées pour la valeur de `format`:
 
 | Variable       | Description                                                                                   |
 | -------------- | --------------------------------------------------------------------------------------------- |
@@ -1201,18 +1201,18 @@ The following variables can be used in `format`:
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
-The following variables can be used in `diverged`:
+Les variables suivantes peuvent être utilisées pour la valeur de `diverged`:
 
 | Variable       | Description                                    |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Les variables suivantes peuvent êtres utilisées dans `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` et `deleted`:
 
-| Variable | Description              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variable | Description                             |
+| -------- | --------------------------------------- |
+| `count`  | Affiche le nombre de fichiers concernés |
 
 ### Exemple
 
@@ -1232,7 +1232,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Afficher le nombre de commits en avance/en retard par rapport à la branche suivie
 
 ```toml
 # ~/.config/starship.toml
@@ -1245,13 +1245,13 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of [Golang](https://golang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `golang` montre la version actuellement installée de [Golang](https://golang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `go.mod`
 - Le répertoire courant contient un fichier `go.sum`
 - Le répertoire courant contient un fichier `glide.yaml`
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- Le répertoire courant contient un fichier `Gopkg.yml`
+- Le répertoire courant contient un fichier `Gopkg.lock`
 - The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
