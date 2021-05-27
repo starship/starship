@@ -2497,7 +2497,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: warning Ce module n'est pas supporté avec elvish. :::
 
 ### Options
 
@@ -2688,7 +2688,7 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## Nom d'utilisateur
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
@@ -2820,11 +2820,11 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Exemple                                     | Description                            |
-| --------- | ------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
-| symbol    |                                             | Reflète la valeur de l'option `symbol` |
-| style\* | `black bold dimmed`                         | Reflète la valeur de l'option `style`  |
+| Variable  | Exemple                                         | Description                            |
+| --------- | ----------------------------------------------- | -------------------------------------- |
+| repo      | `dotfiles` si dans un dépôt VCSH nommé dotfiles | The active repository name             |
+| symbol    |                                                 | Reflète la valeur de l'option `symbol` |
+| style\* | `black bold dimmed`                             | Reflète la valeur de l'option `style`  |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -2965,8 +2965,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters
+command = "echo foo"  # affiche la sortie de la commande
+files = ["foo"]       # ajoute un filtre
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
