@@ -85,17 +85,17 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Segments entre accolades
+## Segments entre crochets
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Cette configuration modifie le format de tous les modules intégrés pour afficher leur segment entre crochets au lieu d'utiliser le label par défaut de Starship ("via", "sur", etc.).
 
-Before:
+Avant:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![Capture d'écran de la configuration par défaut de Starship](/presets/bracketed-segments-before.png)
 
-After:
+Après:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![Capture d'écran de la configuration Segments entre crochets](/presets/bracketed-segments-after.png)
 
 ### Configuration
 
@@ -212,17 +212,17 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## Texte uniquement
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+Cette configuration change les symboles en texte brut. Si votre terminal/police ne peuvent pas afficher les émoticônes ou les symboles NerdFonts, vous pouvez peut-être essayer cette configuration !
 
-Before (default setting with Fixedsys font):
+Avant (réglage par défaut avec la police Fixedsys):
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![Capture d'écran de la configuration Starship par défaut avec la police Fixedsys](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+Après (Texte uniquement):
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![Capture d'écran de la configuration Texte uniquement](/presets/plain-text-symbols-after.png)
 
 ### Configuration
 
