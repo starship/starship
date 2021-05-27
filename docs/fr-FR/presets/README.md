@@ -85,7 +85,7 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## Segments entre accolades
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
