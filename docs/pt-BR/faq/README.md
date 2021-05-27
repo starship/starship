@@ -23,7 +23,7 @@ Sim, ambos podem ser usados para desativar os mulos no prompt. Se seu objetivo g
 
 ## As documentações dizem que o Starship é cross-shell. Porque minha shell preferida não é suportada?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+A forma em que o Starship foi construído, faz com que ele seja compatível com qualquer shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
 Here's a small example getting Starship working with bash:
 
