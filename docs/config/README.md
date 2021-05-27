@@ -419,7 +419,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`vicmd_symbol` is not supported for Bash's vi mode.
+`vicmd_symbol` is only supported in fish and zsh. 
 
 :::
 
