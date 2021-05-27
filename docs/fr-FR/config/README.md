@@ -1186,27 +1186,27 @@ Le module `git_status` affiche des symboles représentant l'état du dépôt dan
 
 Les variables suivantes peuvent être utilisées pour la valeur de `format`:
 
-| Variable       | Description                                                                                   |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
-| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*      | Reflète la valeur de l'option `style`                                                         |
+| Variable       | Description                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`               |
+| `ahead_behind` | Affiche la chaîne formatée de `diverged`, `ahead` ou `behind` selon l'état actuel du dépôt   |
+| `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                   |
+| `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.     |
+| `stashed`      | Affiche `stashed` lorsqu'une remise existe pour le dépôt local.                              |
+| `modified`     | Affiche `modified` lorsqu'il y a des fichiers modifiés dans le répertoire de travail.        |
+| `staged`       | Affiche `staged` lorsqu'un nouveau fichier a été ajouté à la zone de validation.             |
+| `renamed`      | Affiche `renamed` lorsqu'un fichier renommé a été ajouté à la zone de validation.            |
+| `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation. |
+| style\*      | Reflète la valeur de l'option `style`                                                        |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
 Les variables suivantes peuvent être utilisées pour la valeur de `diverged`:
 
-| Variable       | Description                                    |
-| -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| Variable       | Description                                       |
+| -------------- | ------------------------------------------------- |
+| `ahead_count`  | Nombre de commits en avance sur la branche suivie |
+| `behind_count` | Nombre de commits en retard sur la branche suivie |
 
 Les variables suivantes peuvent êtres utilisées dans `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` et `deleted`:
 
@@ -1252,28 +1252,28 @@ Le module `golang` montre la version actuellement installée de [Golang](https:/
 - Le répertoire courant contient un fichier `glide.yaml`
 - Le répertoire courant contient un fichier `Gopkg.yml`
 - Le répertoire courant contient un fichier `Gopkg.lock`
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Le répertoire courant contient un fichier `.go-version`
+- Le répertoire courant contient un répertoire `Godeps`
+- Le répertoire actuel contient un fichier avec l'extension `.go`
 
 ### Options
 
-| Option              | Défaut                                                                         | Description                                                               |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `["go"]`                                                                       | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `["Godeps"]`                                                                   | Quels dossiers devraient activer ce module.                               |
-| `style`             | `"bold cyan"`                                                                  | Le style du module.                                                       |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                                             |
+| Option              | Défaut                                                                         | Description                                                                                |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                                                                    | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                         | Une chaîne de caractères représentant le symbole de Go.                                    |
+| `detect_extensions` | `["go"]`                                                                       | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `["Godeps"]`                                                                   | Quels dossiers devraient activer ce module.                                                |
+| `style`             | `"bold cyan"`                                                                  | Le style du module.                                                                        |
+| `disabled`          | `false`                                                                        | Désactive le module `golang`.                                                              |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | The version of `go`                    |
+| version   | `v1.12.1` | La version de `go`                     |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -1290,29 +1290,29 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `helm` montre la version actuellement installée de [Helm](https://helm.sh/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `helmfile.yaml`
-- The current directory contains a `Chart.yaml` file
+- Le répertoire courant contient un fichier `Chart.yml`
 
 ### Options
 
-| Option              | Défaut                               | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
-| `style`             | `"bold white"`                       | Le style du module.                                                       |
-| `disabled`          | `false`                              | Disables the `helm` module.                                               |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `symbol`            | `"⎈ "`                               | Une chaîne de format représentant le symbole de Helm.                                      |
+| `style`             | `"bold white"`                       | Le style du module.                                                                        |
+| `disabled`          | `false`                              | Désactive le module `helm`.                                                                |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v3.1.1` | The version of `helm`                  |
+| version   | `v3.1.1` | La version de `helm`                   |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -1329,17 +1329,17 @@ format = "via [⎈ $version](bold white) "
 
 ## Nom d'hôte
 
-The `hostname` module shows the system hostname.
+Le module `hostname` affiche le nom d'hôte du système.
 
 ### Options
 
-| Option     | Défaut                      | Description                                                                                                                          |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | Format du module.                                                                                                                    |
-| `style`    | `"bold dimmed green"`       | Le style du module.                                                                                                                  |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Option     | Défaut                      | Description                                                                                                                                             |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Afficher uniquement le nom d'hôte lorsque vous êtes connecté à une session SSH.                                                                         |
+| `trim_at`  | `"."`                       | Chaîne à laquelle le nom d'hôte est coupé, après la première correspondance. `"."` s'arrêtera après le premier point. `""` désactivera toute troncature |
+| `format`   | `"[$hostname]($style) in "` | Format du module.                                                                                                                                       |
+| `style`    | `"bold dimmed green"`       | Le style du module.                                                                                                                                     |
+| `disabled` | `false`                     | Désactive le module `hostname`.                                                                                                                         |
 
 ### Variables
 
