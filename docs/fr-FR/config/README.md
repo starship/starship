@@ -1364,23 +1364,23 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `java` affiche la version actuellement installée de [Java](https://www.oracle.com/java/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- Le répertoire actuel contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, ou `build.boot`
+- Le répertoire actuel contient un fichier avec l'extension `.java`, `.class`, `. gradle`, `.jar`, `.clj`, ou `.cljc`
 
 ### Options
 
-| Option              | Défaut                                                                                                    | Description                                                               |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                                                                                      | Quels dossiers devraient activer ce module.                               |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
-| `style`             | `"red dimmed"`                                                                                            | Le style du module.                                                       |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
+| Option              | Défaut                                                                                                    | Description                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                                                                                      | Quels dossiers devraient activer ce module.                                                |
+| `symbol`            | `"☕ "`                                                                                                    | Une chaîne de caractères représentant le symbole de Java                                   |
+| `style`             | `"red dimmed"`                                                                                            | Le style du module.                                                                        |
+| `disabled`          | `false`                                                                                                   | Désactive le module `java`.                                                                |
 
 ### Variables
 
@@ -1403,29 +1403,29 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module ne sera affiché que s'il y a des tâches de fond. Le module affichera le nombre de tâches en cours d'exécution s'il y a plus d'une tâche, ou plus que la valeur `threshold`, si elle existe. Si `threshold` est définie à 0, alors le module s'affichera également lorsqu'il n'y a pas de tâches de fond en cours.
 
 ::: warning
 
-This module is not supported on tcsh.
+Ce module n'est pas pris en charge sur tcsh.
 
 :::
 
 ### Options
 
-| Option      | Défaut                        | Description                                      |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | Format du module.                                |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | Le style du module.                              |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Option      | Défaut                        | Description                                             |
+| ----------- | ----------------------------- | ------------------------------------------------------- |
+| `threshold` | `1`                           | Afficher le nombre de jobs si dépassé.                  |
+| `format`    | `"[$symbol$number]($style) "` | Format du module.                                       |
+| `symbol`    | `"✦"`                         | Une chaîne de caractères représentant nombre de tâches. |
+| `style`     | `"bold blue"`                 | Le style du module.                                     |
+| `disabled`  | `false`                       | Désactive le module `jobs`.                             |
 
 ### Variables
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| number    | `1`     | The number of jobs                     |
+| number    | `1`     | Le nombre de tâches                    |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -1451,22 +1451,22 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Options
 
-| Option              | Défaut                               | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                         |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["jl"]`                             | Quelles extensions devraient activer ce module.                           |
-| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Quels fichiers devraient activer ce module.                               |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                               |
-| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
-| `style`             | `"bold purple"`                      | Le style du module.                                                       |
-| `disabled`          | `false`                              | Disables the `julia` module.                                              |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["jl"]`                             | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `symbol`            | `"ஃ "`                               | Une chaîne de caractères représentant le symbole de Julia.                                 |
+| `style`             | `"bold purple"`                      | Le style du module.                                                                        |
+| `disabled`          | `false`                              | Désactive le module `Julia`.                                                               |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.4.0` | The version of `julia`                 |
+| version   | `v1.4.0` | La version de `julia`                  |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -1489,23 +1489,23 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Options
 
-| Option              | Défaut                               | Description                                                                   |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                             |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
-| `detect_extensions` | `["kt", "kts"]`                      | Quelles extensions devraient activer ce module.                               |
-| `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                   |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                   |
-| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`             | `"bold blue"`                        | Le style du module.                                                           |
-| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["kt", "kts"]`                      | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                                |
+| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `symbol`            | `"🅺 "`                               | Une chaîne de caractères représentant le symbole de Kotlin.                                |
+| `style`             | `"bold blue"`                        | Le style du module.                                                                        |
+| `kotlin_binary`     | `"kotlin"`                           | Configure le binaire kotlin que Starship exécute lors de l'obtention de la version.        |
+| `disabled`          | `false`                              | Désactive le module `kotlin`.                                                              |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                |
+| version   | `v1.4.21` | La version de `kotlin`                 |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -1540,22 +1540,22 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option            | Défaut                                               | Description                                                           |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                     |
-| `style`           | `"cyan bold"`                                        | Le style du module.                                                   |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| Option            | Défaut                                               | Description                                                            |
+| ----------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | Une chaîne de format représentant le symbole affiché avant le Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
+| `style`           | `"cyan bold"`                                        | Le style du module.                                                    |
+| `context_aliases` |                                                      | Tableau des alias de contexte à afficher.                              |
+| `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                     |
 
 ### Variables
 
-| Variable  | Exemple              | Description                              |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Reflète la valeur de l'option `symbol`   |
-| style\* |                      | Reflète la valeur de l'option `style`    |
+| Variable  | Exemple              | Description                                      |
+| --------- | -------------------- | ------------------------------------------------ |
+| context   | `starship-cluster`   | Le contexte kubernetes actuel                    |
+| namespace | `starship-namespace` | Si défini, l'espace de noms actuel de kubernetes |
+| symbol    |                      | Reflète la valeur de l'option `symbol`           |
+| style\* |                      | Reflète la valeur de l'option `style`            |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
