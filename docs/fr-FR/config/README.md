@@ -1868,7 +1868,7 @@ Le module `ocaml` affiche la version actuellement installée de [OCaml](https://
 
 | Variable         | Exemple      | Description                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
-| version          | `v4.10.0`    | The version of `ocaml`                                            |
+| version          | `v4.10.0`    | La version de `ocaml`                                             |
 | switch_name      | `my-project` | The active OPAM switch                                            |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
 | symbol           |              | Reflète la valeur de l'option `symbol`                            |
@@ -1953,7 +1953,7 @@ The `package` module is shown when the current directory is the repository for a
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.0.0` | The version of your package            |
+| version   | `v1.0.0` | La version de votre package            |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -1995,7 +1995,7 @@ Le module `perl` affiche la version actuellement installée de [Perl](https://ww
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v5.26.1` | The version of `perl`                  |
+| version   | `v5.26.1` | La version de `perl`                   |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -2033,7 +2033,7 @@ Le module `php` affiche la version actuellement installée de [PHP](https://www.
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v7.3.8` | The version of `php`                   |
+| version   | `v7.3.8` | La version de `php`                    |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2053,7 +2053,7 @@ format = "via [🔹 $version](147 bold) "
 Le module `purescript` affiche la version actuellement installée de [PureScript](https://www.purescript.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `spago.dhall`
-- The current directory contains a file with the `.purs` extension
+- Le répertoire actuel contient un fichier avec l'extension `.purs`
 
 ### Options
 
@@ -2072,7 +2072,7 @@ Le module `purescript` affiche la version actuellement installée de [PureScript
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `0.13.5` | The version of `purescript`            |
+| version   | `0.13.5` | La version de `purescript`             |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2095,15 +2095,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
+- Le répertoire courant contient un fichier `.python-version`
+- Le répertoire courant contient un fichier `Pipfile`
+- Le répertoire courant contient un fichier `__init__.py`
 - Le répertoire courant contient un fichier `pyproject.toml`
 - Le répertoire courant contient un fichier `requirements.txt`
 - Le répertoire courant contient un fichier `setup.py`
 - Le répertoire courant contient un fichier `tox.ini`
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- Le répertoire actuel contient un fichier avec l'extension `.py`.
+- Un environnement virtuel est actuellement activé
 
 ### Options
 
@@ -2133,7 +2133,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 | Variable     | Exemple         | Description                                |
 | ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | The version of `python`                    |
+| version      | `"v3.8.1"`      | La version de `python`                     |
 | symbol       | `"🐍 "`          | Reflète la valeur de l'option `symbol`     |
 | style        | `"yellow bold"` | Reflète la valeur de l'option `style`      |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
@@ -2181,13 +2181,13 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 Le module `rlang` vous montre votre version de R actuellement installée. Le module sera affiché si l'une des conditions suivantes est remplie :
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
+- Le répertoire actuel contient un fichier avec l'extension `.R`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rd`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rmd`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rproj`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rsx`.
+- Le répertoire courant contient un fichier `.Rprofile`
+- Le répertoire courant contient un dossier `.Rproj.user`
 
 ### Options
 
@@ -2206,7 +2206,7 @@ Le module `rlang` vous montre votre version de R actuellement installée. Le mod
 
 | Variable | Exemple       | Description                            |
 | -------- | ------------- | -------------------------------------- |
-| version  | `v4.0.5`      | The version of `R`                     |
+| version  | `v4.0.5`      | La version de `R`                      |
 | symbol   |               | Reflète la valeur de l'option `symbol` |
 | style    | `"blue bold"` | Reflète la valeur de l'option `style`  |
 
@@ -2221,9 +2221,9 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- Le répertoire actuel contient un fichier avec l'extension `.red` ou `.reds`
 
 ### Options
 
@@ -2242,7 +2242,7 @@ Par défaut, le module `red` affiche la version actuellement installée de [Red]
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.5.1` | The version of `red`                   |
+| version   | `v2.5.1` | La version de `red`                    |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2259,11 +2259,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). Le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- Le répertoire courant contient un fichier `Gemfile`
+- Le répertoire courant contient un fichier `.ruby-version`
+- Le répertoire courant contient un fichier `.rb`
 
 ### Options
 
@@ -2282,7 +2282,7 @@ Par défaut, le module `ruby` affiche la version actuellement installée de [Rub
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`                  |
+| version   | `v2.5.1` | La version de `ruby`                   |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2299,10 +2299,10 @@ symbol = "🔺 "
 
 ## Rust
 
-Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- Le répertoire courant contient un fichier `Cargo.toml`
+- Le répertoire actuel contient un fichier avec l'extension `.rs`
 
 ### Options
 
@@ -2321,7 +2321,7 @@ Par défaut, le module `rust` affiche la version actuellement installée de [Rus
 
 | Variable  | Exemple           | Description                            |
 | --------- | ----------------- | -------------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`                 |
+| version   | `v1.43.0-nightly` | La version de `rustc`                  |
 | symbol    |                   | Reflète la valeur de l'option `symbol` |
 | style\* |                   | Reflète la valeur de l'option `style`  |
 
@@ -2340,9 +2340,9 @@ format = "via [⚙️ $version](red bold)"
 
 Le module `scala` affiche la version actuellement installée de [Scala](https://www.scala-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- Le répertoire courant contient un fichier `build.sbt`, `.scalaenv` ou `.sbtenv`
+- Le répertoire actuel contient un fichier avec l'extension `.scala` ou `.sbt`
+- Le répertoire courant contient un répertoire nommé `.metals`
 
 ### Options
 
@@ -2361,7 +2361,7 @@ Le module `scala` affiche la version actuellement installée de [Scala](https://
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `2.13.5` | The version of `scala`                 |
+| version   | `2.13.5` | La version de `scala`                  |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2546,10 +2546,10 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- Le répertoire courant contient un fichier `Package.swift`
+- Le répertoire actuel contient un fichier avec l'extension `.swift`
 
 ### Options
 
@@ -2568,7 +2568,7 @@ Par défaut, le module `swift` affiche la version actuellement installée de [Sw
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                 |
+| version   | `v5.2.4` | La version de `swift`                  |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2595,8 +2595,8 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- Le répertoire courant contient un dossier `.terraform`
+- Le répertoire actuel contient un fichier avec l'extension `.tf` ou `.hcl`
 
 ### Options
 
@@ -2615,7 +2615,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`             |
+| version   | `v0.12.24` | La version de `terraform`              |
 | workspace | `default`  | The current Terraform workspace        |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
@@ -2624,7 +2624,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ### Exemple
 
-#### With Terraform Version
+#### Avec la version de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -2633,7 +2633,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Without Terraform version
+#### Sans la version de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -2690,12 +2690,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Le module `username` affiche le nom de l'utilisateur actif. Le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- L'utilisateur courant est root
+- L'utilisateur courant est différent de celui connecté
+- L'utilisateur est actuellement connecté en tant que session SSH
+- La variable `show_always` est définie à true
 
 ::: tip
 
@@ -2737,7 +2737,7 @@ show_always = true
 
 Le module `vagrant` affiche la version actuellement installée de [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `Vagrantfile` file
+- Le répertoire courant contient un fichier `Vagrantfile`
 
 ### Options
 
@@ -2756,7 +2756,7 @@ Le module `vagrant` affiche la version actuellement installée de [Vagrant](http
 
 | Variable  | Exemple          | Description                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| version   | `Vagrant 2.2.10` | La version de `Vagrant`                |
 | symbol    |                  | Reflète la valeur de l'option `symbol` |
 | style\* |                  | Reflète la valeur de l'option `style`  |
 
@@ -2774,8 +2774,8 @@ format = "via [⍱ $version](bold white) "
 ## VLang
 
 Le module `vlang` vous montre votre version de V actuellement installée. Par défaut, le module sera affiché si l'une des conditions suivantes est remplie :
-- The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+- Le répertoire courant contient un fichier avec l'extension `.v`
+- Le répertoire courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
 ### Options
 
@@ -2793,7 +2793,7 @@ Le module `vlang` vous montre votre version de V actuellement installée. Par d�
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v0.2`  | The version of `v`                     |
+| version   | `v0.2`  | La version de `v`                      |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -2839,9 +2839,9 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `.zig` file
+- Le répertoire courant contient un fichier `.zig`
 
 ### Options
 
