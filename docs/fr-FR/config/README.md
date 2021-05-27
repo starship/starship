@@ -2089,7 +2089,7 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+Le module `python` affiche la version actuellement installée de [Python](https://www.python.org/) ainsi que la version d'[environnement virtuel Python](https://docs.python.org/tutorial/venv.html) si il y en a un d'activé.
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
@@ -2179,7 +2179,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
+Le module `rlang` vous montre votre version de R actuellement installée. Le module sera affiché si l'une des conditions suivantes est remplie :
 
 - The current directory contains a file with the `.R` extension.
 - The current directory contains a file with the `.Rd` extension.
@@ -2221,7 +2221,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2259,7 +2259,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -2299,7 +2299,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2338,7 +2338,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `scala` affiche la version actuellement installée de [Scala](https://www.scala-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
 - The current directory contains a file with the `.scala` or `.sbt` extension
@@ -2546,7 +2546,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2735,7 +2735,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `vagrant` affiche la version actuellement installée de [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - The current directory contains a `Vagrantfile` file
 
@@ -2773,7 +2773,7 @@ format = "via [⍱ $version](bold white) "
 
 ## VLang
 
-The `vlang` module shows you your currently installed version of V. By default the module will be shown if any of the following conditions are met:
+Le module `vlang` vous montre votre version de V actuellement installée. Par défaut, le module sera affiché si l'une des conditions suivantes est remplie :
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
@@ -2839,7 +2839,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
