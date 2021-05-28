@@ -1,3 +1,5 @@
+use once_cell::sync::Lazy;
+use regex::Regex;
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{env, io};
@@ -73,6 +75,12 @@ impl StarshipPath {
         };
         Ok(posix_path.replace("\"", "\"'\"'\""))
     }
+}
+
+fn escape_elvish<S: AsRef<str>>(value: S) -> String {
+    static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r#"["\\]"#).unwrap());
+
+    RE.replace_all(value.as_ref(), "\\$0").into_owned()
 }
 
 /* This prints the setup stub, the short piece of code which sets up the main
@@ -151,10 +159,12 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint()?
         ),
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
-        "elvish" => print!(
-            r#"eval ("{}" init elvish --print-full-init | slurp)"#,
-            starship.sprint_posix()?
-        ),
+        "elvish" => {
+            print!(
+                r#"eval ("{}" init elvish --print-full-init | slurp)"#,
+                starship.sprint_posix().map(escape_elvish)?
+            )
+        }
         "tcsh" => print!(
             r#"eval `("{}" init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
@@ -192,7 +202,10 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
         "powershell" => print_script(PWSH_INIT, &starship_path.sprint()?),
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
-        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
+        "elvish" => print_script(
+            ELVISH_INIT,
+            &starship_path.sprint_posix().map(escape_elvish)?,
+        ),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
         _ => {
             println!(
