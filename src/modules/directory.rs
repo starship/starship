@@ -580,8 +580,8 @@ mod tests {
     mod linux {
         use super::*;
 
-        #[ignore]
         #[test]
+        #[ignore]
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -602,8 +602,8 @@ mod tests {
             tmp_dir.close()
         }
 
-        #[ignore]
         #[test]
+        #[ignore]
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
@@ -627,8 +627,8 @@ mod tests {
             tmp_dir.close()
         }
 
-        #[ignore]
         #[test]
+        #[ignore]
         fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
