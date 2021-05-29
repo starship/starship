@@ -1,10 +1,10 @@
 use crate::config::ModuleConfig;
 use indexmap::IndexMap;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use starship_module_config_derive::ModuleConfig;
 
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, ModuleConfig, Serialize)]
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
@@ -20,7 +20,9 @@ pub struct DirectoryConfig<'a> {
     pub truncation_symbol: &'a str,
     pub home_symbol: &'a str,
     pub delimiter: &'a str,
-    pub width: i64,
+    pub fit_width: i64,
+    pub fit_style: &'a str,
+    pub fit_symbol: &'a str,
 }
 
 impl<'a> Default for DirectoryConfig<'a> {
@@ -40,7 +42,9 @@ impl<'a> Default for DirectoryConfig<'a> {
             truncation_symbol: "",
             home_symbol: "~",
             delimiter: "/",
-            width: 0,
+            fit_width: 0,
+            fit_style: "Inner",
+            fit_symbol: "…",
         }
     }
 }

@@ -1251,17 +1251,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "promptly"
-version = "0.1.0"
-source = "git+https://github.com/Jason-S-Ross/stylish-stringlike.git?rev=ee0d133e8ec7599f06f9469de0b93ac9e1a4bcee#ee0d133e8ec7599f06f9469de0b93ac9e1a4bcee"
-dependencies = [
- "ansi_term 0.12.1",
- "regex",
- "unicode-segmentation",
- "unicode-width",
-]
-
-[[package]]
 name = "quick-xml"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1632,7 +1621,6 @@ dependencies = [
  "pest",
  "pest_derive",
  "process_control",
- "promptly",
  "quick-xml",
  "rand",
  "rayon",
@@ -1645,6 +1633,7 @@ dependencies = [
  "shell-words",
  "starship_module_config_derive",
  "strsim 0.10.0",
+ "stylish-stringlike",
  "sys-info",
  "tempfile",
  "term_size",
@@ -1699,6 +1688,16 @@ checksum = "3384590878eb0cab3b128e844412e2d010821e7e091211b9d87324173ada7db8"
 dependencies = [
  "quote 0.3.15",
  "syn 0.11.11",
+]
+
+[[package]]
+name = "stylish-stringlike"
+version = "0.2.0"
+source = "git+https://github.com/Jason-S-Ross/stylish-stringlike?rev=62340615484686a870d9888cc0008a2797031bb6#62340615484686a870d9888cc0008a2797031bb6"
+dependencies = [
+ "regex",
+ "unicode-segmentation",
+ "unicode-width",
 ]
 
 [[package]]
