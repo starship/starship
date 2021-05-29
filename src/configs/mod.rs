@@ -47,6 +47,7 @@ pub mod php;
 pub mod purescript;
 pub mod python;
 pub mod red;
+pub mod rlang;
 pub mod ruby;
 pub mod rust;
 pub mod scala;
@@ -117,6 +118,7 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
+    rlang: rlang::RLangConfig<'a>,
     red: red::RedConfig<'a>,
     ruby: ruby::RubyConfig<'a>,
     rust: rust::RustConfig<'a>,
@@ -129,7 +131,7 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
     username: username::UsernameConfig<'a>,
-    vlang: v::VLangConfig<'a>,
+    vlang: v::VConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,
@@ -186,6 +188,7 @@ impl<'a> Default for FullConfig<'a> {
             purescript: Default::default(),
             python: Default::default(),
             red: Default::default(),
+            rlang: Default::default(),
             ruby: Default::default(),
             rust: Default::default(),
             scala: Default::default(),

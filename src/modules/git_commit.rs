@@ -46,13 +46,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if !config.tag_disabled {
         // Let's get repo tags names
         let tag_names = git_repo.tag_names(None).ok()?;
-        let tag_and_refs = tag_names.iter().flat_map(|name| {
-            let full_tag = format!("refs/tags/{}", name.unwrap());
+        let tag_and_refs = tag_names.iter().flatten().flat_map(|name| {
+            let full_tag = format!("refs/tags/{}", name);
             let tag_obj = git_repo.find_reference(&full_tag)?.peel_to_tag()?;
-            let sig_obj = tag_obj.tagger().unwrap();
-            git_repo
-                .find_reference(&full_tag)
-                .map(|reference| (String::from(name.unwrap()), sig_obj.when(), reference))
+            let sig_obj = tag_obj.tagger();
+            git_repo.find_reference(&full_tag).map(|reference| {
+                (
+                    String::from(name),
+                    // fall back to oldest + 1s time if sig_obj is unavailable
+                    sig_obj.map_or(git2::Time::new(1, 0), |s| s.when()),
+                    reference,
+                )
+            })
         });
 
         let mut tag_name = String::new();
@@ -80,7 +85,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         _ => None,
                     })
                     .map(|variable| match variable {
-                        "tag" => Some(Ok(format!(" {}{}", &config.tag_symbol, &tag_name))),
+                        "tag" => Some(Ok(format!("{}{}", &config.tag_symbol, &tag_name))),
                         _ => None,
                     })
                     .parse(None)
@@ -323,7 +328,7 @@ mod tests {
             .config(toml::toml! {
                 [git_commit]
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();
@@ -395,7 +400,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();

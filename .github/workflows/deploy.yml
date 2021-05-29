@@ -60,11 +60,11 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       # Cache files between builds
       - name: Setup | Cache Cargo
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.6
         with:
           path: |
             ~/.cargo/registry
@@ -72,7 +72,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           override: true
@@ -80,7 +80,7 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Build | Build
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         # TODO: Remove this once it's the default
         env:
           SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
@@ -119,7 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0
 
@@ -154,10 +154,10 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
@@ -183,13 +183,15 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Setup | Install dependencies
-        run: cd docs && npm install
+        run: npm install
+        working-directory: docs
 
       - name: Build | Build docs site
         run: npm run build
+        working-directory: docs
 
       - name: Publish
         uses: netlify/actions/cli@master
@@ -198,3 +200,4 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        working-directory: docs

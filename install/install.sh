@@ -1,27 +1,5 @@
 #!/usr/bin/env sh
 
-# shellcheck disable=SC2039
-
-# Options
-#
-#   -V, --verbose
-#     Enable verbose output for the installer
-#
-#   -f, -y, --force, --yes
-#     Skip the confirmation prompt during installation
-#
-#   -p, --platform
-#     Override the platform identified by the installer
-#
-#   -b, --bin-dir
-#     Override the bin installation directory
-#
-#   -a, --arch
-#     Override the architecture identified by the installer
-#
-#   -B, --base-url
-#     Override the base URL used for downloading releases
-
 set -eu
 printf '\n'
 
@@ -64,7 +42,6 @@ has() {
 
 # Gets path to a temporary file, even if
 get_tmpfile() {
-  local suffix
   suffix="$1"
   if has mktemp; then
     printf "%s.%s" "$(mktemp)" "${suffix}"
@@ -77,7 +54,6 @@ get_tmpfile() {
 # Test if a location is writeable by trying to write to it. Windows does not let
 # you test writeability other than by writing: https://stackoverflow.com/q/1999988
 test_writeable() {
-  local path
   path="${1:-}/test.txt"
   if touch "${path}" 2>/dev/null; then
     rm "${path}"
@@ -114,9 +90,9 @@ download() {
 }
 
 unpack() {
-  local archive=$1
-  local bin_dir=$2
-  local sudo=${3-}
+  archive=$1
+  bin_dir=$2
+  sudo=${3-}
 
   case "$archive" in
     *.tar.gz)
@@ -138,6 +114,39 @@ unpack() {
   return 1
 }
 
+usage() {
+    cat <<EOT
+install.sh [option]
+
+Fetch and install the latest version of starship, if starship is already
+installed it will be updated to the latest version.
+
+Options
+
+  -V, --verbose
+    Enable verbose output for the installer
+
+  -f, -y, --force, --yes
+    Skip the confirmation prompt during installation
+
+  -p, --platform
+    Override the platform identified by the installer [default: ${PLATFORM}]
+
+  -b, --bin-dir
+    Override the bin installation directory [default: ${BIN_DIR}]
+
+  -a, --arch
+    Override the architecture identified by the installer [default: ${ARCH}]
+
+  -B, --base-url
+    Override the base URL used for downloading releases [default: ${BASE_URL}]
+
+  -h, --help
+    Dispays this help message
+
+EOT
+}
+
 elevate_priv() {
   if ! has sudo; then
     error 'Could not find the command "sudo", needed to get permissions for install.'
@@ -153,10 +162,7 @@ elevate_priv() {
 }
 
 install() {
-  local msg
-  local sudo
-  local archive
-  local ext="$1"
+  ext="$1"
 
   if test_writeable "${BIN_DIR}"; then
     sudo=""
@@ -185,7 +191,6 @@ install() {
 #   - linux_musl (Alpine)
 #   - freebsd
 detect_platform() {
-  local platform
   platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
   case "${platform}" in
@@ -205,8 +210,9 @@ detect_platform() {
 # Currently supporting:
 #   - x86_64
 #   - i386
+#   - arm
+#   - arm64
 detect_arch() {
-  local arch
   arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
   case "${arch}" in
@@ -226,9 +232,9 @@ detect_arch() {
 }
 
 detect_target() {
-  local arch="$1"
-  local platform="$2"
-  local target="$arch-$platform"
+  arch="$1"
+  platform="$2"
+  target="$arch-$platform"
 
   if [ "${target}" = "arm-unknown-linux-musl" ]; then
     target="${target}eabihf"
@@ -257,16 +263,16 @@ confirm() {
 }
 
 check_bin_dir() {
-  local bin_dir="$1"
+  bin_dir="$1"
 
   if [ ! -d "$BIN_DIR" ]; then
     error "Installation location $BIN_DIR does not appear to be a directory"
     info "Make sure the location exists and is a directory, then try again."
+    usage
     exit 1
   fi
 
   # https://stackoverflow.com/a/11655875
-  local good
   good=$(
     IFS=:
     for path in $PATH; do
@@ -283,11 +289,9 @@ check_bin_dir() {
 }
 
 is_build_available() {
-  local arch="$1"
-  local platform="$2"
-  local target="$3"
-
-  local good
+  arch="$1"
+  platform="$2"
+  target="$3"
 
   good=$(
     IFS=" "
@@ -355,6 +359,10 @@ while [ "$#" -gt 0 ]; do
     FORCE=1
     shift 1
     ;;
+  -h | --help)
+    usage
+    exit
+    ;;
 
   -p=* | --platform=*)
     PLATFORM="${1#*=}"
@@ -383,6 +391,7 @@ while [ "$#" -gt 0 ]; do
 
   *)
     error "Unknown option: $1"
+    usage
     exit 1
     ;;
   esac
