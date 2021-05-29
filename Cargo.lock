@@ -1692,8 +1692,9 @@ dependencies = [
 
 [[package]]
 name = "stylish-stringlike"
-version = "0.2.0"
-source = "git+https://github.com/Jason-S-Ross/stylish-stringlike?rev=62340615484686a870d9888cc0008a2797031bb6#62340615484686a870d9888cc0008a2797031bb6"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "340e61d0ec15178a0c97f2acabe0aca44141109be31a31b1aba68594dd9061b0"
 dependencies = [
  "regex",
  "unicode-segmentation",
