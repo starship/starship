@@ -580,6 +580,7 @@ mod tests {
     mod linux {
         use super::*;
 
+        #[ignore]
         #[test]
         fn symlinked_subdirectory_git_repo_out_of_tree() -> io::Result<()> {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
@@ -601,6 +602,7 @@ mod tests {
             tmp_dir.close()
         }
 
+        #[ignore]
         #[test]
         fn git_repo_in_home_directory_truncate_to_repo_true() -> io::Result<()> {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
@@ -625,6 +627,7 @@ mod tests {
             tmp_dir.close()
         }
 
+        #[ignore]
         #[test]
         fn directory_in_root() {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
@@ -926,6 +929,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn git_repo_root() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -940,6 +944,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn directory_in_git_repo() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -958,6 +963,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn truncated_directory_in_git_repo() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -976,6 +982,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let tmp_dir = TempDir::new()?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1004,6 +1011,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn fish_path_directory_in_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1034,6 +1042,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn fish_path_directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1064,6 +1073,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn directory_in_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1092,6 +1102,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn symlinked_git_repo_root() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1111,6 +1122,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn directory_in_symlinked_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1134,6 +1146,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1157,6 +1170,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1191,6 +1205,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_false() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1227,6 +1242,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn fish_path_directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1263,6 +1279,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn directory_in_symlinked_git_repo_truncate_to_repo_true() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1297,6 +1314,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn symlinked_directory_in_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
