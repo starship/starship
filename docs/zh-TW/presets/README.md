@@ -100,6 +100,9 @@ After:
 ### 設定
 
 ```toml
+[aws]
+format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -133,6 +136,9 @@ format = '\[[$symbol($version)]($style)\]'
 [erlang]
 format = '\[[$symbol($version)]($style)\]'
 
+[gcloud]
+format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
+
 [git_branch]
 format = '\[[$symbol$branch]($style)\]'
 
@@ -145,6 +151,9 @@ format = '\[[$symbol($version)]($style)\]'
 [helm]
 format = '\[[$symbol($version)]($style)\]'
 
+[hg_branch]
+format = '\[[$symbol$branch]($style)\]'
+
 [java]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -153,6 +162,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [kotlin]
 format = '\[[$symbol($version)]($style)\]'
+
+[kubernetes]
+format = '\[[$symbol$context( \($namespace\))]($style)\]'
 
 [lua]
 format = '\[[$symbol($version)]($style)\]'
@@ -171,6 +183,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [ocaml]
 format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
+
+[openstack]
+format = '\[[$symbol$cloud(\($project\))]($style)\]'
 
 [package]
 format = '\[[$symbol$version]($style)\]'
@@ -205,7 +220,16 @@ format = '\[[$symbol($version)]($style)\]'
 [terraform]
 format = '\[[$symbol$workspace]($style)\]'
 
+[time]
+format = '\[[$time]($style)\]'
+
+[username]
+format = '\[[$user]($style)\]'
+
 [vagrant]
+format = '\[[$symbol($version)]($style)\]'
+
+[vlang]
 format = '\[[$symbol($version)]($style)\]'
 
 [zig]
