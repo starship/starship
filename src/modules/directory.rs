@@ -24,6 +24,9 @@ use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
 
+// Windows and unix both use a forward slash for intermediate path representation.
+const DELIMITER: &str = "/";
+
 /// Creates a module with the current logical or physical directory
 ///
 /// Will perform path contraction, substitution, and truncation.
@@ -83,11 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         substitute_path_regex(&mut dir_spans, &config.substitution_regexes);
         // Truncate the dir string to the maximum number of path components
 
-        truncate::<Spans<Option<Style>>>(
-            &dir_spans,
-            config.truncation_length as usize,
-            &String::from(std::path::MAIN_SEPARATOR),
-        )
+        truncate::<Spans<Option<Style>>>(&dir_spans, config.truncation_length as usize, DELIMITER)
     };
     let prefix = if is_truncated(&dir_string.raw(), &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
@@ -112,7 +111,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let prefix_spans = get_styled(&prefix).unwrap_or_else(|| prefix.as_str().into());
     let displayed_path = prefix_spans
         .join(&dir_string)
-        .replace(&String::from(std::path::MAIN_SEPARATOR), config.delimiter);
+        .replace(DELIMITER, config.delimiter);
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -264,7 +263,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
-        separator = std::path::MAIN_SEPARATOR,
+        separator = DELIMITER,
         path = sub_path.to_slash_lossy()
     )
 }
@@ -297,7 +296,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         return Some(format!(
             "{repo_name}{separator}{path}",
             repo_name = repo_name,
-            separator = std::path::MAIN_SEPARATOR,
+            separator = DELIMITER,
             path = path.to_slash_lossy()
         ));
     }
@@ -405,7 +404,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
             }
         })
         .collect::<Vec<_>>()
-        .join(&String::from(std::path::MAIN_SEPARATOR))
+        .join(DELIMITER)
 }
 
 #[cfg(test)]
