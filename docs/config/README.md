@@ -3012,7 +3012,7 @@ If you have an interesting example not covered there, feel free to share it ther
 | `style`       | `"bold green"`                  | The style for the module.                                                                                                  |
 | `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
 | `disabled`    | `false`                         | Disables this `custom` module.                      |
-| `os`          |                                 | Operating System name on which the module will be shown. |
+| `os`          |                                 | Operating System name on which the module will be shown (linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### Variables
 
