@@ -389,7 +389,17 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: Attenzione
+
+`error_symbol` is not supported on elvish shell.
+
+:::
+
+::: Attenzione
+
+`vicmd_symbol` is only supported in fish and zsh.
+
+:::
 
 ### Options
 
