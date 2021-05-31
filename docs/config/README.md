@@ -412,7 +412,15 @@ By default it only changes color. If you also want to change its shape take a
 look at [this example](#with-custom-error-shape).
 
 ::: warning
+
 `error_symbol` is not supported on elvish shell.
+
+:::
+
+::: warning
+
+`vicmd_symbol` is only supported in fish and zsh. 
+
 :::
 
 ### Options
