@@ -63,7 +63,7 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
     // check
     // 1. `$RUSTUP_TOOLCHAIN`
     // 2. `rustup override list`
-    // 3. `rust-toolchain` in `.` or parent directories
+    // 3. `rust-toolchain` or `rust-toolchain.toml` in `.` or parent directories
     // as `rustup` does.
     // https://github.com/rust-lang/rustup.rs/tree/eb694fcada7becc5d9d160bf7c623abe84f8971d#override-precedence
     //
@@ -163,9 +163,21 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         }
     }
 
+    if let Ok(true) = context
+        .dir_contents()
+        .map(|dir| dir.has_file("rust-toolchain.toml"))
+    {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain.toml")) {
+            return Some(toolchain);
+        }
+    }
+
     let mut dir = &*context.current_dir;
     loop {
         if let Some(toolchain) = read_channel(&dir.join("rust-toolchain")) {
+            return Some(toolchain);
+        }
+        if let Some(toolchain) = read_channel(&dir.join("rust-toolchain.toml")) {
             return Some(toolchain);
         }
         dir = dir.parent()?;
