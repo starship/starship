@@ -20,7 +20,7 @@ impl<'a> Default for NixShellConfig<'a> {
     fn default() -> Self {
         NixShellConfig {
             format: "via [$symbol$state( \\($name\\))]($style) ",
-            symbol: "❄️  ",
+            symbol: "❄️ ",
             style: "bold blue",
             impure_msg: "impure",
             pure_msg: "pure",
