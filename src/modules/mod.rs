@@ -104,6 +104,8 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
+            #[cfg(target_os = "linux")]
+            "linux_netns" => linux_netns::module(context),
             "java" => java::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
