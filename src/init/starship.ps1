@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 
 function global:prompt {
-        
+
     function Get-Cwd {
         $cwd = Get-Location
         $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
@@ -10,7 +10,7 @@ function global:prompt {
             # NOTE: ProviderPath is only a physical filesystem path for the "FileSystem" provider
             # E.g. `Dev:\` -> `C:\Users\Joe Bloggs\Dev\`
             Path = $cwd.ProviderPath;
-            # Resolve the provider-logical path 
+            # Resolve the provider-logical path
             # NOTE: Attempt to trim any "provider prefix" from the path string.
             # E.g. `Microsoft.PowerShell.Core\FileSystem::Dev:\` -> `Dev:\`
             LogicalPath =
@@ -67,7 +67,7 @@ function global:prompt {
 
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
-    
+
     $cwd = Get-Cwd
     $arguments = @(
         "prompt"
@@ -75,7 +75,7 @@ function global:prompt {
         "--logical-path=$($cwd.LogicalPath)",
         "--jobs=$($jobs)"
     )
-    
+
     # Whe start from the premise that the command executed correctly, which covers also the fresh console.
     $lastExitCodeForPrompt = 0
     if ($lastCmd = Get-History -Count 1) {
@@ -88,7 +88,7 @@ function global:prompt {
             $lastExitCodeForPrompt = if ($null -ne $lastCmdletError -and $lastCmd.CommandLine -eq $lastCmdletError.Line) { 1 } else { $origLastExitCode }
         }
         $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
-        
+
         $arguments += "--cmd-duration=$($duration)"
     }
 
@@ -124,7 +124,7 @@ function global:prompt {
 # Disable virtualenv prompt, it breaks starship
 $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
 
-$ENV:STARSHIP_SHELL = "powershell"
+$ENV:STARSHIP_SHELL = "pwsh"
 
 # Set up the session key that will be used to store logs
 $ENV:STARSHIP_SESSION_KEY = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 16 | ForEach-Object { [char]$_ })
