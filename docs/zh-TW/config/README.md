@@ -790,7 +790,6 @@ By default this module will only be shown in your prompt when one or more of the
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
-- `*.sln`
 - `*.csproj`
 - `*.fsproj`
 - `*.xproj`
@@ -809,7 +808,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | 在顯示 dotnet 版本之前用的符號。                                                      |
 | `heuristic`         | `true`                                                                                                  | 使用更快速的版本偵測法來保持 starship 的速度。                                              |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
 | `style`             | `"bold blue"`                                                                                           | 這個模組的風格。                                                                  |
