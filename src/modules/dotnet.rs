@@ -395,10 +395,7 @@ mod tests {
     fn shows_latest_in_directory_with_solution() -> io::Result<()> {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "solution.sln", None)?;
-        expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
-        );
+        expect_output(&workspace.path(), None);
         workspace.close()
     }
 
