@@ -839,7 +839,6 @@ the following files are present in the current directory:
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
-- `*.sln`
 - `*.csproj`
 - `*.fsproj`
 - `*.xproj`
@@ -863,7 +862,7 @@ when there is a csproj file in the current directory.
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
 | `style`             | `"bold blue"`                                                                                           | The style for the module.                                                 |
