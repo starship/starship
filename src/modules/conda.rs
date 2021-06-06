@@ -53,12 +53,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn not_in_env() {
-        let actual = ModuleRenderer::new("conda").collect();
+        let actual = TestRenderer::new().module("conda");
 
         let expected = None;
 
@@ -67,13 +67,13 @@ mod tests {
 
     #[test]
     fn ignore_base() {
-        let actual = ModuleRenderer::new("conda")
+        let actual = TestRenderer::new()
             .env("CONDA_DEFAULT_ENV", "base")
             .config(toml::toml! {
                 [conda]
                 ignore_base = true
             })
-            .collect();
+            .module("conda");
 
         let expected = None;
 
@@ -82,9 +82,9 @@ mod tests {
 
     #[test]
     fn env_set() {
-        let actual = ModuleRenderer::new("conda")
+        let actual = TestRenderer::new()
             .env("CONDA_DEFAULT_ENV", "astronauts")
-            .collect();
+            .module("conda");
 
         let expected = Some(format!(
             "via {} ",
@@ -96,9 +96,9 @@ mod tests {
 
     #[test]
     fn truncate() {
-        let actual = ModuleRenderer::new("conda")
+        let actual = TestRenderer::new()
             .env("CONDA_DEFAULT_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/conda/my_env")
-            .collect();
+            .module("conda");
 
         let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
 

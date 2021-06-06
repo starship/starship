@@ -69,7 +69,7 @@ fn get_deno_version(deno_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -77,7 +77,7 @@ mod tests {
     #[test]
     fn folder_without_deno_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("deno");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -87,7 +87,7 @@ mod tests {
     fn folder_with_mod_ts() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mod.ts"))?.sync_all()?;
-        let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("deno");
         let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -97,7 +97,7 @@ mod tests {
     fn folder_with_mod_js() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mod.js"))?.sync_all()?;
-        let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("deno");
         let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -107,7 +107,7 @@ mod tests {
     fn folder_with_deps_ts() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deps.ts"))?.sync_all()?;
-        let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("deno");
         let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -117,7 +117,7 @@ mod tests {
     fn folder_with_deps_js() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deps.js"))?.sync_all()?;
-        let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("deno");
         let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
         assert_eq!(expected, actual);
         dir.close()

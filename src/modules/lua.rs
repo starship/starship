@@ -87,7 +87,7 @@ fn parse_lua_version(lua_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -95,7 +95,7 @@ mod tests {
     #[test]
     fn folder_without_lua_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("lua");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -105,7 +105,7 @@ mod tests {
     fn folder_with_lua_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.lua"))?.sync_all()?;
-        let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("lua");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -116,7 +116,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".lua-version"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("lua");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -128,7 +128,7 @@ mod tests {
         let lua_dir = dir.path().join("lua");
         fs::create_dir_all(&lua_dir)?;
 
-        let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("lua");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -144,10 +144,10 @@ mod tests {
              lua_binary = "luajit"
         };
 
-        let actual = ModuleRenderer::new("lua")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("lua");
 
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v2.0.5 ")));
         assert_eq!(expected, actual);

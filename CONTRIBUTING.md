@@ -106,7 +106,7 @@ Testing is critical to making sure starship works as intended on systems big and
 
 Unit tests are written using the built-in Rust testing library in the same file as the implementation, as is traditionally done in Rust codebases. These tests can be run with `cargo test` and are run on GitHub as part of our GitHub Actions continuous integration to ensure consistent behavior.
 
-All tests that test the rendered output of a module should use `ModuleRenderer`. For Example:
+All tests that test the rendered output of a prompt or module should use `TestRenderer`. For Example:
 
 ```rust
 use super::{Context, Module, RootModuleConfig};
@@ -123,7 +123,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
    use super::*;
-   use crate::test::ModuleRenderer;
+   use crate::test::TestRenderer;
    use ansi_term::Color;
    use std::fs::File;
    use std::io;
@@ -137,7 +137,7 @@ mod tests {
       File::create(dir.path().join("YOUR_FILE"))?.sync_all()?;
 
       // The output of the module
-      let actual = ModuleRenderer::new("YOUR_MODULE_NAME")
+      let actual = TestRenderer::new()
          // For a custom path
          .path(&tempdir.path())
          // For a custom config
@@ -148,7 +148,7 @@ mod tests {
          // For env mocking
          .env("KEY","VALUE")
          // Run the module and collect the output
-         .collect();
+         .module("YOUR_MODULE_NAME");
 
       // The value that should be rendered by the module.
       let expected = Some(format!("{} ",Color::Black.paint("THIS SHOULD BE RENDERED")));

@@ -62,7 +62,7 @@ fn parse_v_version(v_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::parse_v_version;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -76,7 +76,7 @@ mod tests {
     #[test]
     fn folder_without_v_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vlang");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -86,7 +86,7 @@ mod tests {
     fn folder_with_v_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.v"))?.sync_all()?;
-        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vlang");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -96,7 +96,7 @@ mod tests {
     fn folder_with_vmod_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("v.mod"))?.sync_all()?;
-        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vlang");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -106,7 +106,7 @@ mod tests {
     fn folder_with_vpkg_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("vpkg.json"))?.sync_all()?;
-        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vlang");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -116,7 +116,7 @@ mod tests {
     fn folder_with_vpkg_lockfile() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".vpkg-lock.json"))?.sync_all()?;
-        let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vlang");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
         assert_eq!(expected, actual);
         dir.close()

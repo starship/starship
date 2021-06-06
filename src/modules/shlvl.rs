@@ -65,7 +65,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use ansi_term::{Color, Style};
 
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     use super::SHLVL_ENV_VAR;
 
@@ -76,12 +76,12 @@ mod tests {
 
     #[test]
     fn empty_config() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
             })
             .env(SHLVL_ENV_VAR, "2")
-            .collect();
+            .module("shlvl");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -89,13 +89,13 @@ mod tests {
 
     #[test]
     fn enabled() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "2")
-            .collect();
+            .module("shlvl");
         let expected = Some(format!("{} ", style().paint("↕️  2")));
 
         assert_eq!(expected, actual);
@@ -103,12 +103,12 @@ mod tests {
 
     #[test]
     fn no_level() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 disabled = false
             })
-            .collect();
+            .module("shlvl");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -116,13 +116,13 @@ mod tests {
 
     #[test]
     fn enabled_config_level_1() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "1")
-            .collect();
+            .module("shlvl");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -130,14 +130,14 @@ mod tests {
 
     #[test]
     fn lower_threshold() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 threshold = 1
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "1")
-            .collect();
+            .module("shlvl");
         let expected = Some(format!("{} ", style().paint("↕️  1")));
 
         assert_eq!(expected, actual);
@@ -145,14 +145,14 @@ mod tests {
 
     #[test]
     fn higher_threshold() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 threshold = 3
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "1")
-            .collect();
+            .module("shlvl");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -160,14 +160,14 @@ mod tests {
 
     #[test]
     fn custom_style() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 style = "Red Underline"
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "2")
-            .collect();
+            .module("shlvl");
         let expected = Some(format!("{} ", Color::Red.underline().paint("↕️  2")));
 
         assert_eq!(expected, actual);
@@ -175,14 +175,14 @@ mod tests {
 
     #[test]
     fn custom_symbol() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 symbol = "shlvl is "
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "2")
-            .collect();
+            .module("shlvl");
         let expected = Some(format!("{} ", style().paint("shlvl is 2")));
 
         assert_eq!(expected, actual);
@@ -190,14 +190,14 @@ mod tests {
 
     #[test]
     fn formatting() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 format = "$symbol going down [$shlvl]($style) GOING UP "
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "2")
-            .collect();
+            .module("shlvl");
         let expected = Some(format!("↕️   going down {} GOING UP ", style().paint("2")));
 
         assert_eq!(expected, actual);
@@ -205,7 +205,7 @@ mod tests {
 
     #[test]
     fn repeat() {
-        let actual = ModuleRenderer::new("shlvl")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [shlvl]
                 format = "[$symbol>]($style) "
@@ -214,7 +214,7 @@ mod tests {
                 disabled = false
             })
             .env(SHLVL_ENV_VAR, "3")
-            .collect();
+            .module("shlvl");
         let expected = Some(format!("{} ", style().paint("~~~>")));
 
         assert_eq!(expected, actual);

@@ -78,7 +78,7 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -87,7 +87,7 @@ mod tests {
     fn folder_without_ruby_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ruby");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -99,7 +99,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Gemfile"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ruby");
 
         let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
         assert_eq!(expected, actual);
@@ -111,7 +111,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".ruby-version"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ruby");
 
         let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
         assert_eq!(expected, actual);
@@ -123,7 +123,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.rb"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ruby");
 
         let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
         assert_eq!(expected, actual);

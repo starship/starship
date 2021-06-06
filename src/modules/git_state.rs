@@ -179,15 +179,15 @@ mod tests {
     use std::path::Path;
     use std::process::{Command, Stdio};
 
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("git_state")
+        let actual = TestRenderer::new()
             .path(repo_dir.path())
-            .collect();
+            .module("git_state");
 
         let expected = None;
 
@@ -202,7 +202,7 @@ mod tests {
 
         run_git_cmd(&["rebase", "other-branch"], Some(path), false)?;
 
-        let actual = ModuleRenderer::new("git_state").path(path).collect();
+        let actual = TestRenderer::new().path(path).module("git_state");
 
         let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REBASING 1/1")));
 
@@ -217,7 +217,7 @@ mod tests {
 
         run_git_cmd(&["merge", "other-branch"], Some(path), false)?;
 
-        let actual = ModuleRenderer::new("git_state").path(path).collect();
+        let actual = TestRenderer::new().path(path).module("git_state");
 
         let expected = Some(format!("({}) ", Color::Yellow.bold().paint("MERGING")));
 
@@ -232,7 +232,7 @@ mod tests {
 
         run_git_cmd(&["cherry-pick", "other-branch"], Some(path), false)?;
 
-        let actual = ModuleRenderer::new("git_state").path(path).collect();
+        let actual = TestRenderer::new().path(path).module("git_state");
 
         let expected = Some(format!(
             "({}) ",
@@ -250,7 +250,7 @@ mod tests {
 
         run_git_cmd(&["bisect", "start"], Some(path), false)?;
 
-        let actual = ModuleRenderer::new("git_state").path(path).collect();
+        let actual = TestRenderer::new().path(path).module("git_state");
 
         let expected = Some(format!("({}) ", Color::Yellow.bold().paint("BISECTING")));
 
@@ -265,7 +265,7 @@ mod tests {
 
         run_git_cmd(&["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
 
-        let actual = ModuleRenderer::new("git_state").path(path).collect();
+        let actual = TestRenderer::new().path(path).module("git_state");
 
         let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REVERTING")));
 

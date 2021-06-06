@@ -85,14 +85,14 @@ fn is_ssh_session(context: &Context) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     // TODO: Add tests for if root user (UID == 0)
     // Requires mocking
 
     #[test]
     fn no_env_variables() {
-        let actual = ModuleRenderer::new("username").collect();
+        let actual = TestRenderer::new().module("username");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -101,9 +101,9 @@ mod tests {
     #[test]
     #[ignore]
     fn no_logname_env_variable() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env(super::USERNAME_ENV_VAR, "astronaut")
-            .collect();
+            .module("username");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -112,10 +112,10 @@ mod tests {
     #[test]
     #[ignore]
     fn logname_equals_user() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env("LOGNAME", "astronaut")
             .env(super::USERNAME_ENV_VAR, "astronaut")
-            .collect();
+            .module("username");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -124,9 +124,9 @@ mod tests {
     #[test]
     fn ssh_wo_username() {
         // SSH connection w/o username
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
-            .collect();
+            .module("username");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -134,7 +134,7 @@ mod tests {
 
     #[test]
     fn current_user_not_logname() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env("LOGNAME", "astronaut")
             .env(super::USERNAME_ENV_VAR, "cosmonaut")
             // Test output should not change when run by root/non-root user
@@ -143,7 +143,7 @@ mod tests {
                 style_root = ""
                 style_user = ""
             })
-            .collect();
+            .module("username");
         let expected = Some("cosmonaut in ");
 
         assert_eq!(expected, actual.as_deref());
@@ -151,7 +151,7 @@ mod tests {
 
     #[test]
     fn ssh_connection() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
             // Test output should not change when run by root/non-root user
@@ -160,7 +160,7 @@ mod tests {
                 style_root = ""
                 style_user = ""
             })
-            .collect();
+            .module("username");
         let expected = Some("astronaut in ");
 
         assert_eq!(expected, actual.as_deref());
@@ -168,7 +168,7 @@ mod tests {
 
     #[test]
     fn ssh_connection_tty() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_TTY", "/dev/pts/0")
             // Test output should not change when run by root/non-root user
@@ -177,7 +177,7 @@ mod tests {
                 style_root = ""
                 style_user = ""
             })
-            .collect();
+            .module("username");
         let expected = Some("astronaut in ");
 
         assert_eq!(expected, actual.as_deref());
@@ -185,7 +185,7 @@ mod tests {
 
     #[test]
     fn ssh_connection_client() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env(super::USERNAME_ENV_VAR, "astronaut")
             .env("SSH_CLIENT", "192.168.0.101 39323 22")
             // Test output should not change when run by root/non-root user
@@ -194,7 +194,7 @@ mod tests {
                 style_root = ""
                 style_user = ""
             })
-            .collect();
+            .module("username");
         let expected = Some("astronaut in ");
 
         assert_eq!(expected, actual.as_deref());
@@ -202,7 +202,7 @@ mod tests {
 
     #[test]
     fn show_always() {
-        let actual = ModuleRenderer::new("username")
+        let actual = TestRenderer::new()
             .env(super::USERNAME_ENV_VAR, "astronaut")
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
@@ -212,7 +212,7 @@ mod tests {
                 style_root = ""
                 style_user = ""
             })
-            .collect();
+            .module("username");
         let expected = Some("astronaut in ");
 
         assert_eq!(expected, actual.as_deref());

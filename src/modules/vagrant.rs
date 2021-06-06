@@ -72,7 +72,7 @@ fn get_vagrant_version(vagrant_stdout: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -81,7 +81,7 @@ mod tests {
     fn folder_without_vagrant_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("vagrant").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vagrant");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -93,7 +93,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Vagrantfile"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("vagrant").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("vagrant");
 
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("⍱ v2.2.10 ")));
         assert_eq!(expected, actual);

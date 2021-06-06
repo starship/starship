@@ -101,7 +101,7 @@ fn get_terraform_version(version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io::{self, Write};
@@ -147,13 +147,13 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let tf_dir = dir.path().join(".terraform");
         fs::create_dir(&tf_dir)?;
 
-        let actual = ModuleRenderer::new("terraform")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(toml::toml! {
                 [terraform]
                 format = "via [$symbol$version $workspace]($style) "
             })
-            .collect();
+            .module("terraform");
 
         let expected = Some(format!(
             "via {} ",
@@ -172,13 +172,13 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         file.write_all(b"development")?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("terraform")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(toml::toml! {
                 [terraform]
                 format = "via [$symbol$version $workspace]($style) "
             })
-            .collect();
+            .module("terraform");
 
         let expected = Some(format!(
             "via {} ",
@@ -192,7 +192,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
     fn folder_without_dotterraform() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("terraform");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -204,7 +204,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.tf"))?;
 
-        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("terraform");
         let expected = Some(format!(
             "via {} ",
             Color::Fixed(105).bold().paint("💠 default")
@@ -219,10 +219,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.tf"))?;
 
-        let actual = ModuleRenderer::new("terraform")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("TF_WORKSPACE", "development")
-            .collect();
+            .module("terraform");
         let expected = Some(format!(
             "via {} ",
             Color::Fixed(105).bold().paint("💠 development")
@@ -242,10 +242,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         file.write_all(b"development")?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("terraform")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("TF_DATA_DIR", datadir.path().to_str().unwrap())
-            .collect();
+            .module("terraform");
         let expected = Some(format!(
             "via {} ",
             Color::Fixed(105).bold().paint("💠 development")
@@ -262,7 +262,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let tf_dir = dir.path().join(".terraform");
         fs::create_dir(&tf_dir)?;
 
-        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("terraform");
         let expected = Some(format!(
             "via {} ",
             Color::Fixed(105).bold().paint("💠 default")
@@ -281,7 +281,7 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         file.write_all(b"development")?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("terraform");
         let expected = Some(format!(
             "via {} ",
             Color::Fixed(105).bold().paint("💠 development")

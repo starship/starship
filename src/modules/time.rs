@@ -153,7 +153,7 @@ tests become extra important */
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use chrono::offset::TimeZone;
 
     const FMT_12: &str = "%r";
@@ -470,12 +470,12 @@ mod tests {
 
     #[test]
     fn config_enabled() {
-        let actual = ModuleRenderer::new("time")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [time]
                 disabled = false
             })
-            .collect();
+            .module("time");
 
         // We can't test what it actually is...but we can assert that it is something
         assert!(actual.is_some());
@@ -483,7 +483,7 @@ mod tests {
 
     #[test]
     fn config_blank() {
-        let actual = ModuleRenderer::new("time").collect();
+        let actual = TestRenderer::new().module("time");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -491,14 +491,14 @@ mod tests {
 
     #[test]
     fn config_check_prefix_and_suffix() {
-        let actual = ModuleRenderer::new("time")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [time]
                 disabled = false
                 format = "at [\\[$time\\]]($style) "
                 time_format = "%T"
             })
-            .collect()
+            .module("time")
             .unwrap();
 
         // This is the prefix with "at ", the color code, then the prefix char [

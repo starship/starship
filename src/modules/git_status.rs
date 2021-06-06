@@ -322,7 +322,7 @@ mod tests {
     use std::path::Path;
     use std::process::Command;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{fixture_repo, FixtureProvider, TestRenderer};
 
     /// Right after the calls to git the filesystem state may not have finished
     /// updating yet causing some of the tests to fail. These barriers are placed
@@ -348,9 +348,9 @@ mod tests {
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -363,9 +363,9 @@ mod tests {
 
         behind(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("⇣");
 
         assert_eq!(expected, actual);
@@ -378,13 +378,13 @@ mod tests {
 
         behind(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 behind = "⇣$count"
             })
             .path(repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("⇣1");
 
         assert_eq!(expected, actual);
@@ -398,9 +398,9 @@ mod tests {
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
         ahead(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("⇡");
 
         assert_eq!(expected, actual);
@@ -414,13 +414,13 @@ mod tests {
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
         ahead(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 ahead="⇡$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("⇡1");
 
         assert_eq!(expected, actual);
@@ -433,9 +433,9 @@ mod tests {
 
         diverge(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("⇕");
 
         assert_eq!(expected, actual);
@@ -448,13 +448,13 @@ mod tests {
 
         diverge(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 diverged=r"⇕⇡$ahead_count⇣$behind_count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("⇕⇡1⇣1");
 
         assert_eq!(expected, actual);
@@ -467,9 +467,9 @@ mod tests {
 
         create_conflict(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("=");
 
         assert_eq!(expected, actual);
@@ -482,13 +482,13 @@ mod tests {
 
         create_conflict(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 conflicted = "=$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("=1");
 
         assert_eq!(expected, actual);
@@ -501,9 +501,9 @@ mod tests {
 
         create_untracked(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("?");
 
         assert_eq!(expected, actual);
@@ -516,13 +516,13 @@ mod tests {
 
         create_untracked(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 untracked = "?$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("?1");
 
         assert_eq!(expected, actual);
@@ -541,9 +541,9 @@ mod tests {
             .output()?;
         barrier();
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -563,9 +563,9 @@ mod tests {
             .output()?;
         barrier();
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("$");
 
         assert_eq!(expected, actual);
@@ -586,13 +586,13 @@ mod tests {
             .output()?;
         barrier();
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 stashed = r"\$$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("$1");
 
         assert_eq!(expected, actual);
@@ -605,9 +605,9 @@ mod tests {
 
         create_modified(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("!");
 
         assert_eq!(expected, actual);
@@ -620,13 +620,13 @@ mod tests {
 
         create_modified(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 modified = "!$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("!1");
 
         assert_eq!(expected, actual);
@@ -639,9 +639,9 @@ mod tests {
 
         create_added(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("!");
 
         assert_eq!(expected, actual);
@@ -654,9 +654,9 @@ mod tests {
 
         create_staged(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("+");
 
         assert_eq!(expected, actual);
@@ -669,13 +669,13 @@ mod tests {
 
         create_staged(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 staged = "+[$count](green)"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = Some(format!(
             "{} ",
             ANSIStrings(&[
@@ -695,9 +695,9 @@ mod tests {
 
         create_renamed(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("»");
 
         assert_eq!(expected, actual);
@@ -710,13 +710,13 @@ mod tests {
 
         create_renamed(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 renamed = "»$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("»1");
 
         assert_eq!(expected, actual);
@@ -729,9 +729,9 @@ mod tests {
 
         create_deleted(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("✘");
 
         assert_eq!(expected, actual);
@@ -744,13 +744,13 @@ mod tests {
 
         create_deleted(&repo_dir.path())?;
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_status]
                 deleted = "✘$count"
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_status");
         let expected = format_output("✘1");
 
         assert_eq!(expected, actual);
@@ -779,7 +779,7 @@ mod tests {
         fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
         barrier();
 
-        let actual = ModuleRenderer::new("git_status")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
             .config(toml::toml! {
                 [git_status]
@@ -788,7 +788,7 @@ mod tests {
                 untracked = "U"
                 renamed = "R"
             })
-            .collect();
+            .module("git_status");
         let expected = format_output("DUA");
 
         assert_eq!(actual, expected);

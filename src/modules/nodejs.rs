@@ -120,7 +120,7 @@ fn format_node_version(node_version: &str, version_format: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -129,7 +129,7 @@ mod tests {
     #[test]
     fn folder_without_node_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -140,7 +140,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -153,7 +153,7 @@ mod tests {
         let esy_lock = dir.path().join("esy.lock");
         fs::create_dir_all(&esy_lock)?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -164,7 +164,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".node-version"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -175,7 +175,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".nvmrc"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -186,7 +186,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.js"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -197,7 +197,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.mjs"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -208,7 +208,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.cjs"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -219,7 +219,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("index.ts"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -231,7 +231,7 @@ mod tests {
         let node_modules = dir.path().join("node_modules");
         fs::create_dir_all(&node_modules)?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -250,7 +250,7 @@ mod tests {
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -269,7 +269,7 @@ mod tests {
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("nodejs");
         let expected = Some(format!("via {}", Color::Red.bold().paint(" v12.0.0 ")));
         assert_eq!(expected, actual);
         dir.close()

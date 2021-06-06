@@ -180,7 +180,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
@@ -188,7 +188,7 @@ mod tests {
     #[test]
     #[ignore]
     fn no_region_set() {
-        let actual = ModuleRenderer::new("aws").collect();
+        let actual = TestRenderer::new().module("aws");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -196,9 +196,9 @@ mod tests {
 
     #[test]
     fn region_set() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_REGION", "ap-northeast-2")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
@@ -209,13 +209,13 @@ mod tests {
 
     #[test]
     fn region_set_with_alias() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_REGION", "ap-southeast-2")
             .config(toml::toml! {
                 [aws.region_aliases]
                 ap-southeast-2 = "au"
             })
-            .collect();
+            .module("aws");
         let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  (au) ")));
 
         assert_eq!(expected, actual);
@@ -223,10 +223,10 @@ mod tests {
 
     #[test]
     fn default_region_set() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-1) ")
@@ -237,9 +237,9 @@ mod tests {
 
     #[test]
     fn profile_set() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_PROFILE", "astronauts")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts ")
@@ -250,10 +250,10 @@ mod tests {
 
     #[test]
     fn profile_set_from_aws_vault() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_VAULT", "astronauts-vault")
             .env("AWS_PROFILE", "astronauts-profile")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-vault ")
@@ -264,10 +264,10 @@ mod tests {
 
     #[test]
     fn profile_set_from_awsu() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWSU_PROFILE", "astronauts-awsu")
             .env("AWS_PROFILE", "astronauts-profile")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-awsu ")
@@ -278,10 +278,10 @@ mod tests {
 
     #[test]
     fn profile_set_from_awsume() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWSUME_PROFILE", "astronauts-awsume")
             .env("AWS_PROFILE", "astronauts-profile")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-awsume ")
@@ -292,10 +292,10 @@ mod tests {
 
     #[test]
     fn profile_and_region_set() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow
@@ -322,9 +322,9 @@ region = us-east-2
             .as_bytes(),
         )?;
 
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (us-east-1) ")
@@ -350,13 +350,13 @@ region = us-east-2
             .as_bytes(),
         )?;
 
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .env("AWS_PROFILE", "astronauts")
             .config(toml::toml! {
                 [aws]
             })
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts (us-east-2) ")
@@ -368,10 +368,10 @@ region = us-east-2
 
     #[test]
     fn profile_and_region_set_with_display_all() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow
@@ -384,9 +384,9 @@ region = us-east-2
 
     #[test]
     fn profile_set_with_display_all() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_PROFILE", "astronauts")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts ")
@@ -397,9 +397,9 @@ region = us-east-2
 
     #[test]
     fn region_set_with_display_all() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_REGION", "ap-northeast-1")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-1) ")
@@ -410,14 +410,14 @@ region = us-east-2
 
     #[test]
     fn profile_and_region_set_with_display_region() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$region]($style) "
             })
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {} ",
             Color::Yellow.bold().paint("☁️  ap-northeast-1")
@@ -428,14 +428,14 @@ region = us-east-2
 
     #[test]
     fn profile_and_region_set_with_display_profile() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$profile]($style) "
             })
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {} ",
             Color::Yellow.bold().paint("☁️  astronauts")
@@ -446,13 +446,13 @@ region = us-east-2
 
     #[test]
     fn region_set_with_display_profile() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .env("AWS_REGION", "ap-northeast-1")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$profile]($style) "
             })
-            .collect();
+            .module("aws");
         let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  ")));
 
         assert_eq!(expected, actual);
@@ -467,7 +467,7 @@ region = us-east-2
             Utc,
         );
 
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [aws]
                 show_duration = true
@@ -478,7 +478,7 @@ region = us-east-2
                 "AWS_SESSION_EXPIRATION",
                 now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
             )
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow
@@ -516,7 +516,7 @@ expiration={}
             .as_bytes(),
         )?;
 
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [aws]
                 show_duration = true
@@ -527,7 +527,7 @@ expiration={}
                 "AWS_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
             )
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow
@@ -542,14 +542,14 @@ expiration={}
 
     #[test]
     fn profile_and_region_set_show_duration() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [aws]
                 show_duration = true
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow
@@ -571,7 +571,7 @@ expiration={}
 
         let symbol = "!!!";
 
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [aws]
                 show_duration = true
@@ -583,7 +583,7 @@ expiration={}
                 "AWS_SESSION_EXPIRATION",
                 now.to_rfc3339_opts(SecondsFormat::Secs, true),
             )
-            .collect();
+            .module("aws");
         let expected = Some(format!(
             "on {}",
             Color::Yellow
@@ -597,12 +597,12 @@ expiration={}
     #[test]
     #[ignore]
     fn region_not_set_with_display_region() {
-        let actual = ModuleRenderer::new("aws")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$region]($style) "
             })
-            .collect();
+            .module("aws");
         let expected = None;
 
         assert_eq!(expected, actual);

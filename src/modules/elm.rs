@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -66,7 +66,7 @@ mod tests {
     #[test]
     fn folder_without_elm() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("elm");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -76,7 +76,7 @@ mod tests {
     fn folder_with_elm_json() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("elm.json"))?.sync_all()?;
-        let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("elm");
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -86,7 +86,7 @@ mod tests {
     fn folder_with_elm_package_json() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("elm-package.json"))?.sync_all()?;
-        let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("elm");
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -96,7 +96,7 @@ mod tests {
     fn folder_with_elm_version() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".elm-version"))?.sync_all()?;
-        let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("elm");
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -107,7 +107,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let elmstuff = dir.path().join("elm-stuff");
         fs::create_dir_all(&elmstuff)?;
-        let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("elm");
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -117,7 +117,7 @@ mod tests {
     fn folder_with_elm_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.elm"))?.sync_all()?;
-        let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("elm");
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()

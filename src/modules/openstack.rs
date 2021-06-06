@@ -85,7 +85,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
@@ -106,13 +106,13 @@ clouds:
     interface: public
 ",
         )?;
-        let actual = ModuleRenderer::new("openstack")
+        let actual = TestRenderer::new()
             .env("PWD", dir.path().to_str().unwrap())
             .env("OS_CLOUD", "corp")
             .config(toml::toml! {
                 [openstack]
             })
-            .collect();
+            .module("openstack");
         let expected = Some(format!(
             "on {} ",
             Color::Yellow.bold().paint("☁️  corp(testproject)")
@@ -132,13 +132,13 @@ clouds:
 dummy_yaml
 ",
         )?;
-        let actual = ModuleRenderer::new("openstack")
+        let actual = TestRenderer::new()
             .env("PWD", dir.path().to_str().unwrap())
             .env("OS_CLOUD", "test")
             .config(toml::toml! {
                 [openstack]
             })
-            .collect();
+            .module("openstack");
         let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  test")));
 
         assert_eq!(actual, expected);
@@ -152,13 +152,13 @@ dummy_yaml
         let mut file = File::create(&config_path)?;
         file.write_all(b"")?;
         drop(file);
-        let actual = ModuleRenderer::new("openstack")
+        let actual = TestRenderer::new()
             .env("PWD", dir.path().to_str().unwrap())
             .env("OS_CLOUD", "test")
             .config(toml::toml! {
                 [openstack]
             })
-            .collect();
+            .module("openstack");
         let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  test")));
 
         assert_eq!(actual, expected);

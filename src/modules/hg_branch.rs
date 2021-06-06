@@ -105,7 +105,7 @@ mod tests {
     use std::path::Path;
     use std::process::Command;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{fixture_repo, FixtureProvider, TestRenderer};
 
     enum Expect<'a> {
         BranchName(&'a str),
@@ -120,9 +120,9 @@ mod tests {
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("hg_branch")
+        let actual = TestRenderer::new()
             .path(repo_dir.path())
-            .collect();
+            .module("hg_branch");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -287,7 +287,7 @@ mod tests {
         config: Option<toml::Value>,
         expectations: &[Expect],
     ) {
-        let actual = ModuleRenderer::new("hg_branch")
+        let actual = TestRenderer::new()
             .path(repo_dir.to_str().unwrap())
             .config(config.unwrap_or_else(|| {
                 toml::toml! {
@@ -295,7 +295,7 @@ mod tests {
                     disabled = false
                 }
             }))
-            .collect();
+            .module("hg_branch");
 
         let mut expect_branch_name = "default";
         let mut expect_style = Color::Purple.bold();

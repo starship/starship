@@ -148,29 +148,29 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
 mod tests {
     use ansi_term::Color;
 
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     #[test]
     fn success_status() {
         let expected = None;
 
         // Status code 0
-        let actual = ModuleRenderer::new("status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [status]
                 disabled = false
             })
             .status(0)
-            .collect();
+            .module("status");
         assert_eq!(expected, actual);
 
         // No status code
-        let actual = ModuleRenderer::new("status")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [status]
                 disabled = false
             })
-            .collect();
+            .module("status");
         assert_eq!(expected, actual);
     }
 
@@ -178,7 +178,7 @@ mod tests {
     fn not_enabled() {
         let expected = None;
 
-        let actual = ModuleRenderer::new("status").status(1).collect();
+        let actual = TestRenderer::new().status(1).module("status");
         assert_eq!(expected, actual);
     }
 
@@ -191,14 +191,14 @@ mod tests {
                 "{} ",
                 Color::Red.bold().paint(format!("✖{}", status))
             ));
-            let actual = ModuleRenderer::new("status")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [status]
                     symbol = "✖"
                     disabled = false
                 })
                 .status(*status)
-                .collect();
+                .module("status");
             assert_eq!(expected, actual);
         }
     }
@@ -217,14 +217,14 @@ mod tests {
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
             let expected = name.map(|n| n.to_string());
-            let actual = ModuleRenderer::new("status")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [status]
                     format = "$common_meaning$signal_name"
                     disabled = false
                 })
                 .status(*status)
-                .collect();
+                .module("status");
             assert_eq!(expected, actual);
         }
     }
@@ -244,7 +244,7 @@ mod tests {
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
             let expected = name.map(|n| n.to_string());
-            let actual = ModuleRenderer::new("status")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [status]
                     format = "$common_meaning$signal_name"
@@ -252,7 +252,7 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
-                .collect();
+                .module("status");
             assert_eq!(expected, actual);
         }
     }
@@ -273,14 +273,14 @@ mod tests {
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
             let expected = name.map(|n| n.to_string());
-            let actual = ModuleRenderer::new("status")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [status]
                     format = "$maybe_int"
                     disabled = false
                 })
                 .status(*status)
-                .collect();
+                .module("status");
             assert_eq!(expected, actual);
         }
     }
@@ -292,7 +292,7 @@ mod tests {
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
             let expected = Some(name.to_string());
-            let actual = ModuleRenderer::new("status")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [status]
                     format = "$symbol"
@@ -306,7 +306,7 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
-                .collect();
+                .module("status");
             assert_eq!(expected, actual);
         }
     }
@@ -318,7 +318,7 @@ mod tests {
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
             let expected = Some(name.to_string());
-            let actual = ModuleRenderer::new("status")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [status]
                     format = "$symbol"
@@ -332,7 +332,7 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
-                .collect();
+                .module("status");
             assert_eq!(expected, actual);
         }
     }

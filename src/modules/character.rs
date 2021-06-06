@@ -70,7 +70,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod test {
     use crate::context::Shell;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
@@ -78,11 +78,11 @@ mod test {
         let expected = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // Status code 0
-        let actual = ModuleRenderer::new("character").status(0).collect();
+        let actual = TestRenderer::new().status(0).module("character");
         assert_eq!(expected, actual);
 
         // No status code
-        let actual = ModuleRenderer::new("character").collect();
+        let actual = TestRenderer::new().module("character");
         assert_eq!(expected, actual);
     }
 
@@ -93,7 +93,7 @@ mod test {
         let exit_values = [1, 54321, -5000];
 
         for status in &exit_values {
-            let actual = ModuleRenderer::new("character").status(*status).collect();
+            let actual = TestRenderer::new().status(*status).module("character");
             assert_eq!(expected, actual);
         }
     }
@@ -107,26 +107,26 @@ mod test {
 
         // Test failure values
         for status in &exit_values {
-            let actual = ModuleRenderer::new("character")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [character]
                     success_symbol = "[➜](bold green)"
                     error_symbol = "[✖](bold red)"
                 })
                 .status(*status)
-                .collect();
+                .module("character");
             assert_eq!(expected_fail, actual);
         }
 
         // Test success
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [character]
                 success_symbol = "[➜](bold green)"
                 error_symbol = "[✖](bold red)"
             })
             .status(0)
-            .collect();
+            .module("character");
         assert_eq!(expected_success, actual);
     }
 
@@ -137,28 +137,28 @@ mod test {
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // zle keymap is vicmd
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .shell(Shell::Zsh)
             .keymap("vicmd")
-            .collect();
+            .module("character");
         assert_eq!(expected_vicmd, actual);
 
         // specified vicmd character
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [character]
                 vicmd_symbol = "[V](bold green)"
             })
             .shell(Shell::Zsh)
             .keymap("vicmd")
-            .collect();
+            .module("character");
         assert_eq!(expected_specified, actual);
 
         // zle keymap is other
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .shell(Shell::Zsh)
             .keymap("visual")
-            .collect();
+            .module("character");
         assert_eq!(expected_other, actual);
     }
 
@@ -169,28 +169,28 @@ mod test {
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // fish keymap is default
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .shell(Shell::Fish)
             .keymap("default")
-            .collect();
+            .module("character");
         assert_eq!(expected_vicmd, actual);
 
         // specified vicmd character
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [character]
                 vicmd_symbol = "[V](bold green)"
             })
             .shell(Shell::Fish)
             .keymap("default")
-            .collect();
+            .module("character");
         assert_eq!(expected_specified, actual);
 
         // fish keymap is other
-        let actual = ModuleRenderer::new("character")
+        let actual = TestRenderer::new()
             .shell(Shell::Fish)
             .keymap("visual")
-            .collect();
+            .module("character");
         assert_eq!(expected_other, actual);
     }
 }

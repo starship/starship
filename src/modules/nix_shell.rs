@@ -62,12 +62,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn no_env_variables() {
-        let actual = ModuleRenderer::new("nix_shell").collect();
+        let actual = TestRenderer::new().module("nix_shell");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -75,9 +75,9 @@ mod tests {
 
     #[test]
     fn invalid_env_variables() {
-        let actual = ModuleRenderer::new("nix_shell")
+        let actual = TestRenderer::new()
             .env("IN_NIX_SHELL", "something_wrong")
-            .collect();
+            .module("nix_shell");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -85,9 +85,9 @@ mod tests {
 
     #[test]
     fn pure_shell() {
-        let actual = ModuleRenderer::new("nix_shell")
+        let actual = TestRenderer::new()
             .env("IN_NIX_SHELL", "pure")
-            .collect();
+            .module("nix_shell");
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  pure")));
 
         assert_eq!(expected, actual);
@@ -95,9 +95,9 @@ mod tests {
 
     #[test]
     fn impure_shell() {
-        let actual = ModuleRenderer::new("nix_shell")
+        let actual = TestRenderer::new()
             .env("IN_NIX_SHELL", "impure")
-            .collect();
+            .module("nix_shell");
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure")));
 
         assert_eq!(expected, actual);
@@ -105,10 +105,10 @@ mod tests {
 
     #[test]
     fn pure_shell_name() {
-        let actual = ModuleRenderer::new("nix_shell")
+        let actual = TestRenderer::new()
             .env("IN_NIX_SHELL", "pure")
             .env("name", "starship")
-            .collect();
+            .module("nix_shell");
         let expected = Some(format!(
             "via {} ",
             Color::Blue.bold().paint("❄️  pure (starship)")
@@ -119,10 +119,10 @@ mod tests {
 
     #[test]
     fn impure_shell_name() {
-        let actual = ModuleRenderer::new("nix_shell")
+        let actual = TestRenderer::new()
             .env("IN_NIX_SHELL", "impure")
             .env("name", "starship")
-            .collect();
+            .module("nix_shell");
         let expected = Some(format!(
             "via {} ",
             Color::Blue.bold().paint("❄️  impure (starship)")

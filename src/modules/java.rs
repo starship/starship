@@ -91,7 +91,7 @@ fn format_java_version(java_version: &str, version_format: &str) -> Option<Strin
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{test::ModuleRenderer, utils::CommandOutput};
+    use crate::{test::TestRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -202,7 +202,7 @@ mod tests {
     #[test]
     fn folder_without_java_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -212,7 +212,7 @@ mod tests {
     fn folder_with_java_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.java"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -222,10 +222,10 @@ mod tests {
     fn folder_with_java_file_preview() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.java"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").cmd("java -Xinternalversion", Some(CommandOutput {
+        let actual = TestRenderer::new().cmd("java -Xinternalversion", Some(CommandOutput {
             stdout: "OpenJDK 64-Bit Server VM (16+14) for bsd-aarch64 JRE (16+14), built on Jan 17 2021 07:19:47 by \"brew\" with clang Apple LLVM 12.0.0 (clang-1200.0.32.28)\n".to_owned(),
             stderr: "".to_owned()
-        })).path(dir.path()).collect();
+        })).path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v16 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -235,10 +235,10 @@ mod tests {
     fn folder_with_java_file_no_java_installed() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.java"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java")
+        let actual = TestRenderer::new()
             .cmd("java -Xinternalversion", None)
             .path(dir.path())
-            .collect();
+            .module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -248,7 +248,7 @@ mod tests {
     fn folder_with_class_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.class"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -258,7 +258,7 @@ mod tests {
     fn folder_with_gradle_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -268,7 +268,7 @@ mod tests {
     fn folder_with_jar_archive() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("test.jar"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -278,7 +278,7 @@ mod tests {
     fn folder_with_pom_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("pom.xml"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -288,7 +288,7 @@ mod tests {
     fn folder_with_gradle_kotlin_build_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle.kts"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -298,7 +298,7 @@ mod tests {
     fn folder_with_sbt_build_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle.kts"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -308,7 +308,7 @@ mod tests {
     fn folder_with_java_version_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".java-version"))?.sync_all()?;
-        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -321,7 +321,7 @@ mod tests {
         let java_home: PathBuf = ["a", "b", "c"].iter().collect();
         let java_bin = java_home.join("bin").join("java");
 
-        let actual = ModuleRenderer::new("java")
+        let actual = TestRenderer::new()
             .env("JAVA_HOME", java_home.to_str().unwrap())
             .cmd(&format!("{} -Xinternalversion", java_bin.to_str().unwrap()),
             Some(CommandOutput {
@@ -329,7 +329,7 @@ mod tests {
                 stderr: String::new(),
             }))
             .path(dir.path())
-            .collect();
+            .module("java");
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v11.0.4 ")));
         assert_eq!(expected, actual);
         dir.close()

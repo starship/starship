@@ -123,15 +123,15 @@ mod tests {
     use std::io;
     use std::process::Command;
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{fixture_repo, FixtureProvider, TestRenderer};
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .path(repo_dir.path())
-            .collect();
+            .module("git_branch");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -280,9 +280,9 @@ mod tests {
             .current_dir(&repo_dir)
             .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_branch");
 
         let expected = Some(format!(
             "on {} ",
@@ -302,13 +302,13 @@ mod tests {
             .current_dir(repo_dir.path())
             .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_branch]
                     only_attached = true
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_branch");
 
         let expected = Some(format!(
             "on {} ",
@@ -330,13 +330,13 @@ mod tests {
             .current_dir(&repo_dir.path())
             .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_branch]
                     only_attached = true
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_branch");
 
         let expected = None;
 
@@ -358,9 +358,9 @@ mod tests {
             .current_dir(&repo_dir)
             .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_branch");
 
         let expected = Some(format!(
             "on {} ",
@@ -387,7 +387,7 @@ mod tests {
     //     // git2 does not care about our mocking
     //     std::env::set_var("GIT_DIR", repo_dir.path().join(".git"));
 
-    //     let actual = ModuleRenderer::new("git_branch").collect();
+    //     let actual = TestRenderer::new("git_branch").module("git_branch");
 
     //     std::env::remove_var("GIT_DIR");
 
@@ -429,7 +429,7 @@ mod tests {
             .current_dir(repo_dir.path())
             .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .config(
                 toml::from_str(&format!(
                     "
@@ -442,7 +442,7 @@ mod tests {
                 .unwrap(),
             )
             .path(repo_dir.path())
-            .collect();
+            .module("git_branch");
 
         let expected = Some(format!(
             "on {} ",
@@ -468,7 +468,7 @@ mod tests {
             .current_dir(repo_dir.path())
             .output()?;
 
-        let actual = ModuleRenderer::new("git_branch")
+        let actual = TestRenderer::new()
             .config(
                 toml::from_str(&format!(
                     r#"
@@ -481,7 +481,7 @@ mod tests {
                 .unwrap(),
             )
             .path(repo_dir.path())
-            .collect();
+            .module("git_branch");
 
         assert_eq!(Some(expected.into()), actual);
         repo_dir.close()

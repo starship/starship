@@ -344,7 +344,7 @@ enum FileType {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
@@ -606,7 +606,7 @@ mod tests {
     }
 
     fn expect_output(dir: &Path, expected: Option<String>) {
-        let actual = ModuleRenderer::new("dotnet").path(dir).collect();
+        let actual = TestRenderer::new().path(dir).module("dotnet");
 
         assert_eq!(actual, expected);
     }

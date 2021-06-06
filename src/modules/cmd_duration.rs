@@ -96,14 +96,14 @@ fn undistract_me<'a, 'b>(
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn config_blank_duration_1s() {
-        let actual = ModuleRenderer::new("cmd_duration")
+        let actual = TestRenderer::new()
             .cmd_duration(1000)
-            .collect();
+            .module("cmd_duration");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -111,9 +111,9 @@ mod tests {
 
     #[test]
     fn config_blank_duration_5s() {
-        let actual = ModuleRenderer::new("cmd_duration")
+        let actual = TestRenderer::new()
             .cmd_duration(5000)
-            .collect();
+            .module("cmd_duration");
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("5s")));
         assert_eq!(expected, actual);
@@ -121,13 +121,13 @@ mod tests {
 
     #[test]
     fn config_5s_duration_3s() {
-        let actual = ModuleRenderer::new("cmd_duration")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
             })
             .cmd_duration(3000)
-            .collect();
+            .module("cmd_duration");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -135,13 +135,13 @@ mod tests {
 
     #[test]
     fn config_5s_duration_10s() {
-        let actual = ModuleRenderer::new("cmd_duration")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [cmd_duration]
                 min_time = 5000
             })
             .cmd_duration(10000)
-            .collect();
+            .module("cmd_duration");
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
         assert_eq!(expected, actual);
@@ -149,13 +149,13 @@ mod tests {
 
     #[test]
     fn config_1s_duration_prefix_underwent() {
-        let actual = ModuleRenderer::new("cmd_duration")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [cmd_duration]
                 format = "underwent [$duration]($style) "
             })
             .cmd_duration(1000)
-            .collect();
+            .module("cmd_duration");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -163,13 +163,13 @@ mod tests {
 
     #[test]
     fn config_5s_duration_prefix_underwent() {
-        let actual = ModuleRenderer::new("cmd_duration")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [cmd_duration]
                 format = "underwent [$duration]($style) "
             })
             .cmd_duration(5000)
-            .collect();
+            .module("cmd_duration");
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
         assert_eq!(expected, actual);

@@ -46,12 +46,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn not_in_env() {
-        let actual = ModuleRenderer::new("vcsh").collect();
+        let actual = TestRenderer::new().module("vcsh");
 
         let expected = None;
 
@@ -60,9 +60,9 @@ mod tests {
 
     #[test]
     fn env_set() {
-        let actual = ModuleRenderer::new("vcsh")
+        let actual = TestRenderer::new()
             .env("VCSH_REPO_NAME", "astronauts")
-            .collect();
+            .module("vcsh");
 
         let expected = Some(format!(
             "vcsh {} ",

@@ -82,7 +82,7 @@ fn get_helm_version(helm_stdout: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -91,7 +91,7 @@ mod tests {
     fn folder_without_helm_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("helm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("helm");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -103,7 +103,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("helmfile.yaml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("helm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("helm");
 
         let expected = Some(format!("via {}", Color::White.bold().paint("⎈ v3.1.1 ")));
         assert_eq!(expected, actual);
@@ -115,7 +115,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Chart.yaml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("helm").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("helm");
 
         let expected = Some(format!("via {}", Color::White.bold().paint("⎈ v3.1.1 ")));
         assert_eq!(expected, actual);

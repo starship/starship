@@ -562,11 +562,11 @@ pub fn format_duration(duration: &Duration) -> String {
 #[cfg(test)]
 mod tests {
     use crate::context::PromptMode;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     #[test]
     fn test_prompt_left() {
-        let actual = ModuleRenderer::new("")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 format = "HOST:user  ~\n> "
                 add_newline = false
@@ -582,7 +582,7 @@ mod tests {
     fn test_prompt_right() {
         // Prompt can't end on a right line, so it must always end of a trailing
         // line break if right prompt has more lines than left prompt.
-        let actual = ModuleRenderer::new("")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 format = ""
                 format_right = "5:17 PM\nSaturday, May 5"
@@ -599,7 +599,7 @@ mod tests {
 
     #[test]
     fn test_prompt_both() {
-        let actual = ModuleRenderer::new("")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 format = "HOST:user  ~\n> "
                 format_right = "5:17 PM"
@@ -615,7 +615,7 @@ mod tests {
 
     #[test]
     fn test_prompt_both_too_narrow() {
-        let actual = ModuleRenderer::new("")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 format = "HOST:user  ~\n> "
                 format_right = "5:17 PM"
@@ -631,7 +631,7 @@ mod tests {
 
     #[test]
     fn test_prompt_secondary() {
-        let actual = ModuleRenderer::new("")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 format_secondary = "<<"
             })
@@ -644,7 +644,7 @@ mod tests {
 
     #[test]
     fn test_prompt_secondary_multiline() {
-        let actual = ModuleRenderer::new("")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 format_secondary = "<<\n<<"
             })

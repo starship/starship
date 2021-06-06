@@ -30,14 +30,13 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
 });
 
 /// Render a specific starship module by name
-pub struct ModuleRenderer<'a> {
-    name: &'a str,
+pub struct TestRenderer<'a> {
     context: Context<'a>,
 }
 
-impl<'a> ModuleRenderer<'a> {
-    /// Creates a new ModuleRenderer
-    pub fn new(name: &'a str) -> Self {
+impl<'a> TestRenderer<'a> {
+    /// Creates a new TestRenderer
+    pub fn new() -> Self {
         // Start logger
         Lazy::force(&LOGGER);
 
@@ -49,7 +48,7 @@ impl<'a> ModuleRenderer<'a> {
         );
         context.config = StarshipConfig { config: None };
 
-        Self { name, context }
+        Self { context }
     }
 
     /// Sets the terminal width of the underlying context
@@ -148,8 +147,8 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     /// Renders the module returning its output
-    pub fn collect(self) -> Option<String> {
-        let ret = crate::print::get_module(self.name, self.context);
+    pub fn module(self, name: &str) -> Option<String> {
+        let ret = crate::print::get_module(name, self.context);
         // all tests rely on the fact that an empty module produces None as output as the
         // convention was that there would be no module but None. This is nowadays not anymore
         // the case (to get durations for all modules). So here we make it so, that an empty

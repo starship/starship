@@ -108,15 +108,15 @@ mod tests {
     use std::process::Command;
     use std::{io, str};
 
-    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::test::{fixture_repo, FixtureProvider, TestRenderer};
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = None;
 
@@ -136,13 +136,13 @@ mod tests {
         git_output.truncate(7);
         let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_commit]
                     only_detached = false
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = Some(format!(
             "{} ",
@@ -168,14 +168,14 @@ mod tests {
         git_output.truncate(14);
         let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_commit]
                     only_detached = false
                     commit_hash_length = 14
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = Some(format!(
             "{} ",
@@ -193,9 +193,9 @@ mod tests {
     fn test_render_commit_hash_only_detached_on_branch() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = None;
 
@@ -220,9 +220,9 @@ mod tests {
         git_output.truncate(7);
         let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = Some(format!(
             "{} ",
@@ -257,7 +257,7 @@ mod tests {
 
         let expected_output = format!("{} {}", commit_output, tag_output);
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_commit]
                     only_detached = false
@@ -265,7 +265,7 @@ mod tests {
                     tag_symbol = ""
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = Some(format!(
             "{} ",
@@ -310,14 +310,14 @@ mod tests {
 
         let expected_output = format!("{} {}", commit_output, tag_output);
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_commit]
                     tag_disabled = false
                     tag_symbol = " "
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = Some(format!(
             "{} ",
@@ -381,7 +381,7 @@ mod tests {
 
         let expected_output = format!("{} {}", commit_output, tag_output);
 
-        let actual = ModuleRenderer::new("git_commit")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [git_commit]
                     only_detached = false
@@ -389,7 +389,7 @@ mod tests {
                     tag_symbol = " "
             })
             .path(&repo_dir.path())
-            .collect();
+            .module("git_commit");
 
         let expected = Some(format!(
             "{} ",

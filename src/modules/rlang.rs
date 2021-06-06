@@ -74,7 +74,7 @@ fn parse_version(r_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::parse_version;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs;
     use std::fs::File;
@@ -152,7 +152,7 @@ https://www.gnu.org/licenses/."#;
     }
 
     fn check_r_render(dir: &tempfile::TempDir) {
-        let actual = ModuleRenderer::new("rlang").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("rlang");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.1.0 ")));
         assert_eq!(expected, actual);
     }

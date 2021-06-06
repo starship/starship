@@ -71,7 +71,7 @@ fn parse_swift_version(swift_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::parse_swift_version;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -92,7 +92,7 @@ mod tests {
     fn folder_without_swift_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("swift.txt"))?.sync_all()?;
-        let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("swift");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -102,7 +102,7 @@ mod tests {
     fn folder_with_package_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Package.swift"))?.sync_all()?;
-        let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("swift");
         let expected = Some(format!(
             "via {}",
             Color::Fixed(202).bold().paint("🐦 v5.2.2 ")
@@ -115,7 +115,7 @@ mod tests {
     fn folder_with_swift_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.swift"))?.sync_all()?;
-        let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("swift");
         let expected = Some(format!(
             "via {}",
             Color::Fixed(202).bold().paint("🐦 v5.2.2 ")

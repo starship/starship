@@ -85,7 +85,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
@@ -93,9 +93,9 @@ mod tests {
     #[test]
     fn only_trigger_when_docker_config_exists() -> io::Result<()> {
         let cfg_dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
-            .collect();
+            .module("docker_context");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -118,10 +118,10 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
             .path(pwd.path())
-            .collect();
+            .module("docker_context");
 
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
 
@@ -147,10 +147,10 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
             .path(pwd.path())
-            .collect();
+            .module("docker_context");
 
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
 
@@ -176,10 +176,10 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
             .path(pwd.path())
-            .collect();
+            .module("docker_context");
 
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
 
@@ -202,9 +202,9 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
-            .collect();
+            .module("docker_context");
 
         let expected = None;
 
@@ -226,13 +226,13 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false
             })
-            .collect();
+            .module("docker_context");
 
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
 
@@ -252,13 +252,13 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false
             })
-            .collect();
+            .module("docker_context");
 
         let expected = None;
 
@@ -271,13 +271,13 @@ mod tests {
     fn test_docker_host_env() -> io::Result<()> {
         let cfg_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_HOST", "udp://starship@127.0.0.1:53")
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false
             })
-            .collect();
+            .module("docker_context");
         let expected = Some(format!(
             "via {} ",
             Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
@@ -292,13 +292,13 @@ mod tests {
     fn test_docker_context_env() -> io::Result<()> {
         let cfg_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONTEXT", "starship")
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false
             })
-            .collect();
+            .module("docker_context");
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
 
         assert_eq!(expected, actual);
@@ -320,14 +320,14 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_CONTEXT", "starship")
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
             .config(toml::toml! {
                 [docker_context]
                 only_with_files = false
             })
-            .collect();
+            .module("docker_context");
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
 
         assert_eq!(expected, actual);
@@ -349,7 +349,7 @@ mod tests {
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
-        let actual = ModuleRenderer::new("docker_context")
+        let actual = TestRenderer::new()
             .env("DOCKER_HOST", "udp://starship@127.0.0.1:53")
             .env("DOCKER_CONTEXT", "starship")
             .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
@@ -357,7 +357,7 @@ mod tests {
                 [docker_context]
                 only_with_files = false
             })
-            .collect();
+            .module("docker_context");
         let expected = Some(format!(
             "via {} ",
             Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")

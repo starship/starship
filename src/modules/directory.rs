@@ -297,7 +297,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use crate::utils::home_dir;
     use ansi_term::Color;
     #[cfg(not(target_os = "windows"))]
@@ -477,10 +477,10 @@ mod tests {
             init_repo(&repo_dir)?;
             symlink(&src_dir, &symlink_dir)?;
 
-            let actual = ModuleRenderer::new("directory")
+            let actual = TestRenderer::new()
                 .env("HOME", tmp_dir.path().to_str().unwrap())
                 .path(symlink_dir)
-                .collect();
+                .module("directory");
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge")));
 
             assert_eq!(expected, actual);
@@ -496,7 +496,7 @@ mod tests {
             fs::create_dir_all(&dir)?;
             init_repo(&tmp_dir.path())?;
 
-            let actual = ModuleRenderer::new("directory")
+            let actual = TestRenderer::new()
                 .config(toml::toml! {
                     [directory]
                     // `truncate_to_repo = true` should attempt to display the truncated path
@@ -505,7 +505,7 @@ mod tests {
                 })
                 .path(dir)
                 .env("HOME", tmp_dir.path().to_str().unwrap())
-                .collect();
+                .module("directory");
             let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
 
             assert_eq!(expected, actual);
@@ -516,7 +516,7 @@ mod tests {
         #[test]
         #[ignore]
         fn directory_in_root() {
-            let actual = ModuleRenderer::new("directory").path("/etc").collect();
+            let actual = TestRenderer::new().path("/etc").module("directory");
             let expected = Some(format!(
                 "{}{} ",
                 Color::Cyan.bold().paint("/etc"),
@@ -529,9 +529,9 @@ mod tests {
 
     #[test]
     fn home_directory_default_home_symbol() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path(home_dir().unwrap())
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
 
         assert_eq!(expected, actual);
@@ -539,13 +539,13 @@ mod tests {
 
     #[test]
     fn home_directory_custom_home_symbol() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path(home_dir().unwrap())
             .config(toml::toml! {
                 [directory]
                 home_symbol = "🚀"
             })
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
 
         assert_eq!(expected, actual);
@@ -553,13 +553,13 @@ mod tests {
 
     #[test]
     fn home_directory_custom_home_symbol_subdirectories() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path(home_dir().unwrap().join("path/subpath"))
             .config(toml::toml! {
                 [directory]
                 home_symbol = "🚀"
             })
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀/path/subpath")));
 
         assert_eq!(expected, actual);
@@ -567,7 +567,7 @@ mod tests {
 
     #[test]
     fn substituted_truncated_path() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path("/some/long/network/path/workspace/a/b/c/dev")
             .config(toml::toml! {
                 [directory]
@@ -576,7 +576,7 @@ mod tests {
                 "/some/long/network/path" = "/some/net"
                 "a/b/c" = "d"
             })
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("net/workspace/d/dev")
@@ -587,14 +587,14 @@ mod tests {
 
     #[test]
     fn substitution_order() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path("/path/to/sub")
             .config(toml::toml! {
                 [directory.substitutions]
                 "/path/to/sub" = "/correct/order"
                 "/to/sub" = "/wrong/order"
             })
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/correct/order")));
 
         assert_eq!(expected, actual);
@@ -603,7 +603,7 @@ mod tests {
     #[test]
     fn strange_substitution() {
         let strange_sub = "/\\/;,!";
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path("/foo/bar/regular/path")
             .config(toml::toml! {
                 [directory]
@@ -612,7 +612,7 @@ mod tests {
                 [directory.substitutions]
                 "regular" = strange_sub
             })
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -629,7 +629,7 @@ mod tests {
         let dir = tmp_dir.path().join("starship");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
+        let actual = TestRenderer::new().path(dir).module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!("~/{}/starship", name))
@@ -645,7 +645,7 @@ mod tests {
         let dir = tmp_dir.path().join("engine/schematics");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
+        let actual = TestRenderer::new().path(dir).module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -663,14 +663,14 @@ mod tests {
         let dir = tmp_dir.path().join("starship/schematics");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 1
                 fish_style_pwd_dir_length = 2
             })
             .path(&dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -686,14 +686,14 @@ mod tests {
     fn root_directory() {
         // Note: We have disable the read_only settings here due to false positives when running
         // the tests on Windows as a non-admin.
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 read_only = ""
                 read_only_style = ""
             })
             .path("/")
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
 
         assert_eq!(expected, actual);
@@ -705,7 +705,7 @@ mod tests {
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
+        let actual = TestRenderer::new().path(dir).module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -723,13 +723,13 @@ mod tests {
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 100
             })
             .path(&dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -747,14 +747,14 @@ mod tests {
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 1
                 fish_style_pwd_dir_length = 100
             })
             .path(&dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -772,13 +772,13 @@ mod tests {
         let dir = tmp_dir.path().join("rocket");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 2
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!("{}/rocket", name))
@@ -794,14 +794,14 @@ mod tests {
         let dir = tmp_dir.path().join("thrusters/rocket");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 2
                 fish_style_pwd_dir_length = 1
             })
             .path(&dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!(
@@ -822,7 +822,7 @@ mod tests {
         fs::create_dir(&repo_dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory").path(repo_dir).collect();
+        let actual = TestRenderer::new().path(repo_dir).module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("rocket-controls")));
 
         assert_eq!(expected, actual);
@@ -838,7 +838,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
+        let actual = TestRenderer::new().path(dir).module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls/src")
@@ -857,7 +857,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory").path(dir).collect();
+        let actual = TestRenderer::new().path(dir).module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
@@ -876,7 +876,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
@@ -884,7 +884,7 @@ mod tests {
                 truncate_to_repo = false
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -905,7 +905,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
@@ -914,7 +914,7 @@ mod tests {
                 fish_style_pwd_dir_length = 1
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!(
@@ -936,7 +936,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -945,7 +945,7 @@ mod tests {
                 fish_style_pwd_dir_length = 1
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!(
@@ -967,7 +967,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -975,7 +975,7 @@ mod tests {
                 truncate_to_repo = true
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -997,7 +997,7 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory").path(symlink_dir).collect();
+        let actual = TestRenderer::new().path(symlink_dir).module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls-symlink")
@@ -1019,9 +1019,9 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path(symlink_src_dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls-symlink/src")
@@ -1043,9 +1043,9 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .path(symlink_src_dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
@@ -1070,7 +1070,7 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
@@ -1078,7 +1078,7 @@ mod tests {
                 truncate_to_repo = false
             })
             .path(symlink_src_dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -1105,7 +1105,7 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // Don't truncate the path at all.
@@ -1114,7 +1114,7 @@ mod tests {
                 fish_style_pwd_dir_length = 1
             })
             .path(symlink_src_dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!(
@@ -1142,7 +1142,7 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -1151,7 +1151,7 @@ mod tests {
                 fish_style_pwd_dir_length = 1
             })
             .path(symlink_src_dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!(
@@ -1179,7 +1179,7 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -1187,7 +1187,7 @@ mod tests {
                 truncate_to_repo = true
             })
             .path(symlink_src_dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan
@@ -1209,7 +1209,7 @@ mod tests {
         init_repo(&repo_dir).unwrap();
         symlink(&dir, repo_dir.join("src/loop"))?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 // `truncate_to_repo = true` should display the truncated path
@@ -1217,7 +1217,7 @@ mod tests {
                 truncate_to_repo = true
             })
             .path(repo_dir.join("src/loop/loop"))
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls/src/loop/loop")
@@ -1229,14 +1229,14 @@ mod tests {
 
     #[test]
     fn truncation_symbol_truncated_root() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
             .path(Path::new("/a/four/element/path"))
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("…/four/element/path")
@@ -1246,14 +1246,14 @@ mod tests {
 
     #[test]
     fn truncation_symbol_not_truncated_root() {
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 4
                 truncation_symbol = "…/"
             })
             .path(Path::new("/a/four/element/path"))
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("/a/four/element/path")
@@ -1267,14 +1267,14 @@ mod tests {
         let dir = tmp_dir.path().join("a/subpath");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!("…/{}/a/subpath", name))
@@ -1289,7 +1289,7 @@ mod tests {
         let dir = tmp_dir.path().join("a/subpath");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncate_to_repo = false // Necessary if homedir is a git repo
@@ -1297,7 +1297,7 @@ mod tests {
                 truncation_symbol = "…/"
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(format!("~/{}/a/subpath", name))
@@ -1314,14 +1314,14 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 3
                 truncation_symbol = "…/"
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/src/sub/path")));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1335,7 +1335,7 @@ mod tests {
         fs::create_dir_all(&dir)?;
         init_repo(&repo_dir).unwrap();
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 5
@@ -1343,7 +1343,7 @@ mod tests {
                 truncate_to_repo = true
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint("…/repo/src/sub/path")
@@ -1356,14 +1356,14 @@ mod tests {
     #[cfg(target_os = "windows")]
     fn truncation_symbol_windows_root_not_truncated() {
         let dir = Path::new("C:\\temp");
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 2
                 truncation_symbol = "…/"
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("C:/temp")));
         assert_eq!(expected, actual);
     }
@@ -1372,14 +1372,14 @@ mod tests {
     #[cfg(target_os = "windows")]
     fn truncation_symbol_windows_root_truncated() {
         let dir = Path::new("C:\\temp");
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 1
                 truncation_symbol = "…/"
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/temp")));
         assert_eq!(expected, actual);
     }
@@ -1388,14 +1388,14 @@ mod tests {
     #[cfg(target_os = "windows")]
     fn truncation_symbol_windows_root_truncated_backslash() {
         let dir = Path::new("C:\\temp");
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 truncation_length = 1
                 truncation_symbol = r"…\"
             })
             .path(dir)
-            .collect();
+            .module("directory");
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
         assert_eq!(expected, actual);
     }
@@ -1412,7 +1412,7 @@ mod tests {
             Color::Cyan.bold().paint("Logical:/fuel-gauge")
         ));
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 use_logical_path = true
@@ -1420,7 +1420,7 @@ mod tests {
             })
             .path(path)
             .logical_path(logical_path)
-            .collect();
+            .module("directory");
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1438,7 +1438,7 @@ mod tests {
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
         ));
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 use_logical_path = false
@@ -1446,7 +1446,7 @@ mod tests {
             })
             .path(path)
             .logical_path(logical_path) // logical_path should be ignored
-            .collect();
+            .module("directory");
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1466,7 +1466,7 @@ mod tests {
 
         // Note: We have disable the read_only settings here due to false positives when running
         // the tests on Windows as a non-admin.
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 use_logical_path = false
@@ -1475,7 +1475,7 @@ mod tests {
                 read_only_style = ""
             })
             .path(sys32_path)
-            .collect();
+            .module("directory");
 
         assert_eq!(expected, actual);
     }
@@ -1494,14 +1494,14 @@ mod tests {
             Color::Cyan.bold().paint(r"\\server\share/a/b/c")
         ));
 
-        let actual = ModuleRenderer::new("directory")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [directory]
                 use_logical_path = false
                 truncation_length = 0
             })
             .path(unc_path)
-            .collect();
+            .module("directory");
 
         assert_eq!(expected, actual);
     }
@@ -1544,7 +1544,7 @@ mod tests {
             Color::Cyan.bold().paint(path.to_string_lossy())
         ));
 
-        let actual = ModuleRenderer::new("directory").path(path).collect();
+        let actual = TestRenderer::new().path(path).module("directory");
 
         assert_eq!(expected, actual);
     }

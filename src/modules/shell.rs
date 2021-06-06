@@ -57,13 +57,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::context::Shell;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn test_none_if_disabled() {
         let expected = None;
-        let actual = ModuleRenderer::new("shell").shell(Shell::Bash).collect();
+        let actual = TestRenderer::new().shell(Shell::Bash).module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -71,7 +71,7 @@ mod tests {
     #[test]
     fn test_none_if_unknown_shell() {
         let expected = None;
-        let actual = ModuleRenderer::new("shell").shell(Shell::Unknown).collect();
+        let actual = TestRenderer::new().shell(Shell::Unknown).module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -79,13 +79,13 @@ mod tests {
     #[test]
     fn test_bash_default_format() {
         let expected = Some(format!("{} ", "bsh"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Bash)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -93,14 +93,14 @@ mod tests {
     #[test]
     fn test_bash_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("bash")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Bash)
             .config(toml::toml! {
                 [shell]
                 bash_indicator = "[bash](bold cyan)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -108,13 +108,13 @@ mod tests {
     #[test]
     fn test_fish_default_format() {
         let expected = Some(format!("{} ", "fsh"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Fish)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -122,14 +122,14 @@ mod tests {
     #[test]
     fn test_fish_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("fish")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Fish)
             .config(toml::toml! {
                 [shell]
                 fish_indicator = "[fish](cyan bold)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -137,13 +137,13 @@ mod tests {
     #[test]
     fn test_zsh_default_format() {
         let expected = Some(format!("{} ", "zsh"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Zsh)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -151,14 +151,14 @@ mod tests {
     #[test]
     fn test_zsh_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("zsh")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Bash)
             .config(toml::toml! {
                 [shell]
                 bash_indicator = "[zsh](bold cyan)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -166,13 +166,13 @@ mod tests {
     #[test]
     fn test_powershell_default_format() {
         let expected = Some(format!("{} ", "psh"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::PowerShell)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -180,14 +180,14 @@ mod tests {
     #[test]
     fn test_powershell_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("powershell")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::PowerShell)
             .config(toml::toml! {
                 [shell]
                 powershell_indicator = "[powershell](bold cyan)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -195,13 +195,13 @@ mod tests {
     #[test]
     fn test_ion_default_format() {
         let expected = Some(format!("{} ", "ion"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Ion)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -209,14 +209,14 @@ mod tests {
     #[test]
     fn test_ion_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("ion")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Ion)
             .config(toml::toml! {
                 [shell]
                 ion_indicator = "[ion](bold cyan)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -224,13 +224,13 @@ mod tests {
     #[test]
     fn test_elvish_default_format() {
         let expected = Some(format!("{} ", "esh"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Elvish)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -238,14 +238,14 @@ mod tests {
     #[test]
     fn test_elvish_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("elvish")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Elvish)
             .config(toml::toml! {
                 [shell]
                 elvish_indicator = "[elvish](bold cyan)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -253,13 +253,13 @@ mod tests {
     #[test]
     fn test_nu_default_format() {
         let expected = Some(format!("{} ", "nu"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Nu)
             .config(toml::toml! {
                 [shell]
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -267,14 +267,14 @@ mod tests {
     #[test]
     fn test_nu_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("nu")));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Nu)
             .config(toml::toml! {
                 [shell]
                 nu_indicator = "[nu](bold cyan)"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -282,7 +282,7 @@ mod tests {
     #[test]
     fn test_custom_format_conditional_indicator_match() {
         let expected = Some(format!("{} ", "B"));
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Bash)
             .config(toml::toml! {
                 [shell]
@@ -290,7 +290,7 @@ mod tests {
                 format = "($bash_indicator )"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }
@@ -298,7 +298,7 @@ mod tests {
     #[test]
     fn test_custom_format_conditional_indicator_no_match() {
         let expected = None;
-        let actual = ModuleRenderer::new("shell")
+        let actual = TestRenderer::new()
             .shell(Shell::Fish)
             .config(toml::toml! {
                 [shell]
@@ -306,7 +306,7 @@ mod tests {
                 format = "($indicator )"
                 disabled = false
             })
-            .collect();
+            .module("shell");
 
         assert_eq!(expected, actual);
     }

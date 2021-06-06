@@ -56,7 +56,7 @@ fn parse_red_version(red_version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::parse_red_version;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -70,7 +70,7 @@ mod tests {
     #[test]
     fn folder_without_red_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("red").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("red");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -80,7 +80,7 @@ mod tests {
     fn folder_with_red_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.red"))?.sync_all()?;
-        let actual = ModuleRenderer::new("red").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("red");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -90,7 +90,7 @@ mod tests {
     fn folder_with_reds_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.reds"))?.sync_all()?;
-        let actual = ModuleRenderer::new("red").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("red");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
         assert_eq!(expected, actual);
         dir.close()

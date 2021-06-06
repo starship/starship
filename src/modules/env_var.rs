@@ -52,18 +52,18 @@ fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option
 
 #[cfg(test)]
 mod test {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::{Color, Style};
 
     const TEST_VAR_VALUE: &str = "astronauts";
 
     #[test]
     fn empty_config() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
             })
-            .collect();
+            .module("env_var");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -71,13 +71,13 @@ mod test {
 
     #[test]
     fn defined_variable() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "TEST_VAR"
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
-            .collect();
+            .module("env_var");
         let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
@@ -85,12 +85,12 @@ mod test {
 
     #[test]
     fn undefined_variable() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "TEST_VAR"
             })
-            .collect();
+            .module("env_var");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -98,14 +98,14 @@ mod test {
 
     #[test]
     fn default_has_no_effect() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "TEST_VAR"
                 default = "N/A"
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
-            .collect();
+            .module("env_var");
         let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
@@ -113,13 +113,13 @@ mod test {
 
     #[test]
     fn default_takes_effect() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "UNDEFINED_TEST_VAR"
                 default = "N/A"
             })
-            .collect();
+            .module("env_var");
         let expected = Some(format!("with {} ", style().paint("N/A")));
 
         assert_eq!(expected, actual);
@@ -127,14 +127,14 @@ mod test {
 
     #[test]
     fn symbol() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "TEST_VAR"
                 format = "with [■ $env_value](black bold dimmed) "
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
-            .collect();
+            .module("env_var");
         let expected = Some(format!(
             "with {} ",
             style().paint(format!("■ {}", TEST_VAR_VALUE))
@@ -145,14 +145,14 @@ mod test {
 
     #[test]
     fn prefix() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "TEST_VAR"
                 format = "with [_$env_value](black bold dimmed) "
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
-            .collect();
+            .module("env_var");
         let expected = Some(format!(
             "with {} ",
             style().paint(format!("_{}", TEST_VAR_VALUE))
@@ -163,14 +163,14 @@ mod test {
 
     #[test]
     fn suffix() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [env_var]
                 variable = "TEST_VAR"
                 format = "with [${env_value}_](black bold dimmed) "
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
-            .collect();
+            .module("env_var");
         let expected = Some(format!(
             "with {} ",
             style().paint(format!("{}_", TEST_VAR_VALUE))

@@ -67,7 +67,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::{Color, Style};
 
     macro_rules! get_hostname {
@@ -87,13 +87,13 @@ mod tests {
     #[test]
     fn ssh_only_false() {
         let hostname = get_hostname!();
-        let actual = ModuleRenderer::new("hostname")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [hostname]
                 ssh_only = false
                 trim_at = ""
             })
-            .collect();
+            .module("hostname");
         let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
@@ -101,12 +101,12 @@ mod tests {
 
     #[test]
     fn no_ssh() {
-        let actual = ModuleRenderer::new("hostname")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [hostname]
                 ssh_only = true
             })
-            .collect();
+            .module("hostname");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -115,14 +115,14 @@ mod tests {
     #[test]
     fn ssh() {
         let hostname = get_hostname!();
-        let actual = ModuleRenderer::new("hostname")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [hostname]
                 ssh_only = true
                 trim_at = ""
             })
             .env("SSH_CONNECTION", "something")
-            .collect();
+            .module("hostname");
         let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
@@ -131,13 +131,13 @@ mod tests {
     #[test]
     fn no_trim_at() {
         let hostname = get_hostname!();
-        let actual = ModuleRenderer::new("hostname")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [hostname]
                 ssh_only = false
                 trim_at = ""
             })
-            .collect();
+            .module("hostname");
         let expected = Some(format!("{} in ", style().paint(hostname)));
 
         assert_eq!(expected, actual);
@@ -147,13 +147,13 @@ mod tests {
     fn trim_at() {
         let hostname = get_hostname!();
         let (remainder, trim_at) = hostname.split_at(1);
-        let actual = ModuleRenderer::new("hostname")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [hostname]
                 ssh_only = false
                 trim_at = trim_at
             })
-            .collect();
+            .module("hostname");
         let expected = Some(format!("{} in ", style().paint(remainder)));
 
         assert_eq!(expected, actual);

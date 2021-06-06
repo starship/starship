@@ -173,7 +173,7 @@ mod tests {
 
     use ansi_term::Color;
 
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     #[test]
     fn account_set() -> io::Result<()> {
@@ -192,9 +192,9 @@ account = foo@example.com
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
-            .collect();
+            .module("gcloud");
         let expected = Some(format!(
             "on {} ",
             Color::Blue.bold().paint("☁️  foo@example.com")
@@ -221,13 +221,13 @@ account = foo@example.com
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .config(toml::toml! {
                 [gcloud]
                 format = "on [$symbol$account(\\($region\\))]($style) "
             })
-            .collect();
+            .module("gcloud");
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  foo")));
 
         assert_eq!(actual, expected);
@@ -254,9 +254,9 @@ region = us-central1
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
-            .collect();
+            .module("gcloud");
         let expected = Some(format!(
             "on {} ",
             Color::Blue.bold().paint("☁️  foo@example.com(us-central1)")
@@ -286,13 +286,13 @@ region = us-central1
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .config(toml::toml! {
                 [gcloud.region_aliases]
                 us-central1 = "uc1"
             })
-            .collect();
+            .module("gcloud");
         let expected = Some(format!(
             "on {} ",
             Color::Blue.bold().paint("☁️  foo@example.com(uc1)")
@@ -309,13 +309,13 @@ region = us-central1
         let mut active_config_file = File::create(&active_config_path)?;
         active_config_file.write_all(b"default1")?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .config(toml::toml! {
                 [gcloud]
                 format = "on [$symbol$active]($style) "
             })
-            .collect();
+            .module("gcloud");
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  default1")));
 
         assert_eq!(actual, expected);
@@ -339,13 +339,13 @@ project = abc
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .config(toml::toml! {
                 [gcloud]
                 format = "on [$symbol$project]($style) "
             })
-            .collect();
+            .module("gcloud");
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  abc")));
 
         assert_eq!(actual, expected);
@@ -369,14 +369,14 @@ project = abc
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CORE_PROJECT", "env_project")
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .config(toml::toml! {
                 [gcloud]
                 format = "on [$symbol$project]($style) "
             })
-            .collect();
+            .module("gcloud");
         let expected = Some(format!(
             "on {} ",
             Color::Blue.bold().paint("☁️  env_project")
@@ -389,13 +389,13 @@ project = abc
     #[test]
     fn region_not_set_with_display_region() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .config(toml::toml! {
                 [gcloud]
                 format = "on [$symbol$region]($style) "
             })
-            .collect();
+            .module("gcloud");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -428,14 +428,14 @@ project = overridden
 ",
         )?;
 
-        let actual = ModuleRenderer::new("gcloud")
+        let actual = TestRenderer::new()
             .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
             .env("CLOUDSDK_ACTIVE_CONFIG_NAME", "overridden")
             .config(toml::toml! {
                 [gcloud]
                 format = "on [$symbol$project]($style) "
             })
-            .collect();
+            .module("gcloud");
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
 
         assert_eq!(actual, expected);

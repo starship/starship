@@ -111,7 +111,7 @@ fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
 #[cfg(test)]
 mod tests {
     use super::{parse_opam_switch, SwitchType};
-    use crate::{test::ModuleRenderer, utils::CommandOutput};
+    use crate::{test::TestRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -133,7 +133,7 @@ mod tests {
     #[test]
     fn folder_without_ocaml_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -144,7 +144,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.opam"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -158,7 +158,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join("_opam"))?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -176,7 +176,7 @@ mod tests {
             dir.path().join("package.lock"),
             r#"{"dependencies": {"ocaml": "4.8.1000"}}"#,
         )?;
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.08.1 (default) ")
@@ -190,7 +190,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("dune"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -204,7 +204,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("dune-project"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -218,7 +218,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("jbuild"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -232,7 +232,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("jbuild-ignore"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -246,7 +246,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".merlin"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -260,7 +260,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -274,7 +274,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.mli"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -288,7 +288,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.re"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -302,7 +302,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.rei"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
@@ -316,7 +316,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml")
+        let actual = TestRenderer::new()
             .cmd(
                 "opam switch show --safe",
                 Some(CommandOutput {
@@ -325,7 +325,7 @@ mod tests {
                 }),
             )
             .path(dir.path())
-            .collect();
+            .module("ocaml");
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐫 v4.10.0 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -336,7 +336,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml")
+        let actual = TestRenderer::new()
             .cmd(
                 "opam switch show --safe",
                 Some(CommandOutput {
@@ -345,7 +345,7 @@ mod tests {
                 }),
             )
             .path(dir.path())
-            .collect();
+            .module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow
@@ -361,7 +361,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [ocaml]
                 global_switch_indicator = "g/"
@@ -374,7 +374,7 @@ mod tests {
                 }),
             )
             .path(dir.path())
-            .collect();
+            .module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow
@@ -390,7 +390,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml")
+        let actual = TestRenderer::new()
             .cmd(
                 "opam switch show --safe",
                 Some(CommandOutput {
@@ -399,7 +399,7 @@ mod tests {
                 }),
             )
             .path(dir.path())
-            .collect();
+            .module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (*my-project) ")
@@ -413,7 +413,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("ocaml")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [ocaml]
                 local_switch_indicator = "^"
@@ -426,7 +426,7 @@ mod tests {
                 }),
             )
             .path(dir.path())
-            .collect();
+            .module("ocaml");
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (^my-project) ")

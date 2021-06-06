@@ -14,12 +14,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod test {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
 
     #[test]
     fn produces_result() {
         let expected = Some(String::from("\n"));
-        let actual = ModuleRenderer::new("line_break").collect();
+        let actual = TestRenderer::new().module("line_break");
         assert_eq!(expected, actual);
     }
 }

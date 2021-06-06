@@ -252,7 +252,7 @@ fn format_version(version: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{test::ModuleRenderer, utils::CommandOutput};
+    use crate::{test::TestRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -308,7 +308,7 @@ license = "MIT"
             [package]
             disabled = false
         };
-        let actual = ModuleRenderer::new("package")
+        let actual = TestRenderer::new()
             .cmd(
                 "nimble dump --json",
                 Some(CommandOutput {
@@ -338,7 +338,7 @@ license = "MIT"
             )
             .path(project_dir.path())
             .config(starship_config)
-            .collect();
+            .module("package");
 
         let expected = Some(format!(
             "is {} ",
@@ -368,11 +368,11 @@ license = "MIT"
             [package]
             disabled = false
         };
-        let actual = ModuleRenderer::new("package")
+        let actual = TestRenderer::new()
             .cmd("nimble dump --json", None)
             .path(project_dir.path())
             .config(starship_config)
-            .collect();
+            .module("package");
 
         let expected = None;
 
@@ -389,11 +389,11 @@ license = "MIT"
             [package]
             disabled = false
         };
-        let actual = ModuleRenderer::new("package")
+        let actual = TestRenderer::new()
             .cmd("nimble dump --json", None)
             .path(project_dir.path())
             .config(starship_config)
-            .collect();
+            .module("package");
 
         let expected = None;
 
@@ -1015,10 +1015,10 @@ Module {
             disabled = false
         });
 
-        let actual = ModuleRenderer::new("package")
+        let actual = TestRenderer::new()
             .path(project_dir.path())
             .config(starship_config)
-            .collect();
+            .module("package");
         let text = String::from(contains.unwrap_or(""));
         let expected = Some(format!(
             "is {} ",

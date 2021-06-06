@@ -42,21 +42,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn no_env_set() {
-        let actual = ModuleRenderer::new("singularity").collect();
+        let actual = TestRenderer::new().module("singularity");
 
         let expected = None;
         assert_eq!(expected, actual);
     }
     #[test]
     fn env_set() {
-        let actual = ModuleRenderer::new("singularity")
+        let actual = TestRenderer::new()
             .env("SINGULARITY_NAME", "centos.img")
-            .collect();
+            .module("singularity");
 
         let expected = Some(format!(
             "{} ",

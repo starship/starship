@@ -65,12 +65,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod test {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
     fn config_blank_job_0() {
-        let actual = ModuleRenderer::new("jobs").jobs(0).collect();
+        let actual = TestRenderer::new().jobs(0).module("jobs");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -78,7 +78,7 @@ mod test {
 
     #[test]
     fn config_blank_job_1() {
-        let actual = ModuleRenderer::new("jobs").jobs(1).collect();
+        let actual = TestRenderer::new().jobs(1).module("jobs");
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
         assert_eq!(expected, actual);
@@ -86,7 +86,7 @@ mod test {
 
     #[test]
     fn config_blank_job_2() {
-        let actual = ModuleRenderer::new("jobs").jobs(2).collect();
+        let actual = TestRenderer::new().jobs(2).module("jobs");
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
         assert_eq!(expected, actual);
@@ -94,13 +94,13 @@ mod test {
 
     #[test]
     fn config_2_job_2() {
-        let actual = ModuleRenderer::new("jobs")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [jobs]
                 threshold = 2
             })
             .jobs(2)
-            .collect();
+            .module("jobs");
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
         assert_eq!(expected, actual);
@@ -108,13 +108,13 @@ mod test {
 
     #[test]
     fn config_2_job_3() {
-        let actual = ModuleRenderer::new("jobs")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [jobs]
                 threshold = 2
             })
             .jobs(3)
-            .collect();
+            .module("jobs");
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
         assert_eq!(expected, actual);
@@ -122,13 +122,13 @@ mod test {
 
     #[test]
     fn config_0_job_0() {
-        let actual = ModuleRenderer::new("jobs")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [jobs]
                 threshold = 0
             })
             .jobs(0)
-            .collect();
+            .module("jobs");
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
         assert_eq!(expected, actual);
@@ -136,13 +136,13 @@ mod test {
 
     #[test]
     fn config_0_job_1() {
-        let actual = ModuleRenderer::new("jobs")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [jobs]
                 threshold = 0
             })
             .jobs(1)
-            .collect();
+            .module("jobs");
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
         assert_eq!(expected, actual);

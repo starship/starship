@@ -79,7 +79,7 @@ fn parse_scala_version(scala_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -103,7 +103,7 @@ mod tests {
     #[test]
     fn folder_without_scala_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("scala");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -113,7 +113,7 @@ mod tests {
     fn folder_with_scala_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Test.scala"))?.sync_all()?;
-        let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("scala");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -123,10 +123,10 @@ mod tests {
     fn folder_with_scala_file_no_scala_installed() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Test.scala"))?.sync_all()?;
-        let actual = ModuleRenderer::new("scala")
+        let actual = TestRenderer::new()
             .cmd("scalac -version", None)
             .path(dir.path())
-            .collect();
+            .module("scala");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -136,7 +136,7 @@ mod tests {
     fn folder_with_sbt_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.sbt"))?.sync_all()?;
-        let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("scala");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -146,7 +146,7 @@ mod tests {
     fn folder_with_scala_env_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".scalaenv"))?.sync_all()?;
-        let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("scala");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -156,7 +156,7 @@ mod tests {
     fn folder_with_sbt_env_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".sbtenv"))?.sync_all()?;
-        let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("scala");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -166,7 +166,7 @@ mod tests {
     fn folder_with_metals_dir() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join(".metals"))?;
-        let actual = ModuleRenderer::new("scala").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("scala");
         let expected = Some(format!("via {}", Color::Red.bold().paint("🆂 v2.13.5 ")));
         assert_eq!(expected, actual);
         dir.close()

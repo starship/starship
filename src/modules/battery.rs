@@ -177,7 +177,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
 
     #[test]
@@ -186,14 +186,14 @@ mod tests {
 
         mock.expect_get_battery_info().times(1).returning(|| None);
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -211,14 +211,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -236,14 +236,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(String::from(" 100% "));
 
         assert_eq!(expected, actual);
@@ -261,14 +261,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 90
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(String::from(" 80% "));
 
         assert_eq!(expected, actual);
@@ -286,14 +286,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(String::from(" 80% "));
 
         assert_eq!(expected, actual);
@@ -311,14 +311,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(String::from(" 0% "));
 
         assert_eq!(expected, actual);
@@ -336,14 +336,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(String::from(" 0% "));
 
         assert_eq!(expected, actual);
@@ -361,14 +361,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 50
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = None;
 
         assert_eq!(expected, actual);
@@ -386,14 +386,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 50
                 style = "bold red"
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(format!("{} ", Color::Red.bold().paint(" 40%")));
 
         assert_eq!(expected, actual);
@@ -411,14 +411,14 @@ mod tests {
             })
         });
 
-        let actual = ModuleRenderer::new("battery")
+        let actual = TestRenderer::new()
             .config(toml::toml! {
                 [[battery.display]]
                 threshold = 100
                 style = ""
             })
             .battery_info_provider(&mock)
-            .collect();
+            .module("battery");
         let expected = Some(String::from(" 13% "));
 
         assert_eq!(expected, actual);

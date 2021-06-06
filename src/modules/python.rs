@@ -120,7 +120,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::{create_dir_all, File};
     use std::io;
@@ -177,7 +177,7 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
     #[test]
     fn folder_without_python_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("python").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("python");
         let expected = None;
         assert_eq!(expected, actual);
 
@@ -290,10 +290,10 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
             [python]
             detect_extensions = []
         };
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("python");
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -341,10 +341,10 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
     fn with_virtual_env() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.py"))?.sync_all()?;
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("VIRTUAL_ENV", "/foo/bar/my_venv")
-            .collect();
+            .module("python");
 
         let expected = Some(format!(
             "via {}",
@@ -359,10 +359,10 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
     fn with_active_venv() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("VIRTUAL_ENV", "/foo/bar/my_venv")
-            .collect();
+            .module("python");
 
         let expected = Some(format!(
             "via {}",
@@ -386,10 +386,10 @@ prompt = 'foo'
         )?;
         venv_cfg.sync_all()?;
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
-            .collect();
+            .module("python");
 
         let expected = Some(format!(
             "via {}",
@@ -413,10 +413,10 @@ prompt = '(foo)'
         )?;
         venv_cfg.sync_all()?;
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("VIRTUAL_ENV", dir.path().join("my_venv").to_str().unwrap())
-            .collect();
+            .module("python");
 
         let expected = Some(format!(
             "via {}",
@@ -433,10 +433,10 @@ prompt = '(foo)'
             python_binary = "python2"
         });
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("python");
 
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v2.7.17 ")));
         assert_eq!(expected, actual);
@@ -448,10 +448,10 @@ prompt = '(foo)'
              python_binary = "python3"
         });
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("python");
 
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
@@ -466,10 +466,10 @@ prompt = '(foo)'
              python_binary = ["python", "python3"]
         });
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("python");
 
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
         assert_eq!(expected, actual);
@@ -482,10 +482,10 @@ prompt = '(foo)'
              pyenv_prefix = "test_pyenv "
         });
 
-        let actual = ModuleRenderer::new("python")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("python");
 
         let expected = Some(format!(
             "via {}",

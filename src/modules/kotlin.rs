@@ -87,7 +87,7 @@ fn parse_kotlin_version(kotlin_stdout: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -95,7 +95,7 @@ mod tests {
     #[test]
     fn folder_without_kotlin_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("kotlin").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("kotlin");
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -105,7 +105,7 @@ mod tests {
     fn folder_with_kotlin_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.kt"))?.sync_all()?;
-        let actual = ModuleRenderer::new("kotlin").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("kotlin");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -115,7 +115,7 @@ mod tests {
     fn folder_with_kotlin_script_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.kts"))?.sync_all()?;
-        let actual = ModuleRenderer::new("kotlin").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("kotlin");
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
         assert_eq!(expected, actual);
         dir.close()
@@ -131,10 +131,10 @@ mod tests {
              kotlin_binary = "kotlin"
         };
 
-        let actual = ModuleRenderer::new("kotlin")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("kotlin");
 
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
         assert_eq!(expected, actual);
@@ -151,10 +151,10 @@ mod tests {
              kotlin_binary = "kotlinc"
         };
 
-        let actual = ModuleRenderer::new("kotlin")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .config(config)
-            .collect();
+            .module("kotlin");
 
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
         assert_eq!(expected, actual);

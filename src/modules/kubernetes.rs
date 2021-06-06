@@ -104,7 +104,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::env;
     use std::fs::File;
@@ -134,10 +134,10 @@ users: []
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("kubernetes")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
-            .collect();
+            .module("kubernetes");
 
         assert_eq!(None, actual);
 
@@ -164,7 +164,7 @@ users: []
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("kubernetes")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
             .config(toml::toml! {
@@ -173,7 +173,7 @@ users: []
                 [kubernetes.context_aliases]
                 "test_context" = "test_alias"
             })
-            .collect();
+            .module("kubernetes");
 
         let expected = Some(format!("{} in ", Color::Cyan.bold().paint("☸ test_alias")));
         assert_eq!(expected, actual);
@@ -205,14 +205,14 @@ users: []
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("kubernetes")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
             .config(toml::toml! {
                 [kubernetes]
                 disabled = false
             })
-            .collect();
+            .module("kubernetes");
 
         let expected = Some(format!(
             "{} in ",
@@ -248,14 +248,14 @@ users: []
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("kubernetes")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
             .config(toml::toml! {
                 [kubernetes]
                 disabled = false
             })
-            .collect();
+            .module("kubernetes");
 
         let expected = Some(format!(
             "{} in ",
@@ -296,14 +296,14 @@ users: []
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("kubernetes")
+        let actual = TestRenderer::new()
             .path(dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
             .config(toml::toml! {
                 [kubernetes]
                 disabled = false
             })
-            .collect();
+            .module("kubernetes");
 
         let expected = Some(format!(
             "{} in ",
@@ -354,7 +354,7 @@ users: []
         file_ctx.sync_all()?;
 
         // Test current_context first
-        let actual_cc_first = ModuleRenderer::new("kubernetes")
+        let actual_cc_first = TestRenderer::new()
             .path(dir.path())
             .env(
                 "KUBECONFIG",
@@ -366,10 +366,10 @@ users: []
                 [kubernetes]
                 disabled = false
             })
-            .collect();
+            .module("kubernetes");
 
         // And tes with context and namespace first
-        let actual_ctx_first = ModuleRenderer::new("kubernetes")
+        let actual_ctx_first = TestRenderer::new()
             .path(dir.path())
             .env(
                 "KUBECONFIG",
@@ -381,7 +381,7 @@ users: []
                 [kubernetes]
                 disabled = false
             })
-            .collect();
+            .module("kubernetes");
 
         let expected = Some(format!(
             "{} in ",

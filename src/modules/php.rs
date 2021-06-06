@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::test::TestRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -67,7 +67,7 @@ mod tests {
     fn folder_without_php_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("php");
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -79,7 +79,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("composer.json"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("php");
 
         let expected = Some(format!(
             "via {}",
@@ -94,7 +94,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".php-version"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("php");
 
         let expected = Some(format!(
             "via {}",
@@ -109,7 +109,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.php"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("php").path(dir.path()).collect();
+        let actual = TestRenderer::new().path(dir.path()).module("php");
 
         let expected = Some(format!(
             "via {}",
