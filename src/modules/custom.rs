@@ -39,7 +39,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     if let Some(os) = config.os {
-        if os != env::consts::OS {
+        if os != env::consts::OS && !(os == "unix" && env::consts::OS != "windows") {
             return None;
         }
     }
