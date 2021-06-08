@@ -1,7 +1,7 @@
 name: Auto-merge Dependabot PRs
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "10 9 1 8 *"
 jobs:
   auto_merge:
     if: (github.event_name == 'schedule' && github.repository == 'starship/starship') || (github.event_name != 'schedule')
