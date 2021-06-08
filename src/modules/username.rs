@@ -3,6 +3,9 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
 
+#[cfg(target_os = "windows")]
+use super::utils::admin_win;
+
 #[cfg(not(target_os = "windows"))]
 const USERNAME_ENV_VAR: &str = "USER";
 
@@ -16,12 +19,18 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let username = context.get_env(USERNAME_ENV_VAR)?;
+    let mut username = context.get_env(USERNAME_ENV_VAR)?;
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
     let is_root = is_root_user();
+
+    #[cfg(target_os = "windows")]
+    if is_root {
+        username = "Administrator".to_string();
+    }
+
     let show_username = config.show_always
         || is_root // [1]
         || !is_login_user(&context, &username) // [2]
@@ -70,7 +79,7 @@ fn is_login_user(context: &Context, username: &str) -> bool {
 
 #[cfg(target_os = "windows")]
 fn is_root_user() -> bool {
-    false
+    admin_win::is_app_elevated()
 }
 
 #[cfg(not(target_os = "windows"))]
