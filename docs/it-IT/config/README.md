@@ -2650,7 +2650,7 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Time
+## Ora
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
