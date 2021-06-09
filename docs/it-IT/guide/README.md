@@ -160,10 +160,10 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Per aggiornare Starship stesso, riavviare lo script sopra. Sostituirà la versione corrente senza toccare la configurazione di Starship.
 
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **Nota** - I valori predefiniti dello script di installazione possono essere sovrascritti, vedi la guida integrata.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
