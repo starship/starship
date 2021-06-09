@@ -6,7 +6,7 @@ Questa guida è destinata ad attraversare questi grandi cambiamenti.
 
 ## `prompt_order` è stato sostituito da un formato root-level ``
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Prima della v0.45.0, `prompt_order` avrebbe accettato un array di nomi di moduli nell'ordine in cui sarebbero stati renderizzati da Starship.
 
 Starship v0.45.0 invece accetta un valore `format`, consentendo la personalizzazione del prompt al di fuori dei moduli stessi.
 
