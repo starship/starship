@@ -111,7 +111,7 @@ error_symbol = "[✖](bold red)"
 
 *Nota:* L'elemento `carattere` aggiunge dopo automaticamente uno spazio, quindi a differenza delle altre stringhe `formato`, non ne aggiungiamo uno specificamente agli esempi di cui sopra.
 
-#### Command Duration
+#### Durata del comando
 
 | Proprietà rimossa | Sostituta |
 | ----------------- | --------- |
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### Ora
 
 | Proprietà rimossa | Sostituta     |
 | ----------------- | ------------- |
