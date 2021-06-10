@@ -24,6 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Ion => Some(config.ion_indicator),
                     Shell::Elvish => Some(config.elvish_indicator),
                     Shell::Tcsh => Some(config.tcsh_indicator),
+                    Shell::Nu => Some(config.nu_indicator),
                     Shell::Unknown => Some(config.unknown_indicator),
                 },
                 _ => None,
@@ -242,6 +243,35 @@ mod tests {
             .config(toml::toml! {
                 [shell]
                 elvish_indicator = "[elvish](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_nu_default_format() {
+        let expected = Some(format!("{} ", "nu"));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Nu)
+            .config(toml::toml! {
+                [shell]
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_nu_custom_format() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("nu")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Nu)
+            .config(toml::toml! {
+                [shell]
+                nu_indicator = "[nu](bold cyan)"
                 disabled = false
             })
             .collect();
