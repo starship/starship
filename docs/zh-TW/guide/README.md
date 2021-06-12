@@ -244,7 +244,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
+   **注意** 只支援 elvish v0.15 以上的版本。 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -278,7 +278,7 @@ This project exists thanks to all the people who contribute. [[我要貢獻](htt
 
 ### 專案資助者
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+成為專案資助者，推動社群永續經營 [[Contribute](https://opencollective.com/starship/contribute)]
 
 #### 個人
 
@@ -286,7 +286,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### 組織
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+以組織名義資助專案 這裏會產生一個能連向您組織網站的連結標誌。 [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
