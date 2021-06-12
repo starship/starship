@@ -121,6 +121,15 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    #[cfg(feature = "battery")]
+    pub fn battery_status_provider(
+        mut self,
+        battery_status_provider: &'a (dyn crate::modules::BatteryStatusProvider + Send + Sync),
+    ) -> Self {
+        self.context.battery_status_provider = battery_status_provider;
+        self
+    }
+
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
         let ret = crate::print::get_module(self.name, self.context);
