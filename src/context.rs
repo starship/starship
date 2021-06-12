@@ -51,7 +51,7 @@ pub struct Context<'a> {
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
 
     #[cfg(feature = "battery")]
-    pub battery_status_provider: &'a (dyn crate::modules::BatteryStatusProvider + Send + Sync),
+    pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
@@ -126,7 +126,7 @@ impl<'a> Context<'a> {
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
-            battery_status_provider: &crate::modules::BatteryStatusProviderImpl,
+            battery_info_provider: &crate::modules::BatteryStatusProviderImpl,
             cmd_timeout,
         }
     }

@@ -65,7 +65,7 @@ mod zig;
 mod battery;
 
 #[cfg(feature = "battery")]
-pub use self::battery::{BatteryStatusProvider, BatteryStatusProviderImpl};
+pub use self::battery::{BatteryInfoProvider, BatteryStatusProviderImpl};
 
 use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
