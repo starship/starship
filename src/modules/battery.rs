@@ -405,7 +405,7 @@ mod tests {
 
         mock.expect_get_battery_info().times(1).returning(|| {
             Some(BatteryInfo {
-                energy: 129.87654321,
+                energy: 129.87654,
                 energy_full: 1000.0,
                 state: battery::State::Discharging,
             })
