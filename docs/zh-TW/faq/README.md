@@ -12,7 +12,7 @@
 
 ## 我該如何做出示例圖中的命令自動補齊效果？
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+有關補全或是自動補齊的效果，主要是借助你使用的 Shell 本身提供的服務來達成。 In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -83,12 +83,12 @@ If either symbol fails to display correctly, your system is still misconfigured.
 
 移除 Starship 的過程與安裝過程一樣簡單。
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. 刪除 Shell 的設定檔案 (比如 `~/.bashrc`) 中用來初始化 Starship 的部分。
+1. 刪除 Starship 的執行檔
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+如果你是透過套件管理器安裝 Starship 的，請到套件管理器的文件中尋找相關的移除步驟指示。
 
-If Starship was installed using the install script, the following command will delete the binary:
+如果你是透過安裝腳本來安裝 Starship 的，可以執行以下的命令來移除執行檔。
 
 ```sh
 # Locate and delete the starship binary
