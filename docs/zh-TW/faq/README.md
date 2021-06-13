@@ -12,7 +12,7 @@
 
 ## 我該如何做出示例圖中的命令自動補齊效果？
 
-有關補全或是自動補齊的效果，主要是借助你使用的 Shell 本身提供的服務來達成。 In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+有關補全或是自動補齊的效果，主要是借助你使用的 Shell 本身提供的服務來達成。 而示例中環境是使用 [Fish Shell](https://fishshell.com/)，原生就提供了補全功能。 如果你的環境是使用 Z Shell (zsh)，建議參考一下 [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)。
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
