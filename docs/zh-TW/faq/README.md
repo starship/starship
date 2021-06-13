@@ -16,7 +16,7 @@
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+對，他們都可以被用來關閉提示字元中的 module。 如果你單純只是想關閉 modules，推薦使用 `<module>.disabled`，原因如下所述：
 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
