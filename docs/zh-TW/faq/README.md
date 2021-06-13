@@ -50,7 +50,7 @@ Starship prompt 會盡可能的使用被提供的上下文參數，但使用者�
 
 ## 我要如何在一些配有更舊版本 glibc 的 Linux 發行版上執行 Starship？
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+如果在你使用的環境 (比如：CentOS 6 或 7) 下使用預編好的 Starship 執行檔時會產生一些像 "_version 'GLIBC_2.18' not found (required by starship)_" 的內容，你可以在執行安裝指令時嘗試選用不同的函式庫預先編譯而成的 Starship 版本，比如說 `musl` 而非 `glibc`，如下所示：
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
