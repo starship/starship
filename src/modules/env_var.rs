@@ -84,7 +84,7 @@ mod test {
     fn defined_variable() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.TEST_VAR]
                 variable = "TEST_VAR"
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
@@ -98,7 +98,7 @@ mod test {
     fn undefined_variable() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.TEST_VAR]
                 variable = "TEST_VAR"
             })
             .collect();
@@ -111,7 +111,7 @@ mod test {
     fn default_has_no_effect() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.TEST_VAR]
                 variable = "TEST_VAR"
                 default = "N/A"
             })
@@ -126,7 +126,7 @@ mod test {
     fn default_takes_effect() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.UNDEFINED_TEST_VAR]
                 variable = "UNDEFINED_TEST_VAR"
                 default = "N/A"
             })
@@ -140,7 +140,7 @@ mod test {
     fn symbol() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.TEST_VAR]
                 variable = "TEST_VAR"
                 format = "with [■ $env_value](black bold dimmed) "
             })
@@ -158,7 +158,7 @@ mod test {
     fn prefix() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.TEST_VAR]
                 variable = "TEST_VAR"
                 format = "with [_$env_value](black bold dimmed) "
             })
@@ -176,7 +176,7 @@ mod test {
     fn suffix() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
-                [env_var]
+                [env_var.TEST_VAR]
                 variable = "TEST_VAR"
                 format = "with [${env_value}_](black bold dimmed) "
             })
