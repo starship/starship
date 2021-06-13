@@ -23,10 +23,7 @@ pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Opti
 ///     - env_var.disabled is absent or false
 ///     - env_var.variable is defined
 ///     - a variable named as the value of env_var.variable is defined
-pub fn module<'a>(
-    variable_name: &str,
-    context: &'a Context,
-) -> Option<Module<'a>> {
+pub fn module<'a>(variable_name: &str, context: &'a Context) -> Option<Module<'a>> {
     let module_config_path = ["env_var", variable_name];
     let mut module = context.new_module(&module_config_path.join("."));
     let config_value = context.config.get_config(&module_config_path);
