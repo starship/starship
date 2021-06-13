@@ -10,7 +10,7 @@
   - **fish 設定**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## 我該如何做出示例圖中的命令自動補齊效果？
 
 Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
@@ -79,9 +79,9 @@ The first line should produce a [snake emoji](https://emojipedia.org/snake/), wh
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## 我要如何從電腦中移除 Starship？
 
-Starship is just as easy to uninstall as it is to install in the first place.
+移除 Starship 的過程與安裝過程一樣簡單。
 
 1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
 1. Delete the Starship binary.
