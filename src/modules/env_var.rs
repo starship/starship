@@ -5,7 +5,6 @@ use crate::configs::env_var::EnvVarConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 
-
 /// A utility module to display multiple env_variable modules
 pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("env_var_displayer");
@@ -17,6 +16,7 @@ pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Opti
     module.set_segments(module_segments);
     Some(module)
 }
+
 /// Creates a module with the value of the chosen environment variable
 ///
 /// Will display the environment variable's value if all of the following criteria are met:
@@ -185,6 +185,27 @@ mod test {
         let expected = Some(format!(
             "with {} ",
             style().paint(format!("{}_", TEST_VAR_VALUE))
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn display_few() {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                variable = "TEST_VAR"
+                [env_var.TEST_VAR2]
+                variable = "TEST_VAR2"
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .env("TEST_VAR2", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!(
+            "with {} with {} ",
+            style().paint(TEST_VAR_VALUE),
+            style().paint(TEST_VAR_VALUE)
         ));
 
         assert_eq!(expected, actual);
