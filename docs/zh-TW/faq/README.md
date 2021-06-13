@@ -23,9 +23,9 @@ Yes, they can both be used to disable modules in the prompt. If all you plan to 
 
 ## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+Starship 構建方式基本上確立了他應當能支援所有 shell 的基礎。 Starship 的執行檔是不會紀錄狀態且不假設底下是哪種 Shell 的，所以只要你的 Shell 支援客製化命令提示字元以及 shell expansion，就應該要能使用 Starship。
 
-Here's a small example getting Starship working with bash:
+以下是在 bash 上使用 Starship 的簡單例子：
 
 ```sh
 # Get the status code from the last command executed
