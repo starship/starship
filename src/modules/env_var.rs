@@ -26,9 +26,10 @@ pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Opti
 pub fn module<'a>(
     variable_name: &str,
     context: &'a Context,
-    config_value: Option<&toml::Value>,
 ) -> Option<Module<'a>> {
-    let mut module = context.new_module(&["env_var", variable_name].join("."));
+    let module_config_path = ["env_var", variable_name];
+    let mut module = context.new_module(&module_config_path.join("."));
+    let config_value = context.config.get_config(&module_config_path);
     let config = EnvVarConfig::load(config_value.expect(
         "modules::env_var::module should only be called after ensuring that the module exists",
     ));

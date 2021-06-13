@@ -91,16 +91,14 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
             "env_var" => {
-                if let Some(all_env_var_modules) = context.config.get_env_var_modules() {
-                    let env_modules = all_env_var_modules
+                if let Some(env_modules_configuration) = context.config.get_env_var_modules() {
+                    let env_modules = env_modules_configuration
                         .iter()
                         .filter(|(_, config)| config.is_table())
-                        .filter_map(|(variable, config)| {
-                            env_var::module(variable, context, Some(config))
-                        })
+                        .filter_map(|(variable, _)| env_var::module(variable, context))
                         .collect::<Vec<Module>>();
                     // Old configuration is present in starship configuration, notify user about change
-                    if all_env_var_modules.len() != env_modules.len() {
+                    if env_modules_configuration.len() != env_modules.len() {
                         log::warn!("env_var module configuration has changed. Please update your configuration. https://starship.rs/config/#environment-variable");
                     }
                     env_var::env_var_displayer(env_modules, context)
