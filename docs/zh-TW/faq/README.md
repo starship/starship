@@ -46,9 +46,9 @@ PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+Starship prompt 會盡可能的使用被提供的上下文參數，但使用者也不一定要提供任何參數。
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## 我要如何在一些配有更舊版本 glibc 的 Linux 發行版上執行 Starship？
 
 If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
 
@@ -56,9 +56,9 @@ If you get an error like "_version 'GLIBC_2.18' not found (required by starship)
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## 我發現一些看不懂或意料外的符號，那是代表什麼意思？
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+如果你看見了一些不認得的符號，你可以使用 `starship explain` 來列出當下顯示出的 modules 的解釋。
 
 ## Why don't I see a glyph symbol in my prompt?
 
