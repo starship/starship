@@ -79,6 +79,14 @@ mod test {
     const TEST_VAR_VALUE: &str = "astronauts";
 
     #[test]
+    fn empty_config() {
+        let actual = ModuleRenderer::new("env_var").collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn defined_variable() {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
