@@ -90,7 +90,7 @@ pub struct FullConfig<'a> {
     dotnet: dotnet::DotnetConfig<'a>,
     elixir: elixir::ElixirConfig<'a>,
     elm: elm::ElmConfig<'a>,
-    env_var: env_var::EnvVarConfig<'a>,
+    env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     erlang: erlang::ErlangConfig<'a>,
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,

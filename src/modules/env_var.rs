@@ -3,16 +3,39 @@ use super::{Context, Module};
 use crate::config::RootModuleConfig;
 use crate::configs::env_var::EnvVarConfig;
 use crate::formatter::StringFormatter;
+use crate::segment::Segment;
 
+
+/// A utility module to display multiple env_variable modules
+pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("env_var_displayer");
+
+    let module_segments = modules
+        .into_iter()
+        .flat_map(|module| module.segments)
+        .collect::<Vec<Segment>>();
+    module.set_segments(module_segments);
+    Some(module)
+}
 /// Creates a module with the value of the chosen environment variable
 ///
 /// Will display the environment variable's value if all of the following criteria are met:
 ///     - env_var.disabled is absent or false
 ///     - env_var.variable is defined
 ///     - a variable named as the value of env_var.variable is defined
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("env_var");
-    let config: EnvVarConfig = EnvVarConfig::try_load(module.config);
+pub fn module<'a>(
+    variable_name: &str,
+    context: &'a Context,
+    config_value: Option<&toml::Value>,
+) -> Option<Module<'a>> {
+    let mut module = context.new_module(&["env_var", variable_name].join("."));
+    let config = EnvVarConfig::load(config_value.expect(
+        "modules::env_var::module should only be called after ensuring that the module exists",
+    ));
+
+    if config.disabled {
+        return None;
+    };
 
     let env_value = get_env_value(context, config.variable?, config.default)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -56,18 +79,6 @@ mod test {
     use ansi_term::{Color, Style};
 
     const TEST_VAR_VALUE: &str = "astronauts";
-
-    #[test]
-    fn empty_config() {
-        let actual = ModuleRenderer::new("env_var")
-            .config(toml::toml! {
-                [env_var]
-            })
-            .collect();
-        let expected = None;
-
-        assert_eq!(expected, actual);
-    }
 
     #[test]
     fn defined_variable() {

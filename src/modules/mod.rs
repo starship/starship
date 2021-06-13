@@ -71,7 +71,6 @@ use std::time::Instant;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     let start: Instant = Instant::now();
-
     let mut m: Option<Module> = {
         match module {
             // Keep these ordered alphabetically.
@@ -91,7 +90,24 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
-            "env_var" => env_var::module(context),
+            "env_var" => {
+                if let Some(all_env_var_modules) = context.config.get_env_var_modules() {
+                    let env_modules = all_env_var_modules
+                        .iter()
+                        .filter(|(_, config)| config.is_table())
+                        .filter_map(|(variable, config)| {
+                            env_var::module(variable, context, Some(config))
+                        })
+                        .collect::<Vec<Module>>();
+                    // Old configuration is present in starship configuration, notify user about change
+                    if all_env_var_modules.len() != env_modules.len() {
+                        log::warn!("env_var module configuration has changed. Please update your configuration. https://starship.rs/config/#environment-variable");
+                    }
+                    env_var::env_var_displayer(env_modules, context)
+                } else {
+                    None
+                }
+            }
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),

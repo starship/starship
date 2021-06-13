@@ -342,6 +342,10 @@ impl StarshipConfig {
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
     }
+    /// Get the table of all the registered env_var modules, if any
+    pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
+        self.get_config(&["env_var"])?.as_table()
+    }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {
         if let Some(root_config) = &self.config {
