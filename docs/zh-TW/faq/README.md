@@ -1,13 +1,13 @@
-# FAQ
+# 常見問答
 
-## What is the configuration used in the demo GIF?
+## 主頁示例圖中的效果是使用哪些配置達成的？
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **終端模擬器**: [iTerm2](https://iterm2.com/)
+  - **模擬器主題**: Minimal
+  - **配色方案**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **字型**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **fish 設定**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
 ## How do I get command completion as shown in the demo GIF?
