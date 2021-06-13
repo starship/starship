@@ -38,9 +38,9 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+順帶一提，其中 Starship [針對 Bash shell 的實作](https://github.com/starship/starship/blob/master/src/init/starship.bash) 稍微複雜一點，實踐了一些如 [Command Duration module](https://starship.rs/config/#command-duration) 的進階功能，也實踐了確保 Starship 設定能夠與系統上的 Bash 相兼容的功能。
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+使用以下指令來獲得 `starship prompt` 支援的所有參數。
 
 ```sh
 starship prompt --help
