@@ -18,8 +18,8 @@
 
 對，他們都可以被用來關閉提示字元中的 module。 如果你單純只是想關閉 modules，推薦使用 `<module>.disabled`，原因如下所述：
 
-- Disabling modules is more explicit than omitting them from the top level `format`
-- Newly created modules will be added to the prompt as Starship is updated
+- 明確性：關閉 modules 的動作比在 top level `format` 標記忽略更爲清楚易懂
+- 當 Starship 更新後，新組件能被自動加入到提示字元中
 
 ## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
 
