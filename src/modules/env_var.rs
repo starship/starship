@@ -37,7 +37,7 @@ pub fn module<'a>(
         return None;
     };
 
-    let env_value = get_env_value(context, config.variable?, config.default)?;
+    let env_value = get_env_value(context, variable_name, config.default)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -85,7 +85,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
             .collect();
@@ -99,7 +98,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
             })
             .collect();
         let expected = None;
@@ -112,7 +110,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
                 default = "N/A"
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
@@ -127,7 +124,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.UNDEFINED_TEST_VAR]
-                variable = "UNDEFINED_TEST_VAR"
                 default = "N/A"
             })
             .collect();
@@ -141,7 +137,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
                 format = "with [■ $env_value](black bold dimmed) "
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
@@ -159,7 +154,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
                 format = "with [_$env_value](black bold dimmed) "
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
@@ -177,7 +171,6 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
                 format = "with [${env_value}_](black bold dimmed) "
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
@@ -195,9 +188,7 @@ mod test {
         let actual = ModuleRenderer::new("env_var")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
-                variable = "TEST_VAR"
                 [env_var.TEST_VAR2]
-                variable = "TEST_VAR2"
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
             .env("TEST_VAR2", TEST_VAR_VALUE)
