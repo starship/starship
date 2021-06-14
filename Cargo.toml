@@ -45,7 +45,7 @@ battery = { version = "0.7.8", optional = true }
 path-slash = "0.1.4"
 unicode-segmentation = "1.7.1"
 gethostname = "0.2.1"
-once_cell = "1.7.2"
+once_cell = "1.8.0"
 chrono = "0.4.19"
 sys-info = "0.9.0"
 byte-unit = "4.0.12"
