@@ -349,32 +349,31 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+El valor por defecto para las opciones `charging_symbol` y `discharging_symbol` son respectivamente los valores `charging_symbol` y `discharging_symbol` de las opción de `battery`.
 
 #### Opciones
 
 La opción `display` es un array de la siguiente tabla.
 
-| Opción               | Por defecto | Descripción                                                                                               |
-| -------------------- | ----------- | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`        | El umbral para la opción de visualización.                                                                |
-| `style`              | `bold red`  | El estilo usado cuando si la opción <0>display</0> está activa.                                           |
-| `charging_symbol`    | `-`         | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` | `-`         | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Opción               | Por defecto | Descripción                                                                                                                             |
+| -------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`        | El umbral para la opción de visualización.                                                                                              |
+| `style`              | `bold red`  | El estilo usado cuando si la opción <0>display</0> está activa.                                                                         |
+| `charging_symbol`    | `-`         | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `charging_symbol` de la batería.    |
+| `discharging_symbol` | `-`         | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `discharging_symbol` de la batería. |
 
 #### Ejemplo
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # estilo "bold red" y discharning_symbol cuando la capacidad está entre 0% y 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # estilo "bold yellow" y el símbolo 💦 cuando la capacidad está entre 10% y 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# cuando la capadidad está por encima del 30% el indicador no se mostrará
 
 ```
 
@@ -391,13 +390,13 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ::: aviso
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` no es compatible con el intérprete de comandos Elvish.
 
 :::
 
 ::: aviso
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` sólo es compatible con fish y zsh.
 
 :::
 
@@ -450,7 +449,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://cmake.org/). Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
