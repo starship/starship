@@ -87,15 +87,15 @@ symbol = "ﯣ "
 
 ## Segmentos entre Corchetes
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Este ajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción predeterminada de Starship ("via", "on", etc.).
 
-Before:
+Antes:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![Captura de pantalla de la configuración por defecto de Starship](/presets/bracketed-segments-before.png)
 
-After:
+Después:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![Captura de pantalla de los ajustes predeterminados de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
 
 ### Configuración
 
@@ -242,11 +242,11 @@ Este ajuste preestablecido cambia los símbolos a texto sin formato. Si tu termi
 
 Antes (configuración por defecto con Fuente Fixedsys):
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![Captura de pantalla de configuración por defecto de Starship con fuente Fixedsys](/presets/plain-text-symbols-before.png)
 
 Después (Símbolos de texto sin formato):
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![Captura de pantalla de los ajustes predeterminados de los Símbolos de Nerd Font](/presets/plain-text-symbols-after.png)
 
 ### Configuración
 
