@@ -236,15 +236,15 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## Símbolos de texto sin formato
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+Este ajuste preestablecido cambia los símbolos a texto sin formato. Si tu terminal/fuente no pudo renderizar el NerdFonts/emojis, ¡tal vez podría probar este ajuste preestablecido!
 
-Before (default setting with Fixedsys font):
+Antes (configuración por defecto con Fuente Fixedsys):
 
 ![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+Después (Símbolos de texto sin formato):
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
