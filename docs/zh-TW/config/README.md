@@ -51,7 +51,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **模組 (Module)**： 提示字元中的一個元件，基於你的作業系統提供的背景資訊來提供訊息。 舉例來說，如果你現在的資料夾是一個 Node.js 專案，"nodejs" 模組會顯示出現在安裝在你的電腦上的 Node.js 版本。
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+變數 (**Variable**)：模組的子元件，主要是由模組提供的訊息。 舉例來說，在 "nodejs" 模組中提供的 "version" 變數代表著當下使用的 Node.js 版本。
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
