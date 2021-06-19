@@ -159,6 +159,10 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `("{}" init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
+        "xonsh" => print!(
+            r#"execx($({} init xonsh --print-full-init))"#,
+            starship.sprint_posix()?
+        ),
         _ => {
             let quoted_arg = shell_words::quote(shell_basename);
             println!(
@@ -171,6 +175,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * powershell\\n\
                  * tcsh\\n\
                  * zsh\\n\
+                 * xonsh\\n\
                  \\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for %s:\\nhttps://github.com/starship/starship/issues/new\\n\\n\" {0} {0}",
@@ -194,6 +199,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
+        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -239,3 +245,5 @@ const ION_INIT: &str = include_str!("starship.ion");
 const ELVISH_INIT: &str = include_str!("starship.elv");
 
 const TCSH_INIT: &str = include_str!("starship.tcsh");
+
+const XONSH_INIT: &str = include_str!("starship.xsh");
