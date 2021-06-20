@@ -25,7 +25,7 @@ impl<'a> Default for DotnetConfig<'a> {
             style: "blue bold",
             heuristic: true,
             disabled: false,
-            detect_extensions: vec!["sln", "csproj", "fsproj", "xproj"],
+            detect_extensions: vec!["csproj", "fsproj", "xproj"],
             detect_files: vec![
                 "global.json",
                 "project.json",

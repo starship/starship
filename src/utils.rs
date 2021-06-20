@@ -1,6 +1,7 @@
 use process_control::{ChildExt, Timeout};
-use std::fs::File;
-use std::io::{Read, Result};
+use std::fmt::Debug;
+use std::fs::read_to_string;
+use std::io::Result;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -8,12 +9,18 @@ use std::time::{Duration, Instant};
 use crate::context::Shell;
 
 /// Return the string contents of a file
-pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String> {
-    let mut file = File::open(file_name)?;
-    let mut data = String::new();
+pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
+    log::trace!("Trying to read from {:?}", file_name);
 
-    file.read_to_string(&mut data)?;
-    Ok(data)
+    let result = read_to_string(file_name);
+
+    if result.is_err() {
+        log::debug!("Error reading file: {:?}", result);
+    } else {
+        log::trace!("File read sucessfully");
+    };
+
+    result
 }
 
 #[derive(Debug, Clone)]
@@ -167,6 +174,20 @@ active boot switches: -d:release\n",
         "python3 --version" => Some(CommandOutput {
             stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
+        }),
+        "R --version" => Some(CommandOutput {
+            stdout: String::default(),
+            stderr: String::from(
+                r#"R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)\n
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+https://www.gnu.org/licenses/."#
+            ),
         }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),
