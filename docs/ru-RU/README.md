@@ -44,7 +44,7 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Для обновления Starship перезапустите этот скрипт. Он заменит текущую версию без изменения конфигурации.
 
 
    #### Установить через менеджер пакетов
@@ -120,7 +120,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -131,7 +131,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Добавьте следующее в конец `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc

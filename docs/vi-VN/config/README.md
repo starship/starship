@@ -256,7 +256,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `region_aliases`    |                                                                      | Bảng của các region alias để hiển thị ngoài tên AWS.              |
 | `style`             | `"bold yellow"`                                                      | Kiểu cho module.                                                  |
 | `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
+| `disabled`          | `false`                                                              | Vô hiệu `AWS` module.                                             |
 
 ### Các biến
 
@@ -389,7 +389,17 @@ Kí tự sẽ nói cho bạn câu lệnh cuối liệu thành công hay thất b
 
 Mặc định, nó chỉ thay đổi màu. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning `error_symbol` không được hỗ trợ trên elvish shell. :::
+::: cảnh báo
+
+`error_symbol` is not supported on elvish shell.
+
+:::
+
+::: cảnh báo
+
+`vicmd_symbol` is only supported in fish and zsh.
+
+:::
 
 ### Các tuỳ chọn
 
@@ -780,7 +790,6 @@ Mặc định, mô đun này sẽ chỉ được hiển thị trong dấu nhắc
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
-- `*.sln`
 - `*.csproj`
 - `*.fsproj`
 - `*.xproj`
@@ -799,7 +808,7 @@ Mô đun cũng sẽ hiện Target Framework Moniker (<https://docs.microsoft.com
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | Biểu tượng sử dụng để hiển thị trước phiên bản của dotnet.                |
 | `heuristic`         | `true`                                                                                                  | Sử dụng phiên bản phát hiện thông minh hơn.                               |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
 | `detect_folders`    | `[]`                                                                                                    | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                                          |
@@ -2165,6 +2174,59 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Display the version of python from inside a local venv.
+#
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
+python_binary = ["./venv/bin/python", "python", "python3", "python2"]
+```
+
+## R
+
+The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
+| `style`             | `"blue bold"`                        | Kiểu cho module.                                                          |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                        |
+| `detect_files`      | `[".Rprofile"]`                      | Tên tệp nào sẽ kích hoạt mô-đun này                                       |
+| `detect_folders`    | `[".Rproj.user"]`                    | Thư mục nào sẽ kích hoạt mô-đun này                                       |
+| `disabled`          | `false`                              | Disables the `r` module.                                                  |
+
+### Các biến
+
+| Biến    | Ví dụ         | Mô tả                            |
+| ------- | ------------- | -------------------------------- |
+| version | `v4.0.5`      | The version of `R`               |
+| symbol  |               | Giá trị ghi đè tuỳ chọn `symbol` |
+| style   | `"blue bold"` | Giá trị ghi đè của `style`       |
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[rlang]
+format = "with [📐 $version](blue bold) "
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
@@ -2831,6 +2893,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `directories`
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
 ::: thử thuật
 
@@ -2852,19 +2915,20 @@ The order in which custom modules are shown can be individually set by including
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn      | Mặc định                        | Mô tả                                                                                                                      |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                  | Kiểu cho module.                                                                                                           |
-| `format`      | `"[$symbol($output )]($style)"` | Định dạng cho module.                                                                                                      |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| Tuỳ chọn      | Mặc định                        | Mô tả                                                                                                                                                                         |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
+| `mô tả`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
+| `style`       | `"bold green"`                  | Kiểu cho module.                                                                                                                                                              |
+| `format`      | `"[$symbol($output )]($style)"` | Định dạng cho module.                                                                                                                                                         |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
+| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### Các biến
 

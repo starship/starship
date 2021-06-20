@@ -257,7 +257,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `region_aliases`    |                                                                      | AWS名に加えて表示するリージョンのエイリアスです。                                        |
 | `style`             | `"bold yellow"`                                                      | モジュールのスタイルです。                                                     |
 | `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
+| `disabled`          | `false`                                                              | `aws`モジュールを無効にします。                                                |
 
 ### 変数
 
@@ -390,7 +390,17 @@ discharging_symbol = 💦
 
 デフォルトでは、色だけが変更されます。 If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning `error_symbol` はelvishシェルではサポートされていません。 :::
+::: warning
+
+`error_symbol` is not supported on elvish shell.
+
+:::
+
+::: warning
+
+`vicmd_symbol` is only supported in fish and zsh.
+
+:::
 
 ### オプション
 
@@ -781,7 +791,6 @@ By default this module will only be shown in your prompt when one or more of the
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
-- `*.sln`
 - `*.csproj`
 - `*.fsproj`
 - `*.xproj`
@@ -800,7 +809,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | dotnetのバージョンを表示する前に使用される記号です。                                             |
 | `heuristic`         | `true`                                                                                                  | より高速なバージョン検出を使用して、starshipの動作を維持します。                                      |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | どの拡張子がこのモジュールをアクティブにするか                                                   |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | どの拡張子がこのモジュールをアクティブにするか                                                   |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | どのファイル名がこのモジュールをアクティブにするか                                                 |
 | `detect_folders`    | `[]`                                                                                                    | どのフォルダーがこのモジュールをアクティブにするか                                                 |
 | `style`             | `"bold blue"`                                                                                           | モジュールのスタイルです。                                                             |
@@ -994,7 +1003,7 @@ format = "via [e $version](bold red) "
 | オプション            | デフォルト                                                      | 説明                            |
 | ---------------- | ---------------------------------------------------------- | ----------------------------- |
 | `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | moduleのフォーマットです。              |
-| `symbol`         | `"☁️  "`                                                   | 現在のGCPプロファイルを表示する前に表示される記号です。 |
+| `symbol`         | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。 |
 | `region_aliases` |                                                            | GCP名に加えて表示するリージョンのエイリアスです。    |
 | `style`          | `"bold blue"`                                              | モジュールのスタイルです。                 |
 | `disabled`       | `false`                                                    | `gcloud`モジュールを無効にします。         |
@@ -1634,13 +1643,14 @@ format = "via [🌕 $version](bold blue) "
 
 ## メモリ使用量
 
-`memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
+`memory_usage</ 0>モジュールは、現在のシステムメモリとスワップ使用量を示します。</p>
 
-デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
+<p spaces-before="0">デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。</p>
 
-::: tip
+<p spaces-before="0">::: tip</p>
 
-このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
+<p spaces-before="0">このモジュールはデフォルトで無効になっています。
+有効にするには、設定ファイルで<code>disabled`を`false`に設定します。
 
 :::
 
@@ -2166,6 +2176,59 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Display the version of python from inside a local venv.
+#
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
+python_binary = ["./venv/bin/python", "python", "python3", "python2"]
+```
+
+## R
+
+The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                          |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
+| `style`             | `"blue bold"`                        | モジュールのスタイルです。                                                             |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | どの拡張子がこのモジュールをアクティブにするか                                                   |
+| `detect_files`      | `[".Rprofile"]`                      | どのファイル名がこのモジュールをアクティブにするか                                                 |
+| `detect_folders`    | `[".Rproj.user"]`                    | どのフォルダーがこのモジュールをアクティブにするか                                                 |
+| `disabled`          | `false`                              | Disables the `r` module.                                                  |
+
+### 変数
+
+| 変数      | 設定例           | 説明                     |
+| ------- | ------------- | ---------------------- |
+| version | `v4.0.5`      | The version of `R`     |
+| symbol  |               | オプション `記号` の値をミラーする    |
+| style   | `"blue bold"` | オプション `style` の値をミラーする |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[rlang]
+format = "with [📐 $version](blue bold) "
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
@@ -2657,8 +2720,8 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `style_root`  | `"bold red"`            | ユーザーがrootのときに使用されるスタイルです。 |
 | `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。    |
 | `format`      | `"[$user]($style) in "` | moduleのフォーマットです。          |
-| `show_always` | `false`                 | `username` モジュールを常に表示します。 |
-| `disabled`    | `false`                 | `username` モジュールを無効にします。  |
+| `show_always` | `false`                 | `username`モジュールを常に表示します。  |
+| `disabled`    | `false`                 | `username`モジュールを無効にします。   |
 
 ### 変数
 
@@ -2832,6 +2895,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `directories`
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
 ::: tip
 
@@ -2853,19 +2917,20 @@ The order in which custom modules are shown can be individually set by including
 
 ### オプション
 
-| オプション         | デフォルト                           | 説明                                                                                                                         |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                  | モジュールのスタイルです。                                                                                                              |
-| `format`      | `"[$symbol($output )]($style)"` | moduleのフォーマットです。                                                                                                           |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| オプション         | デフォルト                           | 説明                                                                                                                                                                            |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
+| `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                       |
+| `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
+| `style`       | `"bold green"`                  | モジュールのスタイルです。                                                                                                                                                                 |
+| `format`      | `"[$symbol($output )]($style)"` | moduleのフォーマットです。                                                                                                                                                              |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
+| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### 変数
 

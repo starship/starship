@@ -143,7 +143,7 @@
 
 ### Yêu cầu
 
-- Đã cài đặt m [Nerd Font](https://www.nerdfonts.com/) và đã kích hoạt trong giao diện dòng lệnh của bạn (ví dụ, thử [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Đã cài đặt [Nerd Font](https://www.nerdfonts.com/) và đã kích hoạt trong giao diện dòng lệnh của bạn (ví dụ, thử [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Bắt đầu
 
@@ -161,6 +161,13 @@
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+
+
+   **Note** - The defaults of the install script can be overridden see the built-in help.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
 
 
    #### Cài đặt thông qua Trình quản lí gói
