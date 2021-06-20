@@ -478,7 +478,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 \*: This variable can only be used as a part of a style string
 
-## Command Duration
+## Durata del comando
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -2678,7 +2678,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Example    | Description                         |
 | --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
+| ora       | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
