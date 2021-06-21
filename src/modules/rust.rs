@@ -143,9 +143,9 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     fn read_channel(path: &Path, only_toml: bool) -> Option<String> {
         let contents = fs::read_to_string(path).ok()?;
 
-        match (contents.lines().count(), only_toml) {
-            (0, _) => None,
-            (1, false) => Some(contents),
+        match contents.lines().count() {
+            0 => None,
+            1 if !only_toml => Some(contents),
             _ => {
                 toml::from_str::<OverrideFile>(&contents)
                     .ok()?
