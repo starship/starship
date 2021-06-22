@@ -157,6 +157,24 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         .map(|c| c.trim().to_owned())
     }
 
+    if context
+        .dir_contents()
+        .map_or(false, |dir| dir.has_file("rust-toolchain"))
+    {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain"), false) {
+            return Some(toolchain);
+        }
+    }
+
+    if context
+        .dir_contents()
+        .map_or(false, |dir| dir.has_file("rust-toolchain.toml"))
+    {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain.toml"), true) {
+            return Some(toolchain);
+        }
+    }
+
     let mut dir = &*context.current_dir;
     loop {
         if let Some(toolchain) = read_channel(&dir.join("rust-toolchain"), false) {
