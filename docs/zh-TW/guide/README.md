@@ -160,7 +160,14 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   如果想更新已安裝的 Starship，請重新執行上述指令。 指令只會更新 Starship 執行檔本身，不會影響到任何已撰寫的設定檔。
+
+
+   **Note** - The defaults of the install script can be overridden see the built-in help.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
 
 
    #### 使用套件管理器安裝：
@@ -237,7 +244,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
+   **注意** 只支援 elvish v0.15 以上的版本。 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -264,22 +271,22 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
 
-### Code Contributors
+### 專案貢獻者
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute. [[我要貢獻](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### 專案資助者
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+成為專案資助者，推動社群永續經營 [[Contribute](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### 個人
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### 組織
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+以組織名義資助專案 這裏會產生一個能連向您組織網站的連結標誌。 [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>

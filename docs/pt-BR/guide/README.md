@@ -147,7 +147,7 @@
 
 ### Primeiros passos
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Nota:** Devido ao suporte a diversas plataformas, apenas um subconjunto de plataformas são demonstradas abaixo. Não achou a sua? Dê uma olhada nas [instruções extras das plataformas](https://starship.rs/installing/).
 
 1. Instale o binário do **starship**:
 
@@ -160,7 +160,14 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Para atualizar o Starship de maneira manual, execute novamente o script acima. Isto irá substituir a versão atual sem alterar as configurações do Starship.
+
+
+   **Nota** - Os padrões de instalação do script podem ser alteradas e substituídas, consulte a ajuda de built-in.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
 
 
    #### Instalar via gerenciador de pacotes
@@ -217,7 +224,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Adicione o comando a seguir ao final do arquivo `Microsoft.PowerShell_profile.ps1`. Você pode checar a localização deste arquivo consultando a variável `$PROFILE` no PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -237,7 +244,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Atenção** Apenas a versão v0.15 ou superior do elvish é suportada. Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -248,7 +255,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Adicione ao final do arquivo `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -260,7 +267,7 @@
 
 Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Se você é fluente em uma linguá não inglesa, nos ficaríamos gratos por qualquer ajuda em manter nossas documentações traduzidas e atualizadas em outras linguás. Se você deseja ajudar nas traduções, você pode contribuir no [Crowdin do Starship](https://translate.starship.rs/).
 
 Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
 

@@ -419,7 +419,7 @@ mod tests {
         let time_end = None;
         let time_now = NaiveTime::from_hms(10, 00, 00);
 
-        assert_eq!(is_inside_time_range(time_now, time_start, time_end), true);
+        assert!(is_inside_time_range(time_now, time_start, time_end));
     }
 
     #[test]
@@ -428,8 +428,8 @@ mod tests {
         let time_now = NaiveTime::from_hms(12, 00, 00);
         let time_now2 = NaiveTime::from_hms(8, 00, 00);
 
-        assert_eq!(is_inside_time_range(time_now, time_start, None), true);
-        assert_eq!(is_inside_time_range(time_now2, time_start, None), false);
+        assert!(is_inside_time_range(time_now, time_start, None));
+        assert!(!is_inside_time_range(time_now2, time_start, None));
     }
 
     #[test]
@@ -438,8 +438,8 @@ mod tests {
         let time_now = NaiveTime::from_hms(15, 00, 00);
         let time_now2 = NaiveTime::from_hms(19, 00, 00);
 
-        assert_eq!(is_inside_time_range(time_now, None, time_end), true);
-        assert_eq!(is_inside_time_range(time_now2, None, time_end), false);
+        assert!(is_inside_time_range(time_now, None, time_end));
+        assert!(!is_inside_time_range(time_now2, None, time_end));
     }
 
     #[test]
@@ -450,9 +450,9 @@ mod tests {
         let time_now2 = NaiveTime::from_hms(13, 00, 00);
         let time_now3 = NaiveTime::from_hms(20, 00, 00);
 
-        assert_eq!(is_inside_time_range(time_now, time_start, time_end), false);
-        assert_eq!(is_inside_time_range(time_now2, time_start, time_end), true);
-        assert_eq!(is_inside_time_range(time_now3, time_start, time_end), false);
+        assert!(!is_inside_time_range(time_now, time_start, time_end));
+        assert!(is_inside_time_range(time_now2, time_start, time_end));
+        assert!(!is_inside_time_range(time_now3, time_start, time_end));
     }
 
     #[test]
@@ -463,9 +463,9 @@ mod tests {
         let time_now2 = NaiveTime::from_hms(13, 00, 00);
         let time_now3 = NaiveTime::from_hms(20, 00, 00);
 
-        assert_eq!(is_inside_time_range(time_now, time_start, time_end), true);
-        assert_eq!(is_inside_time_range(time_now2, time_start, time_end), false);
-        assert_eq!(is_inside_time_range(time_now3, time_start, time_end), true);
+        assert!(is_inside_time_range(time_now, time_start, time_end));
+        assert!(!is_inside_time_range(time_now2, time_start, time_end));
+        assert!(is_inside_time_range(time_now3, time_start, time_end));
     }
 
     #[test]

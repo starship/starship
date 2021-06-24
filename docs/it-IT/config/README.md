@@ -1,33 +1,33 @@
 # Configurazione
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Per iniziare a configurare la starship, crea il seguente file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Tutta la configurazione per starship è fatta in questo file [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Inserts a blank line between shell prompts
+# Inserisce una riga vuota tra gli prompt della shell
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Sostituisci il simbolo "❯" nel prompt con "➜"
+[character]                            # Il nome del modulo che stiamo configurando è "character"
+success_symbol = "[➜](grassetto)" # Il segmento "success_symbol" è impostato a "➜" con il colore "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Disabilita il modulo del pacchetto, nasconderlo dal prompt completamente
 [package]
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+È possibile modificare la posizione predefinita del file di configurazione con la variabile d'ambiente `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Equivalentemente in PowerShell (Windows) potresti aggiungere questa riga al tuo `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
@@ -35,23 +35,23 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Per impostazione predefinita, starship salva i warning e gli errori in un file chiamato `~/.cache/starship/session_${STARSHIP_SESSION_KEY}. og`, dove la chiave di sessione è corrispondente a un'istanza del tuo terminale. Questo, tuttavia, può essere modificato utilizzando la variabile di ambiente `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Equivalentemente in PowerShell (Windows) potresti aggiungere questa riga al tuo `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-### Terminology
+### Terminologia
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Modulo**: Un componente nel prompt che dà informazioni basate su informazioni contestuali dal tuo sistema operativo. Ad esempio, il modulo "nodejs" mostra la versione di Node.js attualmente installata sul computer, se la directory corrente è un progetto Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Variable**: Sotto-componenti più piccoli che contengono informazioni fornite dal modulo. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
@@ -389,7 +389,17 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning `error_symbol` is not supported on elvish shell. :::
+::: warning
+
+`error_symbol` is not supported on elvish shell.
+
+:::
+
+::: warning
+
+`vicmd_symbol` is only supported in fish and zsh.
+
+:::
 
 ### Options
 
@@ -468,7 +478,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 \*: This variable can only be used as a part of a style string
 
-## Command Duration
+## Durata del comando
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
@@ -780,7 +790,6 @@ By default this module will only be shown in your prompt when one or more of the
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
-- `*.sln`
 - `*.csproj`
 - `*.fsproj`
 - `*.xproj`
@@ -799,7 +808,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
 | `style`             | `"bold blue"`                                                                                           | The style for the module.                                                 |
@@ -1405,7 +1414,7 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
-::: Attenzione
+::: warning
 
 This module is not supported on tcsh.
 
@@ -2165,6 +2174,59 @@ python_binary = "python3"
 detect_extensions = []
 ```
 
+```toml
+# ~/.config/starship.toml
+
+[python]
+# Display the version of python from inside a local venv.
+#
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
+python_binary = ["./venv/bin/python", "python", "python3", "python2"]
+```
+
+## R
+
+The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
+| `style`             | `"blue bold"`                        | The style for the module.                                                 |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                               |
+| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                |
+| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
+| `disabled`          | `false`                              | Disables the `r` module.                                                  |
+
+### Variables
+
+| Variable | Example       | Description                          |
+| -------- | ------------- | ------------------------------------ |
+| version  | `v4.0.5`      | The version of `R`                   |
+| symbol   |               | Mirrors the value of option `symbol` |
+| style    | `"blue bold"` | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[rlang]
+format = "with [📐 $version](blue bold) "
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
@@ -2588,7 +2650,7 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Time
+## Ora
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
@@ -2616,7 +2678,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Example    | Description                         |
 | --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
+| ora       | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
@@ -2831,6 +2893,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `directories`
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
 ::: tip
 
@@ -2852,19 +2915,20 @@ The order in which custom modules are shown can be individually set by including
 
 ### Options
 
-| Option        | Default                         | Description                                                                                                                |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                               |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                      |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                 |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
-| `style`       | `"bold green"`                  | The style for the module.                                                                                                  |
-| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| Option        | Default                         | Description                                                                                                                                                                   |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
+| `style`       | `"bold green"`                  | The style for the module.                                                                                                                                                     |
+| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                                                                    |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
+| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### Variables
 

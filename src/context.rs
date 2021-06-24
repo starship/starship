@@ -514,58 +514,46 @@ mod tests {
         let empty = testdir(&[])?;
         let empty_dc = DirContents::from_path(empty.path())?;
 
-        assert_eq!(
-            ScanDir {
-                dir_contents: &empty_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            false
-        );
+        assert!(!ScanDir {
+            dir_contents: &empty_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
         let rust_dc = DirContents::from_path(rust.path())?;
-        assert_eq!(
-            ScanDir {
-                dir_contents: &rust_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            false
-        );
+        assert!(!ScanDir {
+            dir_contents: &rust_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
         let java_dc = DirContents::from_path(java.path())?;
-        assert_eq!(
-            ScanDir {
-                dir_contents: &java_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            false
-        );
+        assert!(!ScanDir {
+            dir_contents: &java_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
         let node_dc = DirContents::from_path(node.path())?;
-        assert_eq!(
-            ScanDir {
-                dir_contents: &node_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            true
-        );
+        assert!(ScanDir {
+            dir_contents: &node_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         node.close()?;
 
         Ok(())
