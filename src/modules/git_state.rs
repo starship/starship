@@ -337,7 +337,7 @@ mod tests {
 
         // Ensure on the expected branch.
         // If build environment has `init.defaultBranch` global set
-        // it will default to an unknown branch, so neeed to make & change branch
+        // it will default to an unknown branch, so need to make & change branch
         run_git_cmd(
             &["checkout", "-b", "master"],
             Some(path),
