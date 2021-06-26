@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_added_lines<'a>(diff: &'a str) -> Option<String> {
+fn get_added_lines(diff: &str) -> Option<String> {
     let re = Regex::new(r"^\{\+.*\+\}$").unwrap();
 
     Some(
@@ -55,7 +55,7 @@ fn get_added_lines<'a>(diff: &'a str) -> Option<String> {
             .to_string(),
     )
 }
-fn get_modified_lines<'a>(diff: &'a str) -> Option<String> {
+fn get_modified_lines(diff: &str) -> Option<String> {
     let re = Regex::new(r"^.+(\[-|\{\+).*$").unwrap();
 
     Some(
@@ -65,7 +65,7 @@ fn get_modified_lines<'a>(diff: &'a str) -> Option<String> {
             .to_string(),
     )
 }
-fn get_deleted_lines<'a>(diff: &'a str) -> Option<String> {
+fn get_deleted_lines(diff: &str) -> Option<String> {
     let re = Regex::new(r"^\[-.*-\]$").unwrap();
 
     Some(
