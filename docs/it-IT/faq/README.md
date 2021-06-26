@@ -12,7 +12,7 @@
 
 ## Come posso ottenere il completamento dei comandi come mostrato nella GIF demo?
 
-Completion support, or autocomplete, is provided by your shell of choice. Nel caso della demo, la demo è stata fatta con [Fish Shell](https://fishshell.com/), che fornisce i completamenti per impostazione predefinita. Se usi Z Shell (zsh), ti suggerirei di dare un'occhiata a [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Il supporto di completamento, o autocompletamento, è fornito dalla vostra shell di scelta. Nel caso della demo, la demo è stata fatta con [Fish Shell](https://fishshell.com/), che fornisce i completamenti per impostazione predefinita. Se usi Z Shell (zsh), ti suggerirei di dare un'occhiata a [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Il formato di primo livello `` e `<module>.disabled` fanno la stessa cosa?
 
@@ -21,7 +21,7 @@ Sì, entrambi possono essere utilizzati per disabilitare i moduli nel prompt. Se
 - Disabilitare i moduli è più esplicito che ometterli dal primo `formato` di livello
 - I nuovi moduli creati saranno aggiunti al prompt come Starship viene aggiornato
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## I docs dicono Starship è cross-shell. Perché la mia shell preferita non è supportata?
 
 Il modo in cui Starship è costruito, dovrebbe rendere possibile aggiungere il supporto per qualsiasi shell. Il binario di Starship è apolide e indipendente dalla shell, fino a quando la tua shell supporterà prompt personalizzati, Starship può essere utilizzato.
 
@@ -46,7 +46,7 @@ Per un elenco di tutti i flag accettati da `starship prompt`, utilizzare il segu
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+Il prompt userà tanto contesto quanto è fornito, ma nessun flag è "richiesto".
 
 ## Come faccio a eseguire le distribuzioni Starship su Linux con vecchie versioni di glibc?
 
@@ -56,9 +56,9 @@ Se si ottiene un errore come "_versione 'GLIBC_2. 8' non trovato (richiesta da S
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## Vedo simboli che non capisco o mi aspetto, cosa significano?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Se vedi simboli che non riconosci puoi usare `starship explain` per la spiegazione dei moduli correntemente mostrato.
 
 ## Perché non vedo un simbolo di glifo nel mio prompt?
 
@@ -88,9 +88,9 @@ Starship è altrettanto facile da disinstallare come lo è da installare.
 
 Se Starship è stato installato utilizzando un gestore di pacchetti, fai riferimento alla documentazione per le istruzioni di disinstallazione.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Se Starship è stato installato utilizzando lo script di installazione, il seguente comando eliminerà il file binario:
 
 ```sh
-# Locate and delete the starship binary
+# Individua ed elimina il binario di starship
 sh -c 'rm "$(which starship)"'
 ```

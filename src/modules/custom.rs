@@ -1,3 +1,4 @@
+use std::env;
 use std::io::Write;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
@@ -33,6 +34,12 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
 
         if !is_match {
+            return None;
+        }
+    }
+
+    if let Some(os) = config.os {
+        if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
             return None;
         }
     }

@@ -503,7 +503,7 @@ mod tests {
         rust_config.load_config(&config);
 
         assert_eq!(rust_config.symbol, "T ");
-        assert_eq!(rust_config.disabled, true);
+        assert!(rust_config.disabled);
         assert_eq!(rust_config.some_array, vec!["A"]);
     }
 
@@ -631,7 +631,7 @@ mod tests {
     #[test]
     fn test_from_bool() {
         let config = Value::Boolean(true);
-        assert_eq!(<bool>::from_config(&config).unwrap(), true);
+        assert!(<bool>::from_config(&config).unwrap());
     }
 
     #[test]

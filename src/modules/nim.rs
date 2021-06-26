@@ -85,8 +85,8 @@ mod tests {
             .iter()
             .any(|&v| parse_nim_version(v).is_some());
 
-        assert_eq!(true, all_some);
-        assert_eq!(true, all_none);
+        assert!(all_some);
+        assert!(all_none);
 
         let sample_nimc_output = "Nim Compiler Version 1.2.0 [Linux: amd64]
             Compiled at 2020-04-03
