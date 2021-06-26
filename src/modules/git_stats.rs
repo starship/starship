@@ -13,6 +13,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_stats");
     let config: GitStatsConfig = GitStatsConfig::try_load(module.config);
 
+    if let None = context.get_repo().ok()?.root {
+        return None;
+    }
+
     let diff = context
         .exec_cmd("git", &["diff", "--word-diff", "--unified=0"])?
         .stdout;
@@ -74,4 +78,24 @@ fn get_deleted_lines(diff: &str) -> Option<String> {
             .count()
             .to_string(),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use std::io;
+
+    #[test]
+    fn show_nothing_on_empty_dir() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("git_stats")
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
 }
