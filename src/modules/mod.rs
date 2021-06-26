@@ -19,6 +19,7 @@ mod gcloud;
 mod git_branch;
 mod git_commit;
 mod git_state;
+mod git_stats;
 mod git_status;
 mod golang;
 mod helm;
