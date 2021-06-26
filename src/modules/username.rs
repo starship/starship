@@ -19,6 +19,9 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    // On Windows the username is mutable when tests are not running.
+    // When proper mocking for elevation is implemented, these
+    // conditions should be removed.
     #[cfg(all(target_os = "windows", not(test)))]
     let mut username = context.get_env(USERNAME_ENV_VAR)?;
 
