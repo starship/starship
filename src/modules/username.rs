@@ -19,14 +19,18 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    #[cfg(all(target_os = "windows", not(test)))]
     let mut username = context.get_env(USERNAME_ENV_VAR)?;
+
+    #[cfg(any(not(target_os = "windows"), all(target_os = "windows", test)))]
+    let username = context.get_env(USERNAME_ENV_VAR)?;
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
     let is_root = is_root_user();
 
-    #[cfg(target_os = "windows")]
+    #[cfg(all(target_os = "windows", not(test)))]
     if is_root {
         username = "Administrator".to_string();
     }
