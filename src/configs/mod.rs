@@ -97,7 +97,7 @@ pub struct FullConfig<'a> {
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
     git_state: git_state::GitStateConfig<'a>,
-    git_stats: git_stats::GitStatsConfig,
+    git_stats: git_stats::GitStatsConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
     golang: go::GoConfig<'a>,
     helm: helm::HelmConfig<'a>,
