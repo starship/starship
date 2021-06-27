@@ -33,15 +33,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "added_style" => Some(Ok(config.added_style)),
-                "modified_style" => Some(Ok(config.modified_style)),
-                "deleted_style" => Some(Ok(config.deleted_style)),
+                "a_style" => Some(Ok(config.a_style)),
+                "m_style" => Some(Ok(config.m_style)),
+                "d_style" => Some(Ok(config.d_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "added_lines" => Some(Ok(get_added_lines(&diff)?)),
-                "modified_lines" => Some(Ok(get_modified_lines(&diff)?)),
-                "deleted_lines" => Some(Ok(get_deleted_lines(&diff)?)),
+                "added" => Some(Ok(get_added_lines(&diff)?)),
+                "modified" => Some(Ok(get_modified_lines(&diff)?)),
+                "deleted" => Some(Ok(get_deleted_lines(&diff)?)),
                 _ => None,
             })
             .parse(None)
@@ -128,7 +128,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {}",
+            "{} {} {} ",
             Color::Green.bold().paint("+1"),
             Color::Yellow.bold().paint("~0"),
             Color::Red.bold().paint("-0")
@@ -149,7 +149,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {}",
+            "{} {} {} ",
             Color::Green.bold().paint("+0"),
             Color::Yellow.bold().paint("~1"),
             Color::Red.bold().paint("-0")
@@ -170,7 +170,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {}",
+            "{} {} {} ",
             Color::Green.bold().paint("+0"),
             Color::Yellow.bold().paint("~0"),
             Color::Red.bold().paint("-1")
@@ -191,7 +191,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {}",
+            "{} {} {} ",
             Color::Green.bold().paint("+1"),
             Color::Yellow.bold().paint("~1"),
             Color::Red.bold().paint("-1")
