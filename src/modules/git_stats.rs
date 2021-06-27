@@ -17,7 +17,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo_root = repo.root.as_ref()?;
 
     let diff = context
-        .exec_cmd("git", &["diff", "--word-diff", "--unified=0"])?
+        .exec_cmd(
+            "git",
+            &[
+                "-C",
+                &repo_root.to_string_lossy(),
+                "--no-optional-locks",
+                "diff",
+                "--word-diff",
+                "--unified=0",
+            ],
+        )?
         .stdout;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -113,7 +123,7 @@ mod tests {
         // Add lines to the_file
         let the_file = path.join("the_file");
         let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
-        write!(the_file, "Added line\n")?;
+        write!(the_file, "\nAdded line\n")?;
 
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
