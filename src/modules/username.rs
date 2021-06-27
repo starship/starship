@@ -3,7 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", not(test)))]
 use super::utils::admin_win;
 
 #[cfg(not(target_os = "windows"))]
@@ -84,9 +84,14 @@ fn is_login_user(context: &Context, username: &str) -> bool {
         .unwrap_or(true)
 }
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", not(test)))]
 fn is_root_user() -> bool {
     admin_win::is_app_elevated()
+}
+
+#[cfg(all(target_os = "windows", test))]
+fn is_root_user() -> bool {
+    false
 }
 
 #[cfg(not(target_os = "windows"))]
