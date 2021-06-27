@@ -92,8 +92,8 @@ fn get_deleted_lines(diff: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use std::ffi::OsStr;
-    use std::fs::OpenOptions;
-    use std::io::{self, Error, ErrorKind, Write};
+    use std::fs::{self, OpenOptions};
+    use std::io::{self, BufRead, BufReader, Error, ErrorKind, Write};
     use std::path::Path;
     use std::process::{Command, Stdio};
 
@@ -123,16 +123,45 @@ mod tests {
         // Add lines to the_file
         let the_file = path.join("the_file");
         let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
-        write!(the_file, "\nAdded line\n")?;
+        writeln!(the_file, "\nAdded line")?;
 
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
-        log::debug!("Actual {:#?}", actual);
         let expected = Some(format!(
             "{} {} {}",
             Color::Green.bold().paint("+1"),
             Color::Yellow.bold().paint("~0"),
             Color::Red.bold().paint("-0")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_delete_lines() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        // Add lines to the_file
+        let file_path = path.join("the_file");
+        let the_file = OpenOptions::new().read(true).write(true).open(&file_path)?;
+
+        let lines = BufReader::new(the_file)
+            .lines()
+            .skip(1)
+            .map(|x| x.unwrap())
+            .collect::<Vec<String>>()
+            .join("\n");
+        fs::write(file_path, lines)?;
+
+        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+
+        let expected = Some(format!(
+            "{} {} {}",
+            Color::Green.bold().paint("+0"),
+            Color::Yellow.bold().paint("~0"),
+            Color::Red.bold().paint("-1")
         ));
 
         assert_eq!(expected, actual);
