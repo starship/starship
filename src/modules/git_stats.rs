@@ -92,9 +92,9 @@ fn get_deleted_lines(diff: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use std::ffi::OsStr;
-    use std::fs::{self, OpenOptions};
-    use std::io::{self, BufRead, BufReader, Error, ErrorKind, Write};
-    use std::path::Path;
+    use std::fs::OpenOptions;
+    use std::io::{self, Error, ErrorKind, Write};
+    use std::path::{Path, PathBuf};
     use std::process::{Command, Stdio};
 
     use ansi_term::Color;
@@ -120,10 +120,10 @@ mod tests {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
-        // Add lines to the_file
         let the_file = path.join("the_file");
         let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
         writeln!(the_file, "\nAdded line")?;
+        the_file.sync_all()?;
 
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
@@ -139,21 +139,33 @@ mod tests {
     }
 
     #[test]
-    fn shows_delete_lines() -> io::Result<()> {
+    fn shows_modified_lines() -> io::Result<()> {
         let repo_dir = create_repo_with_commit()?;
         let path = repo_dir.path();
 
-        // Add lines to the_file
-        let file_path = path.join("the_file");
-        let the_file = OpenOptions::new().read(true).write(true).open(&file_path)?;
+        let the_file = path.join("the_file");
+        write_file(the_file, "Modified line\nSecond Line\nThird Line")?;
 
-        let lines = BufReader::new(the_file)
-            .lines()
-            .skip(1)
-            .map(|x| x.unwrap())
-            .collect::<Vec<String>>()
-            .join("\n");
-        fs::write(file_path, lines)?;
+        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+
+        let expected = Some(format!(
+            "{} {} {}",
+            Color::Green.bold().paint("+0"),
+            Color::Yellow.bold().paint("~1"),
+            Color::Red.bold().paint("-0")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_deleted_lines() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let file_path = path.join("the_file");
+        write_file(file_path, "First Line\nSecond Line")?;
 
         let actual = ModuleRenderer::new("git_stats").path(path).collect();
 
@@ -161,6 +173,27 @@ mod tests {
             "{} {} {}",
             Color::Green.bold().paint("+0"),
             Color::Yellow.bold().paint("~0"),
+            Color::Red.bold().paint("-1")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_all_changes() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let file_path = path.join("the_file");
+        write_file(file_path, "\nSecond Line\n\nModified\nAdded")?;
+
+        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+
+        let expected = Some(format!(
+            "{} {} {}",
+            Color::Green.bold().paint("+1"),
+            Color::Yellow.bold().paint("~1"),
             Color::Red.bold().paint("-1")
         ));
 
@@ -193,19 +226,20 @@ mod tests {
         }
     }
 
+    fn write_file(file: PathBuf, text: &str) -> io::Result<()> {
+        let mut file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(&file)?;
+        writeln!(file, "{}", text)?;
+        file.sync_all()
+    }
+
     fn create_repo_with_commit() -> io::Result<tempfile::TempDir> {
         let repo_dir = tempfile::tempdir()?;
         let path = repo_dir.path();
-        let conflicted_file = repo_dir.path().join("the_file");
-
-        let write_file = |text: &str| {
-            let mut file = OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .open(&conflicted_file)?;
-            write!(file, "{}", text)
-        };
+        let file = repo_dir.path().join("the_file");
 
         // Initialize a new git repo
         run_git_cmd(
@@ -241,7 +275,7 @@ mod tests {
         )?;
 
         // Write a file on master and commit it
-        write_file("Version A")?;
+        write_file(file, "First Line\nSecond Line\nThird Line")?;
         run_git_cmd(&["add", "the_file"], Some(path), true)?;
         run_git_cmd(
             &["commit", "--message", "Commit A", "--no-gpg-sign"],
