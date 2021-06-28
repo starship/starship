@@ -412,7 +412,15 @@ By default it only changes color. If you also want to change its shape take a
 look at [this example](#with-custom-error-shape).
 
 ::: warning
+
 `error_symbol` is not supported on elvish shell.
+
+:::
+
+::: warning
+
+`vicmd_symbol` is only supported in fish and zsh. 
+
 :::
 
 ### Options
@@ -831,7 +839,6 @@ the following files are present in the current directory:
 - `Directory.Build.props`
 - `Directory.Build.targets`
 - `Packages.props`
-- `*.sln`
 - `*.csproj`
 - `*.fsproj`
 - `*.xproj`
@@ -855,7 +862,7 @@ when there is a csproj file in the current directory.
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
-| `detect_extensions` | `["sln", "csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                  | Which extensions should trigger this module.                              |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
 | `style`             | `"bold blue"`                                                                                           | The style for the module.                                                 |
@@ -2285,6 +2292,49 @@ detect_extensions = []
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
+## R
+
+The `rlang` module shows the currently installed version of R. The module will be shown if 
+any of the following conditions are met:
+
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
+
+### Options
+
+| Option              | Default                              | Description                                   |
+|---------------------|--------------------------------------|-----------------------------------------------|
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                    |
+| `version_format` | `"v${raw}"` | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
+| `symbol`            | `"📐"`                               | A format string representing the symbol of R. |
+| `style`             | `"blue bold"`                        | The style for the module.                     |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module   |
+| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module    |
+| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module      |
+| `disabled`          | `false`                              | Disables the `r` module.                      |
+
+### Variables
+
+| Variable | Example       | Description                          |
+| -------- | ------------- | ------------------------------------ |
+| version  | `v4.0.5`      | The version of `R`                   |
+| symbol   |               | Mirrors the value of option `symbol` |
+| style    | `"blue bold"` | Mirrors the value of option `style`  |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[rlang]
+format = "with [📐 $version](blue bold) "
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/).
@@ -2974,6 +3024,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `directories`
 - The current directory contains a file whose extension is in `extensions`
 - The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
 ::: tip
 
@@ -3010,7 +3061,8 @@ If you have an interesting example not covered there, feel free to share it ther
 | `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                      |
 | `style`       | `"bold green"`                  | The style for the module.                                                                                                  |
 | `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                 |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                             |
+| `disabled`    | `false`                         | Disables this `custom` module.                      |
+| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### Variables
 

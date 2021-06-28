@@ -175,6 +175,20 @@ active boot switches: -d:release\n",
             stdout: String::from("Python 3.8.0\n"),
             stderr: String::default(),
         }),
+        "R --version" => Some(CommandOutput {
+            stdout: String::default(),
+            stderr: String::from(
+                r#"R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)\n
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+https://www.gnu.org/licenses/."#
+            ),
+        }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),
             stderr: String::default()
