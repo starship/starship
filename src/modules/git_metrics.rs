@@ -1,7 +1,7 @@
 use regex::Regex;
 
 use crate::{
-    config::RootModuleConfig, configs::git_stats::GitStatsConfig, formatter::StringFormatter,
+    config::RootModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
     module::Module,
 };
 
@@ -10,8 +10,8 @@ use super::Context;
 /// Creates a module with the current added/modified/deleted lines in the git repository at the
 /// current directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module("git_stats");
-    let config: GitStatsConfig = GitStatsConfig::try_load(module.config);
+    let mut module = context.new_module("git_metrics");
+    let config: GitMetricsConfig = GitMetricsConfig::try_load(module.config);
 
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `git_stats`:\n{}", error);
+            log::warn!("Error in module `git_metrics`:\n{}", error);
             return None;
         }
     });
@@ -105,7 +105,7 @@ mod tests {
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("git_stats")
+        let actual = ModuleRenderer::new("git_metrics")
             .path(repo_dir.path())
             .collect();
 
@@ -125,7 +125,7 @@ mod tests {
         writeln!(the_file, "\nAdded line")?;
         the_file.sync_all()?;
 
-        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
             "{} {} {} ",
@@ -146,7 +146,7 @@ mod tests {
         let the_file = path.join("the_file");
         write_file(the_file, "Modified line\nSecond Line\nThird Line")?;
 
-        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
             "{} {} {} ",
@@ -167,7 +167,7 @@ mod tests {
         let file_path = path.join("the_file");
         write_file(file_path, "First Line\nSecond Line")?;
 
-        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
             "{} {} {} ",
@@ -188,7 +188,7 @@ mod tests {
         let file_path = path.join("the_file");
         write_file(file_path, "\nSecond Line\n\nModified\nAdded")?;
 
-        let actual = ModuleRenderer::new("git_stats").path(path).collect();
+        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
             "{} {} {} ",

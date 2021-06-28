@@ -194,7 +194,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
-$git_stats\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -1232,20 +1232,20 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git Stats
+## Git Metrics
 
-The `git_stats` module will show the added, modified and deleted lines in
+The `git_metrics` module will show the added, modified and deleted lines in
 the current git repository.
 
 ### Options
 
-| Option                    | Default                                                               | Description                                                                             |
-| ------------------------- | --------------------------------------------------------------------  | --------------------------------------------------------------------------------------- |
-| `a_style`                 | `"bold green"`                                                        | The style for the added count.                                                          |
-| `m_style`                 | `"bold yellow"`                                                       | The style for the modified count.                                                       |
-| `d_style`                 | `"bold red"`                                                          | The style for the deleted count.                                                        |
-| `format`                  | `'[+$added]($a_style) [~$modified]($m_style) [-$deleted]($d_style) '` | The format for the module.                                                              |
-| `disabled`                | `true`                                                                | Disables the `git_stats` module.                                                        |
+| Option                    | Default                                                               | Description                            |
+| ------------------------- | --------------------------------------------------------------------  | ---------------------------------------|
+| `a_style`                 | `"bold green"`                                                        | The style for the added count.         |
+| `m_style`                 | `"bold yellow"`                                                       | The style for the modified count.      |
+| `d_style`                 | `"bold red"`                                                          | The style for the deleted count.       |
+| `format`                  | `'[+$added]($a_style) [~$modified]($m_style) [-$deleted]($d_style) '` | The format for the module.             |
+| `disabled`                | `true`                                                                | Disables the `git_metrics` module.       |
 
 ### Variables
 
@@ -1265,7 +1265,7 @@ the current git repository.
 ```toml
 # ~/.config/starship.toml
 
-[git_state]
+[git_metrics]
 a_style = "bold blue"
 format = '[+$added]($a_style)[-$deleted]($d_style) '
 ```

@@ -23,8 +23,8 @@ pub mod erlang;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
+pub mod git_metrics;
 pub mod git_state;
-pub mod git_stats;
 pub mod git_status;
 pub mod go;
 pub mod helm;
@@ -96,8 +96,8 @@ pub struct FullConfig<'a> {
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
+    git_metrics: git_metrics::GitMetricsConfig<'a>,
     git_state: git_state::GitStateConfig<'a>,
-    git_stats: git_stats::GitStatsConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
     golang: go::GoConfig<'a>,
     helm: helm::HelmConfig<'a>,
@@ -166,8 +166,8 @@ impl<'a> Default for FullConfig<'a> {
             gcloud: Default::default(),
             git_branch: Default::default(),
             git_commit: Default::default(),
+            git_metrics: Default::default(),
             git_state: Default::default(),
-            git_stats: Default::default(),
             git_status: Default::default(),
             golang: Default::default(),
             helm: Default::default(),
