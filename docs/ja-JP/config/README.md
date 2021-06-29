@@ -102,7 +102,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 例：
 
-- `(@$region)` は `region` が `None` の場合何も表示せず、そうでなければ `@` とその後ろに region の値を表示します。
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` は括弧の中に変数がないので、常に何も表示しません。
 - `$all` が `\[$a$b\]` のショートカットである時、 `$a` と `$b` が両方とも `None` である場合に限り、`($all)` は何も表示しません。 これは `(\[$a$b\] )` と同じ動作をします。
 
