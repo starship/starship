@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use regex::Regex;
 
 use crate::{
@@ -128,30 +126,8 @@ mod tests {
         let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {} ",
+            "{} {} ",
             Color::Green.bold().paint("+1"),
-            Color::Yellow.bold().paint("~0"),
-            Color::Red.bold().paint("-0")
-        ));
-
-        assert_eq!(expected, actual);
-        repo_dir.close()
-    }
-
-    #[test]
-    fn shows_modified_lines() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
-        let path = repo_dir.path();
-
-        let the_file = path.join("the_file");
-        write_file(the_file, "Modified line\nSecond Line\nThird Line")?;
-
-        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
-
-        let expected = Some(format!(
-            "{} {} {} ",
-            Color::Green.bold().paint("+0"),
-            Color::Yellow.bold().paint("~1"),
             Color::Red.bold().paint("-0")
         ));
 
@@ -170,9 +146,8 @@ mod tests {
         let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {} ",
+            "{} {} ",
             Color::Green.bold().paint("+0"),
-            Color::Yellow.bold().paint("~0"),
             Color::Red.bold().paint("-1")
         ));
 
@@ -191,9 +166,8 @@ mod tests {
         let actual = ModuleRenderer::new("git_metrics").path(path).collect();
 
         let expected = Some(format!(
-            "{} {} {} ",
+            "{} {} ",
             Color::Green.bold().paint("+1"),
-            Color::Yellow.bold().paint("~1"),
             Color::Red.bold().paint("-1")
         ));
 
