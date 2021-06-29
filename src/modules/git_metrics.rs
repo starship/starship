@@ -71,7 +71,7 @@ struct GitDiff<'a> {
 impl<'a> GitDiff<'a> {
     fn get_matched_str(diff: &'a str, re: &Regex) -> &'a str {
         match re.captures(diff) {
-            Some(caps) => caps.get(0).unwrap().as_str(),
+            Some(caps) => caps.get(1).unwrap().as_str(),
             _ => "0",
         }
     }
@@ -102,10 +102,9 @@ mod tests {
     #[test]
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
+        let path = repo_dir.path();
 
-        let actual = ModuleRenderer::new("git_metrics")
-            .path(repo_dir.path())
-            .collect();
+        let actual = render_metrics(path);
 
         let expected = None;
 
@@ -120,10 +119,10 @@ mod tests {
 
         let the_file = path.join("the_file");
         let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
-        writeln!(the_file, "\nAdded line")?;
+        writeln!(the_file, "Added line")?;
         the_file.sync_all()?;
 
-        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
+        let actual = render_metrics(path);
 
         let expected = Some(format!(
             "{} {} ",
@@ -143,7 +142,7 @@ mod tests {
         let file_path = path.join("the_file");
         write_file(file_path, "First Line\nSecond Line")?;
 
-        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
+        let actual = render_metrics(path);
 
         let expected = Some(format!(
             "{} {} ",
@@ -163,7 +162,7 @@ mod tests {
         let file_path = path.join("the_file");
         write_file(file_path, "\nSecond Line\n\nModified\nAdded")?;
 
-        let actual = ModuleRenderer::new("git_metrics").path(path).collect();
+        let actual = render_metrics(path);
 
         let expected = Some(format!(
             "{} {} ",
@@ -173,6 +172,16 @@ mod tests {
 
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    fn render_metrics(path: &Path) -> Option<String> {
+        ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+            })
+            .path(path)
+            .collect()
     }
 
     fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
