@@ -166,8 +166,8 @@ mod tests {
 
         let expected = Some(format!(
             "{} {} ",
-            Color::Green.bold().paint("+1"),
-            Color::Red.bold().paint("-1")
+            Color::Green.bold().paint("+4"),
+            Color::Red.bold().paint("-2")
         ));
 
         assert_eq!(expected, actual);
