@@ -102,7 +102,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 Например:
 
-- `(@$region)` ничего не будет показывать, если переменная `регион` в значении `None`, иначе `@` будет использовать значение этой переменной.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(некоторый текст)` всегда не показывает ничего, поскольку в скобках нет переменных.
 - Когда `$all` является ярлыком для `\[$a$b\]`, `($all)` будет показываться только если `$a` и `$b` не являются `None`. Это работает так же, как `(\[$a$b\] )`.
 
