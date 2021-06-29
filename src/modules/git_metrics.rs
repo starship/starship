@@ -13,6 +13,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_metrics");
     let config: GitMetricsConfig = GitMetricsConfig::try_load(module.config);
 
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
+    if config.disabled {
+        return None;
+    };
+
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
 
