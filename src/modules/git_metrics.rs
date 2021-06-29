@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use regex::Regex;
 
 use crate::{
@@ -30,24 +32,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 &repo_root.to_string_lossy(),
                 "--no-optional-locks",
                 "diff",
-                "--word-diff",
-                "--unified=0",
+                "--shortstat",
             ],
         )?
         .stdout;
+
+    let stats = GitDiff::parse(&diff);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "a_style" => Some(Ok(config.a_style)),
-                "m_style" => Some(Ok(config.m_style)),
                 "d_style" => Some(Ok(config.d_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "added" => Some(Ok(get_added_lines(&diff)?)),
-                "modified" => Some(Ok(get_modified_lines(&diff)?)),
-                "deleted" => Some(Ok(get_deleted_lines(&diff)?)),
+                "added" => Some(Ok(stats.added)),
+                "deleted" => Some(Ok(stats.deleted)),
                 _ => None,
             })
             .parse(None)
@@ -64,35 +65,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_added_lines(diff: &str) -> Option<String> {
-    let re = Regex::new(r"^\{\+.*\+\}$").unwrap();
-
-    Some(
-        diff.lines()
-            .filter(|line| re.is_match(line))
-            .count()
-            .to_string(),
-    )
+struct GitDiff<'a> {
+    added: &'a str,
+    deleted: &'a str,
 }
-fn get_modified_lines(diff: &str) -> Option<String> {
-    let re = Regex::new(r"^.+(\[-|\{\+).*$").unwrap();
 
-    Some(
-        diff.lines()
-            .filter(|line| re.is_match(line))
-            .count()
-            .to_string(),
-    )
-}
-fn get_deleted_lines(diff: &str) -> Option<String> {
-    let re = Regex::new(r"^\[-.*-\]$").unwrap();
+impl<'a> GitDiff<'a> {
+    fn get_matched_str(diff: &'a str, re: &Regex) -> &'a str {
+        match re.captures(diff) {
+            Some(caps) => caps.get(0).unwrap().as_str(),
+            _ => "0",
+        }
+    }
 
-    Some(
-        diff.lines()
-            .filter(|line| re.is_match(line))
-            .count()
-            .to_string(),
-    )
+    pub fn parse(diff: &'a str) -> Self {
+        let added_re = Regex::new(r"(\d+) \w+\(\+\)").unwrap();
+        let deleted_re = Regex::new(r"(\d+) \w+\(\-\)").unwrap();
+
+        Self {
+            added: GitDiff::get_matched_str(diff, &added_re),
+            deleted: GitDiff::get_matched_str(diff, &deleted_re),
+        }
+    }
 }
 
 #[cfg(test)]
