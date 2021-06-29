@@ -74,6 +74,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "custom",
     "cmd_duration",
     "line_break",
+    "task_warrior",
     "jobs",
     #[cfg(feature = "battery")]
     "battery",

@@ -57,6 +57,7 @@ pub mod singularity;
 mod starship_root;
 pub mod status;
 pub mod swift;
+pub mod task_warrior;
 pub mod terraform;
 pub mod time;
 pub mod username;

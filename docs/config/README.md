@@ -2711,6 +2711,44 @@ The module will be shown if any of the following conditions are met:
 format = "via [🏎  $version](red bold)"
 ```
 
+## Task Warrior
+The `task_warrior` module shows the current started task in the Task Warrior and a symbol indicating if there are due tasks.
+The module is only shown when there's a `.task` folder in the home directory.
+Symbol priority: `overdue` > `today` > `week`, meaning when there's an overdue task has higher priority and is shown even if there's a task due today. Only one symbol is displayed.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+:::
+
+### Options
+| Option                  | Default                                                           | Description                                             |
+| ----------------------- | ----------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`                | `"[$symbol]($symbol_style)[$current_task]($current_task_style) "` | The format for the module.                              |
+| `current_task_style`    | `"white"`                                                         | The style for current task text.                        |
+| `no_tasks_symbol`       | `"✓"`                                                             | The symbol displayed when there's no task due.          |
+| `no_tasks_symbol_style` | `"green"`                                                         | The style for `no_tasks_symbol`.                        |
+| `today_symbol`          | `"⚡"`                                                            | The symbol displayed when there's a task due today.     |
+| `today_symbol_style`    | `"cyan"`                                                          | The style for `today_symbol`.                           |
+| `week_symbol`           | `"📅"`                                                            | The symbol displayed when there's a task due this week. |
+| `week_symbol_style`     | `"green"`                                                         | The style for `week_symbol`.                            |
+| `overdue_symbol`        | `"❌"`                                                            | The symbol displayed when there's an overdue task.      |
+| `overdue_symbol_style`  | `"bold red"`                                                      | The style for `overdue_symbol`.                         |
+| `disabled`              | `true`                                                            | Disables the `task_warrior` module.                     |
+
+### Variables
+
+| Variable             | Example              | Description                                                          |
+| -------------------- | -------------------- | -------------------------------------------------------------------- |
+| symbol               | `⚡`                 | Displayed symbol (one of overdue/today/etc).                         |
+| symbol_style\*       |                      | Displayed symbol style (set with appropriate `*_symbol_style` var).  |
+| current_task         | `Finish the project` | The active task  (the first one in the `task +ACTIVE` list).         |
+| current_task_style\* |                      | The style for the current task.                                      |
+
+\*: This variable can only be used as a part of a style string
+
+
 ## Terraform
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.

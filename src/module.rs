@@ -59,6 +59,7 @@ pub const ALL_MODULES: &[&str] = &[
     "rust",
     "php",
     "swift",
+    "task_warrior",
     "terraform",
     "shell",
     "shlvl",

@@ -242,6 +242,18 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
+        "task +OVERDUE" => Some(CommandOutput {
+            stdout: String::from("[task next ( +OVERDUE )]"),
+            stderr: String::default(),
+        }),
+        "task +ACTIVE uuids" => Some(CommandOutput {
+            stdout: String::from("d0ea68e3-ca95-4da1-8ed5-0a569d9f7f73"),
+            stderr: String::default(),
+        }),
+        "task _get d0ea68e3-ca95-4da1-8ed5-0a569d9f7f73.description" => Some(CommandOutput {
+            stdout: String::from("Task Warrior test task\n"),
+            stderr: String::default(),
+        }),
         // If we don't have a mocked command fall back to executing the command
         _ => internal_exec_cmd(&cmd, &args, time_limit),
     }
