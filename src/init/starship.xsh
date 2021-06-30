@@ -8,3 +8,4 @@ def starship_prompt():
 
 $PROMPT = starship_prompt
 $STARSHIP_SHELL = "xonsh"
+$STARSHIP_SESSION_KEY = $(::STARSHIP:: session).strip()
