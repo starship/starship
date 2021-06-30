@@ -179,7 +179,7 @@ mod tests {
     #[test]
     fn test_all_modules_is_in_alphabetical_order() {
         let mut sorted_modules: Vec<&str> = ALL_MODULES.iter().map(|module| *module).collect();
-        sorted_modules.sort();
+        sorted_modules.sort_unstable();
         assert_eq!(sorted_modules.as_slice(), ALL_MODULES);
     }
 
