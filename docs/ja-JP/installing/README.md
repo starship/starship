@@ -54,7 +54,7 @@ nix-env -iA nixos.starship
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # Configuration written to ~/.config/starship.toml
+    # ~/.config/starship.toml に書き込まれる設定
     settings = {
       # add_newline = false;
 
@@ -69,7 +69,7 @@ nix-env -iA nixos.starship
 }
 ```
 
-そして、以下を実行してください
+そして、次を実行してください
 
 ```sh
 home-manager switch
