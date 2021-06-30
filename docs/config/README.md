@@ -1234,17 +1234,23 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Metrics
 
-The `git_metrics` module will show the added, modified and deleted lines in
+The `git_metrics` module will show the added and deleted lines in
 the current git repository.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
 
 ### Options
 
 | Option                    | Default                                                               | Description                            |
 | ------------------------- | --------------------------------------------------------------------  | ---------------------------------------|
 | `a_style`                 | `"bold green"`                                                        | The style for the added count.         |
-| `m_style`                 | `"bold yellow"`                                                       | The style for the modified count.      |
 | `d_style`                 | `"bold red"`                                                          | The style for the deleted count.       |
-| `format`                  | `'[+$added]($a_style) [~$modified]($m_style) [-$deleted]($d_style) '` | The format for the module.             |
+| `format`                  | `'[+$added]($a_style) [-$deleted]($d_style) '`                        | The format for the module.             |
 | `disabled`                | `true`                                                                | Disables the `git_metrics` module.       |
 
 ### Variables
@@ -1252,10 +1258,8 @@ the current git repository.
 | Variable         | Example    | Description                           |
 | ---------------- | ---------- | -----------------------------------   |
 | added            | `1`        | The current number of added lines     |
-| modified         | `0`        | The current number of modified lines  |
-| added            | `2`        | The current number of deleted lines   |
+| deleted          | `2`        | The current number of deleted lines   |
 | a_style\*        |            | Mirrors the value of option `a_style` |
-| m_style\*        |            | Mirrors the value of option `m_style` |
 | d_style\*        |            | Mirrors the value of option `d_style` |
 
 \*: This variable can only be used as a part of a style string
@@ -1267,7 +1271,7 @@ the current git repository.
 
 [git_metrics]
 a_style = "bold blue"
-format = '[+$added]($a_style)[-$deleted]($d_style) '
+format = '[+$added]($a_style)/[-$deleted]($d_style) '
 ```
 
 ## Git Status

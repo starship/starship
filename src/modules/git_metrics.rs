@@ -63,12 +63,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+/// Represents the parsed output from a git diff.
 struct GitDiff<'a> {
     added: &'a str,
     deleted: &'a str,
 }
 
 impl<'a> GitDiff<'a> {
+    /// Returns the first capture group given a regular expression and a string.
+    /// If it fails to get the capture group it will return "0".
     fn get_matched_str(diff: &'a str, re: &Regex) -> &'a str {
         match re.captures(diff) {
             Some(caps) => caps.get(1).unwrap().as_str(),
@@ -76,6 +79,7 @@ impl<'a> GitDiff<'a> {
         }
     }
 
+    /// Parses the result of 'git diff --shortstat' as a `GitDiff` struct.
     pub fn parse(diff: &'a str) -> Self {
         let added_re = Regex::new(r"(\d+) \w+\(\+\)").unwrap();
         let deleted_re = Regex::new(r"(\d+) \w+\(\-\)").unwrap();
