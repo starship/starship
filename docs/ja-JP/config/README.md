@@ -356,26 +356,26 @@ style = "bold red"
 
 `display`オプションは、次の表の通りです。
 
-| オプション                | デフォルト      | 説明                                                                                                        |
-| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | バッテリーが表示される上限です。                                                                                          |
-| `style`              | `bold red` | displayオプションが使用されている場合のスタイルです。                                                                            |
-| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| オプション                | デフォルト      | 説明                                                                                     |
+| -------------------- | ---------- | -------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | バッテリーが表示される上限です。                                                                       |
+| `style`              | `bold red` | displayオプションが使用されている場合のスタイルです。                                                         |
+| `charging_symbol`    | `-`        | displayオプションが使用されている場合はこののシンボルが表示されます。デフォルトはバッテリーの `charging_symbol` オプションと同じになります。    |
+| `discharging_symbol` | `-`        | displayオプションが使用されている場合はこののシンボルが表示されます。デフォルトはバッテリーの `discharging_symbol` オプションと同じになります。 |
 
 #### 設定例
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # "bold red"のスタイルとバッテリー残量が0%~10%の放電時のシンボル
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # "bold yellow"のスタイルとバッテリー残量が10%~30%の放電時の💦シンボル
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# 残量が30%以上の場合バッテリーインジケータは表示されません
 
 ```
 
@@ -388,17 +388,17 @@ discharging_symbol = 💦
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-デフォルトでは、色だけが変更されます。 If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+デフォルトでは、色だけが変更されます。 形も変えてみたい場合は[このサンプル](#with-custom-error-shape)も参考にしてください。
 
 ::: warning
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol`はelvish shellでサポートされていません。
 
 :::
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol`はfishとzshのみでサポートされています。
 
 :::
 
@@ -451,7 +451,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
+`cmake`モジュールは、現在インストールされている[Cmake](https://cmake.org/)のバージョンを表示します。 デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
 
 - カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
 - カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
@@ -570,23 +570,23 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`crystal`モジュールは、現在インストールされている[Crystal](https://crystal-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`shard.yml`ファイルが含まれている
 - カレントディレクトリに`.cr`の拡張子のファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                           |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `symbol`            | `"🔮 "`                               | Crystalのバージョンを表示する前に使用される記号です。                               |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                             |
-| `version_format`    | `"v${raw}"`                          | The version format. 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `style`             | `"bold red"`                         | モジュールのスタイルです。                                                |
-| `detect_extensions` | `["cr"]`                             | どの拡張子がこのモジュールをアクティブにするか                                      |
-| `detect_files`      | `["shard.yml"]`                      | どのファイル名がこのモジュールをアクティブにするか                                    |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                    |
-| `disabled`          | `false`                              | `crystal`モジュールを無効にします。                                       |
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `symbol`            | `"🔮 "`                               | Crystalのバージョンを表示する前に使用される記号です。                         |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
+| `detect_extensions` | `["cr"]`                             | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["shard.yml"]`                      | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `disabled`          | `false`                              | `crystal`モジュールを無効にします。                                 |
 
 ### 変数
 
@@ -611,8 +611,8 @@ format = "via [✨ $version](bold blue) "
 
 `dart`モジュールは、現在インストールされている[Dart](https://dart.dev/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
+- カレントディレクトリに`.dart`の拡張子のファイルが含まれている
+- カレントディレクトリに`.dart_tool`ディレクトリが含まれている
 - カレントディレクトリに`pubspec.yaml`, `pubspec.yml`,もしくは`pubspec.lock`が含まれている
 
 ### オプション
