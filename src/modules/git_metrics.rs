@@ -40,8 +40,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "a_style" => Some(Ok(config.a_style)),
-                "d_style" => Some(Ok(config.d_style)),
+                "added_style" => Some(Ok(config.added_style)),
+                "deleted_style" => Some(Ok(config.deleted_style)),
                 _ => None,
             })
             .map(|variable| match variable {
