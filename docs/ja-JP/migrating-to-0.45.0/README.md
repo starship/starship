@@ -191,7 +191,7 @@ error_symbol = "[✖](bold red)"
 
 以前は `show_sync_count` プロパティを使用して、 ブランチが先行またはリモートブランチの後ろにあるコミット数を表示するようにプロンプトを設定していました。
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+v0.45.0からは、`ahead`、`behind`と`diverged`に分けて設定するように変更されました。
 
 以前の `show_sync_count = true` 設定を使用するようにプロンプトを構成するには、次の設定ファイルを設定します。
 
