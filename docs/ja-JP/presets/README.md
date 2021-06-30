@@ -88,9 +88,9 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## 括弧を用いた区分け
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+このプリセットは付属のモジュール全てのフォーマットを変更し、デフォルトのStarshipの表示("via", "on", etc.)から、それぞれの情報を括弧で区分けするように変更します。
 
 変更前:
 
@@ -239,7 +239,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## プレーンテキストの記号
 
 This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
 
