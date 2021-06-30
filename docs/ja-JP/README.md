@@ -30,7 +30,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
 ### 必要なもの
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- [Nerd Font](https://www.nerdfonts.com/)の一つがインストールされていて、ターミナルで有効になっていること。
 
 ### クイックインストール
 
@@ -118,7 +118,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning elvish v0.15以上のみサポートされています。 :::
 
    `~/.elvish/rc.elv` の最後に以下を追記してください。
 
