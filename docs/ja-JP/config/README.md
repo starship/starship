@@ -1513,11 +1513,11 @@ symbol = "∴ "
 
 ### 変数
 
-| 変数        | 設定例       | 説明                      |
-| --------- | --------- | ----------------------- |
-| version   | `v1.4.21` | The version of `kotlin` |
-| symbol    |           | オプション `記号` の値をミラーする     |
-| style\* |           | オプション `style` の値をミラーする  |
+| 変数        | 設定例       | 説明                     |
+| --------- | --------- | ---------------------- |
+| version   | `v1.4.21` | `kotlin`のバージョン         |
+| symbol    |           | オプション `記号` の値をミラーする    |
+| style\* |           | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -1534,7 +1534,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# Kotlinコンパイラバイナリを使用してバージョンを確認する
 kotlin_binary = "kotlinc"
 ```
 
@@ -2309,29 +2309,29 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
+デフォルトでは`rust`モジュールは現在インストールされている[Rust](https://www.rust-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                           |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                             |
-| `version_format`    | `"v${raw}"`                          | The version format. 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust              |
-| `detect_extensions` | `["rs"]`                             | どの拡張子がこのモジュールをアクティブにするか                                      |
-| `detect_files`      | `["Cargo.toml"]`                     | どのファイル名がこのモジュールをアクティブにするか                                    |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                    |
-| `style`             | `"bold red"`                         | モジュールのスタイルです。                                                |
-| `disabled`          | `false`                              | `rust`モジュールを無効にします。                                          |
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🦀 "`                               | Rustのシンボルを表すフォーマット文字列                                  |
+| `detect_extensions` | `["rs"]`                             | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["Cargo.toml"]`                     | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | `rust`モジュールを無効にします。                                    |
 
 ### 変数
 
 | 変数        | 設定例               | 説明                     |
 | --------- | ----------------- | ---------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc` |
+| version   | `v1.43.0-nightly` | `rustc`のバージョン          |
 | symbol    |                   | オプション `記号` の値をミラーする    |
 | style\* |                   | オプション `style` の値をミラーする |
 
