@@ -94,7 +94,7 @@ shadow-rs = "0.6.2"
 
 [dev-dependencies]
 tempfile = "3.2.0"
-mockall = "0.9"
+mockall = "0.10"
 
 [profile.release]
 codegen-units = 1
