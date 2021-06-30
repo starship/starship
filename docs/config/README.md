@@ -1234,7 +1234,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Metrics
 
-The `git_metrics` module will show the added and deleted lines in
+The `git_metrics` module will show the number of added and deleted lines in
 the current git repository.
 
 ::: tip
@@ -1248,19 +1248,19 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Option                    | Default                                                               | Description                            |
 | ------------------------- | --------------------------------------------------------------------  | ---------------------------------------|
-| `a_style`                 | `"bold green"`                                                        | The style for the added count.         |
-| `d_style`                 | `"bold red"`                                                          | The style for the deleted count.       |
-| `format`                  | `'[+$added]($a_style) [-$deleted]($d_style) '`                        | The format for the module.             |
-| `disabled`                | `true`                                                                | Disables the `git_metrics` module.       |
+| `added_style`             | `"bold green"`                                                        | The style for the added count.         |
+| `deleted_style`           | `"bold red"`                                                          | The style for the deleted count.       |
+| `format`                  | `'[+$added]($added_style) [-$deleted]($deleted_style) '`              | The format for the module.             |
+| `disabled`                | `true`                                                                | Disables the `git_metrics` module.     |
 
 ### Variables
 
-| Variable         | Example    | Description                           |
-| ---------------- | ---------- | -----------------------------------   |
-| added            | `1`        | The current number of added lines     |
-| deleted          | `2`        | The current number of deleted lines   |
-| a_style\*        |            | Mirrors the value of option `a_style` |
-| d_style\*        |            | Mirrors the value of option `d_style` |
+| Variable         | Example    | Description                                 |
+| ---------------- | ---------- | -----------------------------------         |
+| added            | `1`        | The current number of added lines           |
+| deleted          | `2`        | The current number of deleted lines         |
+| added_style\*    |            | Mirrors the value of option `added_style`   |
+| deleted_style\*  |            | Mirrors the value of option `deleted_style` |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1270,8 +1270,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 # ~/.config/starship.toml
 
 [git_metrics]
-a_style = "bold blue"
-format = '[+$added]($a_style)/[-$deleted]($d_style) '
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
 ## Git Status

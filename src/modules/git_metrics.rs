@@ -7,7 +7,7 @@ use crate::{
 
 use super::Context;
 
-/// Creates a module with the current added/modified/deleted lines in the git repository at the
+/// Creates a module with the current added/deleted lines in the git repository at the
 /// current directory
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_metrics");

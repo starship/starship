@@ -179,7 +179,7 @@ pub fn description(module: &str) -> &'static str {
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
-        "git_metrics" => "The currently added/modified/deleted lines in your repo",
+        "git_metrics" => "The currently added/deleted lines in your repo",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
