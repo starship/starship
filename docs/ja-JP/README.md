@@ -44,7 +44,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Starship自体を更新するには、上記のスクリプトを再度実行してください。 最新のバージョンに置き換わり、設定ファイルには変更を加えません。
 
 
    #### パッケージマネージャー経由でインストール
