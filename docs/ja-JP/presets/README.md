@@ -92,11 +92,11 @@ symbol = "ﯣ "
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
-Before:
+変更前:
 
 ![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
 
-After:
+変更後:
 
 ![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
 
