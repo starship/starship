@@ -102,7 +102,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 例：
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
+- `(@$region)` は`region`が`None`または空だった場合表示されませんが、値がある場合は`@` に続いてregionの値が表示されます。
 - `(some text)` は括弧の中に変数がないので、常に何も表示しません。
 - `$all` が `\[$a$b\]` のショートカットである時、 `$a` と `$b` が両方とも `None` である場合に限り、`($all)` は何も表示しません。 これは `(\[$a$b\] )` と同じ動作をします。
 
@@ -175,7 +175,7 @@ add_newline = false
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# というのは以下と等しい
 format = """
 $username\
 $hostname\
