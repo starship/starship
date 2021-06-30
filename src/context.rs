@@ -126,7 +126,7 @@ impl<'a> Context<'a> {
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
-            battery_info_provider: &crate::modules::BatteryStatusProviderImpl,
+            battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             cmd_timeout,
         }
     }

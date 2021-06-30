@@ -130,9 +130,9 @@ pub trait BatteryInfoProvider {
     fn get_battery_info(&self) -> Option<BatteryInfo>;
 }
 
-pub struct BatteryStatusProviderImpl;
+pub struct BatteryInfoProviderImpl;
 
-impl BatteryInfoProvider for BatteryStatusProviderImpl {
+impl BatteryInfoProvider for BatteryInfoProviderImpl {
     fn get_battery_info(&self) -> Option<BatteryInfo> {
         let battery_manager = battery::Manager::new().ok()?;
         let batteries = battery_manager.batteries().ok()?;
