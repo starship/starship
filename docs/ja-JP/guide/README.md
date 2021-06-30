@@ -163,7 +163,7 @@
    Starship自体を更新するには、上記のスクリプトを再度実行してください。 最新のバージョンに置き換わり、設定ファイルには変更を加えません。
 
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **※**インストールスクリプトのデフォルト値は上書きすることができます。詳しくはヘルプを参照してください。
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
