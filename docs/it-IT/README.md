@@ -30,7 +30,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
 ### Prerequisiti
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Un [ Nerd Font ](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale.
 
 ### Installazione Veloce
 
@@ -44,7 +44,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Per aggiornare Starship stesso, riavviare lo script sopra. Sostituirà la versione corrente senza toccare la configurazione di Starship.
 
 
    #### Installa con Package Manager
@@ -118,7 +118,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning È supportato solo elvish v0.15 o superiore. :::
 
    Aggiungi quanto segue alla fine di `~/.elvish/rc.elv`:
 

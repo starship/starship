@@ -83,6 +83,9 @@ symbol = " "
 [scala]
 symbol = " "
 
+[shlvl]
+symbol = " "
+
 [swift]
 symbol = "ﯣ "
 ```

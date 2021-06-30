@@ -64,6 +64,9 @@ mod zig;
 #[cfg(feature = "battery")]
 mod battery;
 
+#[cfg(feature = "battery")]
+pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
+
 use crate::config::RootModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
@@ -146,16 +149,14 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 
     let elapsed = start.elapsed();
     log::trace!("Took {:?} to compute module {:?}", elapsed, module);
-    if elapsed.as_millis() < 1 {
+    if elapsed.as_millis() >= 1 {
         // If we take less than 1ms to compute a None, then we will not return a module at all
         // if we have a module: default duration is 0 so no need to change it
-        m
-    } else {
         // if we took more than 1ms we want to report that and so--in case we have None currently--
         // need to create an empty module just to hold the duration for that case
         m.get_or_insert_with(|| context.new_module(module)).duration = elapsed;
-        m
     }
+    m
 }
 
 pub fn description(module: &str) -> &'static str {
