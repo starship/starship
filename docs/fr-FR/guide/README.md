@@ -163,6 +163,13 @@
    Pour mettre à jour Starship, relancez le script ci-dessus. Cela remplacera la version actuelle sans toucher à la configuration de Starship.
 
 
+   **Note** - Les valeurs par défaut du script d'installation peuvent être remplacées, voir l'aide intégrée.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
+
+
    #### Installer via le gestionnaire de paquets
 
 

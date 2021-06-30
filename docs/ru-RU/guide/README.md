@@ -160,13 +160,20 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Для обновления Starship перезапустите этот скрипт. Он заменит текущую версию без изменения конфигурации.
+
+
+   **Примечание** - Значения по умолчанию из установочного скрипта могут быть переопределены. Для уточнения смотрите встроенную справку.
+
+   ```sh
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   ```
 
 
    #### Установить через менеджер пакетов
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -237,7 +244,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Внимание** Поддерживается только elvish v0.15 или выше. Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -248,7 +255,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Добавьте следующее в конец `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc

@@ -63,7 +63,7 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
     // check
     // 1. `$RUSTUP_TOOLCHAIN`
     // 2. `rustup override list`
-    // 3. `rust-toolchain` in `.` or parent directories
+    // 3. `rust-toolchain` or `rust-toolchain.toml` in `.` or parent directories
     // as `rustup` does.
     // https://github.com/rust-lang/rustup.rs/tree/eb694fcada7becc5d9d160bf7c623abe84f8971d#override-precedence
     //
@@ -124,8 +124,11 @@ fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Opti
 }
 
 fn find_rust_toolchain_file(context: &Context) -> Option<String> {
-    // Look for 'rust-toolchain' as rustup does.
-    // https://github.com/rust-lang/rustup/blob/89912c4cf51645b9c152ab7380fd07574fec43a3/src/config.rs#L546-L616
+    // Look for 'rust-toolchain' or 'rust-toolchain.toml' as rustup does.
+    // for more information:
+    // https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file
+    // for the implementation in 'rustup':
+    // https://github.com/rust-lang/rustup/blob/a45e4cd21748b04472fce51ba29999ee4b62bdec/src/config.rs#L631
 
     #[derive(Deserialize)]
     struct OverrideFile {
@@ -137,12 +140,12 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         channel: Option<String>,
     }
 
-    fn read_channel(path: &Path) -> Option<String> {
+    fn read_channel(path: &Path, only_toml: bool) -> Option<String> {
         let contents = fs::read_to_string(path).ok()?;
 
         match contents.lines().count() {
             0 => None,
-            1 => Some(contents),
+            1 if !only_toml => Some(contents),
             _ => {
                 toml::from_str::<OverrideFile>(&contents)
                     .ok()?
@@ -154,18 +157,30 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
         .map(|c| c.trim().to_owned())
     }
 
-    if let Ok(true) = context
+    if context
         .dir_contents()
-        .map(|dir| dir.has_file("rust-toolchain"))
+        .map_or(false, |dir| dir.has_file("rust-toolchain"))
     {
-        if let Some(toolchain) = read_channel(Path::new("rust-toolchain")) {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain"), false) {
+            return Some(toolchain);
+        }
+    }
+
+    if context
+        .dir_contents()
+        .map_or(false, |dir| dir.has_file("rust-toolchain.toml"))
+    {
+        if let Some(toolchain) = read_channel(Path::new("rust-toolchain.toml"), true) {
             return Some(toolchain);
         }
     }
 
     let mut dir = &*context.current_dir;
     loop {
-        if let Some(toolchain) = read_channel(&dir.join("rust-toolchain")) {
+        if let Some(toolchain) = read_channel(&dir.join("rust-toolchain"), false) {
+            return Some(toolchain);
+        }
+        if let Some(toolchain) = read_channel(&dir.join("rust-toolchain.toml"), true) {
             return Some(toolchain);
         }
         dir = dir.parent()?;
@@ -353,6 +368,7 @@ mod tests {
 
     #[test]
     fn test_find_rust_toolchain_file() -> io::Result<()> {
+        // `rust-toolchain` with toolchain in one line
         let dir = tempfile::tempdir()?;
         fs::write(dir.path().join("rust-toolchain"), "1.34.0")?;
 
@@ -369,6 +385,7 @@ mod tests {
         );
         dir.close()?;
 
+        // `rust-toolchain` in toml format
         let dir = tempfile::tempdir()?;
         fs::write(
             dir.path().join("rust-toolchain"),
@@ -388,6 +405,7 @@ mod tests {
         );
         dir.close()?;
 
+        // `rust-toolchain` in toml format with new lines
         let dir = tempfile::tempdir()?;
         fs::write(
             dir.path().join("rust-toolchain"),
@@ -399,6 +417,106 @@ mod tests {
             Shell::Unknown,
             dir.path().into(),
             dir.path().into(),
+        );
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        // `rust-toolchain` in parent directory.
+        let dir = tempfile::tempdir()?;
+        let child_dir_path = dir.path().join("child");
+        fs::create_dir(&child_dir_path)?;
+        fs::write(
+            dir.path().join("rust-toolchain"),
+            "\n\n[toolchain]\n\n\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            child_dir_path.clone(),
+            child_dir_path,
+        );
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        // `rust-toolchain.toml` with toolchain in one line
+        // This should not work!
+        // See https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file
+        let dir = tempfile::tempdir()?;
+        fs::write(dir.path().join("rust-toolchain.toml"), "1.34.0")?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            dir.path().into(),
+        );
+
+        assert_eq!(find_rust_toolchain_file(&context), None);
+        dir.close()?;
+
+        // `rust-toolchain.toml` in toml format
+        let dir = tempfile::tempdir()?;
+        fs::write(
+            dir.path().join("rust-toolchain.toml"),
+            "[toolchain]\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            dir.path().into(),
+        );
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        // `rust-toolchain.toml` in toml format with new lines
+        let dir = tempfile::tempdir()?;
+        fs::write(
+            dir.path().join("rust-toolchain.toml"),
+            "\n\n[toolchain]\n\n\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            dir.path().into(),
+            dir.path().into(),
+        );
+
+        assert_eq!(
+            find_rust_toolchain_file(&context),
+            Some("1.34.0".to_owned())
+        );
+        dir.close()?;
+
+        // `rust-toolchain.toml` in parent directory.
+        let dir = tempfile::tempdir()?;
+        let child_dir_path = dir.path().join("child");
+        fs::create_dir(&child_dir_path)?;
+        fs::write(
+            dir.path().join("rust-toolchain.toml"),
+            "\n\n[toolchain]\n\n\nchannel = \"1.34.0\"",
+        )?;
+
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            child_dir_path.clone(),
+            child_dir_path,
         );
 
         assert_eq!(
