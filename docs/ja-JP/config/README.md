@@ -750,16 +750,16 @@ truncation_symbol = "…/"
 
 ### オプション
 
-| オプション               | デフォルト                              | 説明                                                                                |
-| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "` | moduleのフォーマットです。                                                                  |
-| `symbol`            | `"🐳 "`                             | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                             | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                               | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `The format for the module.`       | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                               | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                      | モジュールのスタイルです。                                                                     |
-| `disabled`          | `false`                            | `docker_context`モジュールを無効にします。                                                     |
+| オプション               | デフォルト                              | 説明                                                             |
+| ------------------- | ---------------------------------- | -------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "` | moduleのフォーマットです。                                               |
+| `symbol`            | `"🐳 "`                             | Dockerコンテキストを表示する前に使用される記号です。                                  |
+| `only_with_files`   | `true`                             | ファイルに一致する場合にのみ表示                                               |
+| `detect_extensions` | `[]`                               | どの拡張子がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。    |
+| `detect_files`      | `The format for the module.`       | どんなファイル名がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。 |
+| `detect_folders`    | `[]`                               | どんなフォルダがこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。  |
+| `style`             | `"blue bold"`                      | モジュールのスタイルです。                                                  |
+| `disabled`          | `false`                            | `docker_context`モジュールを無効にします。                                  |
 
 ### 変数
 
@@ -782,7 +782,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
+`dotnet`モジュールはカレントディレクトリに関係する[.NET Core SDK](https://dotnet.microsoft.com/)のバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
