@@ -95,14 +95,21 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "erlang" => erlang::module(context),
             "env_var" => {
                 if let Some(config_table) = context.config.get_env_var_modules() {
-                    let env_modules = config_table
+                    let mut env_modules = config_table
                         .iter()
                         .filter(|(_, config)| config.is_table())
-                        .filter_map(|(variable, _)| env_var::module(variable, context))
+                        .filter_map(|(variable, _)| {
+                            env_var::module(vec!["env_var", variable], context)
+                        })
                         .collect::<Vec<Module>>();
                     // Old configuration is present in starship configuration, notify user about change
                     if config_table.iter().any(|(_, config)| !config.is_table()) {
                         log::warn!("env_var module configuration has changed. Please update your configuration. https://starship.rs/config/#environment-variable");
+                        if let Some(fallback_env_var_module) =
+                            env_var::module(vec!["env_var"], context)
+                        {
+                            env_modules.push(fallback_env_var_module);
+                        }
                     }
                     env_var::env_var_displayer(env_modules, context)
                 } else {

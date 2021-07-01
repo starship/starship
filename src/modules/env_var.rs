@@ -23,8 +23,7 @@ pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Opti
 ///     - env_var.disabled is absent or false
 ///     - env_var.variable is defined
 ///     - a variable named as the value of env_var.variable is defined
-pub fn module<'a>(variable_name: &str, context: &'a Context) -> Option<Module<'a>> {
-    let module_config_path = ["env_var", variable_name];
+pub fn module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module(&module_config_path.join("."));
     let config_value = context.config.get_config(&module_config_path);
     let config = EnvVarConfig::load(config_value.expect(
@@ -35,7 +34,9 @@ pub fn module<'a>(variable_name: &str, context: &'a Context) -> Option<Module<'a
         return None;
     };
 
-    let env_value = get_env_value(context, variable_name, config.default)?;
+    let variable_name = get_variable_name(module_config_path, &config);
+
+    let env_value = get_env_value(context, variable_name?, config.default)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -64,6 +65,19 @@ pub fn module<'a>(variable_name: &str, context: &'a Context) -> Option<Module<'a
     Some(module)
 }
 
+fn get_variable_name<'a>(
+    module_config_path: Vec<&'a str>,
+    config: &'a EnvVarConfig,
+) -> Option<&'a str> {
+    match config.variable {
+        Some(v) => Some(v),
+        None => {
+            let last_element = module_config_path.last()?;
+            Some(*last_element)
+        }
+    }
+}
+
 fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option<String> {
     match context.get_env(name) {
         Some(value) => Some(value),
@@ -82,6 +96,20 @@ mod test {
     fn empty_config() {
         let actual = ModuleRenderer::new("env_var").collect();
         let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn fallback_config() {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                variable="TEST_VAR"
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
     }
