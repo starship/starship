@@ -21,6 +21,12 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     );
     let config = CustomConfig::load(toml_config);
 
+    if let Some(os) = config.os {
+        if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
+            return None;
+        }
+    }
+
     let mut is_match = context
         .try_begin_scan()?
         .set_files(&config.files)
@@ -34,12 +40,6 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
 
         if !is_match {
-            return None;
-        }
-    }
-
-    if let Some(os) = config.os {
-        if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
             return None;
         }
     }
