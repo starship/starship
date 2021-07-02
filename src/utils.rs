@@ -1,8 +1,10 @@
 use process_control::{ChildExt, Timeout};
+use starship_cache::{Cache, CachedOutput};
+use std::convert::TryInto;
 use std::fmt::Debug;
 use std::fs::read_to_string;
 use std::io::Result;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
@@ -32,6 +34,16 @@ pub struct CommandOutput {
 impl PartialEq for CommandOutput {
     fn eq(&self, other: &Self) -> bool {
         self.stdout == other.stdout && self.stderr == other.stderr
+    }
+}
+
+impl From<CommandOutput> for CachedOutput {
+    fn from(output: CommandOutput) -> Self {
+        Self {
+            stdout: output.stdout.into_bytes(),
+            stderr: output.stderr.into_bytes(),
+            status: Some(0),
+        }
     }
 }
 
@@ -311,6 +323,16 @@ pub fn wrap_seq_for_shell(
 fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
 
+    let cache_dir = std::env::var_os("STARSHIP_CACHE")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| {
+            dirs_next::home_dir()
+                .expect("Unable to find home directory")
+                .join(".cache/starship")
+        });
+    let mut cache = Cache::new(&cache_dir.join("bin-cache")).ok()?;
+    log::debug!("Cache initialized: {:?}", &cache_dir);
+
     let full_path = match which::which(cmd) {
         Ok(full_path) => {
             log::trace!("Using {:?} as {:?}", full_path, cmd);
@@ -324,7 +346,31 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
 
     let start = Instant::now();
 
-    let process = match Command::new(full_path)
+    let full_command = format!("{} {}", cmd, args.join(" "));
+    if let Some(output) = cache.get(&full_path, &full_command) {
+        log::info!("Retreived {:?} from cache: {:?}", full_command, output);
+
+        let stdout_string = match String::from_utf8(output.stdout.clone()) {
+            Ok(stdout) => stdout,
+            Err(error) => {
+                log::warn!("Unable to decode stdout: {:?}", error);
+                return None;
+            }
+        };
+        let stderr_string = match String::from_utf8(output.stderr.clone()) {
+            Ok(stderr) => stderr,
+            Err(error) => {
+                log::warn!("Unable to decode stderr: {:?}", error);
+                return None;
+            }
+        };
+        return Some(CommandOutput {
+            stdout: stdout_string,
+            stderr: stderr_string,
+        });
+    }
+
+    let process = match Command::new(&full_path)
         .args(args)
         .stderr(Stdio::piped())
         .stdout(Stdio::piped())
@@ -340,20 +386,36 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
 
     match process.with_output_timeout(time_limit).terminating().wait() {
         Ok(Some(output)) => {
-            let stdout_string = match String::from_utf8(output.stdout) {
+            let stdout_string = match String::from_utf8(output.stdout.clone()) {
                 Ok(stdout) => stdout,
                 Err(error) => {
                     log::warn!("Unable to decode stdout: {:?}", error);
                     return None;
                 }
             };
-            let stderr_string = match String::from_utf8(output.stderr) {
+            let stderr_string = match String::from_utf8(output.stderr.clone()) {
                 Ok(stderr) => stderr,
                 Err(error) => {
                     log::warn!("Unable to decode stderr: {:?}", error);
                     return None;
                 }
             };
+
+            cache.set(
+                &full_path,
+                &full_command,
+                CachedOutput {
+                    stdout: output.stdout,
+                    stderr: output.stderr,
+                    status: output
+                        .status
+                        .code()
+                        .map(|i| i.try_into().unwrap_or_default()),
+                },
+            );
+            cache.write().unwrap_or_else(|e| {
+                log::warn!("Unable to write to binary cache: {}", e);
+            });
 
             log::trace!(
                 "stdout: {:?}, stderr: {:?}, exit code: \"{:?}\", took {:?}",

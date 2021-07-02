@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
+use std::time::Duration;
 
 use serde::Deserialize;
 
@@ -8,6 +9,8 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::exec_cmd;
+use starship_cache::CachedOutput;
 
 /// Creates a module with the current Rust version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -188,15 +191,20 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
 }
 
 fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
-    Command::new("rustup")
-        .args(&["run", toolchain, "rustc", "--version"])
-        .output()
-        .map(extract_toolchain_from_rustup_run_rustc_version)
-        .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
+    exec_cmd(
+        "rustup",
+        &["run", toolchain, "rustc", "--version"],
+        Duration::from_millis(500),
+    )
+    .map(extract_toolchain_from_rustup_run_rustc_version)
+    .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
 }
 
-fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunRustcVersionOutcome {
-    if output.status.success() {
+fn extract_toolchain_from_rustup_run_rustc_version<O: Into<CachedOutput>>(
+    output: O,
+) -> RustupRunRustcVersionOutcome {
+    let output = output.into();
+    if output.success() {
         if let Ok(output) = String::from_utf8(output.stdout) {
             return RustupRunRustcVersionOutcome::RustcVersion(output);
         }
@@ -212,9 +220,9 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
 }
 
 fn execute_rustc_version() -> Option<String> {
-    match Command::new("rustc").arg("--version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
+    match exec_cmd("rustc", &["--version"], Duration::from_millis(500)) {
+        Some(output) => Some(output.stdout),
+        None => None,
     }
 }
 

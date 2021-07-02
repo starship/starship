@@ -1,0 +1,18 @@
+[package]
+name = "starship-cache"
+version = "0.1.0"
+authors = ["Starship Contributors"]
+description = "Intelligent caching for Starship"
+edition = "2018"
+license = "ISC"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dirs = "3.0.2"
+serde = { version = "1.0.126", features = ["derive"] }
+thiserror = "1.0.25"
+toml = "0.5.8"
+
+[dev-dependencies]
+tempfile = "3.2.0"
