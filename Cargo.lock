@@ -912,9 +912,9 @@ dependencies = [
 
 [[package]]
 name = "mockall"
-version = "0.10.0"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c32f8ab37caba9e4ee28481f57c5881a70f0fbafe7ee34fe7c475b6c1423a0a"
+checksum = "cfd9a2de7b4bd932854c776ce60880caf8fa41095a7907e3accc52ef6678895b"
 dependencies = [
  "cfg-if 1.0.0",
  "downcast",
@@ -927,9 +927,9 @@ dependencies = [
 
 [[package]]
 name = "mockall_derive"
-version = "0.10.0"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3d39f303225750deb64c718e133c5dfc74eafa7168ca9d0f00ddadf75fddc8c"
+checksum = "d07174e9c5ffb2ff849187641c48fc66f5588f012f1d248e55c3a68cd462bd29"
 dependencies = [
  "cfg-if 1.0.0",
  "proc-macro2",
