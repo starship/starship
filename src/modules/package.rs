@@ -333,7 +333,7 @@ license = "MIT"
 }
 "##
                     .to_owned(),
-                    stderr: "".to_owned(),
+                    ..Default::default()
                 }),
             )
             .path(project_dir.path())

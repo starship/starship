@@ -319,10 +319,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml")
             .cmd(
                 "opam switch show --safe",
-                Some(CommandOutput {
-                    stdout: String::default(),
-                    stderr: String::default(),
-                }),
+                Some(CommandOutput::default()),
             )
             .path(dir.path())
             .collect();
@@ -341,7 +338,7 @@ mod tests {
                 "opam switch show --safe",
                 Some(CommandOutput {
                     stdout: String::from("ocaml-base-compiler.4.10.0\n"),
-                    stderr: String::default(),
+                    ..Default::default()
                 }),
             )
             .path(dir.path())
@@ -370,7 +367,7 @@ mod tests {
                 "opam switch show --safe",
                 Some(CommandOutput {
                     stdout: String::from("ocaml-base-compiler.4.10.0\n"),
-                    stderr: String::default(),
+                    ..Default::default()
                 }),
             )
             .path(dir.path())
@@ -395,7 +392,7 @@ mod tests {
                 "opam switch show --safe",
                 Some(CommandOutput {
                     stdout: String::from("/path/to/my-project\n"),
-                    stderr: String::default(),
+                    ..Default::default()                
                 }),
             )
             .path(dir.path())
@@ -422,7 +419,7 @@ mod tests {
                 "opam switch show --safe",
                 Some(CommandOutput {
                     stdout: String::from("/path/to/my-project\n"),
-                    stderr: String::default(),
+                    ..Default::default()
                 }),
             )
             .path(dir.path())
