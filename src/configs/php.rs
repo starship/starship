@@ -20,7 +20,7 @@ impl<'a> Default for PhpConfig<'a> {
         PhpConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🐘 ",
+            symbol: " ",
             style: "147 bold",
             disabled: false,
             detect_extensions: vec!["php"],

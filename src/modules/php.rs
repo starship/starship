@@ -83,7 +83,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
+            Color::Fixed(147).bold().paint(" v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -98,7 +98,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
+            Color::Fixed(147).bold().paint(" v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -113,7 +113,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(147).bold().paint("🐘 v7.3.8 ")
+            Color::Fixed(147).bold().paint(" v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
