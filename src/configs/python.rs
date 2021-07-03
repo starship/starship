@@ -27,7 +27,7 @@ impl<'a> Default for PythonConfig<'a> {
             format: "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
             version_format: "v${raw}",
             style: "yellow bold",
-            symbol: "🐍 ",
+            symbol: " ",
             disabled: false,
             detect_extensions: vec!["py"],
             detect_files: vec![
