@@ -54,7 +54,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via ` in "nodejs") and an empty space as a suffix.
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
 ### Format Strings
 
@@ -85,7 +85,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘ ` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### Style Strings
@@ -109,7 +109,7 @@ For example:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
+- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
 
 #### Escapable characters
@@ -419,7 +419,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh. 
+`vicmd_symbol` is only supported in fish and zsh.
 
 :::
 
@@ -682,6 +682,7 @@ format = "via [🔰 $version](bold red) "
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/).
 By default the module will be shown if any of the following conditions are met:
+
 - The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Options
@@ -2220,7 +2221,7 @@ By default the module will be shown if any of the following conditions are met:
 | `symbol`             | `"🐍 "`                                                                                                      | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv `                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
+| `pyenv_prefix`       | `pyenv`                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
@@ -2294,7 +2295,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of R. The module will be shown if 
+The `rlang` module shows the currently installed version of R. The module will be shown if
 any of the following conditions are met:
 
 - The current directory contains a file with the `.R` extension.
@@ -2519,7 +2520,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `elvish_indicator`     | `esh`         | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.                      |
 | `unknown_indicator`    |               | The default value to be displayed when the shell is unknown. |
-| `format`               | `$indicator ` | The format for the module.                                   |
+| `format`               | `$indicator` | The format for the module.                                   |
 | `disabled`             | `true`        | Disables the `shell` module.                                 |
 
 ### Variables
@@ -2911,6 +2912,7 @@ format = "via [⍱ $version](bold white) "
 
 The `vlang` module shows you your currently installed version of V.
 By default the module will be shown if any of the following conditions are met:
+
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
