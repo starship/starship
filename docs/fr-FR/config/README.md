@@ -745,7 +745,7 @@ truncation_symbol = "…/"
 
 ## Contexte Docker
 
-Le module `docker_context` affiche le [contexte Docker](https://docs.docker.com/engine/context/working-with-contexts/) actuellement actif s'il n'est pas réglé à `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Options
 
