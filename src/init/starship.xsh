@@ -1,3 +1,7 @@
+import random
+import string
+
+
 def starship_prompt():
     last_cmd = __xonsh__.history[-1] if __xonsh__.history else None
     status = last_cmd.rtn if last_cmd else 0
@@ -8,4 +12,4 @@ def starship_prompt():
 
 $PROMPT = starship_prompt
 $STARSHIP_SHELL = "xonsh"
-$STARSHIP_SESSION_KEY = $(::STARSHIP:: session).strip()
+$STARSHIP_SESSION_KEY = "".join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
