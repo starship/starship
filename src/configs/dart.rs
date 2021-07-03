@@ -20,7 +20,7 @@ impl<'a> Default for DartConfig<'a> {
         DartConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🎯 ",
+            symbol: " ",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec!["dart"],
