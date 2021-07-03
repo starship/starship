@@ -121,7 +121,7 @@ mod tests {
             .path(pwd.path())
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint(" starship")));
 
         assert_eq!(expected, actual);
 
@@ -150,7 +150,7 @@ mod tests {
             .path(pwd.path())
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint(" starship")));
 
         assert_eq!(expected, actual);
 
@@ -179,7 +179,7 @@ mod tests {
             .path(pwd.path())
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint(" starship")));
 
         assert_eq!(expected, actual);
 
@@ -232,7 +232,7 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint(" starship")));
 
         assert_eq!(expected, actual);
 
