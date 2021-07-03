@@ -152,15 +152,15 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
 1. Install the **starship** binary:
 
-   #### Install Latest Version
+#### Install Latest Version
 
-   ##### From prebuilt binary, with Shell:
+##### From prebuilt binary, with Shell
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
    **Note** - The defaults of the install script can be overridden see the built-in help.
 
@@ -168,15 +168,15 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
    ```
 
-   #### Install via Package Manager
+#### Install via Package Manager
 
-   ##### Example: [Homebrew](https://brew.sh/):
+##### Example: [Homebrew](https://brew.sh/)
 
    ```sh
    brew install starship
    ```
 
-   ##### With [Scoop](https://scoop.sh):
+##### With [Scoop](https://scoop.sh)
 
    ```powershell
    scoop install starship
@@ -184,7 +184,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
 2. Add the init script to your shell's config file:
 
-   #### Bash
+#### Bash
 
    Add the following to the end of `~/.bashrc`:
 
@@ -194,7 +194,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval "$(starship init bash)"
    ```
 
-   #### Fish
+#### Fish
 
    Add the following to the end of `~/.config/fish/config.fish`:
 
@@ -204,7 +204,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    starship init fish | source
    ```
 
-   #### Zsh
+#### Zsh
 
    Add the following to the end of `~/.zshrc`:
 
@@ -214,7 +214,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval "$(starship init zsh)"
    ```
 
-   #### PowerShell
+#### PowerShell
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
@@ -222,7 +222,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    Invoke-Expression (&starship init powershell)
    ```
 
-   #### Ion
+#### Ion
 
    Add the following to the end of `~/.config/ion/initrc`:
 
@@ -232,7 +232,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval $(starship init ion)
    ```
 
-   #### Elvish
+#### Elvish
 
    **Warning** Only elvish v0.15 or higher is supported.
    Add the following to the end of `~/.elvish/rc.elv`:
@@ -243,7 +243,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval (starship init elvish)
    ```
 
-   #### Tcsh
+#### Tcsh
 
    Add the following to the end of `~/.tcshrc`:
 
