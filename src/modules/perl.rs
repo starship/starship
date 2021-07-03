@@ -84,7 +84,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -99,7 +99,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -114,7 +114,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -129,7 +129,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -144,7 +144,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -159,7 +159,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -174,7 +174,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -189,7 +189,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -204,7 +204,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -219,7 +219,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Color::Fixed(149).bold().paint(" v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
