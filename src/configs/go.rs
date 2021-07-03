@@ -20,7 +20,7 @@ impl<'a> Default for GoConfig<'a> {
         GoConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🐹 ",
+            symbol: "ﳑ ",
             style: "bold cyan",
             disabled: false,
             detect_extensions: vec!["go"],
