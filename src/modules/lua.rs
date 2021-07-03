@@ -106,7 +106,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.lua"))?.sync_all()?;
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -117,7 +117,7 @@ mod tests {
         File::create(dir.path().join(".lua-version"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -129,7 +129,7 @@ mod tests {
         fs::create_dir_all(&lua_dir)?;
 
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v5.4.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -149,7 +149,7 @@ mod tests {
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v2.0.5 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint(" v2.0.5 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

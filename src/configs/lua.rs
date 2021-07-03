@@ -21,7 +21,7 @@ impl<'a> Default for LuaConfig<'a> {
         LuaConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🌙 ",
+            symbol: " ",
             style: "bold blue",
             lua_binary: "lua",
             disabled: false,
