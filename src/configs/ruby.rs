@@ -20,7 +20,7 @@ impl<'a> Default for RubyConfig<'a> {
         RubyConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "💎 ",
+            symbol: " ",
             style: "bold red",
             disabled: false,
             detect_extensions: vec!["rb"],

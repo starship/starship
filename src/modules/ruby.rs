@@ -101,7 +101,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint(" v2.5.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -113,7 +113,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint(" v2.5.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -125,7 +125,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!("via {}", Color::Red.bold().paint(" v2.5.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
