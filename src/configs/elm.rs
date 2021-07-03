@@ -20,7 +20,7 @@ impl<'a> Default for ElmConfig<'a> {
         ElmConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🌳 ",
+            symbol: " ",
             style: "cyan bold",
             disabled: false,
             detect_extensions: vec!["elm"],

@@ -77,7 +77,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("elm.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -87,7 +87,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("elm-package.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -97,7 +97,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".elm-version"))?.sync_all()?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -108,7 +108,7 @@ mod tests {
         let elmstuff = dir.path().join("elm-stuff");
         fs::create_dir_all(&elmstuff)?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -118,7 +118,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.elm"))?.sync_all()?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint(" v0.19.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
