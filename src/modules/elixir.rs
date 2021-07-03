@@ -145,7 +145,7 @@ Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("💧 v1.10 (OTP 22) ")
+            Color::Purple.bold().paint(" v1.10 (OTP 22) ")
         ));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 

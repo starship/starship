@@ -20,7 +20,7 @@ impl<'a> Default for ElixirConfig<'a> {
         ElixirConfig {
             format: "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
             version_format: "v${raw}",
-            symbol: "💧 ",
+            symbol: " ",
             style: "bold purple",
             disabled: false,
             detect_extensions: vec![],
