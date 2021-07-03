@@ -6,7 +6,6 @@ use std::fmt;
 use std::time::Duration;
 
 // List of all modules
-// Keep these ordered alphabetically.
 // Default ordering is handled in configs/starship_root.rs
 pub const ALL_MODULES: &[&str] = &[
     "aws",
@@ -16,6 +15,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmake",
     "cmd_duration",
     "conda",
+    "crystal",
     "dart",
     "deno",
     "directory",
@@ -23,8 +23,8 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "elixir",
     "elm",
-    "erlang",
     "env_var",
+    "erlang",
     "gcloud",
     "git_branch",
     "git_commit",
@@ -35,7 +35,6 @@ pub const ALL_MODULES: &[&str] = &[
     "hg_branch",
     "hostname",
     "java",
-    "scala",
     "jobs",
     "julia",
     "kotlin",
@@ -50,24 +49,24 @@ pub const ALL_MODULES: &[&str] = &[
     "openstack",
     "package",
     "perl",
+    "php",
     "purescript",
     "python",
-    "rlang",
     "red",
+    "rlang",
     "ruby",
-    "crystal",
     "rust",
-    "php",
-    "swift",
-    "terraform",
+    "scala",
     "shell",
     "shlvl",
     "singularity",
     "status",
+    "swift",
+    "terraform",
     "time",
     "username",
-    "vcsh",
     "vagrant",
+    "vcsh",
     "vlang",
     "zig",
 ];
@@ -176,6 +175,13 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANS
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_all_modules_is_in_alphabetical_order() {
+        let mut sorted_modules: Vec<&str> = ALL_MODULES.iter().copied().collect();
+        sorted_modules.sort_unstable();
+        assert_eq!(sorted_modules.as_slice(), ALL_MODULES);
+    }
 
     #[test]
     fn test_module_is_empty_with_no_segments() {

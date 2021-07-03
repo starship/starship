@@ -107,7 +107,7 @@ A conditional format string wrapped in `(` and `)` will not render if all variab
 
 For example:
 
-- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
 - When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
@@ -791,7 +791,8 @@ truncation_symbol = "…/"
 
 The `docker_context` module shows the currently active
 [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to
-`default`.
+`default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant
+to override the context in use).
 
 ### Options
 

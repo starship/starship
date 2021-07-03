@@ -284,7 +284,7 @@ impl<'a> StringFormatter<'a> {
                             .unwrap_or_else(|| Ok(Vec::new())),
                         FormatElement::Conditional(format) => {
                             // Show the conditional format string if all the variables inside are not
-                            // none.
+                            // none or empty string.
                             fn should_show_elements<'a>(
                                 format_elements: &[FormatElement],
                                 variables: &'a VariableMapType<'a>,
@@ -307,7 +307,12 @@ impl<'a> StringFormatter<'a> {
                                                             &meta_variables,
                                                         )
                                                     }
-                                                    _ => true,
+                                                    VariableValue::Plain(plain_value) => {
+                                                        !plain_value.is_empty()
+                                                    }
+                                                    VariableValue::Styled(segments) => {
+                                                        segments.iter().any(|x| !x.value.is_empty())
+                                                    }
                                                 })
                                                 // The variable is None or Err, or a meta variable
                                                 // that shouldn't show
@@ -576,6 +581,34 @@ mod tests {
         match_next!(result_iter, "$some", None);
         match_next!(result_iter, " should render but ", None);
         match_next!(result_iter, " shouldn't", None);
+    }
+
+    #[test]
+    fn test_empty() {
+        const FORMAT_STR: &str = "(@$empty)";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|var| match var {
+                "empty" => Some(Ok("")),
+                _ => None,
+            });
+        let result = formatter.parse(None).unwrap();
+        assert_eq!(result.len(), 0);
+    }
+
+    #[test]
+    fn test_styled_empty() {
+        const FORMAT_STR: &str = "[(@$empty)](red bold)";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| match variable {
+                "empty" => Some(Ok("")),
+                _ => None,
+            });
+        let result = formatter.parse(None).unwrap();
+        assert_eq!(result.len(), 0);
     }
 
     #[test]
