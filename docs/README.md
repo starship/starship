@@ -34,16 +34,17 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. Install the **starship** binary:
 
-   #### Install Latest Version
+#### Install Latest Version
 
    With Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
+
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
-   #### Install via Package Manager
+#### Install via Package Manager
 
    With [Homebrew](https://brew.sh/):
 
@@ -59,7 +60,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. Add the init script to your shell's config file:
 
-   #### Bash
+#### Bash
 
    Add the following to the end of `~/.bashrc`:
 
@@ -69,7 +70,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval "$(starship init bash)"
    ```
 
-   #### Fish
+#### Fish
 
    Add the following to the end of `~/.config/fish/config.fish`:
 
@@ -79,7 +80,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init fish | source
    ```
 
-   #### Zsh
+#### Zsh
 
    Add the following to the end of `~/.zshrc`:
 
@@ -89,7 +90,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval "$(starship init zsh)"
    ```
 
-   #### Powershell
+#### Powershell
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
@@ -97,7 +98,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    Invoke-Expression (&starship init powershell)
    ```
 
-   #### Ion
+#### Ion
 
    Add the following to the end of `~/.config/ion/initrc`:
 
@@ -106,7 +107,8 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval $(starship init ion)
    ```
-   #### Elvish
+
+#### Elvish
 
    ::: warning
    Only elvish v0.15 or higher is supported.
@@ -120,7 +122,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval (starship init elvish)
    ```
 
-   #### Tcsh
+#### Tcsh
 
    Add the following to the end of `~/.tcshrc`:
 

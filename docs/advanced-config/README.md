@@ -89,14 +89,14 @@ starship_precmd_user_func="set_win_title"
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
-  - `bold`
-  - `underline`
-  - `dimmed`
-  - `inverted`
-  - `bg:<color>`
-  - `fg:<color>`
-  - `<color>`
-  - `none`
+- `bold`
+- `underline`
+- `dimmed`
+- `inverted`
+- `bg:<color>`
+- `fg:<color>`
+- `<color>`
+- `none`
 
 where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
@@ -104,11 +104,11 @@ The `none` token overrides all other tokens in a string if it is not part of a `
 
 A color specifier can be one of the following:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`,
+- One of the standard terminal colors: `black`, `red`, `green`, `blue`,
     `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these
     with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an
+- A `#` followed by a six-digit hexadecimal number. This specifies an
    [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
