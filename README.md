@@ -257,7 +257,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
    **Warning** This will change in the future. Only nu version v0.33 or higher is supported.
    Add the following to your nu config file. You can check the location of this
-   file by running `config path` in nushell.
+   file by running `config path` in nu.
 
    ```toml
    startup = [
