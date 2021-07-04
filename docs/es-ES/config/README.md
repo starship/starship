@@ -390,7 +390,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ::: aviso
 
-`error_symbol` no es compatible con el intérprete de comandos Elvish.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -1415,7 +1415,7 @@ El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo 
 
 ::: aviso
 
-Este módulo no está soportado en tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2504,7 +2504,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: advertencia Este módulo no es compatible con el intérprete de comandos Elvish. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Opciones
 
