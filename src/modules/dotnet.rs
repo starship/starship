@@ -494,7 +494,9 @@ mod tests {
             &workspace.path().join("deep/path/to/project"),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
+                Color::Blue
+                    .bold()
+                    .paint("via .NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
