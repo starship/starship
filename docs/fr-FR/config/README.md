@@ -391,7 +391,7 @@ Par défaut, seule la couleur change. Si vous désirez également changer sa for
 
 ::: warning
 
-Attention, `error_symbol` n'est pas supporté avec elvish.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -1416,7 +1416,7 @@ Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module n
 
 ::: warning
 
-Ce module n'est pas pris en charge sur tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2506,7 +2506,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 :::
 
-::: warning Ce module n'est pas supporté avec elvish. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Options
 
