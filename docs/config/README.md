@@ -419,7 +419,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh. 
+`vicmd_symbol` is only supported in fish and zsh.
 
 :::
 
@@ -859,7 +859,7 @@ when there is a csproj file in the current directory.
 
 | Option              | Default                                                                                                 | Description                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                              | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                          | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
@@ -2295,7 +2295,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of R. The module will be shown if 
+The `rlang` module shows the currently installed version of R. The module will be shown if
 any of the following conditions are met:
 
 - The current directory contains a file with the `.R` extension.
