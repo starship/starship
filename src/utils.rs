@@ -1,7 +1,9 @@
 use process_control::{ChildExt, Timeout};
+use starship_cache::CachedOutput;
+use std::convert::TryFrom;
 use std::fmt::Debug;
 use std::fs::read_to_string;
-use std::io::Result;
+use std::io;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -9,7 +11,7 @@ use std::time::{Duration, Instant};
 use crate::context::Shell;
 
 /// Return the string contents of a file
-pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
+pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> io::Result<String> {
     log::trace!("Trying to read from {:?}", file_name);
 
     let result = read_to_string(file_name);
@@ -28,6 +30,43 @@ pub struct CommandOutput {
     pub stdout: String,
     pub stderr: String,
     pub status: i64,
+}
+
+impl TryFrom<process_control::Output> for CommandOutput {
+    type Error = String;
+
+    fn try_from(output: process_control::Output) -> Result<Self, Self::Error> {
+        let stdout = String::from_utf8(output.stdout)
+            .map_err(|err| format!("Unable to decode stdout: {:?}", err))?;
+        let stderr = String::from_utf8(output.stderr)
+            .map_err(|err| format!("Unable to decode stderr: {:?}", err))?;
+
+        Ok(Self {
+            stdout,
+            stderr,
+            status: output.status.code().unwrap_or_default(),
+        })
+    }
+}
+
+impl From<&CachedOutput> for CommandOutput {
+    fn from(output: &CachedOutput) -> Self {
+        Self {
+            stdout: output.stdout.to_owned(),
+            stderr: output.stderr.to_owned(),
+            status: output.status.unwrap_or_default() as i64
+        }
+    }
+}
+
+impl Into<CachedOutput> for &CommandOutput {
+    fn into(self) -> CachedOutput {
+        CachedOutput {
+            stdout: self.stdout.clone(),
+            stderr: self.stdout.clone(),
+            status: Some(i32::try_from(self.status).unwrap_or_default())
+        }
+    }
 }
 
 /// Execute a command and return the output on stdout and stderr if successful
@@ -305,7 +344,7 @@ pub fn wrap_seq_for_shell(
 }
 
 fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
-    log::trace!("Executing command {:?} with args {:?}", cmd, args);
+    let start = Instant::now();
 
     let full_path = match which::which(cmd) {
         Ok(full_path) => {
@@ -317,8 +356,6 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
             return None;
         }
     };
-
-    let start = Instant::now();
 
     let process = match Command::new(full_path)
         .args(args)
@@ -336,38 +373,19 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
 
     match process.with_output_timeout(time_limit).terminating().wait() {
         Ok(Some(output)) => {
-            let stdout_string = match String::from_utf8(output.stdout) {
-                Ok(stdout) => stdout,
-                Err(error) => {
-                    log::warn!("Unable to decode stdout: {:?}", error);
-                    return None;
-                }
-            };
-            let stderr_string = match String::from_utf8(output.stderr) {
-                Ok(stderr) => stderr,
-                Err(error) => {
-                    log::warn!("Unable to decode stderr: {:?}", error);
-                    return None;
-                }
-            };
+            let output = CommandOutput::try_from(output)
+                .map_err(|err| log::warn!("{}", err))
+                .ok()?;
 
             log::trace!(
                 "stdout: {:?}, stderr: {:?}, exit code: \"{:?}\", took {:?}",
-                stdout_string,
-                stderr_string,
-                output.status.code(),
+                output.stdout,
+                output.stderr,
+                output.status,
                 start.elapsed()
             );
 
-            if !output.status.success() {
-                return None;
-            }
-
-            Some(CommandOutput {
-                stdout: stdout_string,
-                stderr: stderr_string,
-                status: output.status.code().unwrap_or_default()
-            })
+            Some(output)
         }
         Ok(None) => {
             log::warn!("Executing command {:?} timed out.", cmd);

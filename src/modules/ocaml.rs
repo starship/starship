@@ -317,10 +317,7 @@ mod tests {
         File::create(dir.path().join("any.ml"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("ocaml")
-            .cmd(
-                "opam switch show --safe",
-                Some(CommandOutput::default()),
-            )
+            .cmd("opam switch show --safe", Some(CommandOutput::default()))
             .path(dir.path())
             .collect();
         let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐫 v4.10.0 ")));
@@ -392,7 +389,7 @@ mod tests {
                 "opam switch show --safe",
                 Some(CommandOutput {
                     stdout: String::from("/path/to/my-project\n"),
-                    ..Default::default()                
+                    ..Default::default()
                 }),
             )
             .path(dir.path())

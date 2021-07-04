@@ -79,13 +79,13 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Adds the variable to the env_mocks of the underlying context
     pub fn env<V: Into<String>>(mut self, key: &'a str, val: V) -> Self {
-        self.context.env.insert(key, val.into());
+        self.context.env_mocks.insert(key, val.into());
         self
     }
 
     /// Adds the command to the commandv_mocks of the underlying context
     pub fn cmd(mut self, key: &'a str, val: Option<CommandOutput>) -> Self {
-        self.context.cmd.insert(key, val);
+        self.context.cmd_mocks.insert(key, val);
         self
     }
 

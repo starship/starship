@@ -1,0 +1,16 @@
+[package]
+name = "starship_cache"
+version = "0.1.0"
+authors = ["Starship Contributors"]
+description = "Intelligent caching for Starship"
+edition = "2018"
+license = "ISC"
+
+[dependencies]
+dirs = "3.0.2"
+serde = { version = "1.0.126", features = ["derive"] }
+thiserror = "1.0.25"
+toml = "0.5.8"
+
+[dev-dependencies]
+tempfile = "3.2.0"

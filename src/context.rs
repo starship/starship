@@ -7,6 +7,7 @@ use clap::ArgMatches;
 use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
+use starship_cache::Cache;
 use std::collections::{HashMap, HashSet};
 use std::env;
 use std::ffi::OsString;
@@ -44,17 +45,21 @@ pub struct Context<'a> {
 
     /// A HashMap of environment variable mocks
     #[cfg(test)]
-    pub env: HashMap<&'a str, String>,
+    pub env_mocks: HashMap<&'a str, String>,
 
     /// A HashMap of command mocks
     #[cfg(test)]
-    pub cmd: HashMap<&'a str, Option<CommandOutput>>,
+    pub cmd_mocks: HashMap<&'a str, Option<CommandOutput>>,
 
+    /// A placeholder for a mock battery provider
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
+
+    /// An instance of Starship's binary output cache
+    cmd_cache: Cache
 }
 
 impl<'a> Context<'a> {
@@ -113,6 +118,15 @@ impl<'a> Context<'a> {
 
         let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
 
+        let cache_dir = env::var_os("STARSHIP_CACHE")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| {
+                dirs_next::home_dir()
+                    .expect("Unable to find home directory")
+                    .join(".cache/starship")
+            });
+        let cmd_cache = Cache::create_or_parse(cache_dir).unwrap();
+
         Context {
             config,
             properties,
@@ -122,12 +136,13 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             #[cfg(test)]
-            env: HashMap::new(),
+            env_mocks: HashMap::new(),
             #[cfg(test)]
-            cmd: HashMap::new(),
+            cmd_mocks: HashMap::new(),
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             cmd_timeout,
+            cmd_cache
         }
     }
 
@@ -143,7 +158,7 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env.get(key.as_ref()).map(|val| val.to_string())
+        self.env_mocks.get(key.as_ref()).map(|val| val.to_string())
     }
 
     #[cfg(not(test))]
@@ -155,7 +170,7 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode (os version)
     #[cfg(test)]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        self.env.get(key.as_ref()).map(OsString::from)
+        self.env_mocks.get(key.as_ref()).map(OsString::from)
     }
 
     #[cfg(not(test))]
@@ -264,20 +279,58 @@ impl<'a> Context<'a> {
         self.properties.get("cmd_duration")?.parse::<u128>().ok()
     }
 
-    /// Execute a command and return the output on stdout and stderr if successful
+    /// Execute a command and return the output on stdout and stderr if successful,
+    /// while caching the output and respecting the user's timeout configuration.
+    ///
+    /// This method automatically caches successful commands to short-circuit
+    /// future calls. For a non-caching alternative, use [`Self::uncached_exec_cmd()`].
     #[inline]
-    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    pub fn exec_cmd(&mut self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
         #[cfg(test)]
         {
-            let command = match args.len() {
+            let full_command = match args.len() {
                 0 => cmd.to_owned(),
                 _ => format!("{} {}", cmd, args.join(" ")),
             };
-            if let Some(output) = self.cmd.get(command.as_str()) {
+            if let Some(output) = self.cmd_mocks.get(full_command.as_str()) {
                 return output.clone();
             }
         }
+
+        log::trace!("Executing command {:?} with args {:?}", cmd, args);
+
+        let full_path = match which::which(cmd) {
+            Ok(full_path) => {
+                log::trace!("Using {:?} as {:?}", full_path, cmd);
+                full_path
+            }
+            Err(error) => {
+                log::trace!("Unable to find {:?} in PATH, {:?}", cmd, error);
+                return None;
+            }
+        };
+        let full_command = format!("{} {}", cmd, args.join(" "));
+
+        if let Some(output) = self.cmd_cache.get(&full_path, &full_command) {
+            log::info!("Retreived {:?} from cache: {:?}", full_command, output);
+            let output = CommandOutput::from(output);
+            return Some(output);
+        };
+
         exec_cmd(cmd, args, self.cmd_timeout)
+        .map(|output| {
+            self.cmd_cache.set(&full_path, &full_command, &output);
+            output
+        })
+    }
+
+    /// Execute a command and return the output on stdout and stderr if successful,
+    /// while respecting the user's timeout configuration.
+    ///
+    /// This method specifically doesn't cache its results. For an alternative that
+    /// caches for use by successive calls, use [`Self::exec_cmd()`].
+    pub fn uncached_exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+        todo!()
     }
 }
 

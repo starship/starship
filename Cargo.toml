@@ -28,8 +28,10 @@ http = ["attohttpc"]
 # Vendor OpenSSL, use this if you have trouble cross-compiling starship
 tls-vendored = ["native-tls/vendored"]
 
-
 [dependencies]
+starship_cache = { version = "0.1.0", path = "crates/starship_cache" }
+starship_module_config_derive = { version = "0.2.1", path = "crates/starship_module_config_derive" }
+
 clap = "2.33.3"
 ansi_term = "0.12.1"
 dirs-next = "2.0.0"
@@ -49,7 +51,6 @@ once_cell = "1.8.0"
 chrono = "0.4.19"
 sys-info = "0.9.0"
 byte-unit = "4.0.12"
-starship_module_config_derive = { version = "0.2.1", path = "starship_module_config_derive" }
 yaml-rust = "0.4.5"
 pest = "2.1.3"
 pest_derive = "2.1.0"
@@ -103,3 +104,6 @@ lto = true
 [[bin]]
 name = "starship"
 path = "src/main.rs"
+
+[workspace]
+members = ["crates/*"]
