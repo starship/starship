@@ -413,7 +413,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -1487,7 +1487,7 @@ then the module will also show when there are 0 jobs running.
 
 ::: warning
 
-This module is not supported on tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2624,7 +2624,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 :::
 
 ::: warning
-This module is not supported on elvish shell.
+This module is not supported on elvish and nu shell.
 :::
 
 ### Options

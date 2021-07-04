@@ -32,7 +32,7 @@ tls-vendored = ["native-tls/vendored"]
 [dependencies]
 clap = "2.33.3"
 ansi_term = "0.12.1"
-dirs-next = "2.0.0"
+directories-next = "2.0.0"
 git2 = { version = "0.13.20", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
