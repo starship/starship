@@ -263,6 +263,20 @@
    eval `starship init tcsh`
    ```
 
+
+   #### Nushell
+
+   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file:
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
 ## 🤝 貢獻
 
 我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
