@@ -366,7 +366,7 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 ")
+                Color::Blue.bold().paint(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -394,7 +394,7 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 ")
+                Color::Blue.bold().paint(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -419,7 +419,7 @@ mod tests {
                 "{}",
                 Color::Blue
                     .bold()
-                    .paint("via .NET v3.1.103 🎯 netstandard2.0 ")
+                    .paint(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -433,7 +433,7 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 ")
+                Color::Blue.bold().paint(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -447,7 +447,7 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 ")
+                Color::Blue.bold().paint(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -461,7 +461,7 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 ")
+                Color::Blue.bold().paint(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -474,7 +474,7 @@ mod tests {
         touch_path(&workspace, "global.json", Some(&global_json))?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v1.2.3 "))),
+            Some(format!("{}", Color::Blue.bold().paint(".NET v1.2.3 "))),
         );
         workspace.close()
     }
@@ -492,7 +492,7 @@ mod tests {
                 "{}",
                 Color::Blue
                     .bold()
-                    .paint("via .NET v1.2.3 🎯 netstandard2.0 ")
+                    .paint(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -515,7 +515,7 @@ mod tests {
                 "{}",
                 Color::Blue
                     .bold()
-                    .paint("via .NET v1.2.3 🎯 netstandard2.0 ")
+                    .paint(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -532,7 +532,7 @@ mod tests {
                 "{}",
                 Color::Blue
                     .bold()
-                    .paint("via .NET v3.1.103 🎯 netstandard2.0 ")
+                    .paint(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -549,7 +549,7 @@ mod tests {
                 "{}",
                 Color::Blue
                     .bold()
-                    .paint("via .NET v3.1.103 🎯 netstandard2.0;net461 ")
+                    .paint(".NET v3.1.103 🎯 netstandard2.0;net461 ")
             )),
         );
         workspace.close()
