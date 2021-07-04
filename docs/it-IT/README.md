@@ -138,3 +138,16 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    eval `starship init tcsh`
    ```
+
+    #### Nushell
+
+   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file:
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
