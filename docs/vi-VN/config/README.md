@@ -391,7 +391,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ::: cảnh báo
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -1416,7 +1416,7 @@ symbol = "🌟 "
 
 ::: cảnh báo
 
-Mô đun này không hỗ trợ trên tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2505,7 +2505,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Các tuỳ chọn
 
