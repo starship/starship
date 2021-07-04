@@ -741,15 +741,20 @@ it would have been `nixpkgs/pkgs`.
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
 | `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| `delimiter`         | `"/"`                                              | The symbol to delimit path segments.                                             |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                                                                                                                            |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
-| `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
-| `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| Advanced Option             | Default   | Description                                                                                                                                                            |
+| --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |           | A table of substitutions to be made to the path. Style strings in this table are expanded in the path.                                                                 |
+| `substitution_regexes`      |           | A table of regular expression substitutions to be made to the path. Style strings in this table are expanded in the path.                                              |
+| `fish_style_pwd_dir_length` | `0`       | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
+| `use_logical_path`          | `true`    | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| `fit_width`                 | `"0"`     | The maximum width of the directory string. If zero, don't truncate.                                                                                                    |
+| `fit_style`                 | `"Inner"` | The style to use to shrink directory names if `fit_width` is exceeded. Allowed values are `"Left"`, `"Right"`, or `"Inner"`.                                           |
+| `fit_symbol`                | `"…"`     | The symbol to show where a directory name has been cut off.                                                                                                            |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network
 prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
@@ -757,14 +762,33 @@ prefixes or development directories (i.e. Java). Note that this will disable the
 ```toml
 [directory.substitutions]
 "/Volumes/network/path" = "/net"
-"src/com/long/java/path" = "mypath"
+"src/com/long/java/path" = "[mypath](red bold)"
 ```
+
+
+`substitution_regexes` allows regular expression substitutions for strings that occur in the path. Regular expression support
+is provided by the [rust regex library](https://docs.rs/regex/1.5.4/regex/index.html#syntax) and a full description of the grammar
+is found there. 
+
+```toml
+[directory.substitution_regexes]
+# Replace fo, foo, foooooooooooooooooooo, etc with bar
+"fo+" = "bar"
+# Rainbow background for folder names
+"(/)([^/])?([^/])?([^/])?([^/])?([^/])?([^/]+)?" = "\\$1[\\$2](bg:red)[\\$3](bg:yellow)[\\$4](bg:green)[\\$5](bg:blue)[\\$6](bg:purple)\\$7"
+```
+
 
 `fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero,
 the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path
 `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as
 `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with
 a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+
+`fit_width`, `fit_style`, and `fit_symbol` can be used to limit the maximum displayed length of the path, if a long directory name would
+cause the desired width to be exceeded. For example, setting `fit_width` to 30 would truncate the path 
+`some-random-arbitrarily-long-path/with/segments` to `some-ran…ng-path/with/segments`. Setting the truncation style to `Left` would 
+truncate the same path as `some-random-arb…/with/segments`. 
 
 </details>
 

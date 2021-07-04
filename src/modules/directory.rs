@@ -1,20 +1,31 @@
+use super::utils::directory::truncate;
 #[cfg(not(target_os = "windows"))]
 use super::utils::directory_nix as directory_utils;
 #[cfg(target_os = "windows")]
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
+use crate::segment::Segment;
+use ansi_term::Style;
 use indexmap::IndexMap;
 use path_slash::PathExt;
+use regex::Regex;
+use std::borrow::Cow;
+use std::cmp::PartialEq;
+use std::convert::TryInto;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
+use stylish_stringlike::text::{Joinable, Pushable, RawText, Replaceable, Span, Spans, Split};
+use stylish_stringlike::widget::{Fitable, HBox, TextWidget, TruncationStrategy, TruncationStyle};
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module};
 
-use super::utils::directory::truncate;
 use crate::config::RootModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
+
+// Windows and unix both use a forward slash for intermediate path representation.
+const DELIMITER: &str = "/";
 
 /// Creates a module with the current logical or physical directory
 ///
@@ -49,41 +60,47 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("Physical dir: {:?}", &physical_dir);
     log::debug!("Display dir: {:?}", &display_dir);
 
-    // Attempt repository path contraction (if we are in a git repository)
-    let repo = if config.truncate_to_repo {
-        context.get_repo().ok()
-    } else {
-        None
+    let dir_string = {
+        // Attempt repository path contraction (if we are in a git repository)
+        let repo = if config.truncate_to_repo {
+            context.get_repo().ok()
+        } else {
+            None
+        };
+        let repo_string = repo
+            .and_then(|r| r.root.as_ref())
+            .filter(|root| *root != &home_dir)
+            .and_then(|root| contract_repo_path(&display_dir, root));
+
+        // Otherwise use the logical path, automatically contracting
+        // the home directory if required.
+        let dir_string =
+            repo_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
+
+        #[cfg(windows)]
+        let dir_string = remove_extended_path_prefix(dir_string);
+
+        // Apply path substitutions
+        let mut dir_spans = substitute_path(&dir_string, &config.substitutions);
+
+        substitute_path_regex(&mut dir_spans, &config.substitution_regexes);
+        // Truncate the dir string to the maximum number of path components
+
+        truncate::<Spans<Option<Style>>>(&dir_spans, config.truncation_length as usize, DELIMITER)
     };
-    let dir_string = repo
-        .and_then(|r| r.root.as_ref())
-        .filter(|root| *root != &home_dir)
-        .and_then(|root| contract_repo_path(&display_dir, root));
-
-    // Otherwise use the logical path, automatically contracting
-    // the home directory if required.
-    let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
-
-    #[cfg(windows)]
-    let dir_string = remove_extended_path_prefix(dir_string);
-
-    // Apply path substitutions
-    let dir_string = substitute_path(dir_string, &config.substitutions);
-
-    // Truncate the dir string to the maximum number of path components
-    let dir_string = truncate(dir_string, config.truncation_length as usize);
-
-    let prefix = if is_truncated(&dir_string, &home_symbol) {
+    let prefix = if is_truncated(&dir_string.raw(), &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
             let contracted_home_dir = contract_path(&display_dir, &home_dir, &home_symbol);
             to_fish_style(
-                config.fish_style_pwd_dir_length as usize,
+                config
+                    .fish_style_pwd_dir_length
+                    .try_into()
+                    .expect("Unable to convert fish_style_pwd_dir_length to usize"),
                 contracted_home_dir,
-                &dir_string,
+                &dir_string.raw(),
             )
         } else {
             String::from(config.truncation_symbol)
@@ -91,19 +108,52 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         String::from("")
     };
-
-    let displayed_path = prefix + &dir_string;
+    let prefix_spans = get_styled(&prefix).unwrap_or_else(|| prefix.as_str().into());
+    let displayed_path = prefix_spans
+        .join(&dir_string)
+        .replace(DELIMITER, config.delimiter);
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
+            .map_variables_to_segments(|variable| match variable {
+                "path" => {
+                    let to_show = if config.fit_width > 0 {
+                        let truncator = match config.fit_style {
+                                "Inner" => TruncationStyle::Inner(config.fit_symbol),
+                                "Left" => TruncationStyle::Left(config.fit_symbol),
+                                "Right" => TruncationStyle::Right(config.fit_symbol),
+                                s => {
+                                    log::error!("Unknown fit_style {:?} found in config. Allowed values are 'Left', 'Right', and 'Inner'", s);
+                                    TruncationStyle::Inner(config.fit_symbol)
+                                }
+                            };
+                        shrink(
+                            &displayed_path,
+                            config.fit_width as usize,
+                            truncator,
+                            config.delimiter,
+                        )
+                    } else {
+                        displayed_path.clone()
+                    };
+                    Some(Ok(to_show
+                        .spans()
+                        .map(|span| {
+                            let style: Option<Style> = span.style().clone().into_owned();
+                            let content: String = span.raw();
+                            Segment::new(style, content)
+                        })
+                        .collect()))
+                }
+                _ => None,
+            })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&displayed_path)),
                 "read_only" => {
                     if is_readonly_dir(&physical_dir) {
                         Some(Ok(&lock_symbol))
@@ -125,6 +175,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+/// Shrink path segments to fit the path into the allowed total width.
+fn shrink<T, U>(path: &Spans<T>, max_width: usize, truncation: U, delim: &str) -> Spans<T>
+where
+    T: Clone + PartialEq,
+    U: Clone + TruncationStrategy<Spans<T>>,
+{
+    use stylish_stringlike::text::Splitable;
+    let hbox = path
+        .split(delim)
+        .map(|Split { segment, delim }| vec![segment, delim])
+        .flatten()
+        .flatten()
+        .map(|s| {
+            let b: Box<dyn Fitable<_>> = Box::new(TextWidget::<Spans<_>, U>::new(
+                Cow::Owned(s),
+                Cow::Borrowed(&truncation),
+            ));
+            b
+        })
+        .collect::<HBox<_>>();
+
+    hbox.truncate(max_width as usize)
 }
 
 #[cfg(windows)]
@@ -189,7 +263,7 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
     format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
-        separator = "/",
+        separator = DELIMITER,
         path = sub_path.to_slash_lossy()
     )
 }
@@ -222,7 +296,7 @@ fn contract_repo_path(full_path: &Path, top_level_path: &Path) -> Option<String>
         return Some(format!(
             "{repo_name}{separator}{path}",
             repo_name = repo_name,
-            separator = "/",
+            separator = DELIMITER,
             path = path.to_slash_lossy()
         ));
     }
@@ -247,16 +321,55 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
     buf.canonicalize().unwrap_or_else(|_| path.into())
 }
 
+/// Performs styling on style string to get a spans object
+fn get_styled(text: &str) -> Option<Spans<Option<Style>>> {
+    let formatter = StringFormatter::new(text).ok()?;
+    let segments = formatter.parse(None).ok()?;
+    let mut result: Spans<Option<Style>> = Default::default();
+    for Segment {
+        ref style,
+        ref value,
+    } in segments
+    {
+        let span = Span::new(Cow::Borrowed(style), Cow::Borrowed(value));
+        result.push(&span)
+    }
+    Some(result)
+}
+
 /// Perform a list of string substitutions on the path
 ///
 /// Given a list of (from, to) pairs, this will perform the string
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
-fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
-    let mut substituted_dir = dir_string;
-    for substitution_pair in substitutions.iter() {
-        substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
+fn substitute_path(
+    dir_string: &str,
+    substitutions: &IndexMap<String, &str>,
+) -> Spans<Option<Style>> {
+    let mut substituted_dir: Spans<Option<Style>> = dir_string.into();
+    for (from, to) in substitutions.iter() {
+        if let Some(to_spans) = get_styled(to) {
+            substituted_dir = substituted_dir.replace(from, &to_spans);
+        } else {
+            substituted_dir = substituted_dir.replace(from, *to);
+        }
     }
     substituted_dir
+}
+
+/// Perform a list of regular expression substitutions on the path.
+///
+/// Given a list of (searcher, replacer) pairs, this will perform the
+/// substitutions, in order, on the path.
+fn substitute_path_regex(dir: &mut Spans<Option<Style>>, substitutions: &IndexMap<String, &str>) {
+    for (from, to) in substitutions.iter() {
+        if let Ok(rx) = Regex::new(from) {
+            if let Some(to_spans) = get_styled(to) {
+                *dir = dir.replace_regex(&rx, &to_spans);
+            } else {
+                *dir = dir.replace_regex(&rx, *to)
+            }
+        }
+    }
 }
 
 /// Takes part before contracted path and replaces it with fish style path
@@ -291,14 +404,14 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
             }
         })
         .collect::<Vec<_>>()
-        .join("/")
+        .join(DELIMITER)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use ansi_term::{ANSIStrings, Color};
     use dirs_next::home_dir;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
@@ -394,8 +507,8 @@ mod tests {
         substitutions.insert("/absolute/path".to_string(), "");
         substitutions.insert("/bar/".to_string(), "/");
 
-        let output = substitute_path(full_path.to_string(), &substitutions);
-        assert_eq!(output, "/foo/baz");
+        let output = substitute_path(&full_path.to_string(), &substitutions);
+        assert_eq!(output.raw(), "/foo/baz");
     }
 
     #[test]
@@ -734,7 +847,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(truncate(dir.to_slash_lossy(), 100))
+                .paint(truncate(&dir.to_slash_lossy(), 100, &"/"))
         ));
 
         assert_eq!(expected, actual);
@@ -1546,6 +1659,413 @@ mod tests {
 
         let actual = ModuleRenderer::new("directory").path(path).collect();
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn substituted_formatted_separator() {
+        let actual = ModuleRenderer::new("directory")
+            .path("meters/fuel-gauge")
+            .config(toml::toml! {
+                [directory]
+                [directory.substitutions]
+                "/" = "[/](green bold)"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Cyan.bold().paint("meters"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("fuel-gauge"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substituted_formatted_multiple() {
+        let actual = ModuleRenderer::new("directory")
+            .path("/some/long/network/path/workspace/a/b/c/dev")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitutions]
+                "/some/long/network/path" = "/some/net"
+                "a/b/c" = "[d](red underline)"
+                "/" = "[/](green bold)"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&vec![
+                Color::Cyan.bold().paint("net"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("workspace"),
+                Color::Green.bold().paint("/"),
+                Color::Red.underline().paint("d"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("dev"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn path_looks_like_style() {
+        // Test that directories that look like style strings
+        // don't get formatted like style strings themselves;
+        // only substitutions are valid targets for styling
+        let actual = ModuleRenderer::new("directory")
+            .path("[meters](red bold)/fuel-gauge")
+            .config(toml::toml! {
+                [directory]
+                [directory.substitutions]
+                "/" = "[/](green bold)"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Cyan.bold().paint("[meters](red bold)"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("fuel-gauge"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn substituted_formatted_unicode() {
+        let actual = ModuleRenderer::new("directory")
+            .path("/some/long/network/path/starship/a/b/c/🦀")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitutions]
+                "/some/long/network/path" = "/some/net"
+                "a/b/c" = "[d](red underline)"
+                "/" = "[/](green bold)"
+                "starship" = "🚀"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&vec![
+                Color::Cyan.bold().paint("net"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("🚀"),
+                Color::Green.bold().paint("/"),
+                Color::Red.underline().paint("d"),
+                Color::Green.bold().paint("/"),
+                Color::Cyan.bold().paint("🦀"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substituted_regex_simple() {
+        let actual = ModuleRenderer::new("directory")
+            .path("foooooooo/bar")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitution_regexes]
+                "fo+" = "foo"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!("{} ", ANSIStrings(&[Color::Cyan.bold().paint("foo/bar"),]));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substituted_regex_backref() {
+        let actual = ModuleRenderer::new("directory")
+            .path("rocket-controls/src/loop/loop")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitution_regexes]
+                "(\\w)([^/]+)" = "[\\$1](red bold)[\\$2](red)"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Red.bold().paint("r"),
+                Color::Red.normal().paint("ocket-controls"),
+                Color::Cyan.bold().paint("/"),
+                Color::Red.bold().paint("s"),
+                Color::Red.normal().paint("rc"),
+                Color::Cyan.bold().paint("/"),
+                Color::Red.bold().paint("l"),
+                Color::Red.normal().paint("oop"),
+                Color::Cyan.bold().paint("/"),
+                Color::Red.bold().paint("l"),
+                Color::Red.normal().paint("oop"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn shrink_path_short() {
+        let actual = ModuleRenderer::new("directory")
+            .path("path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_width = 30
+            })
+            .collect()
+            .unwrap();
+        let expected = format!("{} ", Color::Cyan.bold().paint("path/with/segments"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn shrink_path_default() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-random-arbitrarily-long-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_width = 30
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            Color::Cyan.bold().paint("some-ran…ng-path/with/segments")
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn shrink_path_inner() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-random-arbitrarily-long-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_width = 30
+                fit_style = "Inner"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            Color::Cyan.bold().paint("some-ran…ng-path/with/segments")
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn shrink_path_left() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-random-arbitrarily-long-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_width = 30
+                fit_style = "Left"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            Color::Cyan.bold().paint("some-random-arb…/with/segments")
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn shrink_path_right() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-random-arbitrarily-long-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_width = 30
+                fit_style = "Right"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            Color::Cyan.bold().paint("…arily-long-path/with/segments")
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn shrink_path_too_much() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-random-arbitrarily-long-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_width = 5
+            })
+            .collect()
+            .unwrap();
+        let expected = format!("{} ", Color::Cyan.bold().paint("…/…/…"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn different_fit_symbol() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-random-arbitrarily-long-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                fit_symbol = "___"
+                fit_width = 30
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            Color::Cyan.bold().paint("some-ra___g-path/with/segments")
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn different_delimiter() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                delimiter = "\\"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!("{} ", Color::Cyan.bold().paint("some-path\\with\\segments"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn styled_delimiter() {
+        let actual = ModuleRenderer::new("directory")
+            .path("some-path/with/segments")
+            .config(toml::toml! {
+                [directory]
+                delimiter = "\\"
+                [directory.substitutions]
+                "/" = "[/](red bold)"
+            })
+            .collect()
+            .unwrap();
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Cyan.bold().paint("some-path"),
+                Color::Red.bold().paint("\\"),
+                Color::Cyan.bold().paint("with"),
+                Color::Red.bold().paint("\\"),
+                Color::Cyan.bold().paint("segments"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substituted_regex_with_shrink() {
+        let actual = ModuleRenderer::new("directory")
+            .path("rocket-controls/src/loop/loop")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                fit_width = 19
+                [directory.substitution_regexes]
+                "(/+)?([^/]+)?(/+)?([^/]+)?(/+)?([^/]+)?(/+)?([^/]+)?" = "\\$1[\\$2](red bold)\\$3[\\$4](yellow bold)\\$5[\\$6](green bold)\\$7[\\$8](blue bold)"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Red.bold().paint("ro…ls"),
+                Color::Cyan.bold().paint("/"),
+                Color::Yellow.bold().paint("src"),
+                Color::Cyan.bold().paint("/"),
+                Color::Green.bold().paint("loop"),
+                Color::Cyan.bold().paint("/"),
+                Color::Blue.bold().paint("loop"),
+            ])
+        );
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substitute_literal_regex() {
+        let actual = ModuleRenderer::new("directory")
+            .path("looooooooooooooooong/paaaaaaaaaaaaaaaaath")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitutions]
+                "looooooooooooooooong" = "huuuuuuuuuuuuuuuge"
+                [directory.substitution_regexes]
+                "lo+ng" = "long"
+                "pa+th" = "path"
+                "hu+ge" = "huge"
+
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!("{} ", Color::Cyan.bold().paint("huge/path"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn substitute_regex_multiple() {
+        let actual = ModuleRenderer::new("directory")
+            .path("foo/path")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 4
+                [directory.substitution_regexes]
+                "fo+" = "baaaaaar"
+                "ba+r" = "baaaaaaaaz"
+                "ba+z" = "buz"
+
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!("{} ", Color::Cyan.bold().paint("buz/path"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn custom_delimiter() {
+        let actual = ModuleRenderer::new("directory")
+            .path("rocket-controls/src/loop")
+            .config(toml::toml! {
+                [directory]
+                delimiter = "_"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!("{} ", Color::Cyan.bold().paint("rocket-controls_src_loop"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn custom_styled_delimiter() {
+        let actual = ModuleRenderer::new("directory")
+            .path("rocket-controls/src/loop")
+            .config(toml::toml! {
+                [directory]
+                delimiter = "_"
+                [directory.substitutions]
+                "/" = "[/](red bold)"
+            })
+            .collect()
+            .unwrap();
+
+        let expected = format!(
+            "{} ",
+            ANSIStrings(&[
+                Color::Cyan.bold().paint("rocket-controls"),
+                Color::Red.bold().paint("_"),
+                Color::Cyan.bold().paint("src"),
+                Color::Red.bold().paint("_"),
+                Color::Cyan.bold().paint("loop"),
+            ])
+        );
         assert_eq!(expected, actual);
     }
 }

@@ -69,6 +69,7 @@ which = "4.1.0"
 shadow-rs = "0.6.2"
 versions = "3.0.2"
 strsim = "0.10.0"
+stylish-stringlike = "0.3.0"
 
 process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
 
