@@ -298,8 +298,8 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::home_dir;
     use ansi_term::Color;
-    use dirs_next::home_dir;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
