@@ -364,7 +364,10 @@ mod tests {
         touch_path(&workspace, "Directory.Build.props", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v3.1.103 "))),
+            Some(format!(
+                "{}",
+                Color::Blue.bold().paint("via .NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -375,7 +378,10 @@ mod tests {
         touch_path(&workspace, "Directory.Build.targets", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v3.1.103 "))),
+            Some(format!(
+                "{}",
+                Color::Blue.bold().paint("via .NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -386,7 +392,10 @@ mod tests {
         touch_path(&workspace, "Packages.props", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v3.1.103 "))),
+            Some(format!(
+                "{}",
+                Color::Blue.bold().paint("via .NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -408,7 +417,9 @@ mod tests {
             &workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 🎯 netstandard2.0 ")
+                Color::Blue
+                    .bold()
+                    .paint("via .NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -420,7 +431,10 @@ mod tests {
         touch_path(&workspace, "project.fsproj", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v3.1.103 "))),
+            Some(format!(
+                "{}",
+                Color::Blue.bold().paint("via .NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -431,7 +445,10 @@ mod tests {
         touch_path(&workspace, "project.xproj", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v3.1.103 "))),
+            Some(format!(
+                "{}",
+                Color::Blue.bold().paint("via .NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -442,7 +459,10 @@ mod tests {
         touch_path(&workspace, "project.json", None)?;
         expect_output(
             &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint("via .NET v3.1.103 "))),
+            Some(format!(
+                "{}",
+                Color::Blue.bold().paint("via .NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -470,7 +490,9 @@ mod tests {
             &workspace.path().join("project"),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v1.2.3 🎯 netstandard2.0 ")
+                Color::Blue
+                    .bold()
+                    .paint("via .NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -491,7 +513,9 @@ mod tests {
             &workspace.path().join("deep/path/to/project"),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v1.2.3 🎯 netstandard2.0 ")
+                Color::Blue
+                    .bold()
+                    .paint("via .NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -506,7 +530,9 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "{}",
-                Color::Blue.bold().paint("via .NET v3.1.103 🎯 netstandard2.0 ")
+                Color::Blue
+                    .bold()
+                    .paint("via .NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
