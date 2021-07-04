@@ -391,7 +391,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: Warnung
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -1416,7 +1416,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 ::: Warnung
 
-This module is not supported on tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2505,7 +2505,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Optionen
 
