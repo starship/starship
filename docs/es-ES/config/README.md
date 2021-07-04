@@ -803,7 +803,7 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 | Opción              | Por defecto                                                                                             | Descripción                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                                                  |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                                                                                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | Símbolo usado antes de mostrar la versión de .NET                                       |
 | `heuristic`         | `true`                                                                                                  | Usa una detección de versiones más rápida para mantener a starship veloz.               |
