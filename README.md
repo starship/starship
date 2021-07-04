@@ -152,9 +152,9 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
 1. Install the **starship** binary:
 
-#### Install Latest Version
+    #### Install Latest Version
 
-##### From prebuilt binary, with Shell
+    ##### From prebuilt binary, with Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
