@@ -804,7 +804,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | Opções              | Padrão                                                                                                  | Descrição                                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | O formato do módulo.                                                      |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | O formato do módulo.                                                      |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
