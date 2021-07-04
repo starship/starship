@@ -559,7 +559,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
@@ -2295,7 +2295,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of R. The module will be shown if
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if
 any of the following conditions are met:
 
 - The current directory contains a file with the `.R` extension.
@@ -2543,7 +2543,7 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is
+The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") environment variable, if it is
 set to a number and meets or exceeds the specified threshold.
 
 ### Options
@@ -2910,7 +2910,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of V.
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/).
 By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
