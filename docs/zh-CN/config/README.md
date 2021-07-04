@@ -391,7 +391,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -1416,7 +1416,7 @@ symbol = "🌟 "
 
 ::: warning
 
-This module is not supported on tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2505,7 +2505,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### 配置项
 
