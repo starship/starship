@@ -1,16 +1,16 @@
 # Cấu hình nâng cao
 
-Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Trang này chi tiết một vài cấu hình kĩ thuật nâng cao hơn được sử dụng trong starship.
+Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Tài liệu này sẽ mô tả chi tiết các cấu hình nâng cao hơn được sử dụng trong starship.
 
 ::: cảnh báo
 
-Các cấu hình trong phần này có thể thay đổi trong các bản phát hành Starship trong tương lai.
+Các cấu hình trong phần này có thể thay đổi trong các phiên bản tương lai của Starship.
 
 :::
 
 ## Tuỳ biến pre-prompt và pre-execution Commands trong Bash
 
-Bash không có một preexec/precmd framwork chính thống giống như các shells khác. Bởi vì điều này, nó là khó để cung cấp các hook cho việc tuỳ biến được đầy đủ trong `bash`. Tuy nhiên, Starship cung cấp cho bạn khả năng hạn chế để chèn các chức năng của riêng bạn vào trong thủ tục prompt-rendering:
+Bash không có một preexec/precmd framework chính thống giống như các shells khác. Do đó rất khó để cung cấp các hook với khả năng tuỳ biến hoàn toàn cho `bash` shell. Tuy nhiên, Starship cung cấp cho bạn khả năng hạn chế để chèn các chức năng của riêng bạn vào trong thủ tục prompt-rendering:
 
 - Để chạy một hàm tuỳ biến trước khi prompt được vẽ ra, định nghĩa một hàm mới và sau đó gán tên của nó tới `starship_precmd_user_func`. Ví dụ, để vẽ một tên lửa trước prompt, bạn sẽ làm
 
