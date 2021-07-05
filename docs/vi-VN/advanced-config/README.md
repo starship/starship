@@ -31,9 +31,9 @@ trap blastoff DEBUG     # Bẫy DEBUG *trước khi* starship chạy
 eval $(starship init bash)
 ```
 
-## Thay đổi tiêu đề của sổ
+## Thay đổi tên gọi trên cửa sổ của chương trình terminal
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish thậm chí là nó một cách mặc định. Starship không làm điều này, nhưng nó khá đơn giản để thêm điều này vào chức năng cho `bash` hoặc `zsh`.
+Một vài shell có khả năng tự động thay đổi tên hiển thị (chẳng hạn như tên của thư mục hiện thời) trên cửa số của trình mô phỏng terminal. Fish shell mặc định thực hiện thay đổi này. Starship không làm điều này, nhưng nó khá đơn giản để thêm điều này vào chức năng cho `bash` hoặc `zsh`.
 
 Đầu tiên, định nghĩa một hàm thay đổi tiêu đề cửa sổ (giống hệt trong bash và zsh):
 
