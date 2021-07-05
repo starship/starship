@@ -141,7 +141,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
     #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file:
+   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
 
    ```toml
    startup = [
