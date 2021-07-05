@@ -1,14 +1,14 @@
 # Cấu hình nâng cao
 
-Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Tài liệu này sẽ mô tả chi tiết các cấu hình nâng cao hơn được sử dụng trong starship.
+Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Tài liệu này sẽ mô tả chi tiết các tùy chỉnh nâng cao trong starship.
 
 ::: cảnh báo
 
-Các cấu hình trong phần này có thể thay đổi trong các phiên bản tương lai của Starship.
+Các tùy chỉnh được mô tả trong phần này có thể sẽ thay đổi trong các phiên bản tương lai của Starship.
 
 :::
 
-## Tuỳ biến pre-prompt và pre-execution Commands trong Bash
+## Tùy chỉnh các hàm được thực thi trước prompt và các lệnh Linux mặc định của bash shell
 
 Bash không có một preexec/precmd framework chính thống giống như các shells khác. Do đó rất khó để cung cấp các hook với khả năng tuỳ biến hoàn toàn cho `bash` shell. Tuy nhiên, Starship cho phép bạn viết các hàm riêng của bạn để tùy biến việc render prompt:
 
@@ -57,9 +57,9 @@ Với `zsh` shell, thêm hàm này vào mảng `precmd_functions`:
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Nếu ta hài lòng với các tùy biến đã được thiết lập, thêm những dòng sau vào cấu hình shell (`~/.bashrc` hoặc `~/.zshrc`) để thực thi chúng mỗi khi ta khởi tạo một shell mới.
 
-Ví dụ, nếu bạn muốn hiển thị đường dẫn hiện tại của bạn trong tiêu đề tab terminal, thêm snippet sau vào `~/.bashrc` hoặc `~/.zshrc` của bạn:
+Ví dụ, nếu ta muốn hiển thị đường dẫn thư mục hiện tại trong tiêu đề của một terminal tab, thêm đoạn code sau vào `~/.bashrc` hoặc `~/.zshrc`:
 
 ```bash
 function set_win_title(){
