@@ -33,9 +33,9 @@ eval $(starship init bash)
 
 ## Thay đổi tên gọi trên cửa sổ của chương trình terminal
 
-Một vài shell có khả năng tự động thay đổi tên hiển thị (chẳng hạn như tên của thư mục hiện thời) trên cửa số của trình mô phỏng terminal. Fish shell mặc định thực hiện thay đổi này. Starship không làm điều này, nhưng nó khá đơn giản để thêm điều này vào chức năng cho `bash` hoặc `zsh`.
+Một vài shell có khả năng tự động thay đổi tên hiển thị (chẳng hạn như tên của thư mục hiện thời) trên cửa số của trình mô phỏng terminal. Fish shell mặc định thực hiện thay đổi này. Tuy không được set mặc định trên Starship, chức năng này có thể được tích hợp dễ dàng trên `bash` shell và `zsh` shell.
 
-Đầu tiên, định nghĩa một hàm thay đổi tiêu đề cửa sổ (giống hệt trong bash và zsh):
+Đầu tiên, ta cần định nghĩa một hàm thay đổi tiêu đề cửa sổ (dùng chung cho cả bash và zsh):
 
 ```bash
 function set_win_title(){
@@ -43,15 +43,15 @@ function set_win_title(){
 }
 ```
 
-Bạn có thể tuỳ biến để tuỳ biến tiêu đề này (`$USER`, `$HOSTNAME`, và `$PWD` là những lựa chọn phổ biến).
+Ta có thể sử dụng biến số để tuỳ chỉnh tên hiển thị này (`$USER`, `$HOSTNAME`, và `$PWD` là những biến số thường được dùng).
 
-Trong `bash`, thiết lập hàm này thành hàm precmd của starship:
+Với `bash` shell, set precmd của starship bằng tên của hàm này:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-Trong `zsh`, thêm cái này vào mảng `precmd_functions`:
+Với `zsh` shell, thêm hàm này vào mảng `precmd_functions`:
 
 ```bash
 precmd_functions+=(set_win_title)
