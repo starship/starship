@@ -178,7 +178,7 @@ add_newline = false
 
 ### Default Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+If `format` is empty or no `format` is provided, a default value is used. The default is as shown:
 
 ```toml
 format = "$all"
