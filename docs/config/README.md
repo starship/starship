@@ -246,6 +246,16 @@ $shell\
 $character"""
 ```
 
+An alternative way to disable modules is to remove them from the prompt. Users prefering a more minimal prompt could for example use
+```toml
+format = """
+$username\
+$hostname\
+$directory\
+$shell\
+$character"""
+```
+
 ## AWS
 
 The `aws` module shows the current AWS region and profile. This is based on
