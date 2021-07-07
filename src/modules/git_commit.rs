@@ -1,4 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
+use crate::formatter::string_formatter::StringFormatterError;
 use git2::Repository;
 use git2::Time;
 
@@ -25,24 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let head_commit = git_head.peel_to_commit().ok()?;
     let commit_oid = head_commit.id();
 
-    let mut parsed;
-
-    parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "hash" => Some(Ok(id_to_hex_abbrev(
-                    commit_oid.as_bytes(),
-                    config.commit_hash_length,
-                ))),
-                _ => None,
-            })
-            .parse(None)
-    });
-
+    let mut tag_name = String::new();
     if !config.tag_disabled {
         // Let's get repo tags names
         let tag_names = git_repo.tag_names(None).ok()?;
@@ -60,7 +44,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
         });
 
-        let mut tag_name = String::new();
         let mut oldest = Time::new(0, 0);
         // Let's check if HEAD has some tag. If several, gets last created one...
         for (name, timestamp, reference) in tag_and_refs.rev() {
@@ -69,29 +52,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 oldest = timestamp;
             }
         }
-        // If we have tag...
-        if !tag_name.is_empty() {
-            parsed = StringFormatter::new(config.format).and_then(|formatter| {
-                formatter
-                    .map_style(|variable| match variable {
-                        "style" => Some(Ok(config.style)),
-                        _ => None,
-                    })
-                    .map(|variable| match variable {
-                        "hash" => Some(Ok(id_to_hex_abbrev(
-                            commit_oid.as_bytes(),
-                            config.commit_hash_length,
-                        ))),
-                        _ => None,
-                    })
-                    .map(|variable| match variable {
-                        "tag" => Some(Ok(format!("{}{}", &config.tag_symbol, &tag_name))),
-                        _ => None,
-                    })
-                    .parse(None)
-            });
-        }
     };
+
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "hash" => Some(Ok(id_to_hex_abbrev(
+                    commit_oid.as_bytes(),
+                    config.commit_hash_length,
+                ))),
+                "tag" => format_tag(config.tag_symbol, &tag_name),
+                _ => None,
+            })
+            .parse(None)
+    });
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -104,8 +82,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn format_tag(symbol: &str, tag_name: &str) -> Option<Result<String, StringFormatterError>> {
+    if tag_name.is_empty() {
+        None
+    } else {
+        Some(Ok(format!("{}{}", &symbol, &tag_name)))
+    }
+}
+
 /// len specifies length of hex encoded string
-pub fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
+fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
     bytes
         .iter()
         .map(|b| format!("{:02x}", b))

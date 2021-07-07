@@ -4,10 +4,8 @@ use regex::Regex;
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::git_status::GitStatusConfig;
-use crate::context::Repo;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
-use std::path::Path;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -27,8 +25,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let repo = context.get_repo().ok()?;
-    let info = Arc::new(GitStatusInfo::load(context, repo));
+    let info = Arc::new(GitStatusInfo::load(context));
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
@@ -110,16 +107,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
-    repo: &'a Repo,
     repo_status: OnceCell<Option<RepoStatus>>,
     stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
-    pub fn load(context: &'a Context, repo: &'a Repo) -> Self {
+    pub fn load(context: &'a Context) -> Self {
         Self {
             context,
-            repo,
             repo_status: OnceCell::new(),
             stashed_count: OnceCell::new(),
         }
@@ -130,31 +125,25 @@ impl<'a> GitStatusInfo<'a> {
     }
 
     pub fn get_repo_status(&self) -> &Option<RepoStatus> {
-        self.repo_status.get_or_init(|| {
-            let repo_root = self.repo.root.as_ref()?;
-
-            match get_repo_status(self.context, repo_root) {
+        self.repo_status
+            .get_or_init(|| match get_repo_status(self.context) {
                 Some(repo_status) => Some(repo_status),
                 None => {
                     log::debug!("get_repo_status: git status execution failed");
                     None
                 }
-            }
-        })
+            })
     }
 
     pub fn get_stashed(&self) -> &Option<usize> {
-        self.stashed_count.get_or_init(|| {
-            let repo_root = self.repo.root.as_ref()?;
-
-            match get_stashed_count(self.context, repo_root) {
+        self.stashed_count
+            .get_or_init(|| match get_stashed_count(self.context) {
                 Some(stashed_count) => Some(stashed_count),
                 None => {
                     log::debug!("get_stashed_count: git stash execution failed");
                     None
                 }
-            }
-        })
+            })
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
@@ -183,7 +172,7 @@ impl<'a> GitStatusInfo<'a> {
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(context: &Context, repo_root: &Path) -> Option<RepoStatus> {
+fn get_repo_status(context: &Context) -> Option<RepoStatus> {
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
@@ -191,7 +180,7 @@ fn get_repo_status(context: &Context, repo_root: &Path) -> Option<RepoStatus> {
         "git",
         &[
             "-C",
-            &repo_root.to_string_lossy(),
+            &context.current_dir.to_string_lossy(),
             "--no-optional-locks",
             "status",
             "--porcelain=2",
@@ -211,12 +200,12 @@ fn get_repo_status(context: &Context, repo_root: &Path) -> Option<RepoStatus> {
     Some(repo_status)
 }
 
-fn get_stashed_count(context: &Context, repo_root: &Path) -> Option<usize> {
+fn get_stashed_count(context: &Context) -> Option<usize> {
     let stash_output = context.exec_cmd(
         "git",
         &[
             "-C",
-            &repo_root.to_string_lossy(),
+            &context.current_dir.to_string_lossy(),
             "--no-optional-locks",
             "stash",
             "list",
@@ -754,6 +743,32 @@ mod tests {
         let expected = format_output("✘1");
 
         assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn worktree_in_different_dir() -> io::Result<()> {
+        let worktree_dir = tempfile::tempdir()?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        Command::new("git")
+            .args(&[
+                "config",
+                "core.worktree",
+                &worktree_dir.path().to_string_lossy(),
+            ])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("✘?");
+
+        assert_eq!(expected, actual);
+        worktree_dir.close()?;
         repo_dir.close()
     }
 

@@ -168,6 +168,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
+        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint_posix()?),
         "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
@@ -184,6 +185,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * powershell\\n\
                  * tcsh\\n\
                  * zsh\\n\
+                 * nu\\n\
                  * xonsh\\n\
                  \\n\
                  Please open an issue in the starship repo if you would like to \
@@ -253,6 +255,8 @@ const ION_INIT: &str = include_str!("starship.ion");
 const ELVISH_INIT: &str = include_str!("starship.elv");
 
 const TCSH_INIT: &str = include_str!("starship.tcsh");
+
+const NU_INIT: &str = include_str!("starship.nu");
 
 const XONSH_INIT: &str = include_str!("starship.xsh");
 

@@ -1,6 +1,7 @@
 use crate::shadow;
-use crate::utils::exec_cmd;
+use crate::utils::{self, exec_cmd};
 
+use directories_next::ProjectDirs;
 use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
@@ -191,7 +192,12 @@ fn get_terminal_info() -> TerminalInfo {
 }
 
 fn get_config_path(shell: &str) -> Option<PathBuf> {
-    dirs_next::home_dir().and_then(|home_dir| {
+    if shell == "nu" {
+        return ProjectDirs::from("org", "nushell", "nu")
+            .map(|project_dirs| project_dirs.config_dir().join("config.toml"));
+    }
+
+    utils::home_dir().and_then(|home_dir| {
         match shell {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
@@ -218,7 +224,7 @@ fn get_starship_config() -> String {
         .map(PathBuf::from)
         .ok()
         .or_else(|| {
-            dirs_next::home_dir().map(|mut home_dir| {
+            utils::home_dir().map(|mut home_dir| {
                 home_dir.push(".config/starship.toml");
                 home_dir
             })
@@ -277,7 +283,7 @@ mod tests {
     fn test_get_config_path() {
         let config_path = get_config_path("bash");
         assert_eq!(
-            dirs_next::home_dir().unwrap().join(".bashrc"),
+            utils::home_dir().unwrap().join(".bashrc"),
             config_path.unwrap()
         );
     }
