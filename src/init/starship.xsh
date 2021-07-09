@@ -1,5 +1,4 @@
-import random
-import string
+import uuid
 
 
 def starship_prompt():
@@ -12,4 +11,4 @@ def starship_prompt():
 
 $PROMPT = starship_prompt
 $STARSHIP_SHELL = "xonsh"
-$STARSHIP_SESSION_KEY = "".join(random.choice(string.ascii_letters + string.digits) for _ in range(16))
+$STARSHIP_SESSION_KEY = uuid.uuid4().hex
