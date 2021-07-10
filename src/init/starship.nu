@@ -1,5 +1,5 @@
 let-env STARSHIP_SHELL = "nu"
-let-env STARSHIP_SESSION = (random chars -l 16)
+let-env STARSHIP_SESSION_KEY = (random chars -l 16)
 
 def starship_prompt [] {
     # jobs are not supported
