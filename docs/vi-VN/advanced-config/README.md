@@ -1,18 +1,18 @@
 # Cấu hình nâng cao
 
-Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Trang này chi tiết một vài cấu hình kĩ thuật nâng cao hơn được sử dụng trong starship.
+Trong khi Starship là một shell linh hoạt, đôi khi bạn vẫn cần làm nhiều hơn là chỉnh sửa `starship.toml` để có thể là được những việc nhất định. Tài liệu này sẽ mô tả chi tiết các tùy chỉnh nâng cao trong starship.
 
 ::: cảnh báo
 
-Các cấu hình trong phần này có thể thay đổi trong các bản phát hành Starship trong tương lai.
+Các tùy chỉnh được mô tả trong phần này có thể sẽ thay đổi trong các phiên bản tương lai của Starship.
 
 :::
 
-## Tuỳ biến pre-prompt và pre-execution Commands trong Bash
+## Tùy chỉnh các hàm được thực thi trước prompt và các lệnh Linux mặc định của bash shell
 
-Bash không có một preexec/precmd framwork chính thống giống như các shells khác. Bởi vì điều này, nó là khó để cung cấp các hook cho việc tuỳ biến được đầy đủ trong `bash`. Tuy nhiên, Starship cung cấp cho bạn khả năng hạn chế để chèn các chức năng của riêng bạn vào trong thủ tục prompt-rendering:
+Bash không có một preexec/precmd framework chính thống giống như các shells khác. Do đó rất khó để cung cấp các hook với khả năng tuỳ biến hoàn toàn cho `bash` shell. Tuy nhiên, Starship cho phép bạn viết các hàm riêng của bạn để tùy biến việc render prompt:
 
-- Để chạy một hàm tuỳ biến trước khi prompt được vẽ ra, định nghĩa một hàm mới và sau đó gán tên của nó tới `starship_precmd_user_func`. Ví dụ, để vẽ một tên lửa trước prompt, bạn sẽ làm
+- Để thực thi một hàm custom trước khi prompt được render, ta cần định nghĩa một hàm mới và gán `starship_precmd_user_func` cho tên của hàm này. Ví dụ, để vẽ một tên lửa trước prompt
 
 ```bash
 function blastoff(){
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuy nhiên, bạn **phải** đặt bẫy tín hiệu DEBUG *trước* khởi tạo Starship! Starship có thể giữ giá trị của DEBUG trap, nhưng nếu trap được ghi đè sau khi starship khởi động, một vài chức năng sẽ không hoạt động.
+- Để thực thi một hàm custom trước khi một câu lệnh Linux chạy, ta có thể sử dụng cơ chế bẫy tín hiệu [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuy nhiên, bạn **phải** đặt bẫy tín hiệu DEBUG *trước* khởi tạo Starship! Starship có thể giữ giá trị của DEBUG trap, nhưng nếu trap bị ghi đè sau khi starship khởi động, một vài chức năng sẽ không hoạt động.
 
 ```bash
 function blastoff(){
@@ -31,11 +31,11 @@ trap blastoff DEBUG     # Bẫy DEBUG *trước khi* starship chạy
 eval $(starship init bash)
 ```
 
-## Thay đổi tiêu đề của sổ
+## Thay đổi tên gọi trên cửa sổ của chương trình terminal
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish thậm chí là nó một cách mặc định. Starship không làm điều này, nhưng nó khá đơn giản để thêm điều này vào chức năng cho `bash` hoặc `zsh`.
+Một vài shell có khả năng tự động thay đổi tên hiển thị (chẳng hạn như tên của thư mục hiện thời) trên cửa số của trình mô phỏng terminal. Fish shell mặc định thực hiện thay đổi này. Tuy không được set mặc định trên Starship, chức năng này có thể được tích hợp dễ dàng trên `bash` shell và `zsh` shell.
 
-Đầu tiên, định nghĩa một hàm thay đổi tiêu đề cửa sổ (giống hệt trong bash và zsh):
+Đầu tiên, ta cần định nghĩa một hàm thay đổi tiêu đề cửa sổ (dùng chung cho cả bash và zsh):
 
 ```bash
 function set_win_title(){
@@ -43,23 +43,23 @@ function set_win_title(){
 }
 ```
 
-Bạn có thể tuỳ biến để tuỳ biến tiêu đề này (`$USER`, `$HOSTNAME`, và `$PWD` là những lựa chọn phổ biến).
+Ta có thể sử dụng biến số để tuỳ chỉnh tên hiển thị này (`$USER`, `$HOSTNAME`, và `$PWD` là những biến số thường được dùng).
 
-Trong `bash`, thiết lập hàm này thành hàm precmd của starship:
+Với `bash` shell, set precmd của starship bằng tên của hàm này:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-Trong `zsh`, thêm cái này vào mảng `precmd_functions`:
+Với `zsh` shell, thêm hàm này vào mảng `precmd_functions`:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Nếu ta hài lòng với các tùy biến đã được thiết lập, thêm những dòng sau vào cấu hình shell (`~/.bashrc` hoặc `~/.zshrc`) để thực thi chúng mỗi khi ta khởi tạo một shell mới.
 
-Ví dụ, nếu bạn muốn hiển thị đường dẫn hiện tại của bạn trong tiêu đề tab terminal, thêm snippet sau vào `~/.bashrc` hoặc `~/.zshrc` của bạn:
+Ví dụ, nếu ta muốn hiển thị đường dẫn thư mục hiện tại trong tiêu đề của một terminal tab, thêm đoạn code sau vào `~/.bashrc` hoặc `~/.zshrc`:
 
 ```bash
 function set_win_title(){
