@@ -185,6 +185,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -1167,6 +1168,46 @@ The `git_state` module will show in directories which are part of a git reposito
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
+```
+
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+
+::: tip
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option          | Default                                                  | Description                        |
+| --------------- | -------------------------------------------------------- | ---------------------------------- |
+| `added_style`   | `"bold green"`                                           | The style for the added count.     |
+| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | The format for the module.         |
+| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+
+### Variables
+
+| Variable          | Example | Description                                 |
+| ----------------- | ------- | ------------------------------------------- |
+| added             | `1`     | The current number of added lines           |
+| deleted           | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
 ## Git Status
