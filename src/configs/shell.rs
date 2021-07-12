@@ -13,6 +13,7 @@ pub struct ShellConfig<'a> {
     pub ion_indicator: &'a str,
     pub elvish_indicator: &'a str,
     pub tcsh_indicator: &'a str,
+    pub nu_indicator: &'a str,
     pub unknown_indicator: &'a str,
     pub disabled: bool,
 }
@@ -28,6 +29,7 @@ impl<'a> Default for ShellConfig<'a> {
             ion_indicator: "ion",
             elvish_indicator: "esh",
             tcsh_indicator: "tsh",
+            nu_indicator: "nu",
             unknown_indicator: "",
             disabled: true,
         }

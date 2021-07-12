@@ -32,7 +32,7 @@ tls-vendored = ["native-tls/vendored"]
 [dependencies]
 clap = "2.33.3"
 ansi_term = "0.12.1"
-dirs-next = "2.0.0"
+directories-next = "2.0.0"
 git2 = { version = "0.13.20", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
@@ -43,7 +43,7 @@ log = { version = "0.4.14", features = ["std"] }
 # see: https://github.com/svartalf/rust-battery/issues/33
 battery = { version = "0.7.8", optional = true }
 path-slash = "0.1.4"
-unicode-segmentation = "1.7.1"
+unicode-segmentation = "1.8.0"
 gethostname = "0.2.1"
 once_cell = "1.8.0"
 chrono = "0.4.19"

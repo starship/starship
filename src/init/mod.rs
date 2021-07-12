@@ -33,8 +33,17 @@ impl StarshipPath {
             .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?;
         Ok(current_exe)
     }
+
+    /// Returns POSIX quoted path to starship binary
     fn sprint(&self) -> io::Result<String> {
-        self.str_path().map(|s| s.replace("\"", "\"'\"'\""))
+        self.str_path().map(|p| shell_words::quote(p).into_owned())
+    }
+
+    /// PowerShell specific path escaping
+    fn sprint_pwsh(&self) -> io::Result<String> {
+        self.str_path()
+            .map(|s| s.replace("'", "''"))
+            .map(|s| format!("'{}'", s))
     }
     fn sprint_posix(&self) -> io::Result<String> {
         // On non-Windows platform, return directly.
@@ -71,7 +80,7 @@ impl StarshipPath {
                 str_path
             }
         };
-        Ok(posix_path.replace("\"", "\"'\"'\""))
+        Ok(shell_words::quote(posix_path).into_owned())
     }
 }
 
@@ -138,27 +147,28 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint_posix()?
         ),
         "zsh" => print!(
-            r#"source <("{}" init zsh --print-full-init)"#,
+            r#"source <({} init zsh --print-full-init)"#,
             starship.sprint_posix()?
         ),
         "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
-            r#"source ("{}" init fish --print-full-init | psub)"#,
+            r#"source ({} init fish --print-full-init | psub)"#,
             starship.sprint_posix()?
         ),
         "powershell" => print!(
-            r#"Invoke-Expression (& "{}" init powershell --print-full-init | Out-String)"#,
-            starship.sprint()?
+            r#"Invoke-Expression (& {} init powershell --print-full-init | Out-String)"#,
+            starship.sprint_pwsh()?
         ),
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
-            r#"eval ("{}" init elvish --print-full-init | slurp)"#,
+            r#"eval ({} init elvish --print-full-init | slurp)"#,
             starship.sprint_posix()?
         ),
         "tcsh" => print!(
-            r#"eval `("{}" init tcsh --print-full-init)`"#,
+            r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
+        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint_posix()?),
         _ => {
             let quoted_arg = shell_words::quote(shell_basename);
             println!(
@@ -171,6 +181,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * powershell\\n\
                  * tcsh\\n\
                  * zsh\\n\
+                 * nu\\n\
                  \\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for %s:\\nhttps://github.com/starship/starship/issues/new\\n\\n\" {0} {0}",
@@ -190,7 +201,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
         "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
         "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
-        "powershell" => print_script(PWSH_INIT, &starship_path.sprint()?),
+        "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
@@ -206,8 +217,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 }
 
 fn print_script(script: &str, path: &str) {
-    let starship_path_string = format!("\"{}\"", path);
-    let script = script.replace("::STARSHIP::", &starship_path_string);
+    let script = script.replace("::STARSHIP::", path);
     print!("{}", script);
 }
 
@@ -239,3 +249,27 @@ const ION_INIT: &str = include_str!("starship.ion");
 const ELVISH_INIT: &str = include_str!("starship.elv");
 
 const TCSH_INIT: &str = include_str!("starship.tcsh");
+
+const NU_INIT: &str = include_str!("starship.nu");
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn escape_pwsh() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(r"C:\starship.exe"),
+        };
+        assert_eq!(starship_path.sprint_pwsh()?, r"'C:\starship.exe'");
+        Ok(())
+    }
+
+    #[test]
+    fn escape_tick_pwsh() -> io::Result<()> {
+        let starship_path = StarshipPath {
+            native_path: PathBuf::from(r"C:\'starship.exe"),
+        };
+        assert_eq!(starship_path.sprint_pwsh()?, r"'C:\''starship.exe'");
+        Ok(())
+    }
+}

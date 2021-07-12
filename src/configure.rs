@@ -6,6 +6,7 @@ use std::process::Command;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
+use crate::utils;
 use std::fs::File;
 use std::io::Write;
 use toml::map::Map;
@@ -178,7 +179,7 @@ fn get_config_path() -> OsString {
     if let Some(config_path) = env::var_os("STARSHIP_CONFIG") {
         return config_path;
     }
-    dirs_next::home_dir()
+    utils::home_dir()
         .expect("couldn't find home directory")
         .join(".config")
         .join("starship.toml")
