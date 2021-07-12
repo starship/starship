@@ -5,8 +5,26 @@ use crate::configs::env_var::EnvVarConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 
+/// Creates env_var_module displayer which displays all configured environmental variables
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let config_table = context.config.get_env_var_modules()?;
+    let mut env_modules = config_table
+        .iter()
+        .filter(|(_, config)| config.is_table())
+        .filter_map(|(variable, _)| env_var_module(vec!["env_var", variable], context))
+        .collect::<Vec<Module>>();
+    // Old configuration is present in starship configuration, notify user about change
+    if config_table.iter().any(|(_, config)| !config.is_table()) {
+        log::warn!("env_var module configuration has changed. Please update your configuration. https://starship.rs/config/#environment-variable");
+        if let Some(fallback_env_var_module) = env_var_module(vec!["env_var"], context) {
+            env_modules.push(fallback_env_var_module);
+        }
+    }
+    Some(env_var_displayer(env_modules, context))
+}
+
 /// A utility module to display multiple env_variable modules
-pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Option<Module<'a>> {
+fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Module<'a> {
     let mut module = context.new_module("env_var_displayer");
 
     let module_segments = modules
@@ -14,7 +32,7 @@ pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Opti
         .flat_map(|module| module.segments)
         .collect::<Vec<Segment>>();
     module.set_segments(module_segments);
-    Some(module)
+    module
 }
 
 /// Creates a module with the value of the chosen environment variable
@@ -23,7 +41,7 @@ pub fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Opti
 ///     - env_var.disabled is absent or false
 ///     - env_var.variable is defined
 ///     - a variable named as the value of env_var.variable is defined
-pub fn module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Option<Module<'a>> {
+fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module(&module_config_path.join("."));
     let config_value = context.config.get_config(&module_config_path);
     let config = EnvVarConfig::load(config_value.expect(
