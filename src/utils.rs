@@ -17,7 +17,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     if result.is_err() {
         log::debug!("Error reading file: {:?}", result);
     } else {
-        log::trace!("File read sucessfully");
+        log::trace!("File read successfully");
     };
 
     result
