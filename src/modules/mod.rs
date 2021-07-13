@@ -75,7 +75,6 @@ use std::time::Instant;
 
 pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
     let start: Instant = Instant::now();
-
     let mut m: Option<Module> = {
         match module {
             // Keep these ordered alphabetically.
