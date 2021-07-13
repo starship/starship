@@ -23,6 +23,14 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     result
 }
 
+pub fn get_command_string_output(command: CommandOutput) -> String {
+    if command.stdout.is_empty() {
+        command.stderr
+    } else {
+        command.stdout
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct CommandOutput {
     pub stdout: String,
@@ -601,5 +609,18 @@ mod tests {
             wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
             test
         );
+    }
+    #[test]
+    fn test_get_command_string_output() {
+        let case1 = CommandOutput {
+            stdout: String::from("stdout"),
+            stderr: String::from("stderr"),
+        };
+        assert_eq!(get_command_string_output(case1), "stdout");
+        let case2 = CommandOutput {
+            stdout: String::from(""),
+            stderr: String::from("stderr"),
+        };
+        assert_eq!(get_command_string_output(case2), "stderr");
     }
 }
