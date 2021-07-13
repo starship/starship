@@ -13,9 +13,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .filter(|(_, config)| config.is_table())
         .filter_map(|(variable, _)| env_var_module(vec!["env_var", variable], context))
         .collect::<Vec<Module>>();
-    // Old configuration is present in starship configuration, notify user about change
+    // Old configuration is present in starship configuration
     if config_table.iter().any(|(_, config)| !config.is_table()) {
-        log::warn!("env_var module configuration has changed. Please update your configuration. https://starship.rs/config/#environment-variable");
         if let Some(fallback_env_var_module) = env_var_module(vec!["env_var"], context) {
             env_modules.push(fallback_env_var_module);
         }
