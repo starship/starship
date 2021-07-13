@@ -920,10 +920,21 @@ format = "via [ $version](cyan bold) "
 
 ## Biến môi trường
 
-Mô đun `env_var` hiển thị giá trị hiện tại của biến môi trường được chọn. Mô đun sẽ được hiển thị chỉ khi bất kì điều kiện nào sau đây thỏa mãn:
+The `env_var` module displays the current value of a selected environment variables. Mô đun sẽ được hiển thị chỉ khi bất kì điều kiện nào sau đây thỏa mãn:
 
 - Tùy chọn `variable` khớp với mootjj biến môi trường tồn tại
 - Tùy chọn `variable` không được định nghĩa, nhưng tùy chọn `default` là
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### Các tuỳ chọn
 
@@ -953,6 +964,17 @@ Mô đun `env_var` hiển thị giá trị hiện tại của biến môi trư�
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang

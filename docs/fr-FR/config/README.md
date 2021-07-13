@@ -920,10 +920,21 @@ format = "via [ $version](cyan bold) "
 
 ## Variable d'environnement
 
-Le module `env_var` affiche la valeur actuelle d'une variable d'environnement sélectionnée. Le module est affiché si l'une de ces conditions est remplie :
+The `env_var` module displays the current value of a selected environment variables. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'option `variable` correspond à une variable d'environnement existante
 - L'option `variable` n'est pas définie, mais l'option `default` l'est
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### Options
 
@@ -953,6 +964,17 @@ Le module `env_var` affiche la valeur actuelle d'une variable d'environnement s�
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang

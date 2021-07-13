@@ -920,10 +920,21 @@ format = "via [ $version](cyan bold) "
 
 ## 環境變數
 
-`env_var`模組顯示一個選擇的環境變數的現在數值。 這個模組只在下列條件其中之一達到時顯示：
+The `env_var` module displays the current value of a selected environment variables. 這個模組只在下列條件其中之一達到時顯示：
 
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### 選項
 
@@ -953,6 +964,17 @@ format = "via [ $version](cyan bold) "
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
