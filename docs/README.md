@@ -127,7 +127,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    # ~/.tcshrc
 
-   eval `starship init tcsh`
+   eval "`starship init tcsh`"
    ```
 
     #### Nushell
