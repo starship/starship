@@ -142,7 +142,10 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
             Some(std::borrow::Cow::Borrowed(shell_args[0])),
             &shell_args[1..],
         )
-    } else if let Ok(env_shell) = std::env::var("STARSHIP_SHELL") {
+    } else if let Some(env_shell) = std::env::var("STARSHIP_SHELL")
+        .ok()
+        .filter(|s| !cfg!(test) && !s.is_empty())
+    {
         (Some(std::borrow::Cow::Owned(env_shell)), &[] as &[&str])
     } else {
         (None, &[] as &[&str])
