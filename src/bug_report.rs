@@ -266,18 +266,6 @@ mod tests {
     }
 
     #[test]
-    fn test_get_shell_info() {
-        env::remove_var("STARSHIP_SHELL");
-        let unknown_shell = get_shell_info();
-        assert_eq!(UNKNOWN_SHELL, &unknown_shell.name);
-
-        env::set_var("STARSHIP_SHELL", "fish");
-
-        let fish_shell = get_shell_info();
-        assert_eq!("fish", &fish_shell.name);
-    }
-
-    #[test]
     #[cfg(not(windows))]
     fn test_get_config_path() {
         let config_path = get_config_path("bash");
