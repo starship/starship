@@ -170,7 +170,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
         );
     }
 
-    let command = create_command("cmd.exe")
+    let command = create_command("cmd")
         .ok()?
         .arg("/C")
         .arg(cmd)
