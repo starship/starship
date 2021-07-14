@@ -1,7 +1,4 @@
 use super::{Context, Module, RootModuleConfig};
-use crate::formatter::string_formatter::StringFormatterError;
-use git2::Repository;
-use git2::Time;
 
 use crate::configs::git_commit::GitCommitConfig;
 use crate::formatter::StringFormatter;
@@ -13,45 +10,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_commit");
     let config: GitCommitConfig = GitCommitConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
-    let repo_root = repo.root.as_ref()?;
-    let git_repo = Repository::open(repo_root).ok()?;
+    // Test if we are in a git repo
+    context.exec_cmd(
+        "git",
+        &[
+            "-C",
+            &context.current_dir.to_string_lossy(),
+            "rev-parse",
+            "--git-dir",
+        ],
+    )?;
 
-    let is_detached = git_repo.head_detached().ok()?;
-    if config.only_detached && !is_detached {
+    if config.only_detached && !is_detached(context) {
         return None;
-    };
-
-    let git_head = git_repo.head().ok()?;
-    let head_commit = git_head.peel_to_commit().ok()?;
-    let commit_oid = head_commit.id();
-
-    let mut tag_name = String::new();
-    if !config.tag_disabled {
-        // Let's get repo tags names
-        let tag_names = git_repo.tag_names(None).ok()?;
-        let tag_and_refs = tag_names.iter().flatten().flat_map(|name| {
-            let full_tag = format!("refs/tags/{}", name);
-            let tag_obj = git_repo.find_reference(&full_tag)?.peel_to_tag()?;
-            let sig_obj = tag_obj.tagger();
-            git_repo.find_reference(&full_tag).map(|reference| {
-                (
-                    String::from(name),
-                    // fall back to oldest + 1s time if sig_obj is unavailable
-                    sig_obj.map_or(git2::Time::new(1, 0), |s| s.when()),
-                    reference,
-                )
-            })
-        });
-
-        let mut oldest = Time::new(0, 0);
-        // Let's check if HEAD has some tag. If several, gets last created one...
-        for (name, timestamp, reference) in tag_and_refs.rev() {
-            if commit_oid == reference.peel_to_commit().ok()?.id() && timestamp > oldest {
-                tag_name = name;
-                oldest = timestamp;
-            }
-        }
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -61,11 +32,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "hash" => Some(Ok(id_to_hex_abbrev(
-                    commit_oid.as_bytes(),
-                    config.commit_hash_length,
-                ))),
-                "tag" => format_tag(config.tag_symbol, &tag_name),
+                "hash" => get_commit_hash(context, &config).map(Ok),
+                "tag" => get_tag(context, &config).map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -82,24 +50,63 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_tag(symbol: &str, tag_name: &str) -> Option<Result<String, StringFormatterError>> {
-    if tag_name.is_empty() {
-        None
-    } else {
-        Some(Ok(format!("{}{}", &symbol, &tag_name)))
-    }
+fn is_detached(context: &Context) -> bool {
+    context
+        .exec_cmd(
+            "git",
+            &[
+                "-C",
+                &context.current_dir.to_string_lossy(),
+                "symbolic-ref",
+                "--quiet",
+                "HEAD",
+            ],
+        )
+        .is_none()
 }
 
-/// len specifies length of hex encoded string
-fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
-    bytes
-        .iter()
-        .map(|b| format!("{:02x}", b))
-        .collect::<Vec<String>>()
-        .join("")
-        .chars()
-        .take(len)
-        .collect()
+fn get_commit_hash(context: &Context, config: &GitCommitConfig) -> Option<String> {
+    let mut commit_hash = context
+        .exec_cmd(
+            "git",
+            &[
+                "-C",
+                &context.current_dir.to_string_lossy(),
+                "rev-parse",
+                "HEAD",
+            ],
+        )?
+        .stdout
+        .trim()
+        .to_string();
+
+    commit_hash.truncate(config.commit_hash_length);
+
+    Some(commit_hash)
+}
+
+fn get_tag(context: &Context, config: &GitCommitConfig) -> Option<String> {
+    if config.tag_disabled {
+        return None;
+    };
+    let tags = context
+        .exec_cmd(
+            "git",
+            &[
+                "-C",
+                &context.current_dir.to_string_lossy(),
+                "tag",
+                "--sort",
+                "-creatordate",
+                "--points-at",
+                "HEAD",
+            ],
+        )?
+        .stdout;
+
+    let tag_name = tags.lines().next()?;
+
+    Some(format!("{}{}", &config.tag_symbol, &tag_name))
 }
 
 #[cfg(test)]
