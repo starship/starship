@@ -5,7 +5,7 @@ use std::time::Instant;
 
 use super::{Context, Module, RootModuleConfig};
 
-use crate::{configs::custom::CustomConfig, formatter::StringFormatter};
+use crate::{configs::custom::CustomConfig, formatter::StringFormatter, utils::create_command};
 
 /// Creates a custom module with some configuration
 ///
@@ -100,7 +100,7 @@ fn get_shell<'a, 'b>(shell_args: &'b [&'a str]) -> (std::borrow::Cow<'a, str>, &
 #[cfg(not(windows))]
 fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
     let (shell, shell_args) = get_shell(shell_args);
-    let mut command = Command::new(shell.as_ref());
+    let mut command = create_command(shell.as_ref()).ok()?;
 
     command
         .args(shell_args)
@@ -118,6 +118,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
                 "Could not launch command with given shell or STARSHIP_SHELL env variable, retrying with /usr/bin/env sh"
             );
 
+            #[allow(clippy::disallowed_method)]
             Command::new("/usr/bin/env")
                 .arg("sh")
                 .stdin(Stdio::piped())
@@ -148,7 +149,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
     };
 
     if let Some(forced_shell) = shell {
-        let mut command = Command::new(forced_shell.as_ref());
+        let mut command = create_command(forced_shell.as_ref()).ok()?;
 
         command
             .args(shell_args)
@@ -169,7 +170,8 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
         );
     }
 
-    let command = Command::new("cmd.exe")
+    let command = create_command("cmd.exe")
+        .ok()?
         .arg("/C")
         .arg(cmd)
         .stdin(Stdio::piped())

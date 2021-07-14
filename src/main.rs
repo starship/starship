@@ -1,3 +1,5 @@
+#![warn(clippy::disallowed_method)]
+
 use clap::crate_authors;
 use std::io;
 use std::time::SystemTime;

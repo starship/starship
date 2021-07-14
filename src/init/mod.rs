@@ -1,3 +1,4 @@
+use crate::utils::create_command;
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{env, io};
@@ -51,9 +52,7 @@ impl StarshipPath {
             return self.sprint();
         }
         let str_path = self.str_path()?;
-        let res = std::process::Command::new("cygpath.exe")
-            .arg(str_path)
-            .output();
+        let res = create_command("cygpath").and_then(|mut cmd| cmd.arg(str_path).output());
         let output = match res {
             Ok(output) => output,
             Err(e) => {

@@ -1,0 +1,2 @@
+# std::process::Command::new may inadvertly run executables from the current working directory
+disallowed-methods = ["std::process::Command::new"]

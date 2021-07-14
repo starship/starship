@@ -103,9 +103,9 @@ mod tests {
     use std::fs;
     use std::io;
     use std::path::Path;
-    use std::process::Command;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::utils::create_command;
 
     enum Expect<'a> {
         BranchName(&'a str),
@@ -335,7 +335,7 @@ mod tests {
     }
 
     fn run_hg(args: &[&str], repo_dir: &Path) -> io::Result<()> {
-        Command::new("hg")
+        create_command("hg")?
             .args(args)
             .current_dir(&repo_dir)
             .output()?;
