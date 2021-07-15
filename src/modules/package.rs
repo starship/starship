@@ -104,7 +104,6 @@ fn extract_setup_cfg_version(file_contents: &str) -> Option<String> {
     let metadata = config.get("metadata")?;
     let raw_version = metadata.get("version")?.as_deref().unwrap_or("");
 
-    // let raw_version = config["metadata"]["version"].as_ref()?;
     let formatted_version = format_version(&raw_version);
     Some(formatted_version)
 }
