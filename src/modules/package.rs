@@ -3,7 +3,7 @@ use crate::configs::package::PackageConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
-use configparser::ini::Ini;
+use ini::Ini;
 use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
 use regex::Regex;
@@ -98,13 +98,10 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
 }
 
 fn extract_setup_cfg_version(file_contents: &str) -> Option<String> {
-    let mut cfg = Ini::new();
-    let config = cfg.read(String::from(file_contents)).ok()?;
+    let ini = Ini::load_from_str(file_contents).ok()?;
+    let raw_version = ini.get_from(Some("metadata"), "version")?;
 
-    let metadata = config.get("metadata")?;
-    let raw_version = metadata.get("version")?.as_deref().unwrap_or("");
-
-    let formatted_version = format_version(&raw_version);
+    let formatted_version = format_version(raw_version);
     Some(formatted_version)
 }
 
