@@ -261,6 +261,15 @@
    # ~/.tcshrc
 
    eval `starship init tcsh`
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```
 
 
