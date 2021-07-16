@@ -2470,9 +2470,10 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `ion_indicator`        | `ion`        | Une chaîne de format utilisée pour représenter ion.          |
 | `elvish_indicator`     | `esh`        | Une chaîne de format utilisée pour représenter elvish.       |
 | `tcsh_indicator`       | `tsh`        | Une chaîne de format utilisée pour représenter tcsh.         |
+| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
 | `format`               | `$indicator` | Format du module.                                            |
-| `disabled`             | `true`       | Désactive le module `shell`.                                 |
+| `disabled`             | `true`       | Disables the `shell` module.                                 |
 
 ### Variables
 
