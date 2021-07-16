@@ -18,7 +18,7 @@ features:
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship：跨 Shell 提示字元"
-description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 有針對 Bash、Fish、ZSH、Ion 與 Powershell 的快速安裝指南。
+description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -116,6 +116,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
    ::: warning 只有 elvish v0.15 或以上版本才有支援 :::
@@ -139,7 +140,8 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    eval `starship init tcsh`
    ```
 
-    #### Nushell
+
+   #### Nushell
 
    ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
 
@@ -150,4 +152,15 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
     "source ~/.cache/starship/init.nu"
    ]
    prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```
