@@ -1,6 +1,6 @@
 use std::fs;
 use std::path::Path;
-use std::process::{Command, Output};
+use std::process::Output;
 
 use serde::Deserialize;
 
@@ -8,6 +8,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::create_command;
 
 /// Creates a module with the current Rust version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -99,7 +100,8 @@ fn env_rustup_toolchain(context: &Context) -> Option<String> {
 }
 
 fn execute_rustup_override_list(cwd: &Path) -> Option<String> {
-    let Output { stdout, .. } = Command::new("rustup")
+    let Output { stdout, .. } = create_command("rustup")
+        .ok()?
         .args(&["override", "list"])
         .output()
         .ok()?;
@@ -188,9 +190,8 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
 }
 
 fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
-    Command::new("rustup")
-        .args(&["run", toolchain, "rustc", "--version"])
-        .output()
+    create_command("rustup")
+        .and_then(|mut cmd| cmd.args(&["run", toolchain, "rustc", "--version"]).output())
         .map(extract_toolchain_from_rustup_run_rustc_version)
         .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
 }
@@ -212,7 +213,7 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
 }
 
 fn execute_rustc_version() -> Option<String> {
-    match Command::new("rustc").arg("--version").output() {
+    match create_command("rustc").ok()?.arg("--version").output() {
         Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
         Err(_) => None,
     }

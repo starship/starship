@@ -177,9 +177,10 @@ mod tests {
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};
     use std::path::Path;
-    use std::process::{Command, Stdio};
+    use std::process::Stdio;
 
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -278,7 +279,7 @@ mod tests {
         A: IntoIterator<Item = S>,
         S: AsRef<OsStr>,
     {
-        let mut command = Command::new("git");
+        let mut command = create_command("git")?;
         command
             .args(args)
             .stdout(Stdio::null())

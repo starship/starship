@@ -298,6 +298,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
     use crate::utils::home_dir;
     use ansi_term::Color;
     #[cfg(not(target_os = "windows"))]
@@ -305,7 +306,6 @@ mod tests {
     #[cfg(target_os = "windows")]
     use std::os::windows::fs::symlink_dir as symlink;
     use std::path::Path;
-    use std::process::Command;
     use std::{fs, io};
     use tempfile::TempDir;
 
@@ -443,7 +443,7 @@ mod tests {
     }
 
     fn init_repo(path: &Path) -> io::Result<()> {
-        Command::new("git")
+        create_command("git")?
             .args(&["init"])
             .current_dir(path)
             .output()
