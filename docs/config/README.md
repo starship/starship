@@ -107,7 +107,7 @@ A conditional format string wrapped in `(` and `)` will not render if all variab
 
 For example:
 
-- `(@$region)` will show nothing if the variable `region` is `None`, otherwise `@` followed by the value of region.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
 - When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
@@ -194,6 +194,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -413,7 +414,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -791,7 +792,8 @@ truncation_symbol = "…/"
 
 The `docker_context` module shows the currently active
 [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to
-`default`.
+`default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant
+to override the context in use).
 
 ### Options
 
@@ -858,7 +860,7 @@ when there is a csproj file in the current directory.
 
 | Option              | Default                                                                                                 | Description                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                              | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                          | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
@@ -975,11 +977,25 @@ format = "via [ $version](cyan bold) "
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variable.
+The `env_var` module displays the current value of a selected environment variables.
 The module will be shown only if any of the following conditions are met:
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
+
+
+::: tip
+Multiple environmental variables can be displayed by using a `.`. (see example)
+If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
+:::
 
 ### Options
 
@@ -1009,6 +1025,17 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1229,6 +1256,48 @@ that information will be shown too.
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
+```
+
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in
+the current git repository.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option                    | Default                                                               | Description                            |
+| ------------------------- | --------------------------------------------------------------------  | ---------------------------------------|
+| `added_style`             | `"bold green"`                                                        | The style for the added count.         |
+| `deleted_style`           | `"bold red"`                                                          | The style for the deleted count.       |
+| `format`                  | `'[+$added]($added_style) [-$deleted]($deleted_style) '`              | The format for the module.             |
+| `disabled`                | `true`                                                                | Disables the `git_metrics` module.     |
+
+### Variables
+
+| Variable         | Example    | Description                                 |
+| ---------------- | ---------- | -----------------------------------         |
+| added            | `1`        | The current number of added lines           |
+| deleted          | `2`        | The current number of deleted lines         |
+| added_style\*    |            | Mirrors the value of option `added_style`   |
+| deleted_style\*  |            | Mirrors the value of option `deleted_style` |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
 ## Git Status
@@ -1486,7 +1555,7 @@ then the module will also show when there are 0 jobs running.
 
 ::: warning
 
-This module is not supported on tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2623,7 +2692,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 :::
 
 ::: warning
-This module is not supported on elvish shell.
+This module is not supported on elvish and nu shell.
 :::
 
 ### Options

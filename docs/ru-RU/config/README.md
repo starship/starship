@@ -102,7 +102,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 Например:
 
-- `(@$region)` ничего не будет показывать, если переменная `регион` в значении `None`, иначе `@` будет использовать значение этой переменной.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(некоторый текст)` всегда не показывает ничего, поскольку в скобках нет переменных.
 - Когда `$all` является ярлыком для `\[$a$b\]`, `($all)` будет показываться только если `$a` и `$b` не являются `None`. Это работает так же, как `(\[$a$b\] )`.
 
@@ -185,6 +185,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -391,7 +392,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -745,7 +746,7 @@ truncation_symbol = "…/"
 
 ## Контекст Docker
 
-Модуль `docker_context` показывает текущий активный [контекст Docker](https://docs.docker.com/engine/context/working-with-contexts/), если он не установлен как `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Опции
 
@@ -804,7 +805,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | Параметр            | По умолчанию                                                                                            | Описание                                                                  |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Формат модуля.                                                            |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | Формат модуля.                                                            |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | Символ перед отображением текущей версии dotnet.                          |
 | `heuristic`         | `true`                                                                                                  | Использовать быстрое определение версии, для сохранения скорости.         |
@@ -919,10 +920,21 @@ format = "via [ $version](cyan bold) "
 
 ## Переменная Окружения
 
-Модуль `env_var` отображает текущее значение выбранной переменной окружения. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
+The `env_var` module displays the current value of a selected environment variables. Модуль будет показан только в том случае, если любое из следующих условий соблюдено:
 
 - Опция `variable` соответствует существующей переменной среды
 - Опция `variable` не определена, но определена опция `default`
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### Опции
 
@@ -952,6 +964,17 @@ format = "via [ $version](cyan bold) "
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1169,6 +1192,46 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+
+::: tip
+
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
+:::
+
+### Опции
+
+| Параметр        | По умолчанию                                             | Описание                           |
+| --------------- | -------------------------------------------------------- | ---------------------------------- |
+| `added_style`   | `"bold green"`                                           | The style for the added count.     |
+| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | Формат модуля.                     |
+| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+
+### Переменные
+
+| Переменная        | Пример | Описание                                    |
+| ----------------- | ------ | ------------------------------------------- |
+| added             | `1`    | The current number of added lines           |
+| deleted           | `2`    | The current number of deleted lines         |
+| added_style\*   |        | Mirrors the value of option `added_style`   |
+| deleted_style\* |        | Mirrors the value of option `deleted_style` |
+
+\*: Эта переменная может использоваться только в качестве части строки style
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
 ## Статус Git
 
 Модуль `git_status` отображает символы, представляющие состояние репозитория в вашей текущей директории.
@@ -1342,13 +1405,13 @@ format = "via [⎈ $version](bold white) "
 
 ### Опции
 
-| Параметр   | По умолчанию                | Описание                                                                                                                                   |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Показывать имя хоста только при подключении к SSH-сессии.                                                                                  |
-| `trim_at`  | `"."`                       | Символы, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `""` отключит любое усечение |
-| `format`   | `"[$hostname]($style) in "` | Формат модуля.                                                                                                                             |
-| `style`    | `"bold dimmed green"`       | Стиль модуля.                                                                                                                              |
-| `disabled` | `false`                     | Отключает модуль `hostname`.                                                                                                               |
+| Параметр   | По умолчанию                | Описание                                                                                                                                 |
+| ---------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Показывать имя хоста только при подключении к SSH-сессии.                                                                                |
+| `trim_at`  | `"."`                       | Строка, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `"` отключит любое усечение |
+| `format`   | `"[$hostname]($style) in "` | Формат модуля.                                                                                                                           |
+| `style`    | `"bold dimmed green"`       | Стиль модуля.                                                                                                                            |
+| `disabled` | `false`                     | Отключает модуль `hostname`.                                                                                                             |
 
 ### Переменные
 
@@ -1416,7 +1479,7 @@ symbol = "🌟 "
 
 ::: warning
 
-This module is not supported on tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2505,7 +2568,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Опции
 

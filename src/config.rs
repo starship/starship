@@ -226,7 +226,7 @@ impl StarshipConfig {
         } else {
             // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
-            let config_path = dirs_next::home_dir()?.join(".config/starship.toml");
+            let config_path = utils::home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
@@ -341,6 +341,10 @@ impl StarshipConfig {
     /// Get the table of all the registered custom modules, if any
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
+    }
+    /// Get the table of all the registered env_var modules, if any
+    pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
+        self.get_config(&["env_var"])?.as_table()
     }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {

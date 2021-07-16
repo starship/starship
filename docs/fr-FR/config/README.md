@@ -102,7 +102,7 @@ Une chaîne de formatage conditionnel enveloppée dans `(` et `)` ne sera pas re
 
 Par exemple :
 
-- `(@$region)` ne montrera rien si la variable `région` est `None`, sinon `@` suivi de la valeur de la région.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` ne montrera toujours rien puisqu'il n'y a pas de variables enveloppées dans les accolades.
 - Lorsque `$all` est un raccourci pour `\[$a$b\]`, `($all)` ne montrera rien que si `$a` et `$b` sont tous les deux `None`. Cela fonctionne comme `(\[$a$b\] )`.
 
@@ -174,7 +174,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Est équivalent à
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -185,6 +185,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -391,7 +392,7 @@ Par défaut, seule la couleur change. Si vous désirez également changer sa for
 
 ::: warning
 
-Attention, `error_symbol` n'est pas supporté avec elvish.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -745,7 +746,7 @@ truncation_symbol = "…/"
 
 ## Contexte Docker
 
-Le module `docker_context` affiche le [contexte Docker](https://docs.docker.com/engine/context/working-with-contexts/) actuellement actif s'il n'est pas réglé à `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Options
 
@@ -804,7 +805,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | Option              | Défaut                                                                                                  | Description                                                                                |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Format du module.                                                                          |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                                                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | Le symbole utilisé avant d'afficher la version de dotnet.                                  |
 | `heuristic`         | `true`                                                                                                  | Utilisez la détection de versions plus rapide pour garder starship instantané.             |
@@ -919,10 +920,21 @@ format = "via [ $version](cyan bold) "
 
 ## Variable d'environnement
 
-Le module `env_var` affiche la valeur actuelle d'une variable d'environnement sélectionnée. Le module est affiché si l'une de ces conditions est remplie :
+The `env_var` module displays the current value of a selected environment variables. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'option `variable` correspond à une variable d'environnement existante
 - L'option `variable` n'est pas définie, mais l'option `default` l'est
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### Options
 
@@ -952,6 +964,17 @@ Le module `env_var` affiche la valeur actuelle d'une variable d'environnement s�
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1167,6 +1190,46 @@ Le module `git_state` s'affichera dans les répertoires qui font partie d'un dé
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
+```
+
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+
+::: tip
+
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+
+:::
+
+### Options
+
+| Option          | Défaut                                                   | Description                        |
+| --------------- | -------------------------------------------------------- | ---------------------------------- |
+| `added_style`   | `"bold green"`                                           | The style for the added count.     |
+| `deleted_style` | `"bold green"`                                           | The style for the deleted count.   |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | Format du module.                  |
+| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+
+### Variables
+
+| Variable          | Exemple | Description                                 |
+| ----------------- | ------- | ------------------------------------------- |
+| added             | `1`     | The current number of added lines           |
+| deleted           | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
 ## Statut Git
@@ -1416,7 +1479,7 @@ Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module n
 
 ::: warning
 
-Ce module n'est pas pris en charge sur tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2188,7 +2251,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-Le module `rlang` vous montre votre version de R actuellement installée. Le module sera affiché si l'une des conditions suivantes est remplie :
+The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
 
 - Le répertoire actuel contient un fichier avec l'extension `.R`.
 - Le répertoire actuel contient un fichier avec l'extension `.Rd`.
@@ -2506,7 +2569,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 :::
 
-::: warning Ce module n'est pas supporté avec elvish. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Options
 
@@ -2670,7 +2733,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `time_format`     | voir plus bas           | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                                  |
 | `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                     |
 | `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Range from -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
-| `disabled`        | `true`                  | Désactive le module `time`.                                                                                                                                        |
+| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
@@ -2720,7 +2783,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `style_user`  | `"bold yellow"`         | Le style utilisé pour les utilisateurs non-root. |
 | `format`      | `"[$user]($style) in "` | Format du module.                                |
 | `show_always` | `false`                 | Toujours afficher le module `username`.          |
-| `disabled`    | `false`                 | Désactive le module `username`.                  |
+| `disabled`    | `false`                 | Désactiver le module `username`.                 |
 
 ### Variables
 

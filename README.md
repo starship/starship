@@ -253,6 +253,21 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval `starship init tcsh`
    ```
 
+   #### Nushell
+
+   **Warning** This will change in the future. Only nu version v0.33 or higher is supported.
+   Add the following to your nu config file. You can check the location of this
+   file by running `config path` in nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
 ## 🤝 Contributing
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).

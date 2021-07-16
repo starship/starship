@@ -102,7 +102,7 @@ Una cadena de formato condicional envuelto en `(` y `)` no se renderizará si to
 
 Por ejemplo:
 
-- `(@$region)` no mostrará nada si la variable `region` es `None`, de lo contrario `@` seguido por el valor de la región.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(algún texto)` siempre mostrará nada ya que no hay variables envueltas entre llaves.
 - Cuando `$all` es un atajo para `\[$a$b\]`, `($all)` no mostrará nada solo si `$a` y `$b` ambos son `None`. Esto funciona igual que `(\[$a$b\] )`.
 
@@ -174,7 +174,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# El cual es equivalente a
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -185,6 +185,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -390,7 +391,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ::: aviso
 
-`error_symbol` no es compatible con el intérprete de comandos Elvish.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -744,7 +745,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-El módulo `docker_context` muestra el [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) activo si no está a `default`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Opciones
 
@@ -803,7 +804,7 @@ El módulo también mostrará el Target Framework Moniker ([https://docs.microso
 
 | Opción              | Por defecto                                                                                             | Descripción                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | El formato del módulo.                                                                  |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                                                                                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | Símbolo usado antes de mostrar la versión de .NET                                       |
 | `heuristic`         | `true`                                                                                                  | Usa una detección de versiones más rápida para mantener a starship veloz.               |
@@ -918,10 +919,21 @@ format = "via [ $version](cyan bold) "
 
 ## Variable de entorno
 
-El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
+The `env_var` module displays the current value of a selected environment variables. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
 
 - La opción de configuración de `variable` coincide con una variable de entorno existente
 - La opción de configuración de `variable` no está definida, pero la opción de configuración se encuentra `por defecto`
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### Opciones
 
@@ -951,6 +963,17 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1168,6 +1191,46 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+
+::: consejo
+
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
+
+:::
+
+### Opciones
+
+| Opción          | Por defecto                                              | Descripción                        |
+| --------------- | -------------------------------------------------------- | ---------------------------------- |
+| `added_style`   | `"bold green"`                                           | The style for the added count.     |
+| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | El formato del módulo.             |
+| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+
+### Variables
+
+| Variable          | Ejemplo | Descripción                                 |
+| ----------------- | ------- | ------------------------------------------- |
+| added             | `1`     | The current number of added lines           |
+| deleted           | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
 ## Git status
 
 El módulo `git_status` muestra símbolos que representan el estado del repositorio en su directorio actual.
@@ -1188,7 +1251,7 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 | `renamed`    | `"»"`                                           | El formato de `renamed`                  |
 | `deleted`    | `"✘"`                                           | El formato de `deleted`                  |
 | `style`      | `"bold red"`                                    | El estilo del módulo.                    |
-| `disabled`   | `false`                                         | Deshabilita el módulo `git_status`.      |
+| `disabled`   | `false`                                         | Desactiva el módulo `git_status`.        |
 
 ### Variables
 
@@ -1200,21 +1263,21 @@ Las siguientes variables se pueden utilizar en `format`:
 | `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` basado en el estado actual del repositorio |
 | `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                        |
 | `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                        |
-| `stashed`      | Muestra `stashed` cuando existe un archivo en el área de preparación para el repositorio local.          |
+| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                    |
 | `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                     |
-| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de preparación.                           |
-| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de preparación.                   |
-| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de preparación.                              |
+| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                               |
+| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                       |
+| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                  |
 | style\*      | Refleja el valor de la opción `style`                                                                    |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 Las siguientes variables pueden ser usadas en `diverged`:
 
-| Variable       | Descripción                                                    |
-| -------------- | -------------------------------------------------------------- |
-| `ahead_count`  | Número de confirmaciones por delante de la rama de seguimiento |
-| `behind_count` | Número de confirmaciones detrás de la rama de seguimiento      |
+| Variable       | Descripción                                             |
+| -------------- | ------------------------------------------------------- |
+| `ahead_count`  | Número de commits por delante de la rama de seguimiento |
+| `behind_count` | Número de commits detrás de la rama de seguimiento      |
 
 Las siguientes variales pueden ser usadas en `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` y `deleted`:
 
@@ -1341,13 +1404,13 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
-| Opción     | Por defecto                 | Descripción                                                                                                                                                            |
-| ---------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                                 |
-| `trim_at`  | `"."`                       | Cadena en la que el nombre de host se corta, después de la primera coincidencia. `"."` se detendrá después del primer punto. `""` deshabilitará cualquier truncamiento |
-| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                                                                 |
-| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                                                  |
-| `disabled` | `false`                     | Deshabilita el módulo `hostname`.                                                                                                                                      |
+| Opción     | Por defecto                 | Descripción                                                                                                                                                       |
+| ---------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                            |
+| `trim_at`  | `"."`                       | Cadena en la que el nombre de host se corta, después de la primera partida. `"."` se detendrá después del primer punto. `""` deshabilitará cualquier truncamiento |
+| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                                                            |
+| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                                             |
+| `disabled` | `false`                     | Desactiva el módulo `hostname`.                                                                                                                                   |
 
 ### Variables
 
@@ -1415,7 +1478,7 @@ El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo 
 
 ::: aviso
 
-Este módulo no está soportado en tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -1585,9 +1648,9 @@ El módulo `line_break` separa el indicador en dos líneas.
 
 ### Opciones
 
-| Opción     | Por defecto | Descripción                                                                    |
-| ---------- | ----------- | ------------------------------------------------------------------------------ |
-| `disabled` | `false`     | Deshabilita el módulo `line_break`, haciendo que el prompt sea una sola línea. |
+| Opción     | Por defecto | Descripción                                                                     |
+| ---------- | ----------- | ------------------------------------------------------------------------------- |
+| `disabled` | `false`     | Deshabilita el módulo `line_break`, haciendo que el mensaje sea una sola línea. |
 
 ### Ejemplo
 
@@ -1617,8 +1680,8 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | `detect_files`      | `[".lua-version"]`                   | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `["lua"]`                            | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold blue"`                        | El estilo del módulo.                                                                   |
-| `lua_binary`        | `"lua"`                              | Configura el binario lua que Starship ejecuta al obtener la versión.                    |
-| `disabled`          | `false`                              | Deshabilita el módulo `lua`.                                                            |
+| `lua_binary`        | `"lua"`                              | Configura el binario de lua que Starship ejecuta al obtener la versión.                 |
+| `disabled`          | `false`                              | Desactiva el módulo `lua`.                                                              |
 
 ### Variables
 
@@ -1742,7 +1805,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `detect_files`      | `["nim.cfg"]`                        | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold yellow"`                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Deshabilita el módulo `nim`.                                                            |
+| `disabled`          | `false`                              | Desactiva el módulo `nim`.                                                              |
 
 ### Variables
 
@@ -1824,7 +1887,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `detect_files`      | `["package.json", ".node-version"]`  | Qué nombres de archivo deberían activar este módulo.                                                  |
 | `detect_folders`    | `["node_modules"]`                   | Qué carpetas deberían activar este módulo.                                                            |
 | `style`             | `"bold green"`                       | El estilo del módulo.                                                                                 |
-| `disabled`          | `false`                              | Deshabilita el módulo `nodejs`.                                                                       |
+| `disabled`          | `false`                              | Desactiva el módulo `nodejs`.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
@@ -1870,7 +1933,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Qué carpetas deberían activar este módulo.                                              |
 | `style`                   | `"bold yellow"`                                                            | El estilo del módulo.                                                                   |
-| `disabled`                | `false`                                                                    | Deshabilita el módulo `ocaml`.                                                          |
+| `disabled`                | `false`                                                                    | Desactiva el módulo `ocaml`.                                                            |
 
 ### Variables
 
@@ -2074,7 +2137,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | `detect_files`      | `["spago.dhall"]`                    | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold white"`                       | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Desactiva el módulo `purescript`.                                                       |
+| `disabled`          | `false`                              | Deshabilita el módulo `purescript`.                                                     |
 
 ### Variables
 
@@ -2504,7 +2567,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: advertencia Este módulo no es compatible con el intérprete de comandos Elvish. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Opciones
 

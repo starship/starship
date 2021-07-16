@@ -23,6 +23,7 @@ pub mod erlang;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
+pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
@@ -90,11 +91,12 @@ pub struct FullConfig<'a> {
     dotnet: dotnet::DotnetConfig<'a>,
     elixir: elixir::ElixirConfig<'a>,
     elm: elm::ElmConfig<'a>,
-    env_var: env_var::EnvVarConfig<'a>,
+    env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     erlang: erlang::ErlangConfig<'a>,
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
+    git_metrics: git_metrics::GitMetricsConfig<'a>,
     git_state: git_state::GitStateConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
     golang: go::GoConfig<'a>,
@@ -164,6 +166,7 @@ impl<'a> Default for FullConfig<'a> {
             gcloud: Default::default(),
             git_branch: Default::default(),
             git_commit: Default::default(),
+            git_metrics: Default::default(),
             git_state: Default::default(),
             git_status: Default::default(),
             golang: Default::default(),

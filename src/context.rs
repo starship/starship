@@ -3,8 +3,8 @@ use crate::module::Module;
 use crate::utils::{exec_cmd, CommandOutput};
 
 use crate::modules;
+use crate::utils::{self, home_dir};
 use clap::ArgMatches;
-use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
@@ -49,6 +49,9 @@ pub struct Context<'a> {
     /// A HashMap of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
+
+    #[cfg(feature = "battery")]
+    pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
@@ -122,6 +125,8 @@ impl<'a> Context<'a> {
             env: HashMap::new(),
             #[cfg(test)]
             cmd: HashMap::new(),
+            #[cfg(feature = "battery")]
+            battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             cmd_timeout,
         }
     }
@@ -163,7 +168,7 @@ impl<'a> Context<'a> {
     pub fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
-            return dirs_next::home_dir().unwrap().join(without_home);
+            return utils::home_dir().unwrap().join(without_home);
         }
         dir
     }
@@ -251,6 +256,7 @@ impl<'a> Context<'a> {
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
+            "nu" => Shell::Nu,
             _ => Shell::Unknown,
         }
     }
@@ -487,6 +493,7 @@ pub enum Shell {
     Zsh,
     Elvish,
     Tcsh,
+    Nu,
     Unknown,
 }
 
@@ -616,7 +623,7 @@ mod tests {
 
     #[test]
     fn context_constructor_should_fall_back_to_tilde_replacement_when_canonicalization_fails() {
-        use dirs_next::home_dir;
+        use utils::home_dir;
 
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();

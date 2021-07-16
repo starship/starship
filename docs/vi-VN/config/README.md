@@ -102,7 +102,7 @@ Một điều kiện định dạng chuỗi bọc trong `(` và `)` sẽ không 
 
 Ví dụ:
 
-- `(@$region)` sẽ không hiển thị gì nếu biến `region` là `None`, ngược lại `@` theo sao bởi giá trị của region.
+- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(một vài văn bản)` sẽ không hiển thị thứ gì khi không có những biến bọc trong các dấu ngoặc.
 - Khi `$all` là một shortcut cho `\[$a$b\]`, `($all)` sẽ không hiển thị chỉ khi `$a` và `$b` đều là `None`. Cái này làm việc giống như `(\[$a$b\] )`.
 
@@ -185,6 +185,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -391,7 +392,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ::: cảnh báo
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -745,7 +746,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-Mô đun `docker_context` hiển thị [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) hiện tại được kích hoạt nếu nó không được thiết lập `mặc định`.
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Các tuỳ chọn
 
@@ -804,7 +805,7 @@ Mô đun cũng sẽ hiện Target Framework Moniker (<https://docs.microsoft.com
 
 | Tuỳ chọn            | Mặc định                                                                                                | Mô tả                                                                     |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"[$symbol($version )(🎯 $tfm )]($style)"`                                                               | Định dạng cho module.                                                     |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | Định dạng cho module.                                                     |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | Biểu tượng sử dụng để hiển thị trước phiên bản của dotnet.                |
 | `heuristic`         | `true`                                                                                                  | Sử dụng phiên bản phát hiện thông minh hơn.                               |
@@ -919,10 +920,21 @@ format = "via [ $version](cyan bold) "
 
 ## Biến môi trường
 
-Mô đun `env_var` hiển thị giá trị hiện tại của biến môi trường được chọn. Mô đun sẽ được hiển thị chỉ khi bất kì điều kiện nào sau đây thỏa mãn:
+The `env_var` module displays the current value of a selected environment variables. Mô đun sẽ được hiển thị chỉ khi bất kì điều kiện nào sau đây thỏa mãn:
 
 - Tùy chọn `variable` khớp với mootjj biến môi trường tồn tại
 - Tùy chọn `variable` không được định nghĩa, nhưng tùy chọn `default` là
+
+
+::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
 
 ### Các tuỳ chọn
 
@@ -952,6 +964,17 @@ Mô đun `env_var` hiển thị giá trị hiện tại của biến môi trư�
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1167,6 +1190,46 @@ Mô đun `git_state` sẽ hiển hiển thị trong các thư mục là một ph
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
+```
+
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+
+::: thử thuật
+
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+
+:::
+
+### Các tuỳ chọn
+
+| Tuỳ chọn        | Mặc định                                                 | Mô tả                              |
+| --------------- | -------------------------------------------------------- | ---------------------------------- |
+| `added_style`   | `"bold green"`                                           | The style for the added count.     |
+| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | Định dạng cho module.              |
+| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+
+### Các biến
+
+| Biến              | Ví dụ | Mô tả                                       |
+| ----------------- | ----- | ------------------------------------------- |
+| added             | `1`   | The current number of added lines           |
+| deleted           | `2`   | The current number of deleted lines         |
+| added_style\*   |       | Mirrors the value of option `added_style`   |
+| deleted_style\* |       | Mirrors the value of option `deleted_style` |
+
+\*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 ```
 
 ## Git Status
@@ -1416,7 +1479,7 @@ symbol = "🌟 "
 
 ::: cảnh báo
 
-Mô đun này không hỗ trợ trên tcsh.
+This module is not supported on tcsh and nu.
 
 :::
 
@@ -2505,7 +2568,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 :::
 
-::: warning This module is not supported on elvish shell. :::
+::: warning This module is not supported on elvish and nu shell. :::
 
 ### Các tuỳ chọn
 
