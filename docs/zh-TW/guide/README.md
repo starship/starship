@@ -147,7 +147,7 @@
 
 ### 入門
 
-**備註：**由於不同平台的數量眾多，下方僅顯示部分已支持平台。 找不到屬於自己的平台？ Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**備註：**由於不同平台的數量眾多，下方僅顯示部分已支持平台。 找不到屬於自己的平台？ 我想你可以來[額外平台說明](https://starship.rs/installing/)看看。
 
 1. 安裝 **starship** 執行檔：
 
@@ -155,7 +155,7 @@
    #### 安裝最新版本
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### 從預構建的二進制包，並且使用 Shell 命令：
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
@@ -163,7 +163,7 @@
    如果想更新已安裝的 Starship，請重新執行上述指令。 指令只會更新 Starship 執行檔本身，不會影響到任何已撰寫的設定檔。
 
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **備註** —— 安裝腳本的預設值可以被覆蓋，請使用以下指令查看內置說明。
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -173,7 +173,7 @@
    #### 使用套件管理器安裝：
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### 使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
