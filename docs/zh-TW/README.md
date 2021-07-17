@@ -143,7 +143,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning This will change in the future. 只支援 nu v0.33 以上的版本。 ::: Add the following to your nu config file. 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [
