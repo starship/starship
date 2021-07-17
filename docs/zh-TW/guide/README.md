@@ -224,7 +224,7 @@
 
    #### PowerShell
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，在 NixOS，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -275,7 +275,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **警告**：這可能會在未來改變。 只支援 nu v0.33 以上的版本。 將以下內容放到你的 nu 設定檔裡， 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [
