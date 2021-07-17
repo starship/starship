@@ -126,10 +126,10 @@
 
 **適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
+- **快：**很快 —— 非常非常快！ 🚀
+- **可定制：**定制 Shell 的方方面面。
+- **通用：**適用於任何 Shell 以及作業系統。
+- **智能：**一目了然地顯示相關信息。
 - **Feature rich:** support for all your favorite tools.
 - **Easy:** quick to install – start using it in minutes.
 
