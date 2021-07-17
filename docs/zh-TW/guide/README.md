@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship – 跨 Shell 的提示字元"
  />
 </p>
 
@@ -30,7 +30,7 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="在推特上追蹤 @StarshipPrompt"
  /></a>
 </p>
 
@@ -290,18 +290,18 @@
 
 我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果您精通非英語語言，並能協助我們在文檔上的翻譯保持最新狀態，我們會非常感謝！ 如果你想要提供翻譯，可以到 [Starship Crowdin](https://translate.starship.rs/) 上提交您的貢獻。
 
 如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
 
 ### 專案貢獻者
 
-This project exists thanks to all the people who contribute. [[我要貢獻](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
+感謝所有做出貢獻的人，使這個專案能夠存在。 [[我要貢獻](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### 專案資助者
 
-成為專案資助者，推動社群永續經營 [[Contribute](https://opencollective.com/starship/contribute)]
+成為專案資助者，推動社群永續經營 [[成為贊助者](https://opencollective.com/starship/contribute)]
 
 #### 個人
 
@@ -309,7 +309,7 @@ This project exists thanks to all the people who contribute. [[我要貢獻](htt
 
 #### 組織
 
-以組織名義資助專案 這裏會產生一個能連向您組織網站的連結標誌。 [[Contribute](https://opencollective.com/starship/contribute)]
+以組織名義資助專案 這裏會產生一個能連向您組織網站的連結標誌。 [[成為贊助者](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
