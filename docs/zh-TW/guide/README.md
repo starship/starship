@@ -35,11 +35,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">網站</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">安裝</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">設定</a>
 </p>
 
 <p align="center">
@@ -127,14 +127,14 @@
 **適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
 - **快：**很快 —— 非常非常快！ 🚀
-- **可定制：**定制 Shell 的方方面面。
+- **可定制：**全方面定制你的提示訊息以及圖示。
 - **通用：**適用於任何 Shell 以及作業系統。
 - **智能：**一目了然地顯示相關信息。
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **豐富的功能：**支援所以有你喜歡的工具。
+- **易用：**安裝快速 —— 幾分鐘內就可以開始使用。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -143,11 +143,11 @@
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 至少安裝一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
 
 ### 入門
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**備註：**由於不同平台的數量眾多，下方僅顯示部分已支持平台。 找不到屬於自己的平台？ Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
 1. 安裝 **starship** 執行檔：
 
