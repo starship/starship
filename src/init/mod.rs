@@ -1,3 +1,4 @@
+use crate::utils::create_command;
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{env, io};
@@ -51,9 +52,7 @@ impl StarshipPath {
             return self.sprint();
         }
         let str_path = self.str_path()?;
-        let res = std::process::Command::new("cygpath.exe")
-            .arg(str_path)
-            .output();
+        let res = create_command("cygpath").and_then(|mut cmd| cmd.arg(str_path).output());
         let output = match res {
             Ok(output) => output,
             Err(e) => {
@@ -136,9 +135,9 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                 local minor="${{BASH_VERSINFO[1]}}"
 
                 if ((major > 4)) || {{ ((major == 4)) && ((minor >= 1)); }}; then
-                    source <("{0}" init bash --print-full-init)
+                    source <({0} init bash --print-full-init)
                 else
-                    source /dev/stdin <<<"$("{0}" init bash --print-full-init)"
+                    source /dev/stdin <<<"$({0} init bash --print-full-init)"
                 fi
             }}
             __main
@@ -169,6 +168,10 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint_posix()?
         ),
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint_posix()?),
+        "xonsh" => print!(
+            r#"execx($({} init xonsh --print-full-init))"#,
+            starship.sprint_posix()?
+        ),
         _ => {
             let quoted_arg = shell_words::quote(shell_basename);
             println!(
@@ -182,6 +185,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * tcsh\\n\
                  * zsh\\n\
                  * nu\\n\
+                 * xonsh\\n\
                  \\n\
                  Please open an issue in the starship repo if you would like to \
                  see support for %s:\\nhttps://github.com/starship/starship/issues/new\\n\\n\" {0} {0}",
@@ -205,6 +209,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
         "ion" => print_script(ION_INIT, &starship_path.sprint()?),
         "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
         "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
+        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -251,6 +256,8 @@ const ELVISH_INIT: &str = include_str!("starship.elv");
 const TCSH_INIT: &str = include_str!("starship.tcsh");
 
 const NU_INIT: &str = include_str!("starship.nu");
+
+const XONSH_INIT: &str = include_str!("starship.xsh");
 
 #[cfg(test)]
 mod tests {

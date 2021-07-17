@@ -812,9 +812,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.95"
+version = "0.2.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "789da6d93f1b866ffe175afc5322a4d76c038605a1c3319bb57b06967ca98a36"
+checksum = "320cfe77175da3a483efed4bc0adc1968ca050b098ce4f2f1c13a56626128790"
 
 [[package]]
 name = "libgit2-sys"
@@ -994,9 +994,9 @@ dependencies = [
 
 [[package]]
 name = "nix"
-version = "0.21.0"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c3728fec49d363a50a8828a190b379a446cc5cf085c06259bbbeb34447e4ec7"
+checksum = "cf1e25ee6b412c2a1e3fcb6a4499a5c1bfe7f43e014bdce9a6b6666e5aa2d187"
 dependencies = [
  "bitflags 1.2.1",
  "cc",
@@ -1341,9 +1341,9 @@ dependencies = [
 
 [[package]]
 name = "process_control"
-version = "3.0.1"
+version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72770c250bec5862264169dc3a2f7baa46ff6fa52f72d793e15904c5aa3adb7f"
+checksum = "f58e4014e4044c192e428de63277504298583339889483bcbaf9ba91a532b2ec"
 dependencies = [
  "crossbeam-channel",
  "libc",
@@ -1686,7 +1686,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "0.55.0"
+version = "0.56.0"
 dependencies = [
  "ansi_term 0.12.1",
  "attohttpc",
@@ -1701,7 +1701,7 @@ dependencies = [
  "log",
  "mockall",
  "native-tls",
- "nix 0.21.0",
+ "nix 0.22.0",
  "notify-rust",
  "once_cell",
  "open",
@@ -1978,9 +1978,9 @@ dependencies = [
 
 [[package]]
 name = "urlencoding"
-version = "1.3.3"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a1f0175e03a0973cf4afd476bef05c26e228520400eb1fd473ad417b1c00ffb"
+checksum = "d95bbc99edfcbbd61cc6e43dab325bbff0aa481fec3996051ada8409d506d528"
 
 [[package]]
 name = "utf8-width"

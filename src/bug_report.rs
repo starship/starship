@@ -212,6 +212,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "zsh" => Some(".zshrc"),
             "elvish" => Some(".elvish/rc.elv"),
             "tcsh" => Some(".tcshrc"),
+            "xonsh" => Some(".xonshrc"),
             _ => None,
         }
         .map(|path| home_dir.join(path))
@@ -263,18 +264,6 @@ mod tests {
         assert!(link.contains("2.3.4"));
         assert!(link.contains("No+config"));
         assert!(link.contains("No+Starship+config"));
-    }
-
-    #[test]
-    fn test_get_shell_info() {
-        env::remove_var("STARSHIP_SHELL");
-        let unknown_shell = get_shell_info();
-        assert_eq!(UNKNOWN_SHELL, &unknown_shell.name);
-
-        env::set_var("STARSHIP_SHELL", "fish");
-
-        let fish_shell = get_shell_info();
-        assert_eq!("fish", &fish_shell.name);
     }
 
     #[test]

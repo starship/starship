@@ -105,10 +105,10 @@ fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
 #[cfg(test)]
 mod tests {
     use ansi_term::Color;
-    use std::process::Command;
     use std::{io, str};
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::utils::create_command;
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -128,7 +128,7 @@ mod tests {
     fn test_render_commit_hash() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        let mut git_output = Command::new("git")
+        let mut git_output = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -160,7 +160,7 @@ mod tests {
     fn test_render_commit_hash_len_override() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        let mut git_output = Command::new("git")
+        let mut git_output = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -207,12 +207,12 @@ mod tests {
     fn test_render_commit_hash_only_detached_on_detached() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["checkout", "@~1"])
             .current_dir(&repo_dir.path())
             .output()?;
 
-        let mut git_output = Command::new("git")
+        let mut git_output = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -240,7 +240,7 @@ mod tests {
     fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        let mut git_commit = Command::new("git")
+        let mut git_commit = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -248,7 +248,7 @@ mod tests {
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        let git_tag = Command::new("git")
+        let git_tag = create_command("git")?
             .args(&["describe", "--tags", "--exact-match", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -283,17 +283,17 @@ mod tests {
     fn test_render_commit_hash_only_detached_on_detached_with_tag_enabled() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["checkout", "@~1"])
             .current_dir(&repo_dir.path())
             .output()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["tag", "tagOnDetached", "-m", "Testing tags on detached"])
             .current_dir(&repo_dir.path())
             .output()?;
 
-        let mut git_commit = Command::new("git")
+        let mut git_commit = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -301,7 +301,7 @@ mod tests {
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        let git_tag = Command::new("git")
+        let git_tag = create_command("git")?
             .args(&["describe", "--tags", "--exact-match", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -337,7 +337,7 @@ mod tests {
 
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        let mut git_commit = Command::new("git")
+        let mut git_commit = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
             .output()?
@@ -345,7 +345,7 @@ mod tests {
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        Command::new("git")
+        create_command("git")?
             .args(&["tag", "v2", "-m", "Testing tags v2"])
             .current_dir(&repo_dir.path())
             .output()?;
@@ -353,17 +353,17 @@ mod tests {
         // Wait one second between tags
         thread::sleep(time::Duration::from_millis(1000));
 
-        Command::new("git")
+        create_command("git")?
             .args(&["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
             .current_dir(&repo_dir.path())
             .output()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["tag", "v1", "-m", "Testing tags v1"])
             .current_dir(&repo_dir.path())
             .output()?;
 
-        let git_tag = Command::new("git")
+        let git_tag = create_command("git")?
             .args(&[
                 "for-each-ref",
                 "--contains",

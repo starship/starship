@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.55.0"
+version = "0.56.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -55,7 +55,7 @@ pest = "2.1.3"
 pest_derive = "2.1.0"
 regex = "1.5.4"
 os_info = "3.0.6"
-urlencoding = "1.3.3"
+urlencoding = "2.0.0"
 open = "1.7.0"
 unicode-width = "0.1.8"
 term_size = "0.3.2"
@@ -70,7 +70,7 @@ shadow-rs = "0.6.2"
 versions = "3.0.2"
 strsim = "0.10.0"
 
-process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
+process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.17.0", optional = true, default-features = false, features = ["tls", "form"] }
@@ -87,7 +87,7 @@ winapi = { version = "0.3.9", features = [
 ] }
 
 [target.'cfg(not(windows))'.dependencies]
-nix = "0.21.0"
+nix = "0.22.0"
 
 [build-dependencies]
 shadow-rs = "0.6.2"

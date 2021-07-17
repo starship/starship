@@ -14,6 +14,7 @@ pub struct ShellConfig<'a> {
     pub elvish_indicator: &'a str,
     pub tcsh_indicator: &'a str,
     pub nu_indicator: &'a str,
+    pub xonsh_indicator: &'a str,
     pub unknown_indicator: &'a str,
     pub disabled: bool,
 }
@@ -30,6 +31,7 @@ impl<'a> Default for ShellConfig<'a> {
             elvish_indicator: "esh",
             tcsh_indicator: "tsh",
             nu_indicator: "nu",
+            xonsh_indicator: "xsh",
             unknown_indicator: "",
             disabled: true,
         }

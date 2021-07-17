@@ -345,10 +345,10 @@ enum FileType {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
     use ansi_term::Color;
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
-    use std::process::Command;
     use tempfile::{self, TempDir};
 
     #[test]
@@ -551,7 +551,7 @@ mod tests {
         let repo_dir = tempfile::tempdir()?;
 
         if is_repo {
-            Command::new("git")
+            create_command("git")?
                 .args(&["init", "--quiet"])
                 .current_dir(repo_dir.path())
                 .output()?;

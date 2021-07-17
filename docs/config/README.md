@@ -995,6 +995,7 @@ Example: following configuration will display value of USER environment variable
 [env_var.USER]
 default = "unknown user"
 ```
+:::
 
 ### Options
 
@@ -2586,6 +2587,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `ion_indicator`        | `ion`         | A format string used to represent ion.                       |
 | `elvish_indicator`     | `esh`         | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`         | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |               | The default value to be displayed when the shell is unknown. |
 | `format`               | `$indicator ` | The format for the module.                                   |
 | `disabled`             | `true`        | Disables the `shell` module.                                 |

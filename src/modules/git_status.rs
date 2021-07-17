@@ -309,9 +309,9 @@ mod tests {
     use std::fs::{self, File};
     use std::io;
     use std::path::Path;
-    use std::process::Command;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::utils::create_command;
 
     /// Right after the calls to git the filesystem state may not have finished
     /// updating yet causing some of the tests to fail. These barriers are placed
@@ -524,7 +524,7 @@ mod tests {
 
         create_untracked(&repo_dir.path())?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["config", "status.showUntrackedFiles", "no"])
             .current_dir(repo_dir.path())
             .output()?;
@@ -546,7 +546,7 @@ mod tests {
 
         create_stash(&repo_dir.path())?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
@@ -569,7 +569,7 @@ mod tests {
         create_stash(&repo_dir.path())?;
         barrier();
 
-        Command::new("git")
+        create_command("git")?
             .args(&["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
@@ -751,7 +751,7 @@ mod tests {
         let worktree_dir = tempfile::tempdir()?;
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&[
                 "config",
                 "core.worktree",
@@ -781,11 +781,11 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
         File::create(repo_dir.path().join("a"))?.sync_all()?;
         File::create(repo_dir.path().join("b"))?.sync_all()?;
-        Command::new("git")
+        create_command("git")?
             .args(&["add", "--all"])
             .current_dir(&repo_dir.path())
             .output()?;
-        Command::new("git")
+        create_command("git")?
             .args(&["commit", "-m", "add new files", "--no-gpg-sign"])
             .current_dir(&repo_dir.path())
             .output()?;
@@ -814,7 +814,7 @@ mod tests {
     fn ahead(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(&repo_dir)
             .output()?;
@@ -824,7 +824,7 @@ mod tests {
     }
 
     fn behind(repo_dir: &Path) -> io::Result<()> {
-        Command::new("git")
+        create_command("git")?
             .args(&["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
@@ -834,7 +834,7 @@ mod tests {
     }
 
     fn diverge(repo_dir: &Path) -> io::Result<()> {
-        Command::new("git")
+        create_command("git")?
             .args(&["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
@@ -842,7 +842,7 @@ mod tests {
 
         fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
@@ -852,7 +852,7 @@ mod tests {
     }
 
     fn create_conflict(repo_dir: &Path) -> io::Result<()> {
-        Command::new("git")
+        create_command("git")?
             .args(&["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
@@ -860,19 +860,19 @@ mod tests {
 
         fs::write(repo_dir.join("readme.md"), "# goodbye")?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["add", "."])
             .current_dir(repo_dir)
             .output()?;
         barrier();
 
-        Command::new("git")
+        create_command("git")?
             .args(&["commit", "-m", "Change readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
         barrier();
 
-        Command::new("git")
+        create_command("git")?
             .args(&["pull", "--rebase"])
             .current_dir(repo_dir)
             .output()?;
@@ -885,7 +885,7 @@ mod tests {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
         barrier();
 
-        Command::new("git")
+        create_command("git")?
             .args(&["stash", "--all"])
             .current_dir(repo_dir)
             .output()?;
@@ -903,7 +903,7 @@ mod tests {
     fn create_added(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["add", "-A", "-N"])
             .current_dir(repo_dir)
             .output()?;
@@ -921,7 +921,7 @@ mod tests {
     fn create_staged(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["add", "."])
             .current_dir(repo_dir)
             .output()?;
@@ -931,13 +931,13 @@ mod tests {
     }
 
     fn create_renamed(repo_dir: &Path) -> io::Result<()> {
-        Command::new("git")
+        create_command("git")?
             .args(&["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
         barrier();
 
-        Command::new("git")
+        create_command("git")?
             .args(&["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
