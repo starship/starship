@@ -24,6 +24,7 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     result
 }
 
+// Reads command output from stderr or stdout depending on to which stream program streamed it's output
 pub fn get_command_string_output(command: CommandOutput) -> String {
     if command.stdout.is_empty() {
         command.stderr
@@ -31,6 +32,7 @@ pub fn get_command_string_output(command: CommandOutput) -> String {
         command.stdout
     }
 }
+
 /// Attempt to resolve `binary_name` from and creates a new `Command` pointing at it
 /// This allows executing cmd files on Windows and prevents running executable from cwd on Windows
 /// This function also initialises std{err,out,in} to protect against processes changing the console mode
