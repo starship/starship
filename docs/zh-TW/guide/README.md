@@ -261,6 +261,8 @@
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
 
    #### Xonsh
 
@@ -275,7 +277,7 @@
 
    #### Nushell
 
-   **警告**：這可能會在未來改變。 只支援 nu v0.33 以上的版本。 將以下內容放到你的 nu 設定檔裡， 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
+   **Warning** This will change in the future. 只支援 nu v0.33 以上的版本。 Add the following to your nu config file. 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [
