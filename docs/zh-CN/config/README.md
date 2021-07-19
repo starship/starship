@@ -49,7 +49,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 ### 术语
 
-**组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 例如，如果您当前的目录是 Node.js 项目，“nodejs” 模块会显示当前安装在您电脑上的 Node.js 的版本。
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
@@ -142,12 +142,12 @@ format = '''
 
 ### 配置项
 
-| Option            | 默认值                           | 描述                                                           |
-| ----------------- | ----------------------------- | ------------------------------------------------------------ |
-| `format`          | [见下文](#default-prompt-format) | Configure the format of the prompt.                          |
-| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                   |
-| `command_timeout` | `500`                         | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                        | Inserts blank line between shell prompts.                    |
+| Option            | 默认值                           | 描述                          |
+| ----------------- | ----------------------------- | --------------------------- |
+| `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                   |
+| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。  |
+| `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。 |
+| `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。          |
 
 ### 示例
 
@@ -167,7 +167,7 @@ scan_timeout = 10
 add_newline = false
 ```
 
-### Default Prompt Format
+### 默认提示符格式
 
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. 默认设置如下：
 
