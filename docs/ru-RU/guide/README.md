@@ -261,6 +261,8 @@
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
 
    #### Xonsh
 
