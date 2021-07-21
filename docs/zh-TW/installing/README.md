@@ -3,11 +3,11 @@
 要安裝 starship，你必須做兩件事：
 
 1. 下載 **starship** 執行檔到你的電腦裡
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. 修改 shell 的初始化腳本，讓其使用 starship 作為提示字元
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+對大部分的使用者來說，在[主頁面](/guide/#🚀-installation)的安裝指引皆足以正常運作。 然而，對於一些較特別的平台，我們需要不同的安裝指引。
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+有太多平台不適用於主要的 README.md 檔案了，所以這裡有一些來自社群的其他平台的安裝指引。 Is yours not here? Please do add it here if you figure it out!
 
 ## [Chocolatey](https://chocolatey.org)
 
