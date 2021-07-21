@@ -60,13 +60,13 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 如果你看見了一些不認得的符號，你可以使用 `starship explain` 來列出當下顯示出的 modules 的解釋。
 
-## Why don't I see a glyph symbol in my prompt?
+## 為什麼我無法在我的提示字元中看到字形符號？
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+會導致這種狀況，通常是因為系統配置錯誤。 有些 Linux 發行版不支援開箱即用的字體。 你需要確保：
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- 你的當地語言設置為 UTF-8，如 `de_DE.UTF-8` 或 `ja_JP.UTF-8`。 如果 `LC_ALL` 不是 UTF-8，[你會需要改變他](https://www.tecmint.com/set-system-locales-in-linux/)。
+- 你已經安裝一個表情符號字體。 大多數的系統在預設情況下皆有支持表情符號字體，然後有些（尤其 Arch Linux）沒有。 你通常可以透過系統的套件管理器安裝一個表情符號字體 —— [noto emoji](https://www.google.com/get/noto/help/emoji/) 是個受歡迎的選擇。
+- 你正在使用 [Nerd Font](https://www.nerdfonts.com/)。
 
 To test your system, run the following commands in a terminal:
 
