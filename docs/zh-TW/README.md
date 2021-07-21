@@ -8,17 +8,17 @@ actionLink: ./guide/
 features:
   - 
     title: 兼容性優先
-    details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 到處使用它吧！
+    details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 在各處使用它吧！
   - 
-    title: 由 Rust 支持
-    details: 帶來同類最快速度以及 Rust 的安全性，讓你的提示字元盡可能快速與可靠。
+    title: 以 Rust 開發
+    details: 帶來同類中最快的速度以及 Rust 的安全性，讓你的提示字元盡可能快速與可靠。
   - 
     title: 可客製化
     details: 任何些微的細節都可以隨你喜愛地客製化，讓你的提示字元可以隨你所欲地最小化或是充滿各種特色。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship：跨 Shell 提示字元"
-description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 針對 Bash、Fish、ZSH、Ion、Tcsh、Elvish、Nu、Xonsh 以及 Powershell 有快速安裝可供使用。
 ---
 
 <div class="center">
