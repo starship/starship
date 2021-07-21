@@ -37,7 +37,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### 獲得二進制檔
+### 獲得執行檔
 
 #### 命令式
 
@@ -77,7 +77,7 @@ home-manager switch
 
 #### 聲明式、全系統，使用 NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+將 `pkgs.starship` 添加至 `configuration.nix` 檔案內的 `environment.systemPackages` 下，並且執行
 
 ```sh
 sudo nixos-rebuild switch
