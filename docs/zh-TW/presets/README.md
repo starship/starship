@@ -1,6 +1,6 @@
-# Presets
+# 預設配置
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+這裡蒐集了社群提交的 Starship 預設配置。 If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
 ## Nerd Font Symbols
 
