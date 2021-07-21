@@ -4,9 +4,9 @@
 
 ## Nerd Font 符號
 
-這個預設樣式不會更改每個模組使用的符號外的任何東西。 如果你不喜歡 emojis，這個可能會是你所中意的！
+這個預設樣式不會更改每個模組使用的符號外的任何東西。 如果你不喜歡使用 emojis，這個可能會是你所中意的！
 
-![Nerd Font 預設配置的截圖](/presets/nerd-font-symbols.png)
+![Nerd Font 預設樣式的截圖](/presets/nerd-font-symbols.png)
 
 ### 先決要求
 
@@ -90,15 +90,15 @@ symbol = "ﯣ "
 
 ## 括號片段
 
-這個預設配置使所有模組使用括號片段內的格式顯示，而非使用 Starship 預設（"via", "on", etc.）。
+這個預設樣式使所有模組使用括號片段內的格式顯示，而非使用 Starship 預設（"via", "on", etc.）。
 
 變更前：
 
-![預設 Starship 設置的截圖](/presets/bracketed-segments-before.png)
+![預設 Starship 樣式的截圖](/presets/bracketed-segments-before.png)
 
 變更後：
 
-![括號片段預設配置的截圖](/presets/bracketed-segments-after.png)
+![括號片段預設樣式的截圖](/presets/bracketed-segments-after.png)
 
 ### 設定
 
@@ -241,15 +241,15 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## 純文字符號
 
-這個預設配置將符號換成了純文本。 如果你的終端 / 字體無法渲染 NerdFonts/emojis，或許你該試試這套配置！
+這個預設樣式將符號換成了純文本。 如果你的終端 / 字體無法渲染 NerdFonts/emojis，或許你該試試這套樣式！
 
-變更前（預設設置搭配 Fixedsys font）：
+變更前（預設，搭配 Fixedsys font）：
 
-![預設 Starship 設置搭配 Fixedsys font 的截圖](/presets/plain-text-symbols-before.png)
+![預設 Starship 樣式搭配 Fixedsys font 的截圖](/presets/plain-text-symbols-before.png)
 
 變更後（純文字符號）：
 
-![純文字符號預設配置的截圖](/presets/plain-text-symbols-after.png)
+![純文字符號預設樣式的截圖](/presets/plain-text-symbols-after.png)
 
 ### 設定
 
@@ -365,9 +365,9 @@ symbol = "swift "
 
 ## 隱藏執行環境版本
 
-這個預設配置隱藏了各個語言的執行環境版本。 如果你在容器或者虛擬環境中工作，那麼這個配置是為你設計的！
+這個預設樣式隱藏了各個語言的執行環境版本。 如果你在容器或者虛擬環境中工作，那麼這個樣式是為你設計的！
 
-![隱藏運行版本預設配置的截圖](/presets/hide-runtime-versions.png)
+![隱藏運行版本預設樣式的截圖](/presets/hide-runtime-versions.png)
 
 ### 設定
 
