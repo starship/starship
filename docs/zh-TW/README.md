@@ -30,7 +30,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用。
 
 ### 快速安裝
 
@@ -99,7 +99,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Powershell
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，若是在 -Nix 上，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -143,7 +143,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Nushell
 
-   ::: warning This will change in the future. 只支援 nu v0.33 以上的版本。 ::: Add the following to your nu config file. 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
+   ::: warning 這項設定可能在未來改變 只支援 nu v0.33 以上的版本。 ::: 將以下內容放到你的 nu 設定檔裡， 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   將以下內容放到 `~/.xonshrc` 的結尾：
 
    ```sh
    # ~/.xonshrc
