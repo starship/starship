@@ -1,6 +1,6 @@
 # 設定
 
-為了開始設定 Starship，請建立下右檔案： `~/.config/starship.toml`.
+要開始設定 Starship，請先建立檔案： `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
@@ -21,13 +21,13 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+你可以透過更改環境變數 `STARSHIP_CONFIG` 來變更設定檔存放的位置：
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
@@ -41,7 +41,7 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
