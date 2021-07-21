@@ -62,22 +62,22 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 ## 為什麼我無法在我的提示字元中看到字形符號？
 
-會導致這種狀況，通常是因為系統配置錯誤。 有些 Linux 發行版不支援開箱即用的字體。 你需要確保：
+會導致這種狀況，通常是因為系統配置錯誤。 有些 Linux 發行版不支援隨開隨用的字體。 你需要確保：
 
 - 你的當地語言設置為 UTF-8，如 `de_DE.UTF-8` 或 `ja_JP.UTF-8`。 如果 `LC_ALL` 不是 UTF-8，[你會需要改變他](https://www.tecmint.com/set-system-locales-in-linux/)。
 - 你已經安裝一個表情符號字體。 大多數的系統在預設情況下皆有支持表情符號字體，然後有些（尤其 Arch Linux）沒有。 你通常可以透過系統的套件管理器安裝一個表情符號字體 —— [noto emoji](https://www.google.com/get/noto/help/emoji/) 是個受歡迎的選擇。
 - 你正在使用 [Nerd Font](https://www.nerdfonts.com/)。
 
-To test your system, run the following commands in a terminal:
+要測試你的系統，你可以在終端中執行以下指令：
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+第一行指令應該會顯示一個 [snake emoji](https://emojipedia.org/snake/)，同時，第二行指令應該顯示 [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)。
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+如果任何一個符號顯示錯誤，代表你的系統配置仍然是錯誤的。 不幸的是，正確的設置字體有時候是件困難的事。 Discord 上的使用者可能可以提供協助。 如果兩種符號皆正確顯示，但你仍然無法在 starship 中看到他們，請[發送 bug 回報](https://github.com/starship/starship/issues/new/choose)！
 
 ## 我要如何從電腦中移除 Starship？
 
@@ -91,6 +91,6 @@ If either symbol fails to display correctly, your system is still misconfigured.
 如果你是透過安裝腳本來安裝 Starship 的，可以執行以下的命令來移除執行檔。
 
 ```sh
-# Locate and delete the starship binary
+# 定位並且刪除 starship 執行檔
 sh -c 'rm "$(which starship)"'
 ```
