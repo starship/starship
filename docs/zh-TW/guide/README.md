@@ -143,7 +143,7 @@
 
 ### 先決要求
 
-- 至少安裝一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
+- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
 
 ### 入門
 
@@ -224,7 +224,7 @@
 
    #### PowerShell
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，在 NixOS，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，若是在 -Nix 上，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```powershell
    Invoke-Expression (&starship init powershell)
