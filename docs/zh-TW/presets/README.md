@@ -6,7 +6,7 @@
 
 這個預設配置不會更改每個模組使用的符號外的任何東西。 如果你不喜歡 emojis，這個可能會是你所中意的！
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Nerd Font 預設配置的截圖](/presets/nerd-font-symbols.png)
 
 ### 先決要求
 
@@ -88,17 +88,17 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## 括號片段
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+這個預設配置使所有模組使用括號片段內的格式顯示，而非使用 Starship 預設（"via", "on", etc.）。
 
-Before:
+變更前：
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![預設 Starship 設置的截圖](/presets/bracketed-segments-before.png)
 
-After:
+變更後：
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![括號片段設置的截圖](/presets/bracketed-segments-after.png)
 
 ### 設定
 
@@ -239,15 +239,15 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## 純文字符號
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+這個預設配置將符號換成了純文本。 如果你的終端 / 字體無法渲染 NerdFonts/emojis，或許你該試試這套配置！
 
-Before (default setting with Fixedsys font):
+變更前（預設設置搭配 Fixedsys font）：
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![預設 Starship 設置搭配 Fixedsys font 的截圖](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+變更後（純文字符號）：
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
@@ -363,9 +363,9 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## 隱藏執行環境版本
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+這個預設配置隱藏了各個語言的執行環境版本。 如果你在容器或者虛擬環境中工作，那麼這個配置是為你設計的！
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
