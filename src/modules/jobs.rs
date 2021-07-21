@@ -41,7 +41,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .parse::<i64>()
         .ok()?;
 
-    if num_of_jobs == 0 && config.threshold > 0 {
+    if num_of_jobs == 0
+        && config.threshold > 0
+        && config.number_threshold > 0
+        && config.symbol_threshold > 0
+    {
         return None;
     }
 
@@ -129,6 +133,96 @@ mod test {
     }
 
     #[test]
+    fn config_default_is_present_jobs_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 1
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_default_is_present_jobs_2() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 1
+            })
+            .jobs(2)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_conflicting_thresholds_default_jobs_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 1
+                number_threshold = 2
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_conflicting_thresholds_default_no_symbol_jobs_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 1
+                symbol_threshold = 0
+                number_threshold = 2
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_conflicting_thresholds_no_symbol_jobs_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 0
+                symbol_threshold = 0
+                number_threshold = 2
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_conflicting_thresholds_jobs_2() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                threshold = 1
+                number_threshold = 2
+            })
+            .jobs(2)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn config_2_job_2() {
         let actual = ModuleRenderer::new("jobs")
             .config(toml::toml! {
@@ -143,6 +237,35 @@ mod test {
     }
 
     #[test]
+    fn config_number_2_job_2() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                number_threshold = 2
+            })
+            .jobs(2)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_number_2_symbol_3_job_2() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                number_threshold = 2
+                symbol_threshold = 3
+            })
+            .jobs(2)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("2")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn config_2_job_3() {
         let actual = ModuleRenderer::new("jobs")
             .config(toml::toml! {
@@ -153,6 +276,36 @@ mod test {
             .collect();
 
         let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_thresholds_0_jobs_0() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                number_threshold = 0
+                symbol_threshold = 0
+            })
+            .jobs(0)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_thresholds_0_jobs_1() {
+        let actual = ModuleRenderer::new("jobs")
+            .config(toml::toml! {
+                [jobs]
+                number_threshold = 0
+                symbol_threshold = 0
+            })
+            .jobs(1)
+            .collect();
+
+        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
         assert_eq!(expected, actual);
     }
 
