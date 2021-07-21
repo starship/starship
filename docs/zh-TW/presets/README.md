@@ -1,10 +1,10 @@
-# 預設配置
+# 預設樣式
 
-這裡蒐集了社群提交的 Starship 預設配置。 如果你也想要分享你的配置，請[提交一個 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 來更新這個檔案！ 😊
+這裡蒐集了社群提交的 Starship 預設樣式。 如果你也想要分享你的樣式，請[提交一個 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 來更新這個檔案！ 😊
 
-## Nerd Font Symbols
+## Nerd Font 符號
 
-這個預設配置不會更改每個模組使用的符號外的任何東西。 如果你不喜歡 emojis，這個可能會是你所中意的！
+這個預設樣式不會更改每個模組使用的符號外的任何東西。 如果你不喜歡 emojis，這個可能會是你所中意的！
 
 ![Nerd Font 預設配置的截圖](/presets/nerd-font-symbols.png)
 
@@ -98,7 +98,7 @@ symbol = "ﯣ "
 
 變更後：
 
-![括號片段設置的截圖](/presets/bracketed-segments-after.png)
+![括號片段預設配置的截圖](/presets/bracketed-segments-after.png)
 
 ### 設定
 
@@ -249,7 +249,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 變更後（純文字符號）：
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![純文字符號預設配置的截圖](/presets/plain-text-symbols-after.png)
 
 ### 設定
 
@@ -367,7 +367,7 @@ symbol = "swift "
 
 這個預設配置隱藏了各個語言的執行環境版本。 如果你在容器或者虛擬環境中工作，那麼這個配置是為你設計的！
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+![隱藏運行版本預設配置的截圖](/presets/hide-runtime-versions.png)
 
 ### 設定
 
