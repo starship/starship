@@ -2503,7 +2503,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | Format du module.                                             |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | Le style du module.                                           |
 | `disabled`  | `true`                       | Désactive le module `shlvl`.                                  |
