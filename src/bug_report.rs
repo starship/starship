@@ -24,10 +24,7 @@ pub fn create() {
     let link = make_github_issue_link(environment);
     let short_link = shorten_link(&link);
 
-    if open::that(&link)
-        .map(|status| status.success())
-        .unwrap_or(false)
-    {
+    if open::that(&link).is_ok() {
         println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
         println!("If your browser has failed to open, please click this link:\n");
     } else {
