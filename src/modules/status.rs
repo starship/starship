@@ -119,7 +119,7 @@ fn format_exit_code<'a>(
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => match exit_code_int {
-                    0 => Some(config.sucess_symbol),
+                    0 => Some(config.success_symbol),
                     126 if config.map_symbol => Some(config.not_executable_symbol),
                     127 if config.map_symbol => Some(config.not_found_symbol),
                     130 if config.recognize_signal_code && config.map_symbol => {
@@ -431,7 +431,7 @@ mod tests {
                     [status]
                     format = "$symbol"
                     symbol = "🔴"
-                    sucess_symbol = "🟢"
+                    success_symbol = "🟢"
                     not_executable_symbol = "🚫"
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"
@@ -475,7 +475,7 @@ mod tests {
                     [status]
                     format = "$symbol$int$signal_number"
                     symbol = "🔴"
-                    sucess_symbol = "🟢"
+                    success_symbol = "🟢"
                     not_executable_symbol = "🚫"
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"
@@ -514,7 +514,7 @@ mod tests {
                     [status]
                     format = "F $symbol"
                     symbol = "🔴"
-                    sucess_symbol = "🟢"
+                    success_symbol = "🟢"
                     not_executable_symbol = "🚫"
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"
@@ -554,7 +554,7 @@ mod tests {
                     [status]
                     format = "$symbol$maybe_int"
                     symbol = "🔴"
-                    sucess_symbol = "🟢"
+                    success_symbol = "🟢"
                     not_executable_symbol = "🚫"
                     not_found_symbol = "🔍"
                     sigint_symbol = "🧱"

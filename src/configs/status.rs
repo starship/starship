@@ -7,7 +7,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
-    pub sucess_symbol: &'a str,
+    pub success_symbol: &'a str,
     pub not_executable_symbol: &'a str,
     pub not_found_symbol: &'a str,
     pub sigint_symbol: &'a str,
@@ -26,7 +26,7 @@ impl<'a> Default for StatusConfig<'a> {
         StatusConfig {
             format: "[$symbol$status]($style) ",
             symbol: "✖",
-            sucess_symbol: "✔️",
+            success_symbol: "✔️",
             not_executable_symbol: "🚫",
             not_found_symbol: "🔍",
             sigint_symbol: "🧱",
