@@ -3,6 +3,7 @@ use crate::configs::package::PackageConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+use ini::Ini;
 use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
 use regex::Regex;
@@ -91,6 +92,14 @@ fn extract_poetry_version(file_contents: &str) -> Option<String> {
         .get("poetry")?
         .get("version")?
         .as_str()?;
+
+    let formatted_version = format_version(raw_version);
+    Some(formatted_version)
+}
+
+fn extract_setup_cfg_version(file_contents: &str) -> Option<String> {
+    let ini = Ini::load_from_str(file_contents).ok()?;
+    let raw_version = ini.get_from(Some("metadata"), "version")?;
 
     let formatted_version = format_version(raw_version);
     Some(formatted_version)
@@ -217,6 +226,8 @@ fn get_package_version(context: &Context, config: &PackageConfig) -> Option<Stri
         extract_package_version(&package_json, config.display_private)
     } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
         extract_poetry_version(&poetry_toml)
+    } else if let Ok(setup_cfg) = utils::read_file(base_dir.join("setup.cfg")) {
+        extract_setup_cfg_version(&setup_cfg)
     } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
         extract_composer_version(&composer_json)
     } else if let Ok(build_gradle) = utils::read_file(base_dir.join("build.gradle")) {
@@ -565,6 +576,31 @@ license = "MIT"
             name = "starship"
         }
         .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_setup_cfg_version() -> io::Result<()> {
+        let config_name = "setup.cfg";
+        let config_content = String::from(
+            "[metadata]
+            version = 0.1.0",
+        );
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_setup_cfg_version_without_version() -> io::Result<()> {
+        let config_name = "setup.cfg";
+        let config_content = String::from("[metadata]");
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
