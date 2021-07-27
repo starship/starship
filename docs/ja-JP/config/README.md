@@ -2002,6 +2002,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
 - [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
