@@ -23,6 +23,13 @@ fn main() {
         .help("The status code of the previously run command")
         .takes_value(true);
 
+    let pipestatus_arg = Arg::with_name("pipestatus")
+        .long("pipestatus")
+        .value_name("PIPESTATUS")
+        .help("Status codes from a command pipeline")
+        .long_help("Bash and Zsh supports returning codes for each process in a pipeline.")
+        .multiple(true);
+
     let path_arg = Arg::with_name("path")
         .short("p")
         .long("path")
@@ -93,6 +100,7 @@ fn main() {
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
                 .arg(&status_code_arg)
+                .arg(&pipestatus_arg)
                 .arg(&path_arg)
                 .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)
@@ -115,6 +123,7 @@ fn main() {
                         .help("List out all supported modules"),
                 )
                 .arg(&status_code_arg)
+                .arg(&pipestatus_arg)
                 .arg(&path_arg)
                 .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)

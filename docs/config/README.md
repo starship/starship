@@ -2703,6 +2703,7 @@ This module is not supported on elvish and nu shell.
 | ------------------------- | ----------------------------- | ------------------------------------------------------ |
 | `format`                  | `"[$symbol$status]($style) "` | The format of the module                               |
 | `symbol`                  | `"✖"`                         | The symbol displayed on program error                  |
+| `success_symbol`          | `"✔️"`                         | The symbol displayed on program success                |
 | `not_executable_symbol`   | `"🚫"`                        | The symbol displayed when file isn't executable        |
 | `not_found_symbol`        | `"🔍"`                        | The symbol displayed when the command can't be found   |
 | `sigint_symbol`           | `"🧱"`                        | The symbol displayed on SIGINT (Ctrl + c)              |
@@ -2710,6 +2711,9 @@ This module is not supported on elvish and nu shell.
 | `style`                   | `"bold red"`                  | The style for the module.                              |
 | `recognize_signal_code`   | `true`                        | Enable signal mapping from exit code                   |
 | `map_symbol`              | `false`                       | Enable symbols mapping from exit code                  |
+| `pipestatus`              | `false`                       | Enable pipestatus reporting                            |
+| `pipestatus_separator`    | `|`                           | The symbol that separate in pipe program exit codes    |
+| `pipestatus_format`       | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)`  | The format of the module when the command is a pipeline |
 | `disabled`                | `true`                        | Disables the `status` module.                          |
 
 ### Variables
@@ -2722,6 +2726,7 @@ This module is not supported on elvish and nu shell.
 | signal_number           | `9`     | Signal number corresponding to the exit code, only if signalled         |
 | signal_name             | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
 | maybe_int               | `7`     | Contains the exit code number when no meaning has been found            |
+| pipestatus              |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
 | symbol                  |         | Mirrors the value of option `symbol`                                    |
 | style\*                 |         | Mirrors the value of option `style`                                     |
 
