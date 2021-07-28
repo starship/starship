@@ -177,10 +177,10 @@ pub fn timings(args: ArgMatches) {
     println!("\n Here are the timings of modules in your prompt (>=1ms or output):");
 
     // for now we do not expect a wrap around at the end... famous last words
-    // Overall a line looks like this: " {module name}  -  {duration}  -  {module value}".
+    // Overall a line looks like this: " {module name}  -  {duration}  -  "{module value}"".
     for timing in &modules {
         println!(
-            " {}{}  -  {}{}  -   {}",
+            " {}{}  -  {}{}  -   \"{}\"",
             timing.name,
             " ".repeat(max_name_width - (timing.name_len)),
             " ".repeat(max_duration_width - (timing.duration_len)),
@@ -222,8 +222,8 @@ pub fn explain(args: ArgMatches) {
     let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
     // In addition to the module width itself there are also 9 padding characters in each line.
-    // Overall a line looks like this: " {module value} ({xxxms})  -  {description}".
-    const PADDING_WIDTH: usize = 9;
+    // Overall a line looks like this: " "{module value}" ({xxxms})  -  {description}".
+    const PADDING_WIDTH: usize = 11;
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
@@ -238,7 +238,7 @@ pub fn explain(args: ArgMatches) {
             let mut escaping = false;
             // Print info
             print!(
-                " {} ({}){}  -  ",
+                " \"{}\" ({}){}  -  ",
                 info.value,
                 info.duration,
                 " ".repeat(max_module_width - (info.value_len))
