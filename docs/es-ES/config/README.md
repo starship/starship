@@ -2574,31 +2574,36 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Opción                  | Por defecto                   | Descripción                                            |
-| ----------------------- | ----------------------------- | ------------------------------------------------------ |
-| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                  |
-| `symbol`                | `"✖"`                         | El símbolo mostrado en error del programa              |
-| `not_executable_symbol` | `"🚫"`                         | El símbolo mostrado cuando el archivo no es ejecutable |
-| `not_found_symbol`      | `"🔍"`                         | El símbolo mostrado cuando no se encuentra el comando  |
-| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
-| `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
-| `recognize_signal_code` | `true`                        | Activar mapeo de señales desde el código de salida     |
-| `map_symbol`            | `false`                       | Activar mapeo de símbolos desde el código de salida    |
-| `disabled`              | `true`                        | Desactiva el módulo `status`.                          |
+| Opción                  | Por defecto                                                                          | Descripción                                             |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "`                                                        | El formato del módulo                                   |
+| `symbol`                | `"✖"`                                                                                | El símbolo mostrado en error del programa               |
+| `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
+| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
+| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
+| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
+| `style`                 | `"bold red"`                                                                         | El estilo del módulo.                                   |
+| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
+| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
+| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
+| `pipestatus_separator`  | `|`                                                                                  | The symbol that separate in pipe program exit codes     |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
+| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                                          |
-| -------------- | ------- | ------------------------------------------------------------------------------------ |
-| status         | `127`   | El código de salida del último comando                                               |
-| int            | `127`   | El código de salida del último comando                                               |
-| common_meaning | `ERROR` | Comprobación del código si no es una señal                                           |
-| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada         |
-| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada      |
-| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado |
-| symbol         |         | Refleja el valor de la opción `symbol`                                               |
-| style\*      |         | Refleja el valor de la opción `style`                                                |
+| Variable       | Ejemplo | Descripción                                                                                 |
+| -------------- | ------- | ------------------------------------------------------------------------------------------- |
+| status         | `127`   | El código de salida del último comando                                                      |
+| int            | `127`   | El código de salida del último comando                                                      |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                  |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada                |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada             |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado        |
+| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
+| symbol         |         | Refleja el valor de la opción `symbol`                                                      |
+| style\*      |         | Refleja el valor de la opción `style`                                                       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
