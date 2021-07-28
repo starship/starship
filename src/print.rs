@@ -221,7 +221,7 @@ pub fn explain(args: ArgMatches) {
 
     let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
-    // In addition to the module width itself there are also 9 padding characters in each line.
+    // In addition to the module width itself there are also 11 padding characters in each line.
     // Overall a line looks like this: " "{module value}" ({xxxms})  -  {description}".
     const PADDING_WIDTH: usize = 11;
 
