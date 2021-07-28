@@ -5,6 +5,7 @@ use std::process;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
+use crate::configs::PROMPT_ORDER;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
@@ -70,7 +71,14 @@ pub fn print_configuration(use_default: bool) {
 
     let string_config = toml::to_string_pretty(&config).unwrap();
 
-    println!("# Warning: This config does not include keys that have an unset value");
+    println!("# Warning: This config does not include keys that have an unset value\n");
+    println!(
+        "# $all is shorthand for {}",
+        PROMPT_ORDER
+            .iter()
+            .map(|module_name| format!("${}", module_name))
+            .collect::<String>()
+    );
     println!("{}", string_config);
 }
 
