@@ -133,7 +133,12 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn pipestatus(mut self, status: &[i32]) -> Self {
-        self.context.pipestatus = Some(status.iter().map(|i| i.to_string()).collect());
+        self.context.pipestatus = Some(
+            status
+                .iter()
+                .map(std::string::ToString::to_string)
+                .collect(),
+        );
         self
     }
 

@@ -39,7 +39,7 @@ impl Default for StarshipLogger {
             log_file_content: fs::read_to_string(&session_log_file)
                 .unwrap_or_default()
                 .lines()
-                .map(|line| line.to_string())
+                .map(std::string::ToString::to_string)
                 .collect(),
             log_file: OnceCell::new(),
             log_file_path: session_log_file,

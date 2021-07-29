@@ -39,8 +39,7 @@ fn parse_variable(variable: Pair<Rule>) -> &str {
 
 fn parse_text(text: Pair<Rule>) -> String {
     text.into_inner()
-        .map(|pair| pair.as_str().chars())
-        .flatten()
+        .flat_map(|pair| pair.as_str().chars())
         .collect()
 }
 

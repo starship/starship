@@ -15,7 +15,7 @@ pub fn create() {
 
     let environment = Environment {
         os_type: os_info.os_type(),
-        os_version: os_info.version().to_owned(),
+        os_version: os_info.version().clone(),
         shell_info: get_shell_info(),
         terminal_info: get_terminal_info(),
         starship_config: get_starship_config(),
@@ -151,14 +151,17 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500))
-        .map(|output| output.stdout.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
+    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500)).map_or_else(
+        || UNKNOWN_VERSION.to_string(),
+        |output| output.stdout.trim().to_string(),
+    );
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .map(|config| config.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string());
+        .map_or_else(
+            || UNKNOWN_CONFIG.to_string(),
+            |config| config.trim().to_string(),
+        );
 
     ShellInfo {
         name: shell,

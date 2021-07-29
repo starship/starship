@@ -99,7 +99,7 @@ pub fn get_prompt(context: Context) -> String {
                         .collect::<Vec<Segment>>()
                 })
                 .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(&module) {
+        } else if context.is_module_disabled_in_config(module) {
             None
         } else {
             // Get segments from module
@@ -213,7 +213,7 @@ pub fn explain(args: ArgMatches) {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
-                desc: module.get_description().to_owned(),
+                desc: module.get_description().clone(),
                 duration: format_duration(&module.duration),
             }
         })
@@ -301,11 +301,11 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
             for module in PROMPT_ORDER.iter() {
-                let modules = handle_module(module, &context, &modules);
+                let modules = handle_module(module, context, &modules);
                 prompt_order.extend(modules.into_iter());
             }
         } else {
-            let modules = handle_module(module, &context, &modules);
+            let modules = handle_module(module, context, &modules);
             prompt_order.extend(modules.into_iter());
         }
     }
@@ -331,14 +331,14 @@ fn handle_module<'a>(
     if ALL_MODULES.contains(&module) {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, &context));
+            modules.extend(modules::handle(module, context));
         }
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set
         if let Some(custom_modules) = context.config.get_custom_modules() {
             let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
-                if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                    modules::custom::module(custom_module, &context)
+                if should_add_implicit_custom_module(custom_module, config, module_list) {
+                    modules::custom::module(custom_module, context)
                 } else {
                     None
                 }
@@ -347,9 +347,9 @@ fn handle_module<'a>(
         }
     } else if let Some(module) = module.strip_prefix("custom.") {
         // Write out a custom module if it isn't disabled (and it exists...)
-        match context.is_custom_module_disabled_in_config(&module) {
+        match context.is_custom_module_disabled_in_config(module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(&module, &context)),
+            Some(false) => modules.extend(modules::custom::module(module, context)),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",

@@ -27,7 +27,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let pipestatus_status = match &context.pipestatus {
         None => PipeStatusStatus::Disabled,
         Some(ps) => match ps.len() > 1 {
-            true => PipeStatusStatus::Pipe(&ps),
+            true => PipeStatusStatus::Pipe(ps),
             false => PipeStatusStatus::NoPipe,
         },
     };
@@ -255,7 +255,7 @@ mod tests {
     fn failure_status() {
         let exit_values = [1, 2, 130];
 
-        for status in exit_values.iter() {
+        for status in &exit_values {
             let expected = Some(format!(
                 "{} ",
                 Color::Red.bold().paint(format!("✖{}", status))
@@ -285,7 +285,7 @@ mod tests {
         ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = name.map(|n| n.to_string());
+            let expected = name.map(std::string::ToString::to_string);
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -312,7 +312,7 @@ mod tests {
         ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = name.map(|n| n.to_string());
+            let expected = name.map(std::string::ToString::to_string);
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -341,7 +341,7 @@ mod tests {
         ];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = name.map(|n| n.to_string());
+            let expected = name.map(std::string::ToString::to_string);
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -360,7 +360,7 @@ mod tests {
         let exit_values_name = ["🔴", "🚫", "🔍", "🧱", "⚡"];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = Some(name.to_string());
+            let expected = Some((*name).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -386,7 +386,7 @@ mod tests {
         let exit_values_name = ["🔴", "🚫", "🔍", "🔴", "🔴"];
 
         for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
-            let expected = Some(name.to_string());
+            let expected = Some((*name).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -425,7 +425,7 @@ mod tests {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
-            let expected = Some(rendered.to_string());
+            let expected = Some((*rendered).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -469,7 +469,7 @@ mod tests {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
-            let expected = Some(rendered.to_string());
+            let expected = Some((*rendered).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -508,7 +508,7 @@ mod tests {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
-            let expected = Some(rendered.to_string());
+            let expected = Some((*rendered).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
@@ -548,7 +548,7 @@ mod tests {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
-            let expected = Some(rendered.to_string());
+            let expected = Some((*rendered).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]

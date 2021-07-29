@@ -66,7 +66,7 @@ impl PartialEq for CommandOutput {
 /// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
 pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
-    internal_exec_cmd(&cmd, &args, time_limit)
+    internal_exec_cmd(cmd, args, time_limit)
 }
 
 #[cfg(test)]
@@ -271,7 +271,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args, time_limit),
+        _ => internal_exec_cmd(cmd, args, time_limit),
     }
 }
 

@@ -31,17 +31,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     );
 
     let formatted_time_string = if config.utc_time_offset != "local" {
-        match create_offset_time_string(Utc::now(), &config.utc_time_offset, &time_format) {
+        match create_offset_time_string(Utc::now(), config.utc_time_offset, time_format) {
             Ok(formatted_string) => formatted_string,
             Err(_) => {
                 log::warn!(
                     "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
                 );
-                format_time(&time_format, Local::now())
+                format_time(time_format, Local::now())
             }
         }
     } else {
-        format_time(&time_format, Local::now())
+        format_time(time_format, Local::now())
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -86,7 +86,7 @@ fn create_offset_time_string(
         let target_time = utc_time.with_timezone(&timezone_offset);
         log::trace!("Time in target timezone now is {}", target_time);
 
-        Ok(format_time_fixed_offset(&time_format, target_time))
+        Ok(format_time_fixed_offset(time_format, target_time))
     } else {
         Err("Invalid timezone offset.")
     }
@@ -290,7 +290,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "-3";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12).unwrap();
+        let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
         assert_eq!(actual, "12:36:47 PM");
     }
 
@@ -299,7 +299,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+5";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12).unwrap();
+        let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
         assert_eq!(actual, "08:36:47 PM");
     }
 
@@ -308,7 +308,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+9.5";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12).unwrap();
+        let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
         assert_eq!(actual, "01:06:47 AM");
     }
 
@@ -317,7 +317,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+5.75";
 
-        let actual = create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12).unwrap();
+        let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
         assert_eq!(actual, "09:21:47 PM");
     }
 
@@ -326,7 +326,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+24";
 
-        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
@@ -336,7 +336,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "-24";
 
-        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
@@ -346,7 +346,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "+9001";
 
-        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
@@ -356,7 +356,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "-4242";
 
-        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }
@@ -366,7 +366,7 @@ mod tests {
         let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
         let utc_time_offset_str = "completely wrong config";
 
-        create_offset_time_string(utc_time, &utc_time_offset_str, FMT_12)
+        create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
             .err()
             .expect("Invalid timezone offset.");
     }

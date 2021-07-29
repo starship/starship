@@ -207,7 +207,7 @@ fn extract_vpkg_version(file_contents: &str) -> Option<String> {
     if version == "null" {
         return None;
     }
-    let formatted_version = format_version(&version);
+    let formatted_version = format_version(version);
     Some(formatted_version)
 }
 
@@ -313,7 +313,7 @@ license = "MIT"
 "##;
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
 
         let starship_config = toml::toml! {
             [package]
@@ -373,7 +373,7 @@ license = "MIT"
 "##;
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
 
         let starship_config = toml::toml! {
             [package]
@@ -622,7 +622,7 @@ java {
 }";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
@@ -641,7 +641,7 @@ java {
 }";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
         project_dir.close()
     }
@@ -660,7 +660,7 @@ java {
 }";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v0.1.0-rc1"), None);
         project_dir.close()
     }
@@ -678,7 +678,7 @@ java {
 }";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
@@ -711,7 +711,7 @@ java {
 end";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
@@ -722,7 +722,7 @@ end";
         let config_content = "  def project, do: [app: :my_app,version: \"3.2.1\"]";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v3.2.1"), None);
         project_dir.close()
     }
@@ -738,7 +738,7 @@ end";
   end";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.0.0-alpha.3"), None);
         project_dir.close()
     }
@@ -754,7 +754,7 @@ end";
   end";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v0.9.9-dev+20130417140000.amd64"), None);
         project_dir.close()
     }
@@ -769,7 +769,7 @@ end";
         ";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v0.2.0"), None);
         project_dir.close()
     }
@@ -901,7 +901,7 @@ end";
             </project>";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        fill_config(&project_dir, "pom.xml", Some(pom))?;
         expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None);
         project_dir.close()
     }
@@ -925,7 +925,7 @@ end";
             </project>";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        fill_config(&project_dir, "pom.xml", Some(pom))?;
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
@@ -942,7 +942,7 @@ end";
             </project>";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        fill_config(&project_dir, "pom.xml", Some(pom))?;
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
@@ -963,7 +963,7 @@ end";
             </project>";
 
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, "pom.xml", Some(&pom))?;
+        fill_config(&project_dir, "pom.xml", Some(pom))?;
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
@@ -1012,7 +1012,7 @@ Module {
     version: '1.2.3'
 }";
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }

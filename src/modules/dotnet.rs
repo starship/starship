@@ -175,7 +175,7 @@ fn estimate_dotnet_version(
 ///     - The root of the git repository
 ///       (If there is one)
 fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<String> {
-    let current_dir_is_repo_root = repo_root.map(|r| r == current_dir).unwrap_or(false);
+    let current_dir_is_repo_root = repo_root.map_or(false, |r| r == current_dir);
     let parent_dir = if current_dir_is_repo_root {
         // Don't scan the parent directory if it's above the root of a git repository
         None
@@ -274,8 +274,8 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
 
     match extension_lower.as_ref().map(|f| f.as_ref()) {
         Some("sln") => return Some(FileType::SolutionFile),
-        Some("csproj") | Some("fsproj") | Some("xproj") => return Some(FileType::ProjectFile),
-        Some("props") | Some("targets") => return Some(FileType::MsBuildFile),
+        Some("csproj" | "fsproj" | "xproj") => return Some(FileType::ProjectFile),
+        Some("props" | "targets") => return Some(FileType::MsBuildFile),
         _ => (),
     };
 
@@ -354,7 +354,7 @@ mod tests {
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
         let workspace = create_workspace(false)?;
-        expect_output(&workspace.path(), None);
+        expect_output(workspace.path(), None);
         workspace.close()
     }
 
@@ -363,7 +363,7 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "Directory.Build.props", None)?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 ")
@@ -377,7 +377,7 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "Directory.Build.targets", None)?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 ")
@@ -391,7 +391,7 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "Packages.props", None)?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 ")
@@ -404,7 +404,7 @@ mod tests {
     fn shows_latest_in_directory_with_solution() -> io::Result<()> {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "solution.sln", None)?;
-        expect_output(&workspace.path(), None);
+        expect_output(workspace.path(), None);
         workspace.close()
     }
 
@@ -414,7 +414,7 @@ mod tests {
         let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
         touch_path(&workspace, "project.csproj", Some(&csproj))?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
@@ -428,7 +428,7 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.fsproj", None)?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 ")
@@ -442,7 +442,7 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.xproj", None)?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 ")
@@ -456,7 +456,7 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.json", None)?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
                 "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 ")
@@ -471,7 +471,7 @@ mod tests {
         let global_json = make_pinned_sdk_json("1.2.3");
         touch_path(&workspace, "global.json", Some(&global_json))?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!("via {}", Color::Blue.bold().paint(".NET v1.2.3 "))),
         );
         workspace.close()
