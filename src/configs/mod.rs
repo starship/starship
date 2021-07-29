@@ -35,6 +35,7 @@ pub mod jobs;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
+pub mod line_break;
 pub mod lua;
 pub mod memory_usage;
 pub mod nim;
@@ -108,6 +109,7 @@ pub struct FullConfig<'a> {
     julia: julia::JuliaConfig<'a>,
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
+    line_break: line_break::LineBreakConfig,
     lua: lua::LuaConfig<'a>,
     memory_usage: memory_usage::MemoryConfig<'a>,
     nim: nim::NimConfig<'a>,
@@ -120,8 +122,8 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
-    rlang: rlang::RLangConfig<'a>,
     red: red::RedConfig<'a>,
+    rlang: rlang::RLangConfig<'a>,
     ruby: ruby::RubyConfig<'a>,
     rust: rust::RustConfig<'a>,
     scala: scala::ScalaConfig<'a>,
@@ -133,9 +135,9 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
     username: username::UsernameConfig<'a>,
+    vagrant: vagrant::VagrantConfig<'a>,
     vcsh: vcsh::VcshConfig<'a>,
     vlang: v::VConfig<'a>,
-    vagrant: vagrant::VagrantConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,
 }
@@ -179,6 +181,7 @@ impl<'a> Default for FullConfig<'a> {
             julia: Default::default(),
             kotlin: Default::default(),
             kubernetes: Default::default(),
+            line_break: Default::default(),
             lua: Default::default(),
             memory_usage: Default::default(),
             nim: Default::default(),
@@ -209,6 +212,22 @@ impl<'a> Default for FullConfig<'a> {
             vlang: Default::default(),
             zig: Default::default(),
             custom: Default::default(),
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::module::ALL_MODULES;
+    use toml::value::Value;
+
+    #[test]
+    fn test_all_modules_in_full_config() {
+        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
+        let cfg_table = full_cfg.as_table().unwrap();
+        for module in ALL_MODULES {
+            assert!(cfg_table.contains_key(*module));
         }
     }
 }
