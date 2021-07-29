@@ -41,7 +41,7 @@ fn get_osp_cloud_and_project(context: &Context) -> (Option<Cloud>, Option<Projec
     ) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
-        (Some(ref p), None) => (Some(p.to_owned()), get_osp_project_from_config(context, p)),
+        (Some(ref p), None) => (Some(p.clone()), get_osp_project_from_config(context, p)),
         (None, None) => (None, None),
     }
 }

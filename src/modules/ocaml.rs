@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     };
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &ocaml_version.trim(),
+                        ocaml_version.trim(),
                         config.version_format,
                     )
                     .map(Ok)
@@ -92,7 +92,7 @@ fn get_opam_switch(context: &Context) -> Option<OpamSwitch> {
         .exec_cmd("opam", &["switch", "show", "--safe"])?
         .stdout;
 
-    parse_opam_switch(&opam_switch.trim())
+    parse_opam_switch(opam_switch.trim())
 }
 
 fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {

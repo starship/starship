@@ -150,7 +150,9 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env.get(key.as_ref()).map(|val| val.to_string())
+        self.env
+            .get(key.as_ref())
+            .map(std::string::ToString::to_string)
     }
 
     #[cfg(not(test))]
@@ -233,7 +235,7 @@ impl<'a> Context<'a> {
                 let root = repository
                     .as_ref()
                     .and_then(|repo| repo.workdir().map(Path::to_path_buf));
-                let state = repository.as_ref().map(|repo| repo.state());
+                let state = repository.as_ref().map(git2::Repository::state);
                 let remote = repository
                     .as_ref()
                     .and_then(|repo| get_remote_repository_info(repo));
@@ -344,7 +346,7 @@ impl DirContents {
             start.elapsed()
         );
 
-        Ok(DirContents {
+        Ok(Self {
             files,
             file_names,
             folders,
@@ -459,7 +461,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
                     .trim()
                     .split('/')
                     .last()
-                    .map(|r| r.to_owned())
+                    .map(std::borrow::ToOwned::to_owned)
             } else {
                 None
             };

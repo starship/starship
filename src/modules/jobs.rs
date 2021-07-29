@@ -11,8 +11,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let props = &context.properties;
     let num_of_jobs = props
         .get("jobs")
-        .map(String::as_str)
-        .unwrap_or("0")
+        .map_or("0", String::as_str)
         .trim()
         .parse::<i64>()
         .ok()?;

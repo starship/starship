@@ -98,7 +98,7 @@ fn get_variable_name<'a>(
 fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option<String> {
     match context.get_env(name) {
         Some(value) => Some(value),
-        None => default.map(|value| value.to_owned()),
+        None => default.map(std::borrow::ToOwned::to_owned),
     }
 }
 

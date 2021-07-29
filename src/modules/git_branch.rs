@@ -50,13 +50,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Truncate fields if need be
-    for e in [
+    for e in &mut [
         &mut graphemes,
         &mut remote_branch_graphemes,
         &mut remote_name_graphemes,
-    ]
-    .iter_mut()
-    {
+    ] {
         let e = &mut **e;
         let trunc_len = len.min(e.len());
         if trunc_len < e.len() {
