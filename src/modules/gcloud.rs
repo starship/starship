@@ -128,12 +128,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "account" => account
                     .deref()
                     .as_ref()
-                    .map(|(account, _)| (*account).to_owned())
+                    .map(|(account, _)| (*account).clone())
                     .map(Ok),
                 "domain" => account
                     .deref()
                     .as_ref()
-                    .and_then(|(_, domain)| (*domain).to_owned())
+                    .and_then(|(_, domain)| (*domain).clone())
                     .map(Ok),
                 "region" => gcloud_context
                     .get_region()
@@ -141,15 +141,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         config
                             .region_aliases
                             .get(&region)
-                            .map(|alias| (*alias).to_owned())
-                            .unwrap_or(region)
+                            .map_or(region, |alias| (*alias).to_owned())
                     })
                     .map(Ok),
                 "project" => context
                     .get_env("CLOUDSDK_CORE_PROJECT")
                     .or_else(|| gcloud_context.get_project())
                     .map(Ok),
-                "active" => Some(Ok(gcloud_context.config_name.to_owned())),
+                "active" => Some(Ok(gcloud_context.config_name.clone())),
                 _ => None,
             })
             .parse(None)

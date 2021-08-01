@@ -1189,7 +1189,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | Option               | Default                                        | Description                                             |
 | -------------------- | ---------------------------------------------- | ------------------------------------------------------- |
 | `commit_hash_length` | `7`                                            | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                              |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | The format for the module.                              |
 | `style`              | `"bold green"`                                 | The style for the module.                               |
 | `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.       |
@@ -2096,6 +2096,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
+- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
   in the current directory
 - [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
@@ -2290,7 +2291,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv `                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
@@ -2587,6 +2588,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `ion_indicator`        | `ion`         | A format string used to represent ion.                       |
 | `elvish_indicator`     | `esh`         | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`         | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |               | The default value to be displayed when the shell is unknown. |
 | `format`               | `$indicator ` | The format for the module.                                   |
 | `disabled`             | `true`        | Disables the `shell` module.                                 |
@@ -2620,7 +2622,7 @@ set to a number and meets or exceeds the specified threshold.
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
-| `symbol`    | `"↕️ "`                       | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️  "`                       | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | The style for the module.                                     |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
@@ -2701,6 +2703,7 @@ This module is not supported on elvish and nu shell.
 | ------------------------- | ----------------------------- | ------------------------------------------------------ |
 | `format`                  | `"[$symbol$status]($style) "` | The format of the module                               |
 | `symbol`                  | `"✖"`                         | The symbol displayed on program error                  |
+| `success_symbol`          | `"✔️"`                         | The symbol displayed on program success                |
 | `not_executable_symbol`   | `"🚫"`                        | The symbol displayed when file isn't executable        |
 | `not_found_symbol`        | `"🔍"`                        | The symbol displayed when the command can't be found   |
 | `sigint_symbol`           | `"🧱"`                        | The symbol displayed on SIGINT (Ctrl + c)              |
@@ -2708,6 +2711,9 @@ This module is not supported on elvish and nu shell.
 | `style`                   | `"bold red"`                  | The style for the module.                              |
 | `recognize_signal_code`   | `true`                        | Enable signal mapping from exit code                   |
 | `map_symbol`              | `false`                       | Enable symbols mapping from exit code                  |
+| `pipestatus`              | `false`                       | Enable pipestatus reporting                            |
+| `pipestatus_separator`    | `|`                           | The symbol that separate in pipe program exit codes    |
+| `pipestatus_format`       | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)`  | The format of the module when the command is a pipeline |
 | `disabled`                | `true`                        | Disables the `status` module.                          |
 
 ### Variables
@@ -2720,6 +2726,7 @@ This module is not supported on elvish and nu shell.
 | signal_number           | `9`     | Signal number corresponding to the exit code, only if signalled         |
 | signal_name             | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
 | maybe_int               | `7`     | Contains the exit code number when no meaning has been found            |
+| pipestatus              |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
 | symbol                  |         | Mirrors the value of option `symbol`                                    |
 | style\*                 |         | Mirrors the value of option `style`                                     |
 

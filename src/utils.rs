@@ -1,7 +1,8 @@
 use process_control::{ChildExt, Timeout};
+use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
-use std::io::Result;
+use std::io::{Error, ErrorKind, Result};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -23,6 +24,33 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     result
 }
 
+/// Attempt to resolve `binary_name` from and creates a new `Command` pointing at it
+/// This allows executing cmd files on Windows and prevents running executable from cwd on Windows
+/// This function also initialises std{err,out,in} to protect against processes changing the console mode
+pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
+    let binary_name = binary_name.as_ref();
+    log::trace!("Creating Command struct with binary name {:?}", binary_name);
+
+    let full_path = match which::which(binary_name) {
+        Ok(full_path) => {
+            log::trace!("Using {:?} as {:?}", full_path, binary_name);
+            full_path
+        }
+        Err(error) => {
+            log::trace!("Unable to find {:?} in PATH, {:?}", binary_name, error);
+            return Err(Error::new(ErrorKind::NotFound, error));
+        }
+    };
+
+    #[allow(clippy::disallowed_method)]
+    let mut cmd = Command::new(full_path);
+    cmd.stderr(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stdin(Stdio::null());
+
+    Ok(cmd)
+}
+
 #[derive(Debug, Clone)]
 pub struct CommandOutput {
     pub stdout: String,
@@ -38,7 +66,7 @@ impl PartialEq for CommandOutput {
 /// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
 pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
-    internal_exec_cmd(&cmd, &args, time_limit)
+    internal_exec_cmd(cmd, args, time_limit)
 }
 
 #[cfg(test)]
@@ -243,7 +271,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, &args, time_limit),
+        _ => internal_exec_cmd(cmd, args, time_limit),
     }
 }
 
@@ -324,6 +352,7 @@ fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<C
 
     let start = Instant::now();
 
+    #[allow(clippy::disallowed_method)]
     let process = match Command::new(full_path)
         .args(args)
         .stderr(Stdio::piped())

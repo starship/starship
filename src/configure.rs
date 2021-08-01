@@ -2,7 +2,6 @@ use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
-use std::process::Command;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
@@ -136,9 +135,9 @@ pub fn write_configuration(table: &mut Table) {
 pub fn edit_configuration() {
     let config_path = get_config_path();
     let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
-    let editor_path = which::which(&editor_cmd[0]).expect("Unable to locate editor in $PATH.");
 
-    let command = Command::new(editor_path)
+    let command = utils::create_command(&editor_cmd[0])
+        .expect("Unable to locate editor in $PATH.")
         .args(&editor_cmd[1..])
         .arg(config_path)
         .status();

@@ -87,12 +87,12 @@ impl<'a> ModuleConfig<'a> for u64 {
             Value::Integer(value) => {
                 // Converting i64 to u64
                 if *value > 0 {
-                    Some(*value as u64)
+                    Some(*value as Self)
                 } else {
                     None
                 }
             }
-            Value::String(value) => value.parse::<u64>().ok(),
+            Value::String(value) => value.parse::<Self>().ok(),
             _ => None,
         }
     }
@@ -109,12 +109,12 @@ impl<'a> ModuleConfig<'a> for usize {
         match config {
             Value::Integer(value) => {
                 if *value > 0 {
-                    Some(*value as usize)
+                    Some(*value as Self)
                 } else {
                     None
                 }
             }
-            Value::String(value) => value.parse::<usize>().ok(),
+            Value::String(value) => value.parse::<Self>().ok(),
             _ => None,
         }
     }
@@ -139,7 +139,7 @@ where
     S: Clone,
 {
     fn from_config(config: &'a Value) -> Option<Self> {
-        let mut hm = HashMap::default();
+        let mut hm = Self::default();
 
         for (x, y) in config.as_table()?.iter() {
             hm.insert(x.clone(), T::from_config(y)?);
@@ -155,7 +155,7 @@ where
     S: Clone,
 {
     fn from_config(config: &'a Value) -> Option<Self> {
-        let mut im = IndexMap::default();
+        let mut im = Self::default();
 
         for (x, y) in config.as_table()?.iter() {
             im.insert(x.clone(), T::from_config(y)?);
@@ -185,7 +185,7 @@ where
 {
     fn from_config(config: &'a Value) -> Option<Self> {
         if let Some(item) = T::from_config(config) {
-            return Some(VecOr(vec![item]));
+            return Some(Self(vec![item]));
         }
 
         let vec = config
@@ -194,7 +194,7 @@ where
             .map(|value| T::from_config(value))
             .collect::<Option<Vec<T>>>()?;
 
-        Some(VecOr(vec))
+        Some(Self(vec))
     }
 }
 
@@ -207,11 +207,11 @@ impl StarshipConfig {
     /// Initialize the Config struct
     pub fn initialize() -> Self {
         if let Some(file_data) = Self::config_from_file() {
-            StarshipConfig {
+            Self {
                 config: Some(file_data),
             }
         } else {
-            StarshipConfig {
+            Self {
                 config: Some(Value::Table(toml::value::Table::new())),
             }
         }

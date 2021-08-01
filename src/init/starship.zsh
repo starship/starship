@@ -26,7 +26,7 @@ fi
 # Will be run before every prompt draw
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$?
+    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
 
     # Compute cmd_duration, if we have a time to consume, otherwise clear the
     # previous duration
@@ -91,4 +91,4 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
-PROMPT='$(::STARSHIP:: prompt --keymap="$KEYMAP" --status="$STARSHIP_CMD_STATUS" --cmd-duration="$STARSHIP_DURATION" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='$(::STARSHIP:: prompt --keymap="$KEYMAP" --status="$STARSHIP_CMD_STATUS" --pipestatus ${STARSHIP_PIPE_STATUS[@]} --cmd-duration="$STARSHIP_DURATION" --jobs="$STARSHIP_JOBS_COUNT")'
