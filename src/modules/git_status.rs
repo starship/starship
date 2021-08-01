@@ -24,6 +24,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `+` — A new file has been added to the staging area
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
+///   - `✓` — This branch is up to date with its upstream
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let info = Arc::new(GitStatusInfo::load(context));
 
@@ -46,23 +47,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "stashed" => info.get_stashed().and_then(|count| {
                         format_count(config.stashed, "git_status.stashed", count)
                     }),
-                    "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
-                        if ahead > 0 && behind > 0 {
-                            format_text(config.diverged, "git_status.diverged", |variable| {
-                                match variable {
-                                    "ahead_count" => Some(ahead.to_string()),
-                                    "behind_count" => Some(behind.to_string()),
-                                    _ => None,
+                    "ahead_behind" => {
+                        info.get_ahead_behind()
+                            .and_then(|(ahead, behind)| match (ahead, behind) {
+                                (None, _) | (_, None) => None,
+                                (Some(a), Some(b)) => {
+                                    let ahead = a;
+                                    let behind = b;
+                                    if ahead > 0 && behind > 0 {
+                                        format_text(
+                                            config.diverged,
+                                            "git_status.diverged",
+                                            |variable| match variable {
+                                                "ahead_count" => Some(ahead.to_string()),
+                                                "behind_count" => Some(behind.to_string()),
+                                                _ => None,
+                                            },
+                                        )
+                                    } else if ahead > 0 && behind == 0 {
+                                        format_count(config.ahead, "git_status.ahead", ahead)
+                                    } else if behind > 0 && ahead == 0 {
+                                        format_count(config.behind, "git_status.behind", behind)
+                                    } else if ahead == 0 && behind == 0 {
+                                        format_symbol(config.uptodate, "git_status.uptodate")
+                                    } else {
+                                        None
+                                    }
                                 }
                             })
-                        } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead, "git_status.ahead", ahead)
-                        } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind, "git_status.behind", behind)
-                        } else {
-                            None
-                        }
-                    }),
+                    }
                     "conflicted" => info.get_conflicted().and_then(|count| {
                         format_count(config.conflicted, "git_status.conflicted", count)
                     }),
@@ -120,7 +133,7 @@ impl<'a> GitStatusInfo<'a> {
         }
     }
 
-    pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
+    pub fn get_ahead_behind(&self) -> Option<(Option<usize>, Option<usize>)> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
     }
 
@@ -217,14 +230,15 @@ fn get_stashed_count(context: &Context) -> Option<usize> {
 
 #[derive(Default, Debug, Copy, Clone)]
 struct RepoStatus {
-    ahead: usize,
-    behind: usize,
+    ahead: Option<usize>,
+    behind: Option<usize>,
     conflicted: usize,
     deleted: usize,
     renamed: usize,
     modified: usize,
     staged: usize,
     untracked: usize,
+    remoteless: usize,
 }
 
 impl RepoStatus {
@@ -271,8 +285,8 @@ impl RepoStatus {
         let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
 
         if let Some(caps) = re.captures(s) {
-            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().unwrap();
-            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().unwrap();
+            self.ahead = Some(caps.get(1).unwrap().as_str().parse::<usize>().unwrap());
+            self.behind = Some(caps.get(2).unwrap().as_str().parse::<usize>().unwrap());
         }
     }
 }
@@ -301,6 +315,10 @@ fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec
         "count" => Some(count.to_string()),
         _ => None,
     })
+}
+
+fn format_symbol(format_str: &str, config_path: &str) -> Option<Vec<Segment>> {
+    format_text(format_str, config_path, |_variable| None)
 }
 
 #[cfg(test)]
@@ -451,6 +469,19 @@ mod tests {
     }
 
     #[test]
+    fn shows_up_to_date_with_upstream() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("✓");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_conflicted() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -491,6 +522,10 @@ mod tests {
         create_untracked(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("?");
@@ -509,6 +544,7 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 untracked = "?$count"
+                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -531,6 +567,10 @@ mod tests {
         barrier();
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = None;
@@ -553,6 +593,10 @@ mod tests {
         barrier();
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("$");
@@ -579,6 +623,7 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 stashed = r"\$$count"
+                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -595,6 +640,10 @@ mod tests {
         create_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("!");
@@ -613,6 +662,7 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 modified = "!$count"
+                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -629,6 +679,10 @@ mod tests {
         create_added(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("!");
@@ -644,6 +698,10 @@ mod tests {
         create_staged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("+");
@@ -662,6 +720,7 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 staged = "+[$count](green)"
+                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -685,6 +744,10 @@ mod tests {
         create_renamed(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("»");
@@ -703,6 +766,7 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 renamed = "»$count"
+                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -719,6 +783,10 @@ mod tests {
         create_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("✘");
@@ -737,6 +805,7 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 deleted = "✘$count"
+                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -763,6 +832,10 @@ mod tests {
         File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate = ""
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("✘?");
@@ -802,6 +875,7 @@ mod tests {
                 deleted = "D"
                 untracked = "U"
                 renamed = "R"
+                uptodate = ""
             })
             .collect();
         let expected = format_output("DUA");
