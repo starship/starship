@@ -132,6 +132,16 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn pipestatus(mut self, status: &[i32]) -> Self {
+        self.context.pipestatus = Some(
+            status
+                .iter()
+                .map(std::string::ToString::to_string)
+                .collect(),
+        );
+        self
+    }
+
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
         let ret = crate::print::get_module(self.name, self.context);

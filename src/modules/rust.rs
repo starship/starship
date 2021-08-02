@@ -75,7 +75,7 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
     // - `rustup which`
     if let Some(toolchain) = env_rustup_toolchain(context)
         .or_else(|| execute_rustup_override_list(&context.current_dir))
-        .or_else(|| find_rust_toolchain_file(&context))
+        .or_else(|| find_rust_toolchain_file(context))
     {
         match execute_rustup_run_rustc_version(&toolchain) {
             RustupRunRustcVersionOutcome::RustcVersion(rustc_version) => {
@@ -115,7 +115,7 @@ fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Opti
     }
     stdout
         .lines()
-        .flat_map(|line| {
+        .filter_map(|line| {
             let mut words = line.split_whitespace();
             let dir = words.next()?;
             let toolchain = words.next()?;

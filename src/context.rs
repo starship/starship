@@ -36,6 +36,9 @@ pub struct Context<'a> {
     /// Properties to provide to modules.
     pub properties: HashMap<&'a str, String>,
 
+    /// Pipestatus of processes in pipe
+    pub pipestatus: Option<Vec<String>>,
+
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
 
@@ -74,7 +77,7 @@ impl<'a> Context<'a> {
             .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
             .unwrap_or_default();
 
-        // Retrive the "logical directory".
+        // Retrieve the "logical directory".
         // If the path argument is not set fall back to the PWD env variable set by many shells
         // or to the other path.
         let logical_path = arguments
@@ -96,14 +99,17 @@ impl<'a> Context<'a> {
         let config = StarshipConfig::initialize();
 
         // Unwrap the clap arguments into a simple hashtable
-        // we only care about single arguments at this point, there isn't a
-        // use-case for a list of arguments yet.
         let properties: HashMap<&str, std::string::String> = arguments
             .args
             .iter()
             .filter(|(_, v)| !v.vals.is_empty())
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
+
+        // Pipestatus is an arguments list
+        let pipestatus = arguments
+            .values_of("pipestatus")
+            .map(|args| args.into_iter().map(String::from).collect());
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
@@ -116,6 +122,7 @@ impl<'a> Context<'a> {
         Context {
             config,
             properties,
+            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
@@ -143,7 +150,9 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env.get(key.as_ref()).map(|val| val.to_string())
+        self.env
+            .get(key.as_ref())
+            .map(std::string::ToString::to_string)
     }
 
     #[cfg(not(test))]
@@ -326,7 +335,7 @@ impl DirContents {
             start.elapsed()
         );
 
-        Ok(DirContents {
+        Ok(Self {
             files,
             file_names,
             folders,
@@ -441,7 +450,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
                     .trim()
                     .split('/')
                     .last()
-                    .map(|r| r.to_owned())
+                    .map(std::borrow::ToOwned::to_owned)
             } else {
                 None
             };

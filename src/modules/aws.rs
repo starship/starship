@@ -44,9 +44,9 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
     let reader = BufReader::new(file);
     let lines = reader.lines().filter_map(Result::ok);
 
-    let region_line = if let Some(ref aws_profile) = aws_profile {
+    let region_line = if let Some(aws_profile) = aws_profile {
         lines
-            .skip_while(|line| line != &format!("[profile {}]", aws_profile))
+            .skip_while(|line| line != &format!("[profile {}]", &aws_profile))
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("region"))
@@ -76,7 +76,7 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
         (Some(ref p), None) => (
-            Some(p.to_owned()),
+            Some(p.clone()),
             get_aws_region_from_config(context, Some(p)),
         ),
         (None, None) => (None, get_aws_region_from_config(context, None)),

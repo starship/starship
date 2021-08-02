@@ -262,12 +262,12 @@ impl RepoStatus {
     }
 
     fn add(&mut self, s: &str) {
-        self.conflicted += RepoStatus::is_conflicted(s) as usize;
-        self.deleted += RepoStatus::is_deleted(s) as usize;
-        self.renamed += RepoStatus::is_renamed(s) as usize;
-        self.modified += RepoStatus::is_modified(s) as usize;
-        self.staged += RepoStatus::is_staged(s) as usize;
-        self.untracked += RepoStatus::is_untracked(s) as usize;
+        self.conflicted += Self::is_conflicted(s) as usize;
+        self.deleted += Self::is_deleted(s) as usize;
+        self.renamed += Self::is_renamed(s) as usize;
+        self.modified += Self::is_modified(s) as usize;
+        self.staged += Self::is_staged(s) as usize;
+        self.untracked += Self::is_untracked(s) as usize;
     }
 
     fn set_ahead_behind(&mut self, s: &str) {
@@ -353,7 +353,7 @@ mod tests {
     fn shows_behind() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        behind(&repo_dir.path())?;
+        behind(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(repo_dir.path())
@@ -368,7 +368,7 @@ mod tests {
     fn shows_behind_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        behind(&repo_dir.path())?;
+        behind(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -388,7 +388,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
-        ahead(&repo_dir.path())?;
+        ahead(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -404,7 +404,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
-        ahead(&repo_dir.path())?;
+        ahead(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -423,7 +423,7 @@ mod tests {
     fn shows_diverged() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        diverge(&repo_dir.path())?;
+        diverge(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -438,7 +438,7 @@ mod tests {
     fn shows_diverged_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        diverge(&repo_dir.path())?;
+        diverge(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -457,7 +457,7 @@ mod tests {
     fn shows_conflicted() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_conflict(&repo_dir.path())?;
+        create_conflict(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -472,7 +472,7 @@ mod tests {
     fn shows_conflicted_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_conflict(&repo_dir.path())?;
+        create_conflict(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -491,7 +491,7 @@ mod tests {
     fn shows_untracked_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_untracked(&repo_dir.path())?;
+        create_untracked(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -506,7 +506,7 @@ mod tests {
     fn shows_untracked_file_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_untracked(&repo_dir.path())?;
+        create_untracked(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -525,7 +525,7 @@ mod tests {
     fn doesnt_show_untracked_file_if_disabled() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_untracked(&repo_dir.path())?;
+        create_untracked(repo_dir.path())?;
 
         create_command("git")?
             .args(&["config", "status.showUntrackedFiles", "no"])
@@ -547,7 +547,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
         barrier();
 
-        create_stash(&repo_dir.path())?;
+        create_stash(repo_dir.path())?;
 
         create_command("git")?
             .args(&["reset", "--hard", "HEAD"])
@@ -569,7 +569,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
         barrier();
 
-        create_stash(&repo_dir.path())?;
+        create_stash(repo_dir.path())?;
         barrier();
 
         create_command("git")?
@@ -595,7 +595,7 @@ mod tests {
     fn shows_modified() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_modified(&repo_dir.path())?;
+        create_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -610,7 +610,7 @@ mod tests {
     fn shows_modified_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_modified(&repo_dir.path())?;
+        create_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -629,7 +629,7 @@ mod tests {
     fn shows_added() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_added(&repo_dir.path())?;
+        create_added(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -644,7 +644,7 @@ mod tests {
     fn shows_staged_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_staged(&repo_dir.path())?;
+        create_staged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -659,7 +659,7 @@ mod tests {
     fn shows_staged_file_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_staged(&repo_dir.path())?;
+        create_staged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -685,7 +685,7 @@ mod tests {
     fn shows_renamed_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_renamed(&repo_dir.path())?;
+        create_renamed(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -700,7 +700,7 @@ mod tests {
     fn shows_renamed_file_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_renamed(&repo_dir.path())?;
+        create_renamed(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -719,7 +719,7 @@ mod tests {
     fn shows_deleted_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_deleted(&repo_dir.path())?;
+        create_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -734,7 +734,7 @@ mod tests {
     fn shows_deleted_file_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_deleted(&repo_dir.path())?;
+        create_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {

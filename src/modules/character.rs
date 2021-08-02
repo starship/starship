@@ -22,8 +22,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
 
     let props = &context.properties;
-    let exit_code = props.get("status_code").map(String::as_str).unwrap_or("0");
-    let keymap = props.get("keymap").map(String::as_str).unwrap_or("viins");
+    let exit_code = props.get("status_code").map_or("0", String::as_str);
+    let keymap = props.get("keymap").map_or("viins", String::as_str);
     let exit_success = exit_code == "0";
 
     // Match shell "keymap" names to normalized vi modes
