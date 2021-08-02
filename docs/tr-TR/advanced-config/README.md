@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`
