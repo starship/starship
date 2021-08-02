@@ -29,7 +29,10 @@ starship_preexec() {
 # Will be run before the prompt is drawn
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$?
+    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
+    if [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
+        STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
+    fi
 
     local NUM_JOBS=0
     # Evaluate the number of jobs before running the preseved prompt command, so that tools
@@ -46,10 +49,10 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS  --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --jobs="$NUM_JOBS")"
+        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }

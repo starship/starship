@@ -1110,11 +1110,11 @@ checksum = "2839e79665f131bdb5782e51f2c6c9599c133c6098982a54c794358bf432529c"
 
 [[package]]
 name = "open"
-version = "1.7.0"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1711eb4b31ce4ad35b0f316d8dfba4fe5c7ad601c448446d84aae7a896627b20"
+checksum = "970d0e0b8f5f39e6090f3d612e3a17b8e02b91c860fe9eb33665d1aed1f6f37f"
 dependencies = [
- "which",
+ "pathdiff",
  "winapi",
 ]
 
@@ -1193,6 +1193,12 @@ name = "path-slash"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3cacbb3c4ff353b534a67fb8d7524d00229da4cb1dc8c79f4db96e375ab5b619"
+
+[[package]]
+name = "pathdiff"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "877630b3de15c0b64cc52f659345724fbf6bdad9bd9566699fc53688f3c34a34"
 
 [[package]]
 name = "percent-encoding"
@@ -1341,9 +1347,9 @@ dependencies = [
 
 [[package]]
 name = "process_control"
-version = "3.0.1"
+version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72770c250bec5862264169dc3a2f7baa46ff6fa52f72d793e15904c5aa3adb7f"
+checksum = "f58e4014e4044c192e428de63277504298583339889483bcbaf9ba91a532b2ec"
 dependencies = [
  "crossbeam-channel",
  "libc",
@@ -1582,24 +1588,24 @@ dependencies = [
 
 [[package]]
 name = "semver"
-version = "1.0.3"
+version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f3aac57ee7f3272d8395c6e4f502f434f0e289fcd62876f70daa008c20dcabe"
+checksum = "568a8e6258aa33c13358f81fd834adb854c6f7c9468520910a9b1e8fac068012"
 
 [[package]]
 name = "serde"
-version = "1.0.126"
+version = "1.0.127"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec7505abeacaec74ae4778d9d9328fe5a5d04253220a85c4ee022239fc996d03"
+checksum = "f03b9878abf6d14e6779d3f24f07b2cfa90352cfec4acc5aab8f1ac7f146fae8"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.126"
+version = "1.0.127"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "963a7dbc9895aeac7ac90e74f34a5d5261828f79df35cbed41e10189d3804d43"
+checksum = "a024926d3432516606328597e0f224a51355a493b49fdd67e9209187cbe55ecc"
 dependencies = [
  "proc-macro2",
  "quote 1.0.9",
@@ -1608,9 +1614,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.64"
+version = "1.0.66"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "799e97dc9fdae36a5c8b8f2cae9ce2ee9fdce2058c57a93e6099d919fd982f79"
+checksum = "336b10da19a12ad094b59d870ebde26a45402e5b470add4b5fd03c5048a32127"
 dependencies = [
  "itoa",
  "ryu",
@@ -1654,9 +1660,9 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.6.2"
+version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20c8330d4ddbcc8552ba57c3058346c3fc1cafd4fea7e9fe201f32e84d4afa6a"
+checksum = "9e58c7f58507d9031a15e0c1f3496390d4cc70f544c9a11917c56695f0fb9aa5"
 dependencies = [
  "chrono",
  "git2",
@@ -1978,9 +1984,9 @@ dependencies = [
 
 [[package]]
 name = "urlencoding"
-version = "2.0.0"
+version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d95bbc99edfcbbd61cc6e43dab325bbff0aa481fec3996051ada8409d506d528"
+checksum = "68b90931029ab9b034b300b797048cf23723400aa757e8a2bfb9d748102f9821"
 
 [[package]]
 name = "utf8-width"
@@ -2051,11 +2057,12 @@ dependencies = [
 
 [[package]]
 name = "which"
-version = "4.1.0"
+version = "4.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b55551e42cbdf2ce2bedd2203d0cc08dba002c27510f86dab6d0ce304cba3dfe"
+checksum = "ea187a8ef279bc014ec368c27a920da2024d2a711109bfbe3440585d5cf27ad9"
 dependencies = [
  "either",
+ "lazy_static",
  "libc",
 ]
 

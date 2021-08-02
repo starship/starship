@@ -105,11 +105,12 @@ impl<'a> GitDiff<'a> {
 
 #[cfg(test)]
 mod tests {
+    use crate::utils::create_command;
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};
     use std::path::{Path, PathBuf};
-    use std::process::{Command, Stdio};
+    use std::process::Stdio;
 
     use ansi_term::Color;
 
@@ -238,7 +239,7 @@ mod tests {
         A: IntoIterator<Item = S>,
         S: AsRef<OsStr>,
     {
-        let mut command = Command::new("git");
+        let mut command = create_command("git")?;
         command
             .args(args)
             .stdout(Stdio::null())

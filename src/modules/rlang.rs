@@ -3,6 +3,7 @@ use crate::formatter::VersionFormatter;
 
 use crate::configs::rlang::RLangConfig;
 use crate::formatter::StringFormatter;
+use crate::utils::get_command_string_output;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("rlang");
@@ -55,7 +56,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_r_version(context: &Context) -> Option<String> {
-    let r_version = context.exec_cmd("R", &["--version"])?.stderr;
+    let r_version = get_command_string_output(context.exec_cmd("R", &["--version"])?);
     parse_version(&r_version)
 }
 

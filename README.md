@@ -253,6 +253,16 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    eval `starship init tcsh`
    ```
 
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
+   ```
+
    #### Nushell
 
    **Warning** This will change in the future. Only nu version v0.33 or higher is supported.

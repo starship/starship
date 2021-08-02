@@ -36,7 +36,7 @@ directories-next = "2.0.0"
 git2 = { version = "0.13.20", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
-serde_json = "1.0.64"
+serde_json = "1.0.66"
 rayon = "1.5.1"
 log = { version = "0.4.14", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -55,22 +55,22 @@ pest = "2.1.3"
 pest_derive = "2.1.0"
 regex = "1.5.4"
 os_info = "3.0.6"
-urlencoding = "2.0.0"
-open = "1.7.0"
+urlencoding = "2.1.0"
+open = "2.0.0"
 unicode-width = "0.1.8"
 term_size = "0.3.2"
 quick-xml = "0.22.0"
 rand = "0.8.4"
-serde = { version = "1.0.126", features = ["derive"] }
+serde = { version = "1.0.127", features = ["derive"] }
 indexmap = { version ="1.7.0", features = ["serde"] }
 notify-rust = { version = "4.5.1", optional = true }
-semver = "1.0.3"
-which = "4.1.0"
-shadow-rs = "0.6.2"
+semver = "1.0.4"
+which = "4.2.2"
+shadow-rs = "0.6.3"
 versions = "3.0.2"
 strsim = "0.10.0"
 
-process_control = { version = "3.0.1", features = ["crossbeam-channel"] }
+process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.17.0", optional = true, default-features = false, features = ["tls", "form"] }
@@ -90,7 +90,7 @@ winapi = { version = "0.3.9", features = [
 nix = "0.22.0"
 
 [build-dependencies]
-shadow-rs = "0.6.2"
+shadow-rs = "0.6.3"
 
 [dev-dependencies]
 tempfile = "3.2.0"

@@ -1,11 +1,13 @@
 use crate::context::{Context, Shell};
 use crate::logger::StarshipLogger;
-use crate::{config::StarshipConfig, utils::CommandOutput};
+use crate::{
+    config::StarshipConfig,
+    utils::{create_command, CommandOutput},
+};
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
 use std::path::PathBuf;
-use std::process::Command;
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -130,6 +132,16 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn pipestatus(mut self, status: &[i32]) -> Self {
+        self.context.pipestatus = Some(
+            status
+                .iter()
+                .map(std::string::ToString::to_string)
+                .collect(),
+        );
+        self
+    }
+
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
         let ret = crate::print::get_module(self.name, self.context);
@@ -151,24 +163,24 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 
-            Command::new("git")
+            create_command("git")?
                 .current_dir(path.path())
                 .args(&["clone", "-b", "master"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(&path.path())
                 .output()?;
 
-            Command::new("git")
+            create_command("git")?
                 .args(&["config", "--local", "user.email", "starship@example.com"])
                 .current_dir(&path.path())
                 .output()?;
 
-            Command::new("git")
+            create_command("git")?
                 .args(&["config", "--local", "user.name", "starship"])
                 .current_dir(&path.path())
                 .output()?;
 
-            Command::new("git")
+            create_command("git")?
                 .args(&["reset", "--hard", "HEAD"])
                 .current_dir(&path.path())
                 .output()?;
@@ -178,7 +190,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         FixtureProvider::Hg => {
             let path = tempfile::tempdir()?;
 
-            Command::new("hg")
+            create_command("hg")?
                 .current_dir(path.path())
                 .arg("clone")
                 .arg(HG_FIXTURE.as_os_str())

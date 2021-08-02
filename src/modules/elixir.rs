@@ -43,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .map(|elixir_version| {
                         VersionFormatter::format_module_version(
                             module.get_name(),
-                            &elixir_version,
+                            elixir_version,
                             config.version_format,
                         )
                     })?

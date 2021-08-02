@@ -36,7 +36,7 @@ pub fn is_write_allowed(folder_path: &Path) -> Result<bool, &'static str> {
 fn get_supplementary_groups() -> Vec<u32> {
     match nix::unistd::getgroups() {
         Err(_) => Vec::new(),
-        Ok(v) => v.into_iter().map(|i| i.as_raw()).collect(),
+        Ok(v) => v.into_iter().map(nix::unistd::Gid::as_raw).collect(),
     }
 }
 

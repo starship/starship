@@ -49,7 +49,7 @@ impl Error for StringFormatterError {}
 
 impl From<String> for StringFormatterError {
     fn from(error: String) -> Self {
-        StringFormatterError::Custom(error)
+        Self::Custom(error)
     }
 }
 
@@ -186,7 +186,7 @@ impl<'a> StringFormatter<'a> {
             .par_iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
-                *value = mapper(key).map(|var| var.map(|var| var.into()));
+                *value = mapper(key).map(|var| var.map(std::convert::Into::into));
             });
         self
     }
@@ -207,8 +207,8 @@ impl<'a> StringFormatter<'a> {
             parse_format(
                 textgroup.format,
                 style.transpose()?,
-                &variables,
-                &style_variables,
+                variables,
+                style_variables,
             )
         }
 
@@ -254,7 +254,7 @@ impl<'a> StringFormatter<'a> {
                                 format: textgroup.format,
                                 style: textgroup.style,
                             };
-                            parse_textgroup(textgroup, &variables, &style_variables)
+                            parse_textgroup(textgroup, variables, style_variables)
                         }
                         FormatElement::Variable(name) => variables
                             .get(name.as_ref())
@@ -292,18 +292,21 @@ impl<'a> StringFormatter<'a> {
                                 format_elements.get_variables().iter().any(|var| {
                                     variables
                                         .get(var.as_ref())
-                                        .map(|map_result| {
+                                        // false if can't find the variable in format string
+                                        .map_or(false, |map_result| {
                                             let map_result = map_result.as_ref();
                                             map_result
                                                 .and_then(|result| result.as_ref().ok())
-                                                .map(|result| match result {
+                                                // false if the variable is None or Err, or a meta variable
+                                                // that shouldn't show
+                                                .map_or(false, |result| match result {
                                                     // If the variable is a meta variable, also
                                                     // check the format string inside it.
                                                     VariableValue::Meta(meta_elements) => {
                                                         let meta_variables =
                                                             clone_without_meta(variables);
                                                         should_show_elements(
-                                                            &meta_elements,
+                                                            meta_elements,
                                                             &meta_variables,
                                                         )
                                                     }
@@ -314,12 +317,7 @@ impl<'a> StringFormatter<'a> {
                                                         segments.iter().any(|x| !x.value.is_empty())
                                                     }
                                                 })
-                                                // The variable is None or Err, or a meta variable
-                                                // that shouldn't show
-                                                .unwrap_or(false)
                                         })
-                                        // Can't find the variable in format string
-                                        .unwrap_or(false)
                                 })
                             }
 

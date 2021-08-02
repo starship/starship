@@ -144,8 +144,6 @@ jobs:
         with:
           files: starship-*/starship-*
           body_path: RELEASE.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Publish starship to Crates.io
   cargo_publish:

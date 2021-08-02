@@ -15,7 +15,7 @@ pub fn create() {
 
     let environment = Environment {
         os_type: os_info.os_type(),
-        os_version: os_info.version().to_owned(),
+        os_version: os_info.version().clone(),
         shell_info: get_shell_info(),
         terminal_info: get_terminal_info(),
         starship_config: get_starship_config(),
@@ -24,10 +24,7 @@ pub fn create() {
     let link = make_github_issue_link(environment);
     let short_link = shorten_link(&link);
 
-    if open::that(&link)
-        .map(|status| status.success())
-        .unwrap_or(false)
-    {
+    if open::that(&link).is_ok() {
         println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
         println!("If your browser has failed to open, please click this link:\n");
     } else {
@@ -154,14 +151,17 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500))
-        .map(|output| output.stdout.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_VERSION.to_string());
+    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500)).map_or_else(
+        || UNKNOWN_VERSION.to_string(),
+        |output| output.stdout.trim().to_string(),
+    );
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .map(|config| config.trim().to_string())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string());
+        .map_or_else(
+            || UNKNOWN_CONFIG.to_string(),
+            |config| config.trim().to_string(),
+        );
 
     ShellInfo {
         name: shell,
@@ -212,6 +212,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "zsh" => Some(".zshrc"),
             "elvish" => Some(".elvish/rc.elv"),
             "tcsh" => Some(".tcshrc"),
+            "xonsh" => Some(".xonshrc"),
             _ => None,
         }
         .map(|path| home_dir.join(path))
@@ -263,18 +264,6 @@ mod tests {
         assert!(link.contains("2.3.4"));
         assert!(link.contains("No+config"));
         assert!(link.contains("No+Starship+config"));
-    }
-
-    #[test]
-    fn test_get_shell_info() {
-        env::remove_var("STARSHIP_SHELL");
-        let unknown_shell = get_shell_info();
-        assert_eq!(UNKNOWN_SHELL, &unknown_shell.name);
-
-        env::set_var("STARSHIP_SHELL", "fish");
-
-        let fish_shell = get_shell_info();
-        assert_eq!("fish", &fish_shell.name);
     }
 
     #[test]

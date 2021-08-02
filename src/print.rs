@@ -99,7 +99,7 @@ pub fn get_prompt(context: Context) -> String {
                         .collect::<Vec<Segment>>()
                 })
                 .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(&module) {
+        } else if context.is_module_disabled_in_config(module) {
             None
         } else {
             // Get segments from module
@@ -177,10 +177,10 @@ pub fn timings(args: ArgMatches) {
     println!("\n Here are the timings of modules in your prompt (>=1ms or output):");
 
     // for now we do not expect a wrap around at the end... famous last words
-    // Overall a line looks like this: " {module name}  -  {duration}  -  {module value}".
+    // Overall a line looks like this: " {module name}  -  {duration}  -  "{module value}"".
     for timing in &modules {
         println!(
-            " {}{}  -  {}{}  -   {}",
+            " {}{}  -  {}{}  -   \"{}\"",
             timing.name,
             " ".repeat(max_name_width - (timing.name_len)),
             " ".repeat(max_duration_width - (timing.duration_len)),
@@ -213,7 +213,7 @@ pub fn explain(args: ArgMatches) {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
-                desc: module.get_description().to_owned(),
+                desc: module.get_description().clone(),
                 duration: format_duration(&module.duration),
             }
         })
@@ -221,9 +221,9 @@ pub fn explain(args: ArgMatches) {
 
     let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
-    // In addition to the module width itself there are also 9 padding characters in each line.
-    // Overall a line looks like this: " {module value} ({xxxms})  -  {description}".
-    const PADDING_WIDTH: usize = 9;
+    // In addition to the module width itself there are also 11 padding characters in each line.
+    // Overall a line looks like this: " "{module value}" ({xxxms})  -  {description}".
+    const PADDING_WIDTH: usize = 11;
 
     let desc_width = term_size::dimensions()
         .map(|(w, _)| w)
@@ -238,7 +238,7 @@ pub fn explain(args: ArgMatches) {
             let mut escaping = false;
             // Print info
             print!(
-                " {} ({}){}  -  ",
+                " \"{}\" ({}){}  -  ",
                 info.value,
                 info.duration,
                 " ".repeat(max_module_width - (info.value_len))
@@ -301,11 +301,11 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
             for module in PROMPT_ORDER.iter() {
-                let modules = handle_module(module, &context, &modules);
+                let modules = handle_module(module, context, &modules);
                 prompt_order.extend(modules.into_iter());
             }
         } else {
-            let modules = handle_module(module, &context, &modules);
+            let modules = handle_module(module, context, &modules);
             prompt_order.extend(modules.into_iter());
         }
     }
@@ -331,14 +331,14 @@ fn handle_module<'a>(
     if ALL_MODULES.contains(&module) {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, &context));
+            modules.extend(modules::handle(module, context));
         }
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set
         if let Some(custom_modules) = context.config.get_custom_modules() {
             let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
-                if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                    modules::custom::module(custom_module, &context)
+                if should_add_implicit_custom_module(custom_module, config, module_list) {
+                    modules::custom::module(custom_module, context)
                 } else {
                     None
                 }
@@ -347,9 +347,9 @@ fn handle_module<'a>(
         }
     } else if let Some(module) = module.strip_prefix("custom.") {
         // Write out a custom module if it isn't disabled (and it exists...)
-        match context.is_custom_module_disabled_in_config(&module) {
+        match context.is_custom_module_disabled_in_config(module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(&module, &context)),
+            Some(false) => modules.extend(modules::custom::module(module, context)),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
