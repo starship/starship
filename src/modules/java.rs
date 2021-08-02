@@ -1,5 +1,6 @@
 use crate::configs::java::JavaConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
+use crate::utils::get_command_string_output;
 use std::path::PathBuf;
 
 use super::{Context, Module, RootModuleConfig};
@@ -64,12 +65,8 @@ fn get_java_version(context: &Context, config: &JavaConfig) -> Option<String> {
         })
         .unwrap_or_else(|| String::from("java"));
 
-    let output = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
-    let java_version = if output.stdout.is_empty() {
-        output.stderr
-    } else {
-        output.stdout
-    };
+    let command = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
+    let java_version = get_command_string_output(command);
 
     format_java_version(&java_version, config.version_format)
 }
