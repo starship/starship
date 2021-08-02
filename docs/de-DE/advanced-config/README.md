@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`
