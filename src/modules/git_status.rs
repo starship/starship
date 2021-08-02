@@ -18,13 +18,13 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
 ///   - `⇕` – This branch has diverged from the branch being tracked
+///   - `✓` — This branch is up to date with its upstream
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
 ///   - `+` — A new file has been added to the staging area
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
-///   - `✓` — This branch is up to date with its upstream
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let info = Arc::new(GitStatusInfo::load(context));
 
@@ -238,7 +238,6 @@ struct RepoStatus {
     modified: usize,
     staged: usize,
     untracked: usize,
-    remoteless: usize,
 }
 
 impl RepoStatus {
