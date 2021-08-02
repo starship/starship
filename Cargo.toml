@@ -66,7 +66,7 @@ indexmap = { version ="1.7.0", features = ["serde"] }
 notify-rust = { version = "4.5.1", optional = true }
 semver = "1.0.3"
 which = "4.2.1"
-shadow-rs = "0.6.2"
+shadow-rs = "0.6.3"
 versions = "3.0.2"
 strsim = "0.10.0"
 
@@ -90,7 +90,7 @@ winapi = { version = "0.3.9", features = [
 nix = "0.22.0"
 
 [build-dependencies]
-shadow-rs = "0.6.2"
+shadow-rs = "0.6.3"
 
 [dev-dependencies]
 tempfile = "3.2.0"
