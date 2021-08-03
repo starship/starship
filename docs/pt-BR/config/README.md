@@ -240,11 +240,11 @@ $character"""
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
+O módulo `aws` exibi a região e perfil atual do AWS. Isto é baseado nas variáveis de env `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` contidas no arquivo `~/.aws/config`. Este modulo exibi também tempo de expiração de credenciais temporarias.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+Quando usar [aws-vault](https://github.com/99designs/aws-vault) o perfil é lido da variável `AWS_VAULT` e a expiração de credenciais é lida da variável de env `AWS_SESSION_EXPIRATION`.
 
-When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+Quando usar [awsu](https://github.com/kreuzwerker/awsu) o perfil é lido da varável de env `AWSU_PROFILE`.
 
 When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
@@ -259,19 +259,19 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `expiration_symbol` | `X`                                                                  | O simbolo exibido quando as credenciais temporárias estão expiradas. |
 | `disabled`          | `false`                                                              | Desabilita o modulo `AWS`.                                           |
 
-### Variables
+### Variáveis
 
-| Variável  | Exemplo          | Descrição                                   |
-| --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | The current AWS region                      |
-| profile   | `astronauts`     | The current AWS profile                     |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | Mirrors the value of option `symbol`        |
-| style\* |                  | Mirrors the value of option `style`         |
+| Variável  | Exemplo          | Descrição                            |
+| --------- | ---------------- | ------------------------------------ |
+| region    | `ap-northeast-1` | A região atual do AWS                |
+| profile   | `astronauts`     | O perfil atual do AWS                |
+| duration  | `2h27m20s`       | A duração temporária das credenciais |
+| symbol    |                  | Espelha o valor da opção `símbolo`   |
+| style\* |                  | Espelha o valor da opção `style`     |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
-### Examples
+### Exemplos
 
 #### Exibir tudo
 
@@ -326,8 +326,8 @@ The `battery` module shows how charged the device's battery is and its current c
 | `unknown_symbol`     | `" "`                            | O simbolo exibido quando o estado da bateria é desconhecido. |
 | `empty_symbol`       | `" "`                            | O simbolo exibido quando o estado da bateria é vazio.        |
 | `format`             | `"[$symbol$percentage]($style) "` | O formato do módulo.                                         |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.                  |
-| `disabled`           | `false`                           | Disables the `battery` module.                               |
+| `display`            | [link](#battery-display)          | Limite de exibição e estilo para o módulo.                   |
+| `disabled`           | `false`                           | Desabilita o módulo `battery`.                               |
 
 ### Exemplo
 
@@ -390,15 +390,15 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
+::: Atenção
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` não é suportado no elvish e nu shell.
 
 :::
 
-::: warning
+::: Atenção
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` é suportado apenas no fish e zsh.
 
 :::
 
@@ -412,7 +412,7 @@ By default it only changes color. If you also want to change its shape take a lo
 | `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
 | `disabled`       | `false`             | Desabilita o módulo `character`.                                                 |
 
-### Variables
+### Variáveis
 
 | Variável | Exemplo | Descrição                                                             |
 | -------- | ------- | --------------------------------------------------------------------- |
@@ -469,7 +469,7 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 | `style`             | `"bold blue"`                          | O estilo do módulo.                                                                  |
 | `disabled`          | `false`                                | Disables the `cmake` module.                                                         |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -477,7 +477,7 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ## Tempo de execução do comando
 
@@ -509,14 +509,14 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 :::
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                               |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -549,7 +549,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
 | `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
-### Variables
+### Variáveis
 
 | Variável    | Exemplo      | Descrição                            |
 | ----------- | ------------ | ------------------------------------ |
@@ -557,7 +557,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol      |              | Mirrors the value of option `symbol` |
 | style\*   |              | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -588,7 +588,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -596,7 +596,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -628,7 +628,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | `style`             | `"bold blue"`                                     | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -636,7 +636,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -665,7 +665,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `style`             | `"green bold"`                               | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                      | Disables the `deno` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -725,14 +725,14 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo               | Descrição                           |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `"D:/Projects"`       | The current directory path          |
 | style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -761,7 +761,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `style`             | `"blue bold"`                                                 | O estilo do módulo.                                                               |
 | `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo        | Descrição                            |
 | --------- | -------------- | ------------------------------------ |
@@ -769,7 +769,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | Mirrors the value of option `symbol` |
 | style\* |                | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -815,7 +815,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `style`             | `"bold blue"`                                                                                           | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo          | Descrição                                                          |
 | --------- | ---------------- | ------------------------------------------------------------------ |
@@ -824,7 +824,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | Mirrors the value of option `symbol`                               |
 | style\* |                  | Mirrors the value of option `style`                                |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -856,7 +856,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `style`             | `"bold purple"`                                             | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
-### Variables
+### Variáveis
 
 | Variável    | Exemplo | Descrição                            |
 | ----------- | ------- | ------------------------------------ |
@@ -865,7 +865,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | Mirrors the value of option `symbol` |
 | style\*   |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -899,7 +899,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `style`             | `"cyan bold"`                                      | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -907,7 +907,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -947,7 +947,7 @@ default = "unknown user"
 | `format`   | `"with [$env_value]($style) "` | O formato do módulo.                                                         |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo                                     | Descrição                                  |
 | --------- | ------------------------------------------- | ------------------------------------------ |
@@ -955,7 +955,7 @@ default = "unknown user"
 | symbol    |                                             | Mirrors the value of option `symbol`       |
 | style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -998,7 +998,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -1006,7 +1006,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1031,7 +1031,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `style`          | `"bold blue"`                                              | O estilo do módulo.                                             |
 | `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo       | Descrição                                                          |
 | --------- | ------------- | ------------------------------------------------------------------ |
@@ -1043,9 +1043,9 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | Mirrors the value of option `symbol`                               |
 | style\* |               | Mirrors the value of option `style`                                |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
-### Examples
+### Exemplos
 
 #### Display account and project
 
@@ -1095,7 +1095,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
 | `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
-### Variables
+### Variáveis
 
 | Variável      | Exemplo  | Descrição                                                                                              |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
@@ -1105,7 +1105,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Mirrors the value of option `symbol`                                                                   |
 | style\*     |          | Mirrors the value of option `style`                                                                    |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1134,14 +1134,14 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
 | `disabled`           | `false`                            | Disables the `git_commit` module.                       |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                           |
 | --------- | --------- | ----------------------------------- |
 | hash      | `b703eb3` | The current git commit hash         |
 | style\* |           | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1172,7 +1172,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | O formato do módulo.                                                                    |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
-### Variables
+### Variáveis
 
 | Variável         | Exemplo    | Descrição                           |
 | ---------------- | ---------- | ----------------------------------- |
@@ -1181,7 +1181,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | The total operation progress        |
 | style\*        |            | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1212,7 +1212,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | O formato do módulo.               |
 | `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
 
-### Variables
+### Variáveis
 
 | Variável          | Exemplo | Descrição                                   |
 | ----------------- | ------- | ------------------------------------------- |
@@ -1221,7 +1221,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1255,7 +1255,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `style`      | `"bold red"`                                    | O estilo do módulo.                 |
 | `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
-### Variables
+### Variáveis
 
 The following variables can be used in `format`:
 
@@ -1272,7 +1272,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
 | style\*      | Mirrors the value of option `style`                                                           |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 The following variables can be used in `diverged`:
 
@@ -1342,7 +1342,7 @@ The `golang` module shows the currently installed version of [Golang](https://go
 | `style`             | `"bold cyan"`                                                                  | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                                                        | Disables the `golang` module.                                             |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -1350,7 +1350,7 @@ The `golang` module shows the currently installed version of [Golang](https://go
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1381,7 +1381,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `style`             | `"bold white"`                       | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -1389,7 +1389,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1414,14 +1414,14 @@ The `hostname` module shows the system hostname.
 | `style`    | `"bold dimmed green"`       | O estilo do módulo.                                                                                                                  |
 | `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1455,7 +1455,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `style`             | `"red dimmed"`                                                                                            | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
@@ -1463,7 +1463,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1494,7 +1494,7 @@ This module is not supported on tcsh and nu.
 | `style`     | `"bold blue"`                 | O estilo do módulo.                              |
 | `disabled`  | `false`                       | Disables the `jobs` module.                      |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
@@ -1502,7 +1502,7 @@ This module is not supported on tcsh and nu.
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1535,7 +1535,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `style`             | `"bold purple"`                      | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -1543,7 +1543,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1574,7 +1574,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -1582,7 +1582,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1621,7 +1621,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
 | `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo              | Descrição                                |
 | --------- | -------------------- | ---------------------------------------- |
@@ -1630,7 +1630,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | Mirrors the value of option `symbol`     |
 | style\* |                      | Mirrors the value of option `style`      |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1685,7 +1685,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -1693,7 +1693,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1726,7 +1726,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`     | `"bold dimmed white"`                           | O estilo do módulo.                                      |
 | `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
-### Variables
+### Variáveis
 
 | Variável         | Exemplo       | Descrição                                                          |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
@@ -1766,7 +1766,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -1774,7 +1774,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1809,7 +1809,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `style`             | `"bold yellow"`                      | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `nim` module.                                                |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -1817,7 +1817,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1844,7 +1844,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
 | `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
@@ -1853,7 +1853,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1892,7 +1892,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo    | Descrição                            |
 | --------- | ---------- | ------------------------------------ |
@@ -1900,7 +1900,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\* |            | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1937,7 +1937,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `style`                   | `"bold yellow"`                                                            | O estilo do módulo.                                                       |
 | `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
 
-### Variables
+### Variáveis
 
 | Variável         | Exemplo      | Descrição                                                         |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
@@ -1947,7 +1947,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Mirrors the value of option `symbol`                              |
 | style\*        |              | Mirrors the value of option `style`                               |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -1971,7 +1971,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `style`    | `"bold yellow"`                                     | O estilo do módulo.                                            |
 | `disabled` | `false`                                             | Disables the `openstack` module.                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
@@ -1980,7 +1980,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2023,7 +2023,7 @@ The `package` module is shown when the current directory is the repository for a
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
 | `disabled`        | `false`                           | Disables the `package` module.                             |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2031,7 +2031,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2065,7 +2065,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `style`             | `"bold 149"`                                                                                             | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo   | Descrição                            |
 | --------- | --------- | ------------------------------------ |
@@ -2103,7 +2103,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | `style`             | `"147 bold"`                         | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `php` module.                                                |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2111,7 +2111,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2142,7 +2142,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | `style`             | `"bold white"`                       | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `purescript` module.                                         |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2150,7 +2150,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2203,7 +2203,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 :::
 
-### Variables
+### Variáveis
 
 | Variável     | Exemplo         | Descrição                                  |
 | ------------ | --------------- | ------------------------------------------ |
@@ -2275,7 +2275,7 @@ The `rlang` module shows the currently installed version of R. The module will b
 | `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
-### Variables
+### Variáveis
 
 | Variável | Exemplo       | Descrição                            |
 | -------- | ------------- | ------------------------------------ |
@@ -2311,7 +2311,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | `style`             | `"red bold"`                         | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `red` module.                                                |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2319,7 +2319,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2351,7 +2351,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2359,7 +2359,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2390,7 +2390,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo           | Descrição                            |
 | --------- | ----------------- | ------------------------------------ |
@@ -2398,7 +2398,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Mirrors the value of option `symbol` |
 | style\* |                   | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2430,7 +2430,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `style`             | `"red dimmed"`                           | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2438,7 +2438,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2475,13 +2475,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`               | `$indicator` | O formato do módulo.                                         |
 | `disabled`             | `true`       | Disables the `shell` module.                                 |
 
-### Variables
+### Variáveis
 
 | Variável  | Padrão | Descrição                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
 
-### Examples
+### Exemplos
 
 ```toml
 # ~/.config/starship.toml
@@ -2508,7 +2508,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 | `style`     | `"bold yellow"`              | O estilo do módulo.                                           |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
@@ -2516,7 +2516,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2542,7 +2542,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `style`    | `"bold dimmed blue"`             | O estilo do módulo.                              |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo      | Descrição                            |
 | --------- | ------------ | ------------------------------------ |
@@ -2550,7 +2550,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | Mirrors the value of option `symbol` |
 | style\* |              | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2592,7 +2592,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
 | `disabled`              | `true`                                                                               | Disables the `status` module.                           |
 
-### Variables
+### Variáveis
 
 | Variável       | Exemplo | Descrição                                                                                   |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
@@ -2606,7 +2606,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | Mirrors the value of option `symbol`                                                        |
 | style\*      |         | Mirrors the value of option `style`                                                         |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2643,7 +2643,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | `style`             | `"bold 202"`                         | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `swift` module.                                              |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2651,7 +2651,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2690,7 +2690,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `"bold 105"`                         | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo    | Descrição                            |
 | --------- | ---------- | ------------------------------------ |
@@ -2699,7 +2699,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\* |            | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2745,14 +2745,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo    | Descrição                           |
 | --------- | ---------- | ----------------------------------- |
 | horário   | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2792,7 +2792,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `show_always` | `false`                 | Always shows the `username` module.   |
 | `disabled`    | `false`                 | Disables the `username` module.       |
 
-### Variables
+### Variáveis
 
 | Variável | Exemplo      | Descrição                                                                                   |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
@@ -2831,7 +2831,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | `style`             | `"cyan bold"`                        | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo          | Descrição                            |
 | --------- | ---------------- | ------------------------------------ |
@@ -2839,7 +2839,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | Mirrors the value of option `symbol` |
 | style\* |                  | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2868,7 +2868,7 @@ The `vlang` module shows you your currently installed version of V. By default t
 | `style`             | `"blue bold"`                                | O estilo do módulo.                          |
 | `disabled`          | `false`                                      | Disables the `vlang` module.                 |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo | Descrição                            |
 | --------- | ------- | ------------------------------------ |
@@ -2897,7 +2897,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | `format`   | `"vcsh [$symbol$repo]($style) "` | O formato do módulo.                                   |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo                                     | Descrição                            |
 | --------- | ------------------------------------------- | ------------------------------------ |
@@ -2905,7 +2905,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | Mirrors the value of option `symbol` |
 | style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
@@ -2935,7 +2935,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 
-### Variables
+### Variáveis
 
 | Variável  | Exemplo  | Descrição                            |
 | --------- | -------- | ------------------------------------ |
@@ -2943,7 +2943,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
