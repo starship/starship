@@ -122,15 +122,15 @@ Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#u
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
 ```toml
-# with basic string
+# com string básica
 format = "\n\\$"
 
-# with multiline basic string
+# com múltiplas linhas de string básica
 format = """
 
 \\$"""
 
-# with literal string
+# com string literal
 format = '''
 
 \$'''
@@ -138,16 +138,16 @@ format = '''
 
 ## Prompt de Comando
 
-This is the list of prompt-wide configuration options.
+Está é a lista de opções de configuração de prompt.
 
 ### Opções
 
-| Opções            | Padrão                         | Descrição                                                    |
-| ----------------- | ------------------------------ | ------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                          |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).        |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
+| Opções            | Padrão                         | Descrição                                                              |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                         |
+| `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                |
+| `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos). |
+| `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                          |
 
 ### Exemplo
 
@@ -174,7 +174,7 @@ O `formato` padrão é usado para definir o formato do prompt, se um valor vazio
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Que é equivalente a
 format = """
 $username\
 $hostname\
