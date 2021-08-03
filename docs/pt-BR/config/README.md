@@ -9,19 +9,19 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Inserts a blank line between shell prompts
+#Insere uma linha vazia entre os prompts
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Substitui o simbolo "❯" do prompt por "➜"
+[character]                            # O nome do módulo que nos estamos configurando é "character"
+success_symbol = "[➜](bold green)"     # O seguimento do "success_symbol" é alterado para  "➜" com a cor  "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Desabilita o módulo de package, ocultando completamente do prompt
 [package]
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Você pode alterar o caminho padrão do arquivo de configuração com a variável de ambiente `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
@@ -2966,19 +2966,19 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
-::: tip
+::: Dica
 
-Multiple custom modules can be defined by using a `.`.
+Vários módulos personalizados podem ser definidos usando `.`.
 
 :::
 
-::: tip
+::: Dica
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip
+::: Dica
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
@@ -2986,22 +2986,22 @@ The order in which custom modules are shown can be individually set by including
 
 ### Opções
 
-| Opções        | Padrão                          | Descrição                                                                                                                                                                     |
-| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `descrição`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
-| `style`       | `"bold green"`                  | O estilo do módulo.                                                                                                                                                           |
-| `format`      | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                          |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
-| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
+| Opções        | Padrão                          | Descrição                                                                                                                                                                        |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                    |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                       |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                               |
+| `descrição`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                     |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                            |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                      |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                       |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                            |
+| `style`       | `"bold green"`                  | O estilo do módulo.                                                                                                                                                              |
+| `format`      | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                             |
+| `disabled`    | `false`                         | Desabilita este módulo `custom`.                                                                                                                                                 |
+| `os`          |                                 | Nome do sistema operacional onde módulo sera exibido (unix, linux, macos, windows, ... ) [Veja os possíveis valores](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
-### Variables
+### Variáveis
 
 | Variável  | Descrição                              |
 | --------- | -------------------------------------- |
