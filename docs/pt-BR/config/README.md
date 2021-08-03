@@ -350,11 +350,11 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+O valor padrão das opções `charging_symbol` e `discharging_symbol`é respectivamente o valor das opções `battery`'s `charging_symbol` e `discharging_symbol`.
 
 #### Opções
 
-The `display` option is an array of the following table.
+A opção `display` é um array da seguinte tabela.
 
 | Opções               | Padrão     | Descrição                                                                                                 |
 | -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
@@ -366,16 +366,16 @@ The `display` option is an array of the following table.
 #### Exemplo
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # "bold red" é estilo e o simbolo discharging_symbol serão usados quando a capacidade estiver entre 0% e 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # "bold yellow" é estilo e o simbolo 💦 serão usados quando a capacidade estiver entre 10% e 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# Quando a capcidade for maior que  30%, o indicador de bateria não sera mostrado
 
 ```
 
@@ -2451,11 +2451,11 @@ symbol = "🌟 "
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+O módulo de `shell` exibe um indicador para o shell que esta sendo usado.
 
-::: tip
+::: Dica
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
@@ -2463,8 +2463,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Opções                 | Padrão       | Descrição                                                    |
 | ---------------------- | ------------ | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
+| `bash_indicator`       | `bsh`        | Uma string para representar o bash.                          |
+| `fish_indicator`       | `fsh`        | Uma string usada para representar o fish.                    |
 | `zsh_indicator`        | `zsh`        | A format string used to represent zsh.                       |
 | `powershell_indicator` | `psh`        | A format string used to represent powershell.                |
 | `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
@@ -2682,7 +2682,7 @@ By default the module will be shown if any of the following conditions are met:
 | Opções              | Padrão                               | Descrição                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `version_format`    | `"v${raw}"`                          | A versão formatada. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
 | `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
@@ -2901,7 +2901,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | Variável  | Exemplo                                     | Descrição                         |
 | --------- | ------------------------------------------- | --------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name        |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | O nome do repositório ativo       |
 | symbol    |                                             | Espelha o valor da opção `symbol` |
 | style\* | `black bold dimmed`                         | Espelha o valor da opção `style`  |
 
@@ -2954,7 +2954,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Comandos Personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
