@@ -25,7 +25,7 @@ Sim, ambos podem ser usados para desativar os mulos no prompt. Se seu objetivo g
 
 A forma em que o Starship foi construído, faz com que ele seja compatível com qualquer shell. O binário do starship é sem estado e shell agnóstico, então se o seu shell suporta customização de prompt e expansão de shell, Starship pode ser utilizado.
 
-Here's a small example getting Starship working with bash:
+Aqui está um pequeno exemplo de como o Starship funciona com o bash:
 
 ```sh
 # Recupera o status do último comando executado
@@ -38,15 +38,15 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+A [implementação do Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) embutida no Starship é um pouco mais complexa para aceitar recursos avançados como o [Módulo de duração de comando](https://starship.rs/config/#command-duration) e para garantir isto o Starship é compatível com configurações pre-instaladas.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Para uma lista de flags aceitos pelo `starship prompt`, use o seguinte comando:
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+O prompt vai usar o contexto fornecido, mas nenhuma flag é obrigatória.
 
 ## How do I run Starship on Linux distributions with older versions of glibc?
 
