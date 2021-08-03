@@ -1,5 +1,6 @@
 use yaml_rust::YamlLoader;
 
+use std::borrow::Cow;
 use std::env;
 use std::path;
 
@@ -49,6 +50,24 @@ fn get_kube_ns(filename: path::PathBuf, current_ctx: String) -> Option<String> {
     Some(ns.to_owned())
 }
 
+fn get_kube_context_name<'a>(config: &'a KubernetesConfig, kube_ctx: &'a str) -> Cow<'a, str> {
+    if let Some(val) = config.context_aliases.get(kube_ctx) {
+        return Cow::Borrowed(val);
+    }
+
+    config
+        .context_aliases
+        .iter()
+        .find_map(|(k, v)| {
+            let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
+            match re.replace(kube_ctx, *v) {
+                Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
+                _ => None,
+            }
+        })
+        .unwrap_or(Cow::Borrowed(kube_ctx))
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("kubernetes");
     let config: KubernetesConfig = KubernetesConfig::try_load(module.config);
@@ -81,11 +100,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "context" => match config.context_aliases.get(&kube_ctx) {
-                    None => Some(Ok(kube_ctx.as_str())),
-                    Some(&alias) => Some(Ok(alias)),
-                },
-                "namespace" => kube_ns.as_ref().map(|s| Ok(s.as_str())),
+                "context" => Some(Ok(get_kube_context_name(&config, &kube_ctx))),
+                "namespace" => kube_ns.as_ref().map(|s| Ok(Cow::Borrowed(s.as_str()))),
                 _ => None,
             })
             .parse(None)
@@ -144,41 +160,96 @@ users: []
         dir.close()
     }
 
-    #[test]
-    fn test_ctx_alias() -> io::Result<()> {
+    fn base_test_ctx_alias(ctx_name: &str, config: toml::Value, expected: &str) -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let filename = dir.path().join("config");
 
         let mut file = File::create(&filename)?;
         file.write_all(
-            b"
+            format!(
+                "
 apiVersion: v1
 clusters: []
 contexts: []
-current-context: test_context
+current-context: {}
 kind: Config
-preferences: {}
+preferences: {{}}
 users: []
 ",
+                ctx_name
+            )
+            .as_bytes(),
         )?;
         file.sync_all()?;
 
         let actual = ModuleRenderer::new("kubernetes")
             .path(dir.path())
             .env("KUBECONFIG", filename.to_string_lossy().as_ref())
-            .config(toml::toml! {
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("{} in ", Color::Cyan.bold().paint(expected)));
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_ctx_alias_simple() -> io::Result<()> {
+        base_test_ctx_alias(
+            "test_context",
+            toml::toml! {
                 [kubernetes]
                 disabled = false
                 [kubernetes.context_aliases]
                 "test_context" = "test_alias"
-            })
-            .collect();
+                ".*" = "literal match has precedence"
+            },
+            "☸ test_alias",
+        )
+    }
 
-        let expected = Some(format!("{} in ", Color::Cyan.bold().paint("☸ test_alias")));
-        assert_eq!(expected, actual);
+    #[test]
+    fn test_ctx_alias_regex() -> io::Result<()> {
+        base_test_ctx_alias(
+            "namespace/openshift-cluster/user",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                [kubernetes.context_aliases]
+                ".*/openshift-cluster/.*" = "test_alias"
+            },
+            "☸ test_alias",
+        )
+    }
 
-        dir.close()
+    #[test]
+    fn test_ctx_alias_regex_replace() -> io::Result<()> {
+        base_test_ctx_alias(
+            "gke_infra-cluster-28cccff6_europe-west4_cluster-1",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                [kubernetes.context_aliases]
+                "gke_.*_(?P<cluster>[\\w-]+)" = "example: $cluster"
+            },
+            "☸ example: cluster-1",
+        )
+    }
+
+    #[test]
+    fn test_ctx_alias_broken_regex() -> io::Result<()> {
+        base_test_ctx_alias(
+            "input",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                [kubernetes.context_aliases]
+                "input[.*" = "this does not match"
+            },
+            "☸ input",
+        )
     }
 
     #[test]
