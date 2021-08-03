@@ -84,12 +84,12 @@ Estilo de strings são uma lista de palavras, separadas por espaço. As palavras
 
 onde `<color>` é uma especialista de cores (discutido abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, isto deve mudar no futuro. `inverted` troca as cores de background e foreground. A ordem de palavras na string não importa.
 
-O token `none` substitui todos os outros tokens na string se ele não fizer parte de um `bg:` especificado que seja, por exemplo `fg:red none fg:blue` ainda criará uma string sem estilo. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+O token `none` substitui todos os outros tokens na string se ele não fizer parte de um `bg:` especificado que seja, por exemplo `fg:red none fg:blue` ainda criará uma string sem estilo. `bg:none` define a cor padrão de background então `fg:red bg:none` é equivalente a `red` ou `fg:red` e `bg:green fg:red bg:none` é equivalente a `fg:red` ou`red`. Pode se transformar em um erro ao usar `none` em um conjunto de outros tokens no futuro.
 
-A color specifier can be one of the following:
+Um especialista em cores pode ser um dos seguintes:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Um dos padrões de cores no terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Você pode de forma opcional prefixar com `bright-` para obter uma versão mais brilhante/clara (ex `bright-white`).
+ - Um `#` seguido por um número de seis dígitos hexadecimais. Isto especifica um [Código RGB em formato hexadecimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Um número entre 0-255. Este especifica um [Código de Cor ANSI 8 bits](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Se múltiplas cores forem especificadas para foreground/background, a ultima da string que terá prioridade.
