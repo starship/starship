@@ -48,17 +48,17 @@ starship prompt --help
 
 O prompt vai usar o contexto fornecido, mas nenhuma flag é obrigatória.
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Como faço para rodar o Starship em distribuições Linux com versões antigas do glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Se você está tendo um erro como "_version 'GLIBC_2.18' not found (required by starship)_" quando usa o binário prebuilt (por exemplo, no CentOS 6 ou 7), você pode usar um binário compilado com `musl` em vez do `glibc`:
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Se você vê símbolos que não reconhece você pode usar `starship explain` para exibir os módulos que estão sendo mostrados no momento.
 
 ## Por que não consigo visualizar um simbolo glifo no meu prompt?
 
