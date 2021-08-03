@@ -106,9 +106,9 @@ Por exemplo:
 - `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
 - Quando usar `$all` é um atalho para `\[$a$b\]`, `($all)` vai exibir nada somente quando `$a` e `$b` são `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Caractere de escape
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+Os símbolos a seguir tem uso especial em uma formatação de string. Se você quer imprimir os símbolos a seguir você deve adicionar uma barra invertida (`\`).
 
 - \$
 - \\
@@ -117,9 +117,9 @@ The following symbols have special usage in a format string. If you want to prin
 - (
 - )
 
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Observe que `toml` tem [sua própria sintaxe de escape](https://github.com/toml-lang/toml#user-content-string). É recomendado usar uma string literal (`''`) no seu arquivo de configuração. Se você quer usar uma string básica (`""`), preste atenção ao usar a barra invertida `\`.
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+Por exemplo, quando você quer imprimir um simbolo `$` em uma nova linha, as configurações de `format` a seguir são equivalentes:
 
 ```toml
 # com string básica
@@ -154,20 +154,20 @@ Está é a lista de opções de configuração de prompt.
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Usa um format customizado
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+#Espera 10 milissegundos para que o starship check os arquivos do diretório atual.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Desabilita uma nova linha no inicio do prompt
 add_newline = false
 ```
 
-### Default Prompt Format
+### Format de Prompt Padrão
 
 O `formato` padrão é usado para definir o formato do prompt, se um valor vazio ou não `formatado` for informado. Os valores padrão são os seguintes:
 
@@ -318,16 +318,16 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Opções
 
-| Opções               | Padrão                            | Descrição                                           |
-| -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `" "`                            | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `" "`                            | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `" "`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `" "`                            | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `" "`                            | The symbol shown when the battery state is empty.   |
-| `format`             | `"[$symbol$percentage]($style) "` | O formato do módulo.                                |
-| `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
-| `disabled`           | `false`                           | Disables the `battery` module.                      |
+| Opções               | Padrão                            | Descrição                                                    |
+| -------------------- | --------------------------------- | ------------------------------------------------------------ |
+| `full_symbol`        | `" "`                            | O simbolo exibido quando a bateria estiver cheia.            |
+| `charging_symbol`    | `" "`                            | O simbolo exibido quando a bateria está carregando.          |
+| `discharging_symbol` | `" "`                            | O simbolo exibido quando a bateria está descarregando.       |
+| `unknown_symbol`     | `" "`                            | O simbolo exibido quando o estado da bateria é desconhecido. |
+| `empty_symbol`       | `" "`                            | O simbolo exibido quando o estado da bateria é vazio.        |
+| `format`             | `"[$symbol$percentage]($style) "` | O formato do módulo.                                         |
+| `display`            | [link](#battery-display)          | Display threshold and style for the module.                  |
+| `disabled`           | `false`                           | Disables the `battery` module.                               |
 
 ### Exemplo
 
