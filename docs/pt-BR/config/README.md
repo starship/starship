@@ -356,12 +356,12 @@ O valor padrão das opções `charging_symbol` e `discharging_symbol`é respecti
 
 A opção `display` é um array da seguinte tabela.
 
-| Opções               | Padrão     | Descrição                                                                                                 |
-| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | The upper bound for the display option.                                                                   |
-| `style`              | `bold red` | The style used if the display option is in use.                                                           |
-| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Opções               | Padrão     | Descrição                                                                                          |
+| -------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | O limite superior para exibição.                                                                   |
+| `style`              | `bold red` | O estilo usado para exibir quando estiver em uso.                                                  |
+| `charging_symbol`    | `-`        | Simbolo opcional, mostrado quando a opção estiver em uso, o simbolo padrão é `charging_symbol`.    |
+| `discharging_symbol` | `-`        | Simbolo opcional, mostrado quando a opção estiver em uso, o simbolo padrão é `discharging_symbol`. |
 
 #### Exemplo
 
