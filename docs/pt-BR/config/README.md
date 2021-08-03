@@ -1642,6 +1642,29 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
+".*/openshift-cluster/.*" = "openshift"
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+```
+
+#### Regex Matching
+
+Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+
+The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+
+Long and automatically generated cluster names can be identified and shortened using regular expressions:
+
+```toml
+[kubernetes.context_aliases]
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+".*/openshift-cluster/.*" = "openshift"
+# Or better, to rename every OpenShift cluster at once:
+".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
 ## Quebra de linha
@@ -2451,11 +2474,11 @@ symbol = "🌟 "
 
 ## Shell
 
-O módulo de `shell` exibe um indicador para o shell que esta sendo usado.
+The `shell` module shows an indicator for currently used shell.
 
-::: Dica
+::: tip
 
-Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2968,7 +2991,7 @@ These modules will be shown if any of the following conditions are met:
 
 ::: Dica
 
-Vários módulos personalizados podem ser definidos usando `.`.
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
@@ -2978,7 +3001,7 @@ The order in which custom modules are shown can be individually set by including
 
 :::
 
-::: Dica
+::: tip
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
@@ -3009,9 +3032,9 @@ The order in which custom modules are shown can be individually set by including
 | symbol    | Espelha o valor da opção `symbol` |
 | style\* | Espelha o valor da opção `style`  |
 
-\*: Está variável só pode ser usada como parte de estilização de string
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
-#### Comandos personalizados de shell
+#### Custom command shell
 
 `shell` accepts a non-empty list of strings, where:
 
