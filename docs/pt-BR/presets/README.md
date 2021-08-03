@@ -363,11 +363,11 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## Ocultar versões de Runtime
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Está predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, este é para você!
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+![Captura de tela de ajustes de ocultar versão de runtime](/presets/hide-runtime-versions.png)
 
 ### Configuração
 
