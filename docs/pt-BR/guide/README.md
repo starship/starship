@@ -266,7 +266,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Adicione o seguinte ao final do arquivo `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -277,7 +277,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Atenção** Isto vai mudar no futuro. Apenas a versão v0.33 do nu ou superior é suportada. Adicione o seguinte no seu arquivo de configuração do nu. Você pode verificar o local deste arquivo rodando `config path` in nu.
 
    ```toml
    startup = [
