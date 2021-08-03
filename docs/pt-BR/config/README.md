@@ -98,13 +98,13 @@ Note que a aparência do estilo será controlado pelo seu terminal. Por exemplo,
 
 #### Formatação de String Condicional
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Uma formatação condicional de string é envolto por `(` e `)` não vai ser exibido caso a variável dentro esteja vazia.
 
 Por exemplo:
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- `(@$region)` não vai exibir nada caso a variável `region` seja `None` ou vazia, caso contrario vai exibir `@` seguido pelo valor da variável region.
+- `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
+- Quando usar `$all` é um atalho para `\[$a$b\]`, `($all)` vai exibir nada somente quando `$a` e `$b` são `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
 
 #### Escapable characters
 
@@ -453,21 +453,21 @@ vicmd_symbol = "[V](bold green) "
 
 O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por padrão o módulo será ativo se qualquer das condições a seguir for atendida:
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- O diretorio atual cotem um arquivo `CMakeLists.txt`
+- O diretorio atual tem um arquivo `CMakeCache.txt`
 
 ### Opções
 
-| Opções              | Padrão                                 | Descrição                                                                 |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                              |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
-| `style`             | `"bold blue"`                          | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
+| Opções              | Padrão                                 | Descrição                                                                            |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`   | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                            | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                                         |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                                          |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                           |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                             |
+| `style`             | `"bold blue"`                          | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                | Disables the `cmake` module.                                                         |
 
 ### Variables
 
@@ -3003,15 +3003,15 @@ The order in which custom modules are shown can be individually set by including
 
 ### Variáveis
 
-| Variável  | Descrição                              |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| symbol    | Mirrors the value of option `symbol`   |
-| style\* | Mirrors the value of option `style`    |
+| Variável  | Descrição                         |
+| --------- | --------------------------------- |
+| output    | A saída do comando no `shell`     |
+| symbol    | Espelha o valor da opção `symbol` |
+| style\* | Espelha o valor da opção `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Está variável só pode ser usada como parte de estilização de string
 
-#### Custom command shell
+#### Comandos personalizados de shell
 
 `shell` accepts a non-empty list of strings, where:
 
