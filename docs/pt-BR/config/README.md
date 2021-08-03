@@ -66,22 +66,22 @@ Uma variável contem um simbolo `$` seguido pelo nome da variável. O nome da va
 Por exemplo:
 
 - `$version` é uma formatação de string com uma variável chamada `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$git_branch$git_commit` é uma formatação de string com duas variáveis chamadas `git_branch` e `git_commit`.
+- `$git_branch $git_commit` Tem as duas variáveis separadas por espaço.
 
-#### Text Group
+#### Grupo de Texto
 
-A text group is made up of two different parts.
+Um grupo de texto é composto por duas partes diferentes.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+A primeira parte, é contida em um `[]`, é uma [formatação de string](#format-strings). Você pode adicionar textos, variáveis ou até mesmos grupo de textos aninhados.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+Na segunda parte, é composta por um `()`, é uma [estilização de string](#style-strings). Este pode ser usado para estilizar a primeira parte.
 
 Por exemplo:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` vai imprimir uma string `on` com texto em negrito e com a cor vermelha.
+- `[⌘ $version](bold green)` vai imprimir o simbolo `⌘` seguido pela variável `version`, com o texto em negrito e na cor verde.
+- `[a [b](red) c](green)` vai imprimir `a b c` com `b` vermelho, e `a` e `c` verde.
 
 #### Estilo dos textos
 
@@ -96,7 +96,7 @@ A maioria dos módulos do starship permite que você configure o estilo de exibi
 
 Note que a aparência do estilo será controlado pelo seu terminal. Por exemplo, alguns terminais deixarão as cores mais brilhantes ao invés de deixar o texto em negrito, ou alguns temas podem usar as mesmas cores para cores brilhantes e normais. Além disso, para textos em itálico, o terminal precisa ter suporte.
 
-#### Conditional Format Strings
+#### Formatação de String Condicional
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
@@ -273,7 +273,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Examples
 
-#### Display everything
+#### Exibir tudo
 
 ```toml
 # ~/.config/starship.toml
@@ -287,7 +287,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-#### Display region
+#### Exibir região
 
 ```toml
 # ~/.config/starship.toml
@@ -301,7 +301,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-#### Display profile
+#### Exibir perfil
 
 ```toml
 # ~/.config/starship.toml
@@ -418,9 +418,9 @@ By default it only changes color. If you also want to change its shape take a lo
 | -------- | ------- | --------------------------------------------------------------------- |
 | symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
-### Examples
+### Exemplos
 
-#### With custom error shape
+#### Com formas customizadas de erro
 
 ```toml
 # ~/.config/starship.toml
@@ -430,7 +430,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### Sem formas customizadas de erro
 
 ```toml
 # ~/.config/starship.toml
@@ -440,7 +440,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### With custom vim shape
+#### Com formas customizadas no vim
 
 ```toml
 # ~/.config/starship.toml
@@ -451,7 +451,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por padrão o módulo será ativo se qualquer das condições a seguir for atendida:
 
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
