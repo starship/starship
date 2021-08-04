@@ -10,6 +10,7 @@ pub struct PackageConfig<'a> {
     pub style: &'a str,
     pub display_private: bool,
     pub disabled: bool,
+    pub version_format: &'a str,
 }
 
 impl<'a> Default for PackageConfig<'a> {
@@ -20,6 +21,7 @@ impl<'a> Default for PackageConfig<'a> {
             style: "208 bold",
             display_private: false,
             disabled: false,
+            version_format: "v${raw}",
         }
     }
 }
