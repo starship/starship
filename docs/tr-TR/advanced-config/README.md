@@ -20,7 +20,7 @@ echo "🚀"
 starship_precmd_user_func="fırlatıldı"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Özel bir işlemi başlatmadan hemen önce komut istemini çalıştırıp, [`DEBUG`filtreleme mekanizmasını](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/) kullanabilirsiniz. Bununla birlikte, Starship başlatılmadan hemen *önce*, </strong>DEBUG sinyalini filtrelemek<1>**zorundasınız.</0>! Starship, DEBUG filtrelemesinin ardından bazı değerleri içerisinde barındırabilir ancak filtreleme işlemi starship başlatıldıktan sonra yazılırsa bazı fonksiyonlar devre dışı kalabilir.</li> </ul>
 
 ```bash
 function blastoff(){
@@ -30,7 +30,7 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Pencere Başlığını Değiştirme
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
