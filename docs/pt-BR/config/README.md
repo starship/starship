@@ -404,19 +404,19 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ### Opções
 
-| Opções           | Padrão              | Descrição                                                                        |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `format`         | `"$symbol"`         | The format string used before the text input.                                    |
-| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
-| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
-| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | Desabilita o módulo `character`.                                                 |
+| Opções           | Padrão              | Descrição                                                                                   |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------------------- |
+| `format`         | `"$symbol"`         | O formato da string usado antes da entrada dos textos.                                      |
+| `success_symbol` | `"[❯](bold green)"` | O formato da string usado antes da entrada de texto se o comando anterior for bem-sucedido. |
+| `error_symbol`   | `"[❯](bold red)"`   | O formato de string usado antes da entrada de texto se o comando anterior tiver falhado.    |
+| `vicmd_symbol`   | `"[❮](bold green)"` | O fromato de string usado antes da entrada de texto se o shell esta no vim normal mode.     |
+| `disabled`       | `false`             | Desabilita o módulo `character`.                                                            |
 
 ### Variáveis
 
-| Variável | Exemplo | Descrição                                                             |
-| -------- | ------- | --------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Variável | Exemplo | Descrição                                                        |
+| -------- | ------- | ---------------------------------------------------------------- |
+| symbol   |         | Um espelho de `success_symbol`, `error_symbol` ou `vicmd_symbol` |
 
 ### Exemplos
 
@@ -462,12 +462,12 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`   | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                            | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                                         |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                                          |
+| `symbol`            | `"△ "`                                 | O simbolo usado antes da versão do cmake.                                            |
+| `detect_extensions` | `[]`                                   | Quais extensões devem acionar este módulo                                            |
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | []                                                                                   |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                             |
+| `detect_folders`    | `[]`                                   | Quais pastas devem ativar este módulo                                                |
 | `style`             | `"bold blue"`                          | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                                         |
+| `disabled`          | `false`                                | Desabilita o módulo `cmake`.                                                         |
 
 ### Variáveis
 
@@ -2213,9 +2213,9 @@ By default the module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
+| `detect_extensions`  | `["py"]`                                                                                                     | Quais extensões devem acionar este módulo                                              |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | []                                                                                     |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                  |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
@@ -2293,9 +2293,9 @@ The `rlang` module shows the currently installed version of R. The module will b
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
 | `style`             | `"blue bold"`                        | O estilo do módulo.                                                       |
-| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                               |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Quais extensões devem acionar este módulo                                 |
 | `detect_files`      | `[".Rprofile"]`                      | []                                                                        |
-| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
+| `detect_folders`    | `[".Rproj.user"]`                    | Quais pastas devem ativar este módulo                                     |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
 ### Variáveis
