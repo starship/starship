@@ -481,7 +481,7 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 
 ## Tempo de execução do comando
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+O módulo `cmd_duration` exibi o tempo que o ultimo comando levou para executar. O módulo vai exibir somente se o comando levar mais de dois segundos, ou o valor de configuração `min_time` existir.
 
 ::: warning Não utilize o DEBUG-trap no Bash
 
