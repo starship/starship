@@ -390,13 +390,13 @@ O caractere vai te dizer se o ultimo comando foi bem sucedido ou não. Você pod
 
 Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olhada [neste exemplo](#with-custom-error-shape).
 
-::: Atenção
+::: warning
 
 `error_symbol` não é suportado no elvish e nu shell.
 
 :::
 
-::: Atenção
+::: warning
 
 `vicmd_symbol` é suportado apenas no fish e zsh.
 
