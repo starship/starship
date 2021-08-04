@@ -381,14 +381,14 @@ discharging_symbol = 💦
 
 ## Caractere
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+O módulo `character` exibe um caracter (normalmente uma seta) ao lado de onde o texto começa a ser inserido no terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+O caractere vai te dizer se o ultimo comando foi bem sucedido ou não. Você pode fazer isto de duas maneiras:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- alterando a cor (`red`/`green`)
+- alterando a forma (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olhada [neste exemplo](#with-custom-error-shape).
 
 ::: Atenção
 
