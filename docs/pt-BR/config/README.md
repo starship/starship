@@ -511,10 +511,10 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                               |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Espelha o valor da opção `style`        |
+| Variável  | Exemplo  | Descrição                                 |
+| --------- | -------- | ----------------------------------------- |
+| duration  | `16m40s` | O tempo que levou para executar o comando |
+| style\* |          | Espelha o valor da opção `style`          |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -530,11 +530,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+O módulo `conda` exibe o environment atual do conda, se `$CONDA_DEFAULT_ENV` é definido.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`.
 
 :::
 
@@ -543,7 +543,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | Opções              | Padrão                                 | Descrição                                                                                                                                                                                                   |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
+| `symbol`            | `"🅒 "`                                 | O simbolo usado antes do nome do environment.                                                                                                                                                               |
 | `style`             | `"bold green"`                         | O estilo do módulo.                                                                                                                                                                                         |
 | `format`            | `"via [$symbol$environment]($style) "` | O formato do módulo.                                                                                                                                                                                        |
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
@@ -553,7 +553,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 | Variável    | Exemplo      | Descrição                         |
 | ----------- | ------------ | --------------------------------- |
-| environment | `astronauts` | The current conda environment     |
+| environment | `astronauts` | O environment atual do conda      |
 | symbol      |              | Espelha o valor da opção `symbol` |
 | style\*   |              | Espelha o valor da opção `style`  |
 
@@ -669,7 +669,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 | Variável  | Exemplo  | Descrição                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v1.8.3` | The version of `deno`             |
+| version   | `v1.8.3` | A versão do `deno`                |
 | symbol    |          | Espelha o valor da opção `symbol` |
 | style\* |          | Espelha o valor da opção `style`  |
 
