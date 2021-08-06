@@ -2038,13 +2038,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Opções
 
-| Opções            | Padrão                            | Descrição                                                  |
-| ----------------- | --------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | O formato do módulo.                                       |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                      | O estilo do módulo.                                        |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                           | Disables the `package` module.                             |
+| Opções            | Padrão                            | Descrição                                                                 |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | O formato do módulo.                                                      |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | O estilo do módulo.                                                       |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Variáveis
 
