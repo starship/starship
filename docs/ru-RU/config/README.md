@@ -2038,13 +2038,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Опции
 
-| Параметр          | По умолчанию                      | Описание                                                  |
-| ----------------- | --------------------------------- | --------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | Формат модуля.                                            |
-| `symbol`          | `"📦 "`                            | Символ, используемый перед отображением версии пакета.    |
-| `style`           | `"bold 208"`                      | Стиль модуля.                                             |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | Отключает модуль `package`.                               |
+| Параметр          | По умолчанию                      | Описание                                                                  |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | Формат модуля.                                                            |
+| `symbol`          | `"📦 "`                            | Символ, используемый перед отображением версии пакета.                    |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | Стиль модуля.                                                             |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Переменные
 
