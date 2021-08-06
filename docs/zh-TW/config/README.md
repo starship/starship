@@ -2038,13 +2038,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### 選項
 
-| Option            | 預設                                | 說明                                                        |
-| ----------------- | --------------------------------- | --------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                |
-| `symbol`          | `"📦 "`                            | 顯示在套件的版本之前的符號。                                            |
-| `style`           | `"bold 208"`                      | 這個模組的風格。                                                  |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | 停用 `package` 模組。                                          |
+| Option            | 預設                                | 說明                                                                        |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                |
+| `symbol`          | `"📦 "`                            | 顯示在套件的版本之前的符號。                                                            |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | 這個模組的風格。                                                                  |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Variables
 
