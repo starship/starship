@@ -47,32 +47,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "stashed" => info.get_stashed().and_then(|count| {
                         format_count(config.stashed, "git_status.stashed", count)
                     }),
-                    "ahead_behind" => {
-                        info.get_ahead_behind()
-                            .and_then(|(ahead, behind)| match (ahead?, behind?) {
-                                (ahead, behind) => {
-                                    if ahead > 0 && behind > 0 {
-                                        format_text(
-                                            config.diverged,
-                                            "git_status.diverged",
-                                            |variable| match variable {
-                                                "ahead_count" => Some(ahead.to_string()),
-                                                "behind_count" => Some(behind.to_string()),
-                                                _ => None,
-                                            },
-                                        )
-                                    } else if ahead > 0 && behind == 0 {
-                                        format_count(config.ahead, "git_status.ahead", ahead)
-                                    } else if behind > 0 && ahead == 0 {
-                                        format_count(config.behind, "git_status.behind", behind)
-                                    } else if ahead == 0 && behind == 0 {
-                                        format_symbol(config.uptodate, "git_status.uptodate")
-                                    } else {
-                                        None
-                                    }
+                    "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
+                        let (ahead, behind) = (ahead?, behind?);
+                        if ahead > 0 && behind > 0 {
+                            format_text(config.diverged, "git_status.diverged", |variable| {
+                                match variable {
+                                    "ahead_count" => Some(ahead.to_string()),
+                                    "behind_count" => Some(behind.to_string()),
+                                    _ => None,
                                 }
                             })
-                    }
+                        } else if ahead > 0 && behind == 0 {
+                            format_count(config.ahead, "git_status.ahead", ahead)
+                        } else if behind > 0 && ahead == 0 {
+                            format_count(config.behind, "git_status.behind", behind)
+                        } else if ahead == 0 && behind == 0 {
+                            format_symbol(config.uptodate, "git_status.uptodate")
+                        } else {
+                            None
+                        }
+                    }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
                         format_count(config.conflicted, "git_status.conflicted", count)
                     }),
