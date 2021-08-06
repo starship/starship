@@ -18,7 +18,6 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
 ///   - `⇕` – This branch has diverged from the branch being tracked
-///   - `✓` — This branch is up to date with its upstream
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
@@ -49,11 +48,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }),
                     "ahead_behind" => {
                         info.get_ahead_behind()
-                            .and_then(|(ahead, behind)| match (ahead, behind) {
-                                (None, _) | (_, None) => None,
-                                (Some(a), Some(b)) => {
-                                    let ahead = a;
-                                    let behind = b;
+                            .and_then(|(ahead, behind)| match (ahead?, behind?) {
+                                (ahead, behind) => {
                                     if ahead > 0 && behind > 0 {
                                         format_text(
                                             config.diverged,
@@ -284,8 +280,8 @@ impl RepoStatus {
         let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
 
         if let Some(caps) = re.captures(s) {
-            self.ahead = Some(caps.get(1).unwrap().as_str().parse::<usize>().unwrap());
-            self.behind = Some(caps.get(2).unwrap().as_str().parse::<usize>().unwrap());
+            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
+            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
         }
     }
 }
@@ -472,6 +468,10 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                uptodate="✓"
+            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("✓");
@@ -521,10 +521,6 @@ mod tests {
         create_untracked(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("?");
@@ -543,7 +539,6 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 untracked = "?$count"
-                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -566,10 +561,6 @@ mod tests {
         barrier();
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = None;
@@ -592,10 +583,6 @@ mod tests {
         barrier();
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("$");
@@ -622,7 +609,6 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 stashed = r"\$$count"
-                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -639,10 +625,6 @@ mod tests {
         create_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("!");
@@ -661,7 +643,6 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 modified = "!$count"
-                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -678,10 +659,6 @@ mod tests {
         create_added(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("!");
@@ -697,10 +674,6 @@ mod tests {
         create_staged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("+");
@@ -719,7 +692,6 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 staged = "+[$count](green)"
-                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -743,10 +715,6 @@ mod tests {
         create_renamed(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("»");
@@ -765,7 +733,6 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 renamed = "»$count"
-                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -782,10 +749,6 @@ mod tests {
         create_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("✘");
@@ -804,7 +767,6 @@ mod tests {
             .config(toml::toml! {
                 [git_status]
                 deleted = "✘$count"
-                uptodate = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -831,10 +793,6 @@ mod tests {
         File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("git_status")
-            .config(toml::toml! {
-                [git_status]
-                uptodate = ""
-            })
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("✘?");
@@ -874,7 +832,6 @@ mod tests {
                 deleted = "D"
                 untracked = "U"
                 renamed = "R"
-                uptodate = ""
             })
             .collect();
         let expected = format_output("DUA");

@@ -29,7 +29,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             stashed: "\\$",
             ahead: "⇡",
             behind: "⇣",
-            uptodate: "✓",
+            uptodate: "",
             diverged: "⇕",
             conflicted: "=",
             deleted: "✘",

@@ -1314,7 +1314,7 @@ current directory.
 | `ahead`      | `"⇡"`                                         | The format of `ahead`               |
 | `behind`     | `"⇣"`                                         | The format of `behind`              |
 | `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `uptodate`   | `"✓"`                                         | The format of `uptodate`            |
+| `uptodate`   | `""`                                          | The format of `uptodate`            |
 | `untracked`  | `"?"`                                         | The format of `untracked`           |
 | `stashed`    | `"$"`                                         | The format of `stashed`             |
 | `modified`   | `"!"`                                         | The format of `modified`            |
@@ -1366,7 +1366,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
-uptodate = "☑️"
+uptodate = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
