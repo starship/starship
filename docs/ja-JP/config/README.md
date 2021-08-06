@@ -2043,9 +2043,10 @@ The `package` module is shown when the current directory is the repository for a
 | ----------------- | --------------------------------- | --------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | moduleのフォーマットです。                                          |
 | `symbol`          | `"📦 "`                            | パッケージのバージョンを表示する前に使用される記号です。                              |
+| `version_format`  | `"v${raw}"`                       | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。    |
 | `style`           | `"bold 208"`                      | モジュールのスタイルです。                                             |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | `package`モジュールを無効にします。                                    |
+| `disabled`        | `false`                           | Disables the `package` module.                            |
 
 ### 変数
 
