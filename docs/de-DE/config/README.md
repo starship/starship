@@ -2038,13 +2038,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Optionen
 
-| Option            | Standardwert                      | Beschreibung                                              |
-| ----------------- | --------------------------------- | --------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                |
-| `symbol`          | `"📦 "`                            | Symbol das vor der Paketversion angezeigt wird.           |
-| `style`           | `"bold 208"`                      | Stil für dieses Modul.                                    |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | Deaktiviert das `package`-Modul.                          |
+| Option            | Standardwert                      | Beschreibung                                                              |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                |
+| `symbol`          | `"📦 "`                            | Symbol das vor der Paketversion angezeigt wird.                           |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | Stil für dieses Modul.                                                    |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Variables
 
