@@ -18,10 +18,19 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     if result.is_err() {
         log::debug!("Error reading file: {:?}", result);
     } else {
-        log::trace!("File read sucessfully");
+        log::trace!("File read successfully");
     };
 
     result
+}
+
+/// Reads command output from stderr or stdout depending on to which stream program streamed it's output
+pub fn get_command_string_output(command: CommandOutput) -> String {
+    if command.stdout.is_empty() {
+        command.stderr
+    } else {
+        command.stdout
+    }
 }
 
 /// Attempt to resolve `binary_name` from and creates a new `Command` pointing at it
@@ -630,5 +639,18 @@ mod tests {
             wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
             test
         );
+    }
+    #[test]
+    fn test_get_command_string_output() {
+        let case1 = CommandOutput {
+            stdout: String::from("stdout"),
+            stderr: String::from("stderr"),
+        };
+        assert_eq!(get_command_string_output(case1), "stdout");
+        let case2 = CommandOutput {
+            stdout: String::from(""),
+            stderr: String::from("stderr"),
+        };
+        assert_eq!(get_command_string_output(case2), "stderr");
     }
 }
