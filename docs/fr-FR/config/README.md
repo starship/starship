@@ -2038,13 +2038,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Options
 
-| Option            | Défaut                            | Description                                               |
-| ----------------- | --------------------------------- | --------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | Format du module.                                         |
-| `symbol`          | `"📦 "`                            | Le symbole utilisé avant d'afficher la version du paquet. |
-| `style`           | `"bold 208"`                      | Le style du module.                                       |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | Désactive le module `package`.                            |
+| Option            | Défaut                            | Description                                                                                |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`          | `"is [$symbol$version]($style) "` | Format du module.                                                                          |
+| `symbol`          | `"📦 "`                            | Le symbole utilisé avant d'afficher la version du paquet.                                  |
+| `version_format`  | `"v${raw}"`                       | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | Le style du module.                                                                        |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                  |
+| `disabled`        | `false`                           | Disables the `package` module.                                                             |
 
 ### Variables
 
