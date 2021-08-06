@@ -2139,13 +2139,14 @@ package, and shows its current version. The module currently supports `npm`, `ni
 
 ### Options
 
-| Option            | Default                            | Description                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | The style for the module.                                  |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Option            | Default                            | Description                                                              |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                               |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.               |
+| `version_format`  | `"v${raw}"`                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
+| `style`           | `"bold 208"`                       | The style for the module.                                                |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.                |
+| `disabled`        | `false`                            | Disables the `package` module.                                           |
 
 ### Variables
 
