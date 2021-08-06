@@ -1314,7 +1314,7 @@ current directory.
 | `ahead`      | `"⇡"`                                         | The format of `ahead`               |
 | `behind`     | `"⇣"`                                         | The format of `behind`              |
 | `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `uptodate`   | `""`                                          | The format of `uptodate`            |
+| `up_to_date` | `""`                                          | The format of `up_to_date`          |
 | `untracked`  | `"?"`                                         | The format of `untracked`           |
 | `stashed`    | `"$"`                                         | The format of `stashed`             |
 | `modified`   | `"!"`                                         | The format of `modified`            |
@@ -1331,7 +1331,7 @@ The following variables can be used in `format`:
 | Variable       | Description                                                                                                 |
 | -------------- | ----------------------------------------------------------------------------------------------------------- |
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                 |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `uptodate` format string based on the current status of the repo. |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                 |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                               |
 | `stashed`      | Displays `stashed` when a stash exists for the local repository.                                            |
@@ -1366,7 +1366,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
-uptodate = "✓"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"

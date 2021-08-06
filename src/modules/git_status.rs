@@ -61,10 +61,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             format_count(config.ahead, "git_status.ahead", ahead)
                         } else if behind > 0 && ahead == 0 {
                             format_count(config.behind, "git_status.behind", behind)
-                        } else if ahead == 0 && behind == 0 {
-                            format_symbol(config.uptodate, "git_status.uptodate")
                         } else {
-                            None
+                            format_symbol(config.up_to_date, "git_status.up_to_date")
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
@@ -465,7 +463,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                uptodate="✓"
+                up_to_date="✓"
             })
             .path(&repo_dir.path())
             .collect();
