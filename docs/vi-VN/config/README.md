@@ -2038,13 +2038,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn          | Mặc định                          | Mô tả                                                      |
-| ----------------- | --------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | Định dạng cho module.                                      |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                      | Kiểu cho module.                                           |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                           | Disables the `package` module.                             |
+| Tuỳ chọn          | Mặc định                          | Mô tả                                                                     |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | Định dạng cho module.                                                     |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | Kiểu cho module.                                                          |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Các biến
 
