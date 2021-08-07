@@ -1246,31 +1246,32 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `ahead`      | `"⇡"`                                           | Le format de `ahead`                        |
 | `behind`     | `"⇣"`                                           | Le format de `behind`                       |
 | `diverged`   | `"⇕"`                                           | Le format de `diverged`                     |
-| `untracked`  | `"?"`                                           | Le format de `untracked`                    |
-| `stashed`    | `"$"`                                           | Le format de `stashed`                      |
-| `modified`   | `"!"`                                           | Le format de `modified`                     |
-| `staged`     | `"+"`                                           | Le format de `staged`                       |
-| `renamed`    | `"»"`                                           | Le format de `renamed`                      |
-| `deleted`    | `"✘"`                                           | Le format de `deleted`                      |
+| `up_to_date` | `""`                                            | The format of `up_to_date`                  |
+| `untracked`  | `"?"`                                           | The format of `untracked`                   |
+| `stashed`    | `"$"`                                           | The format of `stashed`                     |
+| `modified`   | `"!"`                                           | The format of `modified`                    |
+| `staged`     | `"+"`                                           | The format of `staged`                      |
+| `renamed`    | `"»"`                                           | The format of `renamed`                     |
+| `deleted`    | `"✘"`                                           | The format of `deleted`                     |
 | `style`      | `"bold green"`                                  | Le style du module.                         |
-| `disabled`   | `false`                                         | Désactive le module `git_status`.           |
+| `disabled`   | `false`                                         | Disables the `git_status` module.           |
 
 ### Variables
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                  |
-| -------------- | -------------------------------------------------------------------------------------------- |
-| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`               |
-| `ahead_behind` | Affiche la chaîne formatée de `diverged`, `ahead` ou `behind` selon l'état actuel du dépôt   |
-| `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                   |
-| `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.     |
-| `stashed`      | Affiche `stashed` lorsqu'une remise existe pour le dépôt local.                              |
-| `modified`     | Affiche `modified` lorsqu'il y a des fichiers modifiés dans le répertoire de travail.        |
-| `staged`       | Affiche `staged` lorsqu'un nouveau fichier a été ajouté à la zone de validation.             |
-| `renamed`      | Affiche `renamed` lorsqu'un fichier renommé a été ajouté à la zone de validation.            |
-| `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation. |
-| style\*      | Reflète la valeur de l'option `style`                                                        |
+| Variable       | Description                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                                    |
+| `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.                      |
+| `stashed`      | Affiche `stashed` lorsqu'une remise existe pour le dépôt local.                                               |
+| `modified`     | Affiche `modified` lorsqu'il y a des fichiers modifiés dans le répertoire de travail.                         |
+| `staged`       | Affiche `staged` lorsqu'un nouveau fichier a été ajouté à la zone de validation.                              |
+| `renamed`      | Affiche `renamed` lorsqu'un fichier renommé a été ajouté à la zone de validation.                             |
+| `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation.                  |
+| style\*      | Reflète la valeur de l'option `style`                                                                         |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -1297,6 +1298,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
