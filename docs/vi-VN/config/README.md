@@ -1246,31 +1246,32 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `ahead`      | `"⇡"`                                           | Định dạng của `ahead`               |
 | `behind`     | `"⇣"`                                           | Định dạng của `behind`              |
 | `diverged`   | `"⇕"`                                           | Định dạng của `diverged`            |
-| `untracked`  | `"?"`                                           | Định dạng của `untracked`           |
-| `stashed`    | `"$"`                                           | Định dạng của `stashed`             |
-| `modified`   | `"!"`                                           | Định dạng của `modified`            |
-| `staged`     | `"+"`                                           | Định dạng của `modified`            |
-| `renamed`    | `"»"`                                           | Định dạng của `renamed`             |
-| `deleted`    | `"✘"`                                           | Định dạng của `deleted`             |
+| `up_to_date` | `""`                                            | The format of `up_to_date`          |
+| `untracked`  | `"?"`                                           | The format of `untracked`           |
+| `stashed`    | `"$"`                                           | The format of `stashed`             |
+| `modified`   | `"!"`                                           | The format of `modified`            |
+| `staged`     | `"+"`                                           | The format of `staged`              |
+| `renamed`    | `"»"`                                           | The format of `renamed`             |
+| `deleted`    | `"✘"`                                           | The format of `deleted`             |
 | `style`      | `"bold red"`                                    | Kiểu cho module.                    |
-| `disabled`   | `false`                                         | Vô hiệu `git_status` module.        |
+| `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
 ### Các biến
 
 The following variables can be used in `format`:
 
-| Biến           | Mô tả                                                                                           |
-| -------------- | ----------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                    |
-| `ahead_behind` | Hiển thị format string của `diverged` `ahead` or `behind` dựa trên trạng thái hiện tại của repo |
-| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                         |
-| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                           |
-| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                |
-| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                       |
-| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                               |
-| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                       |
-| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                        |
-| style\*      | Giá trị ghi đè của `style`                                                                      |
+| Biến           | Mô tả                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                  |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
+| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
+| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                              |
+| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                                     |
+| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
+| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
+| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
+| style\*      | Giá trị ghi đè của `style`                                                                                    |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1297,6 +1298,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
