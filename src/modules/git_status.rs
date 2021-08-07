@@ -18,6 +18,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
 ///   - `⇕` – This branch has diverged from the branch being tracked
+///   - `` – This branch is up-to-date with the branch being tracked
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
@@ -47,6 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         format_count(config.stashed, "git_status.stashed", count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
+                        let (ahead, behind) = (ahead?, behind?);
                         if ahead > 0 && behind > 0 {
                             format_text(config.diverged, "git_status.diverged", |variable| {
                                 match variable {
@@ -60,7 +62,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         } else if behind > 0 && ahead == 0 {
                             format_count(config.behind, "git_status.behind", behind)
                         } else {
-                            None
+                            format_symbol(config.up_to_date, "git_status.up_to_date")
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
@@ -120,7 +122,7 @@ impl<'a> GitStatusInfo<'a> {
         }
     }
 
-    pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
+    pub fn get_ahead_behind(&self) -> Option<(Option<usize>, Option<usize>)> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
     }
 
@@ -217,8 +219,8 @@ fn get_stashed_count(context: &Context) -> Option<usize> {
 
 #[derive(Default, Debug, Copy, Clone)]
 struct RepoStatus {
-    ahead: usize,
-    behind: usize,
+    ahead: Option<usize>,
+    behind: Option<usize>,
     conflicted: usize,
     deleted: usize,
     renamed: usize,
@@ -271,8 +273,8 @@ impl RepoStatus {
         let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
 
         if let Some(caps) = re.captures(s) {
-            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().unwrap();
-            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().unwrap();
+            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
+            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
         }
     }
 }
@@ -301,6 +303,10 @@ fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec
         "count" => Some(count.to_string()),
         _ => None,
     })
+}
+
+fn format_symbol(format_str: &str, config_path: &str) -> Option<Vec<Segment>> {
+    format_text(format_str, config_path, |_variable| None)
 }
 
 #[cfg(test)]
@@ -445,6 +451,23 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("⇕⇡1⇣1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_up_to_date_with_upstream() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("✓");
 
         assert_eq!(expected, actual);
         repo_dir.close()
