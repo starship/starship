@@ -684,25 +684,25 @@ format = "via [🦕 $version](green bold) "
 
 ## Diretório
 
-O módulo `directory` exibe o caminho do diretório atual, truncando as três pastas pai. Your directory will also be truncated to the root of the git repo that you're currently in.
+O módulo `directory` exibe o caminho do diretório atual, truncando as três pastas pai. Seu diretório será truncando na raiz do repositório git que você estiver atualmente.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Quando usar a opção de estilo fish pwd, ao invés de esconder o caminho que é truncado, você vai ver um nome encurtado de cada diretório baseado no número que você habilitar para a opção.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz e a opção esta definida para `1`. Você verá `~/D/N/nixpkgs/pkgs`, enquanto antes seria `nixpkgs/pkgs`.
 
 ### Opções
 
-| Opções              | Padrão                                             | Descrição                                                                        |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                             |
-| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                              |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| Opções              | Padrão                                             | Descrição                                                                |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |
+| `truncation_length` | `3`                                                | O número de pastas pais do diretório atual que serão truncadas.          |
+| `truncate_to_repo`  | `true`                                             | Seu diretório será truncado ou não para a raiz do repositório git atual. |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                     |
+| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                      |
+| `disabled`          | `false`                                            | Desabilita o módulo `directory`.                                         |
+| `read_only`         | `"🔒"`                                              | O simbolo que indica que o diretório atual é somente leitura.            |
+| `read_only_style`   | `"red"`                                            | O estilo para o simbolo de somente leitura.                              |
+| `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                   |
+| `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                 |
 
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
@@ -746,7 +746,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+O módulo `docker_context` exibe o [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) atual se não estiver definido como `default` ou se as variáveis de ambiente `DOCKER_HOST` ou `DOCKER_CONTEXT` estiverem definidas (se destinam a sobrescrever o contexto atual).
 
 ### Opções
 
