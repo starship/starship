@@ -577,16 +577,16 @@ O módulo `crystal` exibe a versão instalada atual do [Crystal](https://crystal
 
 ### Opções
 
-| Opções              | Padrão                               | Descrição                                                                 |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal.                 |
-| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
-| `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.                              |
-| `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
+| Opções              | Padrão                               | Descrição                                                                            |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| `symbol`            | `"🔮 "`                               | O simbolo usado antes de exibir a versão do crystal.                                 |
+| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `style`             | `"bold red"`                         | O estilo do módulo.                                                                  |
+| `detect_extensions` | `["cr"]`                             | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["shard.yml"]`                      | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
+| `disabled`          | `false`                              | Desabilita o módulo `crystal`.                                                       |
 
 ### Variáveis
 
@@ -609,24 +609,24 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `dart` exibe a versão atual instalada do [Dart](https://dart.dev/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- O diretório atual contem algum arquivo com extensão `.dart`
+- O diretório atual contem um diretório `.dart_tool`
+- O diretório atual contem um arquivo `pubspec.yaml`, `pubspec.yml` ou `pubspec.lock`
 
 ### Opções
 
-| Opções              | Padrão                                            | Descrição                                                                 |
-| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart                           |
-| `detect_extensions` | `["dart"]`                                        | Which extensions should trigger this module.                              |
-| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.                                 |
-| `style`             | `"bold blue"`                                     | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                               |
+| Opções              | Padrão                                            | Descrição                                                                            |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`              | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                                       | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🎯 "`                                            | Um formato de string que representa o simbolo do Dart                                |
+| `detect_extensions` | `["dart"]`                                        | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[".dart_tool"]`                                  | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `"bold blue"`                                     | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                           | Desabilita o módulo `dart`.                                                          |
 
 ### Variáveis
 
@@ -649,21 +649,21 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+- O diretório contem um arquivo `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
 
 ### Opções
 
-| Opções              | Padrão                                       | Descrição                                                                 |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `"green bold"`                               | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                      | Disables the `deno` module.                                               |
+| Opções              | Padrão                                       | Descrição                                                                            |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`         | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                       | Um formato de string que representa o simbolo do Deno                                |
+| `detect_extensions` | `[]`                                         | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                         | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `"green bold"`                               | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                      | Desabilita o módulo `deno`.                                                          |
 
 ### Variáveis
 
