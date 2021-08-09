@@ -485,23 +485,23 @@ O módulo `cmd_duration` exibi o tempo que o ultimo comando levou para executar.
 
 ::: warning Não utilize o DEBUG-trap no Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Se você esta rodando o Starship no `bash`, você não deve ativar a armadilha `DEBUG` após rodar `eval $(starship init $0)`, ou este módulo **vai** quebrar.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Usuários do bash que precisam de funções pre-executadas podem usar [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simplesmente defina os arrays `preexec_functions` e `precmd_functions` antes de rodar `eval $(starship init $0)`, e depois pode proceder normalmente.
 
 ### Opções
 
-| Opções               | Padrão                        | Descrição                                                  |
-| -------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`             | `"took [$duration]($style) "` | O formato do módulo.                                       |
-| `style`              | `"bold yellow"`               | O estilo do módulo.                                        |
-| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
+| Opções               | Padrão                        | Descrição                                                     |
+| -------------------- | ----------------------------- | ------------------------------------------------------------- |
+| `min_time`           | `2_000`                       | Duração mais curta para exibir o tempo (em milissegundos).    |
+| `show_milliseconds`  | `false`                       | Exibir milissegundos ou invés de segundos para duração.       |
+| `format`             | `"took [$duration]($style) "` | O formato do módulo.                                          |
+| `style`              | `"bold yellow"`               | O estilo do módulo.                                           |
+| `disabled`           | `false`                       | Desabilita o módulo `cmd_duration`.                           |
+| `show_notifications` | `false`                       | Exibi notificações no desktop quando o comando for concluído. |
+| `min_time_to_notify` | `45_000`                      | Tempo minimo para notificação (em milissegundos).             |
 
 ::: tip
 
