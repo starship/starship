@@ -750,22 +750,22 @@ O módulo `docker_context` exibe o [Docker context](https://docs.docker.com/engi
 
 ### Opções
 
-| Opções              | Padrão                                                        | Descrição                                                                         |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | O formato do módulo.                                                              |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | O estilo do módulo.                                                               |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| Opções              | Padrão                                                        | Descrição                                                                            |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol$context]($style) "`                            | O formato do módulo.                                                                 |
+| `symbol`            | `"🐳 "`                                                        | O simbolo usado antes de exibir a versão do contexto docker.                         |
+| `only_with_files`   | `true`                                                        | Exibe somente quando houver um arquivo                                               |
+| `detect_extensions` | `[]`                                                          | Quais extensões devem acionar este módulo (precisa que `only_with_files` seja true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Quais arquivos devem acionar este módulo (precisa que `only_with_files` seja true).  |
+| `detect_folders`    | `[]`                                                          | Quais pastas devem acionar este módulo (precisa que `only_with_files` seja true).    |
+| `style`             | `"blue bold"`                                                 | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                       | Desabilita o módulo `docker_context`.                                                |
 
 ### Variáveis
 
 | Variável  | Exemplo        | Descrição                         |
 | --------- | -------------- | --------------------------------- |
-| context   | `test_context` | The current docker context        |
+| context   | `test_context` | O contexto atual do docker        |
 | symbol    |                | Espelha o valor da opção `symbol` |
 | style\* |                | Espelha o valor da opção `style`  |
 
@@ -817,12 +817,12 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variáveis
 
-| Variável  | Exemplo          | Descrição                                                          |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Espelha o valor da opção `symbol`                                  |
-| style\* |                  | Espelha o valor da opção `style`                                   |
+| Variável  | Exemplo          | Descrição                         |
+| --------- | ---------------- | --------------------------------- |
+| version   | `v3.1.201`       | A versão do sdk `dotnet`          |
+| tfm       | `netstandard2.0` | O framework alvo do projeto atual |
+| symbol    |                  | Espelha o valor da opção `symbol` |
+| style\* |                  | Espelha o valor da opção `style`  |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
