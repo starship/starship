@@ -74,7 +74,7 @@ process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.17.0", optional = true, default-features = false, features = ["tls", "form"] }
-native-tls = { version = "0.2.7", optional = true }
+native-tls = { version = "0.2.8", optional = true }
 shell-words = "1.0.0"
 
 [target.'cfg(windows)'.dependencies]
