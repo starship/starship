@@ -3157,7 +3157,7 @@ If you have an interesting example not covered there, feel free to share it ther
 
 | Option        | Default                         | Description                                                                                                                |
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
 | `description` | `"<custom module>"`             | The description of the module that is shown when running `starship explain`.                                               |
