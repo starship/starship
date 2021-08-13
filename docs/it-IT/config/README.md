@@ -51,33 +51,33 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Modulo**: Un componente nel prompt che dà informazioni basate su informazioni contestuali dal tuo sistema operativo. Ad esempio, il modulo "nodejs" mostra la versione di Node.js attualmente installata sul computer, se la directory corrente è un progetto Node.js.
 
-**Variable**: Sotto-componenti più piccoli che contengono informazioni fornite dal modulo. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Variable**: Sotto-componenti più piccoli che contengono informazioni fornite dal modulo. Per esempio, la variabile "version" nel modulo "nodejs" contiene la versione corrente di Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Per convenzione, la maggior parte dei moduli ha un prefisso di colore predefinito del terminale (ad esempio `via` in "nodejs") e uno spazio vuoto come suffisso.
 
-### Format Strings
+### Formato Stringhe
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Le stringhe di formato sono il formato con cui un modulo stampa tutte le sue variabili. La maggior parte dei moduli ha una voce chiamata `formato` che configura il formato di visualizzazione del modulo. È possibile utilizzare testi, variabili e gruppi di testo in una stringa di formato.
 
 #### Variable
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Una variabile contiene un simbolo `$` seguito dal nome della variabile. Il nome di una variabile contiene solo lettere, numeri e `_`.
 
-For example:
+Per esempio:
 
 - `$version` is a format string with a variable named `version`.
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
 - `$git_branch $git_commit` has the two variables separated with a space.
 
-#### Text Group
+#### Gruppo Testo
 
-A text group is made up of two different parts.
+Un gruppo di testo è composto da due parti diverse.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+La prima parte, che è racchiusa tra `[]`, è una [format string](#format-strings). È possibile aggiungere testi, variabili o anche gruppi annidati di testo.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+Nella seconda parte, che è racchiusa tra `()`, è un [style string](#style-strings). Questo può essere usato stile la prima parte.
 
-For example:
+Per esempio:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Per esempio:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
