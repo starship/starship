@@ -84,7 +84,7 @@ pub fn print_configuration(use_default: bool) {
     let custom_modules = config.get("custom").unwrap().as_table().unwrap();
     if !use_default && !custom_modules.is_empty() {
         println!(
-            "# $custom is shorthand for {}",
+            "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
             custom_modules
                 .keys()
                 .map(|module_name| format!("${{custom.{}}}", module_name))
