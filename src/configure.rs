@@ -79,6 +79,18 @@ pub fn print_configuration(use_default: bool) {
             .map(|module_name| format!("${}", module_name))
             .collect::<String>()
     );
+
+    // Unwrapping is fine because config is based on FullConfig
+    let custom_modules = config.get("custom").unwrap().as_table().unwrap();
+    if !use_default && !custom_modules.is_empty() {
+        println!(
+            "# $custom is shorthand for {}",
+            custom_modules
+                .keys()
+                .map(|module_name| format!("${{custom.{}}}", module_name))
+                .collect::<String>()
+        );
+    }
     println!("{}", string_config);
 }
 
