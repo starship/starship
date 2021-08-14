@@ -1477,7 +1477,13 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: aviso
 
@@ -1485,15 +1491,26 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: aviso
+
+The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+:::
+
 ### Opciones
 
-| Opción      | Por defecto                   | Descripción                                               |
-| ----------- | ----------------------------- | --------------------------------------------------------- |
-| `threshold` | `1`                           | Muestra el número de tareas si se exceden.                |
-| `format`    | `"[$symbol$number]($style) "` | El formato del módulo.                                    |
-| `symbol`    | `"✦"`                         | Una cadena de formato que representa el número de tareas. |
-| `style`     | `"bold blue"`                 | El estilo del módulo.                                     |
-| `disabled`  | `false`                       | Desactiva el módulo `jobs`.                               |
+| Opción             | Por defecto                   | Descripción                                                              |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`\*    | `1`                           | Muestra el número de tareas si se exceden.                               |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                   |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | El estilo del módulo.                                                    |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+ \*: This option is deprecated, please use the 
+
+`number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1512,16 +1529,17 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `Project.toml`
-- El directorio actual contiene un archivo `Manifest.toml`
-- El directorio actual contiene un archivo con la extensión `.jl`
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
 
 ### Opciones
 
@@ -1559,7 +1577,7 @@ symbol = "∴ "
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `.kt` o `.kts`
+- The current directory contains a `.kt` or a `.kts` file
 
 ### Opciones
 
@@ -1691,9 +1709,9 @@ disabled = true
 
 The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `.lua-version`
-- El directorio actual contiene un directorio `lua`
-- El directorio actual contiene un archivo con la extensión `.lua`
+- The current directory contains a `.lua-version` file
+- The current directory contains a `lua` directory
+- The current directory contains a file with the `.lua` extension
 
 ### Opciones
 
@@ -1815,10 +1833,10 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `nim.cfg`
-- El directorio actual contiene un archivo con la extensión `.nim`
-- El directorio actual contiene un archivo con la extensión `.nims`
-- El directorio actual contiene un archivo con la extensión `.nimble`
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
 
 ### Opciones
 
@@ -1895,12 +1913,12 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `package.json`
-- El directorio actual contiene un archivo `.node-version`
+- The current directory contains a `package.json` file
+- The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
-- El directorio actual contiene un directorio `node_modules`
-- El directorio actual contiene un archivo con la extensión `.js`, `.mjs` o `.cjs`
-- El directorio actual contiene un archivo con la extensión `.ts`
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
+- The current directory contains a file with the `.ts` extension
 
 ### Opciones
 
@@ -1939,12 +1957,12 @@ format = "via [🤖 $version](bold green) "
 
 The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo con extensión `.opam` o directorio `_opam`
-- El directorio actual contiene un directorio `esy.lock`
-- El directorio actual contiene un archivo `dune` o `dune-project`
-- El directorio actual contiene un archivo `jbuild` o `jbuild-ignore`
-- El directorio actual contiene un archivo `.merlin`
-- El directorio actual contiene un archivo con la extensión `.ml`, `.mli`, `.re` o `.rei`
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
 
 ### Opciones
 
@@ -2071,11 +2089,11 @@ format = "via [🎁 $version](208 bold) "
 
 The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `Makefile.PL` o `Build.PL`
-- El directorio actual contiene un archivo `cpanfile` o `cpanfile.snapshot`
-- El directorio actual contiene un archivo `META.json` o `META.yml`
-- El directorio actual contiene un archivo `.perl-version`
-- El directorio actual contiene un `.pl`, `.pm` o `.pod`
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
 
 ### Opciones
 
@@ -2111,9 +2129,9 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `composer.json`
-- El directorio actual contiene un archivo `.php-version`
-- El directorio actual contiene una extensión `.php`
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php-version` file
+- The current directory contains a `.php` extension
 
 ### Opciones
 
@@ -2151,8 +2169,8 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `spago.dhall`
-- El directorio actual contiene un archivo con la extensión `.purs`
+- The current directory contains a `spago.dhall` file
+- The current directory contains a file with the `.purs` extension
 
 ### Opciones
 
@@ -2194,15 +2212,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `.python-version`
-- El directorio actual contiene un archivo `Pipfile`
-- El directorio actual contiene un archivo `__init__.py`
-- El directorio actual contiene un archivo `pyproject.toml`
-- El directorio actual contiene un archivo `requirements.txt`
-- El directorio actual contiene un archivo `setup.py`
-- El directorio actual contiene un archivo `tox.ini`
-- El directorio actual contiene un archivo con la extensión `.py`.
-- Un entorno virtual está activado actualmente
+- The current directory contains a `.python-version` file
+- The current directory contains a `Pipfile` file
+- The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
+- A virtual environment is currently activated
 
 ### Opciones
 
@@ -2359,9 +2377,9 @@ symbol = "🔴 "
 
 By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un archivo `Gemfile`
-- El directorio actual contiene un archivo `.ruby-version`
-- El directorio actual contiene un archivo `.rb`
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
+- The current directory contains a `.rb` file
 
 ### Opciones
 
@@ -2399,8 +2417,8 @@ symbol = "🔺 "
 
 By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un archivo `Cargo.toml`
-- El directorio actual contiene un archivo con la extensión `.rs`
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Opciones
 
@@ -2438,9 +2456,9 @@ format = "via [⚙️ $version](red bold)"
 
 The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `build.sbt`, `.scalaenv` o `.sbtenv`
-- El directorio actual contiene un archivo con la extensión `.scala` o `.sbt`
-- El directorio actual contiene un directorio llamado `.metals`
+- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- The current directory contains a file with the `.scala` or `.sbt` extension
+- The current directory contains a directory named `.metals`
 
 ### Opciones
 
@@ -2652,8 +2670,8 @@ disabled = false
 
 By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un archivo `Package.swift`
-- El directorio actual contiene un archivo con la extensión `.swift`
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
 
 ### Opciones
 
@@ -2699,8 +2717,8 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene una carpeta `.terraform`
-- El directorio actual contiene un archivo con las extensiones `.tf` o `.hcl`
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Opciones
 
@@ -2796,10 +2814,10 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- El usuario actual es root
-- El usuario actual no es el mismo que el que está conectado
-- El usuario está actualmente conectado como una sesión SSH
-- La variable `show_always` se establece en true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: consejo
 
@@ -2841,7 +2859,7 @@ show_always = true
 
 The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- El directorio actual contiene un archivo `Vagrantfile`
+- The current directory contains a `Vagrantfile` file
 
 ### Opciones
 
@@ -2945,7 +2963,7 @@ format = "[🆅 $repo](bold blue) "
 
 By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un archivo `.zig`
+- The current directory contains a `.zig` file
 
 ### Opciones
 
@@ -2985,11 +3003,11 @@ The `custom` modules show the output of some arbitrary commands.
 
 These modules will be shown if any of the following conditions are met:
 
-- El directorio actual contiene un archivo cuyo nombre está en `files`
-- El directorio actual contiene un directorio cuyo nombre está en `directories`
-- El directorio actual contiene un archivo cuya extensión está en `extensions`
-- El comando `when` devuelve 0
-- El sistema operativo actual (std::env::consts::OS) coincide con el campo `os` si está definido.
+- The current directory contains a file whose name is in `files`
+- The current directory contains a directory whose name is in `directories`
+- The current directory contains a file whose extension is in `extensions`
+- The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
 ::: consejo
 
@@ -3040,8 +3058,8 @@ The order in which custom modules are shown can be individually set by including
 
 `shell` accepts a non-empty list of strings, where:
 
-- La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
-- Otros argumentos siguientes son pasados al shell.
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
