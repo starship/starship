@@ -1551,9 +1551,18 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running.
 The module will be shown only if there are background jobs running.
-The module will show the number of jobs running if there is more than 1 job, or
-more than the `threshold` config value, if it exists. If `threshold` is set to 0,
-then the module will also show when there are 0 jobs running.
+The module will show the number of jobs running if there are at least
+2 jobs, or more than the `number_threshold` config value, if it exists.
+The module will show a symbol if there is at least 1 job, or more than the
+`symbol_threshold` config value, if it exists. You can set both values
+to 0 in order to *always* show the symbol and number of jobs, even if there are
+0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: warning
 
@@ -1561,15 +1570,27 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: warning
+
+The `threshold` option is deprecated, but if you want to use it,
+the module will show the number of jobs running if there is more than 1 job, or
+more than the `threshold` config value, if it exists. If `threshold` is set to 0,
+then the module will also show when there are 0 jobs running.
+
+:::
+
 ### Options
 
-| Option      | Default                       | Description                                      |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | The style for the module.                        |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Option             | Default                       | Description                                                                                 |
+| -----------        | ----------------------------- | ------------------------------------------------                                            |
+| `threshold`\*      | `1`                           | Show number of jobs if exceeded.                                                            |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.                              |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`.                    |
+| `format`           | `"[$symbol$number]($style) "` | The format for the module.                                                                  |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                                         |
+| `style`            | `"bold blue"`                 | The style for the module.                                                                   |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                                                 |
+\*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1588,7 +1609,8 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
