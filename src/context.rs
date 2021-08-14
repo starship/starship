@@ -221,31 +221,20 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
-        self.repo
-            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = if env::var("GIT_DIR").is_ok() {
-                    Repository::open_from_env().ok()
-                } else {
-                    Repository::discover(&self.current_dir).ok()
-                };
-                let branch = repository
-                    .as_ref()
-                    .and_then(|repo| get_current_branch(repo));
-                let root = repository
-                    .as_ref()
-                    .and_then(|repo| repo.workdir().map(Path::to_path_buf));
-                let state = repository.as_ref().map(git2::Repository::state);
-                let remote = repository
-                    .as_ref()
-                    .and_then(|repo| get_remote_repository_info(repo));
-                Ok(Repo {
-                    branch,
-                    root,
-                    state,
-                    remote,
-                })
+    pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
+        self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
+            let repository = if env::var("GIT_DIR").is_ok() {
+                Repository::open_from_env()
+            } else {
+                Repository::discover(&self.current_dir)
+            }?;
+            Ok(Repo {
+                branch: get_current_branch(&repository),
+                root: repository.workdir().map(Path::to_path_buf),
+                state: repository.state(),
+                remote: get_remote_repository_info(&repository),
             })
+        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
@@ -397,7 +386,7 @@ pub struct Repo {
     pub root: Option<PathBuf>,
 
     /// State
-    pub state: Option<RepositoryState>,
+    pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,
