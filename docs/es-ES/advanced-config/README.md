@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `bold` y `BoLd` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`

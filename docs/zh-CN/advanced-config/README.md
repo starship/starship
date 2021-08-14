@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 样式字符串是用空格分隔的单词列表。 其中单词不是大小写敏感的（例如 `bold` 和 `BoLd` 被视为同一字符串）。 每个单词可以是以下之一：
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`

@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 風格字串是一個以空白分開的單詞清單。 單字並不會區分大小寫（換句話說，`bold` 與 `BoLd` 是被當作兩個相同的字串）。 每個單詞可以是下列其中之一：
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`

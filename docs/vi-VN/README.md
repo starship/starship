@@ -18,7 +18,7 @@ features:
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Có thể được cài đặt nhanh chóng cho Bash, Fish, ZSH, Ion và PowerShell.
+description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -116,6 +116,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 eval $(starship init ion)   
    ```
 
+
    #### Elvish
 
    ::: warning Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. :::
@@ -139,7 +140,8 @@ eval $(starship init ion)
    eval `starship init tcsh`
    ```
 
-    #### Nushell
+
+   #### Nushell
 
    ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
 
@@ -150,4 +152,15 @@ eval $(starship init ion)
     "source ~/.cache/starship/init.nu"
    ]
    prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

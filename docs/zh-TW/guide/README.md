@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship – 跨 Shell 的提示字元"
  />
 </p>
 
@@ -30,16 +30,16 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="在推特上追蹤 @StarshipPrompt"
  /></a>
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">網站</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">安裝</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">設定</a>
 </p>
 
 <p align="center">
@@ -126,15 +126,15 @@
 
 **適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **快：**很快 —— 非常非常快！ 🚀
+- **可客製化：**全方面定制你的提示字元。
+- **通用：**適用於任何 Shell 以及作業系統。
+- **智能：**一目了然地顯示相關信息。
+- **豐富的功能：**支援所以有你喜歡的工具。
+- **易用：**安裝快速 —— 幾分鐘內就可以開始使用。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -143,11 +143,11 @@
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
 
 ### 入門
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**備註：**由於不同平台的數量眾多，下方僅顯示部分已支持平台。 找不到你正在使用的平台？ 我想你可以來[額外平台說明](https://starship.rs/installing/)看看。
 
 1. 安裝 **starship** 執行檔：
 
@@ -155,7 +155,7 @@
    #### 安裝最新版本
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### 從預構建的二進制包，並且使用 Shell 命令：
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
@@ -163,7 +163,7 @@
    如果想更新已安裝的 Starship，請重新執行上述指令。 指令只會更新 Starship 執行檔本身，不會影響到任何已撰寫的設定檔。
 
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **備註** —— 安裝腳本的預設值可以被覆蓋，請使用以下指令查看內置說明。
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -173,7 +173,7 @@
    #### 使用套件管理器安裝：
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### 使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
@@ -224,7 +224,7 @@
 
    #### PowerShell
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，若是在 -Nix 上，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -264,9 +264,20 @@
    ```
 
 
+   #### Xonsh
+
+   將以下內容加到 `~/.xonshrc` 的結尾：
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
+   ```
+
+
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **警告：**此處設定在未來可能有所變動。 只支援 nu v0.33 以上的版本。 將以下內容放到 Nushell 設定檔的結尾。 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [
@@ -281,18 +292,18 @@
 
 我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果您精通非英語語言，並能協助我們在文檔上的翻譯保持最新狀態，我們會非常感謝！ 如果你想要提供翻譯，可以到 [Starship Crowdin](https://translate.starship.rs/) 上提交您的翻譯。
 
 如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
 
 ### 專案貢獻者
 
-This project exists thanks to all the people who contribute. [[我要貢獻](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
+感謝所有做出貢獻的人，使這個專案能夠存在。 [[我要貢獻](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)]
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### 專案資助者
 
-成為專案資助者，推動社群永續經營 [[Contribute](https://opencollective.com/starship/contribute)]
+成為專案資助者，推動社群永續經營 [[成為贊助者](https://opencollective.com/starship/contribute)]
 
 #### 個人
 
@@ -300,7 +311,7 @@ This project exists thanks to all the people who contribute. [[我要貢獻](htt
 
 #### 組織
 
-以組織名義資助專案 這裏會產生一個能連向您組織網站的連結標誌。 [[Contribute](https://opencollective.com/starship/contribute)]
+以組織名義資助專案 這裏會產生一個能連向您組織網站的連結標誌。 [[成為贊助組織](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
