@@ -1478,7 +1478,13 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: warning
 
@@ -1486,15 +1492,26 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: warning
+
+The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+:::
+
 ### Opções
 
-| Opções      | Padrão                        | Descrição                                        |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | O formato do módulo.                             |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | O estilo do módulo.                              |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Opções             | Padrão                        | Descrição                                                                |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`\*    | `1`                           | Show number of jobs if exceeded.                                         |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | O formato do módulo.                                                     |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | O estilo do módulo.                                                      |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+ \*: This option is deprecated, please use the 
+
+`number_threshold` and `symbol_threshold` options instead.
 
 ### Variáveis
 
@@ -1513,7 +1530,8 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
@@ -2992,13 +3010,13 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
-::: Dica
+::: tip
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: Dica
+::: tip
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
