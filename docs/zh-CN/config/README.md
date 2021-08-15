@@ -2902,15 +2902,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### 配置项
 
-| Option              | 默认值                                          | 描述                                           |
-| ------------------- | -------------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | 组件格式化模板。                                     |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module. |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.    |
-| `style`             | `"blue bold"`                                | 此组件的样式。                                      |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
+| Option              | 默认值                                          | 描述                                                                        |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | 组件格式化模板。                                                                  |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `"blue bold"`                                | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Variables
 
