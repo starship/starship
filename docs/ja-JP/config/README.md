@@ -2903,15 +2903,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### オプション
 
-| オプション               | デフォルト                                        | 説明                                           |
-| ------------------- | -------------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | moduleのフォーマットです。                             |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                      | どの拡張子がこのモジュールをアクティブにするか                      |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | どのファイル名がこのモジュールをアクティブにするか                    |
-| `detect_folders`    | `[]`                                         | どのフォルダーがこのモジュールをアクティブにするか                    |
-| `style`             | `"blue bold"`                                | モジュールのスタイルです。                                |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
+| オプション               | デフォルト                                        | 説明                                                     |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`         | moduleのフォーマットです。                                       |
+| `version_format`    | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V           |
+| `detect_extensions` | `["v"]`                                      | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                         | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"blue bold"`                                | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                           |
 
 ### 変数
 
