@@ -1,7 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::v::VConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 
 /// Creates a module with the current V version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -31,7 +31,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => context
                     .exec_cmd("v", &["version"])
-                    .and_then(|output| parse_v_version(output.stdout.trim()))
+                    .map(|output| parse_v_version(&output.stdout))?
+                    .map(|output| {
+                        VersionFormatter::format_module_version(
+                            module.get_name(),
+                            &output,
+                            config.version_format,
+                        )
+                    })?
                     .map(Ok),
                 _ => None,
             })
@@ -51,12 +58,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_v_version(v_version: &str) -> Option<String> {
     let version = v_version
+        .trim()
         // split into ["V", "0.2", "30c0659"]
         .split_whitespace()
         // return "0.2"
         .nth(1)?;
 
-    Some(format!("v{}", version))
+    Some(version.to_owned())
 }
 
 #[cfg(test)]
@@ -70,7 +78,7 @@ mod tests {
     #[test]
     fn test_parse_v_version() {
         const OUTPUT: &str = "V 0.2 30c0659\n";
-        assert_eq!(parse_v_version(OUTPUT.trim()), Some("v0.2".to_string()))
+        assert_eq!(parse_v_version(OUTPUT), Some("0.2".to_string()))
     }
 
     #[test]
@@ -118,6 +126,22 @@ mod tests {
         File::create(dir.path().join(".vpkg-lock.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn version_formatting() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("hello.v"))?.sync_all()?;
+        let actual = ModuleRenderer::new("vlang")
+            .path(dir.path())
+            .config(toml::toml! {
+                [vlang]
+                version_format = "${raw}"
+            })
+            .collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("V 0.2 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
