@@ -2902,15 +2902,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Opções
 
-| Opções              | Padrão                                       | Descrição                                    |
-| ------------------- | -------------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | O formato do módulo.                         |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module. |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.    |
-| `style`             | `"blue bold"`                                | O estilo do módulo.                          |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
+| Opções              | Padrão                                       | Descrição                                                                 |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | O formato do módulo.                                                      |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `"blue bold"`                                | O estilo do módulo.                                                       |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Variáveis
 
