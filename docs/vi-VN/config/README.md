@@ -2902,15 +2902,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                     | Mô tả                                               |
-| ------------------- | -------------------------------------------- | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                               |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V        |
-| `detect_extensions` | `["v"]`                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"blue bold"`                                | Kiểu cho module.                                    |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                        |
+| Tuỳ chọn            | Mặc định                                     | Mô tả                                                                     |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                                                     |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"blue bold"`                                | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Các biến
 
