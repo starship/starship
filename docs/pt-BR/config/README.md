@@ -797,23 +797,23 @@ Por padrão o módulo vai apenas exibir no seu prompt quando um ou mais dos segu
 
 Você também precisa do .NET Core SDK instalado para usá-lo corretamente.
 
-Internamente, este módulo usa seu próprio mecanismo de detecção de versão. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Internamente, este módulo usa seu próprio mecanismo de detecção de versão. Normalmente é duas vezes mais rápido que executar `dotnet --version`, mas pode exibir uma versão errado se o projeto .NET tiver o layout de diretório incomum. Se a precisão é mais importante que velocidade, você pode desabilitar o mecanismo definindo `heuristic = false` nas opções do modulo.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+O módulo também vai exibir o Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) quando o diretório atual tiver o arquivo csproj.
 
 ### Opções
 
-| Opções              | Padrão                                                                                                  | Descrição                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
-| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
-| `style`             | `"bold blue"`                                                                                           | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
+| Opções              | Padrão                                                                                                  | Descrição                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                                                                                             | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `".NET "`                                                                                               | O simbolo usado antes de exibir a versão do dotnet.                                  |
+| `heuristic`         | `true`                                                                                                  | Usa a versão de detecção rápida do starship snappy.                                  |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                                                    | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `"bold blue"`                                                                                           | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                                                                 | Desabilita o módulo `dotnet`.                                                        |
 
 ### Variáveis
 
@@ -841,27 +841,27 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `mix.exs` file.
+- O diretório atual contem um arquivo `mix.exs`.
 
 ### Opções
 
 | Opções              | Padrão                                                      | Descrição                                                                 |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | O formato do módulo elixir.                                               |
 | `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
 | `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                        | Quais pastas devem ativar este módulo.                                    |
 | `style`             | `"bold purple"`                                             | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
+| `disabled`          | `false`                                                     | Desabilita o módulo `elixir`.                                             |
 
 ### Variáveis
 
 | Variável    | Exemplo | Descrição                         |
 | ----------- | ------- | --------------------------------- |
-| version     | `v1.10` | The version of `elixir`           |
-| otp_version |         | The otp version of `elixir`       |
+| version     | `v1.10` | A versão do `elixir`              |
+| otp_version |         | A versão otp do `elixir`          |
 | symbol      |         | Espelha o valor da opção `symbol` |
 | style\*   |         | Espelha o valor da opção `style`  |
 
@@ -895,7 +895,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `["elm-stuff"]`                                    | Quais pastas devem ativar este módulo.                                    |
 | `style`             | `"cyan bold"`                                      | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
@@ -995,7 +995,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                    |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Variáveis
@@ -1378,7 +1378,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                    |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `"bold white"`                       | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
@@ -1452,7 +1452,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                      | Quais pastas devem ativar este módulo.                                    |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
 | `style`             | `"red dimmed"`                                                                                            | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
@@ -1550,7 +1550,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                    |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `"bold purple"`                      | O estilo do módulo.                                                       |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
@@ -1588,7 +1588,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                        |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `"bold blue"`                        | O estilo do módulo.                                                           |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -2469,7 +2469,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `version_format`    | `"v${raw}"`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[".metals"]`                            | Quais pastas devem ativar este módulo.                                    |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                         |
 | `style`             | `"red dimmed"`                           | O estilo do módulo.                                                       |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
