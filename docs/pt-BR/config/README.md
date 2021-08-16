@@ -888,16 +888,16 @@ O módulo `elm` exibe a versão instalada do [Elm](https://elm-lang.org/). Por p
 
 ### Opções
 
-| Opções              | Padrão                                             | Descrição                                                                 |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                           |
-| `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.                              |
-| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `["elm-stuff"]`                                    | Quais pastas devem ativar este módulo.                                    |
-| `style`             | `"cyan bold"`                                      | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                            | Desabilita o módulo `elm`.                                                |
+| Opções              | Padrão                                             | Descrição                                                                            |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`               | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                                        | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🌳 "`                                             | O formato de string que representa o simbolo do Elm.                                 |
+| `detect_extensions` | `["elm"]`                                          | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `["elm-stuff"]`                                    | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `"cyan bold"`                                      | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                            | Desabilita o módulo `elm`.                                                           |
 
 ### Variáveis
 
