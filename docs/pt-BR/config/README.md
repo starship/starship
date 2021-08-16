@@ -839,22 +839,22 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `elixir` exibe a versão instalada do [Elixir](https://elixir-lang.org/) e [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `mix.exs`.
 
 ### Opções
 
-| Opções              | Padrão                                                      | Descrição                                                                 |
-| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | O formato do módulo elixir.                                               |
-| `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
-| `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
-| `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                        | Quais pastas devem ativar este módulo.                                    |
-| `style`             | `"bold purple"`                                             | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                                     | Desabilita o módulo `elixir`.                                             |
+| Opções              | Padrão                                                      | Descrição                                                                            |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | O formato do módulo elixir.                                                          |
+| `version_format`    | `"v${raw}"`                                                 | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"💧 "`                                                      | O simbolo usado antes de exibir a versão do Elixir/Erlang.                           |
+| `detect_extensions` | `[]`                                                        | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["mix.exs"]`                                               | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                                        | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `"bold purple"`                                             | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                     | Desabilita o módulo `elixir`.                                                        |
 
 ### Variáveis
 
@@ -878,13 +878,13 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `elm` exibe a versão instalada do [Elm](https://elm-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- O diretório atual contem um arquivo `elm.json`
+- O diretório atual contem o arquivo `elm-package.json`
+- O diretório atual contem um arquivo `.elm-version`
+- O diretório atual contem uma pasta `elm-stuff`
+- O diretório contem arquivos `*.elm`
 
 ### Opções
 
@@ -897,13 +897,13 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `["elm-stuff"]`                                    | Quais pastas devem ativar este módulo.                                    |
 | `style`             | `"cyan bold"`                                      | O estilo do módulo.                                                       |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                                |
+| `disabled`          | `false`                                            | Desabilita o módulo `elm`.                                                |
 
 ### Variáveis
 
 | Variável  | Exemplo   | Descrição                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v0.19.1` | The version of `elm`              |
+| version   | `v0.19.1` | A versão do `elm`                 |
 | symbol    |           | Espelha o valor da opção `symbol` |
 | style\* |           | Espelha o valor da opção `style`  |
 
@@ -912,8 +912,6 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 ### Exemplo
 
 ```toml
-# ~/.config/starship.toml
-
 [elm]
 format = "via [ $version](cyan bold) "
 ```
