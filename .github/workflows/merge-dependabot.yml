@@ -4,6 +4,7 @@ on:
     - cron: "0 * * * *"
 jobs:
   auto_merge:
+    if: (github.event_name == 'schedule' && github.repository == 'starship/starship') || (github.event_name != 'schedule')
     name: Auto-merge Dependabot PRs
     runs-on: ubuntu-latest
     steps:
