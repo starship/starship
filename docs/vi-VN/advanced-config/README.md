@@ -73,10 +73,10 @@ starship_precmd_user_func="set_win_title"
 Chuỗi kiểu là một danh sách các từ, được phân cách bởi khoảng trắng. Các từ là không phân biệt hoa thường (ví dụ. `bold` và `Bold` là hai chuỗi tương đương). Mỗi từ có thể là một trong các từ sau:
 
   - `bold`
-  - `italic`
-  - `underline`
-  - `dimmed`
-  - `inverted`
+  - `nghiêng`
+  - `gạch dưới`
+  - `làm tối đi`
+  - `đảo ngược`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
