@@ -918,9 +918,9 @@ format = "via [ $version](cyan bold) "
 
 ## Variáveis de Ambiente
 
-The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
+O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada. O módulo vai exibir somente se algumas das condições a seguir for atendida:
 
-- The `variable` configuration option matches an existing environment variable
+- A opção de configuração da `variable` corresponde a uma variável existente
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
 
