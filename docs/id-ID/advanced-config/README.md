@@ -1,10 +1,10 @@
 # Konfigurasi Mendalam
 
-Meskipun Starship tergolong shell yang serbaguna, anda terkadang butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya melakukan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi mendalam yang digunakan starship.
+Meskipun Starship tergolong shell yang serbaguna, terkadang anda butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya melakukan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi mendalam yang digunakan starship.
 
 ::: peringatan
 
-Konfigurasi pada bagian ini dapat berubah dalam rilisan terbaru Starship mendatang.
+Konfigurasi pada bagian ini dapat berubah saat Starship merilis versi terbarunya di kemudian hari.
 
 :::
 
