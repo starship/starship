@@ -1,6 +1,6 @@
 # Advanced Configuration
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Meskipun Starship tergolong shell yang serbaguna, anda terkadang butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya melakukan beberapa hal tertentu. This page details some of the more advanced configuration techniques used in starship.
 
 ::: warning
 
