@@ -233,43 +233,48 @@ struct RepoStatus {
 }
 
 impl RepoStatus {
-    fn is_conflicted(status: &str) -> bool {
-        status.starts_with("u ")
-    }
-
-    fn is_deleted(status: &str) -> bool {
+    fn is_deleted(short_status: &str) -> bool {
         // is_wt_deleted || is_index_deleted
-        status.starts_with("1 .D") || status.starts_with("1 D")
+        short_status.contains('D')
     }
 
-    fn is_renamed(status: &str) -> bool {
-        // is_wt_renamed || is_index_renamed
-        // Potentially a copy and not a rename
-        status.starts_with("2 ")
+    fn is_modified(short_status: &str) -> bool {
+        // is_wt_modified || is_wt_added
+        short_status.ends_with('M') || short_status.ends_with('A')
     }
 
-    fn is_modified(status: &str) -> bool {
-        // is_wt_modified
-        status.starts_with("1 .M") || status.starts_with("1 .A")
+    fn is_staged(short_status: &str) -> bool {
+        // is_index_modified || is_index_added
+        short_status.starts_with('M') || short_status.starts_with('A')
     }
 
-    fn is_staged(status: &str) -> bool {
-        // is_index_modified || is_index_new
-        status.starts_with("1 M") || status.starts_with("1 A")
-    }
+    fn parse_normal_status(&mut self, short_status: &str) {
+        if Self::is_deleted(short_status) {
+            self.deleted += 1;
+        }
 
-    fn is_untracked(status: &str) -> bool {
-        // is_wt_new
-        status.starts_with("? ")
+        if Self::is_modified(short_status) {
+            self.modified += 1;
+        }
+
+        if Self::is_staged(short_status) {
+            self.staged += 1;
+        }
     }
 
     fn add(&mut self, s: &str) {
-        self.conflicted += Self::is_conflicted(s) as usize;
-        self.deleted += Self::is_deleted(s) as usize;
-        self.renamed += Self::is_renamed(s) as usize;
-        self.modified += Self::is_modified(s) as usize;
-        self.staged += Self::is_staged(s) as usize;
-        self.untracked += Self::is_untracked(s) as usize;
+        match s.chars().next() {
+            Some('1') => self.parse_normal_status(&s[2..4]),
+            Some('2') => {
+                self.renamed += 1;
+                self.parse_normal_status(&s[2..4])
+            }
+            Some('u') => self.conflicted += 1,
+            Some('?') => self.untracked += 1,
+            Some('!') => (),
+            Some(_) => log::error!("Unknown line type in git status output"),
+            None => log::error!("Missing line type in git status output"),
+        }
     }
 
     fn set_ahead_behind(&mut self, s: &str) {
@@ -316,7 +321,7 @@ fn format_symbol(format_str: &str, config_path: &str) -> Option<Vec<Segment>> {
 mod tests {
     use ansi_term::{ANSIStrings, Color};
     use std::fs::{self, File};
-    use std::io;
+    use std::io::{self, prelude::*};
     use std::path::Path;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
@@ -705,6 +710,21 @@ mod tests {
     }
 
     #[test]
+    fn shows_staged_and_modified_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("!+");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_renamed_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -739,6 +759,21 @@ mod tests {
     }
 
     #[test]
+    fn shows_renamed_and_modified_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_renamed_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("»!");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_deleted_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -767,6 +802,21 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("✘1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_show_ignored_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_ignored(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("+");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -956,6 +1006,22 @@ mod tests {
         Ok(())
     }
 
+    fn create_staged_and_modified(repo_dir: &Path) -> io::Result<()> {
+        let mut file = File::create(repo_dir.join("readme.md"))?;
+        file.sync_all()?;
+
+        create_command("git")?
+            .args(&["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        writeln!(&mut file, "modified")?;
+        file.sync_all()?;
+
+        Ok(())
+    }
+
     fn create_renamed(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
             .args(&["mv", "readme.md", "readme.md.bak"])
@@ -972,8 +1038,46 @@ mod tests {
         Ok(())
     }
 
+    fn create_renamed_and_modified(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(&["mv", "readme.md", "readme.md.bak"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        create_command("git")?
+            .args(&["add", "-A"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        let mut file = File::create(repo_dir.join("readme.md.bak"))?;
+        writeln!(&mut file, "modified")?;
+        file.sync_all()?;
+
+        Ok(())
+    }
+
     fn create_deleted(repo_dir: &Path) -> io::Result<()> {
         fs::remove_file(repo_dir.join("readme.md"))?;
+
+        Ok(())
+    }
+
+    fn create_staged_and_ignored(repo_dir: &Path) -> io::Result<()> {
+        let mut file = File::create(repo_dir.join(".gitignore"))?;
+        writeln!(&mut file, "ignored.txt")?;
+        file.sync_all()?;
+
+        create_command("git")?
+            .args(&["add", ".gitignore"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        let mut file = File::create(repo_dir.join("ignored.txt"))?;
+        writeln!(&mut file, "modified")?;
+        file.sync_all()?;
 
         Ok(())
     }
