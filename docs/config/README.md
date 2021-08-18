@@ -521,7 +521,7 @@ By default, the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | Which extensions should trigger this module.                             |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                              |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                           |
+| `disabled`          | `false`                              | Disables the `cobol` module.                                             |
 
 ### Variables
 
