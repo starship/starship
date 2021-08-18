@@ -98,7 +98,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🔷 v3.1.2.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -110,7 +110,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🔷 v3.1.2.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -122,7 +122,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🔷 v3.1.2.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -134,7 +134,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🔷 v3.1.2.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

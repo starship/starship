@@ -514,7 +514,7 @@ By default, the module will be shown if any of the following conditions are met:
 
 | Option              | Default                              | Description                                                              |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
-| `symbol`            | `"🔷 "`                              | The symbol used before displaying the version of COBOL.                  |
+| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                  |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                               |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
 | `style`             | `"bold blue"`                        | The style for the module.                                                |
