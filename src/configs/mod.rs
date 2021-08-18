@@ -8,6 +8,7 @@ pub mod battery;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
+pub mod cobol;
 pub mod conda;
 pub mod crystal;
 pub mod custom;
@@ -83,6 +84,7 @@ pub struct FullConfig<'a> {
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
+    cobol: cobol::CobolConfig<'a>,
     conda: conda::CondaConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
@@ -155,6 +157,7 @@ impl<'a> Default for FullConfig<'a> {
             character: Default::default(),
             cmake: Default::default(),
             cmd_duration: Default::default(),
+            cobol: Default::default(),
             conda: Default::default(),
             crystal: Default::default(),
             dart: Default::default(),

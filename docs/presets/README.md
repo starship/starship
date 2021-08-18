@@ -115,6 +115,9 @@ format = '\[[$symbol($version)]($style)\]'
 [cmd_duration]
 format = "[⏱ $duration]($style)"
 
+[cobol]
+format = '\[[$symbol($version)]($style)\]'
+
 [conda]
 format = '\[[$symbol$environment]($style)\]'
 
@@ -276,6 +279,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[cobol]
+symbol = "cobol "
+
 [conda]
 symbol = "conda "
 
@@ -377,6 +383,9 @@ This preset hides the version of language runtimes. If you work in containers or
 
 ```toml
 [cmake]
+format = "via [$symbol]($style)"
+
+[cobol]
 format = "via [$symbol]($style)"
 
 [crystal]
