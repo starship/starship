@@ -4,7 +4,7 @@ Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang anda butuh u
 
 ::: peringatan
 
-Konfigurasi pada bagian ini dapat berubah saat Starship merilis versi terbarunya di kemudian hari.
+Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemudian hari.
 
 :::
 
