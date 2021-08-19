@@ -99,7 +99,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Biasanya, lokasi file tersebut berada di `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` atau `~/.config/powershell/Microsoft.PowerShell_profile.ps1` pada -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -108,7 +108,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -119,7 +119,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning Cuma elvish v0.15 atau yang lebih baru yang tengah didukung. :::
 
    Add the following to the end of `~/.elvish/rc.elv`:
 
