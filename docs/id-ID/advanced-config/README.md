@@ -12,7 +12,7 @@ Konfigurasi pada bagian ini dapat berubah saat Starship merilis versi terbarunya
 
 Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dapat sepenuhnya disesuaikan di dalam `bash`. Namun, Starship memberikan beberapa cara agar anda bisa memasukkan functions anda sendiri ke dalam prosedur prompt-rendereing:
 
-- Untuk menjalankan fungsi ubah suaikan tepat sebelum prompt diraih, definisikan sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. For example, to draw a rocket before the prompt, you would do
+- Untuk menjalankan fungsi ubah suaikan tepat sebelum prompt diraih, definisikan sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, anda dapat menuliskan
 
 ```bash
 function blastoff(){
