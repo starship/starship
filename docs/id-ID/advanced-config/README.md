@@ -27,19 +27,19 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # Trap DEBUG *sebelum* menjalankan starship
 eval $(starship init bash)
 ```
 
-## Mengubah Judul Window
+## Ubah gaya jendela
 
-Beberapa prompts shell akan otomatis mengubah judul window-nya untuk anda (mis. menampilan derektori anda yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Beberapa prompts shell akan otomatis mengubah gaya jendelnya untuk anda (mis. menampilan derektori yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship tidak, tapi caranya mudah untuk menambahkan funsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
 
-First, define a window title change function (identical in bash and zsh):
+Pertama, definisikan fungsi untuk mengubah judul window (sepadan antara bash dan zsh):
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+    echo -ne "\033]0; JUDUL_WINDOW_ANDA \007"
 }
 ```
 
