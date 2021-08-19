@@ -8,9 +8,9 @@ Konfigurasi pada bagian ini dapat berubah saat Starship merilis versi terbarunya
 
 :::
 
-## Perintah pre-prompt dan pre-execution pada Bash
+## Perintah pra-prompt dan pra-execution pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dapat sepenuhnya disesuaikan di dalam `bash`. Namun, Starship memberikan beberapa cara agar anda bisa memasukkan functions anda sendiri ke dalam prosedur prompt-rendereing:
+Bash tidak memiliki framework pra-exec/pra-cmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dapat sepenuhnya disesuaikan di dalam `bash`. Namun, Starship memberikan beberapa cara agar anda bisa memasukkan functions anda sendiri ke dalam prosedur prompt-rendereing:
 
 - Untuk menjalankan fungsi ubah suaikan tepat sebelum prompt, definisikan sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, anda dapat menuliskan
 
@@ -33,19 +33,19 @@ eval $(starship init bash)
 
 ## Ubah gaya jendela
 
-Beberapa prompts shell akan otomatis mengubah gaya jendelnya untuk anda (mis. menampilan derektori yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship tidak, tapi caranya mudah untuk menambahkan funsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
+Beberapa prompts shell akan otomatis mengubah gaya jendelnya untuk anda (mis. menampilan derektori yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship tidak, tapi mudah halnya untuk menambahkan funsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
 
 Pertama, definisikan fungsi untuk mengubah judul window (sepadan antara bash dan zsh):
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; JUDUL_WINDOW_ANDA \007"
+    echo -ne "\033]0; JUDUL_JENDELA_ANDA \007"
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+Anda dapat menggunakan beberapa variabel untuk mengubah gaya jendelanya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah pilihan yang banyak digemari).
 
-In `bash`, set this function to be the precmd starship function:
+Di dalam `bash`, aturlah function ini sebagai function pra-cmd pada starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
