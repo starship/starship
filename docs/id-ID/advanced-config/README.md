@@ -1,6 +1,6 @@
 # Konfigurasi Mendalam
 
-Meskipun Starship tergolong shell yang serbaguna, terkadang anda butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya melakukan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi mendalam yang digunakan oleh starship.
+Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang anda butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya melakukan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi mendalam yang digunakan oleh starship.
 
 ::: peringatan
 
@@ -31,9 +31,9 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
-## Change Window Title
+## Mengubah Judul Window
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Beberapa prompts shell akan otomatis mengubah judul window-nya untuk anda (mis. menampilan derektori anda yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
 First, define a window title change function (identical in bash and zsh):
 
