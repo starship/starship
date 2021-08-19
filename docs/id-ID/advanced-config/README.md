@@ -51,15 +51,15 @@ Di dalam `bash`, aturlah function ini sebagai function precmd untuk starship:
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+Untuk `zsh`, tambahkan `precmd_functions` ke dalam array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Kalau kamu suka dengan hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuat hasilnya jadi permanen.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Sebagai contoh, kalau kamu mau menampilkan lokasi direktori terkinimu pada judul label terminal, tambahkan snipper berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
 
 ```bash
 function set_win_title(){
