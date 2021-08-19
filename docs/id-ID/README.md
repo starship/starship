@@ -2,15 +2,15 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apapun!
+actionText: Mulai
 actionLink: ./guide/
 features:
   - 
     title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    details: Dapat bekerja di shells yang paling biasa dengan sistem operasi yang paling biasa. Bisa digunakan di mana saja!
   - 
-    title: Rust-Powered
+    title: Dibuat Dengan Rust
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
   - 
     title: Customizable
