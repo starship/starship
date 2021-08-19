@@ -1,6 +1,6 @@
 # Konfigurasi Lanjutan
 
-Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang kita butuh upaya yang lebih dari sekadar mengedit `starship.toml` untuk membuatnya menjalankan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi lebih lanjut yang digunakan oleh starship.
+Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang kita butuh upaya yang lebih dari sekadar mengedit `starship.toml` untuk membuatnya menjalankan beberapa hal tertentu. Halaman ini merincikan beberapa teknik konfigurasi lanjutan yang digunakan oleh starship.
 
 ::: peringatan
 
@@ -90,6 +90,6 @@ Berikut ini adalah contoh specifier warna:
 
  - Beberapa warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Untuk memperoleh varian warna yang lebih cerah, kamu dapat menggunakan `bright-` (mis. `bright-white`).
  - Dituliskan dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Tautan ini menspesifikasikan [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Bilangan antara 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - Bilangan antara 0-255. Tautan ini menspesifikasikan [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Jika beberapa warna latar depan/latar belakang diberikan, yang terbaru dalam string akan didahulukan.
