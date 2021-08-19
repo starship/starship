@@ -10,7 +10,7 @@ Konfigurasi pada bagian ini dapat berubah saat Starship merilis versi terbarunya
 
 ## Perintah pre-prompt dan pre-execution pada Bash
 
-Bash does not have a formal preexec/precmd framework like most other shells. Oleh karena itu, sulit halnya untuk membuat hook dapat sepenuhnya disesuaikan di dalam `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dapat sepenuhnya disesuaikan di dalam `bash`. Namun, Starship memberikan beberapa cara agar anda bisa memasukkan functions anda sendiri ke dalam prosedur prompt-rendereing:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
