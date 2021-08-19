@@ -99,7 +99,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Powershell
 
-   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Biasanya, lokasi file tersebut berada di `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` atau `~/.config/powershell/Microsoft.PowerShell_profile.ps1` pada -Nix.
+   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. Kamu dapat mengecek lokasi file tersebut dengan mencari tahu keberadaan variabel `$PROFILE` di dalam PowerShell. Biasanya, lokasi file tersebut berada di `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` atau `~/.config/powershell/Microsoft.PowerShell_profile.ps1` pada -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -121,7 +121,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    ::: warning Cuma elvish v0.15 atau yang lebih baru yang tengah didukung. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Tambahkan skrip berikut pada baris akhir `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -132,7 +132,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -143,7 +143,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: peringatan Hal ini dapat berubah di kemudian hari. Hanya nu versi v0.33 atau lebih baru yang tengah didukung. ::: Tambahkan skrip berikut ke dalam file konfigurasi nu. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
