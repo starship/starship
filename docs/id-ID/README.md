@@ -30,14 +30,14 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
 ### Prasyarat
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- [Nerd Font](https://www.nerdfonts.com/) yang telah terinstalasi dan telah diaktifkan di terminal.
 
-### Quick Install
+### Instalasi Sederhana
 
-1. Install the **starship** binary:
+1. Instalasi dengan menggunakan binary **starship**:
 
 
-   #### Install Latest Version
+   #### Pasang Versi Terbaru
 
    With Shell:
 
