@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Penataan Strings
 
-Penataan strings merupakan kumpulan kata, dipisahkan oleh whistespace. Sifat kata pada string bukanlah case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Each word can be one of the following:
+Penataan strings merupakan kumpulan kata, dipisahkan oleh whistespace. Sifat kata pada string bukanlah case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Kata-kata yang dapat digunakan adalah salah satu dari daftar berikut:
 
   - `bold`
   - `italic`
@@ -82,7 +82,7 @@ Penataan strings merupakan kumpulan kata, dipisahkan oleh whistespace. Sifat kat
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+yang mana `<color>` adalah spesifikasi warna (dibahas di bawah). `fg:<color>` dan `<color>` untuk sementara memiliki fungsi yang sama, namun hal ini dapat berubah di kemudian hari. `inverted` menukar warna pada background dan foreground. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
