@@ -2,19 +2,19 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apapun!
+tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!
 actionText: Mulai
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
+    title: Kompabilitas Yang Utama
     details: Dapat bekerja di shells yang paling biasa dengan sistem operasi yang paling biasa. Bisa digunakan di mana saja!
   - 
     title: Dibuat Dengan Rust
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    details: Menggunakan kecepatan dan keamaan dari Rust, untuk membuat prompt anda bekerja secepat mungkin dan dapat diandalkan.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
+    title: Dapat Diatur
+    details: Semua detail kecil yang ada dapat kamu atur sesukamu, mungkin untuk membuat prompt yang seminimal mungkin atau kaya fitur seperti yang kamu inginkan.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
