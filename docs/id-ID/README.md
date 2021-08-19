@@ -39,34 +39,34 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Pasang Versi Terbaru
 
-   With Shell:
+   Dengan Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Untuk memperbarui Starship, jalankan kembali skrip di atas. Hal ini dapat memperbarui versi yang terpasang tanpa menyentuh konfigurasi Starship.
 
 
-   #### Install via Package Manager
+   #### Pasang Melalui Package Manager
 
-   With [Homebrew](https://brew.sh/):
+   Dengan [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Dengan [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Tambahkan skrip init ke file konfigurasi Shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.bashrc:`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Tambahkan skrip berikut pada baris akhir `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
