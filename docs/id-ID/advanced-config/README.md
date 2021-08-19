@@ -33,19 +33,19 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Beberapa prompts shell akan otomatis mengubah judul window-nya untuk anda (mis. menampilan derektori anda yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship tidak, tapi mudah halnya untuk menambahkan funsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
+Beberapa prompts shell akan mengubah dengan otomatis judul window-nya untukmu (mis. menampilan lokasi derektorimu yang sedang bekerja). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi mudah halnya untuk menambahkan fungsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
 
-Pertama, definisikan fungsi untuk mengubah judul window (sepadan antara bash dan zsh):
+Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; JUDUL_JENDELA_ANDA \007"
+    echo -ne "\033]0; JUDUL_WINDOW_MU \007"
 }
 ```
 
-Anda dapat menggunakan beberapa variabel untuk mengubah gaya jendelanya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah pilihan yang banyak digemari).
+Kamu bisa menggunakan beberapa variabel untuk mengatur judul window-nya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah pilihan yang paling banyak digemari).
 
-Di dalam `bash`, aturlah function ini sebagai function pra-cmd pada starship:
+Di dalam `bash`, aturlah function ini sebagai function precmd untuk starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
