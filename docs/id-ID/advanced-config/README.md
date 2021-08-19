@@ -31,9 +31,9 @@ trap blastoff DEBUG     # Trap DEBUG *sebelum* menjalankan starship
 eval $(starship init bash)
 ```
 
-## Ubah gaya jendela
+## Mengubah Judul Window
 
-Beberapa prompts shell akan otomatis mengubah gaya jendelnya untuk anda (mis. menampilan derektori yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship tidak, tapi mudah halnya untuk menambahkan funsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
+Beberapa prompts shell akan otomatis mengubah judul window-nya untuk anda (mis. menampilan derektori anda yang bekerja). Fish bahkan menjadikannya sebagai bawaan. Starship tidak, tapi mudah halnya untuk menambahkan funsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
 
 Pertama, definisikan fungsi untuk mengubah judul window (sepadan antara bash dan zsh):
 
