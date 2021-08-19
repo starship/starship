@@ -86,10 +86,10 @@ yang mana `<color>` adalah spesifikasi warna (dibahas di bawah). `fg:<color>` da
 
 Token `none` mampu melakukan overrides pada token lainnya di dalam string jika Ia tidak termaksud ke dalam specifier `bg:` Jadi, sebagai contoh, `fg:red none fg:blue` akan tetap menghasilkan string namun tanpa penataan apapun. `bg:none` mengatur warna background menjadi default. Jadi, `fg:red bg:none` sama dengan `red` ataupun `fg:red` dan `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Penggunakan `none` bersama dengan token lainnya bisa saja menjadi masalah di kemudian hari.
 
-A color specifier can be one of the following:
+Berikut ini adalah contoh specifier warna:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - Beberapa warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Untuk memperoleh varian warna yang lebih cerah, kamu dapat menggunakan `bright-` (mis. `bright-white`).
+ - Dituliskan dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Tautan ini menspesifikasikan [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Bilangan antara 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
