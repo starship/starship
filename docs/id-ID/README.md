@@ -15,10 +15,10 @@ features:
   - 
     title: Dapat Diatur
     details: Semua detail kecil yang ada dapat kamu atur sesukamu, mungkin untuk membuat prompt yang seminimal mungkin atau kaya fitur seperti yang kamu inginkan.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+footer: Berlisensi ISC | Hak Cipta © 2019-sekarang Kontributor Starship
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+metaTitle: "Starship: Prompt Lintas Shell"
+description: Starship merupakan prompt yang minimal, super cepat, dan sangat bisa diatur untuk semua shell! Menampilkan info yang dibutuhkan, namun tetap bisa tampil ramping dan minimal. Instalasi sederhana tersedia untuk Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, dan PowerShell.
 ---
 
 <div class="center">
@@ -28,7 +28,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### Prasyarat
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
