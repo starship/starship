@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Style Strings
+## Penataan Strings
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Penataan strings merupakan kumpulan kata, dipisahkan oleh whistespace. Sifat kata pada string bukanlah case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Each word can be one of the following:
 
   - `bold`
   - `italic`
