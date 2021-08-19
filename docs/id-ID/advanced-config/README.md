@@ -1,6 +1,6 @@
 # Konfigurasi Lanjutan
 
-Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang anda butuh upaya lebih dari sekadar mengedit `starship.toml` untuk membuatnya melakukan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi lebih lanjut yang digunakan oleh starship.
+Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang kita butuh upaya yang lebih dari sekadar mengedit `starship.toml` untuk membuatnya menjalankan beberapa hal tertentu. Halaman ini merincikan beberapa konfigurasi lebih lanjut yang digunakan oleh starship.
 
 ::: peringatan
 
@@ -8,11 +8,11 @@ Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemud
 
 :::
 
-## Perintah pra-prompt dan pra-execution pada Bash
+## Perintah pre-prompt dan pre-execution pada Bash
 
-Bash tidak memiliki framework pra-exec/pra-cmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dapat sepenuhnya disesuaikan di dalam `bash`. Namun, Starship memberikan beberapa cara agar anda bisa memasukkan functions anda sendiri ke dalam prosedur prompt-rendereing:
+Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dengan sepenuhnya disesuaikan dalam `bash`. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan functions kamu sendiri ke dalam prosedur prompt-rendering:
 
-- Untuk menjalankan fungsi ubah suaikan tepat sebelum prompt, definisikan sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, anda dapat menuliskan
+- Untuk menampilkan fungsi yang dibuat tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
 
 ```bash
 function blastoff(){
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan fungsi ubah suaian tepat sebelum commands berjalan, anda dapat menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, anda **harus** melakukan trap pada DEBUG signal *sebelum* menginisiasikan Starship! Starship dapat menyimpan nilai dari DEBUG trap, tapi apabila trap ditimpa setelah starship berjalan, beberapa fungsionalitas akan rusak.
+- Untuk menjalankan fungsi yang diatur tepat sebelum commands berjalan, anda dapat menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, anda **harus** melakukan trap pada DEBUG signal *sebelum* menginisiasikan Starship! Starship dapat menyimpan nilai dari DEBUG trap, tapi apabila trap ditimpa setelah starship berjalan, beberapa fungsionalitas akan rusak.
 
 ```bash
 function blastoff(){
