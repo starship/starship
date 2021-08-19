@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan fungsi ubah suaian tepat sebelum commands berjalan, anda dapat menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Untuk menjalankan fungsi ubah suaian tepat sebelum commands berjalan, anda dapat menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, anda **harus** melakukan trap pada DEBUG signal *sebelum* menginisiasikan Starship! Starship dapat menyimpan nilai dari DEBUG trap, tapi apabila trap ditimpa setelah starship berjalan, beberapa fungsionalitas akan rusak.
 
 ```bash
 function blastoff(){
