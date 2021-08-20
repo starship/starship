@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship - een cross-shell prompt"
  />
 </p>
 
@@ -10,36 +10,34 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions workflow status"
+      alt="GitHub Actions-werkwijze status"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="Crates.io-versie"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Packaging status" /></a
+      alt="Verpakkingsstatus" /></a
 ><br />
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord"
+      alt="Chat via Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="Volg @StarshipPrompt op Twitter"
  /></a>
 </p>
 
 <p align="center">
   <a href="https://starship.rs">Website</a>
-  ·
-  <a href="#🚀-installation">Installation</a>
-  ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="#🚀-installation">Installatie</a>
+  <a href="https://starship.rs/config/">Configuratie</a>
 </p>
 
 <p align="center">
@@ -47,7 +45,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="English"
+      alt="Engels"
  /></a>
   &nbsp;
   <a
@@ -55,7 +53,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
+      alt="日本語 (Japans)"
  /></a>
   &nbsp;
   <a
