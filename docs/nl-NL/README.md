@@ -34,20 +34,20 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### Quick Install
 
-1. Install the **starship** binary:
+1. Installeer de **Starship** binary:
 
 
-   #### Install Latest Version
+   #### Installeer de nieuwste versie
 
    With Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Om Starship zelf bij te werken, voer je het bovenstaande script opnieuw uit. Deze vervangt de huidige versie zonder de configuratie van Starship aan te passen.
 
 
-   #### Install via Package Manager
+   #### Installeren via pakketbeheerder
 
    With [Homebrew](https://brew.sh/):
 
@@ -55,18 +55,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Met [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Voeg het initscript toe aan het configuratiebestand van uw shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Voeg het volgende toe aan het einde van `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
