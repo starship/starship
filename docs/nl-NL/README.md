@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: De minimalistische, razend snelle en oneindig aanpasbare prompt voor elke shell!
 actionText: Get Started →
 actionLink: ./guide/
 features:
@@ -28,7 +28,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### Benodigdheden
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
