@@ -147,49 +147,49 @@
 
 **Opmerking:**: als gevolg van de groei van verschillende platforms, worden slechts bepaalde ondersteunde platforms hieronder weergegeven. Staat de jouwe er niet tussen? Neem een kijkje in de [extra platforminstructies](https://starship.rs/installing/).
 
-1. Install the **starship** binary:
+1. Installeer de **Starship** binary:
 
 
-   #### Install Latest Version
+   #### Installeer de nieuwste versie
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Vooraf gebouwde binary, met shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Om Starship zelf bij te werken, voer je het bovenstaande script opnieuw uit. Deze vervangt de huidige versie zonder de configuratie van Starship aan te passen.
 
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **Opmerking** - De standaardinstellingen van het installatiescript kunnen overschreven worden; zie de ingebouwde hulp.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
    ```
 
 
-   #### Install via Package Manager
+   #### Installeren via pakketbeheerder
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Voorbeeld: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Met [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. Voeg het initscript toe aan het configuratiebestand van uw shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Voeg het volgende toe aan het einde van `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
