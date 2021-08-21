@@ -57,11 +57,11 @@ Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis
 
 ### Format String
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Format string merupakan sebuah format yang digunakan modul untuk membentuk semua variabelnya. Most modules have an entry called `format` that configures the display format of the module. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
-#### Variable
+#### Variabel
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Variabel memilki simbol `$` dan diikuti dengan nama variabel. The name of a variable only contains letters, numbers and `_`.
 
 For example:
 
