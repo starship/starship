@@ -86,10 +86,10 @@ yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sem
 
 Token `none` mampu menimpa token lainnya di dalam string jika Ia tidak termaksud ke dalam penentu warna pada `bg:` jadi, sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string namun tanpa ada penataan apapun. `bg:none` mengubah warna background menjadi warna bawaan. Jadi, `fg:red bg:none` sama dengan `red` atau `fg:red` dan `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Penggunaan `none` bersama dengan token lainnya dapat menjadi masalah di kemudian hari.
 
-Berikut ini adalah contoh specifier warna:
+Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 
- - Beberapa warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Untuk memperoleh varian warna yang lebih cerah, kamu dapat menggunakan `bright-` (mis. `bright-white`).
- - Dituliskan dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Tautan ini menspesifikasikan [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Untuk memperoleh varian warna yang lebih cerah, kamu dapat menggunakan `bright-` (mis. `bright-white`).
+ - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Tautan ini menspesifikasikan [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Bilangan antara 0-255. Tautan ini menspesifikasikan [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
 Jika beberapa warna latar depan/latar belakang diberikan, yang terbaru dalam string akan didahulukan.
