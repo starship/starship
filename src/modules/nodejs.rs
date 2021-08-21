@@ -39,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let resolved_node_path = match which::which("node") {
                 Ok(p) => p,
                 Err(e) => {
-                    log::error!("Failed to resolve path for node: {:?}", e);
+                    log::trace!("Unable to find node in PATH, {:?}", e);
                     return None;
                 }
             };
@@ -47,12 +47,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             // If executable is located in known-good location, it's unlikely to be a wrapper executable
             // thus it's possible to get the version from executable metadata
             if Path::new(r"C:\Program Files\nodejs\node.EXE") == resolved_node_path {
-                return match version_win::from_metadata(&resolved_node_path) {
-                    Ok(v) => Some(v),
-                    Err(e) => {
-                        log::error!("Failed to get node version from executable: {:?}", e);
-                        None
-                    }
+                match version_win::from_metadata(&resolved_node_path) {
+                    Ok(v) => return Some(v),
+                    Err(e) => log::error!("Failed to get node version from executable: {:?}", e),
                 };
             }
         }
