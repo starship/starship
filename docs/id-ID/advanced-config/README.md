@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Beberapa prompts shell akan mengubah dengan otomatis judul window-nya untukmu (mis. menampilan lokasi derektorimu yang sedang bekerja). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi mudah halnya untuk menambahkan fungsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
+Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilan lokasi derektorimu yang sedang bekerja). Fish bahkan menjadikannya sebagai aturan bawaan. Starship tidak, tapi mudah halnya untuk menambahkan fungsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -45,7 +45,7 @@ function set_win_title(){
 
 Kamu bisa menggunakan beberapa variabel untuk mengatur judul window-nya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah pilihan yang paling banyak digemari).
 
-Di dalam `bash`, aturlah function ini sebagai function precmd untuk starship:
+Di dalam `bash`, buatlah function berikut sebagai function precmd untuk starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
@@ -57,9 +57,9 @@ Untuk `zsh`, tambahkan `precmd_functions` ke dalam array:
 precmd_functions+=(set_win_title)
 ```
 
-Kalau kamu suka dengan hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuat hasilnya jadi permanen.
+Kalau kamu suka dengan hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuatnya permanen.
 
-Sebagai contoh, kalau kamu mau menampilkan lokasi direktori terkinimu pada judul label terminal, tambahkan snipper berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
+Sebagai contoh, kalau kamu mau menampilkan lokasi direktori terkinimu pada judul label terminal, tambahkan snippet berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Penataan Strings
 
-Penataan strings merupakan kumpulan kata, dipisahkan oleh whistespace. Sifat kata pada string bukanlah case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Kata-kata yang dapat digunakan adalah salah satu dari daftar berikut:
+Penataan strings merupakan kumpulan kata, dan dipisahkan oleh whistespace. Sifat kata pada string bukanlah case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Kata-kata yang dapat digunakan adalah salah satu dari daftar berikut:
 
   - `bold`
   - `italic`
