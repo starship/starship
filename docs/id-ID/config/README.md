@@ -61,25 +61,25 @@ Format string merupakan sebuah format yang digunakan modul untuk membentuk semua
 
 #### Variabel
 
-Variabel memilki simbol `$` dan diikuti dengan nama variabel. The name of a variable only contains letters, numbers and `_`.
+Variabel memilki simbol `$` yang diikuti dengan nama variabel. Nama dari sebuah variabel hanya berisikan, huruf, angka dan `_`.
 
-For example:
+Sebagai contoh:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` adalah format string dengan sebuah nama variabel `version`.
+- `$git_branch$git_commit` merupakan sebuah format string dengan dua variabel bernama `git_branch` dan `git_commit`.
+- `$git_branch $git_commit` memiliki dua variabel yang dipisahkan dengan sebuah spasi.
 
-#### Text Group
+#### Grup Teks
 
-A text group is made up of two different parts.
+Sebuah grup teks dibuat dengan dua bagian yang berbeda.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Bagian pertama, yang mana diapit dalam sebuah `[]`, merupakan sebuah [format string](#format-strings). Kamu bisa menambahkan teks, variabel, atau bahkan grup teks bercabang di dalamnya.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+Pada bagian kedua, yang mana diapit dalam sebuah `()`, merupakan sebuah [penataan string](#style-strings). Bagian ini dapat digunakan untuk menata bagian pertama.
 
-For example:
+Sebagai contoh:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
+- `[on](red bold)` akan menampilkan string `on` dengan teks merah tebal.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Sebagai contoh:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
