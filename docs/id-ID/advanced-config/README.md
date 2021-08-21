@@ -82,7 +82,7 @@ Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. 
   - `<color>`
   - `none`
 
-yang mana `<color>` adalah spesifikasi warna (dibahas di bawah). `fg:<color>` dan `<color>` untuk sementara memiliki fungsi yang sama, namun hal ini bisa saja berubah di kemudian hari. `inverted` menukar warna pada background dan foreground. Urutan kata pada string tidaklah menjadi masalah.
+yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara `fg:<color>` dan `<color>` memiliki fungsi yang sama, namun hal ini bisa saja berubah di kemudian hari. `inverted` menukar warna pada background dan foreground. Urutan kata pada string tidaklah menjadi masalah.
 
 Token `none` mampu melakukan overrides pada token lainnya di dalam string jika Ia tidak termaksud ke dalam specifier `bg:` Jadi, sebagai contoh, `fg:red none fg:blue` akan tetap menghasilkan string namun tanpa penataan apapun. `bg:none` mengatur warna background menjadi default. Jadi, `fg:red bg:none` sama dengan `red` ataupun `fg:red` dan `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Penggunakan `none` bersama dengan token lainnya bisa saja menjadi masalah di kemudian hari.
 
