@@ -4,15 +4,15 @@ Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang kita butuh u
 
 ::: peringatan
 
-Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemudian hari.
+Konfigurasi pada bagian ini dapat berubah dalam pembaruan Starship rilis di kemudian hari nanti.
 
 :::
 
-## Perintah pre-prompt dan pre-execution pada Bash
+## Perintah pre-prompt Dan pre-execution Pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dalam `bash` yang dapat dengan mudah disesuaikan sesuka hati. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan functions kamu sendiri ke dalam prosedur prompt-rendering:
+Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dalam `bash` yang dapat dengan mudah disesuaikan sesuka hati. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsi kamu sendiri ke dalam prosedur prompt-rendering:
 
-- Untuk menampilkan fungsi buatan untuk berjalan tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
+- Untuk menjalankan fungsi buatan tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
 
 ```bash
 function blastoff(){
@@ -92,4 +92,4 @@ Penentuan warna bisa dilakukan dengan salah satu cara berikut:
  - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
-Jika beberapa warna latar depan/latar belakang diberikan, yang terbaru dalam string akan didahulukan.
+Jika banyak warna yang dipakai pada latar depan/latar belakang, maka warna yang terbaru pada string yang akan diprioritaskan.
