@@ -89,7 +89,7 @@ Token `none` mampu menimpa token lainnya di dalam string jika Ia tidak termaksud
 Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 
  - Warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Untuk memperoleh varian warna yang lebih cerah, kamu dapat menggunakan `bright-` (mis. `bright-white`).
- - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Tautan ini menspesifikasikan [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Bilangan antara 0-255. Tautan ini menspesifikasikan [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
+ - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
 Jika beberapa warna latar depan/latar belakang diberikan, yang terbaru dalam string akan didahulukan.
