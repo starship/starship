@@ -10,9 +10,9 @@ Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemud
 
 ## Perintah pre-prompt dan pre-execution pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dengan sepenuhnya disesuaikan dalam `bash`. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan functions kamu sendiri ke dalam prosedur prompt-rendering:
+Bash tidak memiliki framework preexec/precmd yang baku seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dalam `bash` yang dapat dengan mudah disesuaikan sesuka hati. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan functions kamu sendiri ke dalam prosedur prompt-rendering:
 
-- Untuk menampilkan fungsi yang dibuat tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
+- Untuk menampilkan fungsi buatan untuk berjalan tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
 
 ```bash
 function blastoff(){
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan fungsi yang diatur tepat sebelum commands berjalan, anda dapat menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, anda **harus** melakukan trap pada DEBUG signal *sebelum* menginisiasikan Starship! Starship dapat menyimpan nilai dari DEBUG trap, tapi apabila trap ditimpa setelah starship berjalan, beberapa fungsionalitas akan rusak.
+- Untuk menjalankan fungsi buatan tepat sebelum commands berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal *sebelum* menginisiasikan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap ditimpa setelah starship berjalan, beberapa fungsionalitas bisa rusak.
 
 ```bash
 function blastoff(){
