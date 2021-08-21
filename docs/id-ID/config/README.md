@@ -57,11 +57,11 @@ Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis
 
 ### Format String
 
-Format string merupakan sebuah format yang digunakan modul untuk menampilkan semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakanan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
+Format string merupakan sebuah format yang digunakan modul untuk menampilkan semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
 #### Variabel
 
-Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. Nama dari sebuah variabel hanya boleh berisikan, huruf, angka dan `_`.
+Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. Nama dari sebuah variabel hanya boleh berisikan huruf, angka, dan `_`.
 
 Sebagai contoh:
 
@@ -71,7 +71,7 @@ Sebagai contoh:
 
 #### Grup Teks
 
-Sebuah grup teks dibuat dengan dua bagian yang berbeda.
+Grup teks dibuat dengan dua bagian yang berbeda.
 
 Bagian pertama, yang mana diapit dalam sebuah `[]`, merupakan sebuah [format string](#format-strings). Kamu bisa menambahkan teks, variabel, atau bahkan grup teks bercabang di dalamnya.
 
@@ -85,12 +85,12 @@ Sebagai contoh:
 
 #### Penataan Gaya Pada Strings
 
-Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilannya. Hal ini dapat dilakukan dengan menggunakan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan gaya pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [advanced config guide](/advanced-config/).
+Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilannya. Hal ini dapat dilakukan dengan menggunakan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan gaya pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [panduan konfigurasi lanjutan](/advanced-config/).
 
 - `"fg:green bg:blue"` mengeset teks berwana hijau pada latar biru
 - `"bg:blue fg:bright-green"` mengeset teks hijau terang pada latar biru
 - `"bold fg:27"` mengeset tebal teks dengan [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` mengeset teks bergaris bawah pada latar oranye yang menyala
+- `"underline bg:#bf5700"` mengeset teks bergaris bawah pada latar oranye menyala
 - `"bold italic fg:purple"` mengeset teks ungu miring tebal
 - `""` secara eksplisit menonaktifkan semua penataan gaya
 
