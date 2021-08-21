@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan fungsi buatan tepat sebelum commands berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal *sebelum* menginisiasikan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
+- Untuk menjalankan fungsi buatan tepat sebelum commands berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal *sebelum* menjalankan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
 
 ```bash
 function blastoff(){
@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilan lokasi derektorimu yang sedang bekerja). Fish bahkan menjadikannya sebagai aturan bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
+Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilan lokasi direktorimu yang sedang bekerja). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -59,7 +59,7 @@ precmd_functions+=(set_win_title)
 
 Kalau kamu suka dengan hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuatnya permanen.
 
-Sebagai contoh, kalau kamu mau menampilkan lokasi direktori terkinimu pada judul label terminal, tambahkan snippet berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
+Sebagai contoh, kalau kamu mau menampilkan lokasi direktori pada judul label terminalmu, tambahkan snippet berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -82,9 +82,9 @@ Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. 
   - `<color>`
   - `none`
 
-Yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara, namun dapat berubah di kemudian hari, `fg:<color>` dan `<color>` memiliki fungsi yang sama. Token `inverted` menggantikan warna pada background dan foreground. Urutan antara kata pada string dapat diabaikan.
+Yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara, namun dapat berubah di kemudian hari, `fg:<color>` dan `<color>` memiliki fungsi yang sama. Token `inverted` menggantikan warna pada layar depan dan belakang. Urutan antara kata pada string dapat diabaikan.
 
-Token `none` dapat menggantikan token lainnya di dalam string jika Ia tidak termaksud ke dalam penentu warna pada `bg:` sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string yang tidak memiliki penataan. Token `bg:none` menetapkan warna pada latar belakang menjadi warna bawaan. Jadi, nilai `fg:red bg:none` sama dengan `red` atau `fg:red` dan nilai `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Di kemudian hari, menggunakan token `none` bersamaan dengan token lainnya bisa saja menjadi sebuah masalah.
+Token `none` dapat menggantikan token lainnya di dalam string jika Ia tidak termaksud dalam penentu warna pada `bg:` sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string yang tidak memiliki penataan. Token `bg:none` menetapkan warna pada latar belakang menjadi warna bawaan. Jadi, nilai `fg:red bg:none` sama dengan `red` atau `fg:red` dan nilai `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Di kemudian hari, menggunakan token `none` bersamaan dengan token lainnya bisa saja menjadi sebuah masalah.
 
 Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 
