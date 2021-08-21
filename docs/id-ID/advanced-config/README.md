@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Penataan Strings
 
-Penataan strings merupakan kumpulan kata, dan dipisahkan oleh whistespace. Sifat kata pada string bukanlah case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Kata-kata yang dapat digunakan adalah salah satu dari daftar berikut:
+Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. Kata pada string tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah kata yang dapat digunakan menjadi opsi:
 
   - `bold`
   - `italic`
