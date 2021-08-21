@@ -94,7 +94,7 @@ Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilann
 - `"bold italic fg:purple"` sets bold italic purple text
 - `""` secara eksplisit menonaktifkan semua penataan gaya
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Note that what styling looks like will be controlled by your terminal emulator. Sebagai contoh, beberapa terminal emulator alih-alih membuat warnanya lebih terang, malah menebalkan teksnya, dan ada beberapa palet warna yang menggunakan nilai yang sama untuk warna normal dan terangnya. Dan juga, untuk memakai teks miring, terminalmu harus menunjang teks miring.
 
 #### Conditional Format Strings
 
