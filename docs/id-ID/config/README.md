@@ -85,7 +85,7 @@ Sebagai contoh:
 
 #### Penataan Strings
 
-Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi tatanan tampilannya. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi tatanan tampilannya. Hal ini dapat dilakukan dengan menggunakan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan string dan kegunaannya. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` sets green text on a blue background
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
