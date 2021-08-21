@@ -33,6 +33,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let nodejs_version = Lazy::new(|| {
+        #[cfg(all(windows, not(test)))]
+        {
+            use crate::modules::utils::version_win;
+            let resolved_node_path = match which::which("node") {
+                Ok(p) => p,
+                Err(e) => {
+                    log::error!("Failed to resolve path for node: {:?}", e);
+                    return None;
+                }
+            };
+
+            // If executable is located in known-good location, it's unlikely to be a wrapper executable
+            // thus it's possible to get the version from executable metadata
+            if Path::new(r"C:\Program Files\nodejs\node.EXE") == resolved_node_path {
+                return match version_win::from_metadata(&resolved_node_path) {
+                    Ok(v) => Some(v),
+                    Err(e) => {
+                        log::error!("Failed to get node version from executable: {:?}", e);
+                        None
+                    }
+                };
+            }
+        }
+
         context
             .exec_cmd("node", &["--version"])
             .map(|cmd| cmd.stdout)
