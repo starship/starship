@@ -9,7 +9,7 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Semua konfigurasi pada starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
 
 ```toml
-# Menambahkan baris kosong antar promt shell
+# Menambahkan baris kosong antar prompt shell
 add_newline = true
 
 # Mengganti simbol "❯" pada prompt dengan simbol "➜"
@@ -35,7 +35,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 
 ### Logging
 
-Secara bawaan, starship membuat catatan yang bersifat peringatan dan eror ke dalam sebuah file bernama `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, yang mana session key file tersebut sama dengan instance terminalmu. Namun. hal ini dapat diubah dengan menggunakan environment variable dari `STARSHIP_CACHE` berikut:
+Secara bawaan, starship membuat catatan yang bersifat peringatan dan eror ke dalam sebuah file bernama `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, yang mana session key file tersebut sama dengan instance terminalmu. Namun, hal tersebut dapat diubah dengan menggunakan environment variable dari `STARSHIP_CACHE` berikut:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/cache
@@ -51,13 +51,13 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Modul**: Sebuah komponen pada prompt yang memberikan informasi berdasarkan info kontekstual sistem operasimu. Sebagai contoh, modul "nodejs" menampilkan versi Node.js yang tengah terpasang pada komputermu, jika direktorimu sedang berada pada proyek Node.js.
 
-**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. Sebagai contoh, variabel "version" dalam modul "nodejs" berisikan versi Node.js saat ini.
+**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. Sebagai contoh, variabel "version" dalam modul "nodejs", berisikan versi Node.js saat ini.
 
-Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis. `via` pada "nodejs") dan sebuah ruang kosong sebagai sufiks.
+Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis. `via` pada "nodejs") dan juga sebuah ruang kosong sebagai sufiks.
 
 ### Format String
 
-Format string merupakan sebuah format yang digunakan modul untuk membentuk semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakanan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
+Format string merupakan sebuah format yang digunakan modul untuk menampilkan semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakanan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
 #### Variabel
 
@@ -91,10 +91,10 @@ Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilann
 - `"bg:blue fg:bright-green"` mengeset teks hijau terang pada latar biru
 - `"bold fg:27"` mengeset tebal teks dengan [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` mengeset teks bergaris bawah pada latar oranye yang menyala
-- `"bold italic fg:purple"` sets bold italic purple text
+- `"bold italic fg:purple"` mengeset teks ungu miring tebal
 - `""` secara eksplisit menonaktifkan semua penataan gaya
 
-Note that what styling looks like will be controlled by your terminal emulator. Sebagai contoh, beberapa terminal emulator alih-alih membuat warnanya lebih terang, malah menebalkan teksnya, dan ada beberapa palet warna yang menggunakan nilai yang sama untuk warna normal dan terangnya. Dan juga, untuk memakai teks miring, terminalmu harus menunjang teks miring.
+Perhatikan bagaimana nantinya penataanmu akan terlihat pada emulator terminalmu. Sebagai contoh, beberapa terminal emulator alih-alih membuat warnanya lebih terang, malah menebalkan teksnya, dan sebagian palet warna ada yang menggunakan nilai yang sama untuk warna normal dan terangnya. Dan juga, untuk memakai teks miring, terminalmu harus menunjang teks miring.
 
 #### Conditional Format Strings
 
