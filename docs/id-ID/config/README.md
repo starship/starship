@@ -51,11 +51,11 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Modul**: Sebuah komponen pada prompt yang memberikan informasi berdasarkan info kontekstual sistem operasimu. Sebagai contoh, modul "nodejs" menampilkan versi Node.js yang tengah terpasang pada komputermu, jika direktorimu sedang berada pada proyek Node.js.
 
-**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. Sebagai contoh, variabel "version" dalam modul "nodejs" berisikan versi Node.js saat ini.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis. `via` pada "nodejs") dan sebuah ruang kosong sebagai sufiks.
 
-### Format Strings
+### Format String
 
 Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
