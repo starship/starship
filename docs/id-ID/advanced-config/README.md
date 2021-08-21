@@ -68,7 +68,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Penataan Strings
+## Style Strings
 
 Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. Kata pada string tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah kata yang dapat digunakan menjadi opsi:
 
