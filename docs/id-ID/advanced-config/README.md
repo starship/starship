@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilan lokasi derektorimu yang sedang bekerja). Fish bahkan menjadikannya sebagai aturan bawaan. Starship tidak, tapi mudah halnya untuk menambahkan fungsionalitas seperti ini ke dalam `bash` ataupun `zsh`.
+Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilan lokasi derektorimu yang sedang bekerja). Fish bahkan menjadikannya sebagai aturan bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -82,7 +82,7 @@ Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. 
   - `<color>`
   - `none`
 
-yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara `fg:<color>` dan `<color>` memiliki fungsi yang sama, namun hal ini bisa saja berubah di kemudian hari. `inverted` menggantikan warna pada background dan foreground. Urutan kata pada string dapat diabaikan.
+Yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara, namun dapat berubah di kemudian hari, `fg:<color>` dan `<color>` memiliki fungsi yang sama. String `inverted` menggantikan warna pada background dan foreground. Urutan antara kata pada string dapat diabaikan.
 
 Token `none` mampu menimpa token lainnya di dalam string jika Ia tidak termaksud ke dalam penentu warna pada `bg:` jadi, sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string namun tanpa ada penataan apapun. `bg:none` mengubah warna background menjadi warna bawaan. Jadi, `fg:red bg:none` sama dengan `red` atau `fg:red` dan `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Penggunaan `none` bersama dengan token lainnya dapat menjadi masalah di kemudian hari.
 
