@@ -6,6 +6,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
+use std::ffi::OsStr;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -184,12 +185,12 @@ fn get_repo_status(context: &Context) -> Option<RepoStatus> {
     let status_output = context.exec_cmd(
         "git",
         &[
-            "-C",
-            &context.current_dir.to_string_lossy(),
-            "--no-optional-locks",
-            "status",
-            "--porcelain=2",
-            "--branch",
+            OsStr::new("-C"),
+            context.current_dir.as_os_str(),
+            OsStr::new("--no-optional-locks"),
+            OsStr::new("status"),
+            OsStr::new("--porcelain=2"),
+            OsStr::new("--branch"),
         ],
     )?;
     let statuses = status_output.stdout.lines();
@@ -209,11 +210,11 @@ fn get_stashed_count(context: &Context) -> Option<usize> {
     let stash_output = context.exec_cmd(
         "git",
         &[
-            "-C",
-            &context.current_dir.to_string_lossy(),
-            "--no-optional-locks",
-            "stash",
-            "list",
+            OsStr::new("-C"),
+            context.current_dir.as_os_str(),
+            OsStr::new("--no-optional-locks"),
+            OsStr::new("stash"),
+            OsStr::new("list"),
         ],
     )?;
 
@@ -320,6 +321,7 @@ fn format_symbol(format_str: &str, config_path: &str) -> Option<Vec<Segment>> {
 #[cfg(test)]
 mod tests {
     use ansi_term::{ANSIStrings, Color};
+    use std::ffi::OsStr;
     use std::fs::{self, File};
     use std::io::{self, prelude::*};
     use std::path::Path;
@@ -829,9 +831,9 @@ mod tests {
 
         create_command("git")?
             .args(&[
-                "config",
-                "core.worktree",
-                &worktree_dir.path().to_string_lossy(),
+                OsStr::new("config"),
+                OsStr::new("core.worktree"),
+                worktree_dir.path().as_os_str(),
             ])
             .current_dir(repo_dir.path())
             .output()?;

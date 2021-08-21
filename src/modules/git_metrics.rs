@@ -1,4 +1,5 @@
 use regex::Regex;
+use std::ffi::OsStr;
 
 use crate::{
     config::RootModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
@@ -26,11 +27,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .exec_cmd(
             "git",
             &[
-                "-C",
-                &repo_root.to_string_lossy(),
-                "--no-optional-locks",
-                "diff",
-                "--shortstat",
+                OsStr::new("-C"),
+                repo_root.as_os_str(),
+                OsStr::new("--no-optional-locks"),
+                OsStr::new("diff"),
+                OsStr::new("--shortstat"),
             ],
         )?
         .stdout;
