@@ -57,11 +57,11 @@ Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis
 
 ### Format String
 
-Format string merupakan sebuah format yang digunakan modul untuk membentuk semua variabelnya. Most modules have an entry called `format` that configures the display format of the module. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
+Format string merupakan sebuah format yang digunakan modul untuk membentuk semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakanan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
 #### Variabel
 
-Variabel memilki simbol `$` yang diikuti dengan nama variabel. Nama dari sebuah variabel hanya berisikan, huruf, angka dan `_`.
+Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. Nama dari sebuah variabel hanya boleh berisikan, huruf, angka dan `_`.
 
 Sebagai contoh:
 
@@ -83,9 +83,9 @@ Sebagai contoh:
 - `[⌘ $version](bold green)` akan menampilkan simbol `⌘` yang diikuti oleh variabel yang berisikan `version`, dengan teks tebal berwarna hijau.
 - `[a [b](red) c](green)` akan menampilkan `a b c` dengan `b` merah, dan `a` & `c` green.
 
-#### Penataan Strings
+#### Penataan Gaya Pada Strings
 
-Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi tatanan tampilannya. Hal ini dapat dilakukan dengan menggunakan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan string dan kegunaannya. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilannya. Hal ini dapat dilakukan dengan menggunakan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan gaya pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` sets green text on a blue background
 - `"bg:blue fg:bright-green"` sets bright green text on a blue background
