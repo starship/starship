@@ -1,27 +1,27 @@
-# Configuration
+# Konfigurasi
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Untuk memulai mengkonfigurasi starship, buatlah file: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Semua konfigurasi pada starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
 
 ```toml
-# Inserts a blank line between shell prompts
+# Menambahkan baris kosong antar promt shell
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Mengganti simbol "❯" pada prompt dengan simbol "➜"
+[character]                            # Nama modul yang dikonfigurasi adalah "character"
+success_symbol = "[➜](bold green)"     # Segmen "success_symbol" diganti menjadi "➜" dengan warna "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Mengnonaktifkan paket modul, menyembunyikannya dari prompt secara utuh
 [package]
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Kamu bisa mengganti lokasi file konfigurasi bawaan dengan menggunakan environment variable dari `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
