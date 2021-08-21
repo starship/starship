@@ -4,13 +4,13 @@ Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang kita butuh u
 
 ::: peringatan
 
-Konfigurasi pada bagian ini dapat berubah dalam pembaruan Starship rilis di kemudian hari nanti.
+Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemudian hari nanti.
 
 :::
 
 ## Perintah pre-prompt Dan pre-execution Pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dalam `bash` yang dapat dengan mudah disesuaikan sesuka hati. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsi kamu sendiri ke dalam prosedur prompt-rendering:
+Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dalam `bash` yang dapat disesuaikan sepenuhnya. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsimu sendiri ke dalam prosedur prompt-rendering:
 
 - Untuk menjalankan fungsi buatan tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
 
@@ -82,14 +82,14 @@ Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. 
   - `<color>`
   - `none`
 
-Yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara, namun dapat berubah di kemudian hari, `fg:<color>` dan `<color>` memiliki fungsi yang sama. String `inverted` menggantikan warna pada background dan foreground. Urutan antara kata pada string dapat diabaikan.
+Yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara, namun dapat berubah di kemudian hari, `fg:<color>` dan `<color>` memiliki fungsi yang sama. Token `inverted` menggantikan warna pada background dan foreground. Urutan antara kata pada string dapat diabaikan.
 
-Token `none` mampu menimpa token lainnya di dalam string jika Ia tidak termaksud ke dalam penentu warna pada `bg:` jadi, sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string namun tanpa ada penataan apapun. `bg:none` mengubah warna background menjadi warna bawaan. Jadi, `fg:red bg:none` sama dengan `red` atau `fg:red` dan `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Penggunaan `none` bersama dengan token lainnya dapat menjadi masalah di kemudian hari.
+Token `none` dapat menggantikan token lainnya di dalam string jika Ia tidak termaksud ke dalam penentu warna pada `bg:` sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string yang tidak memiliki penataan. Token `bg:none` menetapkan warna pada latar belakang menjadi warna bawaan. Jadi, nilai `fg:red bg:none` sama dengan `red` atau `fg:red` dan nilai `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Di kemudian hari, menggunakan token `none` bersamaan dengan token lainnya bisa saja menjadi sebuah masalah.
 
 Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 
  - Warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Untuk memperoleh varian warna yang lebih cerah, kamu dapat menggunakan `bright-` (mis. `bright-white`).
- - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [warna code hexadesimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
+ - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [kode heksadesimal pada warna RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Menggunakan bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
 Jika banyak warna yang dipakai pada latar depan/latar belakang, maka warna yang terbaru pada string yang akan diprioritaskan.
