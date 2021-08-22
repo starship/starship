@@ -11,14 +11,14 @@ features:
     details: Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!
   - 
     title: Rust-Powered
-    details: Bringt die schnelligkeit und zuverlässigkeit von Rust in deinen Shell-prompt.
+    details: Bringt die Schnelligkeit und Zuverlässigkeit von Rust in deine Shell-Prompt.
   - 
     title: Individualisierbar
     details: Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Sie zeigt die Information, die man benötigt an, während sie schnell und minimal bleibt. Schnell-Installation verfügbar für Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, und PowerShell.
 ---
 
 <div class="center">
