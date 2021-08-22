@@ -3,17 +3,17 @@
 Um Starship zu installieren, musst du zwei Dinge tun:
 
 1. Holen Sie sich das **starship** Binary auf Ihren Computer
-1. Sagen sie ihrer Shell, dass sie das Starship-Binary als Prompt benutzt, indem sie die Initialisierungs-Skripte ändern
+1. Sagen Sie ihrer Shell, dass sie das Starship-Binary als Prompt benutzt, indem sie die Initialisierungs-Skripte ändern
 
-Die Anweisungen auf [der Hauptseite](/guide/#🚀-installation) werden für die meisten Benutzer gut funktionieren. However, for some more specialized platforms, different instructions are needed.
+Die Anweisungen auf [der Hauptseite](/guide/#🚀-installation) werden für die meisten Benutzer gut funktionieren. Für einige speziellere Plattformen werden jedoch andere Anweisungen benötigt.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Es gibt so viele Plattformen, dass sie nicht in das Haupt-README passen, also hier einige Installationsanweisungen für andere Plattformen von der Community. Ist Ihre nicht hier? Bitte fügen Sie es hier hinzu, wenn Sie es herausfinden!
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### Voraussetzungen
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Gehen Sie zur [Chocolatey's Installations-Seite](https://chocolatey.org/install) und folge den Anweisungen um Chocolatey zu installieren.
 
 ### Installation
 
@@ -37,17 +37,17 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Das Binary holen
 
-#### Imperatively
+#### Imperativ
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Deklarativ, Einzel-Benutzer, über [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Aktivieren Sie das Modul `programs.starship` in Ihrer `home.nix`-Datei und fügen Sie Ihre Einstellungen hinzu
 
 ```nix
 {
@@ -69,7 +69,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+und führen Sie dann folgendes aus
 
 ```sh
 home-manager switch
