@@ -75,9 +75,9 @@ und führen Sie dann folgendes aus
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Deklarativ, systemweit, mit NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Fügen Sie `pkgs.starship` zu `environment.systemPackages` in Ihrer `configuration.nix` hinzu, und führen Sie folgendes aus
 
 ```sh
 sudo nixos-rebuild switch
