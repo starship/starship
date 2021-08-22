@@ -57,7 +57,7 @@ starship_precmd_user_func="set_win_title"
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+如果你喜歡這個結果，把這幾行加入你的 shell 設定檔中(`~/.bashrc` or `~/.zsrhc`)來將此設為永久設定。
 
 For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
@@ -73,7 +73,7 @@ starship_precmd_user_func="set_win_title"
 風格字串是一個以空白分開的單詞清單。 單字並不會區分大小寫（換句話說，`bold` 與 `BoLd` 是被當作兩個相同的字串）。 每個單詞可以是下列其中之一：
 
   - `bold`
-  - `italic`
+  - `斜體字`
   - `underline`
   - `dimmed`
   - `inverted`
