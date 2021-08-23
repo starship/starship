@@ -72,18 +72,35 @@ impl PartialEq for CommandOutput {
     }
 }
 
+#[cfg(test)]
+pub fn display_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+    cmd: T,
+    args: &[U],
+) -> String {
+    std::iter::once(cmd.as_ref())
+        .chain(args.iter().map(|i| i.as_ref()))
+        .map(|i| i.to_string_lossy().into_owned())
+        .collect::<Vec<String>>()
+        .join(" ")
+}
+
 /// Execute a command and return the output on stdout and stderr if successful
 #[cfg(not(test))]
-pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
+pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+    cmd: T,
+    args: &[U],
+    time_limit: Duration,
+) -> Option<CommandOutput> {
     internal_exec_cmd(cmd, args, time_limit)
 }
 
 #[cfg(test)]
-pub fn exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
-    let command = match args.len() {
-        0 => String::from(cmd),
-        _ => format!("{} {}", cmd, args.join(" ")),
-    };
+pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+    cmd: T,
+    args: &[U],
+    time_limit: Duration,
+) -> Option<CommandOutput> {
+    let command = display_command(&cmd, args);
     match command.as_str() {
         "crystal --version" => Some(CommandOutput {
             stdout: String::from(
@@ -280,7 +297,7 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stderr: String::default(),
         }),
         // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(cmd, args, time_limit),
+        _ => internal_exec_cmd(&cmd, args, time_limit),
     }
 }
 
@@ -345,10 +362,14 @@ pub fn wrap_seq_for_shell(
     final_string
 }
 
-fn internal_exec_cmd(cmd: &str, args: &[&str], time_limit: Duration) -> Option<CommandOutput> {
+fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+    cmd: T,
+    args: &[U],
+    time_limit: Duration,
+) -> Option<CommandOutput> {
     log::trace!("Executing command {:?} with args {:?}", cmd, args);
 
-    let full_path = match which::which(cmd) {
+    let full_path = match which::which(&cmd) {
         Ok(full_path) => {
             log::trace!("Using {:?} as {:?}", full_path, cmd);
             full_path
@@ -483,7 +504,11 @@ mod tests {
 
     #[test]
     fn exec_mocked_command() {
-        let result = exec_cmd("dummy_command", &[], Duration::from_millis(500));
+        let result = exec_cmd(
+            "dummy_command",
+            &[] as &[&OsStr],
+            Duration::from_millis(500),
+        );
         let expected = Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
@@ -498,7 +523,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_no_output() {
-        let result = internal_exec_cmd("true", &[], Duration::from_millis(500));
+        let result = internal_exec_cmd("true", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from(""),
             stderr: String::from(""),
@@ -555,7 +580,7 @@ mod tests {
     #[test]
     #[cfg(not(windows))]
     fn exec_with_non_zero_exit_code() {
-        let result = internal_exec_cmd("false", &[], Duration::from_millis(500));
+        let result = internal_exec_cmd("false", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = None;
 
         assert_eq!(result, expected)
