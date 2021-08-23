@@ -921,12 +921,12 @@ format = "via [ $version](cyan bold) "
 O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada. O módulo vai exibir somente se algumas das condições a seguir for atendida:
 
 - A opção de configuração da `variable` corresponde a uma variável existente
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- A configuração `variable` não está definida, mas a `default` está
 
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: tip Varias variáveis podem ser exibidas usando um `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
 
-Example: following configuration will display value of USER environment variable
+Exemplo: a configuração a seguir irá mostrar o valor da variável de ambiente USER
 ```toml
 # ~/.config/starship.toml
 
@@ -937,13 +937,13 @@ default = "unknown user"
 
 ### Opções
 
-| Opções     | Padrão                         | Descrição                                                                    |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | O formato do módulo.                                                         |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Opções     | Padrão                         | Descrição                                                                      |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------ |
+| `symbol`   |                                | O simbolo usado antes de exibir o valor da variável.                           |
+| `variable` |                                | A variável de ambiente a ser exibida.                                          |
+| `default`  |                                | O valor padrão para exibir quando a variável selecionada não estiver definida. |
+| `format`   | `"with [$env_value]($style) "` | O formato do módulo.                                                           |
+| `disabled` | `false`                        | Desabilita o módulo `env_var`.                                                 |
 
 ### Variáveis
 
