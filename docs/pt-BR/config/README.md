@@ -947,11 +947,11 @@ default = "unknown user"
 
 ### Variáveis
 
-| Variável  | Exemplo                                     | Descrição                                  |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Espelha o valor da opção `symbol`          |
-| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`           |
+| Variável  | Exemplo                                     | Descrição                               |
+| --------- | ------------------------------------------- | --------------------------------------- |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | O valor de ambiente da opção `variable` |
+| symbol    |                                             | Espelha o valor da opção `symbol`       |
+| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`        |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -965,7 +965,7 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-Displaying multiple environmental variables:
+Exibindo múltiplas variáveis de ambiente:
 ```toml
 # ~/.config/starship.toml
 
@@ -978,7 +978,7 @@ default = "unknown user"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo de `erlang` exibe a versão atual instalada do [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
@@ -1000,7 +1000,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 | Variável  | Exemplo   | Descrição                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v22.1.3` | The version of `erlang`           |
+| version   | `v22.1.3` | A versão do `erlang`              |
 | symbol    |           | Espelha o valor da opção `symbol` |
 | style\* |           | Espelha o valor da opção `style`  |
 
