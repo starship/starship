@@ -991,10 +991,10 @@ O módulo de `erlang` exibe a versão atual instalada do [Erlang/OTP](https://er
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.                               |
+| `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                 |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Quais nomes de arquivos devem ativar este módulo.                         |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                    |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                             |
+| `disabled`          | `false`                              | Desabilita o módulo `erlang`.                                             |
 
 ### Variáveis
 
