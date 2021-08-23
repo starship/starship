@@ -96,7 +96,7 @@ Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilann
 
 Perhatikan bagaimana nantinya penataanmu akan terlihat pada emulator terminalmu. Sebagai contoh, beberapa terminal emulator alih-alih membuat warnanya lebih terang, malah menebalkan teksnya, dan sebagian palet warna ada yang menggunakan nilai yang sama untuk warna normal dan terangnya. Dan juga, untuk memakai teks miring, terminalmu harus menunjang teks miring.
 
-#### Conditional Format Strings
+#### Pengkondisian pada Format Strings
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
