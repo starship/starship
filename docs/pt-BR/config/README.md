@@ -980,21 +980,21 @@ default = "unknown user"
 
 O módulo de `erlang` exibe a versão atual instalada do [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- O diretório atual contem um arquivo `rebar.config`.
+- O diretório atual contem um arquivo `erlang.mk`.
 
 ### Opções
 
-| Opções              | Padrão                               | Descrição                                                                 |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                      |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
-| `style`             | `"bold red"`                         | O estilo do módulo.                                                       |
-| `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                 |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | Quais nomes de arquivos devem ativar este módulo.                         |
-| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                    |
-| `disabled`          | `false`                              | Desabilita o módulo `erlang`.                                             |
+| Opções              | Padrão                               | Descrição                                                                            |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `" "`                               | O simbolo usado antes de exibir a versão do erlang.                                  |
+| `style`             | `"bold red"`                         | O estilo do módulo.                                                                  |
+| `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
+| `disabled`          | `false`                              | Desabilita o módulo `erlang`.                                                        |
 
 ### Variáveis
 
