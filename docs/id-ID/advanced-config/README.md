@@ -92,4 +92,4 @@ Penentuan warna bisa dilakukan dengan salah satu cara berikut:
  - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [kode heksadesimal pada warna RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Menggunakan bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
-Jika banyak warna yang dipakai pada latar depan/latar belakang, maka warna yang terbaru pada string yang akan diprioritaskan.
+Jika warna yang dipakai pada latar depan/latar belakang banyak, maka warna yang terbaru pada string yang akan diprioritaskan.
