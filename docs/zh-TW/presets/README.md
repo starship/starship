@@ -1,16 +1,16 @@
-# Presets
+# 預設樣式
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+這裡蒐集了社群提交的 Starship 預設樣式。 如果你也想要分享你的樣式，請[提交一個 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 來更新這個檔案！ 😊
 
-## Nerd Font Symbols
+## Nerd Font 符號
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+這個預設樣式不會更改每個模組使用的符號外的任何東西。 如果你不喜歡使用 emojis，這個可能會是你所中意的！
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Nerd Font 預設樣式的截圖](/presets/nerd-font-symbols.png)
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- 安裝一個 [Nerd Font](https://www.nerdfonts.com/) 並且在終端中啟用（範例使用 Fira Code Nerd Font）
 
 ### 設定
 
@@ -88,17 +88,17 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## 括號片段
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+這個預設樣式使所有模組使用括號片段內的格式顯示，而非使用 Starship 預設（"via", "on", etc.）。
 
-Before:
+變更前：
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![預設 Starship 樣式的截圖](/presets/bracketed-segments-before.png)
 
-After:
+變更後：
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![括號片段預設樣式的截圖](/presets/bracketed-segments-after.png)
 
 ### 設定
 
@@ -110,7 +110,7 @@ format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
-format = "[⏱ $duration]($style)"
+format = '\[[⏱ $duration ]($style)\]'
 
 [conda]
 format = '\[[$symbol$environment]($style)\]'
@@ -239,17 +239,17 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## 純文字符號
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+這個預設樣式將符號換成了純文本。 如果你的終端 / 字體無法渲染 NerdFonts/emojis，或許你該試試這套樣式！
 
-Before (default setting with Fixedsys font):
+變更前（預設，搭配 Fixedsys font）：
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![預設 Starship 樣式搭配 Fixedsys font 的截圖](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+變更後（純文字符號）：
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![純文字符號預設樣式的截圖](/presets/plain-text-symbols-after.png)
 
 ### 設定
 
@@ -361,4 +361,95 @@ symbol = "scala "
 
 [swift]
 symbol = "swift "
+```
+
+## 隱藏執行環境版本
+
+這個預設樣式隱藏了各個語言的執行環境版本。 如果你在容器或者虛擬環境中工作，那麼這個樣式是為你設計的！
+
+![隱藏運行版本預設樣式的截圖](/presets/hide-runtime-versions.png)
+
+### 設定
+
+```toml
+[cmake]
+format = "via [$symbol]($style)"
+
+[crystal]
+format = "via [$symbol]($style)"
+
+[dart]
+format = "via [$symbol]($style)"
+
+[deno]
+format = "via [$symbol]($style)"
+
+[dotnet]
+format = "[$symbol(🎯 $tfm )]($style)"
+
+[elixir]
+format = 'via [$symbol]($style)'
+
+[elm]
+format = 'via [$symbol]($style)'
+
+[erlang]
+format = 'via [$symbol]($style)'
+
+[golang]
+format = 'via [$symbol]($style)'
+
+[helm]
+format = 'via [$symbol]($style)'
+
+[julia]
+format = 'via [$symbol]($style)'
+
+[kotlin]
+format = 'via [$symbol]($style)'
+
+[lua]
+format = 'via [$symbol]($style)'
+
+[nim]
+format = 'via [$symbol]($style)'
+
+[nodejs]
+format = 'via [$symbol]($style)'
+
+[ocaml]
+format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
+
+[perl]
+format = 'via [$symbol]($style)'
+
+[php]
+format = 'via [$symbol]($style)'
+
+[purescript]
+format = 'via [$symbol]($style)'
+
+[red]
+format = 'via [$symbol]($style)'
+
+[rlang]
+format = 'via [$symbol]($style)'
+
+[ruby]
+format = 'via [$symbol]($style)'
+
+[rust]
+format = 'via [$symbol]($style)'
+
+[swift]
+format = 'via [$symbol]($style)'
+
+[vagrant]
+format = 'via [$symbol]($style)'
+
+[vlang]
+format = 'via [$symbol]($style)'
+
+[zig]
+format = 'via [$symbol]($style)'
 ```

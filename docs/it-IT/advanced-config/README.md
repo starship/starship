@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le parole non sono sensibili alle maiuscole (cioè `grassetto` e `BoLd` sono considerate la stessa stringa). Ogni parola può essere una delle seguenti:
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`

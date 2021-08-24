@@ -18,7 +18,7 @@ features:
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion и PowerShell.
+description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -116,6 +116,7 @@ description: Starship - минимальная, быстрая и бесконе
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
    ::: warning Only elvish v0.15 or higher is supported. :::
@@ -139,7 +140,8 @@ description: Starship - минимальная, быстрая и бесконе
    eval `starship init tcsh`
    ```
 
-    #### Nushell
+
+   #### Nushell
 
    ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
 
@@ -150,4 +152,15 @@ description: Starship - минимальная, быстрая и бесконе
     "source ~/.cache/starship/init.nu"
    ]
    prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

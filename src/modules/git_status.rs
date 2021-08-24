@@ -6,6 +6,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
+use std::ffi::OsStr;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -18,6 +19,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
 ///   - `⇕` – This branch has diverged from the branch being tracked
+///   - `` – This branch is up-to-date with the branch being tracked
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
@@ -29,6 +31,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
+
+    //Return None if not in git repository
+    context.get_repo().ok()?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -47,6 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         format_count(config.stashed, "git_status.stashed", count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
+                        let (ahead, behind) = (ahead?, behind?);
                         if ahead > 0 && behind > 0 {
                             format_text(config.diverged, "git_status.diverged", |variable| {
                                 match variable {
@@ -60,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         } else if behind > 0 && ahead == 0 {
                             format_count(config.behind, "git_status.behind", behind)
                         } else {
-                            None
+                            format_symbol(config.up_to_date, "git_status.up_to_date")
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
@@ -120,7 +126,7 @@ impl<'a> GitStatusInfo<'a> {
         }
     }
 
-    pub fn get_ahead_behind(&self) -> Option<(usize, usize)> {
+    pub fn get_ahead_behind(&self) -> Option<(Option<usize>, Option<usize>)> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
     }
 
@@ -179,12 +185,12 @@ fn get_repo_status(context: &Context) -> Option<RepoStatus> {
     let status_output = context.exec_cmd(
         "git",
         &[
-            "-C",
-            &context.current_dir.to_string_lossy(),
-            "--no-optional-locks",
-            "status",
-            "--porcelain=2",
-            "--branch",
+            OsStr::new("-C"),
+            context.current_dir.as_os_str(),
+            OsStr::new("--no-optional-locks"),
+            OsStr::new("status"),
+            OsStr::new("--porcelain=2"),
+            OsStr::new("--branch"),
         ],
     )?;
     let statuses = status_output.stdout.lines();
@@ -204,11 +210,11 @@ fn get_stashed_count(context: &Context) -> Option<usize> {
     let stash_output = context.exec_cmd(
         "git",
         &[
-            "-C",
-            &context.current_dir.to_string_lossy(),
-            "--no-optional-locks",
-            "stash",
-            "list",
+            OsStr::new("-C"),
+            context.current_dir.as_os_str(),
+            OsStr::new("--no-optional-locks"),
+            OsStr::new("stash"),
+            OsStr::new("list"),
         ],
     )?;
 
@@ -217,8 +223,8 @@ fn get_stashed_count(context: &Context) -> Option<usize> {
 
 #[derive(Default, Debug, Copy, Clone)]
 struct RepoStatus {
-    ahead: usize,
-    behind: usize,
+    ahead: Option<usize>,
+    behind: Option<usize>,
     conflicted: usize,
     deleted: usize,
     renamed: usize,
@@ -228,51 +234,56 @@ struct RepoStatus {
 }
 
 impl RepoStatus {
-    fn is_conflicted(status: &str) -> bool {
-        status.starts_with("u ")
-    }
-
-    fn is_deleted(status: &str) -> bool {
+    fn is_deleted(short_status: &str) -> bool {
         // is_wt_deleted || is_index_deleted
-        status.starts_with("1 .D") || status.starts_with("1 D")
+        short_status.contains('D')
     }
 
-    fn is_renamed(status: &str) -> bool {
-        // is_wt_renamed || is_index_renamed
-        // Potentially a copy and not a rename
-        status.starts_with("2 ")
+    fn is_modified(short_status: &str) -> bool {
+        // is_wt_modified || is_wt_added
+        short_status.ends_with('M') || short_status.ends_with('A')
     }
 
-    fn is_modified(status: &str) -> bool {
-        // is_wt_modified
-        status.starts_with("1 .M") || status.starts_with("1 .A")
+    fn is_staged(short_status: &str) -> bool {
+        // is_index_modified || is_index_added
+        short_status.starts_with('M') || short_status.starts_with('A')
     }
 
-    fn is_staged(status: &str) -> bool {
-        // is_index_modified || is_index_new
-        status.starts_with("1 M") || status.starts_with("1 A")
-    }
+    fn parse_normal_status(&mut self, short_status: &str) {
+        if Self::is_deleted(short_status) {
+            self.deleted += 1;
+        }
 
-    fn is_untracked(status: &str) -> bool {
-        // is_wt_new
-        status.starts_with("? ")
+        if Self::is_modified(short_status) {
+            self.modified += 1;
+        }
+
+        if Self::is_staged(short_status) {
+            self.staged += 1;
+        }
     }
 
     fn add(&mut self, s: &str) {
-        self.conflicted += Self::is_conflicted(s) as usize;
-        self.deleted += Self::is_deleted(s) as usize;
-        self.renamed += Self::is_renamed(s) as usize;
-        self.modified += Self::is_modified(s) as usize;
-        self.staged += Self::is_staged(s) as usize;
-        self.untracked += Self::is_untracked(s) as usize;
+        match s.chars().next() {
+            Some('1') => self.parse_normal_status(&s[2..4]),
+            Some('2') => {
+                self.renamed += 1;
+                self.parse_normal_status(&s[2..4])
+            }
+            Some('u') => self.conflicted += 1,
+            Some('?') => self.untracked += 1,
+            Some('!') => (),
+            Some(_) => log::error!("Unknown line type in git status output"),
+            None => log::error!("Missing line type in git status output"),
+        }
     }
 
     fn set_ahead_behind(&mut self, s: &str) {
         let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
 
         if let Some(caps) = re.captures(s) {
-            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().unwrap();
-            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().unwrap();
+            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
+            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
         }
     }
 }
@@ -303,11 +314,16 @@ fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec
     })
 }
 
+fn format_symbol(format_str: &str, config_path: &str) -> Option<Vec<Segment>> {
+    format_text(format_str, config_path, |_variable| None)
+}
+
 #[cfg(test)]
 mod tests {
     use ansi_term::{ANSIStrings, Color};
+    use std::ffi::OsStr;
     use std::fs::{self, File};
-    use std::io;
+    use std::io::{self, prelude::*};
     use std::path::Path;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
@@ -445,6 +461,23 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("⇕⇡1⇣1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_up_to_date_with_upstream() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                up_to_date="✓"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("✓");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -679,6 +712,21 @@ mod tests {
     }
 
     #[test]
+    fn shows_staged_and_modified_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("!+");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_renamed_file() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -707,6 +755,21 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
         let expected = format_output("»1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_renamed_and_modified_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_renamed_and_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("»!");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -747,15 +810,30 @@ mod tests {
     }
 
     #[test]
+    fn doesnt_show_ignored_file() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_and_ignored(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("+");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn worktree_in_different_dir() -> io::Result<()> {
         let worktree_dir = tempfile::tempdir()?;
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
             .args(&[
-                "config",
-                "core.worktree",
-                &worktree_dir.path().to_string_lossy(),
+                OsStr::new("config"),
+                OsStr::new("core.worktree"),
+                worktree_dir.path().as_os_str(),
             ])
             .current_dir(repo_dir.path())
             .output()?;
@@ -930,6 +1008,22 @@ mod tests {
         Ok(())
     }
 
+    fn create_staged_and_modified(repo_dir: &Path) -> io::Result<()> {
+        let mut file = File::create(repo_dir.join("readme.md"))?;
+        file.sync_all()?;
+
+        create_command("git")?
+            .args(&["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        writeln!(&mut file, "modified")?;
+        file.sync_all()?;
+
+        Ok(())
+    }
+
     fn create_renamed(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
             .args(&["mv", "readme.md", "readme.md.bak"])
@@ -946,8 +1040,46 @@ mod tests {
         Ok(())
     }
 
+    fn create_renamed_and_modified(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(&["mv", "readme.md", "readme.md.bak"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        create_command("git")?
+            .args(&["add", "-A"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        let mut file = File::create(repo_dir.join("readme.md.bak"))?;
+        writeln!(&mut file, "modified")?;
+        file.sync_all()?;
+
+        Ok(())
+    }
+
     fn create_deleted(repo_dir: &Path) -> io::Result<()> {
         fs::remove_file(repo_dir.join("readme.md"))?;
+
+        Ok(())
+    }
+
+    fn create_staged_and_ignored(repo_dir: &Path) -> io::Result<()> {
+        let mut file = File::create(repo_dir.join(".gitignore"))?;
+        writeln!(&mut file, "ignored.txt")?;
+        file.sync_all()?;
+
+        create_command("git")?
+            .args(&["add", ".gitignore"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        let mut file = File::create(repo_dir.join("ignored.txt"))?;
+        writeln!(&mut file, "modified")?;
+        file.sync_all()?;
 
         Ok(())
     }

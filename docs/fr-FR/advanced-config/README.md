@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 Les chaînes de style sont une liste de mots, séparés par des espaces. Les mots ne sont pas sensibles à la casse (c'est-à-dire `gras` et `GrAs` sont considérés comme le même mot). Chaque mot peut être l'un des suivants :
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`

@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
-    let repo_state = repo.state?;
+    let repo_state = repo.state;
 
     let state_description = get_state_description(repo_state, repo_root, &config)?;
 
