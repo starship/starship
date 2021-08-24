@@ -8,9 +8,9 @@ Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemud
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Kostumisasi Perintah pre-prompt dan pre-execution Pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook dalam `bash` yang dapat dikustomisasi sepenuhnya. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsimu sendiri ke dalam prosedur prompt-rendering:
+Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `bash`. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsimu sendiri ke dalam prosedur prompt-rendering:
 
 - Untuk menjalankan fungsi yang dikustomisasi tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
 
@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilan lokasi direktorimu yang sedang bekerja). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
+Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilkan lokasi direktorimu yang sedang bekerja). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -43,7 +43,7 @@ function set_win_title(){
 }
 ```
 
-Kamu bisa menggunakan beberapa variabel untuk mengkostumisasi judulnya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah pilihan yang paling banyak digemari).
+Kamu bisa menggunakan variabel untuk mengkostumisasi judulnya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah opsi yang populer).
 
 Di dalam `bash`, buatlah function berikut sebagai function precmd untuk starship:
 
