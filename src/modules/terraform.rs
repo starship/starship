@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let terraform_version = parse_terraform_version(
-                        &context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                        context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
                     )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
