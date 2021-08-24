@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Ada beberapa prompts shell yang dengan otomatis akan mengubah judul window-nya untukmu (mis. menampilkan lokasi direktorimu yang sedang bekerja). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
+Beberapa prompts shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -51,13 +51,13 @@ Di dalam `bash`, buatlah function berikut sebagai function precmd untuk starship
 starship_precmd_user_func="set_win_title"
 ```
 
-Untuk `zsh`, tambahkan `precmd_functions` ke dalam array:
+Dalam `zsh`, pada array `precmd_functions` tambahkan:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Kalau kamu suka dengan hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuatnya permanen.
+Kalau kamu suka hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuatnya permanen.
 
 Sebagai contoh, kalau kamu mau menampilkan lokasi direktori pada judul label terminalmu, tambahkan snippet berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
 
