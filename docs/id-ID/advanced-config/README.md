@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Beberapa prompts shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh` adalah hal yang mudah.
+Beberapa prompts shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi mudah saja untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh`.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -43,15 +43,15 @@ function set_win_title(){
 }
 ```
 
-Kamu bisa menggunakan variabel untuk mengkostumisasi judulnya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah opsi yang populer).
+Kamu bisa menggunakan variabel untuk mengkustomisasi judulnya (`$USER`, `$HOSTNAME`, dan `$PWD` adalah opsi yang populer).
 
-Di dalam `bash`, buatlah function berikut sebagai function precmd untuk starship:
+Di dalam `bash`, atur fungsi berikut menjadi fungsi precmd untuk starship:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-Dalam `zsh`, pada array `precmd_functions` tambahkan:
+Dalam `zsh`, pada array `precmd_functions`, tambahkan:
 
 ```bash
 precmd_functions+=(set_win_title)
@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Style Strings
+## Menata String
 
-Penataan pada strings merupakan kumpulan kata yang dipisahkan oleh whistespace. Kata pada string tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah kata yang dapat digunakan menjadi opsi:
+Tataan pada strings merupakan sebuah kumpulan kata yang dipisahkan dengan spasi kosong. Kata-katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Kata-kata yang dapat digunakan adalah salah satu dari daftar berikut:
 
   - `bold`
   - `italic`
