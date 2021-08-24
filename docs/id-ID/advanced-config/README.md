@@ -70,7 +70,7 @@ starship_precmd_user_func="set_win_title"
 
 ## Menata String
 
-Tataan pada strings merupakan sebuah kumpulan kata yang dipisahkan dengan spasi kosong. Kata-katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Kata-kata yang dapat digunakan adalah salah satu dari daftar berikut:
+Tataan pada strings merupakan sebuah kumpulan kata yang dipisahkan dengan spasi kosong. Kata-katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
 
   - `bold`
   - `italic`
@@ -82,9 +82,9 @@ Tataan pada strings merupakan sebuah kumpulan kata yang dipisahkan dengan spasi 
   - `<color>`
   - `none`
 
-Yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). Untuk sementara, namun dapat berubah di kemudian hari, `fg:<color>` dan `<color>` memiliki fungsi yang sama. Token `inverted` menggantikan warna pada layar depan dan belakang. Urutan antara kata pada string dapat diabaikan.
+yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). `fg:<color>` dan `<color>` untuk saat ini memiliki fungsi yang sama, meskipun bisa berubah di kemudian hari. `inverted` menggantikan warna pada latar depan dan belakang. Urutan kata pada string tidak jadi masalah.
 
-Token `none` dapat menggantikan token lainnya di dalam string jika Ia tidak termaksud dalam penentu warna pada `bg:` sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string yang tidak memiliki penataan. Token `bg:none` menetapkan warna pada latar belakang menjadi warna bawaan. Jadi, nilai `fg:red bg:none` sama dengan `red` atau `fg:red` dan nilai `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Di kemudian hari, menggunakan token `none` bersamaan dengan token lainnya bisa saja menjadi sebuah masalah.
+`none` bisa menimpa nilai token lainnya di dalam string jika Ia tidak termaksud dalam penentu warna pada `bg:` sebagai contoh, `fg:red none fg:blue` akan tetap menjadi string yang tidak memiliki penataan. `bg:none` menjadikan warna pada latar belakang sebagai warna bawaan. Jadi, nilai `fg:red bg:none` sama dengan `red` atau `fg:red` dan nilai `bg:green fg:red bg:none` juga sama dengan `fg:red` ataupun `red`. Mungkin akan jadi masalah untuk menggunakan `none` dengan token lainnya di kemudian hari.
 
 Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 
