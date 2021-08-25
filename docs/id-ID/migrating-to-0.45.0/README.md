@@ -115,7 +115,7 @@ error_symbol = "[✖](bold red)"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `prefix`         | `format`    |
+| `prefix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -129,7 +129,7 @@ error_symbol = "[✖](bold red)"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `prefix`         | `format`    |
+| `prefix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -143,8 +143,8 @@ error_symbol = "[✖](bold red)"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| `prefix`         | `fromat`    |
+| `suffix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -159,8 +159,8 @@ error_symbol = "[✖](bold red)"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| `prefix`         | `fromat`    |
+| `suffix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -175,9 +175,9 @@ error_symbol = "[✖](bold red)"
 
 | Removed Property  | Replacement |
 | ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| `prefix`          | `fromat`    |
+| `suffix`          | `fromat`    |
+| `show_sync_count` | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -206,8 +206,8 @@ behind = "⇣${count}"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| `prefix`         | `fromat`    |
+| `suffix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -222,9 +222,9 @@ behind = "⇣${count}"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| `label`          | `fromat`    |
+| `prefix`         | `fromat`    |
+| `suffix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
@@ -239,7 +239,7 @@ behind = "⇣${count}"
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |
-| `format`         | `time_format` |
+| `fromat`         | `time_format` |
 
 **Changes to the Default Configuration**
 
@@ -254,8 +254,8 @@ behind = "⇣${count}"
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| `prefix`         | `fromat`    |
+| `suffix`         | `fromat`    |
 
 **Changes to the Default Configuration**
 
