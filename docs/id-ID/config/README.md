@@ -1,12 +1,12 @@
 # Konfigurasi
 
-Untuk memulai mengkonfigurasi starship, buatlah file: `~/.config/starship.toml`.
+Untuk memulai mengkonfigurasi starship, buatlah file berikut: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Semua konfigurasi pada starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
+Seluruh konfigurasi starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
 
 ```toml
 # Menambahkan baris kosong antar prompt shell
@@ -27,7 +27,7 @@ Kamu bisa mengganti lokasi file konfigurasi bawaan dengan menggunakan environmen
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Untuk membuatnya dengan PowerShell (Windows), tambahkan baris berikut pada `$PROFILE`:
+Ekuivalen dalam PowerShell (Windows), tambahkan baris berikut pada `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
