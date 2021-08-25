@@ -57,7 +57,7 @@ Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis
 
 ### Format String
 
-Format string merupakan format yang sebuah modul gunakan untuk menampilkan semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
+Format string merupakan format yang sebuah modul gunakan untuk menampilkan semua variabelnya. Sebagian besar modul memiliki sebuah entri yang disebut `format` yang mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
 #### Variabel
 
@@ -83,9 +83,9 @@ Sebagai contoh:
 - `[⌘ $version](bold green)` akan menampilkan simbol `⌘` yang diikuti oleh variabel yang berisikan `version`, dengan teks tebal berwarna hijau.
 - `[a [b](red) c](green)` akan menampilkan `a b c` dengan `b` merah, dan `a` & `c` green.
 
-#### Penataan Gaya Pada Strings
+#### Menata String
 
-Sebagian besar modul starship mengizinkanmu untuk mengkonfigurasi gaya tampilannya. Hal ini dapat dilakukan dengan menggunakan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan gaya pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [panduan konfigurasi lanjutan](/advanced-config/).
+Sebagian besar modul starship memungkinkan kamu untuk mengkonfigurasi gaya tampilannya. Hal ini dilakukan dengan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [panduan konfigurasi lanjutan](/advanced-config/).
 
 - `"fg:green bg:blue"` mengeset teks berwana hijau pada latar biru
 - `"bg:blue fg:bright-green"` mengeset teks hijau terang pada latar biru
