@@ -149,32 +149,32 @@ This is the list of prompt-wide configuration options.
 | `command_timeout` | `500`                            | Batas waktu untuk perintah yang dieksekusi oleh starship (dalam militdetik). |
 | `add_newline`     | `true`                           | Memasukkan baris kosong antara prompt shell.                                 |
 
-### Example
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Menggunakan format yang dikustomisasi
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Menunggu 10 milidetik untuk starship mencek file pada direktori terkini.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Menonaktifkan baris kosong di awal prompt
 add_newline = false
 ```
 
-### Default Prompt Format
+### Format Prompt Bawaan
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+Aturan `format` bawaan digunakan untuk mendefinisikan format pada prompt, apabila kosong atau tidak ada `format` yang diberikan. Aturannya seperti yang ditunjukkan:
 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# yang mana ekuivalen dengan
 format = """
 $username\
 $hostname\
@@ -342,7 +342,7 @@ discharging_symbol = "💀 "
 
 ### Battery Display
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. The default is as shown:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. Aturannya seperti yang ditunjukkan:
 
 ```toml
 [[battery.display]]
