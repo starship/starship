@@ -108,7 +108,7 @@ Sebagai contoh:
 
 #### Karakter Yang Bisa Dihindari (Escapable)
 
-Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu mau menampilkan simbol-simbol berikut, kamu harus mengikatnya dengan garis miring terbalik (`\`).
+Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus mengikatnya (escape) dengan garis miring terbalik (`\`).
 
 - \$
 - \\
@@ -117,7 +117,7 @@ Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika 
 - (
 - )
 
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Perhatikan bahwa `toml` memiliki [sintaksi bebasnya sendiri](https://github.com/toml-lang/toml#user-content-string). Disarankan halnya untukmu menggunakan string literal (`''`) dalam konfigurasimu. Jika kamu mau memakai string standar (`""`), ingatlah untuk mengikat garis miring terbalik `\`.
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
