@@ -103,12 +103,12 @@ String dengan format bersyarat dibungkus dengan `(` dan `)` tidak akan dijalanka
 Sebagai contoh:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- `(sembarang)` akan selalu tidak menampilkan apapun karena tidak ada variabel yang dibungkus dalam kurung kurawal.
+- Tatkala `$all` digunakan sebagai shortcut untuk `\[$a$b\]`, `($all)` tidak akan menampilkan apapun jika nilai `$a` dan `$b` adalah `None`. Berlaku juga dengan `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Karakter Yang Bisa Dihindari (Escapable)
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu mau menampilkan simbol-simbol berikut, kamu harus mengikatnya dengan garis miring terbalik (`\`).
 
 - \$
 - \\
