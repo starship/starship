@@ -57,7 +57,7 @@ Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis
 
 ### Format String
 
-Format string merupakan sebuah format yang digunakan modul untuk menampilkan semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
+Format string merupakan format yang sebuah modul gunakan untuk menampilkan semua variabelnya. Kebanyakan modul memiliki sebuah entri yang disebut `format`, yang digunakan untuk mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
 #### Variabel
 
