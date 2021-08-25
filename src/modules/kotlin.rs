@@ -62,9 +62,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_kotlin_version(context: &Context, kotlin_binary: &str) -> Option<String> {
     let command = context.exec_cmd(kotlin_binary, &["-version"])?;
-    let kotlin_version = get_command_string_output(command);
+    let kotlin_version_string = get_command_string_output(command);
 
-    parse_kotlin_version(&kotlin_version)
+    parse_kotlin_version(&kotlin_version_string)
 }
 
 fn parse_kotlin_version(kotlin_stdout: &str) -> Option<String> {

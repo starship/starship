@@ -42,7 +42,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_python_version(context, &config).map(Ok),
+                "version" => {
+                    if config.pyenv_version_name {
+                        return get_pyenv_version(context).map(Ok);
+                    }
+                    let python_version = get_python_version(context, &config)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &python_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 "virtualenv" => {
                     let virtual_env = get_python_virtual_env(context);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
@@ -64,11 +75,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+fn get_pyenv_version(context: &Context) -> Option<String> {
+    let version_name = context
+        .exec_cmd("pyenv", &["version-name"])?
+        .stdout
+        .trim()
+        .to_string();
+    Some(version_name)
+}
+
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
-    if config.pyenv_version_name {
-        let version_name = context.exec_cmd("pyenv", &["version-name"])?.stdout;
-        return Some(version_name.trim().to_string());
-    };
     let version = config
         .python_binary
         .0
@@ -76,23 +92,17 @@ fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String
         .find_map(|binary| context.exec_cmd(binary, &["--version"]))
         .map(get_command_string_output)?;
 
-    format_python_version(&version, config.version_format)
+    parse_python_version(&version)
 }
 
-fn format_python_version(python_version: &str, version_format: &str) -> Option<String> {
-    let version = python_version
+fn parse_python_version(python_version_string: &str) -> Option<String> {
+    let version = python_version_string
         // split into ["Python", "3.8.6", ...]
         .split_whitespace()
         // get down to "3.8.6"
         .nth(1)?;
 
-    match VersionFormatter::format_version(version, version_format) {
-        Ok(formatted) => Some(formatted),
-        Err(error) => {
-            log::warn!("Error formatting `python` version:\n{}", error);
-            Some(format!("v{}", version))
-        }
-    }
+    Some(version.to_string())
 }
 
 fn get_python_virtual_env(context: &Context) -> Option<String> {
@@ -122,50 +132,35 @@ mod tests {
     use std::io::Write;
 
     #[test]
-    fn test_format_python_version() {
+    fn test_parse_python_version() {
         assert_eq!(
-            format_python_version("Python 3.7.2", "v${major}.${minor}.${patch}"),
-            Some("v3.7.2".to_string())
+            parse_python_version("Python 3.7.2"),
+            Some("3.7.2".to_string())
         );
     }
 
     #[test]
-    fn test_format_python_version_truncated() {
+    fn test_parse_python_version_is_malformed() {
+        assert_eq!(parse_python_version("Python 3.7"), Some("3.7".to_string()));
+    }
+
+    #[test]
+    fn test_parse_python_version_anaconda() {
         assert_eq!(
-            format_python_version("Python 3.7.2", "v${major}.${minor}"),
-            Some("v3.7".to_string())
+            parse_python_version("Python 3.6.10 :: Anaconda, Inc.",),
+            Some("3.6.10".to_string())
         );
     }
 
     #[test]
-    fn test_format_python_version_is_malformed() {
+    fn test_parse_python_version_pypy() {
         assert_eq!(
-            format_python_version("Python 3.7", "v${major}.${minor}.${patch}"),
-            Some("v3.7.".to_string())
-        );
-    }
-
-    #[test]
-    fn test_format_python_version_anaconda() {
-        assert_eq!(
-            format_python_version(
-                "Python 3.6.10 :: Anaconda, Inc.",
-                "v${major}.${minor}.${patch}"
-            ),
-            Some("v3.6.10".to_string())
-        );
-    }
-
-    #[test]
-    fn test_format_python_version_pypy() {
-        assert_eq!(
-            format_python_version(
+            parse_python_version(
                 "\
 Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
 [PyPy 7.3.3-beta0 with GCC 10.2.0]",
-                "v${major}.${minor}.${patch}"
             ),
-            Some("v3.7.9".to_string())
+            Some("3.7.9".to_string())
         );
     }
 
