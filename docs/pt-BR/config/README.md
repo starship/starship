@@ -1021,23 +1021,23 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Opções
 
-| Opções           | Padrão                                                     | Descrição                                                       |
-| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                            |
-| `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                              | O estilo do módulo.                                             |
-| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
+| Opções           | Padrão                                                     | Descrição                                                    |
+| ---------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                         |
+| `symbol`         | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.       |
+| `region_aliases` |                                                            | Tabela de aliases de região para exibir além do nome do GCP. |
+| `style`          | `"bold blue"`                                              | O estilo do módulo.                                          |
+| `disabled`       | `false`                                                    | Desabilita o módulo `gcloud`.                                |
 
 ### Variáveis
 
 | Variável  | Exemplo       | Descrição                                                          |
 | --------- | ------------- | ------------------------------------------------------------------ |
-| region    | `us-central1` | The current GCP region                                             |
-| account   | `foo`         | The current GCP profile                                            |
-| domain    | `example.com` | The current GCP profile domain                                     |
-| project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| region    | `us-central1` | A região atual do GCP                                              |
+| account   | `foo`         | O perfil atual do GCP                                              |
+| domain    | `example.com` | O perfil de domínio atual do GCP                                   |
+| project   |               | O projeto atual do GCP                                             |
+| active    | `default`     | O nome da configuração escrita em `~/.config/gcloud/active_config` |
 | symbol    |               | Espelha o valor da opção `symbol`                                  |
 | style\* |               | Espelha o valor da opção `style`                                   |
 
@@ -1045,7 +1045,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Exemplos
 
-#### Display account and project
+#### Exibe conta e projeto
 
 ```toml
 # ~/.config/starship.toml
@@ -1054,7 +1054,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Exibe apenas o nome da configuração ativa
 
 ```toml
 # ~/.config/starship.toml
@@ -1064,7 +1064,7 @@ format = "[$symbol$active]($style) "
 style = "bold yellow"
 ```
 
-#### Display account and aliased region
+#### Exibir conta e região
 
 ```toml
 # ~/.config/starship.toml
@@ -1078,30 +1078,30 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+O módulo `git_branch` exibe o branch ativo do repositório no diretório atual.
 
 ### Opções
 
-| Opções               | Padrão                           | Descrição                                                                                |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | O formato do módulo. Use `"$branch"` to refer to the current branch name.                |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | O estilo do módulo.                                                                      |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
-| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
+| Opções               | Padrão                           | Descrição                                                                                         |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Exibe o nome do braço remoto, mesmo se ele for igual ao nome do braço local.                      |
+| `format`             | `"on [$symbol$branch]($style) "` | O formato do módulo. Use `"$branch"` para se referir ao nome do braço atual.                      |
+| `symbol`             | `" "`                           | Um formato de string que representa o simbolo do git branch.                                      |
+| `style`              | `"bold purple"`                  | O estilo do módulo.                                                                               |
+| `truncation_length`  | `2^63 - 1`                       | Truncates um braço do git para `N` caracteres.                                                    |
+| `truncation_symbol`  | `"…"`                            | O simbolo usado para indicar que o nome braço foi truncado. Você pode usar `""` para sem simbolo. |
+| `only_attached`      | `false`                          | Apenas exibe o nome do braço quando o estado não for detached `HEAD`.                             |
+| `disabled`           | `false`                          | Desabilita o módulo `git_branch`.                                                                 |
 
 ### Variáveis
 
-| Variável      | Exemplo  | Descrição                                                                                              |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Espelha o valor da opção `symbol`                                                                      |
-| style\*     |          | Espelha o valor da opção `style`                                                                       |
+| Variável      | Exemplo  | Descrição                                                                                         |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------- |
+| branch        | `master` | O nome do braço atual, retornará para `HEAD` se não tiver braço atual (e.x: git detached `HEAD`). |
+| remote_name   | `origin` | O nome do remoto.                                                                                 |
+| remote_branch | `master` | O nome do braço rastreado no `remote_name`.                                                       |
+| symbol        |          | Espelha o valor da opção `symbol`                                                                 |
+| style\*     |          | Espelha o valor da opção `style`                                                                  |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -1118,25 +1118,25 @@ truncation_symbol = ""
 
 ## Git commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+O módulo `git_commit` exibe o hash do comiit atual e também a tag (se existir) do repositório no diretório atual.
 
 ### Opções
 
-| Opções               | Padrão                             | Descrição                                               |
-| -------------------- | ---------------------------------- | ------------------------------------------------------- |
-| `commit_hash_length` | `7`                                | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | O formato do módulo.                                    |
-| `style`              | `"bold green"`                     | O estilo do módulo.                                     |
-| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state |
-| `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                       |
+| Opções               | Padrão                             | Descrição                                                          |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                                | O tamanho do git commit hash para ser exibido.                     |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | O formato do módulo.                                               |
+| `style`              | `"bold green"`                     | O estilo do módulo.                                                |
+| `only_detached`      | `true`                             | Apenas exibe o git commit hash quando o estado for detached `HEAD` |
+| `tag_disabled`       | `true`                             | Desabilita a exibição da informação da tag no módulo `git_commit`. |
+| `tag_symbol`         | `" 🏷 "`                            | Simbolo da tag prefixado na informação a ser exibida               |
+| `disabled`           | `false`                            | Desabilita o módulo `git_commit`.                                  |
 
 ### Variáveis
 
 | Variável  | Exemplo   | Descrição                        |
 | --------- | --------- | -------------------------------- |
-| hash      | `b703eb3` | The current git commit hash      |
+| hash      | `b703eb3` | A hash atual do git commit       |
 | style\* |           | Espelha o valor da opção `style` |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
@@ -1804,7 +1804,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | O estilo do módulo.                                                                          |
 | `format`            | `"on [$symbol$branch]($style) "` | O formato do módulo.                                                                         |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
+| `truncation_symbol` | `"…"`                            | O simbolo usado para indicar que o nome braço foi truncado.                                  |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### Variáveis
