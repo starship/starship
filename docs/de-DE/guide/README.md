@@ -51,43 +51,11 @@
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Russisch"
- /></a>
-  &nbsp;
-  <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
       alt="Deutsch"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
  /></a>
   &nbsp;
   <a
@@ -107,11 +75,51 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
+      alt="日本語"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/pt-BR/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
+      alt="Português do Brasil"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
+      alt="Русский"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Vietnamesisch"
+      alt="Tiếng Việt"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
+      alt="简体中文"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
+      alt="繁體中文"
  /></a>
 </p>
 
@@ -160,8 +168,8 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   Um Starship selbst zu aktualisieren, lasse das Skript oben nochmal laufen. Es wird die vorhandene Version ersetzen, ohne die Konfiguration von Starship zu berühren.
 
+   Um Starship selbst zu aktualisieren, lasse das Skript oben nochmal laufen. Es wird die vorhandene Version ersetzen, ohne die Konfiguration von Starship zu berühren.
 
    **Note** - The defaults of the install script can be overridden see the built-in help.
 
