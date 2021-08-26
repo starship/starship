@@ -454,20 +454,20 @@ vicmd_symbol = "[V](bold green) "
 Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - Direktori terkini berisikan sebuah file `CMakeLists.txt`
-- The current directory contains a `CMakeCache.txt` file
+- Direktori terkini berisikan sebuah file `CMakeCache.txt`
 
 ### Opsi
 
-| Opsi                | Bawaan                                 | Deskripsi                                                                 |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | Format dari modul.                                                        |
-| `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                              |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
-| `style`             | `"bold blue"`                          | Gaya penataan untuk modul.                                                |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
+| Opsi                | Bawaan                                 | Deskripsi                                                                           |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Format dari modul.                                                                  |
+| `version_format`    | `"v${raw}"`                            | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"△ "`                                 | Simbol yang digunakan sebelum versi cmake.                                          |
+| `detect_extensions` | `[]`                                   | Ekstensi mana yang harus digunakan untuk memicu modul ini                           |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                          |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                            |
+| `style`             | `"bold blue"`                          | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                | Disables the `cmake` module.                                                        |
 
 ### Variabel
 
@@ -2234,7 +2234,7 @@ By default the module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
+| `detect_extensions`  | `["py"]`                                                                                                     | Ekstensi mana yang harus digunakan untuk memicu modul ini                              |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
@@ -2314,7 +2314,7 @@ The `rlang` module shows the currently installed version of R. The module will b
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
 | `style`             | `"blue bold"`                        | Gaya penataan untuk modul.                                                |
-| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                               |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Ekstensi mana yang harus digunakan untuk memicu modul ini                 |
 | `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                |
 | `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
