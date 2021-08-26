@@ -493,19 +493,19 @@ Pengguna Bash yang membutuhkan fungsi seperti preexec dapat menggunakan [kerangk
 
 ### Opsi
 
-| Opsi                 | Bawaan                        | Deskripsi                                                   |
-| -------------------- | ----------------------------- | ----------------------------------------------------------- |
-| `min_tim`            | `2_000`                       | Durasi terpendek untuk menampilkan waktu (dalam milidetik). |
-| `show_milliseconds`  | `false`                       | Tampilkan milidetik sebagai ganti detik untuk durasinya.    |
-| `format`             | `"took [$duration]($style) "` | Format dari modul.                                          |
-| `style`              | `"bold yellow"`               | Gaya penataan untuk modul.                                  |
-| `disabled`           | `false`                       | Menonaktifkan modul `cmd_duration`.                         |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.          |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).       |
+| Opsi                 | Bawaan                        | Deskripsi                                                        |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------- |
+| `min_tim`            | `2_000`                       | Durasi terpendek untuk menampilkan waktu (dalam milidetik).      |
+| `show_milliseconds`  | `false`                       | Tampilkan milidetik sebagai ganti detik untuk durasinya.         |
+| `format`             | `"took [$duration]($style) "` | Format dari modul.                                               |
+| `style`              | `"bold yellow"`               | Gaya penataan untuk modul.                                       |
+| `disabled`           | `false`                       | Menonaktifkan modul `cmd_duration`.                              |
+| `show_notifications` | `false`                       | Menampilkan notifikasi layar ketika perintah selesai.            |
+| `min_time_to_notify` | `45_000`                      | Durasi terpendek untuk menampilkan notifikasi (dalam milidetik). |
 
-::: tip
+::: saran
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+Menampilkan notifikasi layar memerlukan starship dikembangkan dengan dukungan dari `rust-notify`. Periksa apakah starship kamu mendukung notifikasi dengan menjalankan `STARSHIP_LOG=debug starship module cmd_duration -d 60000` ketika `show_notifications` diatur menjadi `true`.
 
 :::
 
@@ -532,7 +532,7 @@ format = "underwent [$duration](bold yellow)"
 
 The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
+::: saran
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
@@ -1197,7 +1197,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1625,7 +1625,7 @@ kotlin_binary = "kotlinc"
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1753,7 +1753,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2239,7 +2239,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_folders`     | `[]`                                                                                                         | Folder mana yang sebaiknya memicul modul ini                                           |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
-::: tip
+::: saran
 
 The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
@@ -2497,7 +2497,7 @@ symbol = "🌟 "
 
 The `shell` module shows an indicator for currently used shell.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2609,7 +2609,7 @@ format = '[📦 \[$env\]]($style) '
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2710,7 +2710,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
-::: tip
+::: saran
 
 By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
@@ -2769,7 +2769,7 @@ format = "[🏎💨 $workspace]($style) "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2820,7 +2820,7 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-::: tip
+::: saran
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
@@ -3011,19 +3011,19 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
-::: tip
+::: saran
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: saran
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip
+::: saran
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
