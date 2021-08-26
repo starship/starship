@@ -352,16 +352,16 @@ style = "bold red"
 
 The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
-#### Options
+#### Opsi
 
-The `display` option is an array of the following table.
+Opsi dari `display` merupakan sebuah array dari tabel berikut.
 
-| Opsi                 | Bawaan     | Deskripsi                                                                                                 |
-| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | The upper bound for the display option.                                                                   |
-| `style`              | `bold red` | The style used if the display option is in use.                                                           |
-| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Opsi                 | Bawaan     | Deskripsi                                                                                                            |
+| -------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | The upper bound for the display option.                                                                              |
+| `style`              | `bold red` | The style used if the display option is in use.                                                                      |
+| `charging_symbol`    | `-`        | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `charging_symbol` dari baterai.    |
+| `discharging_symbol` | `-`        | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `discharging_symbol` dari baterai. |
 
 #### Contoh
 
@@ -402,7 +402,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 :::
 
-### Options
+### Opsi
 
 | Opsi             | Bawaan              | Deskripsi                                                                        |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------- |
@@ -456,7 +456,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 - The current directory contains a `CMakeLists.txt` file
 - The current directory contains a `CMakeCache.txt` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                 | Deskripsi                                                                 |
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
@@ -491,7 +491,7 @@ If you are running Starship in `bash`, do not hook the `DEBUG` trap after runnin
 
 Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
-### Options
+### Opsi
 
 | Opsi                 | Bawaan                        | Deskripsi                                                  |
 | -------------------- | ----------------------------- | ---------------------------------------------------------- |
@@ -538,7 +538,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 :::
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                 | Deskripsi                                                                                                                                                                                                   |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -575,7 +575,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -615,7 +615,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 - The current directory contains a `.dart_tool` directory
 - The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                            | Deskripsi                                                                 |
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -652,7 +652,7 @@ format = "via [🔰 $version](bold red) "
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                       | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
@@ -690,7 +690,7 @@ When using the fish style pwd option, instead of hiding the path that is truncat
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                             | Deskripsi                                                                        |
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
@@ -748,7 +748,7 @@ truncation_symbol = "…/"
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                                        | Deskripsi                                                                         |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
@@ -801,7 +801,7 @@ Internally, this module uses its own mechanism for version detection. Typically 
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                                                                                  | Deskripsi                                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -843,7 +843,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 - The current directory contains a `mix.exs` file.
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                                      | Deskripsi                                                                 |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -886,7 +886,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                             | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -937,7 +937,7 @@ default = "unknown user"
 ```
 :::
 
-### Options
+### Opsi
 
 | Opsi       | Bawaan                         | Deskripsi                                                                    |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
@@ -985,7 +985,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 - The current directory contains a `rebar.config` file.
 - The current directory contains a `erlang.mk` file.
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1021,7 +1021,7 @@ format = "via [e $version](bold red) "
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
-### Options
+### Opsi
 
 | Opsi             | Bawaan                                                     | Deskripsi                                                       |
 | ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
@@ -1082,7 +1082,7 @@ asia-northeast1 = "an1"
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### Opsi
 
 | Opsi                 | Bawaan                           | Deskripsi                                                                                |
 | -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -1122,7 +1122,7 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
-### Options
+### Opsi
 
 | Opsi                 | Bawaan                             | Deskripsi                                               |
 | -------------------- | ---------------------------------- | ------------------------------------------------------- |
@@ -1157,7 +1157,7 @@ tag_symbol = "🔖 "
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### Options
+### Opsi
 
 | Opsi           | Bawaan                                                          | Deskripsi                                                                               |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -1203,7 +1203,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opsi
 
 | Opsi            | Bawaan                                                   | Deskripsi                          |
 | --------------- | -------------------------------------------------------- | ---------------------------------- |
@@ -1237,7 +1237,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### Options
+### Opsi
 
 | Opsi         | Bawaan                                          | Deskripsi                           |
 | ------------ | ----------------------------------------------- | ----------------------------------- |
@@ -1331,7 +1331,7 @@ The `golang` module shows the currently installed version of [Golang](https://go
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                                                         | Deskripsi                                                                 |
 | ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
@@ -1370,7 +1370,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 - The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1406,7 +1406,7 @@ format = "via [⎈ $version](bold white) "
 
 The `hostname` module shows the system hostname.
 
-### Options
+### Opsi
 
 | Opsi       | Bawaan                      | Deskripsi                                                                                                                            |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -1444,7 +1444,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                                                                                    | Deskripsi                                                                 |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -1498,7 +1498,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 :::
 
-### Options
+### Opsi
 
 | Opsi               | Bawaan                        | Deskripsi                                                                |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
@@ -1542,7 +1542,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 - The current directory contains a `Manifest.toml` file
 - The current directory contains a file with the `.jl` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1580,7 +1580,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 - The current directory contains a `.kt` or a `.kts` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                     |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
@@ -1631,7 +1631,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opsi
 
 | Opsi              | Bawaan                                               | Deskripsi                                                             |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
@@ -1691,7 +1691,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 The `line_break` module separates the prompt into two lines.
 
-### Options
+### Opsi
 
 | Opsi       | Bawaan  | Deskripsi                                                          |
 | ---------- | ------- | ------------------------------------------------------------------ |
@@ -1714,7 +1714,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 - The current directory contains a `lua` directory
 - The current directory contains a file with the `.lua` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                  |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
@@ -1759,7 +1759,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opsi
 
 | Opsi        | Bawaan                                          | Deskripsi                                                |
 | ----------- | ----------------------------------------------- | -------------------------------------------------------- |
@@ -1798,7 +1798,7 @@ style = "bold dimmed green"
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                           | Deskripsi                                                                                    |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -1839,7 +1839,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1876,7 +1876,7 @@ symbol = "🎣 "
 
 The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
-### Options
+### Opsi
 
 | Opsi         | Bawaan                                         | Deskripsi                                             |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
@@ -1921,7 +1921,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                                             |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -1965,7 +1965,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 - The current directory contains a `.merlin` file
 - The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
 
-### Options
+### Opsi
 
 | Opsi                      | Bawaan                                                                     | Deskripsi                                                                 |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -2005,7 +2005,7 @@ format = "via [🐪 $version]($style) "
 
 The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
 
-### Options
+### Opsi
 
 | Opsi       | Bawaan                                              | Deskripsi                                                      |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
@@ -2056,7 +2056,7 @@ The `package` module is shown when the current directory is the repository for a
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### Options
+### Opsi
 
 | Opsi              | Bawaan                            | Deskripsi                                                                 |
 | ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
@@ -2096,7 +2096,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 - The current directory contains a `.perl-version` file
 - The current directory contains a `.pl`, `.pm` or `.pod`
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                                                                                   | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -2134,7 +2134,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2173,7 +2173,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 - The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2223,7 +2223,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
-### Options
+### Opsi
 
 | Opsi                 | Bawaan                                                                                                       | Deskripsi                                                                              |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
@@ -2306,7 +2306,7 @@ The `rlang` module shows the currently installed version of R. The module will b
 - The current directory contains a `.Rprofile` file
 - The current directory contains a `.Rproj.user` folder
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2342,7 +2342,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 - The current directory contains a file with `.red` or `.reds` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2382,7 +2382,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2421,7 +2421,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2461,7 +2461,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 - The current directory contains a file with the `.scala` or `.sbt` extension
 - The current directory contains a directory named `.metals`
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                   | Deskripsi                                                                 |
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
@@ -2503,7 +2503,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opsi
 
 | Opsi                   | Bawaan       | Deskripsi                                                    |
 | ---------------------- | ------------ | ------------------------------------------------------------ |
@@ -2541,7 +2541,7 @@ disabled = false
 
 The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
-### Options
+### Opsi
 
 | Opsi        | Bawaan                       | Deskripsi                                                     |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
@@ -2577,7 +2577,7 @@ threshold = 3
 
 The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
 
-### Options
+### Opsi
 
 | Opsi       | Bawaan                           | Deskripsi                                        |
 | ---------- | -------------------------------- | ------------------------------------------------ |
@@ -2617,7 +2617,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ::: warning This module is not supported on elvish and nu shell. :::
 
-### Options
+### Opsi
 
 | Opsi                    | Bawaan                                                                               | Deskripsi                                               |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
@@ -2674,7 +2674,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2721,7 +2721,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2775,7 +2775,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-### Options
+### Opsi
 
 | Opsi              | Bawaan                  | Deskripsi                                                                                                                          |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
@@ -2826,7 +2826,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 :::
 
-### Options
+### Opsi
 
 | Opsi          | Bawaan                  | Deskripsi                             |
 | ------------- | ----------------------- | ------------------------------------- |
@@ -2862,7 +2862,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 - The current directory contains a `Vagrantfile` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2900,7 +2900,7 @@ The `vlang` module shows you your currently installed version of V. By default t
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                                       | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
@@ -2933,7 +2933,7 @@ format = "via [V $version](blue bold) "
 
 The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
 
-### Options
+### Opsi
 
 | Opsi       | Bawaan                           | Deskripsi                                              |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
@@ -2967,7 +2967,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 - The current directory contains a `.zig` file
 
-### Options
+### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -3029,7 +3029,7 @@ The order in which custom modules are shown can be individually set by including
 
 :::
 
-### Options
+### Opsi
 
 | Opsi          | Bawaan                          | Deskripsi                                                                                                                                                                     |
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
