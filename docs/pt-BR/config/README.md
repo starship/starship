@@ -1258,29 +1258,29 @@ O módulo `git_status` exibe o simbolo que representa o estado do repositório n
 
 As variáveis a seguir podem ser usadas no `format`:
 
-| Variável       | Descrição                                                                                                     |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Exibe `stashed` quando um stash existe para o repositório local.                                              |
-| `modified`     | Exibe `modified` quando um arquivo tenha modificações for adicionado na área de staging.                      |
-| `staged`       | Exibe `staged` quando um arquivo novo for adicionado na área de staging.                                      |
-| `renamed`      | Exibe `renamed` quando um arquivo renomeado for adicionado na área de staging.                                |
-| `deleted`      | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                                 |
-| style\*      | Espelha o valor da opção `style`                                                                              |
+| Variável       | Descrição                                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Atalhos para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                               |
+| `ahead_behind` | Exibe `diverged`, `ahead`, `behind` or `up_to_date` conforme o formato da string do status do repositório. |
+| `conflicted`   | Exibe `conflicted` quando este braço tenha conflitos no merge.                                             |
+| `untracked`    | Exibe `untracked` quando há arquivos não rastreados no diretório atual.                                    |
+| `stashed`      | Exibe `stashed` quando um stash existe para o repositório local.                                           |
+| `modified`     | Exibe `modified` quando um arquivo tenha modificações for adicionado na área de staging.                   |
+| `staged`       | Exibe `staged` quando um arquivo novo for adicionado na área de staging.                                   |
+| `renamed`      | Exibe `renamed` quando um arquivo renomeado for adicionado na área de staging.                             |
+| `deleted`      | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                              |
+| style\*      | Espelha o valor da opção `style`                                                                           |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
 As variáveis a seguir podem ser usadas em `diverged`:
 
-| Variável       | Descrição                                      |
-| -------------- | ---------------------------------------------- |
-| `ahead_count`  | Number of commits ahead of the tracking branch |
-| `behind_count` | Number of commits behind the tracking branch   |
+| Variável       | Descrição                                           |
+| -------------- | --------------------------------------------------- |
+| `ahead_count`  | Número de commits a frente do braço de rastreamento |
+| `behind_count` | Número de commits atrás do braço de rastreamento    |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+As variaveis a seguir podem ser usadas em `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` e `deleted`:
 
 | Variável | Descrição                  |
 | -------- | -------------------------- |
@@ -1305,7 +1305,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Exibe o count a frente/atrás do braço que esta sendo rastreado
 
 ```toml
 # ~/.config/starship.toml
@@ -1318,13 +1318,13 @@ behind = "⇣${count}"
 
 ## Golang
 
-The `golang` module shows the currently installed version of [Golang](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `golang` exibe a versão atual instalada do [Golang](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `go.mod`
 - O diretório atual contem um arquivo `go.sum`
 - O diretório atual contem um arquivo `glide.yaml`
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- O diretório atual contem um arquivo `Gopkg.yml`
+- O diretório atual contém um arquivo `Gopkg.lock`
 - The current directory contains a `.go-version` file
 - The current directory contains a `Godeps` directory
 - The current directory contains a file with the `.go` extension
@@ -1335,18 +1335,18 @@ The `golang` module shows the currently installed version of [Golang](https://go
 | ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`                                           | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                                                                    | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                                       |
+| `symbol`            | `"🐹 "`                                                                         | O formato da string que representa o simbolo do Go.                                  |
 | `detect_extensions` | `["go"]`                                                                       | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `["Godeps"]`                                                                   | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold cyan"`                                                                  | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                                                        |
+| `disabled`          | `false`                                                                        | Desabilita o módulo `golang`.                                                        |
 
 ### Variáveis
 
 | Variável  | Exemplo   | Descrição                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v1.12.1` | The version of `go`               |
+| version   | `v1.12.1` | A versão do `go`                  |
 | symbol    |           | Espelha o valor da opção `symbol` |
 | style\* |           | Espelha o valor da opção `style`  |
 
