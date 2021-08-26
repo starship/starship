@@ -1017,7 +1017,7 @@ format = "via [e $version](bold red) "
 
 ## Google Cloud (`gcloud`)
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+O módulo `gcloud` exibe a configuração atual para o [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Isto é baseadp mp arquivo `~/.config/gcloud/active_config` e no arquivo`~/.config/gcloud/configurations/config_{CONFIG NAME}` e a env var `CLOUDSDK_CONFIG`.
 
 ### Opções
 
@@ -1233,26 +1233,26 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+O módulo `git_status` exibe o simbolo que representa o estado do repositório no diretório atual.
 
 ### Opções
 
-| Opções       | Padrão                                          | Descrição                           |
-| ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
-| `behind`     | `"⇣"`                                           | The format of `behind`              |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
-| `up_to_date` | `""`                                            | The format of `up_to_date`          |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold red"`                                    | O estilo do módulo.                 |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| Opções       | Padrão                                          | Descrição                          |
+| ------------ | ----------------------------------------------- | ---------------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status` |
+| `conflicted` | `"="`                                           | Este braço tem conflitos.          |
+| `ahead`      | `"⇡"`                                           | The format of `ahead`              |
+| `behind`     | `"⇣"`                                           | The format of `behind`             |
+| `diverged`   | `"⇕"`                                           | The format of `diverged`           |
+| `up_to_date` | `""`                                            | The format of `up_to_date`         |
+| `untracked`  | `"?"`                                           | The format of `untracked`          |
+| `stashed`    | `"$"`                                           | The format of `stashed`            |
+| `modified`   | `"!"`                                           | The format of `modified`           |
+| `staged`     | `"+"`                                           | O formato do `staged`              |
+| `renamed`    | `"»"`                                           | O formato do `renamed`             |
+| `deleted`    | `"✘"`                                           | O formato do `deleted`             |
+| `style`      | `"bold red"`                                    | O estilo do módulo.                |
+| `disabled`   | `false`                                         | Desabilita o módulo `git_status`.  |
 
 ### Variáveis
 
