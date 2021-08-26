@@ -511,10 +511,10 @@ Menampilkan notifikasi layar memerlukan starship dikembangkan dengan dukungan da
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                               |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Menyalin nilai dari opsi `style`        |
+| Variabel  | Contoh   | Deskripsi                                          |
+| --------- | -------- | -------------------------------------------------- |
+| duration  | `16m40s` | Waktu yang dibutuhkan untuk menyelesaikan perintah |
+| style\* |          | Menyalin nilai dari opsi `style`                   |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -530,11 +530,11 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+Modul `conda` menampilkan environment conda terkini, jika `$CONDA_DEFAULT_ENV` telah diatur.
 
 ::: saran
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungkin bisa menjalankan `conda config --set changeps1 False`.
 
 :::
 
