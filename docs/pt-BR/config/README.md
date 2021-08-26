@@ -1153,31 +1153,31 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+O módulo `git_state` vai exibir nos diretorios que fazem parte de um repositorio git e onde existe uma operação em progresso, como: _REBASING_, _BISECTING_, etc. Se houver informação de progresso (e.x: REBASING 3/10). esta informação será exibida também.
 
 ### Opções
 
-| Opções         | Padrão                                                          | Descrição                                                                               |
-| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
-| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | O estilo do módulo.                                                                     |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | O formato do módulo.                                                                    |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| Opções         | Padrão                                                          | Descrição                                                                            |
+| -------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `rebase`       | `"REBASING"`                                                    | O formato de string exibida quando um `rebase` esta em progresso.                    |
+| `merge`        | `"MERGING"`                                                     | O formato de string exibida quando um `merge` esta em progresso.                     |
+| `revert`       | `"REVERTING"`                                                   | O formato de string exibida quando um `revert` esta em progresso.                    |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | O formato de string exibida quando um `cherry-pick` esta em progresso.               |
+| `bisect`       | `"BISECTING"`                                                   | O formato de string exibida quando um `bisect` esta em progresso.                    |
+| `am`           | `"AM"`                                                          | O formato de string exibida quando um `apply-mailbox` (`git am`) esta em progresso.  |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | O formato de string exibida quando um `apply-mailbox` or `rebase` esta em progresso. |
+| `style`        | `"bold yellow"`                                                 | O estilo do módulo.                                                                  |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | O formato do módulo.                                                                 |
+| `disabled`     | `false`                                                         | Desabilita o módulo `git_state`.                                                     |
 
 ### Variáveis
 
-| Variável         | Exemplo    | Descrição                        |
-| ---------------- | ---------- | -------------------------------- |
-| state            | `REBASING` | The current state of the repo    |
-| progress_current | `1`        | The current operation progress   |
-| progress_total   | `2`        | The total operation progress     |
-| style\*        |            | Espelha o valor da opção `style` |
+| Variável         | Exemplo    | Descrição                              |
+| ---------------- | ---------- | -------------------------------------- |
+| state            | `REBASING` | O estado atual do repo                 |
+| progress_current | `1`        | O progresso da operação atual          |
+| progress_total   | `2`        | O total do progresso da operação atual |
+| style\*        |            | Espelha o valor da opção `style`       |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -1193,7 +1193,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 ## Git Metrics
 
-The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+O módulo `git_metrics` vai exibir o número de adições e exclusões de linhas no repositório git atual.
 
 ::: tip
 
