@@ -414,13 +414,13 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ### Variabel
 
-| Variabel | Contoh | Deskripsi                                                             |
-| -------- | ------ | --------------------------------------------------------------------- |
-| symbol   |        | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Variabel | Contoh | Deskripsi                                                              |
+| -------- | ------ | ---------------------------------------------------------------------- |
+| symbol   |        | Representasi dari `success_symbol`, `error_symbol` atau `vicmd_symbol` |
 
 ### Contoh
 
-#### With custom error shape
+#### Dengan menggunakan corak eror yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -430,7 +430,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### Tanpa menggunakan corak eror yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -440,7 +440,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### With custom vim shape
+#### Dengan menggunakan corak vim yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -451,9 +451,9 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `CMakeLists.txt` file
+- Direktori terkini berisikan sebuah file `CMakeLists.txt`
 - The current directory contains a `CMakeCache.txt` file
 
 ### Opsi
