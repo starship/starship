@@ -1197,27 +1197,27 @@ O módulo `git_metrics` vai exibir o número de adições e exclusões de linhas
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
 ### Opções
 
-| Opções          | Padrão                                                   | Descrição                          |
-| --------------- | -------------------------------------------------------- | ---------------------------------- |
-| `added_style`   | `"bold green"`                                           | The style for the added count.     |
-| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | O formato do módulo.               |
-| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+| Opções          | Padrão                                                   | Descrição                              |
+| --------------- | -------------------------------------------------------- | -------------------------------------- |
+| `added_style`   | `"bold green"`                                           | O estilo para a contagem de adições.   |
+| `deleted_style` | `"bold red"`                                             | O estilo para a contagem de exclusões. |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | O formato do módulo.                   |
+| `disabled`      | `true`                                                   | Desabilita o módulo `git_metrics`.     |
 
 ### Variáveis
 
-| Variável          | Exemplo | Descrição                                   |
-| ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variável          | Exemplo | Descrição                               |
+| ----------------- | ------- | --------------------------------------- |
+| added             | `1`     | O número atual de linhas adicionadas    |
+| deleted           | `2`     | O número atual de linhas excluidas      |
+| added_style\*   |         | Espelha o valor da opção `added_style`  |
+| deleted_style\* |         | Espelha o valor da opção`deleted_style` |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -1625,7 +1625,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
@@ -1753,7 +1753,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
@@ -2497,7 +2497,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
@@ -2609,7 +2609,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
@@ -2769,7 +2769,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para `false` no seu arquivo de configuração.
 
 :::
 
