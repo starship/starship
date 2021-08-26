@@ -366,39 +366,39 @@ Opsi dari `display` merupakan sebuah array dari tabel berikut.
 #### Contoh
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # "bold red" untuk corak gaya dan discharging_symbol ketika kapasitasnya berada di antara 0% dan 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # "bold yellow" untuk corak gaya dan simbol 💦 ketika kapasitasnya berada di antara 10% dan 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# ketika kapasitasnya di atas 30%, indikator baterai tidak akan ditampilkan
 
 ```
 
-## Character
+## Karakter
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Modul `character` menampilkan sebuah karakter (biasanya anak panah) di samping teks pada terminalmu.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Karakter dapat memberitahu kamu apakah perintah terakhir berhasil atau tidak. Karakter dapat memberitahumu dengan dua cara ini:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- mengganti warna (`red`/`green`)
+- mengganti bentuk (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin mengganti bentuknya, perhatikan [contoh](#with-custom-error-shape) berikut.
 
 ::: peringatan
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` tidak didukung pada elvish dan nu shell.
 
 :::
 
 ::: peringatan
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` hanya didukung pada fish dan zsh.
 
 :::
 
