@@ -935,6 +935,7 @@ Example: following configuration will display value of USER environment variable
 [env_var.USER]
 default = "unknown user"
 ```
+:::
 
 ### Các tuỳ chọn
 
@@ -1123,15 +1124,15 @@ Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                                               | Mô tả                                                     |
-| -------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | Độ dài của git commit hash được hiển thị.                 |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | Định dạng cho module.                                     |
-| `style`              | `"bold green"`                                         | Kiểu cho module.                                          |
-| `only_detached`      | `true`                                                 | Only show git commit hash when in detached `HEAD` state   |
-| `tag_disabled`       | `true`                                                 | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`. |
-| `tag_symbol`         | `" 🏷 "`                                                | Biểu tượng tag trước thông tin được hiển thị              |
-| `disabled`           | `false`                                                | Vô hiệu mô đun `git_commit`.                              |
+| Tuỳ chọn             | Mặc định                           | Mô tả                                                     |
+| -------------------- | ---------------------------------- | --------------------------------------------------------- |
+| `commit_hash_length` | `7`                                | Độ dài của git commit hash được hiển thị.                 |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | Định dạng cho module.                                     |
+| `style`              | `"bold green"`                     | Kiểu cho module.                                          |
+| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state   |
+| `tag_disabled`       | `true`                             | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`. |
+| `tag_symbol`         | `" 🏷 "`                            | Biểu tượng tag trước thông tin được hiển thị              |
+| `disabled`           | `false`                            | Vô hiệu mô đun `git_commit`.                              |
 
 ### Các biến
 
@@ -1245,6 +1246,7 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 | `ahead`      | `"⇡"`                                           | Định dạng của `ahead`               |
 | `behind`     | `"⇣"`                                           | Định dạng của `behind`              |
 | `diverged`   | `"⇕"`                                           | Định dạng của `diverged`            |
+| `up_to_date` | `""`                                            | The format of `up_to_date`          |
 | `untracked`  | `"?"`                                           | Định dạng của `untracked`           |
 | `stashed`    | `"$"`                                           | Định dạng của `stashed`             |
 | `modified`   | `"!"`                                           | Định dạng của `modified`            |
@@ -1258,18 +1260,18 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 
 Các biến dưới đây có thể được sử dụng trong `format`:
 
-| Biến           | Mô tả                                                                                           |
-| -------------- | ----------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                    |
-| `ahead_behind` | Hiển thị format string của `diverged` `ahead` or `behind` dựa trên trạng thái hiện tại của repo |
-| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                         |
-| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                           |
-| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                |
-| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                       |
-| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                               |
-| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                       |
-| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                        |
-| style\*      | Giá trị ghi đè của `style`                                                                      |
+| Biến           | Mô tả                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut cho `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                  |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Hiển thị `conflicted` khi nhánh này có merge conflicts.                                                       |
+| `untracked`    | Hiển thị `untracked` khi có tệp tin untracked trong thư mục làm việc.                                         |
+| `stashed`      | Hiển thị `stashed` khi một stash tồn tại trong local repository.                                              |
+| `modified`     | Hiển thị `modified` khi có tệp tin được chỉnh sửa trong thư mục làm việc.                                     |
+| `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
+| `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
+| `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
+| style\*      | Giá trị ghi đè của `style`                                                                                    |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1296,6 +1298,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
@@ -1475,7 +1478,13 @@ symbol = "🌟 "
 
 ## Jobs
 
-`jobs` module cho biết số lượng các jobs đang chạy. Mô đun sẽ được hiển thị chỉ khi có background jobs đang chạy. Mô đúnẽ hiển thị số lượng jobs đang chỵ nếu có nhiều hơn 1 jobs, hoặc nhiều hơn giá trị cấu hình `threshold`, nếu nó tồn tại. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+`jobs` module cho biết số lượng các jobs đang chạy. Mô đun sẽ được hiển thị chỉ khi có background jobs đang chạy. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: cảnh báo
 
@@ -1483,15 +1492,26 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: cảnh báo
+
+The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+:::
+
 ### Các tuỳ chọn
 
-| Tuỳ chọn    | Mặc định                      | Mô tả                                        |
-| ----------- | ----------------------------- | -------------------------------------------- |
-| `threshold` | `1`                           | Cho biết số lượng jobs nếu nó vượt quá.      |
-| `format`    | `"[$symbol$number]($style) "` | Định dạng cho module.                        |
-| `symbol`    | `"✦"`                         | Một format string đại diện cho số lượng job. |
-| `style`     | `"bold blue"`                 | Kiểu cho module.                             |
-| `disabled`  | `false`                       | Vô hiệu `jobs` module.                       |
+| Tuỳ chọn           | Mặc định                      | Mô tả                                                                    |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`\*    | `1`                           | Cho biết số lượng jobs nếu nó vượt quá.                                  |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | Định dạng cho module.                                                    |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | Kiểu cho module.                                                         |
+| `disabled`         | `false`                       | Vô hiệu `jobs` module.                                                   |
+ \*: This option is deprecated, please use the 
+
+`number_threshold` and `symbol_threshold` options instead.
 
 ### Các biến
 
@@ -1510,7 +1530,8 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
@@ -1641,6 +1662,29 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
+".*/openshift-cluster/.*" = "openshift"
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+```
+
+#### Regex Matching
+
+Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+
+The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+
+Long and automatically generated cluster names can be identified and shortened using regular expressions:
+
+```toml
+[kubernetes.context_aliases]
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+".*/openshift-cluster/.*" = "openshift"
+# Or better, to rename every OpenShift cluster at once:
+".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
 ## Line Break
@@ -2000,6 +2044,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
 - [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
@@ -2013,13 +2058,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn          | Mặc định                          | Mô tả                                                      |
-| ----------------- | --------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | Định dạng cho module.                                      |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                      | Kiểu cho module.                                           |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                           | Disables the `package` module.                             |
+| Tuỳ chọn          | Mặc định                          | Mô tả                                                                     |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | Định dạng cho module.                                                     |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | Kiểu cho module.                                                          |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Các biến
 
@@ -2187,7 +2233,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | `style`              | `"yellow bold"`                                                                                              | Kiểu cho module.                                                                       |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                                     |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Tên tệp nào sẽ kích hoạt mô-đun này                                                    |
 | `detect_folders`     | `[]`                                                                                                         | Thư mục nào sẽ kích hoạt mô-đun này                                                    |
@@ -2468,6 +2514,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
 | `elvish_indicator`     | `esh`        | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
 | `format`               | `$indicator` | Định dạng cho module.                                        |
 | `disabled`             | `true`       | Disables the `shell` module.                                 |
@@ -2500,7 +2547,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | Định dạng cho module.                                         |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | Kiểu cho module.                                              |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
@@ -2572,31 +2619,36 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn                | Mặc định                      | Mô tả                                                |
-| ----------------------- | ----------------------------- | ---------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "` | The format of the module                             |
-| `symbol`                | `"✖"`                         | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                         | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                         | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                         | The symbol displayed on SIGINT (Ctrl + c)            |
-| `signal_symbol`         | `"⚡"`                         | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`                  | Kiểu cho module.                                     |
-| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                        | Disables the `status` module.                        |
+| Tuỳ chọn                | Mặc định                                                                             | Mô tả                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
+| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
+| `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
+| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
+| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
+| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
+| `style`                 | `"bold red"`                                                                         | Kiểu cho module.                                        |
+| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
+| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
+| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
+| `pipestatus_separator`  | `|`                                                                                  | The symbol that separate in pipe program exit codes     |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
+| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
 
 ### Các biến
 
-| Biến           | Ví dụ   | Mô tả                                                                |
-| -------------- | ------- | -------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                    |
-| int            | `127`   | The exit code of the last command                                    |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                  |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                     |
-| style\*      |         | Giá trị ghi đè của `style`                                           |
+| Biến           | Ví dụ   | Mô tả                                                                                       |
+| -------------- | ------- | ------------------------------------------------------------------------------------------- |
+| status         | `127`   | The exit code of the last command                                                           |
+| int            | `127`   | The exit code of the last command                                                           |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
+| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
+| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                                            |
+| style\*      |         | Giá trị ghi đè của `style`                                                                  |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -2850,15 +2902,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                     | Mô tả                                               |
-| ------------------- | -------------------------------------------- | --------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                               |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V        |
-| `detect_extensions` | `["v"]`                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Tên tệp nào sẽ kích hoạt mô-đun này.                |
-| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.          |
-| `style`             | `"blue bold"`                                | Kiểu cho module.                                    |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                        |
+| Tuỳ chọn            | Mặc định                                     | Mô tả                                                                     |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                                                     |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
+| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"blue bold"`                                | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Các biến
 

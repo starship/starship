@@ -1,7 +1,7 @@
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::red::RedConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 
 /// Creates a module with the current  Red version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -31,7 +31,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => context
                     .exec_cmd("red", &["--version"])
-                    .map(|output| parse_red_version(output.stdout.trim()))
+                    .map(|output| {
+                        VersionFormatter::format_module_version(
+                            module.get_name(),
+                            output.stdout.trim(),
+                            config.version_format,
+                        )
+                    })?
                     .map(Ok),
                 _ => None,
             })
@@ -49,23 +55,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_red_version(red_version: &str) -> String {
-    format!("v{}", red_version)
-}
-
 #[cfg(test)]
 mod tests {
-    use super::parse_red_version;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_parse_red_version() {
-        const OUTPUT: &str = "0.6.4\n";
-        assert_eq!(parse_red_version(OUTPUT.trim()), "v0.6.4".to_string())
-    }
 
     #[test]
     fn folder_without_red_files() -> io::Result<()> {
@@ -92,6 +87,22 @@ mod tests {
         File::create(dir.path().join("hello.reds"))?.sync_all()?;
         let actual = ModuleRenderer::new("red").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn version_formatting() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("hello.red"))?.sync_all()?;
+        let actual = ModuleRenderer::new("red")
+            .path(dir.path())
+            .config(toml::toml! {
+                [red]
+                version_format = "${raw}"
+            })
+            .collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 0.6.4 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

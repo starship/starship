@@ -32,8 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let vagrant_version =
-                        get_vagrant_version(&context.exec_cmd("vagrant", &["--version"])?.stdout)?;
+                    let vagrant_version = parse_vagrant_version(
+                        &context.exec_cmd("vagrant", &["--version"])?.stdout,
+                    )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &vagrant_version,
@@ -57,11 +58,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_vagrant_version(vagrant_stdout: &str) -> Option<String> {
+fn parse_vagrant_version(vagrant_stdout: &str) -> Option<String> {
     // `vagrant --version` output looks like this:
     // Vagrant 2.2.10
     let version = vagrant_stdout
-        // split into ["Vagrant","2.2.10"]
+        // split into ["Vagrant", "2.2.10"]
         .split_whitespace()
         // return "2.2.10"
         .nth(1)?;
@@ -101,8 +102,8 @@ mod tests {
     }
 
     #[test]
-    fn test_get_vagrant_version() {
+    fn test_parse_vagrant_version() {
         let vagrant = "Vagrant 2.2.10\n";
-        assert_eq!(get_vagrant_version(vagrant), Some("2.2.10".to_string()));
+        assert_eq!(parse_vagrant_version(vagrant), Some("2.2.10".to_string()));
     }
 }

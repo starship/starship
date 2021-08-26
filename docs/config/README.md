@@ -1314,6 +1314,7 @@ current directory.
 | `ahead`      | `"⇡"`                                         | The format of `ahead`               |
 | `behind`     | `"⇣"`                                         | The format of `behind`              |
 | `diverged`   | `"⇕"`                                         | The format of `diverged`            |
+| `up_to_date` | `""`                                          | The format of `up_to_date`          |
 | `untracked`  | `"?"`                                         | The format of `untracked`           |
 | `stashed`    | `"$"`                                         | The format of `stashed`             |
 | `modified`   | `"!"`                                         | The format of `modified`            |
@@ -1327,18 +1328,18 @@ current directory.
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                   |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
-| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*        | Mirrors the value of option `style`                                                           |
+| Variable       | Description                                                                                                 |
+| -------------- | ----------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                 |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                 |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                               |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                            |
+| `modified`     | Displays `modified` when there are file modifications in the working directory.                             |
+| `staged`       | Displays `staged` when a new file has been added to the staging area.                                       |
+| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                  |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                               |
+| style\*        | Mirrors the value of option `style`                                                                         |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1365,6 +1366,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
@@ -1549,9 +1551,18 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running.
 The module will be shown only if there are background jobs running.
-The module will show the number of jobs running if there is more than 1 job, or
-more than the `threshold` config value, if it exists. If `threshold` is set to 0,
-then the module will also show when there are 0 jobs running.
+The module will show the number of jobs running if there are at least
+2 jobs, or more than the `number_threshold` config value, if it exists.
+The module will show a symbol if there is at least 1 job, or more than the
+`symbol_threshold` config value, if it exists. You can set both values
+to 0 in order to *always* show the symbol and number of jobs, even if there are
+0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: warning
 
@@ -1559,15 +1570,27 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: warning
+
+The `threshold` option is deprecated, but if you want to use it,
+the module will show the number of jobs running if there is more than 1 job, or
+more than the `threshold` config value, if it exists. If `threshold` is set to 0,
+then the module will also show when there are 0 jobs running.
+
+:::
+
 ### Options
 
-| Option      | Default                       | Description                                      |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | The style for the module.                        |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Option             | Default                       | Description                                                                                 |
+| -----------        | ----------------------------- | ------------------------------------------------                                            |
+| `threshold`\*      | `1`                           | Show number of jobs if exceeded.                                                            |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.                              |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`.                    |
+| `format`           | `"[$symbol$number]($style) "` | The format for the module.                                                                  |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                                         |
+| `style`            | `"bold blue"`                 | The style for the module.                                                                   |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                                                 |
+\*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1586,7 +1609,8 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
@@ -1723,6 +1747,33 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
+".*/openshift-cluster/.*" = "openshift"
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+```
+
+#### Regex Matching
+
+Additional to simple aliasing, `context_aliases` also supports
+extended matching and renaming using regular expressions.
+
+The regular expression must match on the entire kube context,
+capture groups can be referenced using `$name` and `$N` in the replacement.
+This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+
+Long and automatically generated cluster names can be identified
+and shortened using regular expressions:
+
+```toml
+[kubernetes.context_aliases]
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+".*/openshift-cluster/.*" = "openshift"
+# Or better, to rename every OpenShift cluster at once:
+".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
 ## Line Break
@@ -2112,13 +2163,14 @@ package, and shows its current version. The module currently supports `npm`, `ni
 
 ### Options
 
-| Option            | Default                            | Description                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | The style for the module.                                  |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Option            | Default                            | Description                                                              |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                               |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.               |
+| `version_format`  | `"v${raw}"`                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
+| `style`           | `"bold 208"`                       | The style for the module.                                                |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.                |
+| `disabled`        | `false`                            | Disables the `package` module.                                           |
 
 ### Variables
 
@@ -2992,21 +3044,22 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                      | Description                                  |
-| ------------------- | -------------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                   |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module. |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.    |
-| `style`             | `"blue bold"`                                | The style for the module.                    |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
+| Option              | Default                                      | Description                                                               |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `"blue bold"`                                | The style for the module.                                                 |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Variables
 
 | Variable | Example  | Description                          |
 | -------- | -------- | ------------------------------------ |
-| version  | `v0.2` | The version of `v`                |
+| version  | `v0.2`   | The version of `v`                   |
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 

@@ -8,17 +8,17 @@ actionLink: ./guide/
 features:
   - 
     title: 兼容性優先
-    details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 到處使用它吧！
+    details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 在各處使用它吧！
   - 
-    title: 由 Rust 支持
-    details: 帶來同類最快速度以及 Rust 的安全性，讓你的提示字元盡可能快速與可靠。
+    title: 以 Rust 開發
+    details: 帶來同類中最快的速度以及 Rust 的安全性，讓你的提示字元盡可能快速與可靠。
   - 
     title: 可客製化
     details: 任何些微的細節都可以隨你喜愛地客製化，讓你的提示字元可以隨你所欲地最小化或是充滿各種特色。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship：跨 Shell 提示字元"
-description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 有針對 Bash、Fish、ZSH、Ion 與 Powershell 的快速安裝指南。
+description: Starship 是適合任何 shell 的最小、極速、高度客製化的提示字元！ 顯示你需要的訊息，同時保持順暢與最小化。 針對 Bash、Fish、ZSH、Ion、Tcsh、Elvish、Nu、Xonsh 以及 Powershell 有快速安裝可供使用。
 ---
 
 <div class="center">
@@ -30,7 +30,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用。
 
 ### 快速安裝
 
@@ -99,7 +99,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Powershell
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或是在 -Nix 上的話會在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
+   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，若是在 -Nix 上，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -115,6 +115,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    eval $(starship init ion)
    ```
+
 
    #### Elvish
 
@@ -139,9 +140,10 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    eval `starship init tcsh`
    ```
 
-    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   #### Nushell
+
+   ::: warning 這項設定可能在未來改變 只支援 nu v0.33 以上的版本。 ::: 將以下內容放到你的 nu 設定檔裡， 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [
@@ -150,4 +152,15 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
     "source ~/.cache/starship/init.nu"
    ]
    prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   將以下內容放到 `~/.xonshrc` 的結尾：
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

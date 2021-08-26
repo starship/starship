@@ -9,7 +9,8 @@ use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
+use std::fmt::Debug;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
@@ -221,31 +222,20 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
-        self.repo
-            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = if env::var("GIT_DIR").is_ok() {
-                    Repository::open_from_env().ok()
-                } else {
-                    Repository::discover(&self.current_dir).ok()
-                };
-                let branch = repository
-                    .as_ref()
-                    .and_then(|repo| get_current_branch(repo));
-                let root = repository
-                    .as_ref()
-                    .and_then(|repo| repo.workdir().map(Path::to_path_buf));
-                let state = repository.as_ref().map(git2::Repository::state);
-                let remote = repository
-                    .as_ref()
-                    .and_then(|repo| get_remote_repository_info(repo));
-                Ok(Repo {
-                    branch,
-                    root,
-                    state,
-                    remote,
-                })
+    pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
+        self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
+            let repository = if env::var("GIT_DIR").is_ok() {
+                Repository::open_from_env()
+            } else {
+                Repository::discover(&self.current_dir)
+            }?;
+            Ok(Repo {
+                branch: get_current_branch(&repository),
+                root: repository.workdir().map(Path::to_path_buf),
+                state: repository.state(),
+                remote: get_remote_repository_info(&repository),
             })
+        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
@@ -277,18 +267,19 @@ impl<'a> Context<'a> {
 
     /// Execute a command and return the output on stdout and stderr if successful
     #[inline]
-    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+        &self,
+        cmd: T,
+        args: &[U],
+    ) -> Option<CommandOutput> {
         #[cfg(test)]
         {
-            let command = match args.len() {
-                0 => cmd.to_owned(),
-                _ => format!("{} {}", cmd, args.join(" ")),
-            };
+            let command = crate::utils::display_command(&cmd, args);
             if let Some(output) = self.cmd.get(command.as_str()) {
                 return output.clone();
             }
         }
-        exec_cmd(cmd, args, self.cmd_timeout)
+        exec_cmd(&cmd, args, self.cmd_timeout)
     }
 }
 
@@ -397,7 +388,7 @@ pub struct Repo {
     pub root: Option<PathBuf>,
 
     /// State
-    pub state: Option<RepositoryState>,
+    pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,

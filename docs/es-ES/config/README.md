@@ -934,6 +934,7 @@ Example: following configuration will display value of USER environment variable
 [env_var.USER]
 default = "unknown user"
 ```
+:::
 
 ### Opciones
 
@@ -1122,15 +1123,15 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 
 ### Opciones
 
-| Opción               | Por defecto                                            | Descripción                                                                            |
-| -------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                                                    | La longitud del hash de la confirmación de git mostrado.                               |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | El formato del módulo.                                                                 |
-| `style`              | `"bold green"`                                         | El estilo del módulo.                                                                  |
-| `only_detached`      | `true`                                                 | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`" |
-| `tag_disabled`       | `true`                                                 | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.                |
-| `tag_symbol`         | `" 🏷 "`                                                | Símbolo de etiqueta prefijando la información mostrada                                 |
-| `disabled`           | `false`                                                | Deshabilita el módulo `git_commit`.                                                    |
+| Opción               | Por defecto                        | Descripción                                                                            |
+| -------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| `commit_hash_length` | `7`                                | La longitud del hash de la confirmación de git mostrado.                               |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | El formato del módulo.                                                                 |
+| `style`              | `"bold green"`                     | El estilo del módulo.                                                                  |
+| `only_detached`      | `true`                             | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`" |
+| `tag_disabled`       | `true`                             | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.                |
+| `tag_symbol`         | `" 🏷 "`                            | Símbolo de etiqueta prefijando la información mostrada                                 |
+| `disabled`           | `false`                            | Deshabilita el módulo `git_commit`.                                                    |
 
 ### Variables
 
@@ -1244,6 +1245,7 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 | `ahead`      | `"⇡"`                                           | El formato de `ahead`                    |
 | `behind`     | `"⇣"`                                           | El formato de `behind`                   |
 | `diverged`   | `"⇕"`                                           | El formato de `diverged`                 |
+| `up_to_date` | `""`                                            | The format of `up_to_date`               |
 | `untracked`  | `"?"`                                           | El formato de `untracked`                |
 | `stashed`    | `"$"`                                           | El formato de `stashed`                  |
 | `modified`   | `"!"`                                           | El formato de `modified`                 |
@@ -1257,18 +1259,18 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 Las siguientes variables se pueden utilizar en `format`:
 
-| Variable       | Descripción                                                                                              |
-| -------------- | -------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                               |
-| `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` basado en el estado actual del repositorio |
-| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                        |
-| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                        |
-| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                    |
-| `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                     |
-| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                               |
-| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                       |
-| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                  |
-| style\*      | Refleja el valor de la opción `style`                                                                    |
+| Variable       | Descripción                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                    |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                             |
+| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                             |
+| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                         |
+| `modified`     | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                          |
+| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                                    |
+| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                            |
+| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                       |
+| style\*      | Refleja el valor de la opción `style`                                                                         |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1295,6 +1297,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
@@ -1474,7 +1477,13 @@ symbol = "🌟 "
 
 ## Jobs
 
-El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas en ejecución si hay más de 1 tarea o más que el valor configurado de `threshold`, si existe. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: aviso
 
@@ -1482,15 +1491,26 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: aviso
+
+The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+:::
+
 ### Opciones
 
-| Opción      | Por defecto                   | Descripción                                               |
-| ----------- | ----------------------------- | --------------------------------------------------------- |
-| `threshold` | `1`                           | Muestra el número de tareas si se exceden.                |
-| `format`    | `"[$symbol$number]($style) "` | El formato del módulo.                                    |
-| `symbol`    | `"✦"`                         | Una cadena de formato que representa el número de tareas. |
-| `style`     | `"bold blue"`                 | El estilo del módulo.                                     |
-| `disabled`  | `false`                       | Desactiva el módulo `jobs`.                               |
+| Opción             | Por defecto                   | Descripción                                                              |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`\*    | `1`                           | Muestra el número de tareas si se exceden.                               |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                   |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | El estilo del módulo.                                                    |
+| `disabled`         | `false`                       | Desactiva el módulo `jobs`.                                              |
+ \*: This option is deprecated, please use the 
+
+`number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1509,7 +1529,8 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
@@ -1640,6 +1661,29 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
+".*/openshift-cluster/.*" = "openshift"
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+```
+
+#### Regex Matching
+
+Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+
+The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+
+Long and automatically generated cluster names can be identified and shortened using regular expressions:
+
+```toml
+[kubernetes.context_aliases]
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+".*/openshift-cluster/.*" = "openshift"
+# Or better, to rename every OpenShift cluster at once:
+".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
 ## Salto de línea
@@ -1999,6 +2043,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
 - [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
@@ -2012,13 +2057,14 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 
 ### Opciones
 
-| Opción            | Por defecto                       | Descripción                                                                      |
-| ----------------- | --------------------------------- | -------------------------------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | El formato del módulo.                                                           |
-| `symbol`          | `"📦 "`                            | El símbolo usado antes de mostrar la versión del paquete.                        |
-| `style`           | `"bold 208"`                      | El estilo del módulo.                                                            |
-| `display_private` | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados. |
-| `disabled`        | `false`                           | Desactiva el módulo `package`.                                                   |
+| Opción            | Por defecto                       | Descripción                                                                             |
+| ----------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | El formato del módulo.                                                                  |
+| `symbol`          | `"📦 "`                            | El símbolo usado antes de mostrar la versión del paquete.                               |
+| `version_format`  | `"v${raw}"`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | El estilo del módulo.                                                                   |
+| `display_private` | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados.        |
+| `disabled`        | `false`                           | Desactiva el módulo `package`.                                                          |
 
 ### Variables
 
@@ -2186,7 +2232,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                   |
 | `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                            |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
 | `detect_extensions`  | `["py"]`                                                                                                     | Qué extensiones deben activar este módulo                                               |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
@@ -2467,6 +2513,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `ion_indicator`        | `ion`        | Una cadena de formato usada para representar Ion.                    |
 | `elvish_indicator`     | `esh`        | Una cadena de formato usada para representar Elvish.                 |
 | `tcsh_indicator`       | `tsh`        | Una cadena de formato usada para representar tcsh.                   |
+| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                             |
 | `unknown_indicator`    |              | El valor por defecto que se mostrará cuando se desconoce el comando. |
 | `format`               | `$indicator` | El formato del módulo.                                               |
 | `disabled`             | `true`       | Deshabilita el módulo `shell`.                                       |
@@ -2499,7 +2546,7 @@ El módulo `shlvl` muestra la variable de entorno actual `SHLVL` ("nivel de shel
 | ----------- | ---------------------------- | ----------------------------------------------------------------- |
 | `threshold` | `2`                          | Mostrar umbral.                                                   |
 | `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                            |
-| `symbol`    | `"↕️ "`                      | El símbolo utilizado para representar el `SHLVL`.                 |
+| `symbol`    | `"↕️  "`                     | El símbolo utilizado para representar el `SHLVL`.                 |
 | `repeat`    | `false`                      | Hace que el `symbol` se repita con la cantidad actual de `SHLVL`. |
 | `style`     | `"bold yellow"`              | El estilo del módulo.                                             |
 | `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                      |
@@ -2571,31 +2618,36 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                  | Por defecto                   | Descripción                                            |
-| ----------------------- | ----------------------------- | ------------------------------------------------------ |
-| `format`                | `"[$symbol$status]($style) "` | El formato del módulo                                  |
-| `symbol`                | `"✖"`                         | El símbolo mostrado en error del programa              |
-| `not_executable_symbol` | `"🚫"`                         | El símbolo mostrado cuando el archivo no es ejecutable |
-| `not_found_symbol`      | `"🔍"`                         | El símbolo mostrado cuando no se encuentra el comando  |
-| `sigint_symbol`         | `"🧱"`                         | El símbolo mostrado en SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                         | El símbolo mostrado en cualquier señal                 |
-| `style`                 | `"bold red"`                  | El estilo del módulo.                                  |
-| `recognize_signal_code` | `true`                        | Activar mapeo de señales desde el código de salida     |
-| `map_symbol`            | `false`                       | Activar mapeo de símbolos desde el código de salida    |
-| `disabled`              | `true`                        | Desactiva el módulo `status`.                          |
+| Opción                  | Por defecto                                                                          | Descripción                                             |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "`                                                        | El formato del módulo                                   |
+| `symbol`                | `"✖"`                                                                                | El símbolo mostrado en error del programa               |
+| `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
+| `not_executable_symbol` | `"🚫"`                                                                                | El símbolo mostrado cuando el archivo no es ejecutable  |
+| `not_found_symbol`      | `"🔍"`                                                                                | El símbolo mostrado cuando no se encuentra el comando   |
+| `sigint_symbol`         | `"🧱"`                                                                                | El símbolo mostrado en SIGINT (Ctrl + c)                |
+| `signal_symbol`         | `"⚡"`                                                                                | El símbolo mostrado en cualquier señal                  |
+| `style`                 | `"bold red"`                                                                         | El estilo del módulo.                                   |
+| `recognize_signal_code` | `true`                                                                               | Activar mapeo de señales desde el código de salida      |
+| `map_symbol`            | `false`                                                                              | Activar mapeo de símbolos desde el código de salida     |
+| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
+| `pipestatus_separator`  | `|`                                                                                  | The symbol that separate in pipe program exit codes     |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
+| `disabled`              | `true`                                                                               | Desactiva el módulo `status`.                           |
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                                          |
-| -------------- | ------- | ------------------------------------------------------------------------------------ |
-| status         | `127`   | El código de salida del último comando                                               |
-| int            | `127`   | El código de salida del último comando                                               |
-| common_meaning | `ERROR` | Comprobación del código si no es una señal                                           |
-| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada         |
-| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada      |
-| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado |
-| symbol         |         | Refleja el valor de la opción `symbol`                                               |
-| style\*      |         | Refleja el valor de la opción `style`                                                |
+| Variable       | Ejemplo | Descripción                                                                                 |
+| -------------- | ------- | ------------------------------------------------------------------------------------------- |
+| status         | `127`   | El código de salida del último comando                                                      |
+| int            | `127`   | El código de salida del último comando                                                      |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                  |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada                |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada             |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado        |
+| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
+| symbol         |         | Refleja el valor de la opción `symbol`                                                      |
+| style\*      |         | Refleja el valor de la opción `style`                                                       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2849,15 +2901,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Opciones
 
-| Opción              | Por defecto                                  | Descripción                                          |
-| ------------------- | -------------------------------------------- | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | El formato del módulo.                               |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V         |
-| `detect_extensions` | `["v"]`                                      | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.           |
-| `style`             | `"blue bold"`                                | El estilo del módulo.                                |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                         |
+| Opción              | Por defecto                                  | Descripción                                                                             |
+| ------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | El formato del módulo.                                                                  |
+| `version_format`    | `"v${raw}"`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                            |
+| `detect_extensions` | `["v"]`                                      | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `"blue bold"`                                | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                            |
 
 ### Variables
 

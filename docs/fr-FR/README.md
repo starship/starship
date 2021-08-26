@@ -18,7 +18,7 @@ features:
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship : Invite Multi-Shell"
-description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion et PowerShell.
+description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -116,6 +116,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
    ::: warning Seul elvish v0.15 ou supérieur est pris en charge. :::
@@ -139,9 +140,10 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    eval `starship init tcsh`
    ```
 
-    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   #### Nushell
+
+   ::: warning This will change in the future. Seule la version nu v0.33 ou supérieure est prise en charge. ::: Add the following to your nu config file. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
 
    ```toml
    startup = [
@@ -150,4 +152,15 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
     "source ~/.cache/starship/init.nu"
    ]
    prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Ajouter ce qui suit à la fin de `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

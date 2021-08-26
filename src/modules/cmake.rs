@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let cmake_version =
-                        get_cmake_version(&context.exec_cmd("cmake", &["--version"])?.stdout)?;
+                        parse_cmake_version(&context.exec_cmd("cmake", &["--version"])?.stdout)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &cmake_version,
@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_cmake_version(cmake_version: &str) -> Option<String> {
+fn parse_cmake_version(cmake_version: &str) -> Option<String> {
     Some(
         cmake_version
             //split into ["cmake" "version" "3.10.2", ...]

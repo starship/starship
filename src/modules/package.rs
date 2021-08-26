@@ -1,6 +1,6 @@
 use super::{Context, Module, RootModuleConfig};
 use crate::configs::package::PackageConfig;
-use crate::formatter::StringFormatter;
+use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils;
 
 use ini::Ini;
@@ -10,12 +10,10 @@ use regex::Regex;
 use serde_json as json;
 
 /// Creates a module with the current package version
-///
-/// Will display if a version is defined for your Node.js or Rust project (if one exists)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("package");
     let config: PackageConfig = PackageConfig::try_load(module.config);
-    let module_version = get_package_version(context, &config)?;
+    let module_version = get_version(context, &config)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -45,28 +43,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn extract_cargo_version(file_contents: &str) -> Option<String> {
-    let cargo_toml: toml::Value = toml::from_str(file_contents).ok()?;
-    let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
+fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("package.json")).ok()?;
+    let package_json: json::Value = json::from_str(&file_contents).ok()?;
 
-    let formatted_version = format_version(raw_version);
-    Some(formatted_version)
-}
-
-fn extract_nimble_version(context: &Context) -> Option<String> {
-    let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
-
-    let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
-    let raw_version = nimble_json.get("version")?.as_str()?;
-
-    let formatted_version = format_version(raw_version);
-    Some(formatted_version)
-}
-
-fn extract_package_version(file_contents: &str, display_private: bool) -> Option<String> {
-    let package_json: json::Value = json::from_str(file_contents).ok()?;
-
-    if !display_private && package_json.get("private").and_then(json::Value::as_bool) == Some(true)
+    if !config.display_private
+        && package_json.get("private").and_then(json::Value::as_bool) == Some(true)
     {
         return None;
     }
@@ -76,7 +58,7 @@ fn extract_package_version(file_contents: &str, display_private: bool) -> Option
         return None;
     };
 
-    let formatted_version = format_version(raw_version);
+    let formatted_version = format_version(raw_version, config.version_format)?;
     if formatted_version == "v0.0.0-development" || formatted_version.starts_with("v0.0.0-semantic")
     {
         return Some("semantic".to_string());
@@ -85,69 +67,69 @@ fn extract_package_version(file_contents: &str, display_private: bool) -> Option
     Some(formatted_version)
 }
 
-fn extract_poetry_version(file_contents: &str) -> Option<String> {
-    let poetry_toml: toml::Value = toml::from_str(file_contents).ok()?;
+fn get_poetry_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("pyproject.toml")).ok()?;
+    let poetry_toml: toml::Value = toml::from_str(&file_contents).ok()?;
     let raw_version = poetry_toml
         .get("tool")?
         .get("poetry")?
         .get("version")?
         .as_str()?;
 
-    let formatted_version = format_version(raw_version);
-    Some(formatted_version)
+    format_version(raw_version, config.version_format)
 }
 
-fn extract_setup_cfg_version(file_contents: &str) -> Option<String> {
-    let ini = Ini::load_from_str(file_contents).ok()?;
+fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("setup.cfg")).ok()?;
+    let ini = Ini::load_from_str(&file_contents).ok()?;
     let raw_version = ini.get_from(Some("metadata"), "version")?;
 
-    let formatted_version = format_version(raw_version);
-    Some(formatted_version)
+    format_version(raw_version, config.version_format)
 }
 
-fn extract_gradle_version(file_contents: &str) -> Option<String> {
+fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("build.gradle")).ok()?;
     let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
-    let caps = re.captures(file_contents)?;
+    let caps = re.captures(&file_contents)?;
 
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
+    format_version(&caps["version"], config.version_format)
 }
 
-fn extract_composer_version(file_contents: &str) -> Option<String> {
-    let composer_json: json::Value = json::from_str(file_contents).ok()?;
+fn get_composer_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("composer.json")).ok()?;
+    let composer_json: json::Value = json::from_str(&file_contents).ok()?;
     let raw_version = composer_json.get("version")?.as_str()?;
-    if raw_version == "null" {
-        return None;
-    };
 
-    let formatted_version = format_version(raw_version);
-    Some(formatted_version)
+    format_version(raw_version, config.version_format)
 }
 
-fn extract_project_version(file_contents: &str) -> Option<String> {
-    let project_toml: toml::Value = toml::from_str(file_contents).ok()?;
+fn get_julia_project_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("Project.toml")).ok()?;
+    let project_toml: toml::Value = toml::from_str(&file_contents).ok()?;
     let raw_version = project_toml.get("version")?.as_str()?;
 
-    let formatted_version = format_version(raw_version);
-    Some(formatted_version)
+    format_version(raw_version, config.version_format)
 }
 
-fn extract_helm_package_version(file_contents: &str) -> Option<String> {
-    let yaml = yaml_rust::YamlLoader::load_from_str(file_contents).ok()?;
+fn get_helm_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("Chart.yaml")).ok()?;
+    let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["version"].as_str()?;
-    Some(format_version(version))
+
+    format_version(version, config.version_format)
 }
 
-fn extract_mix_version(file_contents: &str) -> Option<String> {
+fn get_mix_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("mix.exs")).ok()?;
     let re = Regex::new(r#"(?m)version: "(?P<version>[^"]+)""#).unwrap();
-    let caps = re.captures(file_contents)?;
+    let caps = re.captures(&file_contents)?;
 
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
+    format_version(&caps["version"], config.version_format)
 }
 
-fn extract_maven_version(file_contents: &str) -> Option<String> {
-    let mut reader = QXReader::from_str(file_contents);
+fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let pom_file = utils::read_file(context.current_dir.join("pom.xml")).ok()?;
+    let mut reader = QXReader::from_str(&pom_file);
     reader.trim_text(true);
 
     let mut buf = vec![];
@@ -167,7 +149,7 @@ fn extract_maven_version(file_contents: &str) -> Option<String> {
                 let ver = t.unescape_and_decode(&reader).ok();
                 return match ver {
                     // Ignore version which is just a property reference
-                    Some(ref v) if !v.starts_with('$') => ver,
+                    Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
                     _ => None,
                 };
             }
@@ -184,80 +166,88 @@ fn extract_maven_version(file_contents: &str) -> Option<String> {
     None
 }
 
-fn extract_meson_version(file_contents: &str) -> Option<String> {
-    let file_contents = file_contents.split_ascii_whitespace().collect::<String>();
+fn get_meson_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("meson.build"))
+        .ok()?
+        .split_ascii_whitespace()
+        .collect::<String>();
 
     let re = Regex::new(r#"project\([^())]*,version:'(?P<version>[^']+)'[^())]*\)"#).unwrap();
     let caps = re.captures(&file_contents)?;
 
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
+    format_version(&caps["version"], config.version_format)
 }
 
-fn extract_vmod_version(file_contents: &str) -> Option<String> {
+fn get_vmod_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("v.mod")).ok()?;
     let re = Regex::new(r"(?m)^\s*version\s*:\s*'(?P<version>[^']+)'").unwrap();
-    let caps = re.captures(file_contents)?;
-    let formatted_version = format_version(&caps["version"]);
-    Some(formatted_version)
+    let caps = re.captures(&file_contents)?;
+    format_version(&caps["version"], config.version_format)
 }
 
-fn extract_vpkg_version(file_contents: &str) -> Option<String> {
-    let vpkg_json: json::Value = json::from_str(file_contents).ok()?;
-    let version = vpkg_json.get("version")?.as_str()?;
-    if version == "null" {
-        return None;
-    }
-    let formatted_version = format_version(version);
-    Some(formatted_version)
+fn get_vpkg_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("vpkg.json")).ok()?;
+    let vpkg_json: json::Value = json::from_str(&file_contents).ok()?;
+    let raw_version = vpkg_json.get("version")?.as_str()?;
+
+    format_version(raw_version, config.version_format)
 }
 
-fn get_package_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let base_dir = &context.current_dir;
+fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("Cargo.toml")).ok()?;
 
-    if let Ok(cargo_toml) = utils::read_file(base_dir.join("Cargo.toml")) {
-        extract_cargo_version(&cargo_toml)
-    } else if context
+    let cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
+    let raw_version = cargo_toml.get("package")?.get("version")?.as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
+fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    if !context
         .try_begin_scan()?
         .set_extensions(&["nimble"])
         .is_match()
     {
-        extract_nimble_version(context)
-    } else if let Ok(package_json) = utils::read_file(base_dir.join("package.json")) {
-        extract_package_version(&package_json, config.display_private)
-    } else if let Ok(poetry_toml) = utils::read_file(base_dir.join("pyproject.toml")) {
-        extract_poetry_version(&poetry_toml)
-    } else if let Ok(setup_cfg) = utils::read_file(base_dir.join("setup.cfg")) {
-        extract_setup_cfg_version(&setup_cfg)
-    } else if let Ok(composer_json) = utils::read_file(base_dir.join("composer.json")) {
-        extract_composer_version(&composer_json)
-    } else if let Ok(build_gradle) = utils::read_file(base_dir.join("build.gradle")) {
-        extract_gradle_version(&build_gradle)
-    } else if let Ok(project_toml) = utils::read_file(base_dir.join("Project.toml")) {
-        extract_project_version(&project_toml)
-    } else if let Ok(mix_file) = utils::read_file(base_dir.join("mix.exs")) {
-        extract_mix_version(&mix_file)
-    } else if let Ok(chart_file) = utils::read_file(base_dir.join("Chart.yaml")) {
-        extract_helm_package_version(&chart_file)
-    } else if let Ok(pom_file) = utils::read_file(base_dir.join("pom.xml")) {
-        extract_maven_version(&pom_file)
-    } else if let Ok(meson_build) = utils::read_file(base_dir.join("meson.build")) {
-        extract_meson_version(&meson_build)
-    } else if let Ok(vlang_mod) = utils::read_file(base_dir.join("v.mod")) {
-        extract_vmod_version(&vlang_mod)
-    } else if let Ok(vlang_vpkg) = utils::read_file(base_dir.join("vpkg.json")) {
-        extract_vpkg_version(&vlang_vpkg)
-    } else {
-        None
-    }
+        return None;
+    };
+
+    let cmd_output = context.exec_cmd("nimble", &["dump", "--json"])?;
+    let nimble_json: json::Value = json::from_str(&cmd_output.stdout).ok()?;
+
+    let raw_version = nimble_json.get("version")?.as_str()?;
+
+    format_version(raw_version, config.version_format)
 }
 
-fn format_version(version: &str) -> String {
-    let cleaned = version.replace('"', "").trim().to_string();
-    if cleaned.starts_with('v') {
-        cleaned
-    } else {
-        format!("v{}", cleaned)
-    }
+fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
+        get_cargo_version,
+        get_nimble_version,
+        get_node_package_version,
+        get_poetry_version,
+        get_setup_cfg_version,
+        get_composer_version,
+        get_gradle_version,
+        get_julia_project_version,
+        get_mix_version,
+        get_helm_package_version,
+        get_maven_version,
+        get_meson_version,
+        get_vmod_version,
+        get_vpkg_version,
+    ];
+
+    package_version_fn.iter().find_map(|f| f(context, config))
+}
+
+fn format_version(version: &str, version_format: &str) -> Option<String> {
+    let cleaned = version
+        .replace('"', "")
+        .trim()
+        .trim_start_matches('v')
+        .to_string();
+
+    VersionFormatter::format_module_version("package", &cleaned, version_format)
 }
 
 #[cfg(test)]
@@ -272,17 +262,32 @@ mod tests {
 
     #[test]
     fn test_format_version() {
-        assert_eq!(format_version("0.1.0"), "v0.1.0");
-        assert_eq!(format_version(" 0.1.0 "), "v0.1.0");
-        assert_eq!(format_version("0.1.0 "), "v0.1.0");
-        assert_eq!(format_version(" 0.1.0"), "v0.1.0");
-        assert_eq!(format_version("\"0.1.0\""), "v0.1.0");
+        let raw_expected = Some(String::from("v1.2.3"));
 
-        assert_eq!(format_version("v0.1.0"), "v0.1.0");
-        assert_eq!(format_version(" v0.1.0 "), "v0.1.0");
-        assert_eq!(format_version(" v0.1.0"), "v0.1.0");
-        assert_eq!(format_version("v0.1.0 "), "v0.1.0");
-        assert_eq!(format_version("\"v0.1.0\""), "v0.1.0");
+        assert_eq!(format_version("1.2.3", "v${raw}"), raw_expected);
+        assert_eq!(format_version(" 1.2.3 ", "v${raw}"), raw_expected);
+        assert_eq!(format_version("1.2.3 ", "v${raw}"), raw_expected);
+        assert_eq!(format_version(" 1.2.3", "v${raw}"), raw_expected);
+        assert_eq!(format_version("\"1.2.3\"", "v${raw}"), raw_expected);
+
+        assert_eq!(format_version("v1.2.3", "v${raw}"), raw_expected);
+        assert_eq!(format_version(" v1.2.3 ", "v${raw}"), raw_expected);
+        assert_eq!(format_version(" v1.2.3", "v${raw}"), raw_expected);
+        assert_eq!(format_version("v1.2.3 ", "v${raw}"), raw_expected);
+        assert_eq!(format_version("\"v1.2.3\"", "v${raw}"), raw_expected);
+
+        let major_expected = Some(String::from("v1"));
+        assert_eq!(format_version("1.2.3", "v${major}"), major_expected);
+        assert_eq!(format_version(" 1.2.3 ", "v${major}"), major_expected);
+        assert_eq!(format_version("1.2.3 ", "v${major}"), major_expected);
+        assert_eq!(format_version(" 1.2.3", "v${major}"), major_expected);
+        assert_eq!(format_version("\"1.2.3\"", "v${major}"), major_expected);
+
+        assert_eq!(format_version("v1.2.3", "v${major}"), major_expected);
+        assert_eq!(format_version(" v1.2.3 ", "v${major}"), major_expected);
+        assert_eq!(format_version(" v1.2.3", "v${major}"), major_expected);
+        assert_eq!(format_version("v1.2.3 ", "v${major}"), major_expected);
+        assert_eq!(format_version("\"v1.2.3\"", "v${major}"), major_expected);
     }
 
     #[test]
@@ -508,7 +513,7 @@ license = "MIT"
     }
 
     #[test]
-    fn test_package_version_semantic_development_version() -> io::Result<()> {
+    fn test_node_package_version_semantic_development_version() -> io::Result<()> {
         let config_name = "package.json";
         let config_content = json::json!({
             "name": "starship",
@@ -523,7 +528,7 @@ license = "MIT"
     }
 
     #[test]
-    fn test_package_version_with_semantic_other_version() -> io::Result<()> {
+    fn test_node_package_version_with_semantic_other_version() -> io::Result<()> {
         let config_name = "package.json";
         let config_content = json::json!({
             "name": "starship",
@@ -538,7 +543,7 @@ license = "MIT"
     }
 
     #[test]
-    fn test_package_version_with_non_semantic_tag() -> io::Result<()> {
+    fn test_node_package_version_with_non_semantic_tag() -> io::Result<()> {
         let config_name = "package.json";
         let config_content = json::json!({
             "name": "starship",
@@ -804,7 +809,7 @@ end";
     }
 
     #[test]
-    fn test_extract_project_version() -> io::Result<()> {
+    fn test_extract_julia_project_version() -> io::Result<()> {
         let config_name = "Project.toml";
         let config_content = toml::toml! {
             name = "starship"
@@ -819,7 +824,7 @@ end";
     }
 
     #[test]
-    fn test_extract_project_version_without_version() -> io::Result<()> {
+    fn test_extract_julia_project_version_without_version() -> io::Result<()> {
         let config_name = "Project.toml";
         let config_content = toml::toml! {
             name = "starship"
@@ -902,7 +907,7 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(pom))?;
-        expect_output(&project_dir, Some("0.3.20-SNAPSHOT"), None);
+        expect_output(&project_dir, Some("v0.3.20-SNAPSHOT"), None);
         project_dir.close()
     }
 

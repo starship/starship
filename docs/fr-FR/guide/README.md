@@ -264,9 +264,20 @@
    ```
 
 
+   #### Xonsh
+
+   Ajouter ce qui suit à la fin de `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
+   ```
+
+
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Avertissement** Cela changera dans le futur. Seule la version nu v0.33 ou supérieure est prise en charge. Ajoutez ce qui suit à votre fichier de configuration 'nu'. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
 
    ```toml
    startup = [

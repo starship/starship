@@ -35,7 +35,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 
 ### ロギング
 
-デフォルトでは、Starship は警告やエラーログを `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log` という名前のファイルに出力します。このセッションキーはターミナルのインスタンスに相当します。しかし、これは `STARSHIP_CACHE` という環境変数を使って変更できます： しかし、これは `STARSHIP_CACHE` という環境変数を使って変更できます：
+デフォルトでは、Starship は警告やエラーログを `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log` という名前のファイルに出力します。このセッションキーはターミナルのインスタンスに相当します。 しかし、これは `STARSHIP_CACHE` という環境変数を使って変更できます：
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -936,6 +936,7 @@ Example: following configuration will display value of USER environment variable
 [env_var.USER]
 default = "unknown user"
 ```
+:::
 
 ### オプション
 
@@ -1124,15 +1125,15 @@ truncation_symbol = ""
 
 ### オプション
 
-| オプション                | デフォルト                                                  | 説明                                        |
-| -------------------- | ------------------------------------------------------ | ----------------------------------------- |
-| `commit_hash_length` | `7`                                                    | 表示される git コミットハッシュの長さ。                    |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | moduleのフォーマットです。                          |
-| `style`              | `"bold green"`                                         | モジュールのスタイルです。                             |
-| `only_detached`      | `true`                                                 | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
-| `tag_disabled`       | `true`                                                 | `git_commit` モジュールのタグ情報の表示を無効にする。         |
-| `tag_symbol`         | `" 🏷 "`                                                | 表示される情報の前に追加されるタグシンボル                     |
-| `disabled`           | `false`                                                | `git_commit` モジュールを無効にします。                |
+| オプション                | デフォルト                              | 説明                                        |
+| -------------------- | ---------------------------------- | ----------------------------------------- |
+| `commit_hash_length` | `7`                                | 表示される git コミットハッシュの長さ。                    |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | moduleのフォーマットです。                          |
+| `style`              | `"bold green"`                     | モジュールのスタイルです。                             |
+| `only_detached`      | `true`                             | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
+| `tag_disabled`       | `true`                             | `git_commit` モジュールのタグ情報の表示を無効にする。         |
+| `tag_symbol`         | `" 🏷 "`                            | 表示される情報の前に追加されるタグシンボル                     |
+| `disabled`           | `false`                            | `git_commit` モジュールを無効にします。                |
 
 ### 変数
 
@@ -1239,38 +1240,39 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### オプション
 
-| オプション        | デフォルト                                           | 説明                        |
-| ------------ | ----------------------------------------------- | ------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット |
-| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。      |
-| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット            |
-| `behind`     | `"⇣"`                                           | `behind`のフォーマット           |
-| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット         |
-| `untracked`  | `"?"`                                           | The format of `untracked` |
-| `stashed`    | `"$"`                                           | The format of `stashed`   |
-| `modified`   | `"!"`                                           | The format of `modified`  |
-| `staged`     | `"+"`                                           | The format of `staged`    |
-| `renamed`    | `"»"`                                           | The format of `renamed`   |
-| `deleted`    | `"✘"`                                           | The format of `deleted`   |
-| `style`      | `"bold red"`                                    | モジュールのスタイルです。             |
-| `disabled`   | `false`                                         | `git_status`モジュールを無効にします。 |
+| オプション        | デフォルト                                           | 説明                         |
+| ------------ | ----------------------------------------------- | -------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット  |
+| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。       |
+| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット             |
+| `behind`     | `"⇣"`                                           | `behind`のフォーマット            |
+| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット          |
+| `up_to_date` | `""`                                            | The format of `up_to_date` |
+| `untracked`  | `"?"`                                           | The format of `untracked`  |
+| `stashed`    | `"$"`                                           | The format of `stashed`    |
+| `modified`   | `"!"`                                           | The format of `modified`   |
+| `staged`     | `"+"`                                           | The format of `staged`     |
+| `renamed`    | `"»"`                                           | The format of `renamed`    |
+| `deleted`    | `"✘"`                                           | The format of `deleted`    |
+| `style`      | `"bold red"`                                    | モジュールのスタイルです。              |
+| `disabled`   | `false`                                         | `git_status`モジュールを無効にします。  |
 
 ### 変数
 
 ` format` 内では以下の変数が利用できます。
 
-| 変数             | 説明                                                                                            |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
-| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*      | オプション `style` の値をミラーする                                                                        |
+| 変数             | 説明                                                                                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| style\*      | オプション `style` の値をミラーする                                                                                        |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -1297,6 +1299,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
@@ -1476,7 +1479,13 @@ symbol = "🌟 "
 
 ## ジョブ
 
-`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 1つ以上のジョブがある、または`threshold`に指定した値以上にジョブがある場合は実行中のジョブの数を表示します。 If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: warning
 
@@ -1484,15 +1493,26 @@ This module is not supported on tcsh and nu.
 
 :::
 
+::: warning
+
+The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+
+:::
+
 ### オプション
 
-| オプション       | デフォルト                         | 説明                  |
-| ----------- | ----------------------------- | ------------------- |
-| `threshold` | `1`                           | 超過した場合、ジョブの数を表示します。 |
-| `format`    | `"[$symbol$number]($style) "` | moduleのフォーマットです。    |
-| `symbol`    | `"✦"`                         | ジョブの数を表すフォーマット文字列   |
-| `style`     | `"bold blue"`                 | モジュールのスタイルです。       |
-| `disabled`  | `false`                       | `jobs`モジュールを無効にします。 |
+| オプション              | デフォルト                         | 説明                                                                       |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`\*    | `1`                           | 超過した場合、ジョブの数を表示します。                                                      |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | moduleのフォーマットです。                                                         |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | モジュールのスタイルです。                                                            |
+| `disabled`         | `false`                       | `jobs`モジュールを無効にします。                                                      |
+ \*: This option is deprecated, please use the 
+
+`number_threshold` and `symbol_threshold` options instead.
 
 ### 変数
 
@@ -1511,7 +1531,8 @@ This module is not supported on tcsh and nu.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
@@ -1642,6 +1663,29 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
+".*/openshift-cluster/.*" = "openshift"
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+```
+
+#### Regex Matching
+
+Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+
+The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+
+Long and automatically generated cluster names can be identified and shortened using regular expressions:
+
+```toml
+[kubernetes.context_aliases]
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+".*/openshift-cluster/.*" = "openshift"
+# Or better, to rename every OpenShift cluster at once:
+".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
 ## Line Break
@@ -2001,6 +2045,7 @@ symbol = "☁️ "
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
 - [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
 - [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
@@ -2018,6 +2063,7 @@ symbol = "☁️ "
 | ----------------- | --------------------------------- | --------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | moduleのフォーマットです。                                          |
 | `symbol`          | `"📦 "`                            | パッケージのバージョンを表示する前に使用される記号です。                              |
+| `version_format`  | `"v${raw}"`                       | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。    |
 | `style`           | `"bold 208"`                      | モジュールのスタイルです。                                             |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private. |
 | `disabled`        | `false`                           | `package`モジュールを無効にします。                                    |
@@ -2188,7 +2234,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 | `style`              | `"yellow bold"`                                                                                              | モジュールのスタイルです。                                                                          |
 | `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | どのファイル名がこのモジュールをアクティブにするか                                                              |
 | `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                              |
@@ -2469,6 +2515,7 @@ The `shell` module shows an indicator for currently used shell.
 | `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
 | `elvish_indicator`     | `esh`        | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
 | `format`               | `$indicator` | moduleのフォーマットです。                                             |
 | `disabled`             | `true`       | Disables the `shell` module.                                 |
@@ -2501,7 +2548,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | moduleのフォーマットです。                                              |
-| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | モジュールのスタイルです。                                                 |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
@@ -2573,31 +2620,36 @@ The `status` module displays the exit code of the previous command. The module w
 
 ### オプション
 
-| オプション                   | デフォルト                         | 説明                                                   |
-| ----------------------- | ----------------------------- | ---------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "` | The format of the module                             |
-| `symbol`                | `"✖"`                         | The symbol displayed on program error                |
-| `not_executable_symbol` | `"🚫"`                         | The symbol displayed when file isn't executable      |
-| `not_found_symbol`      | `"🔍"`                         | The symbol displayed when the command can't be found |
-| `sigint_symbol`         | `"🧱"`                         | The symbol displayed on SIGINT (Ctrl + c)            |
-| `signal_symbol`         | `"⚡"`                         | The symbol displayed on any signal                   |
-| `style`                 | `"bold red"`                  | モジュールのスタイルです。                                        |
-| `recognize_signal_code` | `true`                        | Enable signal mapping from exit code                 |
-| `map_symbol`            | `false`                       | Enable symbols mapping from exit code                |
-| `disabled`              | `true`                        | Disables the `status` module.                        |
+| オプション                   | デフォルト                                                                                | 説明                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
+| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
+| `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
+| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
+| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
+| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
+| `style`                 | `"bold red"`                                                                         | モジュールのスタイルです。                                           |
+| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
+| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
+| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
+| `pipestatus_separator`  | `|`                                                                                  | The symbol that separate in pipe program exit codes     |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
+| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
 
 ### 変数
 
-| 変数             | 設定例     | 説明                                                                   |
-| -------------- | ------- | -------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                    |
-| int            | `127`   | The exit code of the last command                                    |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                  |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled      |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found         |
-| symbol         |         | オプション `記号` の値をミラーする                                                  |
-| style\*      |         | オプション `style` の値をミラーする                                               |
+| 変数             | 設定例     | 説明                                                                                          |
+| -------------- | ------- | ------------------------------------------------------------------------------------------- |
+| status         | `127`   | The exit code of the last command                                                           |
+| int            | `127`   | The exit code of the last command                                                           |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
+| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
+| symbol         |         | オプション `記号` の値をミラーする                                                                         |
+| style\*      |         | オプション `style` の値をミラーする                                                                      |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -2851,15 +2903,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### オプション
 
-| オプション               | デフォルト                                        | 説明                                           |
-| ------------------- | -------------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | moduleのフォーマットです。                             |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                      | どの拡張子がこのモジュールをアクティブにするか                      |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | どのファイル名がこのモジュールをアクティブにするか                    |
-| `detect_folders`    | `[]`                                         | どのフォルダーがこのモジュールをアクティブにするか                    |
-| `style`             | `"blue bold"`                                | モジュールのスタイルです。                                |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
+| オプション               | デフォルト                                        | 説明                                                     |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`         | moduleのフォーマットです。                                       |
+| `version_format`    | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V           |
+| `detect_extensions` | `["v"]`                                      | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                         | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"blue bold"`                                | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                           |
 
 ### 変数
 

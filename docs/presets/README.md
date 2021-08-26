@@ -113,7 +113,7 @@ format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
-format = "[⏱ $duration]($style)"
+format = '\[[⏱ $duration ]($style)\]'
 
 [conda]
 format = '\[[$symbol$environment]($style)\]'
