@@ -481,27 +481,27 @@ Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang te
 
 ## Command Duration
 
-Modul `cmd_duration` menampilkan seberapa lama perintah sebelumnya membutuhkan waktu untuk dilaksanakan. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Modul `cmd_duration` menampilkan seberapa lama perintah sebelumnya membutuhkan waktu untuk dilaksanakan. Modulnya hanya akan ditampilkan jika perintahnya membutuhkan waktu lebih dari dua detik, atau ada nilai dari konfigurasi `min_time`.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: jangan lakukan hook DEBUG trap dalam Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Jia kamu menjalankan Starship di `bash`, jangan lakukan hook DEBUG trap setelah menjalankan `eval $(starship init $0)`, atau modulnya **akan** rusak.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Pengguna Bash yang membutuhkan fungsi seperti preexec dapat menggunakan [kerangka kerja bash_preexec dari rcaloras](https://github.com/rcaloras/bash-preexec). Cukup dengan membuat array `preexec_functions` dan `precmd_functions` sebelum menjalankan `eval $(starship init $0)`, lalu lanjutkan seperti biasa.
 
 ### Opsi
 
-| Opsi                 | Bawaan                        | Deskripsi                                                  |
-| -------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`             | `"took [$duration]($style) "` | Format dari modul.                                         |
-| `style`              | `"bold yellow"`               | Gaya penataan untuk modul.                                 |
-| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
+| Opsi                 | Bawaan                        | Deskripsi                                                   |
+| -------------------- | ----------------------------- | ----------------------------------------------------------- |
+| `min_tim`            | `2_000`                       | Durasi terpendek untuk menampilkan waktu (dalam milidetik). |
+| `show_milliseconds`  | `false`                       | Tampilkan milidetik sebagai ganti detik untuk durasinya.    |
+| `format`             | `"took [$duration]($style) "` | Format dari modul.                                          |
+| `style`              | `"bold yellow"`               | Gaya penataan untuk modul.                                  |
+| `disabled`           | `false`                       | Menonaktifkan modul `cmd_duration`.                         |
+| `show_notifications` | `false`                       | Show desktop notifications when command completes.          |
+| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).       |
 
 ::: tip
 
