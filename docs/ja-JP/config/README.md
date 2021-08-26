@@ -1020,7 +1020,7 @@ format = "via [e $version](bold red) "
 
 ## Google Cloud (`gcloud`)
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+`gcloud` モジュールは、 [`gcloud`](https://cloud.google.com/sdk/gcloud) CLIの現在の設定が表示されます。 これは `~/.config/gcloud/active_config` ファイルと `~/.config/gcloud/configurations/config_{CONFIG NAME}` ファイルと `CLOUDSDK_CONFIG` 環境変数に基づきます。
 
 ### オプション
 
@@ -1081,7 +1081,7 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch`モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを表示します。
 
 ### オプション
 
@@ -1121,7 +1121,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+`git_commit` モジュールは、カレントディレクトリのリポジトリの現在のコミットハッシュとタグ (もしあれば) を表示します。
 
 ### オプション
 
@@ -1156,7 +1156,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state`モジュールはgitディレクトリの進行状態を表します。 (例: _REBASING_, _BISECTING_, その他) 進捗情報がある場合(例: REBASING 3/10)はその情報も表示されます。
 
 ### オプション
 
@@ -1200,7 +1200,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -1236,30 +1236,30 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status`モジュールは、現在のディレクトリのリポジトリの状態を表すシンボルを表示します。
 
 ### オプション
 
-| オプション        | デフォルト                                           | 説明                                |
-| ------------ | ----------------------------------------------- | --------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット         |
-| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。              |
-| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット                    |
-| `behind`     | `"⇣"`                                           | `behind`のフォーマット                   |
-| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット                 |
-| `up_to_date` | `""`                                            | The format of `up_to_date`        |
-| `untracked`  | `"?"`                                           | The format of `untracked`         |
-| `stashed`    | `"$"`                                           | The format of `stashed`           |
-| `modified`   | `"!"`                                           | The format of `modified`          |
-| `staged`     | `"+"`                                           | The format of `staged`            |
-| `renamed`    | `"»"`                                           | The format of `renamed`           |
-| `deleted`    | `"✘"`                                           | The format of `deleted`           |
-| `style`      | `"bold red"`                                    | モジュールのスタイルです。                     |
-| `disabled`   | `false`                                         | Disables the `git_status` module. |
+| オプション        | デフォルト                                           | 説明                         |
+| ------------ | ----------------------------------------------- | -------------------------- |
+| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット  |
+| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。       |
+| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット             |
+| `behind`     | `"⇣"`                                           | `behind`のフォーマット            |
+| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット          |
+| `up_to_date` | `""`                                            | The format of `up_to_date` |
+| `untracked`  | `"?"`                                           | The format of `untracked`  |
+| `stashed`    | `"$"`                                           | The format of `stashed`    |
+| `modified`   | `"!"`                                           | The format of `modified`   |
+| `staged`     | `"+"`                                           | The format of `staged`     |
+| `renamed`    | `"»"`                                           | The format of `renamed`    |
+| `deleted`    | `"✘"`                                           | The format of `deleted`    |
+| `style`      | `"bold red"`                                    | モジュールのスタイルです。              |
+| `disabled`   | `false`                                         | `git_status`モジュールを無効にします。  |
 
 ### 変数
 
-The following variables can be used in `format`:
+` format` 内では以下の変数が利用できます。
 
 | 変数             | 説明                                                                                                            |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -1405,7 +1405,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+`hostname`モジュールには、システムのホスト名が表示されます。
 
 ### オプション
 
@@ -1479,7 +1479,7 @@ symbol = "🌟 "
 
 ## ジョブ
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+`jobs`モジュールには、実行中のジョブの現在の数が表示されます。 このモジュールは、実行中のバックグラウンドジョブがある場合にのみ表示されます。 The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1509,7 +1509,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | moduleのフォーマットです。                                                         |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | モジュールのスタイルです。                                                            |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | `jobs`モジュールを無効にします。                                                      |
  \*: This option is deprecated, please use the 
 
 `number_threshold` and `symbol_threshold` options instead.
@@ -1539,9 +1539,9 @@ symbol_threshold = 0
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- カレントディレクトリに`Project.toml`ファイルが含まれている
+- カレントディレクトリに`Manifest.toml`ファイルが含まれている
+- カレントディレクトリに`.jl`の拡張子のファイルが含まれている
 
 ### オプション
 
@@ -1577,9 +1577,9 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`kotlin`モジュールは、現在インストールされている[Kotlin](https://kotlinlang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.kt` or a `.kts` file
+- カレントディレクトリに`.kt`もしくは`.kts`ファイルが含まれている
 
 ### オプション
 
@@ -1624,11 +1624,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. namespace は kubconfigで設定する必要があります。設定は、`kubectl config set-context starship-cluster --namespace astronaut` といったコマンド行えます。 `$KUBECONFIG` 環境変数が設定されている場合、このモジュールは環境変数を優先して使用し、`~/.kube/config` は使用しません。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -1690,7 +1690,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+`line_break`モジュールは、プロンプトを2行に分割します。
 
 ### オプション
 
@@ -1750,13 +1750,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## メモリ使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -1797,7 +1797,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
 
 ### オプション
 
@@ -1835,7 +1835,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `nim.cfg` file
+- カレントディレクトリに`nim.cfg`ファイルが含まれている
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1875,7 +1875,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. このモジュールは、nixシェル環境内にあるときに表示されます。
 
 ### オプション
 
@@ -1915,10 +1915,10 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `package.json` file
+- カレントディレクトリに`package.json`ファイルが含まれている
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
-- The current directory contains a `node_modules` directory
+- カレントディレクトリに`node_modules`ディレクトリが含まれている
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -2039,7 +2039,7 @@ symbol = "☁️ "
 
 ## パッケージのバージョン
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2066,7 +2066,7 @@ The `package` module is shown when the current directory is the repository for a
 | `version_format`  | `"v${raw}"`                       | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。    |
 | `style`           | `"bold 208"`                      | モジュールのスタイルです。                                             |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | Disables the `package` module.                            |
+| `disabled`        | `false`                           | `package`モジュールを無効にします。                                    |
 
 ### 変数
 
@@ -2131,7 +2131,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `composer.json` file
+- カレントディレクトリに`composer.json`ファイルが含まれている
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2171,7 +2171,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `spago.dhall` file
+- カレントディレクトリに`spago.dhall`ファイルが含まれている
 - The current directory contains a file with the `.purs` extension
 
 ### オプション
@@ -2210,19 +2210,19 @@ format = "via [$symbol$version](bold white)"
 
 The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+`pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
+- カレントディレクトリに`.python-version`ファイルが含まれている
+- カレントディレクトリに`Pipfile`ファイルが含まれている
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- カレントディレクトリに`pyproject.toml`ファイルが含まれている
+- カレントディレクトリに`requirements.txt`ファイルが含まれている
+- カレントディレクトリに`setup.py`ファイルが含まれている
+- カレントディレクトリに`tox.ini`ファイルが含まれている
+- カレントディレクトリに`.py`の拡張子のファイルが含まれている.
+- 仮想環境がアクティブである
 
 ### オプション
 
@@ -2339,7 +2339,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2377,11 +2377,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Gemfile` file
+- カレントディレクトリに`Gemfile`ファイルが含まれている
 - The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- カレントディレクトリに`.rb`の拡張子のファイルが含まれている
 
 ### オプション
 
@@ -2417,10 +2417,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+デフォルトでは`rust`モジュールは現在インストールされている[Rust](https://www.rust-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- カレントディレクトリに`Cargo.toml`ファイルが含まれている
+- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
 ### オプション
 
@@ -2500,7 +2500,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -2612,7 +2612,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -2670,7 +2670,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2719,7 +2719,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.terraform` folder
+- カレントディレクトリに`.terraform`フォルダが含まれている
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### オプション
@@ -2768,11 +2768,11 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
@@ -2788,7 +2788,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
@@ -2814,12 +2814,12 @@ time_range = "10:00:00-14:00:00"
 
 ## ユーザー名
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- カレントユーザーがroot
+- カレントユーザーが、ログインしているユーザーとは異なる
+- ユーザーがSSHセッションとして接続されている
+- `show_always`変数がtrueに設定されている
 
 ::: tip
 
@@ -2964,7 +2964,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - The current directory contains a `.zig` file
 
