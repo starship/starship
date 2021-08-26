@@ -124,7 +124,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!**
 
 - **Fast:** it's fast – _really really_ fast! 🚀
 - **Customizable:** configure every aspect of your prompt.
@@ -141,7 +141,7 @@
 
 ## 🚀 Installation
 
-### Prerequisites
+### Prasyarat
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
@@ -149,10 +149,10 @@
 
 **Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
-1. Install the **starship** binary:
+1. Instalasi dengan menggunakan binary **starship**:
 
 
-   #### Install Latest Version
+   #### Pasang Versi Terbaru
 
 
    ##### From prebuilt binary, with Shell:
@@ -160,7 +160,7 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Untuk memperbarui Starship, jalankan kembali skrip di atas. Hal ini dapat memperbarui versi yang terpasang tanpa menyentuh konfigurasi Starship.
 
 
    **Note** - The defaults of the install script can be overridden see the built-in help.
@@ -170,7 +170,7 @@
    ```
 
 
-   #### Install via Package Manager
+   #### Pasang Melalui Package Manager
 
 
    ##### Example: [Homebrew](https://brew.sh/):
@@ -180,18 +180,18 @@
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Dengan [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. Tambahkan skrip init ke file konfigurasi Shell:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.bashrc:`:
 
    ```sh
    # ~/.bashrc
@@ -202,7 +202,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Tambahkan skrip berikut pada baris akhir `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -213,7 +213,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -224,7 +224,7 @@
 
    #### PowerShell
 
-   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. Kamu dapat mengecek lokasi file tersebut dengan mencari tahu keberadaan variabel `$PROFILE` di dalam PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. Kamu dapat mengecek lokasi file tersebut dengan mencari tahu keberadaan variabel `$PROFILE` di dalam PowerShell. Biasanya, lokasi file tersebut berada di `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` atau `~/.config/powershell/Microsoft.PowerShell_profile.ps1` pada -Nix.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -233,7 +233,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -244,7 +244,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.15 or higher is supported. Tambahkan skrip berikut pada baris akhir `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -255,7 +255,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
