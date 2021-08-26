@@ -10,36 +10,36 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="Trạng thái GitHub Actions workflow"
+      alt="GitHub Actions workflow status"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Phiên bản Crates.io"
+      alt="Crates.io version"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Trạng thái đóng gói" /></a
+      alt="Packaging status" /></a
 ><br />
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Trò chuyện trên Discord"
+      alt="Chat on Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Theo dõi @StarshipPrompt trên Twitter"
+      alt="Follow @StarshipPrompt on Twitter"
  /></a>
 </p>
 
 <p align="center">
   <a href="https://starship.rs">Website</a>
   ·
-  <a href="#🚀-installation">Cài đặt</a>
+  <a href="#🚀-installation">Installation</a>
   ·
-  <a href="https://starship.rs/config/">Cấu hình</a>
+  <a href="https://starship.rs/config/">Configuration</a>
 </p>
 
 <p align="center">
@@ -47,7 +47,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="Tiếng Anh"
+      alt="English"
  /></a>
   &nbsp;
   <a
@@ -55,7 +55,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="Tiếng Nhật"
+      alt="日本語"
  /></a>
   &nbsp;
   <a
@@ -63,7 +63,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="Tiếng Trung hiện đại"
+      alt="繁體中文"
  /></a>
   &nbsp;
   <a
@@ -71,7 +71,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Tiếng Nga"
+      alt="Русский"
  /></a>
   &nbsp;
   <a
@@ -79,7 +79,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Tiếng Đức"
+      alt="Deutsch"
  /></a>
   &nbsp;
   <a
@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="Tiếng Trung giản thể"
+      alt="简体中文"
  /></a>
   &nbsp;
   <a
@@ -95,7 +95,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Tiếng Tây Ban Nha"
+      alt="Español"
  /></a>
   &nbsp;
   <a
@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Thiếng Pháp"
+      alt="Français"
  /></a>
   &nbsp;
   <a
@@ -119,79 +119,79 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship với iTerm2 and chủ đề Snazzy"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
 
-**Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!**
+**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Nhanh:** nó có tốc độ nhanh – _thực sự_ nhanh! 🚀
-- **Khả năng tuỳ chỉnh:** cấu hình mọi thứ trên prompt của bạn.
-- **Độ phổ biến:** làm việc trên mọi shell, bất kì hệ điều hành nào.
-- **Thông minh:** hiển thị thông tin liên quan dưới một cái nhìn.
-- **Tính năng phong phú:** hỗ trợ tất cả các công cụ yêu thích của bạn.
-- **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
+- **Fast:** it's fast – _really really_ fast! 🚀
+- **Customizable:** configure every aspect of your prompt.
+- **Universal:** works on any shell, on any operating system.
+- **Intelligent:** shows relevant information at a glance.
+- **Feature rich:** support for all your favorite tools.
+- **Easy:** quick to install – start using it in minutes.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Cài đặt
+## 🚀 Installation
 
-### Yêu cầu
+### Prerequisites
 
-- Đã cài đặt [Nerd Font](https://www.nerdfonts.com/) và đã kích hoạt trong giao diện dòng lệnh của bạn (ví dụ, thử [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Bắt đầu
+### Getting Started
 
-**Lưu ý**: do sự gia tăng của các nền tảng khác nhau, chỉ một tập con các nền tảng hỗ trợ được hiển thị bên dưới. Không thể tìm thấy nền tảng phù hợp của bạn? Hãy xem một [hướng dẫn bổ sung cho các nền tảng khác](https://starship.rs/installing/).
+**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
-1. Cài đặt **starship** nhị phân:
-
-
-   #### Cài đặt phiên bản cuối cùng
+1. Install the **starship** binary:
 
 
-   ##### Từ bản nhị phân có sẵn, với Shell:
+   #### Install Latest Version
+
+
+   ##### From prebuilt binary, with Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   Để cập nhật chính Starship, hãy chạy lại đoạn script bên trên. Nó sẽ thay thế phiên bản hiện tại mà không hề thay đổi gì những cài đặt của Starship trước đó.
+   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
-   **Ghi chú** - Script cài đặt mặc định có thể bị ghi đè.
+   **Note** - The defaults of the install script can be overridden see the built-in help.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
    ```
 
 
-   #### Cài đặt thông qua Trình quản lí gói
+   #### Install via Package Manager
 
 
-   ##### Ví dụ: [Homebrew](https://brew.sh/):
+   ##### Example: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### Với [Scoop](https://scoop.sh):
+   ##### With [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
+2. Add the init script to your shell's config file:
 
 
    #### Bash
 
-   Thêm đoạn sau vào cuối tệp tin `~/.bashrc`:
+   Add the following to the end of `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -202,7 +202,7 @@
 
    #### Fish
 
-   Thêm đoạn sau vào cuối tệp tin `~/.config/fish/config.fish`:
+   Add the following to the end of `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -213,7 +213,7 @@
 
    #### Zsh
 
-   Thêm đoạn sau vào cuối tệp tin `~/.zshrc`:
+   Add the following to the end of `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -224,7 +224,7 @@
 
    #### PowerShell
 
-   Thêm đoạn sau vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
+   Tambahkan skrip berikut pada baris akhir `Microsoft.PowerShell_profile.ps1`. Kamu dapat mengecek lokasi file tersebut dengan mencari tahu keberadaan variabel `$PROFILE` di dalam PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -233,7 +233,7 @@
 
    #### Ion
 
-   Thêm đoạn sau vào cuối tệp tin `~/.config/ion/initrc`:
+   Add the following to the end of `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -244,7 +244,7 @@
 
    #### Elvish
 
-   **Cảnh báo** Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -255,7 +255,7 @@
 
    #### Tcsh
 
-   Thêm đoạn sau vào cuối tệp tin `~/.tcshrc`:
+   Add the following to the end of `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -266,7 +266,7 @@
 
    #### Xonsh
 
-   Thêm dòng này vào cuối của file `~/.xonshrc`:
+   Tambahkan skrip berikut pada baris akhir `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -277,7 +277,7 @@
 
    #### Nushell
 
-   **Cảnh báo ** Cái này có thể bị thay đổi trong tương lai. Chỉ có nu phiên bản v. 033 hoặc cao hơn được hỗ trợ. Thêm dòng sau vào file cấu hình nu. Bạn có thể kiểm tra vị trí của cái file này bằng cách chạy `đường dẫn cấu hình` trong nu.
+   **Warning** This will change in the future. Hanya nu versi v0.33 atau lebih baru yang tengah didukung. Add the following to your nu config file. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
 
    ```toml
    startup = [
@@ -288,30 +288,30 @@
    prompt = "starship_prompt"
    ```
 
-## 🤝 Đóng góp
+## 🤝 Contributing
 
-Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! Nếu bạn đang tìm kiếm cách dễ dàng để tham gia vào dự án, thử một [good issue đầu tiên](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin hãy xem [Hướng dẫn đóng góp](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) của chúng tôi. Ngoài ra, vui lòng truy cập vào [máy chủ Discord](https://discord.gg/8Jzqu3T) và nói xin chào. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### Cộng tác viên
+### Code Contributors
 
-Dự án này tồn tại là nhờ tất cả những cộng tác viên. [[Cộng tác viên](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Những cộng tác viên về tài chính
+### Financial Contributors
 
-Trở thành một cộng tác viên tài tài về tài chính và giúp chúng ta duy trì cộng đồng của chúng ta. [[Cộng tác viên](https://opencollective.com/starship/contribute)]
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
 
-#### Cá nhân
+#### Individuals
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Tổ chức
+#### Organizations
 
-Hỗ trợ dự án này với tổ chức của bạn. Biểu tượng của bạn sẽ hiển thị ở đây với một liên kết tới website của bạn. [[Cộng tác viên](https://opencollective.com/starship/contribute)]
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -324,21 +324,21 @@ Hỗ trợ dự án này với tổ chức của bạn. Biểu tượng của b�
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## Cảm hứng
+## 💭 Inspired By
 
-Xin hãy xem qua những công việc này trước đây, những thứ đã giúp truyền cảm hứng để tạo ra starship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt cho những phi hành gia.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme được viết bằng JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell có khả năng tuỳ biến giống powerline prompt với các icon.
+- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 Giấy phép
+## 📝 License
 
-Bản quyền © 2019-nay, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Dự án này được [ISC](https://github.com/starship/starship/blob/master/LICENSE) cấp phép.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

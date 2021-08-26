@@ -1,33 +1,33 @@
-# 設定
+# Konfigurasi
 
-要開始設定 Starship，請先建立檔案： `~/.config/starship.toml`.
+Untuk memulai mengkonfigurasi starship, buatlah file berikut: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-所有關於 Starship 的設定都在這個 [TOML](https://github.com/toml-lang/toml) 檔案內：
+Seluruh konfigurasi starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
 
 ```toml
-# Inserts a blank line between shell prompts
+# Menambahkan baris kosong antar prompt shell
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Mengganti simbol "❯" pada prompt dengan simbol "➜"
+[character]                            # Nama modul yang dikonfigurasi adalah "character"
+success_symbol = "[➜](bold green)"     # Segmen "success_symbol" diganti menjadi "➜" dengan warna "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Mengnonaktifkan paket modul, menyembunyikannya dari prompt secara utuh
 [package]
 disabled = true
 ```
 
-你可以透過更改環境變數 `STARSHIP_CONFIG` 來變更設定檔存放的位置：
+Kamu bisa mengganti lokasi file konfigurasi bawaan dengan menggunakan environment variable dari `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
+Ekuivalen dalam PowerShell (Windows), tambahkan baris berikut pada `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
@@ -35,80 +35,80 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Secara bawaan, starship mencatat peringatan dan eror ke dalam sebuah file bernama `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, yang mana session key file tersebut sama dengan instance terminalmu. Namun, hal tersebut dapat diubah dengan menggunakan environment variable dari `STARSHIP_CACHE` berikut:
 
 ```sh
-export STARSHIP_CACHE=~/.starship/cache
+export STARSHIP_CONFIG=~/.starship/cache
 ```
 
-等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
+Pada PowerShell (Windows), tambahkan baris berikut pada `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-### 術語
+### Terminologi
 
-**模組 (Module)**： 提示字元中的一個元件，基於你的作業系統提供的背景資訊來提供訊息。 舉例來說，如果你現在的資料夾是一個 Node.js 專案，"nodejs" 模組會顯示出現在安裝在你的電腦上的 Node.js 版本。
+**Modul**: Sebuah komponen pada prompt yang memberikan informasi berdasarkan info kontekstual sistem operasimu. Sebagai contoh, modul "nodejs" menampilkan versi Node.js yang tengah terpasang pada komputermu, jika direktorimu sedang berada pada proyek Node.js.
 
-變數 (**Variable**)：模組的子元件，主要是由模組提供的訊息。 舉例來說，在 "nodejs" 模組中提供的 "version" 變數代表著當下使用的 Node.js 版本。
+**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. Sebagai contoh, variabel "version" dalam modul "nodejs" memuat versi Node.js saat ini.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis. `via` pada "nodejs") dan juga sebuah ruang kosong sebagai sufiks.
 
-### Format Strings
+### Format String
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Format string merupakan format yang sebuah modul gunakan untuk menampilkan semua variabelnya. Sebagian besar modul memiliki sebuah entri yang disebut `format` yang mengkonfigurasi format tampilan pada modul. Kamu bisa menggunakan teks, variabel, dan grup teks di dalam sebuah format string.
 
-#### 變數
+#### Variabel
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. Nama dari sebuah variabel hanya boleh berisikan huruf, angka, dan `_`.
 
-For example:
+Sebagai contoh:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` adalah format string dengan sebuah nama variabel `version`.
+- `$git_branch$git_commit` merupakan sebuah format string dengan dua variabel bernama `git_branch` dan `git_commit`.
+- `$git_branch $git_commit` memiliki dua variabel yang dipisahkan dengan sebuah spasi.
 
-#### Text Group
+#### Grup Teks
 
-A text group is made up of two different parts.
+Grup teks dibuat dengan dua bagian yang berbeda.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Bagian pertama, yang mana diapit dalam sebuah `[]`, merupakan sebuah [format string](#format-strings). Kamu bisa menambahkan teks, variabel, atau bahkan grup teks bercabang di dalamnya.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+Pada bagian kedua, yang mana diapit dalam sebuah `()`, merupakan sebuah [penataan string](#style-strings). Bagian ini dapat digunakan untuk menata bagian pertama.
 
-For example:
+Sebagai contoh:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` akan menampilkan string `on` dengan teks merah tebal.
+- `[⌘ $version](bold green)` akan menampilkan simbol `⌘` yang diikuti oleh variabel yang berisikan `version`, dengan teks tebal berwarna hijau.
+- `[a [b](red) c](green)` akan menampilkan `a b c` dengan `b` merah, dan `a` & `c` green.
 
-#### 風格字串
+#### Menata String
 
-Starship 內大多數的模組允許你設定他們的顯示風格。 這要透過一個條目 (通常叫做 `style`)，這個條目使用一個字串來進行設定。 這裡給幾個風格字串的例子，以及這些字串的功用。 對於完整語法的詳細說明，請參照 [進階設定指南](/advanced-config/)。
+Sebagian besar modul starship memungkinkan kamu untuk mengkonfigurasi gaya tampilannya. Hal ini dilakukan dengan sebuah entri (biasanya `style`) yang konfigurasinya ditentukan oleh string. Berikut adalah beberapa contoh penataan pada string dan kegunaannya. Untuk detail sintaksis yang lebih lengkap, lihat [panduan konfigurasi lanjutan](/advanced-config/).
 
-- `"fg:green bg:blue"` 在一個藍色背景上設定綠色文字
-- `"bg:blue fg:bright-green"` 在一個藍色背景上設定亮綠色文字
-- `"bold fg:27"` 設定具有 [ANSI 顏色](https://i.stack.imgur.com/KTSQa.png) 27 號的粗體文字
-- `"underline bg:#bf5700"` 在一個燒橙色背景上設定有底線的文字
-- `"bold italic fg:purple"` 設定粗體、斜體且紫色的文字
-- `""` 明確地關閉所有風格
+- `"fg:green bg:blue"` mengeset teks berwana hijau pada latar biru
+- `"bg:blue fg:bright-green"` mengeset teks hijau terang pada latar biru
+- `"bold fg:27"` mengeset tebal teks dengan [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` mengeset teks bergaris bawah pada latar oranye menyala
+- `"bold italic fg:purple"` mengeset teks ungu miring tebal
+- `""` secara eksplisit menonaktifkan semua penataan gaya
 
-注意風格產出的樣子取決於你的終端機模擬器。 例如，有些終端機模擬器會提升顏色的亮度而不是讓文字變粗體，而且有些色彩主題對一般與加亮顏色使用的是相同色碼。 除此之外，為了要有斜體字，你的終端機一定要支援斜體。
+Perhatikan bagaimana nantinya penataanmu akan terlihat pada emulator terminalmu. Sebagai contoh, beberapa terminal emulator alih-alih membuat warnanya lebih terang, malah menebalkan teksnya, dan sebagian palet warna ada yang menggunakan nilai yang sama untuk warna normal dan terangnya. Dan juga, untuk memakai teks miring, terminalmu harus menunjang teks miring.
 
-#### Conditional Format Strings
+#### Format String Bersyarat (Conditional)
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+String dengan format bersyarat dibungkus dengan `(` dan `)` tidak akan dijalankan jika variabel di dalamnya kosong.
 
-For example:
+Sebagai contoh:
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- `(@$region)` tidak akan menampilkan apapun jika nilai variabel `region` adalah `None` atau berupa string kosong, jika tidak, `@` diikuti dengan nilai dari region.
+- `(sembarang)` akan selalu tidak menampilkan apapun karena tidak ada variabel yang dibungkus dalam kurung kurawal.
+- Tatkala `$all` digunakan sebagai shortcut untuk `\[$a$b\]`, `($all)` tidak akan menampilkan apapun jika nilai `$a` dan `$b` adalah `None`. Berlaku juga dengan `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Karakter Yang Bisa Dihindari (Escapable)
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus mengikatnya (escape) dengan garis miring terbalik (`\`).
 
 - \$
 - \\
@@ -117,64 +117,64 @@ The following symbols have special usage in a format string. If you want to prin
 - (
 - )
 
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Perhatikan bahwa `toml` memiliki [sintaksi bebasnya sendiri](https://github.com/toml-lang/toml#user-content-string). Disarankan halnya untukmu menggunakan string literal (`''`) dalam konfigurasimu. Jika kamu mau memakai string standar (`""`), ingatlah untuk mengikat garis miring terbalik `\`.
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+Sebagai contoh, ketika kamu ingin menampilkan simbol `$` pada baris baru, konfigurasi berikut untuk `format` bersifat ekuivalen:
 
 ```toml
-# with basic string
+# dengan string standar
 format = "\n\\$"
 
-# with multiline basic string
+# dengan string standar multibaris
 format = """
 
 \\$"""
 
-# with literal string
+# dengan string literal
 format = '''
 
 \$'''
 ```
 
-## 提示字元
+## Prompt
 
-以下是針對提示字元內容的設定。
+Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
-### 選項
+### Opsi
 
-| Option            | 預設                           | 說明                                                           |
-| ----------------- | ---------------------------- | ------------------------------------------------------------ |
-| `format`          | [連結](#default-prompt-format) | Configure the format of the prompt.                          |
-| `scan_timeout`    | `30`                         | Timeout for starship to scan files (in milliseconds).        |
-| `command_timeout` | `500`                        | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                       | Inserts blank line between shell prompts.                    |
+| Opsi              | Bawaan                         | Deskripsi                                                                    |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                          |
+| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).                 |
+| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dieksekusi oleh starship (dalam militdetik). |
+| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                 |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Menggunakan format yang dikustomisasi
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Menunggu 10 milidetik untuk starship mencek file pada direktori terkini.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Menonaktifkan baris kosong di awal prompt
 add_newline = false
 ```
 
-### Default Prompt Format
+### Format Prompt Bawaan
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. 預設如下：
+Aturan `format` bawaan digunakan untuk mendefinisikan format pada prompt, apabila kosong atau tidak ada `format` yang diberikan. Aturannya seperti yang ditunjukkan:
 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# yang mana ekuivalen dengan
 format = """
 $username\
 $hostname\
@@ -240,40 +240,40 @@ $character"""
 
 ## AWS
 
-`aws` 模組顯示現在 AWS 的區域與概況。 這是根據 `AWS_REGION`、`AWS_DEFAULT_REGION` 與 `AWS_PROFILE` 環境變數及 `~/.aws/config` 檔案。 This module also shows an expiration timer when using temporary credentials.
+Module `aws` menampilkan region dan profil AWS terkini. Diperoleh dari variabel environment `AWS_REGION`, `AWS_DEFAULT_REGION`, dan `AWS_PROFILE` pada file `~/.aws/config`. Modul ini juga menampilkan penghitung waktu mundur kedaluwarsa ketika menggunakan temporer kredensial.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+Ketika menggunakan [aws-vault](https://github.com/99designs/aws-vault), profil dibaca dari variabel environment `AWS_VAULT` dan tanggal kedaluwarsanya dibaca dari variabel environment `AWS_SESSION_EXPIRATION`.
 
-When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+Ketika menggunakan [awsu](https://github.com/kreuzwerker/awsu) profil dibaca dari variabel environment `AWSU_PROFILE`.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
+Ketika menggunakan [AWSume](https://awsu.me) profil dibaca dari variabel environment `AWSUME_PROFILE` dan tanggal kedaluwarsanya dibaca dari variabel environment `AWSUME_EXPIRATION`.
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                                   | 說明                                                                |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
-| `symbol`            | `"☁️ "`                                                              | 顯示在目前 AWS 配置之前的符號。                                                |
-| `region_aliases`    |                                                                      | 除了AWS名稱外，顯示區域別名表                                                  |
-| `style`             | `"bold yellow"`                                                      | 這個模組的風格。                                                          |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | 停用 `AWS` 模組。                                                      |
+| Opsi                | Bawaan                                                               | Deskripsi                                                        |
+| ------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format dari modul.                                               |
+| `symbol`            | `"☁️ "`                                                              | Simbol yang digunakan sebelum menampilkan profil AWS terkini.    |
+| `region_aliases`    |                                                                      | Tabel alias dari region yang ditampilan selain nama AWS.         |
+| `style`             | `"bold yellow"`                                                      | Gaya penataan untuk modul.                                       |
+| `expiration_symbol` | `X`                                                                  | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa. |
+| `disabled`          | `false`                                                              | Menonaktifkan modul `AWS`.                                       |
 
-### Variables
+### Variabel
 
-| 變數        | 範例               | 說明                                          |
-| --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | The current AWS region                      |
-| profile   | `astronauts`     | The current AWS profile                     |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | Mirrors the value of option `symbol`        |
-| style\* |                  | Mirrors the value of option `style`         |
+| Variabel  | Contoh           | Deskripsi                         |
+| --------- | ---------------- | --------------------------------- |
+| region    | `ap-northeast-1` | Region AWS terkini                |
+| profile   | `astronauts`     | Profil AWS terkini                |
+| duration  | `2h27m20s`       | Durasi temporer kredensial        |
+| symbol    |                  | Menyalin nilai dari opsi `symbol` |
+| style\* |                  | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### Examples
+### Contoh
 
-#### Display everything
+#### Menampilkan semuanya
 
 ```toml
 # ~/.config/starship.toml
@@ -287,7 +287,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-#### Display region
+#### Menampilkan region
 
 ```toml
 # ~/.config/starship.toml
@@ -301,7 +301,7 @@ ap-southeast-2 = "au"
 us-east-1 = "va"
 ```
 
-#### Display profile
+#### Menampilkan profil
 
 ```toml
 # ~/.config/starship.toml
@@ -312,24 +312,24 @@ style = "bold blue"
 symbol = "🅰 "
 ```
 
-## 電池
+## Baterai
 
-`battery` 模組顯示電池的電量以及現在的充電狀態。 這個模組只會在裝置的電量低於 10% 的時候看見。
+Modul `battery` menampilkan seberapa penuh baterai piranti terisi dan status pengisiannya. Modulnya hanya dapat terlihat ketika baterai dari pirantinya di bawah 10%.
 
-### 選項
+### Opsi
 
-| Option               | 預設                                | 說明                         |
-| -------------------- | --------------------------------- | -------------------------- |
-| `full_symbol`        | `" "`                            | 當電池充飽時顯示的符號。               |
-| `charging_symbol`    | `" "`                            | 當電池正在充電時顯示的符號。             |
-| `discharging_symbol` | `" "`                            | 當電池正在放電時顯示的符號。             |
-| `unknown_symbol`     | `" "`                            | 當電池狀態不明時顯示的符號。             |
-| `empty_symbol`       | `" "`                            | 當電池沒電時顯示的符號。               |
-| `format`             | `"[$symbol$percentage]($style) "` | The format for the module. |
-| `display`            | [連結](#battery-display)            | 顯示的門檻與模組的風格。               |
-| `disabled`           | `false`                           | 停用 `battery` 模組。           |
+| Opsi                 | Bawaan                            | Deskripsi                                                 |
+| -------------------- | --------------------------------- | --------------------------------------------------------- |
+| `full_symbol`        | `" "`                            | Simbol dimunculkan ketika baterai penuh.                  |
+| `charging_symbol`    | `" "`                            | Simbol dimunculkan ketika baterai mengisi.                |
+| `discharging_symbol` | `" "`                            | Simbol dimunculkan ketika baterai terpakai.               |
+| `unknown_symbol`     | `" "`                            | Simbol dimunculkan ketika keadaan baterai tidak dikenali. |
+| `empty_symbol`       | `" "`                            | Simbol dimunculkan ketika keadaan baterai kosong.         |
+| `format`             | `"[$symbol$percentage]($style) "` | Format dari modul.                                        |
+| `display`            | [link](#battery-display)          | Menampilkan ambang dan gaya dari modul.                   |
+| `disabled`           | `false`                           | Menonaktifkan modul `baterai`.                            |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -340,9 +340,9 @@ charging_symbol = "⚡️ "
 discharging_symbol = "💀 "
 ```
 
-### 電池顯示
+### Tampilan Baterai
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). 如果沒有提供 `display`。 預設如下：
+Opsi konfigurasi `display` digunakan untuk menentukan kapan indikator baterai harus ditampilkan (threshold), simbol mana yang akan digunakan (symbol), dan bagaimana seharusnya itu terlihat (style). Jika tidak ada `display` yang diberikan. Aturannya seperti yang ditunjukkan:
 
 ```toml
 [[battery.display]]
@@ -350,77 +350,77 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+Nilai bawaan untuk opsi `charging_symbol` dan `discharging_symbol` adalah nilai dari masing-masing opsi `charging_symbol` dan `discharging_symbol` dari nilai `battery`.
 
-#### 選項
+#### Opsi
 
-`display` 選項是一個下列表格的陣列。
+Opsi dari `display` merupakan sebuah array dari tabel berikut.
 
-| Option               | 預設         | 說明                                                                                                        |
-| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | 顯示選項的上界。                                                                                                  |
-| `style`              | `bold red` | 顯示選項使用時的風格。                                                                                               |
-| `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Opsi                 | Bawaan     | Deskripsi                                                                                                            |
+| -------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`       | The upper bound for the display option.                                                                              |
+| `style`              | `bold red` | The style used if the display option is in use.                                                                      |
+| `charging_symbol`    | `-`        | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `charging_symbol` dari baterai.    |
+| `discharging_symbol` | `-`        | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `discharging_symbol` dari baterai. |
 
-#### 範例
+#### Contoh
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # "bold red" untuk corak gaya dan discharging_symbol ketika kapasitasnya berada di antara 0% dan 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # "bold yellow" untuk corak gaya dan simbol 💦 ketika kapasitasnya berada di antara 10% dan 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# ketika kapasitasnya di atas 30%, indikator baterai tidak akan ditampilkan
 
 ```
 
-## 字元
+## Karakter
 
-`character` 模組在你的文字輸入處旁顯示一個字元 (通常是箭頭)。
+Modul `character` menampilkan sebuah karakter (biasanya anak panah) di samping teks pada terminalmu.
 
-這個字元會告訴你最後的指令是成功還是失敗。 It can do this in two ways:
+Karakter dapat memberitahu kamu apakah perintah terakhir berhasil atau tidak. Karakter dapat memberitahumu dengan dua cara ini:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- mengganti warna (`red`/`green`)
+- mengganti bentuk (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin mengganti bentuknya, perhatikan [contoh](#with-custom-error-shape) berikut.
 
-::: warning
+::: peringatan
 
-`error_symbol` is not supported on elvish and nu shell.
-
-:::
-
-::: warning
-
-`vicmd_symbol` is only supported in fish and zsh.
+`error_symbol` tidak didukung pada elvish dan nu shell.
 
 :::
 
-### 選項
+::: peringatan
 
-| Option           | 預設                  | 說明                                                                               |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
-| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
-| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
-| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | 停用 `character` 模組。                                                               |
+`vicmd_symbol` hanya didukung pada fish dan zsh.
 
-### Variables
+:::
 
-| 變數     | 範例 | 說明                                                                    |
-| ------ | -- | --------------------------------------------------------------------- |
-| symbol |    | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+### Opsi
 
-### Examples
+| Opsi             | Bawaan              | Deskripsi                                                                                         |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | Format string yang digunakan sebelum masukan teks.                                                |
+| `success_symbol` | `"[❯](bold green)"` | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya berhasil.              |
+| `error_symbol`   | `"[❯](bold red)"`   | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya gagal.                 |
+| `vicmd_symbol`   | `"[❮](bold green)"` | Format string yang digunakan sebelum masukan teks jika shell sedang dalam vim dengan mode normal. |
+| `disabled`       | `false`             | Menonaktifkan module `character`.                                                                 |
 
-#### With custom error shape
+### Variabel
+
+| Variabel | Contoh | Deskripsi                                                              |
+| -------- | ------ | ---------------------------------------------------------------------- |
+| symbol   |        | Representasi dari `success_symbol`, `error_symbol` atau `vicmd_symbol` |
+
+### Contoh
+
+#### Dengan menggunakan corak eror yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -430,7 +430,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
 ```
 
-#### Without custom error shape
+#### Tanpa menggunakan corak eror yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -440,7 +440,7 @@ success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
 ```
 
-#### With custom vim shape
+#### Dengan menggunakan corak vim yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -451,74 +451,74 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- Direktori terkini berisikan sebuah file `CMakeLists.txt`
+- Direktori terkini berisikan sebuah file `CMakeCache.txt`
 
-### 選項
+### Opsi
 
-| Option              | 預設                                     | 說明                                                                        |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                              |
-| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
-| `style`             | `"bold blue"`                          | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
+| Opsi                | Bawaan                                 | Deskripsi                                                                           |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`   | Format dari modul.                                                                  |
+| `version_format`    | `"v${raw}"`                            | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"△ "`                                 | Simbol yang digunakan sebelum versi cmake.                                          |
+| `detect_extensions` | `[]`                                   | Ekstensi mana yang sebaiknya memicu modul ini                                       |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | filenames mana yang sebaiknya memicu modul ini                                      |
+| `detect_folders`    | `[]`                                   | Folder mana yang sebaiknya memicul modul ini                                        |
+| `style`             | `"bold blue"`                          | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                | Menonaktifkan modul `cmake`.                                                        |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v3.17.3` | The version of cmake                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v3.17.3` | Versi dari cmake                  |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-## 指令持續時間
+## Command Duration
 
-`cmd_duration` 模組顯示最後一個指令執行所花費的時間。 這個模組只會在指令花費超過兩秒或是有設定 `min_time` 時，超過設定值時出現。
+Modul `cmd_duration` menampilkan seberapa lama perintah sebelumnya membutuhkan waktu untuk dilaksanakan. Modulnya hanya akan ditampilkan jika perintahnya membutuhkan waktu lebih dari dua detik, atau ada nilai dari konfigurasi `min_time`.
 
-::: warning 不要在 Bash 中設置 DEBUG trap
+::: jangan lakukan hook DEBUG trap dalam Bash
 
-如果你在 `bash` 中使用 Starship，不要在執行 `eval $(starship init $0)` 之後設置 `DEBUG` trap，不然這個模組**會**壞掉。
-
-:::
-
-想使用類似 preexec 功能的 Bash 使用者可以 [rcaloras 的 bash_preexec 框架](https://github.com/rcaloras/bash-preexec)。 只要在 `eval $(starship init $0)` 之前簡單地定義 `preexec_functions` 與 `precmd_functions` 兩個陣列，然後就可以照常進行。
-
-### 選項
-
-| Option               | 預設                            | 說明                                                    |
-| -------------------- | ----------------------------- | ----------------------------------------------------- |
-| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds). |
-| `show_milliseconds`  | `false`                       | 顯示時間除了以秒為單位外，亦以毫秒顯示                                   |
-| `format`             | `"took [$duration]($style) "` | The format for the module.                            |
-| `style`              | `"bold yellow"`               | 這個模組的風格。                                              |
-| `disabled`           | `false`                       | 停用 `cmd_duration` 模組。                                 |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.    |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds). |
-
-::: tip
-
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
+Jia kamu menjalankan Starship di `bash`, jangan lakukan hook DEBUG trap setelah menjalankan `eval $(starship init $0)`, atau modulnya **akan** rusak.
 
 :::
 
-### Variables
+Pengguna Bash yang membutuhkan fungsi seperti preexec dapat menggunakan [kerangka kerja bash_preexec dari rcaloras](https://github.com/rcaloras/bash-preexec). Cukup dengan membuat array `preexec_functions` dan `precmd_functions` sebelum menjalankan `eval $(starship init $0)`, lalu lanjutkan seperti biasa.
 
-| 變數        | 範例       | 說明                                      |
-| --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Mirrors the value of option `style`     |
+### Opsi
 
-\*: This variable can only be used as a part of a style string
+| Opsi                 | Bawaan                        | Deskripsi                                                        |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------- |
+| `min_tim`            | `2_000`                       | Durasi terpendek untuk menampilkan waktu (dalam milidetik).      |
+| `show_milliseconds`  | `false`                       | Tampilkan milidetik sebagai ganti detik untuk durasinya.         |
+| `format`             | `"took [$duration]($style) "` | Format dari modul.                                               |
+| `style`              | `"bold yellow"`               | Gaya penataan untuk modul.                                       |
+| `disabled`           | `false`                       | Menonaktifkan modul `cmd_duration`.                              |
+| `show_notifications` | `false`                       | Menampilkan notifikasi layar ketika perintah selesai.            |
+| `min_time_to_notify` | `45_000`                      | Durasi terpendek untuk menampilkan notifikasi (dalam milidetik). |
 
-### 範例
+::: saran
+
+Menampilkan notifikasi layar memerlukan starship dikembangkan dengan dukungan dari `rust-notify`. Periksa apakah starship kamu mendukung notifikasi dengan menjalankan `STARSHIP_LOG=debug starship module cmd_duration -d 60000` ketika `show_notifications` diatur menjadi `true`.
+
+:::
+
+### Variabel
+
+| Variabel  | Contoh   | Deskripsi                                          |
+| --------- | -------- | -------------------------------------------------- |
+| duration  | `16m40s` | Waktu yang dibutuhkan untuk menyelesaikan perintah |
+| style\* |          | Menyalin nilai dari opsi `style`                   |
+
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -530,36 +530,36 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-如果有設定 `$CONDA_DEFAULT_ENV` 時，`conda` 模組顯示現在 conda 的環境。
+Modul `conda` menampilkan environment conda terkini, jika `$CONDA_DEFAULT_ENV` telah diatur.
 
-::: tip
+::: saran
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungkin bisa menjalankan `conda config --set changeps1 False`.
 
 :::
 
-### 選項
+### Opsi
 
-| Option              | 預設                                     | 說明                                                                                              |
-| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | 如果環境變數由所`conda create -p [path]`產生時，環境變數的資料夾需要截斷的數目。 `0` 表示不截斷 也請參考 [`directory`](#directory)模組 |
-| `symbol`            | `"🅒 "`                                 | 環境名稱前使用的符號。                                                                                     |
-| `style`             | `"bold green"`                         | 這個模組的風格。                                                                                        |
-| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                      |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                      |
-| `disabled`          | `false`                                | 停用 `conda` 模組。                                                                                  |
+| Opsi                | Bawaan                                 | Deskripsi                                                                                                                                                                                                   |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
+| `style`             | `"bold green"`                         | Gaya penataan untuk modul.                                                                                                                                                                                  |
+| `format`            | `"via [$symbol$environment]($style) "` | Format dari modul.                                                                                                                                                                                          |
+| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
+| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
-### Variables
+### Variabel
 
-| 變數          | 範例           | 說明                                   |
-| ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current conda environment        |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
+| Variabel    | Contoh       | Deskripsi                         |
+| ----------- | ------------ | --------------------------------- |
+| environment | `astronauts` | The current conda environment     |
+| symbol      |              | Menyalin nilai dari opsi `symbol` |
+| style\*   |              | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -572,33 +572,33 @@ format = "[$symbol$environment](dimmed green) "
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `shard.yml` 檔案
-- 現在資料夾中含有一個`.cr`檔案
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal.                 |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `"bold red"`                         | 這個模組的風格。                                                                  |
+| `style`             | `"bold red"`                         | Gaya penataan untuk modul.                                                |
 | `detect_extensions` | `["cr"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["shard.yml"]`                      | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.32.1` | The version of `crystal`             |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v0.32.1` | The version of `crystal`          |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -613,32 +613,32 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
-- 現在資料夾中包含一個 `pubspec.yaml`、`pubspec.yml` 或 `pubspec.lock` 檔案
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                | 說明                                                                        |
+| Opsi                | Bawaan                                            | Deskripsi                                                                 |
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"`              | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart                           |
 | `detect_extensions` | `["dart"]`                                        | Which extensions should trigger this module.                              |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".dart_tool"]`                                  | Which folders should trigger this module.                                 |
-| `style`             | `"bold blue"`                                     | 這個模組的風格。                                                                  |
+| `style`             | `"bold blue"`                                     | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.8.4` | The version of `dart`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.8.4` | The version of `dart`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -652,28 +652,28 @@ format = "via [🔰 $version](bold red) "
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                           | 說明                                                                        |
+| Opsi                | Bawaan                                       | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"`         | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                           |
 | `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `"green bold"`                               | 這個模組的風格。                                                                  |
+| `style`             | `"green bold"`                               | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                      | Disables the `deno` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.8.3` | The version of `deno`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.8.3` | The version of `deno`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -682,35 +682,35 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 format = "via [🦕 $version](green bold) "
 ```
 
-## 資料夾
+## Directory
 
-`directory` 模組顯示到現在資料夾的路徑，並裁減到前三層資料夾。 你的資料夾也會被裁減到你所在的 git 儲存庫的根目錄。
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-如果正在使用 fish 風格的 pwd 選項，將不會隱藏被裁減的資料夾，而是會根據你在選項中設定的數字看到每一層資料夾的縮寫。
+When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-例如，給定一個右列的路徑 `~/Dev/Nix/nixpkgs/pkgs` 其中 `nixpkgs` 是儲存庫的根目錄，而且該選項被設定為 `1`。 你會看到 `~/D/N/nixpkgs/pkgs`，而在這個設定之前則是 `nixpkgs/pkgs`。
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                 | 說明                                                    |
-| ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
-| `truncation_length` | `3`                                                | 到達現在資料夾的路徑中，要被裁減掉的資料夾數目。                              |
-| `truncate_to_repo`  | `true`                                             | 是否要裁減到你現在所在的 git 儲存庫的根目錄。                             |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                            |
-| `style`             | `"bold cyan"`                                      | 這個模組的風格。                                              |
-| `disabled`          | `false`                                            | 停用 `directory` 模組。                                    |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                 |
+| Opsi                | Bawaan                                             | Deskripsi                                                                        |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
+| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format dari modul.                                                               |
+| `style`             | `"bold cyan"`                                      | Gaya penataan untuk modul.                                                       |
+| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
 
 <details>
-<summary>這個模組有些進階設定選項可以控制顯示資料夾。</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | 預設     | 說明                                                                                                                                                                     |
+| Advanced Option             | Bawaan | Deskripsi                                                                                                                                                              |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |        | A table of substitutions to be made to the path.                                                                                                                       |
-| `fish_style_pwd_dir_length` | `0`    | 當使用 fish shell 的 pwd 路徑邏輯時使用的字元數量。                                                                                                                                     |
+| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
@@ -725,16 +725,16 @@ format = "via [🦕 $version](green bold) "
 
 </details>
 
-### Variables
+### Variabel
 
-| 變數        | 範例                    | 說明                                  |
-| --------- | --------------------- | ----------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path          |
-| style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
+| Variabel  | Contoh                | Deskripsi                        |
+| --------- | --------------------- | -------------------------------- |
+| path      | `"D:/Projects"`       | The current directory path       |
+| style\* | `"black bold dimmed"` | Menyalin nilai dari opsi `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -748,30 +748,30 @@ truncation_symbol = "…/"
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                            | 說明                                                                                |
+| Opsi                | Bawaan                                                        | Deskripsi                                                                         |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | The format for the module.                                                        |
+| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                |
 | `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
 | `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
 | `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
 | `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
 | `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | 這個模組的風格。                                                                          |
+| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                        |
 | `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
-### Variables
+### Variabel
 
-| 變數        | 範例             | 說明                                   |
-| --------- | -------------- | ------------------------------------ |
-| context   | `test_context` | The current docker context           |
-| symbol    |                | Mirrors the value of option `symbol` |
-| style\* |                | Mirrors the value of option `style`  |
+| Variabel  | Contoh         | Deskripsi                         |
+| --------- | -------------- | --------------------------------- |
+| context   | `test_context` | The current docker context        |
+| symbol    |                | Menyalin nilai dari opsi `symbol` |
+| style\* |                | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -782,7 +782,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. 如果這個資料夾已經選定一個 SDK，則顯示這個 SDK 的版本。 如果沒有的話，則顯示最新安裝的 SDK 版本。
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -797,36 +797,36 @@ By default this module will only be shown in your prompt when one or more of the
 
 You'll also need the .NET Core SDK installed in order to use it correctly.
 
-這個模組內部是使用它自己的機制來偵測版本。 一般來說這個模組有 `dotnet --version` 的兩倍快，但是它可能會在你的 .NET 專案有不尋常的資料夾結構時顯示不正確的版本。 如果精確度比速度更重要的話，你可以藉由設定模組中的 `heuristic = false` 選項來停用這個功能。
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                                                                      | 說明                                                                        |
+| Opsi                | Bawaan                                                                                                  | Deskripsi                                                                 |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `".NET "`                                                                                               | 在顯示 dotnet 版本之前用的符號。                                                      |
-| `heuristic`         | `true`                                                                                                  | 使用更快速的版本偵測法來保持 starship 的速度。                                              |
+| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
 | `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
-| `style`             | `"bold blue"`                                                                                           | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                                                                 | 停用 `dotnet` 模組。                                                           |
+| `style`             | `"bold blue"`                                                                                           | Gaya penataan untuk modul.                                                |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
-### Variables
+### Variabel
 
-| 變數        | 範例               | 說明                                                                 |
+| Variabel  | Contoh           | Deskripsi                                                          |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Mirrors the value of option `symbol`                               |
-| style\* |                  | Mirrors the value of option `style`                                |
+| symbol    |                  | Menyalin nilai dari opsi `symbol`                                  |
+| style\* |                  | Menyalin nilai dari opsi `style`                                   |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -841,11 +841,11 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中包含一個 `mix.exs` 檔案.
+- The current directory contains a `mix.exs` file.
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                          | 說明                                                                        |
+| Opsi                | Bawaan                                                      | Deskripsi                                                                 |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
 | `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -853,21 +853,21 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `detect_extensions` | `[]`                                                        | Which extensions should trigger this module.                              |
 | `detect_files`      | `["mix.exs"]`                                               | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
-| `style`             | `"bold purple"`                                             | 這個模組的風格。                                                                  |
+| `style`             | `"bold purple"`                                             | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
-### Variables
+### Variabel
 
-| 變數          | 範例      | 說明                                   |
-| ----------- | ------- | ------------------------------------ |
-| version     | `v1.10` | The version of `elixir`              |
-| otp_version |         | The otp version of `elixir`          |
-| symbol      |         | Mirrors the value of option `symbol` |
-| style\*   |         | Mirrors the value of option `style`  |
+| Variabel    | Contoh  | Deskripsi                         |
+| ----------- | ------- | --------------------------------- |
+| version     | `v1.10` | The version of `elixir`           |
+| otp_version |         | The otp version of `elixir`       |
+| symbol      |         | Menyalin nilai dari opsi `symbol` |
+| style\*   |         | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -880,36 +880,36 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中包含一個 `elm.json` 檔案
-- 現在資料夾中包含一個 `elm-package.json` 檔案
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                 | 說明                                                                        |
+| Opsi                | Bawaan                                             | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`               | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"`               | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `["elm"]`                                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.                                |
-| `style`             | `"cyan bold"`                                      | 這個模組的風格。                                                                  |
+| `style`             | `"cyan bold"`                                      | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.19.1` | The version of `elm`                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v0.19.1` | The version of `elm`              |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -918,12 +918,12 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = "via [ $version](cyan bold) "
 ```
 
-## 環境變數
+## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variables. 這個模組只在下列條件其中之一達到時顯示：
+The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
-- `variable` 設定選項符合一個存在的環境變數。
-- 沒有設定 `variable` 選項，但是有設定 `default` 選項。
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
@@ -937,27 +937,27 @@ default = "unknown user"
 ```
 :::
 
-### 選項
+### Opsi
 
-| Option     | 預設                             | 說明                         |
-| ---------- | ------------------------------ | -------------------------- |
-| `symbol`   |                                | 顯示在變數數值之前的符號。              |
-| `variable` |                                | 要顯示的環境變數。                  |
-| `default`  |                                | 在選擇的變數值沒有定義時，顯示的預設值。       |
-| `format`   | `"with [$env_value]($style) "` | The format for the module. |
-| `disabled` | `false`                        | 停用 `env_var` 模組。           |
+| Opsi       | Bawaan                         | Deskripsi                                                                    |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   |                                | The symbol used before displaying the variable value.                        |
+| `variable` |                                | The environment variable to be displayed.                                    |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [$env_value]($style) "` | Format dari modul.                                                           |
+| `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例                                          | 說明                                         |
+| Variabel  | Contoh                                      | Deskripsi                                  |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| symbol    |                                             | Menyalin nilai dari opsi `symbol`          |
+| style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`           |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -982,33 +982,33 @@ default = "unknown user"
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中包含一個 `rebar.config` 檔案.
-- 現在資料夾中包含一個 `erlang.mk` 檔案.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
-| `style`             | `"bold red"`                         | 這個模組的風格。                                                                  |
+| `style`             | `"bold red"`                         | Gaya penataan untuk modul.                                                |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v22.1.3` | The version of `erlang`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v22.1.3` | The version of `erlang`           |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1021,31 +1021,31 @@ format = "via [e $version](bold red) "
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
-### 選項
+### Opsi
 
-| Option           | 預設                                                         | 說明                                                              |
+| Opsi             | Bawaan                                                     | Deskripsi                                                       |
 | ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
+| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format dari modul.                                              |
 | `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                              | 這個模組的風格。                                                        |
+| `style`          | `"bold blue"`                                              | Gaya penataan untuk modul.                                      |
 | `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
 
-### Variables
+### Variabel
 
-| 變數        | 範例            | 說明                                                                 |
+| Variabel  | Contoh        | Deskripsi                                                          |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
 | active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |               | Mirrors the value of option `symbol`                               |
-| style\* |               | Mirrors the value of option `style`                                |
+| symbol    |               | Menyalin nilai dari opsi `symbol`                                  |
+| style\* |               | Menyalin nilai dari opsi `style`                                   |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### Examples
+### Contoh
 
 #### Display account and project
 
@@ -1078,36 +1078,36 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-## Git 分支
+## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
-### 選項
+### Opsi
 
-| Option               | 預設                               | 說明                                                                                   |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.      |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
-| `style`              | `"bold purple"`                  | 這個模組的風格。                                                                             |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                             |
-| `truncation_symbol`  | `"…"`                            | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                      |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                       |
-| `disabled`           | `false`                          | 停用 `git_branch` 模組。                                                                  |
+| Opsi                 | Bawaan                           | Deskripsi                                                                                |
+| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
+| `format`             | `"on [$symbol$branch]($style) "` | Format dari modul. Use `"$branch"` to refer to the current branch name.                  |
+| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
+| `style`              | `"bold purple"`                  | Gaya penataan untuk modul.                                                               |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
+| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
+| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
-### Variables
+### Variabel
 
-| 變數            | 範例       | 說明                                                                                                     |
+| Variabel      | Contoh   | Deskripsi                                                                                              |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Mirrors the value of option `symbol`                                                                   |
-| style\*     |          | Mirrors the value of option `style`                                                                    |
+| symbol        |          | Menyalin nilai dari opsi `symbol`                                                                      |
+| style\*     |          | Menyalin nilai dari opsi `style`                                                                       |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1122,28 +1122,28 @@ truncation_symbol = ""
 
 The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
-### 選項
+### Opsi
 
-| Option               | 預設                                 | 說明                                                      |
+| Opsi                 | Bawaan                             | Deskripsi                                               |
 | -------------------- | ---------------------------------- | ------------------------------------------------------- |
 | `commit_hash_length` | `7`                                | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | The format for the module.                              |
-| `style`              | `"bold green"`                     | 這個模組的風格。                                                |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | Format dari modul.                                      |
+| `style`              | `"bold green"`                     | Gaya penataan untuk modul.                              |
 | `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.       |
 | `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
 | `disabled`           | `false`                            | Disables the `git_commit` module.                       |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                  |
-| --------- | --------- | ----------------------------------- |
-| hash      | `b703eb3` | The current git commit hash         |
-| style\* |           | Mirrors the value of option `style` |
+| Variabel  | Contoh    | Deskripsi                        |
+| --------- | --------- | -------------------------------- |
+| hash      | `b703eb3` | The current git commit hash      |
+| style\* |           | Menyalin nilai dari opsi `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1157,9 +1157,9 @@ tag_symbol = "🔖 "
 
 The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
-### 選項
+### Opsi
 
-| Option         | 預設                                                              | 說明                                                                                      |
+| Opsi           | Bawaan                                                          | Deskripsi                                                                               |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
@@ -1168,22 +1168,22 @@ The `git_state` module will show in directories which are part of a git reposito
 | `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | 這個模組的風格。                                                                                |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | The format for the module.                                                              |
-| `disabled`     | `false`                                                         | 停用 `git_state` 模組。                                                                      |
+| `style`        | `"bold yellow"`                                                 | Gaya penataan untuk modul.                                                              |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Format dari modul.                                                                      |
+| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
-### Variables
+### Variabel
 
-| 變數               | 範例         | 說明                                  |
-| ---------------- | ---------- | ----------------------------------- |
-| state            | `REBASING` | The current state of the repo       |
-| progress_current | `1`        | The current operation progress      |
-| progress_total   | `2`        | The total operation progress        |
-| style\*        |            | Mirrors the value of option `style` |
+| Variabel         | Contoh     | Deskripsi                        |
+| ---------------- | ---------- | -------------------------------- |
+| state            | `REBASING` | The current state of the repo    |
+| progress_current | `1`        | The current operation progress   |
+| progress_total   | `2`        | The total operation progress     |
+| style\*        |            | Menyalin nilai dari opsi `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1197,33 +1197,33 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
-### 選項
+### Opsi
 
-| Option          | 預設                                                       | 說明                                 |
+| Opsi            | Bawaan                                                   | Deskripsi                          |
 | --------------- | -------------------------------------------------------- | ---------------------------------- |
 | `added_style`   | `"bold green"`                                           | The style for the added count.     |
 | `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | The format for the module.         |
+| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | Format dari modul.                 |
 | `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
 
-### Variables
+### Variabel
 
-| 變數                | 範例  | 說明                                          |
-| ----------------- | --- | ------------------------------------------- |
-| added             | `1` | The current number of added lines           |
-| deleted           | `2` | The current number of deleted lines         |
-| added_style\*   |     | Mirrors the value of option `added_style`   |
-| deleted_style\* |     | Mirrors the value of option `deleted_style` |
+| Variabel          | Contoh | Deskripsi                                   |
+| ----------------- | ------ | ------------------------------------------- |
+| added             | `1`    | The current number of added lines           |
+| deleted           | `2`    | The current number of deleted lines         |
+| added_style\*   |        | Mirrors the value of option `added_style`   |
+| deleted_style\* |        | Mirrors the value of option `deleted_style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1237,12 +1237,12 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
-### 選項
+### Opsi
 
-| Option       | 預設                                              | 說明                                  |
+| Opsi         | Bawaan                                          | Deskripsi                           |
 | ------------ | ----------------------------------------------- | ----------------------------------- |
 | `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | 這個分支有合併衝突。                          |
+| `conflicted` | `"="`                                           | This branch has merge conflicts.    |
 | `ahead`      | `"⇡"`                                           | The format of `ahead`               |
 | `behind`     | `"⇣"`                                           | The format of `behind`              |
 | `diverged`   | `"⇕"`                                           | The format of `diverged`            |
@@ -1253,14 +1253,14 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `staged`     | `"+"`                                           | The format of `staged`              |
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
 | `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold red"`                                    | 這個模組的風格。                            |
+| `style`      | `"bold red"`                                    | Gaya penataan untuk modul.          |
 | `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
-### Variables
+### Variabel
 
 The following variables can be used in `format`:
 
-| 變數             | 說明                                                                                                            |
+| Variabel       | Deskripsi                                                                                                     |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
@@ -1271,24 +1271,24 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| style\*      | Mirrors the value of option `style`                                                                           |
+| style\*      | Menyalin nilai dari opsi `style`                                                                              |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 The following variables can be used in `diverged`:
 
-| 變數             | 說明                                             |
+| Variabel       | Deskripsi                                      |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| 變數      | 說明                       |
-| ------- | ------------------------ |
-| `count` | Show the number of files |
+| Variabel | Deskripsi                |
+| -------- | ------------------------ |
+| `count`  | Show the number of files |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1322,39 +1322,39 @@ behind = "⇣${count}"
 
 The `golang` module shows the currently installed version of [Golang](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `go.mod` 檔案
-- 現在資料夾中含有一個 `go.sum` 檔案
-- 現在資料夾中含有一個 `glide.yaml` 檔案
-- 現在資料夾中含有一個 `Gopkg.yml` 檔案
-- 現在資料夾中含有一個 `Gopkg.lock` 檔案
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
-- 現在資料夾中含有一個 `Godeps` 資料夾
-- 現在資料夾中含有一個檔案具有 `.go` 副檔名
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                                             | 說明                                                                        |
+| Opsi                | Bawaan                                                                         | Deskripsi                                                                 |
 | ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
 | `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.                                 |
-| `style`             | `"bold cyan"`                                                                  | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                                        | 停用 `golang` 模組。                                                           |
+| `style`             | `"bold cyan"`                                                                  | Gaya penataan untuk modul.                                                |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                                             |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.12.1` | The version of `go`                  |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v1.12.1` | The version of `go`               |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1367,33 +1367,33 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中包含一個 `helmfile.yaml` 檔案
+- The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
-| `style`             | `"bold white"`                       | 這個模組的風格。                                                                  |
+| `style`             | `"bold white"`                       | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v3.1.1` | The version of `helm`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v3.1.1` | The version of `helm`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1402,30 +1402,30 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 format = "via [⎈ $version](bold white) "
 ```
 
-## 主機名稱
+## Hostname
 
 The `hostname` module shows the system hostname.
 
-### 選項
+### Opsi
 
-| Option     | 預設                          | 說明                                                         |
-| ---------- | --------------------------- | ---------------------------------------------------------- |
-| `ssh_only` | `true`                      | 只在連接到一個 SSH session 時顯示主機名稱。                               |
-| `trim_at`  | `"."`                       | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
-| `format`   | `"[$hostname]($style) in "` | The format for the module.                                 |
-| `style`    | `"bold dimmed green"`       | 這個模組的風格。                                                   |
-| `disabled` | `false`                     | 停用 `hostname` 模組。                                          |
+| Opsi       | Bawaan                      | Deskripsi                                                                                                                            |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
+| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`   | `"[$hostname]($style) in "` | Format dari modul.                                                                                                                   |
+| `style`    | `"bold dimmed green"`       | Gaya penataan untuk modul.                                                                                                           |
+| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
-### Variables
+### Variabel
 
-| 變數        | 範例 | 說明                                   |
-| --------- | -- | ------------------------------------ |
-| symbol    |    | Mirrors the value of option `symbol` |
-| style\* |    | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1444,30 +1444,30 @@ The `java` module shows the currently installed version of [Java](https://www.or
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                                                                        | 說明                                                                        |
+| Opsi                | Bawaan                                                                                                    | Deskripsi                                                                 |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                                                |
+| `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
-| `style`             | `"red dimmed"`                                                                                            | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                                                                   | 停用 `java` 模組。                                                             |
+| `style`             | `"red dimmed"`                                                                                            | Gaya penataan untuk modul.                                                |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例    | 說明                                   |
-| --------- | ----- | ------------------------------------ |
-| version   | `v14` | The version of `java`                |
-| symbol    |       | Mirrors the value of option `symbol` |
-| style\* |       | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| version   | `v14`  | The version of `java`             |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1476,7 +1476,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 symbol = "🌟 "
 ```
 
-## 工作
+## Jobs
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
@@ -1486,44 +1486,44 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: warning
+::: peringatan
 
 This module is not supported on tcsh and nu.
 
 :::
 
-::: warning
+::: peringatan
 
 The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 :::
 
-### 選項
+### Opsi
 
-| Option             | 預設                            | 說明                                                                       |
+| Opsi               | Bawaan                        | Deskripsi                                                                |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`\*    | `1`                           | 在超過指定值時顯示工作數量。                                                           |
+| `threshold`\*    | `1`                           | Show number of jobs if exceeded.                                         |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `"[$symbol$number]($style) "` | The format for the module.                                               |
+| `format`           | `"[$symbol$number]($style) "` | Format dari modul.                                                       |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `"bold blue"`                 | 這個模組的風格。                                                                 |
+| `style`            | `"bold blue"`                 | Gaya penataan untuk modul.                                               |
 | `disabled`         | `false`                       | Disables the `jobs` module.                                              |
  \*: This option is deprecated, please use the 
 
 `number_threshold` and `symbol_threshold` options instead.
 
-### Variables
+### Variabel
 
-| 變數        | 範例  | 說明                                   |
-| --------- | --- | ------------------------------------ |
-| number    | `1` | The number of jobs                   |
-| symbol    |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| number    | `1`    | The number of jobs                |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1542,30 +1542,30 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 - The current directory contains a `Manifest.toml` file
 - The current directory contains a file with the `.jl` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["jl"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
-| `style`             | `"bold purple"`                      | 這個模組的風格。                                                                  |
+| `style`             | `"bold purple"`                      | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.4.0` | The version of `julia`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.4.0` | The version of `julia`            |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1580,31 +1580,31 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 - The current directory contains a `.kt` or a `.kts` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                            |
+| Opsi                | Bawaan                               | Deskripsi                                                                     |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                            |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `["kt", "kts"]`                      | Which extensions should trigger this module.                                  |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                                   |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
-| `style`             | `"bold blue"`                        | 這個模組的風格。                                                                      |
+| `style`             | `"bold blue"`                        | Gaya penataan untuk modul.                                                    |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.4.21` | The version of `kotlin`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v1.4.21` | The version of `kotlin`           |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1625,34 +1625,34 @@ kotlin_binary = "kotlinc"
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
-### 選項
+### Opsi
 
-| Option            | 預設                                                   | 說明                                                                    |
+| Opsi              | Bawaan                                               | Deskripsi                                                             |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`           | `"cyan bold"`                                        | 這個模組的風格。                                                              |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
+| `style`           | `"cyan bold"`                                        | Gaya penataan untuk modul.                                            |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
 | `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
-### Variables
+### Variabel
 
-| 變數        | 範例                   | 說明                                       |
+| Variabel  | Contoh               | Deskripsi                                |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-cluster`   | The current kubernetes context           |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Mirrors the value of option `symbol`     |
-| style\* |                      | Mirrors the value of option `style`      |
+| symbol    |                      | Menyalin nilai dari opsi `symbol`        |
+| style\* |                      | Menyalin nilai dari opsi `style`         |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1687,17 +1687,17 @@ Long and automatically generated cluster names can be identified and shortened u
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-## 換行
+## Line Break
 
 The `line_break` module separates the prompt into two lines.
 
-### 選項
+### Opsi
 
-| Option     | 預設      | 說明                            |
-| ---------- | ------- | ----------------------------- |
-| `disabled` | `false` | 停用 `line_break` 模組，讓提示字元變成一行。 |
+| Opsi       | Bawaan  | Deskripsi                                                          |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1714,31 +1714,31 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 - The current directory contains a `lua` directory
 - The current directory contains a file with the `.lua` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                         |
+| Opsi                | Bawaan                               | Deskripsi                                                                  |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                 |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
 | `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
 | `detect_extensions` | `["lua"]`                            | Which extensions should trigger this module.                               |
 | `detect_files`      | `[".lua-version"]`                   | Which filenames should trigger this module.                                |
 | `detect_folders`    | `["lua"]`                            | Which folders should trigger this module.                                  |
-| `style`             | `"bold blue"`                        | 這個模組的風格。                                                                   |
+| `style`             | `"bold blue"`                        | Gaya penataan untuk modul.                                                 |
 | `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.4.0` | The version of `lua`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v5.4.0` | The version of `lua`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1747,42 +1747,42 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 format = "via [🌕 $version](bold blue) "
 ```
 
-## 記憶體使用量
+## Memory Usage
 
 The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
-### 選項
+### Opsi
 
-| Option      | 預設                                              | 說明                         |
-| ----------- | ----------------------------------------------- | -------------------------- |
-| `threshold` | `75`                                            | 將記憶體使用量隱藏，除非使用量超過指定值。      |
-| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | The format for the module. |
-| `symbol`    | `"🐏"`                                           | 顯示在記憶體使用量之前的符號。            |
-| `style`     | `"bold dimmed white"`                           | 這個模組的風格。                   |
-| `disabled`  | `true`                                          | 停用 `memory_usage` 模組。      |
+| Opsi        | Bawaan                                          | Deskripsi                                                |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | Format dari modul.                                       |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | Gaya penataan untuk modul.                               |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
-### Variables
+### Variabel
 
-| 變數               | 範例            | 說明                                                                 |
+| Variabel         | Contoh        | Deskripsi                                                          |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol           | `🐏`           | Mirrors the value of option `symbol`                               |
-| style\*        |               | Mirrors the value of option `style`                                |
+| symbol           | `🐏`           | Menyalin nilai dari opsi `symbol`                                  |
+| style\*        |               | Menyalin nilai dari opsi `style`                                   |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1798,28 +1798,28 @@ style = "bold dimmed green"
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
 
-### 選項
+### Opsi
 
-| Option              | 預設                               | 說明                                                                                           |
+| Opsi                | Bawaan                           | Deskripsi                                                                                    |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `"bold purple"`                  | 這個模組的風格。                                                                                     |
-| `format`            | `"on [$symbol$branch]($style) "` | The format for the module.                                                                   |
+| `style`             | `"bold purple"`                  | Gaya penataan untuk modul.                                                                   |
+| `format`            | `"on [$symbol$branch]($style) "` | Format dari modul.                                                                           |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `"…"`                            | 用來指示分支名稱被縮減的符號。                                                                              |
+| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| branch    | `master` | The active mercurial branch          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| branch    | `master` | The active mercurial branch       |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1839,9 +1839,9 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1849,20 +1849,20 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Which extensions should trigger this module.                              |
 | `detect_files`      | `["nim.cfg"]`                        | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"bold yellow"`                      | 這個模組的風格。                                                                  |
+| `style`             | `"bold yellow"`                      | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `nim` module.                                                |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.2.0` | The version of `nimc`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.2.0` | The version of `nimc`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1876,29 +1876,29 @@ symbol = "🎣 "
 
 The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
-### 選項
+### Opsi
 
-| Option       | 預設                                             | 說明                                                    |
+| Opsi         | Bawaan                                         | Deskripsi                                             |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | Format dari modul.                                    |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                  | 這個模組的風格。                                              |
+| `style`      | `"bold blue"`                                  | Gaya penataan untuk modul.                            |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | 停用 `nix_shell` 模組。                                    |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
-### Variables
+### Variabel
 
-| 變數        | 範例      | 說明                                   |
-| --------- | ------- | ------------------------------------ |
-| state     | `pure`  | The state of the nix-shell           |
-| name      | `lorri` | The name of the nix-shell            |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variabel  | Contoh  | Deskripsi                         |
+| --------- | ------- | --------------------------------- |
+| state     | `pure`  | The state of the nix-shell        |
+| name      | `lorri` | The name of the nix-shell         |
+| symbol    |         | Menyalin nilai dari opsi `symbol` |
+| style\* |         | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1921,31 +1921,31 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                                                    |
+| Opsi                | Bawaan                               | Deskripsi                                                                                             |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                                    |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
 | `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
-| `style`             | `"bold green"`                       | 這個模組的風格。                                                                                              |
-| `disabled`          | `false`                              | 停用 `nodejs` 模組。                                                                                       |
+| `style`             | `"bold green"`                       | Gaya penataan untuk modul.                                                                            |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
 
-### Variables
+### Variabel
 
-| 變數        | 範例         | 說明                                   |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v13.12.0` | The version of `node`                |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Variabel  | Contoh     | Deskripsi                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v13.12.0` | The version of `node`             |
+| symbol    |            | Menyalin nilai dari opsi `symbol` |
+| style\* |            | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -1965,9 +1965,9 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 - The current directory contains a `.merlin` file
 - The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
 
-### 選項
+### Opsi
 
-| Option                    | 預設                                                                         | 說明                                                                        |
+| Opsi                      | Bawaan                                                                     | Deskripsi                                                                 |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
 | `version_format`          | `"v${raw}"`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1977,22 +1977,22 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Which extensions should trigger this module.                              |
 | `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Which filenames should trigger this module.                               |
 | `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Which folders should trigger this module.                                 |
-| `style`                   | `"bold yellow"`                                                            | 這個模組的風格。                                                                  |
+| `style`                   | `"bold yellow"`                                                            | Gaya penataan untuk modul.                                                |
 | `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
 
-### Variables
+### Variabel
 
-| 變數               | 範例           | 說明                                                                |
+| Variabel         | Contoh       | Deskripsi                                                         |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
-| symbol           |              | Mirrors the value of option `symbol`                              |
-| style\*        |              | Mirrors the value of option `style`                               |
+| symbol           |              | Menyalin nilai dari opsi `symbol`                                 |
+| style\*        |              | Menyalin nilai dari opsi `style`                                  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2005,27 +2005,27 @@ format = "via [🐪 $version]($style) "
 
 The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
 
-### 選項
+### Opsi
 
-| Option     | 預設                                                  | 說明                                                             |
+| Opsi       | Bawaan                                              | Deskripsi                                                      |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | The format for the module.                                     |
+| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Format dari modul.                                             |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `"bold yellow"`                                     | 這個模組的風格。                                                       |
+| `style`    | `"bold yellow"`                                     | Gaya penataan untuk modul.                                     |
 | `disabled` | `false`                                             | Disables the `openstack` module.                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例     | 說明                                   |
-| --------- | ------ | ------------------------------------ |
-| cloud     | `corp` | The current OpenStack cloud          |
-| project   | `dev`  | The current OpenStack project        |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| cloud     | `corp` | The current OpenStack cloud       |
+| project   | `dev`  | The current OpenStack project     |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2036,7 +2036,7 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## 套件版本
+## Package Version
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
@@ -2054,30 +2054,30 @@ The `package` module is shown when the current directory is the repository for a
 - [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**vlang**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
-> ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
+> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
-### 選項
+### Opsi
 
-| Option            | 預設                                | 說明                                                                        |
+| Opsi              | Bawaan                            | Deskripsi                                                                 |
 | ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                |
-| `symbol`          | `"📦 "`                            | 顯示在套件的版本之前的符號。                                                            |
+| `format`          | `"is [$symbol$version]($style) "` | Format dari modul.                                                        |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                |
 | `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`           | `"bold 208"`                      | 這個模組的風格。                                                                  |
+| `style`           | `"bold 208"`                      | Gaya penataan untuk modul.                                                |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
 | `disabled`        | `false`                           | Disables the `package` module.                                            |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of your package          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.0.0` | The version of your package       |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2096,9 +2096,9 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 - The current directory contains a `.perl-version` file
 - The current directory contains a `.pl`, `.pm` or `.pod`
 
-### 選項
+### Opsi
 
-| Option              | 預設                                                                                                       | 說明                                                                        |
+| Opsi                | Bawaan                                                                                                   | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2106,18 +2106,18 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                                 |
-| `style`             | `"bold 149"`                                                                                             | 這個模組的風格。                                                                  |
+| `style`             | `"bold 149"`                                                                                             | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例        | 說明                                   |
-| --------- | --------- | ------------------------------------ |
-| version   | `v5.26.1` | The version of `perl`                |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v5.26.1` | The version of `perl`             |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2134,30 +2134,30 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                     |
 | `detect_extensions` | `["php"]`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"147 bold"`                         | 這個模組的風格。                                                                  |
+| `style`             | `"147 bold"`                         | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `php` module.                                                |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v7.3.8` | The version of `php`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v7.3.8` | The version of `php`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2173,30 +2173,30 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 - The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript.              |
 | `detect_extensions` | `["purs"]`                           | Which extensions should trigger this module.                              |
 | `detect_files`      | `["spago.dhall"]`                    | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"bold white"`                       | 這個模組的風格。                                                                  |
+| `style`             | `"bold white"`                       | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `purescript` module.                                         |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `0.13.5` | The version of `purescript`          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `0.13.5` | The version of `purescript`       |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2223,23 +2223,23 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
-### 選項
+### Opsi
 
-| Option               | 預設                                                                                                           | 說明                                                                                     |
+| Opsi                 | Bawaan                                                                                                       | Deskripsi                                                                              |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | The format for the module.                                                             |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Format dari modul.                                                                     |
 | `version_format`     | `"v${raw}"`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
-| `style`              | `"yellow bold"`                                                                                              | 這個模組的風格。                                                                               |
-| `pyenv_version_name` | `false`                                                                                                      | 使用 pyenv 取得 Python 的版本。                                                                |
+| `style`              | `"yellow bold"`                                                                                              | Gaya penataan untuk modul.                                                             |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
-| `disabled`           | `false`                                                                                                      | 停用 `python` 模組。                                                                        |
+| `detect_extensions`  | `["py"]`                                                                                                     | Ekstensi mana yang sebaiknya memicu modul ini                                          |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | filenames mana yang sebaiknya memicu modul ini                                         |
+| `detect_folders`     | `[]`                                                                                                         | Folder mana yang sebaiknya memicul modul ini                                           |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
-::: tip
+::: saran
 
 The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
@@ -2247,17 +2247,17 @@ The default values and order for `python_binary` was chosen to first identify th
 
 :::
 
-### Variables
+### Variabel
 
-| 變數           | 範例              | 說明                                         |
+| Variabel     | Contoh          | Deskripsi                                  |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
-| style        | `"yellow bold"` | Mirrors the value of option `style`        |
+| symbol       | `"🐍 "`          | Menyalin nilai dari opsi `symbol`          |
+| style        | `"yellow bold"` | Menyalin nilai dari opsi `style`           |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2306,28 +2306,28 @@ The `rlang` module shows the currently installed version of R. The module will b
 - The current directory contains a `.Rprofile` file
 - The current directory contains a `.Rproj.user` folder
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
-| `style`             | `"blue bold"`                        | 這個模組的風格。                                                                  |
-| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                               |
-| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                |
-| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
+| `style`             | `"blue bold"`                        | Gaya penataan untuk modul.                                                |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Ekstensi mana yang sebaiknya memicu modul ini                             |
+| `detect_files`      | `[".Rprofile"]`                      | filenames mana yang sebaiknya memicu modul ini                            |
+| `detect_folders`    | `[".Rproj.user"]`                    | Folder mana yang sebaiknya memicul modul ini                              |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
-### Variables
+### Variabel
 
-| 變數      | 範例            | 說明                                   |
-| ------- | ------------- | ------------------------------------ |
-| version | `v4.0.5`      | The version of `R`                   |
-| symbol  |               | Mirrors the value of option `symbol` |
-| style   | `"blue bold"` | Mirrors the value of option `style`  |
+| Variabel | Contoh        | Deskripsi                         |
+| -------- | ------------- | --------------------------------- |
+| version  | `v4.0.5`      | The version of `R`                |
+| symbol   |               | Menyalin nilai dari opsi `symbol` |
+| style    | `"blue bold"` | Menyalin nilai dari opsi `style`  |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2342,30 +2342,30 @@ By default the `red` module shows the currently installed version of [Red](https
 
 - The current directory contains a file with `.red` or `.reds` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
 | `detect_extensions` | `["red"]`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"red bold"`                         | 這個模組的風格。                                                                  |
+| `style`             | `"red bold"`                         | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `red` module.                                                |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `red`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.5.1` | The version of `red`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2382,30 +2382,30 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"bold red"`                         | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                              | 停用 `ruby` 模組。                                                             |
+| `style`             | `"bold red"`                         | Gaya penataan untuk modul.                                                |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `ruby`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2421,30 +2421,30 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
 | `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"bold red"`                         | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                              | 停用 `rust` 模組。                                                             |
+| `style`             | `"bold red"`                         | Gaya penataan untuk modul.                                                |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例                | 說明                                   |
-| --------- | ----------------- | ------------------------------------ |
-| version   | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol    |                   | Mirrors the value of option `symbol` |
-| style\* |                   | Mirrors the value of option `style`  |
+| Variabel  | Contoh            | Deskripsi                         |
+| --------- | ----------------- | --------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`            |
+| symbol    |                   | Menyalin nilai dari opsi `symbol` |
+| style\* |                   | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2461,30 +2461,30 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 - The current directory contains a file with the `.scala` or `.sbt` extension
 - The current directory contains a directory named `.metals`
 
-### 選項
+### Opsi
 
-| Option              | 預設                                       | 說明                                                                        |
+| Opsi                | Bawaan                                   | Deskripsi                                                                 |
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [${symbol}(${version} )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["sbt", "scala"]`                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.                                |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                         |
-| `style`             | `"red dimmed"`                           | 這個模組的風格。                                                                  |
+| `style`             | `"red dimmed"`                           | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `2.13.5` | The version of `scala`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `2.13.5` | The version of `scala`            |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2497,15 +2497,15 @@ symbol = "🌟 "
 
 The `shell` module shows an indicator for currently used shell.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
-### 選項
+### Opsi
 
-| Option                 | 預設           | 說明                                                           |
+| Opsi                   | Bawaan       | Deskripsi                                                    |
 | ---------------------- | ------------ | ------------------------------------------------------------ |
 | `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
 | `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
@@ -2516,16 +2516,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
-| `format`               | `$indicator` | The format for the module.                                   |
+| `format`               | `$indicator` | Format dari modul.                                           |
 | `disabled`             | `true`       | Disables the `shell` module.                                 |
 
-### Variables
+### Variabel
 
-| 變數        | 預設 | 說明                                                         |
-| --------- | -- | ---------------------------------------------------------- |
-| indicator |    | Mirrors the value of `indicator` for currently used shell. |
+| Variabel  | Bawaan | Deskripsi                                                  |
+| --------- | ------ | ---------------------------------------------------------- |
+| indicator |        | Mirrors the value of `indicator` for currently used shell. |
 
-### Examples
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2541,28 +2541,28 @@ disabled = false
 
 The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
-### 選項
+### Opsi
 
-| Option      | 預設                           | 說明                                                            |
+| Opsi        | Bawaan                       | Deskripsi                                                     |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
-| `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
+| `format`    | `"[$symbol$shlvl]($style) "` | Format dari modul.                                            |
 | `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
-| `style`     | `"bold yellow"`              | 這個模組的風格。                                                      |
+| `style`     | `"bold yellow"`              | Gaya penataan untuk modul.                                    |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
-### Variables
+### Variabel
 
-| 變數        | 範例  | 說明                                   |
-| --------- | --- | ------------------------------------ |
-| shlvl     | `3` | The current value of `SHLVL`         |
-| symbol    |     | Mirrors the value of option `symbol` |
-| style\* |     | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| shlvl     | `3`    | The current value of `SHLVL`      |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2577,26 +2577,26 @@ threshold = 3
 
 The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
 
-### 選項
+### Opsi
 
-| Option     | 預設                               | 說明                                               |
+| Opsi       | Bawaan                           | Deskripsi                                        |
 | ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
+| `format`   | `'[$symbol\[$env\]]($style) '` | Format dari modul.                               |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | 這個模組的風格。                                         |
+| `style`    | `"bold dimmed blue"`             | Gaya penataan untuk modul.                       |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
-### Variables
+### Variabel
 
-| 變數        | 範例           | 說明                                   |
-| --------- | ------------ | ------------------------------------ |
-| env       | `centos.img` | The current Singularity image        |
-| symbol    |              | Mirrors the value of option `symbol` |
-| style\* |              | Mirrors the value of option `style`  |
+| Variabel  | Contoh       | Deskripsi                         |
+| --------- | ------------ | --------------------------------- |
+| env       | `centos.img` | The current Singularity image     |
+| symbol    |              | Menyalin nilai dari opsi `symbol` |
+| style\* |              | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2609,7 +2609,7 @@ format = '[📦 \[$env\]]($style) '
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2617,9 +2617,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ::: warning This module is not supported on elvish and nu shell. :::
 
-### 選項
+### Opsi
 
-| Option                  | 預設                                                                                   | 說明                                                      |
+| Opsi                    | Bawaan                                                                               | Deskripsi                                               |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
 | `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
@@ -2628,7 +2628,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
 | `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
 | `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
-| `style`                 | `"bold red"`                                                                         | 這個模組的風格。                                                |
+| `style`                 | `"bold red"`                                                                         | Gaya penataan untuk modul.                              |
 | `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
 | `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
 | `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
@@ -2636,9 +2636,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
 | `disabled`              | `true`                                                                               | Disables the `status` module.                           |
 
-### Variables
+### Variabel
 
-| 變數             | 範例      | 說明                                                                                          |
+| Variabel       | Contoh  | Deskripsi                                                                                   |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
 | status         | `127`   | The exit code of the last command                                                           |
 | int            | `127`   | The exit code of the last command                                                           |
@@ -2647,12 +2647,12 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
 | pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbol         |         | Mirrors the value of option `symbol`                                                        |
-| style\*      |         | Mirrors the value of option `style`                                                         |
+| symbol         |         | Menyalin nilai dari opsi `symbol`                                                           |
+| style\*      |         | Menyalin nilai dari opsi `style`                                                            |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 
@@ -2674,30 +2674,30 @@ By default the `swift` module shows the currently installed version of [Swift](h
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                          |
 | `detect_extensions` | `["swift"]`                          | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Package.swift"]`                  | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"bold 202"`                         | 這個模組的風格。                                                                  |
+| `style`             | `"bold 202"`                         | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `swift` module.                                              |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.2.4` | The version of `swift`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v5.2.4` | The version of `swift`            |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2710,7 +2710,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
-::: tip
+::: saran
 
 By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
@@ -2721,9 +2721,9 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2731,21 +2731,21 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
-| `style`             | `"bold 105"`                         | 這個模組的風格。                                                                  |
+| `style`             | `"bold 105"`                         | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
-### Variables
+### Variabel
 
-| 變數        | 範例         | 說明                                   |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Variabel  | Contoh     | Deskripsi                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`        |
+| workspace | `default`  | The current Terraform workspace   |
+| symbol    |            | Menyalin nilai dari opsi `symbol` |
+| style\* |            | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 #### With Terraform Version
 
@@ -2765,40 +2765,40 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## 時間
+## Time
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: saran
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
-### 選項
+### Opsi
 
-| Option            | 預設                      | 說明                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
-| `use_12hr`        | `false`                 | 啟用 12 小時格式。                                                                                           |
-| `time_format`     | 請看下列                    | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
-| `style`           | `"bold yellow"`         | 這個模組的時間的風格。                                                                                           |
-| `utc_time_offset` | `"local"`               | 設定相對於 UTC 的時差。 Range from -24 &lt; x &lt; 24. 允許使用浮點數來表示 30/45 分鐘時差的時區。                   |
-| `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| Opsi              | Bawaan                  | Deskripsi                                                                                                                          |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### Variabel
 
-| 變數        | 範例         | 說明                                  |
-| --------- | ---------- | ----------------------------------- |
-| 時間        | `13:08:10` | The current time.                   |
-| style\* |            | Mirrors the value of option `style` |
+| Variabel  | Contoh     | Deskripsi                        |
+| --------- | ---------- | -------------------------------- |
+| time      | `13:08:10` | The current time.                |
+| style\* |            | Menyalin nilai dari opsi `style` |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2811,7 +2811,7 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## 使用者名稱
+## Username
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
@@ -2820,30 +2820,30 @@ The `username` module shows active user's username. The module will be shown if 
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
 
-::: tip
+::: saran
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 :::
 
-### 選項
+### Opsi
 
-| Option        | 預設                      | 說明                         |
-| ------------- | ----------------------- | -------------------------- |
-| `style_root`  | `"bold red"`            | 使用者為 root 時使用的風格。          |
-| `style_user`  | `"bold yellow"`         | 非 root 使用者時使用的風格。          |
-| `format`      | `"[$user]($style) in "` | The format for the module. |
-| `show_always` | `false`                 | 總是顯示 `username` 模組。        |
-| `disabled`    | `false`                 | 停用 `username` 模組。          |
+| Opsi          | Bawaan                  | Deskripsi                             |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | Format dari modul.                    |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
-### Variables
+### Variabel
 
-| 變數      | 範例           | 說明                                                                                          |
-| ------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style` | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`  | `"matchai"`  | The currently logged-in user ID.                                                            |
+| Variabel | Contoh       | Deskripsi                                                                                   |
+| -------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2862,30 +2862,30 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 - The current directory contains a `Vagrantfile` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                       |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"cyan bold"`                        | 這個模組的風格。                                                                  |
+| `style`             | `"cyan bold"`                        | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
-### Variables
+### Variabel
 
-| 變數        | 範例               | 說明                                   |
-| --------- | ---------------- | ------------------------------------ |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
-| symbol    |                  | Mirrors the value of option `symbol` |
-| style\* |                  | Mirrors the value of option `style`  |
+| Variabel  | Contoh           | Deskripsi                         |
+| --------- | ---------------- | --------------------------------- |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`          |
+| symbol    |                  | Menyalin nilai dari opsi `symbol` |
+| style\* |                  | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2900,28 +2900,28 @@ The `vlang` module shows you your currently installed version of V. By default t
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                           | 說明                                                                        |
+| Opsi                | Bawaan                                       | Deskripsi                                                                 |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"`         | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
 | `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `"blue bold"`                                | 這個模組的風格。                                                                  |
+| `style`             | `"blue bold"`                                | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
-### Variables
+### Variabel
 
-| 變數        | 範例     | 說明                                   |
-| --------- | ------ | ------------------------------------ |
-| version   | `v0.2` | The version of `v`                   |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| version   | `v0.2` | The version of `v`                |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2933,26 +2933,26 @@ format = "via [V $version](blue bold) "
 
 The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
 
-### 選項
+### Opsi
 
-| Option     | 預設                               | 說明                                                     |
+| Opsi       | Bawaan                           | Deskripsi                                              |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
 | `symbol`   |                                  | The symbol used before displaying the repository name. |
-| `style`    | `"bold yellow"`                  | 這個模組的風格。                                               |
-| `format`   | `"vcsh [$symbol$repo]($style) "` | The format for the module.                             |
+| `style`    | `"bold yellow"`                  | Gaya penataan untuk modul.                             |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | Format dari modul.                                     |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
-### Variables
+### Variabel
 
-| 變數        | 範例                                          | 說明                                   |
-| --------- | ------------------------------------------- | ------------------------------------ |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
-| symbol    |                                             | Mirrors the value of option `symbol` |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
+| Variabel  | Contoh                                      | Deskripsi                         |
+| --------- | ------------------------------------------- | --------------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name        |
+| symbol    |                                             | Menyalin nilai dari opsi `symbol` |
+| style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -2967,30 +2967,30 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 - The current directory contains a `.zig` file
 
-### 選項
+### Opsi
 
-| Option              | 預設                                   | 說明                                                                        |
+| Opsi                | Bawaan                               | Deskripsi                                                                 |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                        |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                     |
-| `style`             | `"bold yellow"`                      | 這個模組的風格。                                                                  |
+| `style`             | `"bold yellow"`                      | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                              | Disables the `zig` module.                                                |
 | `detect_extensions` | `["zig"]`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 
-### Variables
+### Variabel
 
-| 變數        | 範例       | 說明                                   |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.6.0` | The version of `zig`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v0.6.0` | The version of `zig`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
@@ -3011,50 +3011,50 @@ These modules will be shown if any of the following conditions are met:
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
-::: tip
+::: saran
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: saran
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip
+::: saran
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
 :::
 
-### 選項
+### Opsi
 
-| Option        | 預設                              | 說明                                                                                                                                                                            |
+| Opsi          | Bawaan                          | Deskripsi                                                                                                                                                                     |
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `說明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
 | `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
-| `style`       | `"bold green"`                  | 這個模組的風格。                                                                                                                                                                      |
-| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                                                                    |
+| `style`       | `"bold green"`                  | Gaya penataan untuk modul.                                                                                                                                                    |
+| `format`      | `"[$symbol($output )]($style)"` | Format dari modul.                                                                                                                                                            |
 | `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
 | `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
-### Variables
+### Variabel
 
-| 變數        | 說明                                     |
+| Variabel  | Deskripsi                              |
 | --------- | -------------------------------------- |
 | output    | The output of shell command in `shell` |
-| symbol    | Mirrors the value of option `symbol`   |
-| style\* | Mirrors the value of option `style`    |
+| symbol    | Menyalin nilai dari opsi `symbol`      |
+| style\* | Menyalin nilai dari opsi `style`       |
 
-\*: This variable can only be used as a part of a style string
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 #### Custom command shell
 
@@ -3085,7 +3085,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 
 :::
 
-### 範例
+### Contoh
 
 ```toml
 # ~/.config/starship.toml
