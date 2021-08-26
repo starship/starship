@@ -340,9 +340,9 @@ charging_symbol = "⚡️ "
 discharging_symbol = "💀 "
 ```
 
-### Battery Display
+### Tampilan Baterai
 
-Opsi konfigurasi `display` digunakan untuk menentukan kapan indikator baterai harus ditampilkan (threshold), simbol mana yang akan digunakan (symbol), dan bagaimana seharusnya itu terlihat (style). If no `display` is provided. Aturannya seperti yang ditunjukkan:
+Opsi konfigurasi `display` digunakan untuk menentukan kapan indikator baterai harus ditampilkan (threshold), simbol mana yang akan digunakan (symbol), dan bagaimana seharusnya itu terlihat (style). Jika tidak ada `display` yang diberikan. Aturannya seperti yang ditunjukkan:
 
 ```toml
 [[battery.display]]
