@@ -138,16 +138,16 @@ format = '''
 
 ## Prompt
 
-This is the list of prompt-wide configuration options.
+Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
 ### Opsi
 
-| Opsi              | Bawaan                           | Deskripsi                                                                    |
-| ----------------- | -------------------------------- | ---------------------------------------------------------------------------- |
-| `fromat`          | [tautan](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                          |
-| `scan_timeout`    | `30`                             | Batas waktu starpship untuk memindai file (dalam milidetik).                 |
-| `command_timeout` | `500`                            | Batas waktu untuk perintah yang dieksekusi oleh starship (dalam militdetik). |
-| `add_newline`     | `true`                           | Memasukkan baris kosong antara prompt shell.                                 |
+| Opsi              | Bawaan                         | Deskripsi                                                                    |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                          |
+| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).                 |
+| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dieksekusi oleh starship (dalam militdetik). |
+| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                 |
 
 ### Contoh
 
@@ -326,7 +326,7 @@ Modul `battery` menampilkan seberapa penuh baterai piranti terisi dan status pen
 | `unknown_symbol`     | `" "`                            | Simbol dimunculkan ketika keadaan baterai tidak dikenali. |
 | `empty_symbol`       | `" "`                            | Simbol dimunculkan ketika keadaan baterai kosong.         |
 | `format`             | `"[$symbol$percentage]($style) "` | Format dari modul.                                        |
-| `display`            | [tautan](#battery-display)        | Menampilkan ambang dan gaya dari modul.                   |
+| `display`            | [link](#battery-display)          | Menampilkan ambang dan gaya dari modul.                   |
 | `disabled`           | `false`                           | Menonaktifkan modul `baterai`.                            |
 
 ### Contoh
@@ -350,7 +350,7 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+Nilai bawaan untuk opsi `charging_symbol` dan `discharging_symbol` adalah nilai dari masing-masing opsi `charging_symbol` dan `discharging_symbol` dari nilai `battery`.
 
 #### Opsi
 
@@ -463,25 +463,25 @@ Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang te
 | `format`            | `"via [$symbol($version )]($style)"`   | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                            | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"△ "`                                 | Simbol yang digunakan sebelum versi cmake.                                          |
-| `detect_extensions` | `[]`                                   | Ekstensi mana yang harus digunakan untuk memicu modul ini                           |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                          |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                            |
+| `detect_extensions` | `[]`                                   | Ekstensi mana yang sebaiknya memicu modul ini                                       |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | filenames mana yang sebaiknya memicu modul ini                                      |
+| `detect_folders`    | `[]`                                   | Folder mana yang sebaiknya memicul modul ini                                        |
 | `style`             | `"bold blue"`                          | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                                        |
+| `disabled`          | `false`                                | Menonaktifkan modul `cmake`.                                                        |
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v3.17.3` | The version of cmake                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v3.17.3` | Versi dari cmake                  |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 ## Command Duration
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Modul `cmd_duration` menampilkan seberapa lama perintah sebelumnya membutuhkan waktu untuk dilaksanakan. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
 
@@ -514,7 +514,7 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 | Variabel  | Contoh   | Deskripsi                               |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
-| style\* |          | Mirrors the value of option `style`     |
+| style\* |          | Menyalin nilai dari opsi `style`        |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -551,11 +551,11 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Variabel
 
-| Variabel    | Contoh       | Deskripsi                            |
-| ----------- | ------------ | ------------------------------------ |
-| environment | `astronauts` | The current conda environment        |
-| symbol      |              | Mirrors the value of option `symbol` |
-| style\*   |              | Mirrors the value of option `style`  |
+| Variabel    | Contoh       | Deskripsi                         |
+| ----------- | ------------ | --------------------------------- |
+| environment | `astronauts` | The current conda environment     |
+| symbol      |              | Menyalin nilai dari opsi `symbol` |
+| style\*   |              | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -590,11 +590,11 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.32.1` | The version of `crystal`             |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v0.32.1` | The version of `crystal`          |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -630,11 +630,11 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.8.4` | The version of `dart`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.8.4` | The version of `dart`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -667,11 +667,11 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.8.3` | The version of `deno`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.8.3` | The version of `deno`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 ### Contoh
 
@@ -727,10 +727,10 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variabel
 
-| Variabel  | Contoh                | Deskripsi                           |
-| --------- | --------------------- | ----------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path          |
-| style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
+| Variabel  | Contoh                | Deskripsi                        |
+| --------- | --------------------- | -------------------------------- |
+| path      | `"D:/Projects"`       | The current directory path       |
+| style\* | `"black bold dimmed"` | Menyalin nilai dari opsi `style` |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -763,11 +763,11 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variabel
 
-| Variabel  | Contoh         | Deskripsi                            |
-| --------- | -------------- | ------------------------------------ |
-| context   | `test_context` | The current docker context           |
-| symbol    |                | Mirrors the value of option `symbol` |
-| style\* |                | Mirrors the value of option `style`  |
+| Variabel  | Contoh         | Deskripsi                         |
+| --------- | -------------- | --------------------------------- |
+| context   | `test_context` | The current docker context        |
+| symbol    |                | Menyalin nilai dari opsi `symbol` |
+| style\* |                | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -821,8 +821,8 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Mirrors the value of option `symbol`                               |
-| style\* |                  | Mirrors the value of option `style`                                |
+| symbol    |                  | Menyalin nilai dari opsi `symbol`                                  |
+| style\* |                  | Menyalin nilai dari opsi `style`                                   |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -858,12 +858,12 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variabel
 
-| Variabel    | Contoh  | Deskripsi                            |
-| ----------- | ------- | ------------------------------------ |
-| version     | `v1.10` | The version of `elixir`              |
-| otp_version |         | The otp version of `elixir`          |
-| symbol      |         | Mirrors the value of option `symbol` |
-| style\*   |         | Mirrors the value of option `style`  |
+| Variabel    | Contoh  | Deskripsi                         |
+| ----------- | ------- | --------------------------------- |
+| version     | `v1.10` | The version of `elixir`           |
+| otp_version |         | The otp version of `elixir`       |
+| symbol      |         | Menyalin nilai dari opsi `symbol` |
+| style\*   |         | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -901,11 +901,11 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v0.19.1` | The version of `elm`                 |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v0.19.1` | The version of `elm`              |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -952,8 +952,8 @@ default = "unknown user"
 | Variabel  | Contoh                                      | Deskripsi                                  |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Mirrors the value of option `symbol`       |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
+| symbol    |                                             | Menyalin nilai dari opsi `symbol`          |
+| style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`           |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1000,11 +1000,11 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v22.1.3` | The version of `erlang`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v22.1.3` | The version of `erlang`           |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1040,8 +1040,8 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
 | active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |               | Mirrors the value of option `symbol`                               |
-| style\* |               | Mirrors the value of option `style`                                |
+| symbol    |               | Menyalin nilai dari opsi `symbol`                                  |
+| style\* |               | Menyalin nilai dari opsi `style`                                   |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1102,8 +1102,8 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Mirrors the value of option `symbol`                                                                   |
-| style\*     |          | Mirrors the value of option `style`                                                                    |
+| symbol        |          | Menyalin nilai dari opsi `symbol`                                                                      |
+| style\*     |          | Menyalin nilai dari opsi `style`                                                                       |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1136,10 +1136,10 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                           |
-| --------- | --------- | ----------------------------------- |
-| hash      | `b703eb3` | The current git commit hash         |
-| style\* |           | Mirrors the value of option `style` |
+| Variabel  | Contoh    | Deskripsi                        |
+| --------- | --------- | -------------------------------- |
+| hash      | `b703eb3` | The current git commit hash      |
+| style\* |           | Menyalin nilai dari opsi `style` |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1174,12 +1174,12 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variabel
 
-| Variabel         | Contoh     | Deskripsi                           |
-| ---------------- | ---------- | ----------------------------------- |
-| state            | `REBASING` | The current state of the repo       |
-| progress_current | `1`        | The current operation progress      |
-| progress_total   | `2`        | The total operation progress        |
-| style\*        |            | Mirrors the value of option `style` |
+| Variabel         | Contoh     | Deskripsi                        |
+| ---------------- | ---------- | -------------------------------- |
+| state            | `REBASING` | The current state of the repo    |
+| progress_current | `1`        | The current operation progress   |
+| progress_total   | `2`        | The total operation progress     |
+| style\*        |            | Menyalin nilai dari opsi `style` |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1271,7 +1271,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| style\*      | Mirrors the value of option `style`                                                                           |
+| style\*      | Menyalin nilai dari opsi `style`                                                                              |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1346,11 +1346,11 @@ The `golang` module shows the currently installed version of [Golang](https://go
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.12.1` | The version of `go`                  |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v1.12.1` | The version of `go`               |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1385,11 +1385,11 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v3.1.1` | The version of `helm`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v3.1.1` | The version of `helm`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1418,10 +1418,10 @@ The `hostname` module shows the system hostname.
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                            |
-| --------- | ------ | ------------------------------------ |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1459,11 +1459,11 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                            |
-| --------- | ------ | ------------------------------------ |
-| version   | `v14`  | The version of `java`                |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| version   | `v14`  | The version of `java`             |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1515,11 +1515,11 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                            |
-| --------- | ------ | ------------------------------------ |
-| number    | `1`    | The number of jobs                   |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| number    | `1`    | The number of jobs                |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1557,11 +1557,11 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.4.0` | The version of `julia`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.4.0` | The version of `julia`            |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1596,11 +1596,11 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v1.4.21` | The version of `kotlin`              |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v1.4.21` | The version of `kotlin`           |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1647,8 +1647,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-cluster`   | The current kubernetes context           |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Mirrors the value of option `symbol`     |
-| style\* |                      | Mirrors the value of option `style`      |
+| symbol    |                      | Menyalin nilai dari opsi `symbol`        |
+| style\* |                      | Menyalin nilai dari opsi `style`         |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1730,11 +1730,11 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.4.0` | The version of `lua`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v5.4.0` | The version of `lua`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1777,8 +1777,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol           | `🐏`           | Mirrors the value of option `symbol`                               |
-| style\*        |               | Mirrors the value of option `style`                                |
+| symbol           | `🐏`           | Menyalin nilai dari opsi `symbol`                                  |
+| style\*        |               | Menyalin nilai dari opsi `style`                                   |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
@@ -1811,11 +1811,11 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| branch    | `master` | The active mercurial branch          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| branch    | `master` | The active mercurial branch       |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1854,11 +1854,11 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.2.0` | The version of `nimc`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.2.0` | The version of `nimc`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1889,12 +1889,12 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variabel
 
-| Variabel  | Contoh  | Deskripsi                            |
-| --------- | ------- | ------------------------------------ |
-| state     | `pure`  | The state of the nix-shell           |
-| name      | `lorri` | The name of the nix-shell            |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variabel  | Contoh  | Deskripsi                         |
+| --------- | ------- | --------------------------------- |
+| state     | `pure`  | The state of the nix-shell        |
+| name      | `lorri` | The name of the nix-shell         |
+| symbol    |         | Menyalin nilai dari opsi `symbol` |
+| style\* |         | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1937,11 +1937,11 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variabel
 
-| Variabel  | Contoh     | Deskripsi                            |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v13.12.0` | The version of `node`                |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Variabel  | Contoh     | Deskripsi                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v13.12.0` | The version of `node`             |
+| symbol    |            | Menyalin nilai dari opsi `symbol` |
+| style\* |            | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1987,8 +1987,8 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
-| symbol           |              | Mirrors the value of option `symbol`                              |
-| style\*        |              | Mirrors the value of option `style`                               |
+| symbol           |              | Menyalin nilai dari opsi `symbol`                                 |
+| style\*        |              | Menyalin nilai dari opsi `style`                                  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2016,12 +2016,12 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                            |
-| --------- | ------ | ------------------------------------ |
-| cloud     | `corp` | The current OpenStack cloud          |
-| project   | `dev`  | The current OpenStack project        |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| cloud     | `corp` | The current OpenStack cloud       |
+| project   | `dev`  | The current OpenStack project     |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2069,11 +2069,11 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v1.0.0` | The version of your package          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.0.0` | The version of your package       |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2111,11 +2111,11 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                            |
-| --------- | --------- | ------------------------------------ |
-| version   | `v5.26.1` | The version of `perl`                |
-| symbol    |           | Mirrors the value of option `symbol` |
-| style\* |           | Mirrors the value of option `style`  |
+| Variabel  | Contoh    | Deskripsi                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v5.26.1` | The version of `perl`             |
+| symbol    |           | Menyalin nilai dari opsi `symbol` |
+| style\* |           | Menyalin nilai dari opsi `style`  |
 
 ### Contoh
 
@@ -2149,11 +2149,11 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v7.3.8` | The version of `php`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v7.3.8` | The version of `php`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2188,11 +2188,11 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `0.13.5` | The version of `purescript`          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `0.13.5` | The version of `purescript`       |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2234,9 +2234,9 @@ By default the module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `["py"]`                                                                                                     | Ekstensi mana yang harus digunakan untuk memicu modul ini                              |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `detect_extensions`  | `["py"]`                                                                                                     | Ekstensi mana yang sebaiknya memicu modul ini                                          |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | filenames mana yang sebaiknya memicu modul ini                                         |
+| `detect_folders`     | `[]`                                                                                                         | Folder mana yang sebaiknya memicul modul ini                                           |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
@@ -2252,8 +2252,8 @@ The default values and order for `python_binary` was chosen to first identify th
 | Variabel     | Contoh          | Deskripsi                                  |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
-| style        | `"yellow bold"` | Mirrors the value of option `style`        |
+| symbol       | `"🐍 "`          | Menyalin nilai dari opsi `symbol`          |
+| style        | `"yellow bold"` | Menyalin nilai dari opsi `style`           |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
@@ -2314,18 +2314,18 @@ The `rlang` module shows the currently installed version of R. The module will b
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
 | `style`             | `"blue bold"`                        | Gaya penataan untuk modul.                                                |
-| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Ekstensi mana yang harus digunakan untuk memicu modul ini                 |
-| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                |
-| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Ekstensi mana yang sebaiknya memicu modul ini                             |
+| `detect_files`      | `[".Rprofile"]`                      | filenames mana yang sebaiknya memicu modul ini                            |
+| `detect_folders`    | `[".Rproj.user"]`                    | Folder mana yang sebaiknya memicul modul ini                              |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
 ### Variabel
 
-| Variabel | Contoh        | Deskripsi                            |
-| -------- | ------------- | ------------------------------------ |
-| version  | `v4.0.5`      | The version of `R`                   |
-| symbol   |               | Mirrors the value of option `symbol` |
-| style    | `"blue bold"` | Mirrors the value of option `style`  |
+| Variabel | Contoh        | Deskripsi                         |
+| -------- | ------------- | --------------------------------- |
+| version  | `v4.0.5`      | The version of `R`                |
+| symbol   |               | Menyalin nilai dari opsi `symbol` |
+| style    | `"blue bold"` | Menyalin nilai dari opsi `style`  |
 
 ### Contoh
 
@@ -2357,11 +2357,11 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `red`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.5.1` | The version of `red`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2397,11 +2397,11 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v2.5.1` | The version of `ruby`                |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.5.1` | The version of `ruby`             |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2436,11 +2436,11 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variabel
 
-| Variabel  | Contoh            | Deskripsi                            |
-| --------- | ----------------- | ------------------------------------ |
-| version   | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol    |                   | Mirrors the value of option `symbol` |
-| style\* |                   | Mirrors the value of option `style`  |
+| Variabel  | Contoh            | Deskripsi                         |
+| --------- | ----------------- | --------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`            |
+| symbol    |                   | Menyalin nilai dari opsi `symbol` |
+| style\* |                   | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2476,11 +2476,11 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `2.13.5` | The version of `scala`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `2.13.5` | The version of `scala`            |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2554,11 +2554,11 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                            |
-| --------- | ------ | ------------------------------------ |
-| shlvl     | `3`    | The current value of `SHLVL`         |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| shlvl     | `3`    | The current value of `SHLVL`      |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2588,11 +2588,11 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variabel
 
-| Variabel  | Contoh       | Deskripsi                            |
-| --------- | ------------ | ------------------------------------ |
-| env       | `centos.img` | The current Singularity image        |
-| symbol    |              | Mirrors the value of option `symbol` |
-| style\* |              | Mirrors the value of option `style`  |
+| Variabel  | Contoh       | Deskripsi                         |
+| --------- | ------------ | --------------------------------- |
+| env       | `centos.img` | The current Singularity image     |
+| symbol    |              | Menyalin nilai dari opsi `symbol` |
+| style\* |              | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2647,8 +2647,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
 | pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbol         |         | Mirrors the value of option `symbol`                                                        |
-| style\*      |         | Mirrors the value of option `style`                                                         |
+| symbol         |         | Menyalin nilai dari opsi `symbol`                                                           |
+| style\*      |         | Menyalin nilai dari opsi `style`                                                            |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2689,11 +2689,11 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v5.2.4` | The version of `swift`               |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v5.2.4` | The version of `swift`            |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2736,12 +2736,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variabel
 
-| Variabel  | Contoh     | Deskripsi                            |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Variabel  | Contoh     | Deskripsi                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`        |
+| workspace | `default`  | The current Terraform workspace   |
+| symbol    |            | Menyalin nilai dari opsi `symbol` |
+| style\* |            | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2791,10 +2791,10 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 ### Variabel
 
-| Variabel  | Contoh     | Deskripsi                           |
-| --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
-| style\* |            | Mirrors the value of option `style` |
+| Variabel  | Contoh     | Deskripsi                        |
+| --------- | ---------- | -------------------------------- |
+| time      | `13:08:10` | The current time.                |
+| style\* |            | Menyalin nilai dari opsi `style` |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2877,11 +2877,11 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variabel
 
-| Variabel  | Contoh           | Deskripsi                            |
-| --------- | ---------------- | ------------------------------------ |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
-| symbol    |                  | Mirrors the value of option `symbol` |
-| style\* |                  | Mirrors the value of option `style`  |
+| Variabel  | Contoh           | Deskripsi                         |
+| --------- | ---------------- | --------------------------------- |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`          |
+| symbol    |                  | Menyalin nilai dari opsi `symbol` |
+| style\* |                  | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2915,11 +2915,11 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                            |
-| --------- | ------ | ------------------------------------ |
-| version   | `v0.2` | The version of `v`                   |
-| symbol    |        | Mirrors the value of option `symbol` |
-| style\* |        | Mirrors the value of option `style`  |
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| version   | `v0.2` | The version of `v`                |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
 
 ### Contoh
 
@@ -2944,11 +2944,11 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variabel
 
-| Variabel  | Contoh                                      | Deskripsi                            |
-| --------- | ------------------------------------------- | ------------------------------------ |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
-| symbol    |                                             | Mirrors the value of option `symbol` |
-| style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
+| Variabel  | Contoh                                      | Deskripsi                         |
+| --------- | ------------------------------------------- | --------------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name        |
+| symbol    |                                             | Menyalin nilai dari opsi `symbol` |
+| style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2982,11 +2982,11 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Variabel
 
-| Variabel  | Contoh   | Deskripsi                            |
-| --------- | -------- | ------------------------------------ |
-| version   | `v0.6.0` | The version of `zig`                 |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v0.6.0` | The version of `zig`              |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -3051,8 +3051,8 @@ The order in which custom modules are shown can be individually set by including
 | Variabel  | Deskripsi                              |
 | --------- | -------------------------------------- |
 | output    | The output of shell command in `shell` |
-| symbol    | Mirrors the value of option `symbol`   |
-| style\* | Mirrors the value of option `style`    |
+| symbol    | Menyalin nilai dari opsi `symbol`      |
+| style\* | Menyalin nilai dari opsi `style`       |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
