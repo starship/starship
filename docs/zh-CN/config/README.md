@@ -1080,7 +1080,7 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 组件显示当前目录的 git 仓库的活动分支。
 
 ### 配置项
 
@@ -1155,7 +1155,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 组件会显示当前目录在哪个 git 仓库中，以及正在进行的操作，例如：_REBASING_，_BISECTING_ 等。 进度信息（例如 REBASING 3/10）如果存在则也会被显示。
 
 ### 配置项
 
@@ -1199,7 +1199,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -1235,7 +1235,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status`组件通过相应的符号显示您当前目录中 git 仓库的状态。
 
 ### 配置项
 
@@ -1254,7 +1254,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
 | `deleted`    | `"✘"`                                           | The format of `deleted`             |
 | `style`      | `"bold red"`                                    | 此组件的样式。                             |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| `disabled`   | `false`                                         | 禁用 `git_status` 组件。                 |
 
 ### Variables
 
@@ -1404,7 +1404,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+`hostname` 组件显示系统主机名。
 
 ### 配置项
 
@@ -1478,7 +1478,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1508,7 +1508,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | 组件格式化模板。                                                                 |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | 此组件的样式。                                                                  |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | 禁用 `jobs` 组件。                                                            |
  \*: This option is deprecated, please use the 
 
 `number_threshold` and `symbol_threshold` options instead.
@@ -1627,7 +1627,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -1689,7 +1689,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 组件将提示分隔为两行。
 
 ### 配置项
 
@@ -1749,13 +1749,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 组件显示当前系统内存和交换区使用情况。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -1796,7 +1796,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+`hg_branch` 组件显示当前目录的 hg 仓库的活动分支。
 
 ### 配置项
 
@@ -1834,7 +1834,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `nim.cfg` file
+- 当前目录包含 `nim.cfg` 文件
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1874,7 +1874,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. 当处于一个 nix-shell 环境中时，此组件会被显示。
 
 ### 配置项
 
@@ -1914,10 +1914,10 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `package.json` file
+- 当前目录包含 `package.json` 文件
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
-- The current directory contains a `node_modules` directory
+- 当前目录包含 `node_modules` 目录
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -2038,7 +2038,7 @@ symbol = "☁️ "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2065,7 +2065,7 @@ The `package` module is shown when the current directory is the repository for a
 | `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`           | `"bold 208"`                      | 此组件的样式。                                                                   |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
-| `disabled`        | `false`                           | Disables the `package` module.                                            |
+| `disabled`        | `false`                           | 禁用 `package` 组件。                                                          |
 
 ### Variables
 
@@ -2130,7 +2130,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `composer.json` file
+- 当前目录包含一个 `composer.json` 文件
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2170,7 +2170,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `spago.dhall` file
+- 当前目录包含 `spago.dhall` 文件
 - The current directory contains a file with the `.purs` extension
 
 ### 配置项
@@ -2209,19 +2209,19 @@ format = "via [$symbol$version](bold white)"
 
 The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名。 否则则显示通过`python --version`获得的版本号
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- 当前目录包含 `.python-version` 文件
+- 当前目录包含 `Pipfile` 文件
+- 当前目录包含一个名为`__init__.py`的文件
+- 当前目录包含 `pyproject.toml` 文件
+- 当前目录包含 `requirements.txt` 文件
+- 当前目录包含 `setup.py` 文件
+- 当前目录包含一个 `tox.ini` 文件
+- 当前目录包含一个使用 `.py` 扩展名的文件.
+- 当前处于一个活跃的 python 虚拟环境中
 
 ### 配置项
 
@@ -2338,7 +2338,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 此组件只有满足以下条件之一时才会被显示：
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2376,11 +2376,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `Gemfile` file
+- 当前目录包含 `Gemfile` 文件
 - The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- 当前目录包含 `.rb` 文件
 
 ### 配置项
 
@@ -2416,10 +2416,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 此组件只有满足以下条件之一时才会被显示：
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- 当前目录包含 `Cargo.toml` 文件
+- 当前目录包含一个使用 `.rs` 扩展名的文件
 
 ### 配置项
 
@@ -2499,7 +2499,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -2611,7 +2611,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -2669,7 +2669,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 此组件只有满足以下条件之一时才会被显示：
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2718,7 +2718,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.terraform` folder
+- 当前目录包含 `.terraform` 目录
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### 配置项
@@ -2767,11 +2767,11 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -2787,7 +2787,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `disabled`        | `true`                  | 禁用 `time` 组件。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默认值为 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2813,12 +2813,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username` 组件显示当前活跃的用户名。 此组件只有满足以下条件之一时才会被显示：
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- 当前用户是 root
+- 当前用户与登录用户不相同
+- 用户正通过 SSH 会话连接访问
+- 字段 `show_always` 被设置为 true
 
 ::: tip
 
@@ -2963,7 +2963,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 此组件只有满足以下条件之一时才会被显示：
 
 - The current directory contains a `.zig` file
 
