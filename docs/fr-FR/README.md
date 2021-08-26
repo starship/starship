@@ -143,7 +143,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning This will change in the future. Seule la version nu v0.33 ou supérieure est prise en charge. ::: Add the following to your nu config file. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Ajouter ce qui suit à la fin de `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
