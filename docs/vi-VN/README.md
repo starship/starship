@@ -143,7 +143,7 @@ eval $(starship init ion)
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning This will change in the future. Chỉ có nu phiên bản v. 033 hoặc cao hơn được hỗ trợ. ::: Add the following to your nu config file. Bạn có thể kiểm tra vị trí của cái file này bằng cách chạy `đường dẫn cấu hình` trong nu.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ eval $(starship init ion)
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Thêm dòng này vào cuối của file `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc

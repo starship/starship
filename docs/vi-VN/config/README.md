@@ -1019,7 +1019,7 @@ format = "via [e $version](bold red) "
 
 ## Google Cloud (`gcloud`)
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Cái này dựa trên tập tin `~/.config/gcloud/active_config`, `~/.config/gcloud/configurations/config_{CONFIG NAME}` và biến môi trường `CLOUDSDK_CONFIG`.
 
 ### Các tuỳ chọn
 
@@ -1080,7 +1080,7 @@ asia-northeast1 = "an1"
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư mục hiện tại của bạn.
 
 ### Các tuỳ chọn
 
@@ -1120,7 +1120,7 @@ truncation_symbol = ""
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) của repo trong thư mục hiện tại của bạn.
 
 ### Các tuỳ chọn
 
@@ -1155,7 +1155,7 @@ tag_symbol = "🔖 "
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Mô đun `git_state` sẽ hiển hiển thị trong các thư mục là một phần của gt repository và những nơi tồn tại một hoạt động trong tiến trình như _REBASING_, _BISECTING_. Nếu có thông tin tiến trình (ví dụ, REBASING 3/10), thông tin đó cũng sẽ được hiển thị.
 
 ### Các tuỳ chọn
 
@@ -1199,7 +1199,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: thử thuật
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 :::
 
@@ -1235,7 +1235,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạng thái của repo trong thư mục hiện tại của bạn.
 
 ### Các tuỳ chọn
 
@@ -1247,18 +1247,18 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `behind`     | `"⇣"`                                           | Định dạng của `behind`              |
 | `diverged`   | `"⇕"`                                           | Định dạng của `diverged`            |
 | `up_to_date` | `""`                                            | The format of `up_to_date`          |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `untracked`  | `"?"`                                           | Định dạng của `untracked`           |
+| `stashed`    | `"$"`                                           | Định dạng của `stashed`             |
+| `modified`   | `"!"`                                           | Định dạng của `modified`            |
+| `staged`     | `"+"`                                           | Định dạng của `modified`            |
+| `renamed`    | `"»"`                                           | Định dạng của `renamed`             |
+| `deleted`    | `"✘"`                                           | Định dạng của `deleted`             |
 | `style`      | `"bold red"`                                    | Kiểu cho module.                    |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| `disabled`   | `false`                                         | Vô hiệu `git_status` module.        |
 
 ### Các biến
 
-The following variables can be used in `format`:
+Các biến dưới đây có thể được sử dụng trong `format`:
 
 | Biến           | Mô tả                                                                                                         |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -1275,14 +1275,14 @@ The following variables can be used in `format`:
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-The following variables can be used in `diverged`:
+Các biến sau có thể được sử dụng trong `diverged`:
 
 | Biến           | Mô tả                                         |
 | -------------- | --------------------------------------------- |
 | `ahead_count`  | Số lượng commit phía trước của nhánh tracking |
 | `behind_count` | Số lượng commit phía sau nhánh tracking       |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Các biến sau có thể được sử dụng trong `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
 | Biến    | Mô tả                         |
 | ------- | ----------------------------- |
@@ -1307,7 +1307,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Show ahead/behind count of the branch being tracked
+Hiển thị tổng số nhánh phía trước/phía sau của nhánh được track
 
 ```toml
 # ~/.config/starship.toml
@@ -1404,7 +1404,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
@@ -1478,7 +1478,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+`jobs` module cho biết số lượng các jobs đang chạy. Mô đun sẽ được hiển thị chỉ khi có background jobs đang chạy. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1508,7 +1508,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | Định dạng cho module.                                                    |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | Kiểu cho module.                                                         |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | Vô hiệu `jobs` module.                                                   |
  \*: This option is deprecated, please use the 
 
 `number_threshold` and `symbol_threshold` options instead.
@@ -1538,9 +1538,9 @@ symbol_threshold = 0
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- Thư mục hiện tại chứa một tệp tin `Project.toml`
+- Thư mục hiện tại chứa một tập tin `Manifest.toml`
+- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.jl`
 
 ### Các tuỳ chọn
 
@@ -1578,7 +1578,7 @@ symbol = "∴ "
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `.kt` or a `.kts` file
+- Thư mục hiện tại chứa một tệp tin `.kt` hoặc một tệp tin `.kts`
 
 ### Các tuỳ chọn
 
@@ -1623,11 +1623,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. Namespace cần được thiết lập trong tệp tin kubeconfig, cài này có thể được thực thi thông qua `kubectl config set-context starship-cluster --namespace astronaut`. Nếu biến môi trường `$KUBECONFIG` được thiết lập, mô đun sẽ sử dụng cái đó nếu nó không sử dụng `~/.kube/config`.
 
 ::: thử thuật
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 :::
 
@@ -1755,7 +1755,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: thử thuật
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 :::
 
@@ -1834,7 +1834,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `nim.cfg` file
+- Đường dẫn hiện tại chứa một tập tin `nim.cfg`
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1914,7 +1914,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `package.json` file
+- Đường dẫn hiện tại chứa một tập tin `package.json`
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
@@ -2130,7 +2130,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `composer.json` file
+- Đường dẫn hiện tại chứa một tập tin `composer.json`
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2170,7 +2170,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- The current directory contains a `spago.dhall` file
+- Đường dẫn hiện tại chứa một tập tin `spago.dhall`
 - The current directory contains a file with the `.purs` extension
 
 ### Các tuỳ chọn
@@ -2216,10 +2216,10 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
+- Đường dẫn hiện tại chứa một tập tin `pyproject.toml`
+- Đường dẫn hiện tại chứa một tập tin `requirements.txt`
+- Đường dẫn hiện tại chứa một tập tin `setup.py`
+- Đường dẫn hiện tại chứa một tập tin `tox.ini`
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -2338,7 +2338,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2376,7 +2376,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -2416,7 +2416,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2499,7 +2499,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: thử thuật
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 :::
 
@@ -2611,7 +2611,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: thử thuật
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 :::
 
@@ -2669,7 +2669,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2771,7 +2771,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: thử thuật
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
 
 :::
 
@@ -2813,7 +2813,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2963,7 +2963,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.zig` file
 

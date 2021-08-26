@@ -77,9 +77,9 @@ Les chaînes de style sont une liste de mots, séparés par des espaces. Les mot
   - `underline`
   - `dimmed`
   - `inverted`
-  - `bg:<color>`
-  - `fg:<color>`
-  - `<color>`
+  - `bg:<couleur>`
+  - `fg:<couleur>`
+  - `<couleur>`
   - `none`
 
 où `<couleur>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, bien que cela puisse changer dans le futur. `inverted` permute les couleurs de fond et de premier plan. L'ordre des mots dans la chaîne n'a pas d'importance.
