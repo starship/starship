@@ -76,7 +76,7 @@ format = "took [$duration]($style) "
 
 ### Affected Modules
 
-#### Character
+#### Karakter
 
 | Removed Property        | Replacement      |
 | ----------------------- | ---------------- |
