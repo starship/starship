@@ -87,10 +87,11 @@ pub fn get_prompt(context: Context) -> String {
         return buf;
     };
     let modules = formatter.get_variables();
+
     let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules
+        // Make $all display all modules not explicitly referenced
         if module == "all" {
-            Some(Ok(PROMPT_ORDER
+            Some(Ok(all_modules_uniq(&modules)
                 .par_iter()
                 .flat_map(|module| {
                     handle_module(module, &context, &modules)
@@ -300,8 +301,8 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     for module in &modules {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
-            for module in PROMPT_ORDER {
-                let modules = handle_module(module, context, &modules);
+            for module in all_modules_uniq(&modules) {
+                let modules = handle_module(&module, context, &modules);
                 prompt_order.extend(modules);
             }
         } else {
@@ -402,4 +403,16 @@ pub fn format_duration(duration: &Duration) -> String {
     } else {
         format!("{:?}ms", &milis)
     }
+}
+
+/// Return the modules from $all that are not already in the list
+fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
+    let mut prompt_order: Vec<String> = Vec::new();
+    for module in PROMPT_ORDER.iter() {
+        if !module_list.contains(*module) {
+            prompt_order.push(String::from(*module))
+        }
+    }
+
+    prompt_order
 }
