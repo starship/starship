@@ -1241,13 +1241,13 @@ O módulo `git_status` exibe o simbolo que representa o estado do repositório n
 | ------------ | ----------------------------------------------- | ---------------------------------- |
 | `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status` |
 | `conflicted` | `"="`                                           | Este braço tem conflitos.          |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`              |
-| `behind`     | `"⇣"`                                           | The format of `behind`             |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`           |
-| `up_to_date` | `""`                                            | The format of `up_to_date`         |
-| `untracked`  | `"?"`                                           | The format of `untracked`          |
-| `stashed`    | `"$"`                                           | The format of `stashed`            |
-| `modified`   | `"!"`                                           | The format of `modified`           |
+| `ahead`      | `"⇡"`                                           | O formato do `ahead`               |
+| `behind`     | `"⇣"`                                           | O formato do `behind`              |
+| `diverged`   | `"⇕"`                                           | O formato do `diverged`            |
+| `up_to_date` | `""`                                            | O formato do `up_to_date`          |
+| `untracked`  | `"?"`                                           | O formato do `untracked`           |
+| `stashed`    | `"$"`                                           | O formato do `stashed`             |
+| `modified`   | `"!"`                                           | O formato do `modified`            |
 | `staged`     | `"+"`                                           | O formato do `staged`              |
 | `renamed`    | `"»"`                                           | O formato do `renamed`             |
 | `deleted`    | `"✘"`                                           | O formato do `deleted`             |
@@ -1256,7 +1256,7 @@ O módulo `git_status` exibe o simbolo que representa o estado do repositório n
 
 ### Variáveis
 
-The following variables can be used in `format`:
+As variáveis a seguir podem ser usadas no `format`:
 
 | Variável       | Descrição                                                                                                     |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -1264,16 +1264,16 @@ The following variables can be used in `format`:
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `stashed`      | Exibe `stashed` quando um stash existe para o repositório local.                                              |
+| `modified`     | Exibe `modified` quando um arquivo tenha modificações for adicionado na área de staging.                      |
+| `staged`       | Exibe `staged` quando um arquivo novo for adicionado na área de staging.                                      |
+| `renamed`      | Exibe `renamed` quando um arquivo renomeado for adicionado na área de staging.                                |
+| `deleted`      | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                                 |
 | style\*      | Espelha o valor da opção `style`                                                                              |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
-The following variables can be used in `diverged`:
+As variáveis a seguir podem ser usadas em `diverged`:
 
 | Variável       | Descrição                                      |
 | -------------- | ---------------------------------------------- |
@@ -1282,9 +1282,9 @@ The following variables can be used in `diverged`:
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variável | Descrição                |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variável | Descrição                  |
+| -------- | -------------------------- |
+| `count`  | Exibe o número de arquivos |
 
 ### Exemplo
 
