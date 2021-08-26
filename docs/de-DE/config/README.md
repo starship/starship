@@ -1080,7 +1080,7 @@ asia-northeast1 = "an1"
 
 ## Git-Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
 
 ### Optionen
 
@@ -1199,7 +1199,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -1254,7 +1254,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
 | `deleted`    | `"✘"`                                           | The format of `deleted`             |
 | `style`      | `"bold red"`                                    | Stil für dieses Modul.              |
-| `disabled`   | `false`                                         | Disables the `git_status` module.   |
+| `disabled`   | `false`                                         | Deaktiviert das `git_status`-Modul. |
 
 ### Variables
 
@@ -1404,7 +1404,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 
 ### Optionen
 
@@ -1508,7 +1508,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | The format for the module.                                                       |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                              |
 | `style`            | `"bold blue"`                 | Stil für dieses Modul.                                                           |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                                      |
+| `disabled`         | `false`                       | Deaktiviert das `jobs`-Modul.                                                    |
  \*: This option is deprecated, please use the 
 
 `number_threshold` and `symbol_threshold` options instead.
@@ -1627,7 +1627,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -1689,7 +1689,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Zeilenumbruch
 
-The `line_break` module separates the prompt into two lines.
+Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
 
 ### Optionen
 
@@ -1749,13 +1749,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Speicherauslastung
 
-The `memory_usage` module shows current system memory and swap usage.
+Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
 
 ::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -1834,7 +1834,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `nim.cfg` file
+- Das aktuelle Verzeichnis enthält eine `nim.cfg`-Datei
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -1874,7 +1874,7 @@ symbol = "🎣 "
 
 ## Nix-Shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
 
 ### Optionen
 
@@ -1914,10 +1914,10 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `package.json` file
+- Das aktuelle Verzeichnis enthält eine `package.json`-Datei
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
-- The current directory contains a `node_modules` directory
+- Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -2038,7 +2038,7 @@ symbol = "☁️ "
 
 ## Paketversion
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2065,7 +2065,7 @@ The `package` module is shown when the current directory is the repository for a
 | `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`           | `"bold 208"`                      | Stil für dieses Modul.                                                    |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
-| `disabled`        | `false`                           | Disables the `package` module.                                            |
+| `disabled`        | `false`                           | Deaktiviert das `package`-Modul.                                          |
 
 ### Variables
 
@@ -2130,7 +2130,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `composer.json` file
+- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2170,7 +2170,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `spago.dhall` file
+- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
 - The current directory contains a file with the `.purs` extension
 
 ### Optionen
@@ -2213,15 +2213,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
+- Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
+- Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
+- Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
+- Das aktuelle Verzeichnis enthält eine `setup.py`-Datei
+- Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.py`-Erweiterung.
+- Ein virtualenv ist momentan aktiv
 
 ### Optionen
 
@@ -2338,7 +2338,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2376,11 +2376,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `Gemfile` file
+- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
 - The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
 
 ### Optionen
 
@@ -2416,10 +2416,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
 
 ### Optionen
 
@@ -2499,7 +2499,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -2611,7 +2611,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -2669,7 +2669,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2718,7 +2718,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.terraform` folder
+- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
 - Current directory contains a file with the `.tf` or `.hcl` extensions
 
 ### Optionen
@@ -2767,11 +2767,11 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Zeit
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
 
 ::: Tipp
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
 :::
 
@@ -2787,7 +2787,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                                               |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                       |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Ansonsten ist der Standardwert hierfür `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2813,12 +2813,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Benutzername
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- Der aktuelle Benutzer ist root
+- Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
+- Der Benutzer ist über eine SSH-Sitzung verbunden
+- Die Variale `show_always` ist auf `true` gesetzt
 
 ::: Tipp
 
@@ -2963,7 +2963,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current directory contains a `.zig` file
 
