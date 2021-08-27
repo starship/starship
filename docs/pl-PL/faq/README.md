@@ -4,15 +4,15 @@
 
 - **Emulator terminala**: [iTerm2](https://iterm2.com/)
   - **Motyw**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+  - **Schemat kolorów**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Czcionka**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **Powłoka**: [Fish Shell](https://fishshell.com/)
+  - **Konfiguracja**: [Pliki Dotfile użytkownika matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **Wiersz poleceń**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Jak uzyskać uzupełniania poleceń pokazane na GIFie demonstracyjnym?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Uzupełnianie, znane też jako autouzupełnianie, jest dostarczane przez używaną przez ciebie powłokę. W przypadku demo, jest to powłoka [Fish Shell](https://fishshell.com/), która domyślnie zapewnia uzupełnianie. Jeśli używasz Z Shell (zsh), zalecamy zapoznać się z [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Yes, they can both be used to disable modules in the prompt. If all you plan to 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Dokumentacja stwierdza że Starship jest wieloplatformowy. Dlaczego moja preferowana powłoka nie jest obsługiwana?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
