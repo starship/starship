@@ -1,10 +1,10 @@
-# Advanced Configuration
+# Zaawansowana konfiguracja
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Mimo że Starship jest wszechstronny, czasem nie wystarczy modyfikacja pliku `starship.toml` żeby uzyskać pewne rzeczy. Na tej stronie opisano bardziej zaawansowane sposoby konfigurowania używane w Starship.
 
 ::: warning
 
-The configurations in this section are subject to change in future releases of Starship.
+Konfiguracja opisana w tej sekcji może ulec zmianie w przyszłych wydaniach Starship.
 
 :::
 
