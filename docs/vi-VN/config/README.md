@@ -1205,12 +1205,13 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn        | Mặc định                                                 | Mô tả                              |
-| --------------- | -------------------------------------------------------- | ---------------------------------- |
-| `added_style`   | `"bold green"`                                           | The style for the added count.     |
-| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | Định dạng cho module.              |
-| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+| Tuỳ chọn             | Mặc định                                                     | Mô tả                                 |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `added_style`        | `"bold green"`                                               | The style for the added count.        |
+| `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Định dạng cho module.                 |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 
 ### Các biến
 
