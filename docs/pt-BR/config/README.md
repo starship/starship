@@ -1325,9 +1325,9 @@ O módulo `golang` exibe a versão atual instalada do [Golang](https://golang.or
 - O diretório atual contem um arquivo `glide.yaml`
 - O diretório atual contem um arquivo `Gopkg.yml`
 - O diretório atual contém um arquivo `Gopkg.lock`
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- O diretório atual contem um arquivo `.go-version`
+- O diretório atual contem um diretório `Godeps`
+- O diretório atual contem arquivos com a extensão `.go`
 
 ### Opções
 
@@ -1363,10 +1363,10 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `helm` exibe a versão atual instalada do [Helm](https://helm.sh/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `helmfile.yaml`
-- The current directory contains a `Chart.yaml` file
+- O diretório atual contem um arquivo `Chart.yaml`
 
 ### Opções
 
@@ -1377,15 +1377,15 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
-| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                                     |
+| `symbol`            | `"⎈ "`                               | O formato de string que representa o simbolo do Helm.                                |
 | `style`             | `"bold white"`                       | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `helm` module.                                                          |
+| `disabled`          | `false`                              | Desabilita o módulo `helm`.                                                          |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v3.1.1` | The version of `helm`             |
+| version   | `v3.1.1` | A versão do `helm`                |
 | symbol    |          | Espelha o valor da opção `symbol` |
 | style\* |          | Espelha o valor da opção `style`  |
 
@@ -1402,7 +1402,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+O módulo `hostname` exibe o nome do hostname.
 
 ### Opções
 
