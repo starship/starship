@@ -81,10 +81,10 @@ If either symbol fails to display correctly, your system is still misconfigured.
 
 ## Jak odinstalować Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship można odinstalować równie łatwo jak przebiega proces instalacji.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Usuń zawartość konfiguracji powłoki (np. `~/.bashrc`) służącą do zainicjalizowania Starship.
+1. Usuń plik wykonywalny programu Starship.
 
 If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
 
