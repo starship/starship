@@ -1,9 +1,9 @@
-# FAQ
+# Najczęściej zadawane pytania (FAQ)
 
-## What is the configuration used in the demo GIF?
+## Jakiej konfiguracji użyto w GIFie demonstracyjnym?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
+- **Emulator terminala**: [iTerm2](https://iterm2.com/)
+  - **Motyw**: Minimal
   - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
   - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
