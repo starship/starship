@@ -2,8 +2,8 @@ use regex::Regex;
 use std::ffi::OsStr;
 
 use crate::{
-    config::RootModuleConfig, configs::git_metrics::GitMetricsConfig, formatter::StringFormatter,
-    module::Module,
+    config::RootModuleConfig, configs::git_metrics::GitMetricsConfig,
+    formatter::string_formatter::StringFormatterError, formatter::StringFormatter, module::Module,
 };
 
 use super::Context;
@@ -46,8 +46,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "added" => Some(Ok(stats.added)),
-                "deleted" => Some(Ok(stats.deleted)),
+                "added" => GitDiff::get_variable(config.only_nonzero_diffs, stats.added),
+                "deleted" => GitDiff::get_variable(config.only_nonzero_diffs, stats.deleted),
                 _ => None,
             })
             .parse(None)
@@ -90,6 +90,19 @@ impl<'a> GitDiff<'a> {
             deleted: GitDiff::get_matched_str(diff, &deleted_re),
         }
     }
+
+    pub fn get_variable(
+        only_nonzero_diffs: bool,
+        changed: &str,
+    ) -> Option<Result<&str, StringFormatterError>> {
+        match only_nonzero_diffs {
+            true => match changed {
+                "0" => None,
+                _ => Some(Ok(changed)),
+            },
+            false => Some(Ok(changed)),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -130,11 +143,7 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+1"),
-            Color::Red.bold().paint("-0")
-        ));
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -150,11 +159,7 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!(
-            "{} {} ",
-            Color::Green.bold().paint("+0"),
-            Color::Red.bold().paint("-1")
-        ));
+        let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -174,6 +179,47 @@ mod tests {
             "{} {} ",
             Color::Green.bold().paint("+4"),
             Color::Red.bold().paint("-2")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_nothing_if_no_changes() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let actual = render_metrics(path);
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_all_if_only_nonzero_diffs_is_false() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let the_file = path.join("the_file");
+        let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
+        writeln!(the_file, "Added line")?;
+        the_file.sync_all()?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                [git_metrics]
+                disabled = false
+                only_nonzero_diffs = false
+            })
+            .path(path)
+            .collect();
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+1"),
+            Color::Red.bold().paint("-0")
         ));
 
         assert_eq!(expected, actual);
