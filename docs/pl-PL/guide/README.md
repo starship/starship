@@ -169,7 +169,7 @@
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
 
-   Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. It will replace the current version without touching Starship's configuration.
+   Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. Obecna wersja zostanie zastąpiona nową, bez modyfikowania konfiguracji Starship.
 
    **Note** - The defaults of the install script can be overridden see the built-in help.
 
@@ -178,28 +178,28 @@
    ```
 
 
-   #### Install via Package Manager
+   #### Instalacja za pomocą menedżera pakietów
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Przykład: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### Za pomocą [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Dodaj na koniec pliku `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -210,7 +210,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Dodaj na koniec pliku `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -221,7 +221,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Dodaj na koniec pliku `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -298,7 +298,7 @@
 
 ## 🤝 Contributing
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! Jeśli potrzebujesz łatwiejszego wdrożenia w projekt, wypróbuj [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
