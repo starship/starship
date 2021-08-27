@@ -1476,40 +1476,40 @@ symbol = "🌟 "
 
 ## Jobs
 
-O módulo `jobs` exibe o número atual de jobs rodando. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+O módulo `jobs` exibe o número atual de jobs rodando. O módulo vai ser exibido apenas se existir jobs em segundo plano sendo executados. O módulo vai exibir o número de jobs rodando se ao menos tiver 2 jobs ou mais que o valor da configuração `number_threshold`, se existir. O módulo vai exibir um simbolo se tiver ao menos 1 job ou mais, se o valor da configuração `symbol_threshold` existir. Você pode setar os dois valores para 0 para *sempre* exibir o simbolo e número de jobs, mesmo que seja 0 os jobs em execução.
 
-The default functionality is:
+A funcionalidade padrão é:
 
-- 0 jobs -> Nothing is shown.
-- 1 job -> `symbol` is shown.
-- 2 jobs or more -> `symbol` + `number` are shown.
+- 0 jobs -> Nada é exibido.
+- 1 job -> `symbol` é exibido.
+- 2 jobs or more -> `symbol` + `number` é exibido.
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+Este módulo não é suportado em tcsh e nu.
 
 :::
 
 ::: warning
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai exibir o numero de jobs rodando se for maior que 1 ou maior que o valor configurado na `threshold`, se ele existir. Se o valor `threshold` for definido como 0, então o módulo vai exibir quando tiver 0 jobs rodando.
 
 :::
 
 ### Opções
 
-| Opções             | Padrão                        | Descrição                                                                |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`\*    | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `"[$symbol$number]($style) "` | O formato do módulo.                                                     |
-| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `"bold blue"`                 | O estilo do módulo.                                                      |
-| `disabled`         | `false`                       | Desabilita o módulo `jobs`.                                              |
- \*: This option is deprecated, please use the 
+| Opções             | Padrão                        | Descrição                                                                 |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------- |
+| `threshold`\*    | `1`                           | Exibe o número de jobs se excedido.                                       |
+| `symbol_threshold` | `1`                           | Exibe `symbol` se o número de jobs for ao menos `symbol_threshold`.       |
+| `number_threshold` | `2`                           | Exibe o número de jobs se o número de jobs é ao menos `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | O formato do módulo.                                                      |
+| `symbol`           | `"✦"`                         | A string usada para representar a variável `symbol`.                      |
+| `style`            | `"bold blue"`                 | O estilo do módulo.                                                       |
+| `disabled`         | `false`                       | Desabilita o módulo `jobs`.                                               |
+ \*: Esta opção está obsoleta, por favor use o 
 
-`number_threshold` and `symbol_threshold` options instead.
+`number_threshold` e `symbol_threshold` em vez disso.
 
 ### Variáveis
 
@@ -1536,9 +1536,9 @@ symbol_threshold = 0
 
 O módulo `julia` exibe a versão atual instalada do [Julia](https://julialang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- O diretório atual contem um arquivo `Project.toml`
+- O diretório atual contem um arquivo `Manifest.toml`
+- O diretório atual contem arquivos com a extensão `.jl`
 
 ### Opções
 
@@ -1549,15 +1549,15 @@ O módulo `julia` exibe a versão atual instalada do [Julia](https://julialang.o
 | `detect_extensions` | `["jl"]`                             | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
-| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                                    |
+| `symbol`            | `"ஃ "`                               | O formato de string que representa o simbolo do Julia.                               |
 | `style`             | `"bold purple"`                      | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `julia` module.                                                         |
+| `disabled`          | `false`                              | Desabilita o módulo `julia`.                                                         |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v1.4.0` | The version of `julia`            |
+| version   | `v1.4.0` | A versão do `julia`               |
 | symbol    |          | Espelha o valor da opção `symbol` |
 | style\* |          | Espelha o valor da opção `style`  |
 
@@ -1574,7 +1574,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `kotlin` exibie a versão atual instalada do [Kotlin](https://kotlinlang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - The current directory contains a `.kt` or a `.kts` file
 
