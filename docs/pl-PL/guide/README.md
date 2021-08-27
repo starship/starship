@@ -15,22 +15,22 @@
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="Wersja na crates.io"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Packaging status" /></a
+      alt="Status pakietów" /></a
 ><br />
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord"
+      alt="Porozmawiaj na Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="Śledź @StarshipPrompt na Twitterze"
  /></a>
 </p>
 
@@ -127,12 +127,12 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship na iTerm2 z motywem Snazzy"
   width="50%"
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!**
 
 - **Szybkość:** jest szybki - _naprawdę_ szybki! 🚀
 - **Konfigurowalny:** dostosowuj swój wiersz poleceń w każdym aspekcie.
