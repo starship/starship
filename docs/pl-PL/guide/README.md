@@ -232,7 +232,7 @@
 
    #### PowerShell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Dodaj na koniec pliku `Microsoft.PowerShell_profile.ps1`. Możesz sprawdzić lokalizację tego pliku odczytując zmienną środowiskową `$PROFILE` w PowerShell. Zazwyczaj jest to `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` lub `~/.config/powershell/Microsoft.PowerShell_profile.ps1` na -Nixie.
 
    ```powershell
    Invoke-Expression (&starship init powershell)
@@ -241,7 +241,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Dodaj na koniec pliku `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -252,7 +252,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **Uwaga** Działa tylko dla wersji powłoki elvish v0.15 lub wyższej. Dodaj na koniec pliku `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -263,7 +263,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Dodaj na koniec pliku `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -274,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Dodaj na koniec pliku `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Uwaga** Może ulec zmianie w przyszłości. Działa tylko dla wersji powłoki nu v0.33 lub wyższej. Dodaj do pliku konfiguracyjnego nu. Możesz sprawdzić lokalizację tego pliku wywołując polecenie `config path` w powłoce nu.
 
    ```toml
    startup = [
@@ -311,15 +311,15 @@ Ten projekt istnieje dzięki pomocy wszystkich zaangażowanych osób. [[Wspomó�
 
 ### Wsparcie finansowe
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+Udziel wsparcia finansowego i pomóż nam utrzymywać społeczność. [[Wspomóż nas](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Osoby prywatne
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
 #### Organizacje
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+Wspieraj ten projekt za pomocą swojej organizacji. Twoje logo pojawi się tutaj z linkiem do Twojej witryny. [[Wspomóż nas](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
