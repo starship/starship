@@ -66,14 +66,14 @@ Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. Nazwa zmiennej
 Na przykład:
 
 - `$version` to ciąg formatujący ze zmienną o nazwie `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$git_branch$git_commit` zawiera dwie zmienne: `git_branch` i `git_commit`.
+- `$git_branch $git_commit` zawiera te dwie zmienne rozdzielone spacją.
 
-#### Text Group
+#### Grupy tekstowe
 
-A text group is made up of two different parts.
+Grupa tekstowa składa się z dwóch oddzielnych części.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Pierwsza część, otoczona `[]`, to [ciąg formatujący](#format-strings). You can add texts, variables, or even nested text groups in it.
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
