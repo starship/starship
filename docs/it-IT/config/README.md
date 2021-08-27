@@ -94,11 +94,11 @@ La maggior parte dei moduli in starship ti permettono di configurare i loro stil
 - `"bold italic fg:purple"` imposta il testo viola in corsivo e grassetto
 - `""` disabilita esplicitamente tutti gli stili
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Nota che quello che assomiglia allo stile sarà controllato dal tuo emulatore terminale. Ad esempio, alcuni emulatori di terminale renderanno luminosi i colori invece del testo in grassetto, e alcuni temi colorati useranno gli stessi valori per i colori normali e luminosi. Inoltre, per ottenere il testo in corsivo, il tuo terminale deve supportare il corsivo.
 
 #### Formattazione condizionale delle stringhe
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Una stringa di formato condizionale inserita in `(` e `)` non verrà presentata se tutte le variabili interne sono vuote.
 
 Per esempio:
 
@@ -108,7 +108,7 @@ Per esempio:
 
 #### Escapable characters
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+I seguenti simboli hanno un uso speciale in una stringa di formato. If you want to print the following symbols, you have to escape them with a backslash (`\`).
 
 - \$
 - \\
@@ -140,16 +140,16 @@ format = '''
 
 This is the list of prompt-wide configuration options.
 
-### Options
+### Opzioni
 
-| Option            | Default                        | Description                                                  |
-| ----------------- | ------------------------------ | ------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                          |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).        |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
+| Opzione           | Default                        | Descrizione                                                    |
+| ----------------- | ------------------------------ | -------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura il formato del prompt.                               |
+| `scan_timeout`    | `30`                           | Timeout per starship per scansionare i file (in millisecondi). |
+| `command_timeout` | `500`                          | Timeout per i comandi eseguiti da starship (in millisecondi).  |
+| `add_newline`     | `true`                         | Inserisce una riga vuota tra i prompt della shell.             |
 
-### Example
+### Esempio
 
 ```toml
 # ~/.config/starship.toml
@@ -250,7 +250,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Options
 
-| Option              | Default                                                              | Description                                                       |
+| Opzione             | Default                                                              | Descrizione                                                       |
 | ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
 | `symbol`            | `"☁️ "`                                                              | The symbol used before displaying the current AWS profile.        |
@@ -261,7 +261,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Variables
 
-| Variable  | Example          | Description                                 |
+| Variable  | Example          | Descrizione                                 |
 | --------- | ---------------- | ------------------------------------------- |
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
@@ -318,7 +318,7 @@ The `battery` module shows how charged the device's battery is and its current c
 
 ### Options
 
-| Option               | Default                           | Description                                         |
+| Opzione              | Default                           | Descrizione                                         |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
 | `full_symbol`        | `" "`                            | The symbol shown when the battery is full.          |
 | `charging_symbol`    | `" "`                            | The symbol shown when the battery is charging.      |
@@ -356,7 +356,7 @@ The default value for the `charging_symbol` and `discharging_symbol` option is r
 
 The `display` option is an array of the following table.
 
-| Option               | Default    | Description                                                                                               |
+| Opzione              | Default    | Descrizione                                                                                               |
 | -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
 | `threshold`          | `10`       | The upper bound for the display option.                                                                   |
 | `style`              | `bold red` | The style used if the display option is in use.                                                           |
@@ -404,7 +404,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Options
 
-| Option           | Default             | Description                                                                      |
+| Opzione          | Default             | Descrizione                                                                      |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------- |
 | `format`         | `"$symbol "`        | The format string used before the text input.                                    |
 | `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
@@ -414,7 +414,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Variables
 
-| Variable | Example | Description                                                           |
+| Variable | Example | Descrizione                                                           |
 | -------- | ------- | --------------------------------------------------------------------- |
 | symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
@@ -458,7 +458,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Options
 
-| Option              | Default                                | Description                                                               |
+| Opzione             | Default                                | Descrizione                                                               |
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -471,7 +471,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v3.17.3` | The version of cmake                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -493,7 +493,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Options
 
-| Option               | Default                       | Description                                                |
+| Opzione              | Default                       | Descrizione                                                |
 | -------------------- | ----------------------------- | ---------------------------------------------------------- |
 | `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
 | `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
@@ -511,7 +511,7 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 ### Variables
 
-| Variable  | Example  | Description                             |
+| Variable  | Example  | Descrizione                             |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
@@ -540,7 +540,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Options
 
-| Option              | Default                                | Description                                                                                                                                                                                                 |
+| Opzione             | Default                                | Descrizione                                                                                                                                                                                                 |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
@@ -551,7 +551,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Variables
 
-| Variable    | Example      | Description                          |
+| Variable    | Example      | Descrizione                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current conda environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -577,7 +577,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal.                 |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
@@ -590,7 +590,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -617,7 +617,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Options
 
-| Option              | Default                                           | Description                                                               |
+| Opzione             | Default                                           | Descrizione                                                               |
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -630,7 +630,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -654,7 +654,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Options
 
-| Option              | Default                                      | Description                                                               |
+| Opzione             | Default                                      | Descrizione                                                               |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -667,7 +667,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.8.3` | The version of `deno`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -692,7 +692,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Options
 
-| Option              | Default                                            | Description                                                                      |
+| Opzione             | Default                                            | Descrizione                                                                      |
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
 | `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
@@ -707,7 +707,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                                                                                                                            |
+| Advanced Option             | Default | Descrizione                                                                                                                                                            |
 | --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
@@ -727,7 +727,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Variable  | Example               | Description                         |
+| Variable  | Example               | Descrizione                         |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `"D:/Projects"`       | The current directory path          |
 | style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
@@ -750,7 +750,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Options
 
-| Option              | Default                                                       | Description                                                                       |
+| Opzione             | Default                                                       | Descrizione                                                                       |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$context]($style) "`                            | The format for the module.                                                        |
 | `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
@@ -763,7 +763,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Variable  | Example        | Description                          |
+| Variable  | Example        | Descrizione                          |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | symbol    |                | Mirrors the value of option `symbol` |
@@ -803,7 +803,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Options
 
-| Option              | Default                                                                                                 | Description                                                               |
+| Opzione             | Default                                                                                                 | Descrizione                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -817,7 +817,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Variable  | Example          | Description                                                        |
+| Variable  | Example          | Descrizione                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
@@ -845,7 +845,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Options
 
-| Option              | Default                                                     | Description                                                               |
+| Opzione             | Default                                                     | Descrizione                                                               |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
 | `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -858,7 +858,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variables
 
-| Variable    | Example | Description                          |
+| Variable    | Example | Descrizione                          |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -886,9 +886,9 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
-### Options
+### Opzioni
 
-| Option              | Default                                            | Description                                                               |
+| Opzione             | Default                                            | Descrizione                                                               |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -901,7 +901,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Esempio   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -937,9 +937,9 @@ default = "unknown user"
 ```
 :::
 
-### Options
+### Opzioni
 
-| Option     | Default                        | Description                                                                  |
+| Opzione    | Default                        | Descrizione                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   |                                | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
@@ -949,7 +949,7 @@ default = "unknown user"
 
 ### Variables
 
-| Variable  | Example                                     | Description                                |
+| Variable  | Example                                     | Descrizione                                |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
@@ -987,7 +987,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1000,7 +1000,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1023,7 +1023,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Options
 
-| Option           | Default                                                    | Description                                                     |
+| Opzione          | Default                                                    | Descrizione                                                     |
 | ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
 | `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
@@ -1033,7 +1033,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Variables
 
-| Variable  | Example       | Description                                                        |
+| Variable  | Example       | Descrizione                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
@@ -1084,7 +1084,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option               | Default                          | Description                                                                              |
+| Opzione              | Default                          | Descrizione                                                                              |
 | -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
 | `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
 | `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
@@ -1097,7 +1097,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Example  | Description                                                                                            |
+| Variable      | Example  | Descrizione                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
@@ -1124,7 +1124,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Options
 
-| Option               | Default                            | Description                                             |
+| Opzione              | Default                            | Descrizione                                             |
 | -------------------- | ---------------------------------- | ------------------------------------------------------- |
 | `commit_hash_length` | `7`                                | The length of the displayed git commit hash.            |
 | `format`             | `"[\\($hash$tag\\)]($style) "` | The format for the module.                              |
@@ -1136,7 +1136,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | Example   | Description                         |
+| Variable  | Example   | Descrizione                         |
 | --------- | --------- | ----------------------------------- |
 | hash      | `b703eb3` | The current git commit hash         |
 | style\* |           | Mirrors the value of option `style` |
@@ -1159,7 +1159,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Options
 
-| Option         | Default                                                         | Description                                                                             |
+| Opzione        | Default                                                         | Descrizione                                                                             |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
@@ -1174,7 +1174,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Variable         | Example    | Description                         |
+| Variable         | Example    | Descrizione                         |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -1205,7 +1205,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option          | Default                                                  | Description                        |
+| Opzione         | Default                                                  | Descrizione                        |
 | --------------- | -------------------------------------------------------- | ---------------------------------- |
 | `added_style`   | `"bold green"`                                           | The style for the added count.     |
 | `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
@@ -1214,7 +1214,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable          | Example | Description                                 |
+| Variable          | Example | Descrizione                                 |
 | ----------------- | ------- | ------------------------------------------- |
 | added             | `1`     | The current number of added lines           |
 | deleted           | `2`     | The current number of deleted lines         |
@@ -1239,7 +1239,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### Options
 
-| Option       | Default                                         | Description                         |
+| Opzione      | Default                                         | Descrizione                         |
 | ------------ | ----------------------------------------------- | ----------------------------------- |
 | `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
 | `conflicted` | `"="`                                           | This branch has merge conflicts.    |
@@ -1260,7 +1260,7 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                                   |
+| Variable       | Descrizione                                                                                                   |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
@@ -1277,14 +1277,14 @@ The following variables can be used in `format`:
 
 The following variables can be used in `diverged`:
 
-| Variable       | Description                                    |
+| Variable       | Descrizione                                    |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Description              |
+| Variable | Descrizione              |
 | -------- | ------------------------ |
 | `count`  | Show the number of files |
 
@@ -1333,7 +1333,7 @@ The `golang` module shows the currently installed version of [Golang](https://go
 
 ### Options
 
-| Option              | Default                                                                        | Description                                                               |
+| Opzione             | Default                                                                        | Descrizione                                                               |
 | ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                           | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1346,7 +1346,7 @@ The `golang` module shows the currently installed version of [Golang](https://go
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.12.1` | The version of `go`                  |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1372,7 +1372,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1385,7 +1385,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1408,7 +1408,7 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Option     | Default                     | Description                                                                                                                          |
+| Opzione    | Default                     | Descrizione                                                                                                                          |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
@@ -1418,7 +1418,7 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
@@ -1446,7 +1446,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Options
 
-| Option              | Default                                                                                                   | Description                                                               |
+| Opzione             | Default                                                                                                   | Descrizione                                                               |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1459,7 +1459,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | version   | `v14`   | The version of `java`                |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -1500,7 +1500,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Options
 
-| Option             | Default                       | Description                                                              |
+| Opzione            | Default                       | Descrizione                                                              |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
 | `threshold`\*    | `1`                           | Show number of jobs if exceeded.                                         |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
@@ -1515,7 +1515,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | number    | `1`     | The number of jobs                   |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -1544,7 +1544,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1557,7 +1557,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1582,7 +1582,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Options
 
-| Option              | Default                              | Description                                                                   |
+| Opzione             | Default                              | Descrizione                                                                   |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                    |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
@@ -1596,7 +1596,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1633,7 +1633,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option            | Default                                              | Description                                                           |
+| Opzione           | Default                                              | Descrizione                                                           |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
@@ -1643,7 +1643,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Example              | Description                              |
+| Variable  | Example              | Descrizione                              |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-cluster`   | The current kubernetes context           |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -1693,7 +1693,7 @@ The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Default | Description                                                        |
+| Opzione    | Default | Descrizione                                                        |
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
@@ -1716,7 +1716,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Options
 
-| Option              | Default                              | Description                                                                |
+| Opzione             | Default                              | Descrizione                                                                |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                 |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
@@ -1730,7 +1730,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1761,7 +1761,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option      | Default                                         | Description                                              |
+| Opzione     | Default                                         | Descrizione                                              |
 | ----------- | ----------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | The format for the module.                               |
@@ -1771,7 +1771,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable         | Example       | Description                                                        |
+| Variable         | Example       | Descrizione                                                        |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -1800,7 +1800,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Options
 
-| Option              | Default                          | Description                                                                                  |
+| Opzione             | Default                          | Descrizione                                                                                  |
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `"bold purple"`                  | The style for the module.                                                                    |
@@ -1811,7 +1811,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | branch    | `master` | The active mercurial branch          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1841,7 +1841,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1854,7 +1854,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1878,7 +1878,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Options
 
-| Option       | Default                                        | Description                                           |
+| Opzione      | Default                                        | Descrizione                                           |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
@@ -1889,7 +1889,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
@@ -1923,7 +1923,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Options
 
-| Option              | Default                              | Description                                                                                           |
+| Opzione             | Default                              | Descrizione                                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
@@ -1937,7 +1937,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | Example    | Descrizione                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v13.12.0` | The version of `node`                |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -1967,7 +1967,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Options
 
-| Option                    | Default                                                                    | Description                                                               |
+| Opzione                   | Default                                                                    | Descrizione                                                               |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
 | `version_format`          | `"v${raw}"`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1982,7 +1982,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Variables
 
-| Variable         | Example      | Description                                                       |
+| Variable         | Example      | Descrizione                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
@@ -2007,7 +2007,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Options
 
-| Option     | Default                                             | Description                                                    |
+| Opzione    | Default                                             | Descrizione                                                    |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | The format for the module.                                     |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
@@ -2016,7 +2016,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | cloud     | `corp`  | The current OpenStack cloud          |
 | project   | `dev`   | The current OpenStack project        |
@@ -2058,7 +2058,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Options
 
-| Option            | Default                           | Description                                                                                 |
+| Opzione           | Default                           | Descrizione                                                                                 |
 | ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                                  |
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                  |
@@ -2069,7 +2069,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2098,7 +2098,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Options
 
-| Option              | Default                                                                                                  | Description                                                               |
+| Opzione             | Default                                                                                                  | Descrizione                                                               |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2111,7 +2111,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -2136,7 +2136,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2149,7 +2149,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2175,7 +2175,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2188,7 +2188,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2225,7 +2225,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option               | Default                                                                                                      | Description                                                                            |
+| Opzione              | Default                                                                                                      | Descrizione                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | The format for the module.                                                             |
 | `version_format`     | `"v${raw}"`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
@@ -2249,7 +2249,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Example         | Description                                |
+| Variable     | Example         | Descrizione                                |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
 | symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
@@ -2308,7 +2308,7 @@ The `rlang` module shows the currently installed version of R. The module will b
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2321,7 +2321,7 @@ The `rlang` module shows the currently installed version of R. The module will b
 
 ### Variables
 
-| Variable | Example       | Description                          |
+| Variable | Example       | Descrizione                          |
 | -------- | ------------- | ------------------------------------ |
 | version  | `v4.0.5`      | The version of `R`                   |
 | symbol   |               | Mirrors the value of option `symbol` |
@@ -2344,7 +2344,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2357,7 +2357,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `red`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2384,7 +2384,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2397,7 +2397,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `ruby`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2423,7 +2423,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2436,7 +2436,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| Variable  | Example           | Description                          |
+| Variable  | Example           | Descrizione                          |
 | --------- | ----------------- | ------------------------------------ |
 | version   | `v1.43.0-nightly` | The version of `rustc`               |
 | symbol    |                   | Mirrors the value of option `symbol` |
@@ -2463,7 +2463,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Options
 
-| Option              | Default                                  | Description                                                               |
+| Opzione             | Default                                  | Descrizione                                                               |
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2476,7 +2476,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `2.13.5` | The version of `scala`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2505,7 +2505,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option                 | Default      | Description                                                  |
+| Opzione                | Default      | Descrizione                                                  |
 | ---------------------- | ------------ | ------------------------------------------------------------ |
 | `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
 | `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
@@ -2521,7 +2521,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Default | Description                                                |
+| Variable  | Default | Descrizione                                                |
 | --------- | ------- | ---------------------------------------------------------- |
 | indicator |         | Mirrors the value of `indicator` for currently used shell. |
 
@@ -2543,7 +2543,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 
 ### Options
 
-| Option      | Default                      | Description                                                   |
+| Opzione     | Default                      | Descrizione                                                   |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
@@ -2554,7 +2554,7 @@ The `shlvl` module shows the current `SHLVL` ("shell level") environment variabl
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | shlvl     | `3`     | The current value of `SHLVL`         |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -2579,7 +2579,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Options
 
-| Option     | Default                          | Description                                      |
+| Opzione    | Default                          | Descrizione                                      |
 | ---------- | -------------------------------- | ------------------------------------------------ |
 | `format`   | `'[$symbol\[$env\]]($style) '` | The format for the module.                       |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
@@ -2588,7 +2588,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variables
 
-| Variable  | Example      | Description                          |
+| Variable  | Example      | Descrizione                          |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current Singularity image        |
 | symbol    |              | Mirrors the value of option `symbol` |
@@ -2619,7 +2619,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option                  | Default                                                                              | Description                                             |
+| Opzione                 | Default                                                                              | Descrizione                                             |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
 | `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
@@ -2638,7 +2638,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable       | Example | Description                                                                                 |
+| Variable       | Example | Descrizione                                                                                 |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
 | status         | `127`   | The exit code of the last command                                                           |
 | int            | `127`   | The exit code of the last command                                                           |
@@ -2676,7 +2676,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2689,7 +2689,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2723,7 +2723,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2736,7 +2736,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | Example    | Descrizione                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `terraform`           |
 | workspace | `default`  | The current Terraform workspace      |
@@ -2777,7 +2777,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option            | Default                 | Description                                                                                                                        |
+| Opzione           | Default                 | Descrizione                                                                                                                        |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
@@ -2791,7 +2791,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 ### Variables
 
-| Variable  | Example    | Description                         |
+| Variable  | Example    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
 | ora       | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
@@ -2828,7 +2828,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Default                 | Description                           |
+| Opzione       | Default                 | Descrizione                           |
 | ------------- | ----------------------- | ------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root. |
 | `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
@@ -2838,7 +2838,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Variable | Example      | Description                                                                                 |
+| Variable | Example      | Descrizione                                                                                 |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
@@ -2864,7 +2864,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2877,7 +2877,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variables
 
-| Variable  | Example          | Description                          |
+| Variable  | Example          | Descrizione                          |
 | --------- | ---------------- | ------------------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
 | symbol    |                  | Mirrors the value of option `symbol` |
@@ -2902,7 +2902,7 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Options
 
-| Option              | Default                                      | Description                                                                                  |
+| Opzione             | Default                                      | Descrizione                                                                                  |
 | ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
@@ -2915,7 +2915,7 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | Example | Descrizione                          |
 | --------- | ------- | ------------------------------------ |
 | version   | `v0.2`  | The version of `v`                   |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -2935,7 +2935,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Options
 
-| Option     | Default                          | Description                                            |
+| Opzione    | Default                          | Descrizione                                            |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
 | `symbol`   |                                  | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | The style for the module.                              |
@@ -2944,7 +2944,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Example                                     | Description                          |
+| Variable  | Example                                     | Descrizione                          |
 | --------- | ------------------------------------------- | ------------------------------------ |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
 | symbol    |                                             | Mirrors the value of option `symbol` |
@@ -2969,7 +2969,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2982,7 +2982,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | Example  | Descrizione                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3031,7 +3031,7 @@ The order in which custom modules are shown can be individually set by including
 
 ### Options
 
-| Option        | Default                         | Description                                                                                                                                                                   |
+| Opzione       | Default                         | Descrizione                                                                                                                                                                   |
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
@@ -3048,7 +3048,7 @@ The order in which custom modules are shown can be individually set by including
 
 ### Variables
 
-| Variable  | Description                            |
+| Variable  | Descrizione                            |
 | --------- | -------------------------------------- |
 | output    | The output of shell command in `shell` |
 | symbol    | Mirrors the value of option `symbol`   |
