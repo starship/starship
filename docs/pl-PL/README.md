@@ -44,10 +44,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. It will replace the current version without touching Starship's configuration.
+   Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. Obecna wersja zostanie zastąpiona nową, bez modyfikowania konfiguracji Starship.
 
 
-   #### Install via Package Manager
+   #### Instalacja za pomocą menedżera pakietów
 
    With [Homebrew](https://brew.sh/):
 
@@ -55,18 +55,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Za pomocą [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Dodaj na koniec pliku `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Dodaj na koniec pliku `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Dodaj na koniec pliku `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
