@@ -35,11 +35,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Strona internetowa</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">Instalacja</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Konfiguracja</a>
 </p>
 
 <p align="center">
@@ -134,12 +134,12 @@
 
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
+- **Szybkość:** jest szybki - _naprawdę_ szybki! 🚀
+- **Konfigurowalny:** dostosowuj swój wiersz poleceń w każdym aspekcie.
+- **Uniwersalny:** działa na każdej powłoce, na każdym systemie operacyjnym.
+- **Inteligentny:** pokazuje istotne informacje na pierwszy rzut oka.
 - **Bogata funkcjonalność:** wspiera wszystkie twoje ulubione narzędzia.
-- **Łatwość:** szybka instalacja - zacznij korzystać w kilka minut.
+- **Łatwy w obsłudze:** szybka instalacja - zacznij korzystać w kilka minut.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Przeglądaj dokumentację Starship&nbsp;&nbsp;▶</strong></a>
@@ -171,7 +171,7 @@
 
    Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. Obecna wersja zostanie zastąpiona nową, bez modyfikowania konfiguracji Starship.
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **Uwaga** - Domyślne ustawienia skryptu instalacyjnego można zmienić - szczegóły znajdziesz we wbudowanym poleceniu pomocy.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
