@@ -65,9 +65,9 @@ Una variabile contiene un simbolo `$` seguito dal nome della variabile. Il nome 
 
 Per esempio:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` è una stringa di formato con una variabile chiamata `version`.
+- `$git_branch$git_commit` è una stringa di formato con due variabili denominate `git_branch` e `git_commit`.
+- `$git_branch $git_commit` ha le due variabili separate con uno spazio.
 
 #### Gruppo Testo
 
@@ -79,24 +79,24 @@ Nella seconda parte, che è racchiusa tra `()`, è un [style string](#style-stri
 
 Per esempio:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](rosso grassetto)` stamperà una stringa `on` con testo in grassetto di colore rosso.
+- `[⌘ $version](grassetto verde)` stamperà un simbolo `⌘` seguito dal contenuto della variabile `version`, con testo grassetto di colore verde.
+- `[a [b](rosso) c](verde)` stamperà `a b c` con `b` rosso, e `a` e `c` verde.
 
-#### Stringhe di stile
+#### Stile delle Stringhe
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+La maggior parte dei moduli in starship ti permettono di configurare i loro stili di visualizzazione. Questo viene fatto con una voce (solitamente chiamata `style`) che è una stringa che specifica la configurazione. Ecco alcuni esempi di stringhe di stile per quello che fanno. Per maggiori dettagli sulla sintassi completa, consulta la [guida di configurazione avanzata](/advanced-config/).
 
-- `"fg:green bg:blue"` sets green text on a blue background
-- `"bg:blue fg:bright-green"` sets bright green text on a blue background
-- `"bold fg:27"` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `"underline bg:#bf5700"` sets underlined text on a burnt orange background
-- `"bold italic fg:purple"` sets bold italic purple text
-- `""` explicitly disables all styling
+- `"fg:green bg:blue"` imposta il testo verde su uno sfondo blu
+- `"bg:blue fg:bright-green"` imposta un testo verde brillante su uno sfondo blu
+- `"bold fg:27"` imposta il testo in grassetto con [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
+- `"underline bg:#bf5700"` imposta il testo sottolineato su uno sfondo arancione scuro
+- `"bold italic fg:purple"` imposta il testo viola in corsivo e grassetto
+- `""` disabilita esplicitamente tutti gli stili
 
 Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
-#### Conditional Format Strings
+#### Formattazione condizionale delle stringhe
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
@@ -2058,14 +2058,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Options
 
-| Option            | Default                           | Description                                                               |
-| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                |
-| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`           | `"bold 208"`                      | The style for the module.                                                 |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
-| `disabled`        | `false`                           | Disables the `package` module.                                            |
+| Option            | Default                           | Description                                                                                 |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                                  |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                  |
+| `version_format`  | `"v${raw}"`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | Lo stile per il modulo.                                                                     |
+| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.      |
+| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                             |
 
 ### Variables
 
@@ -2902,16 +2902,16 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ### Options
 
-| Option              | Default                                      | Description                                                               |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
-| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `"blue bold"`                                | The style for the module.                                                 |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
+| Option              | Default                                      | Description                                                                                  |
+| ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
+| `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
+| `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
+| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
 
 ### Variables
 
