@@ -1205,12 +1205,13 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option          | Défaut                                                   | Description                        |
-| --------------- | -------------------------------------------------------- | ---------------------------------- |
-| `added_style`   | `"bold green"`                                           | The style for the added count.     |
-| `deleted_style` | `"bold green"`                                           | The style for the deleted count.   |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | Format du module.                  |
-| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+| Option               | Défaut                                                       | Description                           |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `added_style`        | `"bold green"`                                               | The style for the added count.        |
+| `deleted_style`      | `"bold green"`                                               | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format du module.                     |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 
 ### Variables
 
