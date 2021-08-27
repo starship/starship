@@ -253,7 +253,7 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
 fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
     let mut substituted_dir = dir_string;
-    for substitution_pair in substitutions.iter() {
+    for substitution_pair in substitutions {
         substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
     }
     substituted_dir

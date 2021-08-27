@@ -300,13 +300,13 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     for module in &modules {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
-            for module in PROMPT_ORDER.iter() {
+            for module in PROMPT_ORDER {
                 let modules = handle_module(module, context, &modules);
-                prompt_order.extend(modules.into_iter());
+                prompt_order.extend(modules);
             }
         } else {
             let modules = handle_module(module, context, &modules);
-            prompt_order.extend(modules.into_iter());
+            prompt_order.extend(modules);
         }
     }
 

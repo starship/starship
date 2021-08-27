@@ -122,7 +122,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                             "env_var",
                         ]
                         .iter()
-                        .chain(ALL_MODULES.iter())
+                        .chain(ALL_MODULES)
                         .filter_map(|field| {
                             let score = strsim::jaro_winkler(unknown, field);
                             (score > 0.8).then(|| (score, field))

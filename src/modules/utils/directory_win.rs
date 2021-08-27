@@ -1,6 +1,5 @@
 extern crate winapi;
 
-use std::iter;
 use std::mem;
 use std::os::windows::ffi::OsStrExt;
 use std::path::Path;
@@ -22,11 +21,7 @@ use winapi::um::winnt::{
 /// the current process access token and directory's security descriptor.
 /// Does not work for network drives and always returns true
 pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'static str> {
-    let folder_name: Vec<u16> = folder_path
-        .as_os_str()
-        .encode_wide()
-        .chain(iter::once(0))
-        .collect();
+    let folder_name: Vec<u16> = folder_path.as_os_str().encode_wide().chain([0]).collect();
 
     if is_network_path(&folder_name) {
         log::info!(
