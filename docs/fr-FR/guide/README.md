@@ -263,6 +263,31 @@
    eval `starship init tcsh`
    ```
 
+
+   #### Xonsh
+
+   Ajouter ce qui suit à la fin de `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
+   ```
+
+
+   #### Nushell
+
+   **Avertissement** Cela changera dans le futur. Seule la version nu v0.33 ou supérieure est prise en charge. Ajoutez ce qui suit à votre fichier de configuration 'nu'. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
 ## 🤝 Contribuer
 
 Nous sommes toujours à la recherche de contributeurs de **tous niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).

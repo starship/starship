@@ -73,6 +73,7 @@ starship_precmd_user_func="set_win_title"
 スタイル文字列は空白で区切られた単語のリストです。 大文字小文字を区別しません（例えば、 `bold` と`BoLd` は同じだとみなされます）。 それぞれ以下のいずれか一つが該当します。
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`

@@ -18,7 +18,7 @@ features:
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Có thể được cài đặt nhanh chóng cho Bash, Fish, ZSH, Ion và PowerShell.
+description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -44,7 +44,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Để cập nhật chính Starship, hãy chạy lại đoạn script bên trên. Nó sẽ thay thế phiên bản hiện tại mà không hề thay đổi gì những cài đặt của Starship trước đó.
 
 
    #### Cài đặt thông qua Trình quản lí gói
@@ -116,6 +116,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 eval $(starship init ion)   
    ```
 
+
    #### Elvish
 
    ::: warning Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. :::
@@ -137,4 +138,29 @@ eval $(starship init ion)
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+
+   #### Nushell
+
+   ::: warning This will change in the future. Chỉ có nu phiên bản v. 033 hoặc cao hơn được hỗ trợ. ::: Add the following to your nu config file. Bạn có thể kiểm tra vị trí của cái file này bằng cách chạy `đường dẫn cấu hình` trong nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Thêm dòng này vào cuối của file `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

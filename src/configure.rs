@@ -2,10 +2,10 @@ use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
-use std::process::Command;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
+use crate::utils;
 use std::fs::File;
 use std::io::Write;
 use toml::map::Map;
@@ -135,9 +135,9 @@ pub fn write_configuration(table: &mut Table) {
 pub fn edit_configuration() {
     let config_path = get_config_path();
     let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
-    let editor_path = which::which(&editor_cmd[0]).expect("Unable to locate editor in $PATH.");
 
-    let command = Command::new(editor_path)
+    let command = utils::create_command(&editor_cmd[0])
+        .expect("Unable to locate editor in $PATH.")
         .args(&editor_cmd[1..])
         .arg(config_path)
         .status();
@@ -178,7 +178,7 @@ fn get_config_path() -> OsString {
     if let Some(config_path) = env::var_os("STARSHIP_CONFIG") {
         return config_path;
     }
-    dirs_next::home_dir()
+    utils::home_dir()
         .expect("couldn't find home directory")
         .join(".config")
         .join("starship.toml")

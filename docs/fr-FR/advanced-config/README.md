@@ -73,12 +73,13 @@ starship_precmd_user_func="set_win_title"
 Les chaînes de style sont une liste de mots, séparés par des espaces. Les mots ne sont pas sensibles à la casse (c'est-à-dire `gras` et `GrAs` sont considérés comme le même mot). Chaque mot peut être l'un des suivants :
 
   - `bold`
+  - `italic`
   - `underline`
   - `dimmed`
   - `inverted`
-  - `bg:<color>`
-  - `fg:<color>`
-  - `<color>`
+  - `bg:<couleur>`
+  - `fg:<couleur>`
+  - `<couleur>`
   - `none`
 
 où `<couleur>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, bien que cela puisse changer dans le futur. `inverted` permute les couleurs de fond et de premier plan. L'ordre des mots dans la chaîne n'a pas d'importance.

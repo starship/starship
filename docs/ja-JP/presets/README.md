@@ -6,7 +6,7 @@
 
 このプリセットは、各モジュールに使用されるシンボル以外は何も変更しません。 絵文字が気に食わない場合、これはあなたの目を引くかもしれません！
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Nerd Font Symbolsプリセットのスクリーンショット](/presets/nerd-font-symbols.png)
 
 ### 必要なもの
 
@@ -90,15 +90,15 @@ symbol = "ﯣ "
 
 ## Bracketed Segments
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+このプリセットは付属のモジュール全てのフォーマットを変更し、デフォルトのStarshipの表示("via", "on", etc.)から、それぞれの情報を括弧で区分けするように変更します。
 
-Before:
+変更前:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![Starshipのデフォルト設定のスクリーンショット](/presets/bracketed-segments-before.png)
 
-After:
+変更後:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![Bracketed Segmentsプリセットのスクリーンショット](/presets/bracketed-segments-after.png)
 
 ### 設定
 
@@ -110,7 +110,7 @@ format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
-format = "[⏱ $duration]($style)"
+format = '\[[⏱ $duration ]($style)\]'
 
 [conda]
 format = '\[[$symbol$environment]($style)\]'
@@ -241,15 +241,15 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Plain Text Symbols
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+このプリセットは記号をプレーンテキストに変更します。 あなたのターミナルのフォントでNerdFontsまたは絵文字が使えない場合は、これを試してみるといいかもしれません！
 
-Before (default setting with Fixedsys font):
+変更前 (デフォルトの設定でFixedsysフォント):
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![Fixedsysフォントを用いたStarshipのデフォルト設定のスクリーンショット](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+変更後 (プレーンテキストの記号):
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![Plain Text Symbolsプリセットのスクリーンショット](/presets/plain-text-symbols-after.png)
 
 ### 設定
 
@@ -361,4 +361,95 @@ symbol = "scala "
 
 [swift]
 symbol = "swift "
+```
+
+## Hide Runtime Versions
+
+This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+
+![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+
+### 設定
+
+```toml
+[cmake]
+format = "via [$symbol]($style)"
+
+[crystal]
+format = "via [$symbol]($style)"
+
+[dart]
+format = "via [$symbol]($style)"
+
+[deno]
+format = "via [$symbol]($style)"
+
+[dotnet]
+format = "[$symbol(🎯 $tfm )]($style)"
+
+[elixir]
+format = 'via [$symbol]($style)'
+
+[elm]
+format = 'via [$symbol]($style)'
+
+[erlang]
+format = 'via [$symbol]($style)'
+
+[golang]
+format = 'via [$symbol]($style)'
+
+[helm]
+format = 'via [$symbol]($style)'
+
+[julia]
+format = 'via [$symbol]($style)'
+
+[kotlin]
+format = 'via [$symbol]($style)'
+
+[lua]
+format = 'via [$symbol]($style)'
+
+[nim]
+format = 'via [$symbol]($style)'
+
+[nodejs]
+format = 'via [$symbol]($style)'
+
+[ocaml]
+format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
+
+[perl]
+format = 'via [$symbol]($style)'
+
+[php]
+format = 'via [$symbol]($style)'
+
+[purescript]
+format = 'via [$symbol]($style)'
+
+[red]
+format = 'via [$symbol]($style)'
+
+[rlang]
+format = 'via [$symbol]($style)'
+
+[ruby]
+format = 'via [$symbol]($style)'
+
+[rust]
+format = 'via [$symbol]($style)'
+
+[swift]
+format = 'via [$symbol]($style)'
+
+[vagrant]
+format = 'via [$symbol]($style)'
+
+[vlang]
+format = 'via [$symbol]($style)'
+
+[zig]
+format = 'via [$symbol]($style)'
 ```

@@ -26,6 +26,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "git_branch",
     "git_commit",
     "git_state",
+    "git_metrics",
     "git_status",
     "hg_branch",
     "docker_context",
@@ -104,7 +105,10 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                 "command_timeout" => self.command_timeout.load_config(v),
                 "add_newline" => self.add_newline.load_config(v),
                 unknown => {
-                    if !ALL_MODULES.contains(&unknown) && unknown != "custom" {
+                    if !ALL_MODULES.contains(&unknown)
+                        && unknown != "custom"
+                        && unknown != "env_var"
+                    {
                         log::warn!("Unknown config key '{}'", unknown);
 
                         let did_you_mean = &[
@@ -115,6 +119,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                             "add_newline",
                             // Modules
                             "custom",
+                            "env_var",
                         ]
                         .iter()
                         .chain(ALL_MODULES.iter())

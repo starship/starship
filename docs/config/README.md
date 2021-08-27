@@ -194,6 +194,7 @@ $vcsh\
 $git_branch\
 $git_commit\
 $git_state\
+$git_metrics\
 $git_status\
 $hg_branch\
 $docker_context\
@@ -413,7 +414,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`error_symbol` is not supported on elvish shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
@@ -976,11 +977,25 @@ format = "via [ $version](cyan bold) "
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variable.
+The `env_var` module displays the current value of a selected environment variables.
 The module will be shown only if any of the following conditions are met:
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
+
+
+::: tip
+Multiple environmental variables can be displayed by using a `.`. (see example)
+If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+
+Example: following configuration will display value of USER environment variable
+```toml
+# ~/.config/starship.toml
+
+[env_var.USER]
+default = "unknown user"
+```
+:::
 
 ### Options
 
@@ -1010,6 +1025,17 @@ The module will be shown only if any of the following conditions are met:
 [env_var]
 variable = "SHELL"
 default = "unknown shell"
+```
+
+Displaying multiple environmental variables:
+```toml
+# ~/.config/starship.toml
+
+[env_var.SHELL]
+variable = "SHELL"
+default = "unknown shell"
+[env_var.USER]
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1163,7 +1189,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | Option               | Default                                        | Description                                             |
 | -------------------- | ---------------------------------------------- | ------------------------------------------------------- |
 | `commit_hash_length` | `7`                                            | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash\\)]($style) [\\($tag\\)]($style)"` | The format for the module.                              |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | The format for the module.                              |
 | `style`              | `"bold green"`                                 | The style for the module.                               |
 | `only_detached`      | `true`                                         | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                                         | Disables showing tag info in `git_commit` module.       |
@@ -1232,6 +1258,48 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
+## Git Metrics
+
+The `git_metrics` module will show the number of added and deleted lines in
+the current git repository.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option                    | Default                                                               | Description                            |
+| ------------------------- | --------------------------------------------------------------------  | ---------------------------------------|
+| `added_style`             | `"bold green"`                                                        | The style for the added count.         |
+| `deleted_style`           | `"bold red"`                                                          | The style for the deleted count.       |
+| `format`                  | `'[+$added]($added_style) [-$deleted]($deleted_style) '`              | The format for the module.             |
+| `disabled`                | `true`                                                                | Disables the `git_metrics` module.     |
+
+### Variables
+
+| Variable         | Example    | Description                                 |
+| ---------------- | ---------- | -----------------------------------         |
+| added            | `1`        | The current number of added lines           |
+| deleted          | `2`        | The current number of deleted lines         |
+| added_style\*    |            | Mirrors the value of option `added_style`   |
+| deleted_style\*  |            | Mirrors the value of option `deleted_style` |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_metrics]
+added_style = "bold blue"
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
 ## Git Status
 
 The `git_status` module shows symbols representing the state of the repo in your
@@ -1246,6 +1314,7 @@ current directory.
 | `ahead`      | `"⇡"`                                         | The format of `ahead`               |
 | `behind`     | `"⇣"`                                         | The format of `behind`              |
 | `diverged`   | `"⇕"`                                         | The format of `diverged`            |
+| `up_to_date` | `""`                                          | The format of `up_to_date`          |
 | `untracked`  | `"?"`                                         | The format of `untracked`           |
 | `stashed`    | `"$"`                                         | The format of `stashed`             |
 | `modified`   | `"!"`                                         | The format of `modified`            |
@@ -1259,18 +1328,18 @@ current directory.
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                   |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                   |
-| `ahead_behind` | Displays `diverged` `ahead` or `behind` format string based on the current status of the repo |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                 |
-| style\*        | Mirrors the value of option `style`                                                           |
+| Variable       | Description                                                                                                 |
+| -------------- | ----------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                 |
+| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                 |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                               |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                            |
+| `modified`     | Displays `modified` when there are file modifications in the working directory.                             |
+| `staged`       | Displays `staged` when a new file has been added to the staging area.                                       |
+| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                  |
+| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                               |
+| style\*        | Mirrors the value of option `style`                                                                         |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1297,6 +1366,7 @@ conflicted = "🏳"
 ahead = "🏎💨"
 behind = "😰"
 diverged = "😵"
+up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
 modified = "📝"
@@ -1481,25 +1551,46 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running.
 The module will be shown only if there are background jobs running.
-The module will show the number of jobs running if there is more than 1 job, or
-more than the `threshold` config value, if it exists. If `threshold` is set to 0,
-then the module will also show when there are 0 jobs running.
+The module will show the number of jobs running if there are at least
+2 jobs, or more than the `number_threshold` config value, if it exists.
+The module will show a symbol if there is at least 1 job, or more than the
+`symbol_threshold` config value, if it exists. You can set both values
+to 0 in order to *always* show the symbol and number of jobs, even if there are
+0 jobs running.
+
+The default functionality is:
+
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: warning
 
-This module is not supported on tcsh.
+This module is not supported on tcsh and nu.
+
+:::
+
+::: warning
+
+The `threshold` option is deprecated, but if you want to use it,
+the module will show the number of jobs running if there is more than 1 job, or
+more than the `threshold` config value, if it exists. If `threshold` is set to 0,
+then the module will also show when there are 0 jobs running.
 
 :::
 
 ### Options
 
-| Option      | Default                       | Description                                      |
-| ----------- | ----------------------------- | ------------------------------------------------ |
-| `threshold` | `1`                           | Show number of jobs if exceeded.                 |
-| `format`    | `"[$symbol$number]($style) "` | The format for the module.                       |
-| `symbol`    | `"✦"`                         | A format string representing the number of jobs. |
-| `style`     | `"bold blue"`                 | The style for the module.                        |
-| `disabled`  | `false`                       | Disables the `jobs` module.                      |
+| Option             | Default                       | Description                                                                                 |
+| -----------        | ----------------------------- | ------------------------------------------------                                            |
+| `threshold`\*      | `1`                           | Show number of jobs if exceeded.                                                            |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.                              |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`.                    |
+| `format`           | `"[$symbol$number]($style) "` | The format for the module.                                                                  |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                                         |
+| `style`            | `"bold blue"`                 | The style for the module.                                                                   |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                                                 |
+\*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1518,7 +1609,8 @@ This module is not supported on tcsh.
 
 [jobs]
 symbol = "+ "
-threshold = 4
+number_threshold = 4
+symbol_threshold = 0
 ```
 
 ## Julia
@@ -1655,6 +1747,33 @@ format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
+".*/openshift-cluster/.*" = "openshift"
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+```
+
+#### Regex Matching
+
+Additional to simple aliasing, `context_aliases` also supports
+extended matching and renaming using regular expressions.
+
+The regular expression must match on the entire kube context,
+capture groups can be referenced using `$name` and `$N` in the replacement.
+This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+
+Long and automatically generated cluster names can be identified
+and shortened using regular expressions:
+
+```toml
+[kubernetes.context_aliases]
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+".*/openshift-cluster/.*" = "openshift"
+# Or better, to rename every OpenShift cluster at once:
+".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
 ## Line Break
@@ -2028,7 +2147,9 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
+
 - [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
+- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directo
   in the current directory
 - [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
@@ -2043,13 +2164,14 @@ package, and shows its current version. The module currently supports `npm`, `ni
 
 ### Options
 
-| Option            | Default                            | Description                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                 |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
-| `style`           | `"bold 208"`                       | The style for the module.                                  |
-| `display_private` | `false`                            | Enable displaying version for packages marked as private.  |
-| `disabled`        | `false`                            | Disables the `package` module.                             |
+| Option            | Default                            | Description                                                              |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------ |
+| `format`          | `"is [$symbol$version]($style) "`  | The format for the module.                                               |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.               |
+| `version_format`  | `"v${raw}"`                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
+| `style`           | `"bold 208"`                       | The style for the module.                                                |
+| `display_private` | `false`                            | Enable displaying version for packages marked as private.                |
+| `disabled`        | `false`                            | Disables the `package` module.                                           |
 
 ### Variables
 
@@ -2222,7 +2344,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv `                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3, "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                            | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
@@ -2519,6 +2641,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `ion_indicator`        | `ion`         | A format string used to represent ion.                       |
 | `elvish_indicator`     | `esh`         | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`         | A format string used to represent xonsh.                     |
 | `unknown_indicator`    |               | The default value to be displayed when the shell is unknown. |
 | `format`               | `$indicator ` | The format for the module.                                   |
 | `disabled`             | `true`        | Disables the `shell` module.                                 |
@@ -2552,7 +2675,7 @@ set to a number and meets or exceeds the specified threshold.
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
-| `symbol`    | `"↕️ "`                       | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️  "`                       | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | The style for the module.                                     |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
@@ -2624,7 +2747,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 :::
 
 ::: warning
-This module is not supported on elvish shell.
+This module is not supported on elvish and nu shell.
 :::
 
 ### Options
@@ -2633,6 +2756,7 @@ This module is not supported on elvish shell.
 | ------------------------- | ----------------------------- | ------------------------------------------------------ |
 | `format`                  | `"[$symbol$status]($style) "` | The format of the module                               |
 | `symbol`                  | `"✖"`                         | The symbol displayed on program error                  |
+| `success_symbol`          | `"✔️"`                         | The symbol displayed on program success                |
 | `not_executable_symbol`   | `"🚫"`                        | The symbol displayed when file isn't executable        |
 | `not_found_symbol`        | `"🔍"`                        | The symbol displayed when the command can't be found   |
 | `sigint_symbol`           | `"🧱"`                        | The symbol displayed on SIGINT (Ctrl + c)              |
@@ -2640,6 +2764,9 @@ This module is not supported on elvish shell.
 | `style`                   | `"bold red"`                  | The style for the module.                              |
 | `recognize_signal_code`   | `true`                        | Enable signal mapping from exit code                   |
 | `map_symbol`              | `false`                       | Enable symbols mapping from exit code                  |
+| `pipestatus`              | `false`                       | Enable pipestatus reporting                            |
+| `pipestatus_separator`    | `|`                           | The symbol that separate in pipe program exit codes    |
+| `pipestatus_format`       | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)`  | The format of the module when the command is a pipeline |
 | `disabled`                | `true`                        | Disables the `status` module.                          |
 
 ### Variables
@@ -2652,6 +2779,7 @@ This module is not supported on elvish shell.
 | signal_number           | `9`     | Signal number corresponding to the exit code, only if signalled         |
 | signal_name             | `KILL`  | Name of the signal corresponding to the exit code, only if signalled    |
 | maybe_int               | `7`     | Contains the exit code number when no meaning has been found            |
+| pipestatus              |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
 | symbol                  |         | Mirrors the value of option `symbol`                                    |
 | style\*                 |         | Mirrors the value of option `style`                                     |
 
@@ -2917,21 +3045,22 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                      | Description                                  |
-| ------------------- | -------------------------------------------- | -------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                   |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V |
-| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module. |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.  |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.    |
-| `style`             | `"blue bold"`                                | The style for the module.                    |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                 |
+| Option              | Default                                      | Description                                                               |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `"blue bold"`                                | The style for the module.                                                 |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Variables
 
 | Variable | Example  | Description                          |
 | -------- | -------- | ------------------------------------ |
-| version  | `v0.2` | The version of `v`                |
+| version  | `v0.2`   | The version of `v`                   |
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 

@@ -68,6 +68,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 ```
 
+If using `context.exec_cmd` isn't possible, please use `crate::utils::create_command` instead of `std::process::Command::new`.
+
 ## Logging
 
 Debug logging in starship is done with our custom logger implementation.

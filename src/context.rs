@@ -3,13 +3,14 @@ use crate::module::Module;
 use crate::utils::{exec_cmd, CommandOutput};
 
 use crate::modules;
+use crate::utils::{self, home_dir};
 use clap::ArgMatches;
-use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
+use std::fmt::Debug;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
@@ -35,6 +36,9 @@ pub struct Context<'a> {
 
     /// Properties to provide to modules.
     pub properties: HashMap<&'a str, String>,
+
+    /// Pipestatus of processes in pipe
+    pub pipestatus: Option<Vec<String>>,
 
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
@@ -74,7 +78,7 @@ impl<'a> Context<'a> {
             .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
             .unwrap_or_default();
 
-        // Retrive the "logical directory".
+        // Retrieve the "logical directory".
         // If the path argument is not set fall back to the PWD env variable set by many shells
         // or to the other path.
         let logical_path = arguments
@@ -96,14 +100,17 @@ impl<'a> Context<'a> {
         let config = StarshipConfig::initialize();
 
         // Unwrap the clap arguments into a simple hashtable
-        // we only care about single arguments at this point, there isn't a
-        // use-case for a list of arguments yet.
         let properties: HashMap<&str, std::string::String> = arguments
             .args
             .iter()
             .filter(|(_, v)| !v.vals.is_empty())
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
+
+        // Pipestatus is an arguments list
+        let pipestatus = arguments
+            .values_of("pipestatus")
+            .map(|args| args.into_iter().map(String::from).collect());
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
@@ -116,6 +123,7 @@ impl<'a> Context<'a> {
         Context {
             config,
             properties,
+            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
@@ -143,7 +151,9 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env.get(key.as_ref()).map(|val| val.to_string())
+        self.env
+            .get(key.as_ref())
+            .map(std::string::ToString::to_string)
     }
 
     #[cfg(not(test))]
@@ -168,7 +178,7 @@ impl<'a> Context<'a> {
     pub fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
-            return dirs_next::home_dir().unwrap().join(without_home);
+            return utils::home_dir().unwrap().join(without_home);
         }
         dir
     }
@@ -212,31 +222,20 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
-        self.repo
-            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = if env::var("GIT_DIR").is_ok() {
-                    Repository::open_from_env().ok()
-                } else {
-                    Repository::discover(&self.current_dir).ok()
-                };
-                let branch = repository
-                    .as_ref()
-                    .and_then(|repo| get_current_branch(repo));
-                let root = repository
-                    .as_ref()
-                    .and_then(|repo| repo.workdir().map(Path::to_path_buf));
-                let state = repository.as_ref().map(|repo| repo.state());
-                let remote = repository
-                    .as_ref()
-                    .and_then(|repo| get_remote_repository_info(repo));
-                Ok(Repo {
-                    branch,
-                    root,
-                    state,
-                    remote,
-                })
+    pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
+        self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
+            let repository = if env::var("GIT_DIR").is_ok() {
+                Repository::open_from_env()
+            } else {
+                Repository::discover(&self.current_dir)
+            }?;
+            Ok(Repo {
+                branch: get_current_branch(&repository),
+                root: repository.workdir().map(Path::to_path_buf),
+                state: repository.state(),
+                remote: get_remote_repository_info(&repository),
             })
+        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
@@ -256,6 +255,8 @@ impl<'a> Context<'a> {
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
+            "nu" => Shell::Nu,
+            "xonsh" => Shell::Xonsh,
             _ => Shell::Unknown,
         }
     }
@@ -266,18 +267,19 @@ impl<'a> Context<'a> {
 
     /// Execute a command and return the output on stdout and stderr if successful
     #[inline]
-    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+        &self,
+        cmd: T,
+        args: &[U],
+    ) -> Option<CommandOutput> {
         #[cfg(test)]
         {
-            let command = match args.len() {
-                0 => cmd.to_owned(),
-                _ => format!("{} {}", cmd, args.join(" ")),
-            };
+            let command = crate::utils::display_command(&cmd, args);
             if let Some(output) = self.cmd.get(command.as_str()) {
                 return output.clone();
             }
         }
-        exec_cmd(cmd, args, self.cmd_timeout)
+        exec_cmd(&cmd, args, self.cmd_timeout)
     }
 }
 
@@ -335,7 +337,7 @@ impl DirContents {
             start.elapsed()
         );
 
-        Ok(DirContents {
+        Ok(Self {
             files,
             file_names,
             folders,
@@ -386,7 +388,7 @@ pub struct Repo {
     pub root: Option<PathBuf>,
 
     /// State
-    pub state: Option<RepositoryState>,
+    pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,
@@ -450,7 +452,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
                     .trim()
                     .split('/')
                     .last()
-                    .map(|r| r.to_owned())
+                    .map(std::borrow::ToOwned::to_owned)
             } else {
                 None
             };
@@ -492,6 +494,8 @@ pub enum Shell {
     Zsh,
     Elvish,
     Tcsh,
+    Nu,
+    Xonsh,
     Unknown,
 }
 
@@ -621,7 +625,7 @@ mod tests {
 
     #[test]
     fn context_constructor_should_fall_back_to_tilde_replacement_when_canonicalization_fails() {
-        use dirs_next::home_dir;
+        use utils::home_dir;
 
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();

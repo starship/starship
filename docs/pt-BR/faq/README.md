@@ -23,9 +23,9 @@ Sim, ambos podem ser usados para desativar os mulos no prompt. Se seu objetivo g
 
 ## As documentações dizem que o Starship é cross-shell. Porque minha shell preferida não é suportada?
 
-A forma em que o Starship foi construído, faz com que ele seja compatível com qualquer shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+A forma em que o Starship foi construído, faz com que ele seja compatível com qualquer shell. O binário do starship é sem estado e shell agnóstico, então se o seu shell suporta customização de prompt e expansão de shell, Starship pode ser utilizado.
 
-Here's a small example getting Starship working with bash:
+Aqui está um pequeno exemplo de como o Starship funciona com o bash:
 
 ```sh
 # Recupera o status do último comando executado
@@ -38,27 +38,27 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+A [implementação do Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) embutida no Starship é um pouco mais complexa para aceitar recursos avançados como o [Módulo de duração de comando](https://starship.rs/config/#command-duration) e para garantir isto o Starship é compatível com configurações pre-instaladas.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Para uma lista de flags aceitos pelo `starship prompt`, use o seguinte comando:
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+O prompt vai usar o contexto fornecido, mas nenhuma flag é obrigatória.
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Como faço para rodar o Starship em distribuições Linux com versões antigas do glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Se você está tendo um erro como "_version 'GLIBC_2.18' not found (required by starship)_" quando usa o binário prebuilt (por exemplo, no CentOS 6 ou 7), você pode usar um binário compilado com `musl` em vez do `glibc`:
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Se você vê símbolos que não reconhece você pode usar `starship explain` para exibir os módulos que estão sendo mostrados no momento.
 
 ## Por que não consigo visualizar um simbolo glifo no meu prompt?
 

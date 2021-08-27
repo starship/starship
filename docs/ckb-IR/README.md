@@ -18,7 +18,7 @@ features:
 footer: لەژێر مۆڵەتی ISCـە | مافی پارێزراوە © 2019-ئێستا بەژداریکەرانی Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: یەکێ لە Promptـە شێڵ نەناسەکان"
-description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! ئەو زانیارییانە پشان دەدات کە پێویستە، لەوکاتەیا بە ئارامی و سوکەڵەیی ئەمێنێتەوە. دامەزراندنی خێرا بەردەستە بۆ Bash, Fish, ZSH, Ion و PowerShell.'
+description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و بێسنور دڵخوازکراوەکان بۆ هەر شێڵێک! ئەو زانیارییانە پشان دەدات کە پێویستە، لەوکاتەیا بە ئارامی و سوکەڵەیی ئەمێنێتەوە. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.'
 ---
 
 <div class="center">
@@ -116,6 +116,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
    ::: ئاگادارکردنەوە تەنها elvish v0.15 یان بەرزتر پشتگیری کراوە. :::
@@ -137,4 +138,29 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+
+   #### Nushell
+
+   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

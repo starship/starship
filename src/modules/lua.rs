@@ -3,6 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
+use crate::utils::get_command_string_output;
 
 /// Creates a module with the current Lua version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -32,7 +33,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let lua_version = get_lua_version(context, &config.lua_binary)?;
+                    let lua_version_string =
+                        get_command_string_output(context.exec_cmd(config.lua_binary, &["-v"])?);
+                    let lua_version = parse_lua_version(&lua_version_string)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &lua_version,
@@ -54,17 +57,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn get_lua_version(context: &Context, lua_binary: &str) -> Option<String> {
-    let output = context.exec_cmd(lua_binary, &["-v"])?;
-    let lua_version = if output.stdout.is_empty() {
-        output.stderr
-    } else {
-        output.stdout
-    };
-
-    parse_lua_version(&lua_version)
 }
 
 fn parse_lua_version(lua_version: &str) -> Option<String> {

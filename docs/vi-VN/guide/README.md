@@ -160,10 +160,10 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Để cập nhật chính Starship, hãy chạy lại đoạn script bên trên. Nó sẽ thay thế phiên bản hiện tại mà không hề thay đổi gì những cài đặt của Starship trước đó.
 
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **Ghi chú** - Script cài đặt mặc định có thể bị ghi đè.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -261,6 +261,31 @@
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+
+   #### Xonsh
+
+   Thêm dòng này vào cuối của file `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
+   ```
+
+
+   #### Nushell
+
+   **Cảnh báo ** Cái này có thể bị thay đổi trong tương lai. Chỉ có nu phiên bản v. 033 hoặc cao hơn được hỗ trợ. Thêm dòng sau vào file cấu hình nu. Bạn có thể kiểm tra vị trí của cái file này bằng cách chạy `đường dẫn cấu hình` trong nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
    ```
 
 ## 🤝 Đóng góp

@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let elm_version = context.exec_cmd("elm", &["--version"])?.stdout;
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &elm_version.trim(),
+                        elm_version.trim(),
                         config.version_format,
                     )
                     .map(Ok)
