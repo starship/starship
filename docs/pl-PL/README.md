@@ -99,7 +99,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Zazwyczaj jest to `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` lub `~/.config/powershell/Microsoft.PowerShell_profile.ps1` na -Nixie.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Dodaj na koniec pliku `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -121,7 +121,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Dodaj na koniec pliku `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -132,7 +132,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Dodaj na koniec pliku `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
