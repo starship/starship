@@ -2147,8 +2147,8 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
+- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
 - [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
-- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directo
   in the current directory
 - [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
