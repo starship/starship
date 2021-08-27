@@ -1,4 +1,4 @@
-# Configuration
+# Konfiguracja
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
@@ -6,7 +6,7 @@ To get started configuring starship, create the following file: `~/.config/stars
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Cała konfiguracja starship jest wykonywana w tym pliku [TOML](https://github.com/toml-lang/toml):
 
 ```toml
 # Inserts a blank line between shell prompts
@@ -21,19 +21,19 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Możesz zmienić domyślną lokalizację pliku konfiguracyjnego za pomocą zmiennej środowiskowej `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoim `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
-### Logging
+### Logi
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
@@ -41,7 +41,7 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoim `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
