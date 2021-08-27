@@ -1576,7 +1576,7 @@ symbol = "∴ "
 
 O módulo `kotlin` exibie a versão atual instalada do [Kotlin](https://kotlinlang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `.kt` or a `.kts` file
+- O diretório atual contem um arquivo `.kt` ou um arquivo `.kts`
 
 ### Opções
 
@@ -1587,16 +1587,16 @@ O módulo `kotlin` exibie a versão atual instalada do [Kotlin](https://kotlinla
 | `detect_extensions` | `["kt", "kts"]`                      | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
-| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                                   |
+| `symbol`            | `"🅺 "`                               | O formato de string que representa o simbolo do Kotlin.                              |
 | `style`             | `"bold blue"`                        | O estilo do módulo.                                                                  |
-| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version.        |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                        |
+| `kotlin_binary`     | `"kotlin"`                           | Configura o binário do kotlin que o Starship executa para obter a versão.            |
+| `disabled`          | `false`                              | Desabilita o módulo `kotlin`.                                                        |
 
 ### Variáveis
 
 | Variável  | Exemplo   | Descrição                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`           |
+| version   | `v1.4.21` | A versão do `kotlin`              |
 | symbol    |           | Espelha o valor da opção `symbol` |
 | style\* |           | Espelha o valor da opção `style`  |
 
