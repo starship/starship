@@ -1406,13 +1406,13 @@ O módulo `hostname` exibe o nome do hostname.
 
 ### Opções
 
-| Opções     | Padrão                      | Descrição                                                                                                                            |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | O formato do módulo.                                                                                                                 |
-| `style`    | `"bold dimmed green"`       | O estilo do módulo.                                                                                                                  |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Opções     | Padrão                      | Descrição                                                                                                                                                |
+| ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only` | `true`                      | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                                              |
+| `trim_at`  | `"."`                       | String na qual vai truncar o hostname, após a primeira correspondência. `"."` vai truncar após o primeiro ponto. `""` vai desabilitar qualquer truncação |
+| `format`   | `"[$hostname]($style) in "` | O formato do módulo.                                                                                                                                     |
+| `style`    | `"bold dimmed green"`       | O estilo do módulo.                                                                                                                                      |
+| `disabled` | `false`                     | Desabilita o módulo `hostname`.                                                                                                                          |
 
 ### Variáveis
 
@@ -1437,10 +1437,10 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `java` exibe o versão atual instalada do [Java](https://www.oracle.com/java/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- O diretório atual contenha algum dos arquivos `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot`
+- O diretório atual contenha arquivos com as extensões `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc`
 
 ### Opções
 
@@ -1451,15 +1451,15 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                                                      | Quais pastas devem ativar este módulo.                                               |
-| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                                      |
+| `symbol`            | `"☕ "`                                                                                                    | Um formato de string que representa o simbolo do Java                                |
 | `style`             | `"red dimmed"`                                                                                            | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                                          |
+| `disabled`          | `false`                                                                                                   | Desabilita o módulo `java`.                                                          |
 
 ### Variáveis
 
 | Variável  | Exemplo | Descrição                         |
 | --------- | ------- | --------------------------------- |
-| version   | `v14`   | The version of `java`             |
+| version   | `v14`   | A versão do `java`                |
 | symbol    |         | Espelha o valor da opção `symbol` |
 | style\* |         | Espelha o valor da opção `style`  |
 
@@ -1476,7 +1476,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+O módulo `jobs` exibe o número atual de jobs rodando. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1506,7 +1506,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | O formato do módulo.                                                     |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | O estilo do módulo.                                                      |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | Desabilita o módulo `jobs`.                                              |
  \*: This option is deprecated, please use the 
 
 `number_threshold` and `symbol_threshold` options instead.
@@ -1515,7 +1515,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Variável  | Exemplo | Descrição                         |
 | --------- | ------- | --------------------------------- |
-| number    | `1`     | The number of jobs                |
+| number    | `1`     | O número de jobs                  |
 | symbol    |         | Espelha o valor da opção `symbol` |
 | style\* |         | Espelha o valor da opção `style`  |
 
@@ -1534,7 +1534,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `julia` exibe a versão atual instalada do [Julia](https://julialang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - The current directory contains a `Project.toml` file
 - The current directory contains a `Manifest.toml` file
