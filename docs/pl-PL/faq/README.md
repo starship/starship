@@ -48,17 +48,17 @@ starship prompt --help
 
 The prompt will use as much context as is provided, but no flags are "required".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Jak uruchomić Starship na dystrybucjach systemu Linux ze starszymi wersjami glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Jeżeli podczas używania gotowych instalacji (np. na CentOS 6 lub 7) pojawia się błąd w stylu "_version 'GLIBC_2.18' not found (required by starship)_", możesz użyć instalacji zbudowanej za pomocą `musl` zamiast `glibc`:
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## W wierszu poleceń zauważyłem symbole których się nie spodziewałem bądź nie rozumiem. Co one oznaczają?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Jeśli zauważyłeś symbole których nie rozpoznajesz, możesz użyć `starship explain` aby uzyskać szczegółowy opis obecnie wyświetlanych modułów.
 
 ## Why don't I see a glyph symbol in my prompt?
 
@@ -79,7 +79,7 @@ The first line should produce a [snake emoji](https://emojipedia.org/snake/), wh
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Jak odinstalować Starship?
 
 Starship is just as easy to uninstall as it is to install in the first place.
 
