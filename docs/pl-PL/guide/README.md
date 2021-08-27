@@ -142,34 +142,34 @@
 - **Łatwość:** szybka instalacja - zacznij korzystać w kilka minut.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Przeglądaj dokumentację Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀Instalacja
 
-### Prerequisites
+### Wymagania wstępne
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Czcionka typu [Nerd Font](https://www.nerdfonts.com/) zainstalowana i ustawiona w twoim terminalu (wypróbuj na przykład [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Getting Started
+### Pierwsze kroki
 
 **Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
-1. Install the **starship** binary:
+1. Zainstaluj plik programu **starship**:
 
 
-   #### Install Latest Version
+   #### Instalacja najnowszej wersji
 
 
-   ##### From prebuilt binary, with Shell:
+   ##### Z wstępnie zbudowanego pliku wykonywalnego, za pomocą powłoki Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. It will replace the current version without touching Starship's configuration.
 
    **Note** - The defaults of the install script can be overridden see the built-in help.
 
