@@ -2,18 +2,18 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!
 actionText: Get Started →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
+    title: Kompatybilność przede wszystkim
     details: Works on the most common shells on the most common operating systems. Use it everywhere!
   - 
-    title: Rust-Powered
+    title: Napędzany językiem Rust
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
   - 
-    title: Customizable
+    title: Konfigurowalny
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
