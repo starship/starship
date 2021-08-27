@@ -1203,12 +1203,13 @@ Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para 
 
 ### Opções
 
-| Opções          | Padrão                                                   | Descrição                              |
-| --------------- | -------------------------------------------------------- | -------------------------------------- |
-| `added_style`   | `"bold green"`                                           | O estilo para a contagem de adições.   |
-| `deleted_style` | `"bold red"`                                             | O estilo para a contagem de exclusões. |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | O formato do módulo.                   |
-| `disabled`      | `true`                                                   | Desabilita o módulo `git_metrics`.     |
+| Opções               | Padrão                                                       | Descrição                              |
+| -------------------- | ------------------------------------------------------------ | -------------------------------------- |
+| `added_style`        | `"bold green"`                                               | O estilo para a contagem de adições.   |
+| `deleted_style`      | `"bold red"`                                                 | O estilo para a contagem de exclusões. |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items.  |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | O formato do módulo.                   |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.     |
 
 ### Variáveis
 
