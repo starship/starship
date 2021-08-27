@@ -1204,12 +1204,13 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción          | Por defecto                                              | Descripción                        |
-| --------------- | -------------------------------------------------------- | ---------------------------------- |
-| `added_style`   | `"bold green"`                                           | The style for the added count.     |
-| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | El formato del módulo.             |
-| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+| Opción               | Por defecto                                                  | Descripción                           |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `added_style`        | `"bold green"`                                               | The style for the added count.        |
+| `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | El formato del módulo.                |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 
 ### Variables
 
