@@ -35,7 +35,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 
 ### Logi
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Starship domyślnie loguje ostrzeżenia i błędy do pliku o nazwie`~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, gdzie klucz sesji odpowiada twojej instancji terminala. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -47,25 +47,25 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-### Terminology
+### Glosariusz
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Moduł**: Komponent wiersza poleceń, który dostarcza informacji opartych na kontekście twojego systemu operacyjnego. Przykładowo, moduł "nodejs" pokazuje wersję Node.js, która jest obecnie zainstalowana na twoim komputerze, jeżeli znajdujesz się w folderze zawierającym projekt Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Zmienna**: Mniejszy podkomponent zawierający informacje dostarczane przez moduł. Przykładowo, zmienna "version" w module "nodejs" zawiera obecną wersję Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+W ramach konwencji większość modułów posiada przedrostek w domyślnym kolorze terminala (n.p. `via` w "nodejs") oraz pojedynczy odstęp za treścią modułu.
 
-### Format Strings
+### Formatowanie
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Moduły wypisują swoje zmienne przy użyciu ciągów formatujących. Większość modułów posiada wpis o nazwie `format`, który konfiguruje format wyświetlania modułu. W ciągach formatujących można używać tekstu, zmiennych oraz grup tekstowych.
 
-#### Variable
+#### Zmienne
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. Nazwa zmiennej zawiera tylko litery, cyfry i `_`.
 
-For example:
+Na przykład:
 
-- `$version` is a format string with a variable named `version`.
+- `$version` to ciąg formatujący ze zmienną o nazwie `version`.
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
 - `$git_branch $git_commit` has the two variables separated with a space.
 
@@ -77,7 +77,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
 
-For example:
+Na przykład:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Na przykład:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
