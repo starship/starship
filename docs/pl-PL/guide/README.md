@@ -138,8 +138,8 @@
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Bogata funkcjonalność:** wspiera wszystkie twoje ulubione narzędzia.
+- **Łatwość:** szybka instalacja - zacznij korzystać w kilka minut.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
