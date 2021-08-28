@@ -142,12 +142,12 @@ Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
 ### Opsi
 
-| Opsi              | Bawaan                         | Deskripsi                                                    |
-| ----------------- | ------------------------------ | ------------------------------------------------------------ |
-| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                          |
-| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik). |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                 |
+| Opsi              | Bawaan                         | Deskripsi                                                              |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                    |
+| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).           |
+| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dijalankan starship (dalam milidetik). |
+| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                           |
 
 ### Contoh
 
@@ -314,7 +314,7 @@ symbol = "🅰 "
 
 ## Baterai
 
-Modul `battery` menampilkan seberapa penuh baterai piranti terisi dan status pengisiannya. Modulnya hanya dapat terlihat ketika baterai dari pirantinya di bawah 10%.
+Modul `battery` menampilkan seberapa penuh baterai perangkat terisi dan status pengisiannya. Modulnya hanya dapat terlihat ketika baterai perangkat di bawah 10%.
 
 ### Opsi
 
@@ -479,7 +479,7 @@ Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang te
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
-## Command Duration
+## Durasi Perintah
 
 Modul `cmd_duration` menampilkan seberapa lama perintah sebelumnya membutuhkan waktu untuk dilaksanakan. Modulnya hanya akan ditampilkan jika perintahnya membutuhkan waktu lebih dari dua detik, atau ada nilai dari konfigurasi `min_time`.
 
@@ -540,20 +540,20 @@ Hal ini tidak menahan pengubah (modifier) prompt dari conda sendiri, kamu mungki
 
 ### Opsi
 
-| Opsi                | Bawaan                                 | Deskripsi                                                                                                                                                                                                   |
-| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `"bold green"`                         | Gaya penataan untuk modul.                                                                                                                                                                                  |
-| `format`            | `"via [$symbol$environment]($style) "` | Format dari modul.                                                                                                                                                                                          |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
+| Opsi                | Bawaan                                 | Deskripsi                                                                                                                                                                                       |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | Jumlah direktori yang dipotong oleh environment path, jika environment-nya dibuat melalui `conda create -p [path]`. `0` artinya tidak ada potongan. Lihat juga modul [`directory`](#directory). |
+| `symbol`            | `"🅒 "`                                 | Simbol yang digunakan sebelum nama environment.                                                                                                                                                 |
+| `style`             | `"bold green"`                         | Gaya penataan untuk modul.                                                                                                                                                                      |
+| `format`            | `"via [$symbol$environment]($style) "` | Format dari modul.                                                                                                                                                                              |
+| `ignore_base`       | `true`                                 | Mengabaikan `base` environment saat aktif.                                                                                                                                                      |
+| `disabled`          | `false`                                | Menonaktifkan modul `conda`.                                                                                                                                                                    |
 
 ### Variabel
 
 | Variabel    | Contoh       | Deskripsi                         |
 | ----------- | ------------ | --------------------------------- |
-| environment | `astronauts` | The current conda environment     |
+| environment | `astronauts` | Environment conda saat ini        |
 | symbol      |              | Menyalin nilai dari opsi `symbol` |
 | style\*   |              | Menyalin nilai dari opsi `style`  |
 
@@ -570,7 +570,7 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
+Modul `crystal` menampilkan versi terkini dari [Crystal](https://crystal-lang.org/) yang terpasang. By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
