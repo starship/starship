@@ -684,25 +684,25 @@ format = "via [🦕 $version](green bold) "
 
 ## Direktori
 
-Modul `directory` menampilkan arah ke direkori terkinimu, disingkat ke tiga folder induk. Direkrotimu juga akan disingkat ke sumber akar dari git repo di tempatmu berada saat ini.
+Modul `directory` menampilkan arah ke direkori terkinimu, disingkat ke tiga folder induk. Direkrotimu juga akan disingkat ke root dari git repo di tempatmu berada saat ini.
 
 Ketika kamu menggunakan penataan pwd option fish, alih-alih menyembunyikan jalur yang disingkat, kamu akan melihat nama yang disingkat untuk tiap-tiap direktori berdasarkan dari jumlah nomor yang kamu aktifkan untuk opsi tersebut.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root repo-nya, dan lalu opsinya diset menjadi `1`. Kamu akan melihat `~/D/N/nixpkgs/pkgs`, sedangkan sebelumnya direktori tersebut harusnya `nixpkgs/pkgs`.
 
 ### Opsi
 
-| Opsi                | Bawaan                                             | Deskripsi                                                                        |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format dari modul.                                                               |
-| `style`             | `"bold cyan"`                                      | Gaya penataan untuk modul.                                                       |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| Opsi                | Bawaan                                             | Deskripsi                                                                 |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | Jumlah dari folder induk yang harusnya disingkat oleh direktori saat ini. |
+| `truncate_to_repo`  | `true`                                             | Apakah harus menyingkat root dari git repo tempatmu berada saat ini.      |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format dari modul.                                                        |
+| `style`             | `"bold cyan"`                                      | Gaya penataan untuk modul.                                                |
+| `disabled`          | `false`                                            | Menonaktifkan modul `directory`.                                          |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                     |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                       |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                         |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                     |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
