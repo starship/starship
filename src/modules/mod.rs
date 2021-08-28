@@ -31,6 +31,7 @@ mod haskell;
 mod helm;
 mod hg_branch;
 mod hostname;
+mod iterm2_mark;
 mod java;
 mod jobs;
 mod julia;
@@ -88,6 +89,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
         match module {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
+            "iterm2_mark" => iterm2_mark::module(context),
             "aws" => aws::module(context),
             "azure" => azure::module(context),
             #[cfg(feature = "battery")]
@@ -180,6 +182,10 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 
 pub fn description(module: &str) -> &'static str {
     match module {
+        "iterm2_mark" => {
+            "The marker for iTerm2 on macOS. \
+            You can navigate marks with Cmd-Shift-Up and Down-arrow keys."
+        }
         "aws" => "The current AWS region and profile",
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",

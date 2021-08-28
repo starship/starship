@@ -67,6 +67,7 @@ shadow-rs = "0.10.0"
 starship-battery = { version = "0.7.9", optional = true }
 starship_module_config_derive = { version = "0.2.1", path = "starship_module_config_derive" }
 strsim = "0.10.0"
+strip-ansi-escapes = "0.1.1"
 sys-info = "0.9.1"
 terminal_size = "0.1.17"
 toml = { version = "0.5.8", features = ["preserve_order"] }

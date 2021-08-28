@@ -18,6 +18,7 @@ pub struct StarshipRootConfig {
 // NOTE: If this const value is changed then Default prompt order subheading inside
 // prompt heading of config docs needs to be updated according to changes made here.
 pub const PROMPT_ORDER: &[&str] = &[
+    "iterm2_mark",
     "username",
     "hostname",
     "localip",
