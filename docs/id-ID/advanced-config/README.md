@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Menata String
+## Style Strings
 
-Tataan pada strings merupakan sebuah kumpulan kata yang dipisahkan dengan spasi kosong. Kumpulan katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
+Style strings are a list of words, separated by whitespace. Kumpulan katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
 
   - `bold`
   - `italic`
