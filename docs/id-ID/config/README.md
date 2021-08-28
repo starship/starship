@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Seluruh konfigurasi starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
 
 ```toml
-# Inserts a blank line between shell prompts
+# Menambahkan baris kosong antar prompt shell
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Mengganti simbol "❯" pada prompt dengan simbol "➜"
+[character]                            # Nama modul yang dikonfigurasi adalah "character"
+success_symbol = "[➜](bold green)"     # Segmen "success_symbol" diganti menjadi "➜" dengan warna "bold green"
 
-# Disable the package module, hiding it from the prompt completely
+# Menonaktifkan paket modul, menyembunyikannya dari prompt seutuhnya
 [package]
 disabled = true
 ```
@@ -51,7 +51,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Modul**: Sebuah komponen pada prompt yang memberikan informasi berdasarkan info kontekstual sistem operasimu. Sebagai contoh, modul "nodejs" menampilkan versi Node.js yang tengah terpasang pada komputermu, jika direktorimu sedang berada pada proyek Node.js.
 
-**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. Sebagai contoh, variabel "version" dalam modul "nodejs" memuat versi Node.js saat ini.
+**Variabel**: Sub-komponen yang terdiri dari informasi yang disediakan oleh modul. Sebagai contoh, variabel "version" dalam modul "nodejs" memuat versi terikini dari Node.js.
 
 Secara konvensi, sebagian modul memiliki prefiks bawaan pada warna terminal (mis. `via` pada "nodejs") dan juga sebuah ruang kosong sebagai sufiks.
 
@@ -98,7 +98,7 @@ Perhatikan bagaimana nantinya penataanmu akan terlihat pada emulator terminalmu.
 
 #### Format String Bersyarat (Conditional)
 
-String dengan format bersyarat dibungkus dengan `(` dan `)` tidak akan dijalankan jika variabel di dalamnya kosong.
+Sebuah string dengan format bersyarat dibungkus dengan `(` dan `)` tidak akan dijalankan jika variabel di dalamnya kosong.
 
 Sebagai contoh:
 
@@ -106,7 +106,7 @@ Sebagai contoh:
 - `(sembarang)` akan selalu tidak menampilkan apapun karena tidak ada variabel yang dibungkus dalam kurung kurawal.
 - Tatkala `$all` digunakan sebagai shortcut untuk `\[$a$b\]`, `($all)` tidak akan menampilkan apapun jika nilai `$a` dan `$b` adalah `None`. Berlaku juga dengan `(\[$a$b\] )`.
 
-#### Karakter Yang Bisa Dihindari (Escapable)
+#### Karakter Pelarian
 
 Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus mengikatnya (escape) dengan garis miring terbalik (`\`).
 
