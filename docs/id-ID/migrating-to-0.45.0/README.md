@@ -111,7 +111,7 @@ error_symbol = "[✖](bold red)"
 
 *Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
-#### Command Duration
+#### Durasi Perintah
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |
