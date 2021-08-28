@@ -49,6 +49,9 @@ pub struct Context<'a> {
     /// Construct the right prompt instead of the left prompt
     pub right: bool,
 
+    /// Width of terminal, or zero if width cannot be detected.
+    pub width: usize,
+
     /// A HashMap of environment variable mocks
     #[cfg(test)]
     pub env: HashMap<&'a str, String>,
@@ -135,6 +138,9 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             right,
+            width: term_size::dimensions()
+                .map(|(width, _)| width)
+                .unwrap_or_default(),
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]

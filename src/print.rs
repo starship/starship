@@ -16,7 +16,7 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 
-pub struct Grapheme<'a>(&'a str);
+pub struct Grapheme<'a>(pub &'a str);
 
 impl<'a> Grapheme<'a> {
     pub fn width(&self) -> usize {
@@ -112,7 +112,7 @@ pub fn get_prompt(context: Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_shell(context.shell);
+    let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline {
         writeln!(buf).unwrap();
     }

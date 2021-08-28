@@ -1,5 +1,5 @@
 use crate::context::Shell;
-use crate::segment::Segment;
+use crate::segment::{FillSegment, Segment};
 use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::{ANSIString, ANSIStrings};
 use std::fmt;
@@ -26,6 +26,7 @@ pub const ALL_MODULES: &[&str] = &[
     "elm",
     "env_var",
     "erlang",
+    "fill",
     "gcloud",
     "git_branch",
     "git_commit",
@@ -124,29 +125,29 @@ impl<'a> Module<'a> {
         self.segments
             .iter()
             // no trim: if we add spaces/linebreaks it's not "empty" as we change the final output
-            .all(|segment| segment.value.is_empty())
+            .all(|segment| segment.value().is_empty())
     }
 
     /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
         self.segments
             .iter()
-            .map(|segment| segment.value.as_str())
+            .map(|segment| segment.value())
             .collect()
     }
 
     /// Returns a vector of colored ANSIString elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
-        self.ansi_strings_for_shell(Shell::Unknown)
+        self.ansi_strings_for_shell(Shell::Unknown, None)
     }
 
-    pub fn ansi_strings_for_shell(&self, shell: Shell) -> Vec<ANSIString> {
-        let ansi_strings = self
-            .segments
-            .iter()
-            .map(Segment::ansi_string)
-            .collect::<Vec<ANSIString>>();
+    pub fn ansi_strings_for_shell(&self, shell: Shell, width: Option<usize>) -> Vec<ANSIString> {
+        let mut iter = self.segments.iter().peekable();
+        let mut ansi_strings: Vec<ANSIString> = Vec::new();
+        while iter.peek().is_some() {
+            ansi_strings.extend(ansi_line(&mut iter, width));
+        }
 
         match shell {
             Shell::Bash => ansi_strings_modified(ansi_strings, shell),
@@ -172,6 +173,49 @@ fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANS
             ANSIString::from(wrapped)
         })
         .collect::<Vec<ANSIString>>()
+}
+
+fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<ANSIString<'a>>
+where
+    I: Iterator<Item = &'a Segment>,
+{
+    let mut used = 0usize;
+    let mut current: Vec<ANSIString> = Vec::new();
+    let mut chunks: Vec<(Vec<ANSIString>, &FillSegment)> = Vec::new();
+
+    for segment in segments {
+        match segment {
+            Segment::Fill(fs) => {
+                chunks.push((current, fs));
+                current = Vec::new();
+            }
+            _ => {
+                used += segment.width_graphemes();
+                current.push(segment.ansi_string());
+            }
+        }
+
+        if let Segment::LineTerm = segment {
+            break;
+        }
+    }
+
+    if chunks.is_empty() {
+        current
+    } else {
+        let fill_size = term_width
+            .map(|tw| if tw > used { Some(tw - used) } else { None })
+            .flatten()
+            .map(|remaining| remaining / chunks.len());
+        chunks
+            .into_iter()
+            .flat_map(|(strs, fill)| {
+                strs.into_iter()
+                    .chain(std::iter::once(fill.ansi_string(fill_size)))
+            })
+            .chain(current.into_iter())
+            .collect::<Vec<ANSIString>>()
+    }
 }
 
 #[cfg(test)]
@@ -208,7 +252,7 @@ mod tests {
             config: None,
             name: name.to_string(),
             description: desc.to_string(),
-            segments: vec![Segment::new(None, "")],
+            segments: Segment::from_text(None, ""),
             duration: Duration::default(),
         };
 
@@ -223,7 +267,7 @@ mod tests {
             config: None,
             name: name.to_string(),
             description: desc.to_string(),
-            segments: vec![Segment::new(None, "\n")],
+            segments: Segment::from_text(None, "\n"),
             duration: Duration::default(),
         };
 
@@ -238,7 +282,7 @@ mod tests {
             config: None,
             name: name.to_string(),
             description: desc.to_string(),
-            segments: vec![Segment::new(None, " ")],
+            segments: Segment::from_text(None, " "),
             duration: Duration::default(),
         };
 
