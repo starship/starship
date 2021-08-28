@@ -454,7 +454,7 @@ vicmd_symbol = "[V](bold green) "
 Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - Direktori terkini yang berisikan sebuah file `CMakeLists.txt`
-- Direktori terkini berisikan sebuah file `CMakeCache.txt`
+- Direktori terkini yang berisikan sebuah file `CMakeCache.txt`
 
 ### Opsi
 
@@ -572,8 +572,8 @@ format = "[$symbol$environment](dimmed green) "
 
 Modul `crystal` menampilkan versi terkini dari [Crystal](https://crystal-lang.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini berisikan sebuah file `shard.yml`
-- Direktori terkini berisikan sebuah file `.cr`
+- Direktori terkini yang berisikan sebuah file `shard.yml`
+- Direktori terkini yang berisikan sebuah file `.cr`
 
 ### Opsi
 
@@ -613,7 +613,7 @@ Modul `dart` menampilkan versi terkini dari [Dart](https://dart.dev/) yang terpa
 
 - Direktori terkini yang berisikan sebuah file berekstensi `.dart`
 - Direktori terkini yang berisikan sebuah direktori `dart_tool`
-- Direktori terkini yang berisikan sebuah file `pubspec.yaml`, `pubspec.yml`, atau `pubspec.lock`
+- Direktori terkini yang berisikan sebuah file `pubspec.yaml`, `pubspec.yml` atau `pubspec.lock`
 
 ### Opsi
 
@@ -621,18 +621,18 @@ Modul `dart` menampilkan versi terkini dari [Dart](https://dart.dev/) yang terpa
 | ------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                       | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart                                     |
+| `symbol`            | `"🎯 "`                                            | Sebuah format string yang melambangkan simbol Dart                                  |
 | `detect_extensions` | `["dart"]`                                        | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[".dart_tool"]`                                  | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `style`             | `"bold blue"`                                     | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                                         |
+| `disabled`          | `false`                                           | Menonaktifkan modul `dart`.                                                         |
 
 ### Variabel
 
 | Variabel  | Contoh   | Deskripsi                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v2.8.4` | The version of `dart`             |
+| version   | `v2.8.4` | Versi dari `dart`                 |
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
@@ -649,8 +649,8 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+Modul `deno` menampilkan versi terkini dari [Deno](https://deno.land/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+- Direktori terkini yang berisikan sebuah file `mod.ts`, `mod.js`, `deps.ts` atau `deps.js`
 
 ### Opsi
 
@@ -658,18 +658,18 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | ------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                                     |
+| `symbol`            | `🦕 "`                                        | Sebuah format string yang melambangkan simbol Deno                                  |
 | `detect_extensions` | `[]`                                         | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                         | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `style`             | `"green bold"`                               | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                      | Disables the `deno` module.                                                         |
+| `disabled`          | `false`                                      | Menonaktifkan modul `deno`.                                                         |
 
 ### Variabel
 
 | Variabel  | Contoh   | Deskripsi                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v1.8.3` | The version of `deno`             |
+| version   | `v1.8.3` | Versi dari `deno`                 |
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
@@ -682,9 +682,9 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 format = "via [🦕 $version](green bold) "
 ```
 
-## Directory
+## Direktori
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Modul `directory` menampilkan arah ke direkori terkinimu, disingkat ke tiga folder induk. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
