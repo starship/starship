@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Seluruh konfigurasi starship dilakukan dalam file [TOML](https://github.com/toml-lang/toml) berikut:
 
 ```toml
-# Menambahkan baris kosong antar prompt shell
+# Inserts a blank line between shell prompts
 add_newline = true
 
-# Mengganti simbol "❯" pada prompt dengan simbol "➜"
-[character]                            # Nama modul yang dikonfigurasi adalah "character"
-success_symbol = "[➜](bold green)"     # Segmen "success_symbol" diganti menjadi "➜" dengan warna "bold green"
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Mengnonaktifkan paket modul, menyembunyikannya dari prompt secara utuh
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
