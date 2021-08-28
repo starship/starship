@@ -108,7 +108,7 @@ Sebagai contoh:
 
 #### Karakter Pelarian
 
-Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus mengikatnya (escape) dengan garis miring terbalik (`\`).
+Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus membebaskannya (escape) dengan garis miring terbalik (`\`).
 
 - \$
 - \\
@@ -117,9 +117,9 @@ Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika 
 - (
 - )
 
-Perhatikan bahwa `toml` memiliki [sintaksi bebasnya sendiri](https://github.com/toml-lang/toml#user-content-string). Disarankan halnya untukmu menggunakan string literal (`''`) dalam konfigurasimu. Jika kamu mau memakai string standar (`""`), ingatlah untuk mengikat garis miring terbalik `\`.
+Perhatikan bahwa `toml` memiliki [sintaksi bebasnya sendiri](https://github.com/toml-lang/toml#user-content-string). Disarankan halnya untukmu menggunakan string literal (`''`) dalam konfigurasimu. Jika kamu mau memakai string standar (`""`), ingatlah untuk membebaskan garis miring terbalik `\`.
 
-Sebagai contoh, ketika kamu ingin menampilkan simbol `$` pada baris baru, konfigurasi berikut untuk `format` bersifat ekuivalen:
+Sebagai contoh, ketika kamu ingin menampilkan simbol `$` pada sebuah baris baru, konfigurasi berikut sama halnya pada `format`:
 
 ```toml
 # dengan string standar
@@ -142,12 +142,12 @@ Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
 ### Opsi
 
-| Opsi              | Bawaan                         | Deskripsi                                                                    |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                          |
-| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).                 |
-| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dieksekusi oleh starship (dalam militdetik). |
-| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                 |
+| Opsi              | Bawaan                         | Deskripsi                                                    |
+| ----------------- | ------------------------------ | ------------------------------------------------------------ |
+| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                          |
+| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik). |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
+| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                 |
 
 ### Contoh
 
