@@ -684,9 +684,9 @@ format = "via [🦕 $version](green bold) "
 
 ## Direktori
 
-Modul `directory` menampilkan arah ke direkori terkinimu, disingkat ke tiga folder induk. Your directory will also be truncated to the root of the git repo that you're currently in.
+Modul `directory` menampilkan arah ke direkori terkinimu, disingkat ke tiga folder induk. Direkrotimu juga akan disingkat ke sumber akar dari git repo di tempatmu berada saat ini.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Ketika kamu menggunakan penataan pwd option fish, alih-alih menyembunyikan jalur yang disingkat, kamu akan melihat nama yang disingkat untuk tiap-tiap direktori berdasarkan dari jumlah nomor yang kamu aktifkan untuk opsi tersebut.
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
