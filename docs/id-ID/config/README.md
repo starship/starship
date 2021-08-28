@@ -699,13 +699,13 @@ Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root r
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format dari modul.                                                        |
 | `style`             | `"bold cyan"`                                      | Gaya penataan untuk modul.                                                |
 | `disabled`          | `false`                                            | Menonaktifkan modul `directory`.                                          |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                     |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                       |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                         |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                     |
+| `read_only`         | `"🔒"`                                              | Simbol yang mengindikasikan direktori saat ini bersifat read only.        |
+| `read_only_style`   | `"red"`                                            | Corak gaya untuk simbol read only.                                        |
+| `truncation_symbol` | `""`                                               | Simbol untuk awalan jalur yang disingkat. misalnya: ".../"                |
+| `home_symbol`       | `"~"`                                              | Simbol yang mengindikasikan direktori home.                               |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Modul ini memilki beberapa opsi konfigurasi lanjutan yang mengontrol bagaimana direktori ditampilkan.</summary>
 
 | Advanced Option             | Bawaan | Deskripsi                                                                                                                                                              |
 | --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -729,7 +729,7 @@ Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root r
 
 | Variabel  | Contoh                | Deskripsi                        |
 | --------- | --------------------- | -------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path       |
+| path      | `"D:/Projects"`       | Direktori terkini                |
 | style\* | `"black bold dimmed"` | Menyalin nilai dari opsi `style` |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
@@ -746,26 +746,26 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+Modul `docker_context` menampilkan [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) yang kini aktif jika tidak diset ke `default` atau jika variabel environment `DOCKER_HOST` atau `DOCKER_CONTEXT` telah diatur (yang seharusnya diatur untuk menimpa konteks yang digunakan).
 
 ### Opsi
 
-| Opsi                | Bawaan                                                        | Deskripsi                                                                         |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                        |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| Opsi                | Bawaan                                                        | Deskripsi                                                                               |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                      |
+| `symbol`            | `"🐳 "`                                                        | Simbol yang digunakan sebelum menampilkan Docker context.                               |
+| `only_with_files`   | `true`                                                        | Hanya ditampilkan jika terdapat kecocokan                                               |
+| `detect_extensions` | `[]`                                                          | Extensions mana yang harusnya memicu modul ( butuh `only_with_files` untuk diset true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).        |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).          |
+| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                              |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                                   |
 
 ### Variabel
 
 | Variabel  | Contoh         | Deskripsi                         |
 | --------- | -------------- | --------------------------------- |
-| context   | `test_context` | The current docker context        |
+| context   | `test_context` | Docker context terkini            |
 | symbol    |                | Menyalin nilai dari opsi `symbol` |
 | style\* |                | Menyalin nilai dari opsi `style`  |
 
