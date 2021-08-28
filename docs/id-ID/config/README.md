@@ -750,16 +750,16 @@ Modul `docker_context` menampilkan [Docker context](https://docs.docker.com/engi
 
 ### Opsi
 
-| Opsi                | Bawaan                                                        | Deskripsi                                                                               |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                      |
-| `symbol`            | `"🐳 "`                                                        | Simbol yang digunakan sebelum menampilkan Docker context.                               |
-| `only_with_files`   | `true`                                                        | Hanya ditampilkan jika terdapat kecocokan                                               |
-| `detect_extensions` | `[]`                                                          | Extensions mana yang harusnya memicu modul ( butuh `only_with_files` untuk diset true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).        |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).          |
-| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                              |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                                   |
+| Opsi                | Bawaan                                                        | Deskripsi                                                                                 |
+| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                        |
+| `symbol`            | `"🐳 "`                                                        | Simbol yang digunakan sebelum menampilkan Docker context.                                 |
+| `only_with_files`   | `true`                                                        | Hanya ditampilkan jika terdapat kecocokan                                                 |
+| `detect_extensions` | `[]`                                                          | Extensions mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).    |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | filenames mana yang harusnya memicu modul ini (butuh `only_with_files` untuk diset true). |
+| `detect_folders`    | `[]`                                                          | Folder mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).        |
+| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                                |
+| `disabled`          | `false`                                                       | Menonaktifkan module `docket_context`.                                                    |
 
 ### Variabel
 
@@ -2959,7 +2959,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "[🆅 $repo](bold blue) "
+format = "via [✨ $repo](bold blue) "
 ```
 
 ## Zig
@@ -3092,8 +3092,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters
+command = "echo foo"  # affiche la sortie de la commande
+files = ["foo"]       # ajoute un filtre
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
