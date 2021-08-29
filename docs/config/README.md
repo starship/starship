@@ -3068,7 +3068,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ```toml
 # ~/.config/starship.toml
-[v]
+[vlang]
 format = "via [V $version](blue bold) "
 ```
 
