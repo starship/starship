@@ -153,7 +153,7 @@
 
 ### Aan de slag
 
-**Opmerking:**: als gevolg van de groei van verschillende platforms, worden slechts bepaalde ondersteunde platforms hieronder weergegeven. Staat de jouwe er niet tussen? Neem een kijkje in de [extra platforminstructies](https://starship.rs/installing/).
+**Opmerking:** als gevolg van de groei van verschillende platforms, worden slechts bepaalde ondersteunde platforms hieronder weergegeven. Staat de jouwe er niet tussen? Neem een kijkje in de [extra platforminstructies](https://starship.rs/installing/).
 
 1. Installeer de **Starship** binary:
 
