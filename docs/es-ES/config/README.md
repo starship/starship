@@ -2924,7 +2924,7 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ```toml
 # ~/.config/starship.toml
-[vlang]
+[v]
 format = "via [V $version](blue bold) "
 ```
 
