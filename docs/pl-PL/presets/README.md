@@ -88,15 +88,15 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## Moduły w nawiasach kwadratowych
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Ta konfiguracja zmienia format wyświetlania wbudowanych modułów - zamiast domyślnych wyrazów ("via", "on", itp.) są wypisywane w nawiasach kwadratowych.
 
-Before:
+Przed:
 
 ![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
 
-After:
+Po:
 
 ![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
 
