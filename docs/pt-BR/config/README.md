@@ -1203,13 +1203,13 @@ Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para 
 
 ### Opções
 
-| Opções               | Padrão                                                       | Descrição                              |
-| -------------------- | ------------------------------------------------------------ | -------------------------------------- |
-| `added_style`        | `"bold green"`                                               | O estilo para a contagem de adições.   |
-| `deleted_style`      | `"bold red"`                                                 | O estilo para a contagem de exclusões. |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items.  |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | O formato do módulo.                   |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.     |
+| Opções               | Padrão                                                       | Descrição                                   |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| `added_style`        | `"bold green"`                                               | O estilo para a contagem de adições.        |
+| `deleted_style`      | `"bold red"`                                                 | O estilo para a contagem de exclusões.      |
+| `only_nonzero_diffs` | `true`                                                       | Exibe apenas o status para itens alterados. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | O formato do módulo.                        |
+| `disabled`           | `true`                                                       | Desabilita o módulo `git_metrics`.          |
 
 ### Variáveis
 
@@ -1638,16 +1638,16 @@ Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para 
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | O formato do módulo.                                                  |
 | `style`           | `"cyan bold"`                                        | O estilo do módulo.                                                   |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| `disabled`        | `true`                                               | Desabilita o módulo `kubernetes`.                                     |
 
 ### Variáveis
 
-| Variável  | Exemplo              | Descrição                                |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Espelha o valor da opção `symbol`        |
-| style\* |                      | Espelha o valor da opção `style`         |
+| Variável  | Exemplo              | Descrição                                   |
+| --------- | -------------------- | ------------------------------------------- |
+| context   | `starship-cluster`   | O contexto atual do kubernetes              |
+| namespace | `starship-namespace` | Se definido o namespace atual do kubernetes |
+| symbol    |                      | Espelha o valor da opção `symbol`           |
+| style\* |                      | Espelha o valor da opção `style`            |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
