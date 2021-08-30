@@ -1637,7 +1637,7 @@ Este módulo é desabilitado por padrão. Para ativa-lo, defina `disabled` para 
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | O formato do módulo.                                                  |
 | `style`           | `"cyan bold"`                                        | O estilo do módulo.                                                   |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `context_aliases` |                                                      | Tabela de aliases de contexto para exibir.                            |
 | `disabled`        | `true`                                               | Desabilita o módulo `kubernetes`.                                     |
 
 ### Variáveis
