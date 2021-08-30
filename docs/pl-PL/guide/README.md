@@ -10,7 +10,7 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions workflow status"
+      alt="Status Github Actions"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
@@ -336,11 +336,11 @@ Wspieraj ten projekt za pomocą swojej organizacji. Twoje logo pojawi się tutaj
 
 Zapoznaj się z wcześniejszymi projektami które zainspirowały nas do stworzenia starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - wiersz poleceń ZSH dla astronautów.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Wiersz poleceń ZSH dla astronautów.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Motyw robyrussell dla wielu powłok, napisany w JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - Wiersz polecenia typu Powerline z ikonami, działa na wielu różnych powłokach.
 
 <p align="center">
     <br>
