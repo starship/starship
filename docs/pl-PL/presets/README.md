@@ -1,16 +1,16 @@
 # Gotowe konfiguracje
 
-Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność. Jeżeli chcesz zamieścić własną konfigurację, [złóż PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) z modyfikacją tego pliku! 😊
 
-## Nerd Font Symbols
+## Symbole Nerd Font
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+Poniższa konfiguracja nie zmienia nic poza znaczkami użytymi do oznaczenia poszczególnych modułów. Jeżeli nie jesteś fanem emoji, to może ci się spodobać!
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
 ### Wymagania wstępne
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Czcionka [Nerd Font](https://www.nerdfonts.com/) zainstalowana i ustawiona w twoim terminalu (w przykładzie użyto Fira Code Nerd Font)
 
 ### Konfiguracja
 
