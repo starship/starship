@@ -1,6 +1,6 @@
-# Presets
+# Gotowe konfiguracje
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
 ## Nerd Font Symbols
 
