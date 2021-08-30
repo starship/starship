@@ -155,7 +155,7 @@
 
 ### Pierwsze kroki
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Uwaga**: z powodu szybko rosnącej liczby platform poniżej pokazano wybrane platformy spośród obecnie obsługiwanych. Nie widzisz swojej? Sprawdź w [dodatkowych instrukcjach dla platform](https://starship.rs/installing/).
 
 1. Zainstaluj plik programu **starship**:
 
