@@ -7,6 +7,7 @@ use std::cmp::Ordering;
 #[derive(Clone, Serialize)]
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
+    pub right_format: &'a str,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -89,6 +90,7 @@ impl<'a> Default for StarshipRootConfig<'a> {
     fn default() -> Self {
         StarshipRootConfig {
             format: "$all",
+            right_format: "",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -101,6 +103,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
         if let toml::Value::Table(config) = config {
             config.iter().for_each(|(k, v)| match k.as_str() {
                 "format" => self.format.load_config(v),
+                "right_format" => self.right_format.load_config(v),
                 "scan_timeout" => self.scan_timeout.load_config(v),
                 "command_timeout" => self.command_timeout.load_config(v),
                 "add_newline" => self.add_newline.load_config(v),
@@ -114,6 +117,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                         let did_you_mean = &[
                             // Root options
                             "format",
+                            "right_format",
                             "scan_timeout",
                             "command_timeout",
                             "add_newline",

@@ -11,6 +11,7 @@ fn starship-after-readline-hook [line]{
 
 fn starship-before-readline-hook {
     cmd-end-time = (::STARSHIP:: time)
+    cmd-duration=(- $cmd-end-time $cmd-start-time)
 }
 
 # Install Hooks
@@ -25,9 +26,17 @@ edit:prompt = {
     if (== $cmd-start-time 0) {
         ::STARSHIP:: prompt --jobs=$num-bg-jobs
     } else {
-        ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=(- $cmd-end-time $cmd-start-time)
+        ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration
     }
 }
 
-# Get rid of default rprompt
-edit:rprompt = { }
+edit:rprompt = {
+    # Note:
+    # Elvish does not appear to support exit status codes (--status)
+
+    if (== $cmd-start-time 0) {
+        ::STARSHIP:: prompt --right --jobs=$num-bg-jobs
+    } else {
+        ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration
+    }
+}

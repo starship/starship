@@ -99,6 +99,11 @@ fn main() {
         .subcommand(
             SubCommand::with_name("prompt")
                 .about("Prints the full starship prompt")
+                .arg(
+                    Arg::with_name("right")
+                        .long("right")
+                        .help("Print the right prompt (instead of the standard left prompt)"),
+                )
                 .arg(&status_code_arg)
                 .arg(&pipestatus_arg)
                 .arg(&path_arg)

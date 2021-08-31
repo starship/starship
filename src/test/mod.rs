@@ -31,6 +31,17 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
     log::set_boxed_logger(Box::new(logger)).unwrap();
 });
 
+pub fn default_context() -> Context<'static> {
+    let mut context = Context::new_with_shell_and_path(
+        clap::ArgMatches::default(),
+        Shell::Unknown,
+        PathBuf::new(),
+        PathBuf::new(),
+    );
+    context.config = StarshipConfig { config: None };
+    context
+}
+
 /// Render a specific starship module by name
 pub struct ModuleRenderer<'a> {
     name: &'a str,
@@ -43,13 +54,7 @@ impl<'a> ModuleRenderer<'a> {
         // Start logger
         Lazy::force(&LOGGER);
 
-        let mut context = Context::new_with_shell_and_path(
-            clap::ArgMatches::default(),
-            Shell::Unknown,
-            PathBuf::new(),
-            PathBuf::new(),
-        );
-        context.config = StarshipConfig { config: None };
+        let context = default_context();
 
         Self { name, context }
     }

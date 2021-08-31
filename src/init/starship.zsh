@@ -92,3 +92,4 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 PROMPT='$(::STARSHIP:: prompt --keymap="$KEYMAP" --status="$STARSHIP_CMD_STATUS" --pipestatus ${STARSHIP_PIPE_STATUS[@]} --cmd-duration="$STARSHIP_DURATION" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt --right --keymap="$KEYMAP" --status="$STARSHIP_CMD_STATUS" --pipestatus ${STARSHIP_PIPE_STATUS[@]} --cmd-duration="$STARSHIP_DURATION" --jobs="$STARSHIP_JOBS_COUNT")'

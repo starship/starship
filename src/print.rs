@@ -79,14 +79,7 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
-    } else {
-        log::error!("Error parsing `format`");
-        buf.push('>');
-        return buf;
-    };
-    let modules = formatter.get_variables();
+    let (formatter, modules) = load_formatter_and_modules(&context);
 
     let formatter = formatter.map_variables_to_segments(|module| {
         // Make $all display all modules not explicitly referenced
@@ -124,6 +117,11 @@ pub fn get_prompt(context: Context) -> String {
         writeln!(buf).unwrap();
     }
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+
+    if context.right {
+        // right prompts generally do not allow newlines
+        buf = buf.replace('\n', "");
+    }
 
     // escape \n and ! characters for tcsh
     if let Shell::Tcsh = context.shell {
@@ -289,14 +287,7 @@ pub fn explain(args: ArgMatches) {
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
-    let config = context.config.get_root_config();
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
-    } else {
-        log::error!("Error parsing `format`");
-        return Vec::new();
-    };
-    let modules = formatter.get_variables();
+    let (_formatter, modules) = load_formatter_and_modules(context);
 
     for module in &modules {
         // Manually add all modules if `$all` is encountered
@@ -415,4 +406,57 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     }
 
     prompt_order
+}
+
+/// Load the correct formatter for the context (ie left prompt or right prompt)
+/// and the list of all modules used in a format string
+fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
+    let config = context.config.get_root_config();
+
+    let lformatter = StringFormatter::new(config.format);
+    let rformatter = StringFormatter::new(config.right_format);
+    if lformatter.is_err() {
+        log::error!("Error parsing `format`")
+    }
+    if rformatter.is_err() {
+        log::error!("Error parsing `right_format`")
+    }
+
+    match (lformatter, rformatter) {
+        (Ok(lf), Ok(rf)) => {
+            let mut modules: BTreeSet<String> = BTreeSet::new();
+            modules.extend(lf.get_variables());
+            modules.extend(rf.get_variables());
+            if context.right {
+                (rf, modules)
+            } else {
+                (lf, modules)
+            }
+        }
+        _ => (StringFormatter::raw(">"), BTreeSet::new()),
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::config::StarshipConfig;
+    use crate::test::default_context;
+
+    #[test]
+    fn right_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_format="$character"
+                [character]
+                format=">\n>"
+            }),
+        };
+        context.right = true;
+
+        let expected = String::from(">>"); // should strip new lines
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
 }
