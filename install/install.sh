@@ -115,36 +115,21 @@ unpack() {
 }
 
 usage() {
-    cat <<EOT
-install.sh [option]
+  printf "%s\n" \
+    "install.sh [option]" \
+    "" \
+    "Fetch and install the latest version of starship, if starship is already" \
+    "installed it will be updated to the latest version."
 
-Fetch and install the latest version of starship, if starship is already
-installed it will be updated to the latest version.
-
-Options
-
-  -V, --verbose
-    Enable verbose output for the installer
-
-  -f, -y, --force, --yes
-    Skip the confirmation prompt during installation
-
-  -p, --platform
-    Override the platform identified by the installer [default: ${PLATFORM}]
-
-  -b, --bin-dir
-    Override the bin installation directory [default: ${BIN_DIR}]
-
-  -a, --arch
-    Override the architecture identified by the installer [default: ${ARCH}]
-
-  -B, --base-url
-    Override the base URL used for downloading releases [default: ${BASE_URL}]
-
-  -h, --help
-    Dispays this help message
-
-EOT
+  printf "\n%s\n" "Options"
+  printf "\t%s\n\t\t%s\n\n" \
+    "-V, --verbose" "Enable verbose output for the installer" \
+    "-f, -y, --force, --yes" "Skip the confirmation prompt during installation" \
+    "-p, --platform" "Override the platform identified by the installer [default: ${PLATFORM}]" \
+    "-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
+    "-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
+    "-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
+    "-h, --help" "Dispays this help message"
 }
 
 elevate_priv() {
