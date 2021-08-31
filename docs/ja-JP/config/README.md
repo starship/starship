@@ -393,7 +393,7 @@ discharging_symbol = 💦
 
 ::: warning
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol`はelvishとnu shellでサポートされていません。
 
 :::
 
