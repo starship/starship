@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **警告** これは将来的に変更されます。 nu バージョン 0.33 以降のみサポートされます。 nu 設定ファイルに以下を追加してください。 You can check the location of this file by running `config path` in nu.
+   **警告** これは将来的に変更されます。 nu バージョン 0.33 以降のみサポートされます。 nu 設定ファイルに以下を追加してください。 nu で`config path`を実行することで、設定ファイルの場所を確認できます。
 
    ```toml
    startup = [
