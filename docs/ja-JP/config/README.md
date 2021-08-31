@@ -820,9 +820,9 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | 変数        | 設定例              | 説明                                                                 |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| version   | `v3.1.201`       | `dotnet sdk` のバージョンです                                              |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | オプション `記号` の値をミラーする                                                |
+| symbol    |                  | オプション `symbol` の値をミラーする                                            |
 | style\* |                  | オプション `style` の値をミラーする                                             |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
