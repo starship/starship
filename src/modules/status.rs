@@ -19,6 +19,15 @@ enum PipeStatusStatus<'a> {
 ///
 /// Will display the status only if it is not 0
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("status");
+    let config = StatusConfig::try_load(module.config);
+
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
+    if config.disabled {
+        return None;
+    };
+
     let exit_code = context
         .properties
         .get("status_code")
@@ -31,24 +40,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             false => PipeStatusStatus::NoPipe,
         },
     };
+
+    let pipestatus_status = match config.pipestatus {
+        true => pipestatus_status,
+        false => PipeStatusStatus::Disabled,
+    };
+
     if exit_code == "0"
         && (pipestatus_status == PipeStatusStatus::Disabled
             || pipestatus_status == PipeStatusStatus::NoPipe)
     {
         return None;
     }
-    let mut module = context.new_module("status");
-    let config = StatusConfig::try_load(module.config);
-
-    // As we default to disabled=true, we have to check here after loading our config module,
-    // before it was only checking against whatever is in the config starship.toml
-    if config.disabled {
-        return None;
-    };
-    let pipestatus_status = match config.pipestatus {
-        true => pipestatus_status,
-        false => PipeStatusStatus::Disabled,
-    };
 
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
@@ -495,14 +498,28 @@ mod tests {
     }
 
     #[test]
+    fn successful_pipeline() {
+        let pipe_exit_code = [0, 0, 0];
+
+        let main_exit_code = 0;
+
+        let expected = None;
+
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(&pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn pipeline_disabled() {
-        let exit_values = [
-            [0, 0, 0, 0],
-            [0, 1, 2, 3],
-            [130, 126, 131, 127],
-            [1, 1, 1, 1],
-        ];
-        let exit_values_rendered = ["F 🟢", "F 🟢", "F 🧱", "F 🔴"];
+        let exit_values = [[130, 126, 131, 127], [1, 1, 1, 1]];
+        let exit_values_rendered = ["F 🧱", "F 🔴"];
 
         for (status, rendered) in exit_values.iter().zip(exit_values_rendered.iter()) {
             let main_exit_code = status[0];
