@@ -560,7 +560,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
@@ -1387,9 +1387,9 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-## Golang
+## Go
 
-The `golang` module shows the currently installed version of [Golang](https://golang.org/).
+The `golang` module shows the currently installed version of [Go](https://golang.org/).
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `go.mod` file
@@ -2144,20 +2144,20 @@ package, and shows its current version. The module currently supports `npm`, `ni
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present
   in the current directory
-- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
-- [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
+- [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
+- [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present
   in the current directory
-- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
-- [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
+- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
+- [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present
   in the current directory
-- [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
-- [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
-- [**mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
-- [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
-- [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
-- [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
-- [**vlang**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
+- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
+- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
+- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -2417,7 +2417,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of R. The module will be shown if
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if
 any of the following conditions are met:
 
 - The current directory contains a file with the `.R` extension.
@@ -2666,7 +2666,7 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is
+The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") environment variable, if it is
 set to a number and meets or exceeds the specified threshold.
 
 ### Options
@@ -3036,9 +3036,9 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [⍱ $version](bold white) "
 ```
 
-## VLang
+## V
 
-The `vlang` module shows you your currently installed version of V.
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/).
 By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
