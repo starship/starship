@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Hanya nu versi v0.33 atau lebih baru yang tengah didukung. Add the following to your nu config file. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
+   **Warning** This will change in the future. Hanya nu versi v0.33 atau versi terbaru yang mendapat dukungan pengembangan. Add the following to your nu config file. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
 
    ```toml
    startup = [
