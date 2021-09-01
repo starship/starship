@@ -12,6 +12,7 @@ on:
     - cron: '0 0 * * *'
 jobs:
   security_audit:
+    if: (github.event_name == 'schedule' && github.repository == 'starship/starship') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
