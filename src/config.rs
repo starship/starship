@@ -141,7 +141,7 @@ where
     fn from_config(config: &'a Value) -> Option<Self> {
         let mut hm = Self::default();
 
-        for (x, y) in config.as_table()?.iter() {
+        for (x, y) in config.as_table()? {
             hm.insert(x.clone(), T::from_config(y)?);
         }
 
@@ -157,7 +157,7 @@ where
     fn from_config(config: &'a Value) -> Option<Self> {
         let mut im = Self::default();
 
-        for (x, y) in config.as_table()?.iter() {
+        for (x, y) in config.as_table()? {
             im.insert(x.clone(), T::from_config(y)?);
         }
 

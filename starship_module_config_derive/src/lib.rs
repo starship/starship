@@ -20,7 +20,7 @@ fn impl_module_config(dinput: DeriveInput) -> proc_macro::TokenStream {
             let mut load_tokens = quote! {};
             let mut fields = quote! {};
 
-            for field in fields_named.named.iter() {
+            for field in &fields_named.named {
                 let ident = field.ident.as_ref().unwrap();
 
                 let new_load_tokens = quote! {

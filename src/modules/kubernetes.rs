@@ -429,7 +429,7 @@ users: []
             .path(dir.path())
             .env(
                 "KUBECONFIG",
-                env::join_paths([&filename_cc, &filename_ctx].iter())
+                env::join_paths([&filename_cc, &filename_ctx])
                     .unwrap()
                     .to_string_lossy(),
             )
@@ -444,7 +444,7 @@ users: []
             .path(dir.path())
             .env(
                 "KUBECONFIG",
-                env::join_paths([&filename_ctx, &filename_cc].iter())
+                env::join_paths([&filename_ctx, &filename_cc])
                     .unwrap()
                     .to_string_lossy(),
             )

@@ -186,7 +186,7 @@ fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> 
     // Check the parent directory, or otherwise the repository root, for a global.json
     let mut check_dirs = parent_dir
         .iter()
-        .chain(repo_root.iter())
+        .chain(&repo_root)
         .copied() // Copies the reference, not the Path itself
         .collect::<Vec<&Path>>();
 
