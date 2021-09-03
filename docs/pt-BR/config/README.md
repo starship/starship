@@ -1688,13 +1688,13 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Quebra de linha
 
-The `line_break` module separates the prompt into two lines.
+O módulo `line_break` separa o prompt em duas linhas.
 
 ### Opções
 
-| Opções     | Padrão  | Descrição                                                          |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Opções     | Padrão  | Descrição                                                                           |
+| ---------- | ------- | ----------------------------------------------------------------------------------- |
+| `disabled` | `false` | Desabilita o módulo `line_break`, fazendo com que o prompt seja em uma unica linha. |
 
 ### Exemplo
 
@@ -2250,7 +2250,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 | Variável     | Exemplo         | Descrição                                  |
 | ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | The version of `python`                    |
+| version      | `"v3.8.1"`      | A versão do `python`                       |
 | symbol       | `"🐍 "`          | Espelha o valor da opção `symbol`          |
 | style        | `"yellow bold"` | Espelha o valor da opção `style`           |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
@@ -2288,8 +2288,8 @@ detect_extensions = []
 [python]
 # Exibe a versão do python dentro de um local venv.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Observe que isso só funcionará quando o venv estiver dentro do projeto e somente
+# funcionar no diretório que contém o venv dir mas talvez isso esteja ok?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
