@@ -2916,7 +2916,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 | Variável  | Exemplo | Descrição                         |
 | --------- | ------- | --------------------------------- |
-| version   | `v0.2`  | The version of `v`                |
+| version   | `v0.2`  | A versão do `v`                   |
 | symbol    |         | Espelha o valor da opção `symbol` |
 | style\* |         | Espelha o valor da opção `style`  |
 
@@ -2983,7 +2983,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 | Variável  | Exemplo  | Descrição                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v0.6.0` | The version of `zig`              |
+| version   | `v0.6.0` | A versão do `zig`                 |
 | symbol    |          | Espelha o valor da opção `symbol` |
 | style\* |          | Espelha o valor da opção `style`  |
 
