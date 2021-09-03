@@ -55,7 +55,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch"
+      alt="Tedesco"
  /></a>
   &nbsp;
   <a
@@ -63,7 +63,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español"
+      alt="Spagnolo"
  /></a>
   &nbsp;
   <a
@@ -71,7 +71,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Français"
+      alt="Francese"
  /></a>
   &nbsp;
   <a
@@ -79,7 +79,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
+      alt="Giapponese"
  /></a>
   &nbsp;
   <a
@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="Portoghese del Brasile"
  /></a>
   &nbsp;
   <a
@@ -95,7 +95,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Russo"
  /></a>
   &nbsp;
   <a
@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamita"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Cinese semplificato"
  /></a>
   &nbsp;
   <a
@@ -119,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Cinese tradizionale"
  /></a>
 </p>
 
@@ -274,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Aggiungi quanto segue alla fine di `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Warning** This will change in the future. È supportata solo la versione v0.33 o superiore. Add the following to your nu config file. Puoi controllare la posizione di questo file eseguendo `percorso di configurazione` in nu.
 
    ```toml
    startup = [
