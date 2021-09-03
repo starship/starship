@@ -18,7 +18,7 @@ features:
 footer: Licenza ISC | Copyright © 2019-present Starship Collaboratori
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Installazione rapida disponibile per Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh e PowerShell.
 ---
 
 <div class="center">
