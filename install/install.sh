@@ -278,10 +278,14 @@ print_install() {
   # and or the config cmd variable
   for s in "bash" "zsh" "ion" "tcsh" "xonsh" "fish"
   do
+    # shellcheck disable=SC2088
+    # we don't want these '~' expanding
+    config_file="~/.${s}rc"
+    config_cmd="eval \"\$(starship init ${s})\""
+ 
     case ${s} in
       ion )
         # shellcheck disable=SC2088
-        # we don't want these '~' expanding
         config_file="~/.config/ion/initrc"
         config_cmd="eval \$(starship init ${s})"
         ;;
@@ -295,11 +299,6 @@ print_install() {
         ;;
       xonsh )
         config_cmd="execx(\$(starship init xonsh))"
-        ;;
-      * )
-        # shellcheck disable=SC2088
-        config_file="~/.${s}rc"
-        config_cmd="eval \"\$(starship init ${s})\""
         ;;
     esac
 
