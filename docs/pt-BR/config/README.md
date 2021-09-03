@@ -2270,7 +2270,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Apenas use o binário `python3` para pegar a versão.
 python_binary = "python3"
 ```
 
@@ -2278,7 +2278,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+#Não acione arquivos com a extensão py
 detect_extensions = []
 ```
 
@@ -2286,7 +2286,7 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Exibe a versão do python dentro de um local venv.
 #
 # Note this will only work when the venv is inside the project and it will only
 # work in the directory that contains the venv dir but maybe this is ok?
@@ -2857,9 +2857,9 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `vagrant` exibe a versão atual instalada do [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `Vagrantfile` file
+- O diretório atual contem um arquivo `Vagrantfile`
 
 ### Opções
 
@@ -2867,18 +2867,18 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                                  |
+| `symbol`            | `"⍱ "`                               | Um formato de string que representa o simbolo do Vagrant.                            |
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["Vagrantfile"]`                    | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"cyan bold"`                        | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                                       |
+| `disabled`          | `false`                              | Desabilita o módulo `vagrant`.                                                       |
 
 ### Variáveis
 
 | Variável  | Exemplo          | Descrição                         |
 | --------- | ---------------- | --------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`          |
+| version   | `Vagrant 2.2.10` | A versão do `Vagrant`             |
 | symbol    |                  | Espelha o valor da opção `symbol` |
 | style\* |                  | Espelha o valor da opção `style`  |
 
@@ -2895,9 +2895,9 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
-- The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+O módulo `vlang` exibe a versão atual instalada do [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+- O diretório atual cotem qualquer arquivo com a extensão `.v`
+- O diretório atual contem um arquivo `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
 ### Opções
 
@@ -2905,12 +2905,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`         | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                         |
+| `symbol`            | `"V "`                                       | Um formato de string que representa o simbolo do V                                   |
 | `detect_extensions` | `["v"]`                                      | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                         | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"blue bold"`                                | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                                         |
+| `disabled`          | `false`                                      | Desabilita o módulo `vlang`.                                                         |
 
 ### Variáveis
 
