@@ -2,6 +2,7 @@ use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
+use std::process::Stdio;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
@@ -158,6 +159,9 @@ pub fn edit_configuration() {
 
     let command = utils::create_command(&editor_cmd[0])
         .expect("Unable to locate editor in $PATH.")
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
         .args(&editor_cmd[1..])
         .arg(config_path)
         .status();
