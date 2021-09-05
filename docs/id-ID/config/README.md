@@ -939,21 +939,21 @@ default = "unknown user"
 
 ### Opsi
 
-| Opsi       | Bawaan                         | Deskripsi                                                                    |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
-| `variabel` |                                | The environment variable to be displayed.                                    |
-| `bawaan`   |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | Format dari modul.                                                           |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Opsi       | Bawaan                         | Deskripsi                                                                             |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------- |
+| `symbol`   |                                | Simbol yang digunakan sebelum menampilkan nilai dari variabel.                        |
+| `variabel` |                                | Variabel environment yang akan ditampilkan.                                           |
+| `bawaan`   |                                | Nilai bawaan yang akan ditampilkan ketika variabel yang terpilih tidak didefinisikan. |
+| `format`   | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
+| `disabled` | `false`                        | Menonaktifkan modul `env_var`.                                                        |
 
 ### Variabel
 
-| Variabel  | Contoh                                      | Deskripsi                                  |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Menyalin nilai dari opsi `symbol`          |
-| style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`           |
+| Variabel  | Contoh                                            | Deskripsi                              |
+| --------- | ------------------------------------------------- | -------------------------------------- |
+| env_value | `Windows NT` (jika _variable_ akan menjadi `$OS`) | Nilai environment dari opsi `variable` |
+| symbol    |                                                   | Menyalin nilai dari opsi `symbol`      |
+| style\* | `black bold dimmed`                               | Menyalin nilai dari opsi `style`       |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -967,7 +967,7 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-Displaying multiple environmental variables:
+Menampilkan multi-variabel environment:
 ```toml
 # ~/.config/starship.toml
 
