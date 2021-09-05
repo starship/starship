@@ -189,11 +189,11 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Sebelumnya, properti `show_sync_count` digunakan untuk mengkonfigurasi prompt untuk menampilkan jumlah commits dari branch yang terdepan atau terbelakang dari remote branch.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+Dengan rilisnya v0.45.0, hal ini kini digantikan dengan tiga properti terpisah, `ahead`, `behind`, dan `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Untuk mengkonfigurasi prompt agar menggunakan konfigurasi `show_sync_count = true`, tambahkan baris berikut ke dalam file config:
 
 ```toml
 [git_status]
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### Waktu
 
 | Properti Yang Digantikan | Penggantinya  |
 | ------------------------ | ------------- |
