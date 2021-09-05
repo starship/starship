@@ -106,7 +106,7 @@ Sebagai contoh:
 - `(sembarang)` akan selalu tidak menampilkan apapun karena tidak ada variabel yang dibungkus dalam kurung kurawal.
 - Tatkala `$all` digunakan sebagai shortcut untuk `\[$a$b\]`, `($all)` tidak akan menampilkan apapun jika nilai `$a` dan `$b` adalah `None`. Berlaku juga dengan `(\[$a$b\] )`.
 
-#### Karakter Pelarian
+#### Pembebasan Karakter
 
 Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus membebaskannya (escape) dengan garis miring terbalik (`\`).
 
@@ -880,11 +880,11 @@ symbol = "🔮 "
 
 Modul `elixir` menampilkan versi terkini dari [Elm](https://elm-lang.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- Direktori terkini yang berisikan sebuah file `elm.json`
+- Direktori terkini yang berisikan sebuah file `elm-package.json`
+- Direktori terkini yang berisikan sebuah file `elm-version`
+- Direktori terkini yang berisikan sebuah folder`elm-stuff`
+- Direktori terkini yang berisikan sebuah file `*.elm`
 
 ### Opsi
 
@@ -897,7 +897,7 @@ Modul `elixir` menampilkan versi terkini dari [Elm](https://elm-lang.org/) yang 
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `["elm-stuff"]`                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `style`             | `"cyan bold"`                                      | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                                          |
+| `disabled`          | `false`                                            | Menonaktifkan modul `elm`.                                                          |
 
 ### Variabel
 
@@ -920,7 +920,7 @@ format = "via [ $version](cyan bold) "
 
 ## Variabel Environment
 
-The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
+Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih. The module will be shown only if any of the following conditions are met:
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
