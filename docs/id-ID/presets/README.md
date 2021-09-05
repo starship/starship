@@ -6,7 +6,7 @@ Here is a collection of community-submitted configuration presets for Starship. 
 
 Preset berikut tidak mengubah apapun selain simbol yang digunakan untuk masing-masing modul. Jika kamu tidak cocok dengan emoji, hal ini mungkin menarik perhatianmu!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Tangkapan Layar dari preset simbol Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prasyarat
 
@@ -90,15 +90,15 @@ symbol = "ﯣ "
 
 ## Segmen Berkurung
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Preset berikut mengubah format dari seluruh modul bawaan untuk menampilkan segmennya di dalam tanda kurung daripada menggunakan susunan kata bawaan Starship ("via", "on", dll.).
 
 Sebelum:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![Tangkapan Layar dari konfigurasi bawaan Starship](/presets/bracketed-segments-before.png)
 
 Sesudah:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![Tangkapan Layar dari Segmen Berkurung](/presets/bracketed-segments-after.png)
 
 ### Konfigurasi
 
@@ -241,15 +241,15 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Simbol Teks Sederhana
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+Preset berikut mengubah simbol menjadi teks sederhana. Jika terminal atau font kamu tidak mampu me-render Nerd Font atau emoji, mungkin kamu bisa mencoba preset ini!
 
 Sebelum (aturan bawaan dengan menggunakan font Fixedys):
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![Tangkapan Layar dari konfigurasi bawaan Starship dengan Font Fixedsys](/presets/plain-text-symbols-before.png)
 
 Sesudah (Simbol Teks Sederhana):
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![Tangkapan Layar dari preset Simbol Teks Sederhana](/presets/plain-text-symbols-after.png)
 
 ### Konfigurasi
 
@@ -363,11 +363,11 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Menyembunyikan Versi Runtime
+## Penyembunyian Versi Runtime
 
 Preset berikut menyembunyikan versi language runtimes. Jika kamu bekerja di dalam kontainer atau environments virtual, preset berikut cocok untukmu!
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+![Tangkapan Layar dari preset Penyembunyian Versi Runtime](/presets/hide-runtime-versions.png)
 
 ### Konfigurasi
 
