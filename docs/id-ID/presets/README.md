@@ -92,11 +92,11 @@ symbol = "ﯣ "
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
-Before:
+Sebelum:
 
 ![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
 
-After:
+Sesudah:
 
 ![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
 
@@ -239,15 +239,15 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## Simbol Teks Sederhana
 
 This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
 
-Before (default setting with Fixedsys font):
+Sebelum (aturan bawaan dengan menggunakan font Fixedys):
 
 ![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+Sesudah (Simbol Teks Sederhana):
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
@@ -363,9 +363,9 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## Menyembunyikan Versi Runtime
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Preset berikut menyembunyikan versi language runtimes. Jika kamu bekerja di dalam kontainer atau environments virtual, preset berikut cocok untukmu!
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
