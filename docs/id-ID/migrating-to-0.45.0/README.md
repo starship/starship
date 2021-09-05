@@ -78,14 +78,14 @@ format = "took [$duration]($style) "
 
 #### Karakter
 
-| Removed Property        | Penggantinya     |
-| ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
-| `use_symbol_for_status` | `error_symbol`   |
-| `style_success`         | `success_symbol` |
-| `style_failure`         | `error_symbol`   |
+| Properti Yang Digantikan | Penggantinya     |
+| ------------------------ | ---------------- |
+| `symbol`                 | `success_symbol` |
+| `use_symbol_for_status`  | `error_symbol`   |
+| `style_success`          | `success_symbol` |
+| `style_failure`          | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Sebelumnya, properti `use_symbol_for_status` digunakan untuk mengkonfigurasi prompt untuk menampilkan `error_symbol` saat perintah terakhir berakhir dengan nilai code status yang bukan nol.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+Dengan rilisnya v0.45.0, kini kita selalu menggunakan `error_symbol` setelah nilai code status yang bukan nol, menggabungkan properti `use_symbol_for_status` dan `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Untuk mengkonfigurasi prompt agar menggunakan konfigurasi `use_symbol_for_status = true`, tambahkan baris berikut ke dalam file config:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*Catatan:* Element `character` secara otomatis menambahkan sebuah spasi setelahnya, jadi tidak seperti `format` string yang lain, kami secara spesifik tidak menambahkannya pada contoh di atas.
 
 #### Durasi Perintah
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `prefix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [cmd_duration]
@@ -125,13 +125,13 @@ error_symbol = "[✖](bold red)"
 ++ format = "took [$duration]($style) "
 ```
 
-#### Directory
+#### Direktori
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `prefix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [directory]
@@ -139,14 +139,14 @@ error_symbol = "[✖](bold red)"
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### Variabel Environment
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `prefix`         | `format`     |
-| `suffix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [env_var]
@@ -157,12 +157,12 @@ error_symbol = "[✖](bold red)"
 
 #### Git Commit
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `prefix`         | `format`     |
-| `suffix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [git_commit]
@@ -173,13 +173,13 @@ error_symbol = "[✖](bold red)"
 
 #### Git Status
 
-| Removed Property  | Penggantinya |
-| ----------------- | ------------ |
-| `prefix`          | `format`     |
-| `suffix`          | `format`     |
-| `show_sync_count` | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
+| `show_sync_count`        | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `prefix`         | `format`     |
-| `suffix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `label`          | `format`     |
-| `prefix`         | `format`     |
-| `suffix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `label`                  | `format`     |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [singularity]
@@ -237,11 +237,11 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Penggantinya  |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Properti Yang Digantikan | Penggantinya  |
+| ------------------------ | ------------- |
+| `format`                 | `time_format` |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [time]
@@ -252,12 +252,12 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Penggantinya |
-| ---------------- | ------------ |
-| `prefix`         | `format`     |
-| `suffix`         | `format`     |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [custom.example]
