@@ -860,8 +860,8 @@ Modul `elixir` menampilkan versi terkini dari [Elixir](https://elixir-lang.org/)
 
 | Variabel    | Contoh  | Deskripsi                         |
 | ----------- | ------- | --------------------------------- |
-| version     | `v1.10` | The version of `elixir`           |
-| otp_version |         | The otp version of `elixir`       |
+| version     | `v1.10` | Versi dari `elixir`               |
+| otp_version |         | Versi otp dari `elixir`           |
 | symbol      |         | Menyalin nilai dari opsi `symbol` |
 | style\*   |         | Menyalin nilai dari opsi `style`  |
 
@@ -878,7 +878,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+Modul `elixir` menampilkan versi terkini dari [Elm](https://elm-lang.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - The current directory contains a `elm.json` file
 - The current directory contains a `elm-package.json` file
@@ -892,7 +892,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | ------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                        | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                                     |
+| `symbol`            | `"🌳 "`                                             | Sebuah format string yang melambangkan simbol Elm.                                  |
 | `detect_extensions` | `["elm"]`                                          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `["elm-stuff"]`                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
@@ -903,7 +903,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 | Variabel  | Contoh    | Deskripsi                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v0.19.1` | The version of `elm`              |
+| version   | `v0.19.1` | Versi dari `elm`                  |
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
