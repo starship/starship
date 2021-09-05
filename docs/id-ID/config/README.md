@@ -918,7 +918,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## Variabel Environment
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
