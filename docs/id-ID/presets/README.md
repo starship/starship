@@ -4,13 +4,13 @@ Here is a collection of community-submitted configuration presets for Starship. 
 
 ## Simbol Nerd Font
 
-Preset berikut tidak mengubah apapun selain simbol yang digunakan untuk masing-masing modul. If emojis aren't your thing, this might catch your eye!
+Preset berikut tidak mengubah apapun selain simbol yang digunakan untuk masing-masing modul. Jika kamu tidak cocok dengan emoji, hal ini mungkin menarik perhatianmu!
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
 ### Prasyarat
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Nerd Font yang terpasang dan telah diaktifkan di dalam terminal (contoh berikut menggunakan Nerd Font Fira Code)
 
 ### Konfigurasi
 
@@ -88,7 +88,7 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## Segmen Berkurung
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
