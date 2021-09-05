@@ -8,9 +8,9 @@ Petunjuk berikut memandu kamu ke perubahan besar kami.
 
 Sebelum v0.45.0, `prompt_order` dapat menerima sebuah nama modul dengan urutan yang harusya di-render oleh Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 kini menerima nilai dari `format`, memungkinkan kustomisasi prompt di luar modul itu sendiri.
 
-**Example pre-v0.45.0 configuration**
+**Contoh konfigurasi pra-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -58,7 +58,7 @@ Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in ord
 
 Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
 
-**Example pre-v0.45.0 configuration**
+**Contoh konfigurasi pra-v0.45.0**
 
 ```toml
 [cmd_duration]
