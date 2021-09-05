@@ -920,15 +920,15 @@ format = "via [ $version](cyan bold) "
 
 ## Variabel Environment
 
-Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih. The module will be shown only if any of the following conditions are met:
+Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih. Modul hanya akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- Opsi konfigurasi `variable` cocok dengan variabel environment yang ada
+- Opsi konfigurasi `variable` tidak didefinisikan, tapi opsi konfigurasi `default` yang didefinisikan
 
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+Multi-variabel environment dapat ditampilkan dengan menggunakan `.`. (lihat contoh) Jika opsi konfigurasi `variable` tidak diset, modul akan menampilkan nilai variabel di bawah teks nama setelah karakter `.`.
 
-Example: following configuration will display value of USER environment variable
+Contoh: konfigurasi berikut akan menampilkan nilai dari variabel USER environment
 ```toml
 # ~/.config/starship.toml
 
