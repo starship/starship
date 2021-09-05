@@ -1,6 +1,6 @@
 # Migrasi ke v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. Kami membuat beberapa perubahan besar tentang bagaimana konfigurasi dilakukan pada prompt, hingga bagaimana kami mengizinkan tingkat kustomisasi yang lebih luas.
+Starship v0.45.0 merupakan rilisan dengan perubahan yang signifikan, untuk persiapan v1.0.0 yang besar. Kami membuat beberapa perubahan besar tentang bagaimana konfigurasi dilakukan pada prompt, hingga bagaimana kami mengizinkan tingkat kustomisasi yang lebih luas.
 
 Petunjuk berikut memandu kamu ke perubahan besar kami.
 
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Contoh konfigurasi v0.45.0**
 
 ```toml
 format = """\
@@ -52,11 +52,11 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Modul `prefix` dan `suffix` kini digantikan dengan `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Sebelum v0.45.0, beberapa modul bisa menerima `prefix` dan/atau `suffix` untuk menata gayanya sesuai yang di-render modul.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 menerima nilai `format` sebagai gantinya, memungkinkan bagaimana modul di-render untuk kustomisasi yang lebih jauh. Ketimbang membuat prefix dan suffix untuk varibel berbasis konteks, kini variabel dapat disubtitusikan dari sebuah format string, yang mana merepresantikan keluaran dari sebuah modul.
 
 **Contoh konfigurasi pra-v0.45.0**
 
@@ -65,7 +65,7 @@ Starship v0.45.0 instead accepts a `format` value, allowing for further customiz
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Contoh konfigurasi v0.45.0**
 
 ```toml
 [cmd_duration]
@@ -78,7 +78,7 @@ format = "took [$duration]($style) "
 
 #### Karakter
 
-| Removed Property        | Replacement      |
+| Removed Property        | Penggantinya     |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
@@ -113,9 +113,9 @@ error_symbol = "[✖](bold red)"
 
 #### Durasi Perintah
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `prefix`         | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -127,9 +127,9 @@ error_symbol = "[✖](bold red)"
 
 #### Directory
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `prefix`         | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -141,10 +141,10 @@ error_symbol = "[✖](bold red)"
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `prefix`         | `format`     |
+| `suffix`         | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -157,10 +157,10 @@ error_symbol = "[✖](bold red)"
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `prefix`         | `format`     |
+| `suffix`         | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -173,11 +173,11 @@ error_symbol = "[✖](bold red)"
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Removed Property  | Penggantinya |
+| ----------------- | ------------ |
+| `prefix`          | `format`     |
+| `suffix`          | `format`     |
+| `show_sync_count` | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -204,10 +204,10 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `prefix`         | `format`     |
+| `suffix`         | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -220,11 +220,11 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `label`          | `format`     |
+| `prefix`         | `format`     |
+| `suffix`         | `format`     |
 
 **Changes to the Default Configuration**
 
@@ -237,7 +237,7 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Replacement   |
+| Removed Property | Penggantinya  |
 | ---------------- | ------------- |
 | `format`         | `time_format` |
 
@@ -252,10 +252,10 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Removed Property | Penggantinya |
+| ---------------- | ------------ |
+| `prefix`         | `format`     |
+| `suffix`         | `format`     |
 
 **Changes to the Default Configuration**
 
