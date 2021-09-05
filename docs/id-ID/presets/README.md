@@ -1,10 +1,10 @@
-# Presets
+# Prasetel (Presets)
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Berikut ini adalah koleksi konfigurasi prasetel dari kumpulan komunita Starship. Jika kamu punya konfigurasi prasetel untuk dibagikan, silakan [kirim PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) untuk memperbarui file ini! 😊
 
 ## Simbol Nerd Font
 
-Preset berikut tidak mengubah apapun selain simbol yang digunakan untuk masing-masing modul. Jika kamu tidak cocok dengan emoji, hal ini mungkin menarik perhatianmu!
+Konfigurasi prasetel berikut tidak mengubah apapun selain simbol yang digunakan untuk masing-masing modulnya. Kalau kamu enggak suka dengan emoji, hal ini mungkin bisa menarik perhatianmu!
 
 ![Tangkapan Layar dari preset simbol Nerd Font](/presets/nerd-font-symbols.png)
 
@@ -90,7 +90,7 @@ symbol = "ﯣ "
 
 ## Segmen Berkurung
 
-Preset berikut mengubah format dari seluruh modul bawaan untuk menampilkan segmennya di dalam tanda kurung daripada menggunakan susunan kata bawaan Starship ("via", "on", dll.).
+Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk menampilkan segmennya di dalam tanda kurung daripada menggunakan susunan kata bawaan Starship ("via", "on", dll.).
 
 Sebelum:
 
@@ -241,7 +241,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Simbol Teks Sederhana
 
-Preset berikut mengubah simbol menjadi teks sederhana. Jika terminal atau font kamu tidak mampu me-render Nerd Font atau emoji, mungkin kamu bisa mencoba preset ini!
+Konfigurasi prasetel berikut mengubah simbol menjadi teks sederhana. Jika terminal atau font kamu tidak mampu me-render Nerd Font atau emoji, mungkin kamu bisa mencoba konfigurasi prasetel berikut!
 
 Sebelum (aturan bawaan dengan menggunakan font Fixedys):
 
@@ -365,7 +365,7 @@ symbol = "swift "
 
 ## Penyembunyian Versi Runtime
 
-Preset berikut menyembunyikan versi language runtimes. Jika kamu bekerja di dalam kontainer atau environments virtual, preset berikut cocok untukmu!
+Konfigurasi prasetel berikut menyembunyikan versi language runtimes. Jika kamu bekerja di dalam kontainer atau environments virtual, preset berikut cocok untukmu!
 
 ![Tangkapan Layar dari preset Penyembunyian Versi Runtime](/presets/hide-runtime-versions.png)
 
