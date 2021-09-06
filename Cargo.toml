@@ -99,6 +99,7 @@ mockall = "0.10"
 [profile.release]
 codegen-units = 1
 lto = true
+opt-level = 3
 
 [[bin]]
 name = "starship"
