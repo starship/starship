@@ -34,6 +34,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
     "cmake",
+    "cobol",
     "dart",
     "deno",
     "dotnet",

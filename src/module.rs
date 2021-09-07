@@ -14,6 +14,7 @@ pub const ALL_MODULES: &[&str] = &[
     "character",
     "cmake",
     "cmd_duration",
+    "cobol",
     "conda",
     "crystal",
     "dart",

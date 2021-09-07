@@ -3,6 +3,7 @@ mod aws;
 mod character;
 mod cmake;
 mod cmd_duration;
+mod cobol;
 mod conda;
 mod crystal;
 pub(crate) mod custom;
@@ -85,6 +86,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "character" => character::module(context),
             "cmake" => cmake::module(context),
             "cmd_duration" => cmd_duration::module(context),
+            "cobol" => cobol::module(context),
             "conda" => conda::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
@@ -169,6 +171,7 @@ pub fn description(module: &str) -> &'static str {
         }
         "cmake" => "The currently installed version of CMake",
         "cmd_duration" => "How long the last command took to execute",
+        "cobol" => "The currently installed version of COBOL/GNUCOBOL",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
