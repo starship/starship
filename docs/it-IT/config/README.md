@@ -479,6 +479,36 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 \*: This variable can only be used as a part of a style string
 
+## COBOL / GNUCOBOL
+
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains any files ending in `.cob` or `.COB`
+- The current directory contains any files ending in `.cbl` or `.CBL`
+
+### Options
+
+| Opzione             | Default                              | Descrizione                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                   |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `"bold blue"`                        | The style for the module.                                                 |
+| `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `cobol` module.                                              |
+
+### Variables
+
+| Variable  | Example    | Descrizione                          |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v3.1.2.0` | The version of `cobol`               |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
 ## Durata del comando
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
@@ -858,7 +888,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variables
 
-| Variable    | Example | Descrizione                          |
+| Variable    | Esempio | Descrizione                          |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -886,7 +916,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
 
-### Opzioni
+### Options
 
 | Opzione             | Default                                            | Descrizione                                                               |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
@@ -901,7 +931,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variables
 
-| Variable  | Esempio   | Descrizione                          |
+| Variable  | Example   | Descrizione                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -937,7 +967,7 @@ default = "unknown user"
 ```
 :::
 
-### Opzioni
+### Options
 
 | Opzione    | Default                        | Descrizione                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
@@ -2059,14 +2089,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Options
 
-| Opzione           | Default                           | Descrizione                                                                                 |
-| ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                                  |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                  |
-| `version_format`  | `"v${raw}"`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `style`           | `"bold 208"`                      | Lo stile per il modulo.                                                                     |
-| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.      |
-| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                             |
+| Opzione           | Default                           | Descrizione                                                               |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | The format for the module.                                                |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                |
+| `version_format`  | `"v${raw}"`                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`           | `"bold 208"`                      | The style for the module.                                                 |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
+| `disabled`        | `false`                           | Disables the `package` module.                                            |
 
 ### Variables
 
@@ -2794,7 +2824,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Example    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
@@ -2865,16 +2895,16 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Options
 
-| Opzione             | Default                              | Descrizione                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                       |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
-| `style`             | `"cyan bold"`                        | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
+| Opzione             | Default                              | Descrizione                                                                                  |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                   |
+| `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                                          |
+| `detect_extensions` | `[]`                                 | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["Vagrantfile"]`                    | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `style`             | `"cyan bold"`                        | Lo stile per il modulo.                                                                      |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                                               |
 
 ### Variables
 
@@ -2903,16 +2933,16 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Options
 
-| Opzione             | Default                                      | Descrizione                                                                                  |
-| ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
-| `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
-| `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
-| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
-| `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
-| `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
+| Opzione             | Default                                      | Descrizione                                                               |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                              |
+| `detect_extensions` | `["v"]`                                      | Which extensions should trigger this module.                              |
+| `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
+| `style`             | `"blue bold"`                                | The style for the module.                                                 |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
 ### Variables
 
