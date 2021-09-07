@@ -112,6 +112,9 @@ format = '\[[$symbol($version)]($style)\]'
 [cmd_duration]
 format = '\[[⏱ $duration ]($style)\]'
 
+[cobol]
+format = '\[[$symbol($version)]($style)\]'
+
 [conda]
 format = '\[[$symbol$environment]($style)\]'
 
@@ -272,6 +275,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[cobol]
+symbol = "cobol "
+
 [conda]
 symbol = "conda "
 
@@ -373,6 +379,9 @@ Konfigurasi prasetel berikut menyembunyikan versi language runtimes. Jika kamu b
 
 ```toml
 [cmake]
+format = "via [$symbol]($style)"
+
+[cobol]
 format = "via [$symbol]($style)"
 
 [crystal]
