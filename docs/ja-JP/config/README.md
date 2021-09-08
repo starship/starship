@@ -142,12 +142,14 @@ format = '''
 
 ### オプション
 
-| オプション             | デフォルト                          | 説明                                                |
-| ----------------- | ------------------------------ | ------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                   |
-| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。          |
-| `command_timeout` | `500`                          | Starshipによって実行されたコマンドのタイムアウト時間 (milliseconds) です。 |
-| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                              |
+| オプション             | デフォルト                          | 説明                                                               |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                                  |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).            |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).     |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                        |
+
 
 ### 設定例
 
@@ -239,13 +241,20 @@ $shell\
 $character"""
 ```
 
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+
+```toml
+# Move the directory to the second line
+format="$all$directory$character"
+```
+
 ## AWS
 
-`aws` モジュールは現在のAWSプロファイルが表示されます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
-[awsu](https://github.com/kreuzwerker/awsu) を使う場合、そのプロファイルは環境変数 `AWSU_PROFILE` から読まれます。
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
 When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
@@ -270,7 +279,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | symbol    |                  | オプション `記号` の値をミラーする                         |
 | style\* |                  | オプション `style` の値をミラーする                      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -315,7 +324,7 @@ symbol = "🅰 "
 
 ## バッテリー
 
-`battery`モジュールは、デバイスのバッテリー残量と現在の充電状態を示します。 モジュールは、デバイスのバッテリー残量が10％未満の場合にのみ表示されます。
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### オプション
 
@@ -343,7 +352,7 @@ discharging_symbol = "💀 "
 
 ### バッテリーの表示
 
-`display`オプションを使用して、バッテリーインジケーターを表示するタイミング（threshold）、どのシンボルが使われるか(symbol) と外観（style）を定義します。 `display` が提供されない場合、 デフォルトは次のとおりです。
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. デフォルトは次のとおりです。
 
 ```toml
 [[battery.display]]
@@ -351,11 +360,11 @@ threshold = 10
 style = "bold red"
 ```
 
-`charging_symbol`と`discharging_symbol`オプションのデフォルト値はそれぞれ`battery`の `charging_symbol`と`discharging_symbol`になります。
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
 #### オプション
 
-`display`オプションは、次の表の通りです。
+The `display` option is an array of the following table.
 
 | オプション                | デフォルト      | 説明                                                                                     |
 | -------------------- | ---------- | -------------------------------------------------------------------------------------- |
@@ -367,39 +376,39 @@ style = "bold red"
 #### 設定例
 
 ```toml
-[[battery.display]]  # "bold red"のスタイルとバッテリー残量が0%~10%の放電時のシンボル
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow"のスタイルとバッテリー残量が10%~30%の放電時の💦シンボル
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# 残量が30%以上の場合バッテリーインジケータは表示されません
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## 文字
 
-`character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-文字は、最後のコマンドが成功したかどうかを示します。 表し方は下記の2つです。
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - 色の変更 (`赤`/`緑`)
 - プロンプトの表示の変更 (`❯`/`✖`)
 
-デフォルトでは、色だけが変更されます。 形も変えてみたい場合は[このサンプル](#with-custom-error-shape)も参考にしてください。
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`error_symbol`はelvishとnu shellでサポートされていません。
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
 ::: warning
 
-`vicmd_symbol`はfishとzshのみでサポートされています。
+`vicmd_symbol` is only supported in fish and zsh.
 
 :::
 
@@ -452,7 +461,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-`cmake`モジュールは、現在インストールされている[Cmake](https://cmake.org/)のバージョンを表示します。 デフォルトでは次のいずれかの条件が満たされると、モジュールがアクティブになります。
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - カレントディレクトリに `CMakeLists.txt` ファイルが含まれている
 - カレントディレクトリに `CMakeCache.txt` ファイルが含まれている
@@ -478,7 +487,7 @@ vicmd_symbol = "[V](bold green) "
 | symbol    |           | オプション `記号` の値をミラーする    |
 | style\* |           | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ## COBOL / GNUCOBOL
 
@@ -508,7 +517,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | symbol    |            | オプション `記号` の値をミラーする    |
 | style\* |            | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ## Command Duration
 
@@ -547,7 +556,7 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | オプション `style` の値をミラーする                  |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -588,7 +597,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol      |              | オプション `記号` の値をミラーする           |
 | style\*   |              | オプション `style` の値をミラーする        |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -627,7 +636,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | オプション `記号` の値をミラーする      |
 | style\* |           | オプション `style` の値をミラーする   |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -667,7 +676,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -763,7 +772,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | path      | `"D:/Projects"`       | The current directory path |
 | style\* | `"black bold dimmed"` | オプション `style` の値をミラーする     |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -800,7 +809,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | オプション `記号` の値をミラーする        |
 | style\* |                | オプション `style` の値をミラーする     |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -855,7 +864,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | オプション `記号` の値をミラーする                                                |
 | style\* |                  | オプション `style` の値をミラーする                                             |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -896,7 +905,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | オプション `記号` の値をミラーする         |
 | style\*   |         | オプション `style` の値をミラーする      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -938,7 +947,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | オプション `記号` の値をミラーする    |
 | style\* |           | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -986,7 +995,7 @@ default = "unknown user"
 | symbol    |                                             | オプション `記号` の値をミラーする                        |
 | style\* | `black bold dimmed`                         | オプション `style` の値をミラーする                     |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1037,7 +1046,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | オプション `記号` の値をミラーする     |
 | style\* |           | オプション `style` の値をミラーする  |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1074,7 +1083,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | オプション `記号` の値をミラーする                                                |
 | style\* |               | オプション `style` の値をミラーする                                             |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1136,7 +1145,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | オプション `記号` の値をミラーする                                                                                    |
 | style\*     |          | オプション `style` の値をミラーする                                                                                 |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1172,7 +1181,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash      | `b703eb3` | The current git commit hash |
 | style\* |           | オプション `style` の値をミラーする      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1212,7 +1221,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | The total operation progress   |
 | style\*        |            | オプション `style` の値をミラーする         |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1253,7 +1262,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |     | Mirrors the value of option `added_style`   |
 | deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1305,7 +1314,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*      | オプション `style` の値をミラーする                                                                                        |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 The following variables can be used in `diverged`:
 
@@ -1384,7 +1393,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | symbol    |           | オプション `記号` の値をミラーする    |
 | style\* |           | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1423,7 +1432,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1455,7 +1464,7 @@ The `hostname` module shows the system hostname.
 | symbol    |     | オプション `記号` の値をミラーする    |
 | style\* |     | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1497,7 +1506,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |       | オプション `記号` の値をミラーする    |
 | style\* |       | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1553,7 +1562,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |     | オプション `記号` の値をミラーする    |
 | style\* |     | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1595,7 +1604,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1634,7 +1643,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | オプション `記号` の値をミラーする     |
 | style\* |           | オプション `style` の値をミラーする  |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1649,7 +1658,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Kotlinコンパイラバイナリを使用してバージョンを確認する
+# Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = "kotlinc"
 ```
 
@@ -1682,7 +1691,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | オプション `記号` の値をミラーする                      |
 | style\* |                      | オプション `style` の値をミラーする                   |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1768,7 +1777,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1849,7 +1858,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | オプション `記号` の値をミラーする         |
 | style\* |          | オプション `style` の値をミラーする      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1892,7 +1901,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1928,7 +1937,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | オプション `記号` の値をミラーする        |
 | style\* |         | オプション `style` の値をミラーする     |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -1975,7 +1984,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | オプション `記号` の値をミラーする    |
 | style\* |            | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2022,7 +2031,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | オプション `記号` の値をミラーする                                               |
 | style\*        |              | オプション `style` の値をミラーする                                            |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2055,7 +2064,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |        | オプション `記号` の値をミラーする           |
 | style\* |        | オプション `style` の値をミラーする        |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2107,7 +2116,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | オプション `記号` の値をミラーする         |
 | style\* |          | オプション `style` の値をミラーする      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2187,7 +2196,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2226,7 +2235,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | オプション `記号` の値をミラーする         |
 | style\* |          | オプション `style` の値をミラーする      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2370,7 +2379,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2395,7 +2404,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2408,7 +2417,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -2435,7 +2444,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2448,7 +2457,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2474,7 +2483,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | オプション `記号` の値をミラーする    |
 | style\* |                   | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2514,7 +2523,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2592,7 +2601,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |     | オプション `記号` の値をミラーする          |
 | style\* |     | オプション `style` の値をミラーする       |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2626,7 +2635,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | オプション `記号` の値をミラーする           |
 | style\* |              | オプション `style` の値をミラーする        |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2682,7 +2691,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | オプション `記号` の値をミラーする                                                                         |
 | style\*      |         | オプション `style` の値をミラーする                                                                      |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2701,7 +2710,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2727,7 +2736,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2775,7 +2784,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 | symbol    |            | オプション `記号` の値をミラーする             |
 | style\* |            | オプション `style` の値をミラーする          |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2828,7 +2837,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 | time      | `13:08:10` | The current time.      |
 | style\* |            | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2845,7 +2854,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -2915,7 +2924,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | オプション `記号` の値をミラーする      |
 | style\* |                  | オプション `style` の値をミラーする   |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2982,7 +2991,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | オプション `記号` の値をミラーする        |
 | style\* | `black bold dimmed`                         | オプション `style` の値をミラーする     |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -2995,7 +3004,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます。
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -3020,7 +3029,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 ### 設定例
 
@@ -3086,7 +3095,7 @@ The order in which custom modules are shown can be individually set by including
 | symbol    | オプション `記号` の値をミラーする                    |
 | style\* | オプション `style` の値をミラーする                 |
 
-\*: この変数はスタイル文字列の一部としてのみ使用できます
+\*: This variable can only be used as a part of a style string
 
 #### Custom command shell
 
