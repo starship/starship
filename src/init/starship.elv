@@ -11,7 +11,7 @@ fn starship-after-readline-hook [line]{
 
 fn starship-before-readline-hook {
     cmd-end-time = (::STARSHIP:: time)
-    cmd-duration=(- $cmd-end-time $cmd-start-time)
+    cmd-duration = (- $cmd-end-time $cmd-start-time)
 }
 
 # Install Hooks
