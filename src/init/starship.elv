@@ -4,6 +4,7 @@ set-env STARSHIP_SESSION_KEY (::STARSHIP:: session)
 # Define Hooks
 local:cmd-start-time = 0
 local:cmd-end-time = 0
+local:cmd-duration = 0
 
 fn starship-after-readline-hook [line]{
     cmd-start-time = (::STARSHIP:: time)
