@@ -142,12 +142,14 @@ Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
 ### Opsi
 
-| Opsi              | Bawaan                         | Deskripsi                                                              |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
-| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                    |
-| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).           |
-| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dijalankan starship (dalam milidetik). |
-| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                           |
+| Opsi              | Bawaan                         | Deskripsi                                                        |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `fromat`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                              |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).            |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).     |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                        |
+
 
 ### Contoh
 
@@ -238,15 +240,22 @@ $shell\
 $character"""
 ```
 
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+
+```toml
+# Move the directory to the second line
+format="$all$directory$character"
+```
+
 ## AWS
 
-Module `aws` menampilkan region dan profil AWS terkini. Diperoleh dari variabel environment `AWS_REGION`, `AWS_DEFAULT_REGION`, dan `AWS_PROFILE` pada file `~/.aws/config`. Modul ini juga menampilkan penghitung waktu mundur kedaluwarsa ketika menggunakan temporer kredensial.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
-Ketika menggunakan [aws-vault](https://github.com/99designs/aws-vault), profil dibaca dari variabel environment `AWS_VAULT` dan tanggal kedaluwarsanya dibaca dari variabel environment `AWS_SESSION_EXPIRATION`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
-Ketika menggunakan [awsu](https://github.com/kreuzwerker/awsu) profil dibaca dari variabel environment `AWSU_PROFILE`.
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
-Ketika menggunakan [AWSume](https://awsu.me) profil dibaca dari variabel environment `AWSUME_PROFILE` dan tanggal kedaluwarsanya dibaca dari variabel environment `AWSUME_EXPIRATION`.
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Opsi
 
@@ -269,7 +278,7 @@ Ketika menggunakan [AWSume](https://awsu.me) profil dibaca dari variabel environ
 | symbol    |                  | Menyalin nilai dari opsi `symbol` |
 | style\* |                  | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -314,7 +323,7 @@ symbol = "🅰 "
 
 ## Baterai
 
-Modul `battery` menampilkan seberapa penuh baterai perangkat terisi dan status pengisiannya. Modulnya hanya dapat terlihat ketika baterai perangkat di bawah 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Opsi
 
@@ -342,7 +351,7 @@ discharging_symbol = "💀 "
 
 ### Tampilan Baterai
 
-Opsi konfigurasi `display` digunakan untuk menentukan kapan indikator baterai harus ditampilkan (threshold), simbol mana yang akan digunakan (symbol), dan bagaimana seharusnya itu terlihat (style). Jika tidak ada `display` yang diberikan. Aturannya seperti yang ditunjukkan:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. Aturannya seperti yang ditunjukkan:
 
 ```toml
 [[battery.display]]
@@ -350,11 +359,11 @@ threshold = 10
 style = "bold red"
 ```
 
-Nilai bawaan untuk opsi `charging_symbol` dan `discharging_symbol` adalah nilai dari masing-masing opsi `charging_symbol` dan `discharging_symbol` dari nilai `battery`.
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
 #### Opsi
 
-Opsi dari `display` merupakan sebuah array dari tabel berikut.
+The `display` option is an array of the following table.
 
 | Opsi                 | Bawaan     | Deskripsi                                                                                                            |
 | -------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -366,39 +375,39 @@ Opsi dari `display` merupakan sebuah array dari tabel berikut.
 #### Contoh
 
 ```toml
-[[battery.display]]  # "bold red" untuk corak gaya dan discharging_symbol ketika kapasitasnya berada di antara 0% dan 10%
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" untuk corak gaya dan simbol 💦 ketika kapasitasnya berada di antara 10% dan 30%
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = 💦
 
-# ketika kapasitasnya di atas 30%, indikator baterai tidak akan ditampilkan
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
 ## Karakter
 
-Modul `character` menampilkan sebuah karakter (biasanya anak panah) di samping teks pada terminalmu.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Karakter dapat memberitahu kamu apakah perintah terakhir berhasil atau tidak. Karakter dapat memberitahumu dengan dua cara ini:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - mengganti warna (`red`/`green`)
 - mengganti bentuk (`❯`/`✖`)
 
-Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin mengganti bentuknya, perhatikan [contoh](#with-custom-error-shape) berikut.
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 ::: peringatan
 
-`error_symbol` tidak didukung pada elvish dan nu shell.
+`error_symbol` is not supported on elvish and nu shell.
 
 :::
 
 ::: peringatan
 
-`vicmd_symbol` hanya didukung pada fish dan zsh.
+`vicmd_symbol` is only supported in fish and zsh.
 
 :::
 
@@ -451,7 +460,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - Direktori terkini yang berisikan sebuah file `CMakeLists.txt`
 - Direktori terkini yang berisikan sebuah file `CMakeCache.txt`
@@ -477,7 +486,7 @@ Modul `cmake` menampilkan versi terkini dari [CMake](https://cmake.org/) yang te
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ## COBOL / GNUCOBOL
 
@@ -507,7 +516,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | symbol    |            | Menyalin nilai dari opsi `symbol` |
 | style\* |            | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ## Durasi Perintah
 
@@ -546,7 +555,7 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Menyalin nilai dari opsi `style`        |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -587,7 +596,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol      |              | Menyalin nilai dari opsi `symbol` |
 | style\*   |              | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -626,7 +635,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -666,7 +675,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -762,7 +771,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | path      | `"D:/Projects"`       | The current directory path       |
 | style\* | `"black bold dimmed"` | Menyalin nilai dari opsi `style` |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -799,7 +808,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | Menyalin nilai dari opsi `symbol` |
 | style\* |                | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -854,7 +863,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | Menyalin nilai dari opsi `symbol`                                  |
 | style\* |                  | Menyalin nilai dari opsi `style`                                   |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -895,7 +904,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | Menyalin nilai dari opsi `symbol` |
 | style\*   |         | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -937,7 +946,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -985,7 +994,7 @@ default = "unknown user"
 | symbol    |                                             | Menyalin nilai dari opsi `symbol`          |
 | style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`           |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1036,7 +1045,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1073,7 +1082,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | Menyalin nilai dari opsi `symbol`                                  |
 | style\* |               | Menyalin nilai dari opsi `style`                                   |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1135,7 +1144,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Menyalin nilai dari opsi `symbol`                                                                      |
 | style\*     |          | Menyalin nilai dari opsi `style`                                                                       |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1171,7 +1180,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash      | `b703eb3` | The current git commit hash      |
 | style\* |           | Menyalin nilai dari opsi `style` |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1211,7 +1220,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | The total operation progress     |
 | style\*        |            | Menyalin nilai dari opsi `style` |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1252,7 +1261,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |        | Mirrors the value of option `added_style`   |
 | deleted_style\* |        | Mirrors the value of option `deleted_style` |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1304,7 +1313,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*      | Menyalin nilai dari opsi `style`                                                                              |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 The following variables can be used in `diverged`:
 
@@ -1383,7 +1392,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1422,7 +1431,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1454,7 +1463,7 @@ The `hostname` module shows the system hostname.
 | symbol    |        | Menyalin nilai dari opsi `symbol` |
 | style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1496,7 +1505,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |        | Menyalin nilai dari opsi `symbol` |
 | style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1552,7 +1561,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |        | Menyalin nilai dari opsi `symbol` |
 | style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1594,7 +1603,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1633,7 +1642,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1681,7 +1690,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | Menyalin nilai dari opsi `symbol`        |
 | style\* |                      | Menyalin nilai dari opsi `style`         |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1767,7 +1776,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1848,7 +1857,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1891,7 +1900,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1927,7 +1936,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | Menyalin nilai dari opsi `symbol` |
 | style\* |         | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -1974,7 +1983,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | Menyalin nilai dari opsi `symbol` |
 | style\* |            | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2021,7 +2030,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Menyalin nilai dari opsi `symbol`                                 |
 | style\*        |              | Menyalin nilai dari opsi `style`                                  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2054,7 +2063,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |        | Menyalin nilai dari opsi `symbol` |
 | style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2106,7 +2115,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2186,7 +2195,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2225,7 +2234,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2394,7 +2403,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2434,7 +2443,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2473,7 +2482,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Menyalin nilai dari opsi `symbol` |
 | style\* |                   | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2513,7 +2522,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2591,7 +2600,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |        | Menyalin nilai dari opsi `symbol` |
 | style\* |        | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2625,7 +2634,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | Menyalin nilai dari opsi `symbol` |
 | style\* |              | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2681,7 +2690,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | Menyalin nilai dari opsi `symbol`                                                           |
 | style\*      |         | Menyalin nilai dari opsi `style`                                                            |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2726,7 +2735,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2774,7 +2783,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | symbol    |            | Menyalin nilai dari opsi `symbol` |
 | style\* |            | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2827,7 +2836,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 | time      | `13:08:10` | The current time.                |
 | style\* |            | Menyalin nilai dari opsi `style` |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2914,7 +2923,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | Menyalin nilai dari opsi `symbol` |
 | style\* |                  | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2981,7 +2990,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | Menyalin nilai dari opsi `symbol` |
 | style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -2989,7 +2998,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "via [✨ $repo](bold blue) "
+format = "[🆅 $repo](bold blue) "
 ```
 
 ## Zig
@@ -3019,7 +3028,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | Menyalin nilai dari opsi `symbol` |
 | style\* |          | Menyalin nilai dari opsi `style`  |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 ### Contoh
 
@@ -3085,7 +3094,7 @@ The order in which custom modules are shown can be individually set by including
 | symbol    | Menyalin nilai dari opsi `symbol`      |
 | style\* | Menyalin nilai dari opsi `style`       |
 
-\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+\*: This variable can only be used as a part of a style string
 
 #### Custom command shell
 
@@ -3122,8 +3131,8 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # affiche la sortie de la commande
-files = ["foo"]       # ajoute un filtre
+command = "echo foo"  # shows output of command
+files = ["foo"]       # can specify filters
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
