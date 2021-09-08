@@ -46,6 +46,9 @@ pub struct Context<'a> {
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
+    /// Construct the right prompt instead of the left prompt
+    pub right: bool,
+
     /// A HashMap of environment variable mocks
     #[cfg(test)]
     pub env: HashMap<&'a str, String>,
@@ -120,6 +123,8 @@ impl<'a> Context<'a> {
 
         let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
 
+        let right = arguments.is_present("right");
+
         Context {
             config,
             properties,
@@ -129,6 +134,7 @@ impl<'a> Context<'a> {
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            right,
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]

@@ -86,6 +86,15 @@ impl<'a> StringFormatter<'a> {
         })
     }
 
+    /// A StringFormatter that does no formatting, parse just returns the raw text
+    pub fn raw(text: &'a str) -> Self {
+        Self {
+            format: vec![FormatElement::Text(text.into())],
+            variables: BTreeMap::new(),
+            style_variables: BTreeMap::new(),
+        }
+    }
+
     /// Maps variable name to its value
     ///
     /// You should provide a function or closure that accepts the variable name `name: &str` as a
