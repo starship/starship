@@ -102,7 +102,7 @@ Una cadena de formato condicional envuelto en `(` y `)` no se renderizará si to
 
 Por ejemplo:
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
+- `(@$region)` no mostrará nada si la variable `region` es `None` o una cadena vacía, de lo contrario `@` seguido por el valor de la región.
 - `(algún texto)` siempre mostrará nada ya que no hay variables envueltas entre llaves.
 - Cuando `$all` es un atajo para `\[$a$b\]`, `($all)` no mostrará nada solo si `$a` y `$b` ambos son `None`. Esto funciona igual que `(\[$a$b\] )`.
 
@@ -142,13 +142,13 @@ Esta es la lista de opciones de configuración del prompt.
 
 ### Opciones
 
-| Opción            | Por defecto                        | Descripción                                                      |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------------- |
-| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                 |
-| `right_format`    | `""`                               | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
-| `scan_timeout`    | `30`                               | Timeout for starship to scan files (in milliseconds).            |
-| `command_timeout` | `500`                              | Timeout for commands executed by starship (in milliseconds).     |
-| `add_newline`     | `true`                             | Inserts blank line between shell prompts.                        |
+| Opción            | Por defecto                        | Descripción                                                                    |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
+| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                               |
+| `right_format`    | `""`                               | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)          |
+| `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea archivos (en milisegundos).      |
+| `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por Starship (en milisegundos).  |
+| `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
 
 
 ### Ejemplo
@@ -176,7 +176,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# El cual es equivalente a
 format = """
 $username\
 $hostname\
@@ -240,10 +240,10 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+Si solo quieres extender el formato predeterminado, puedes usar `$all`; los módulos que se añaden explícitamente al formato no serán duplicados. Por ejemplo.
 
 ```toml
-# Move the directory to the second line
+# Mueve el directorio a la segunda línea
 format="$all$directory$character"
 ```
 
