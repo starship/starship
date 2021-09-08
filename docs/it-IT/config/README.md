@@ -142,12 +142,14 @@ This is the list of prompt-wide configuration options.
 
 ### Opzioni
 
-| Opzione           | Default                        | Descrizione                                                    |
-| ----------------- | ------------------------------ | -------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configura il formato del prompt.                               |
-| `scan_timeout`    | `30`                           | Timeout per starship per scansionare i file (in millisecondi). |
-| `command_timeout` | `500`                          | Timeout per i comandi eseguiti da starship (in millisecondi).  |
-| `add_newline`     | `true`                         | Inserisce una riga vuota tra i prompt della shell.             |
+| Opzione           | Default                        | Descrizione                                                      |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura il formato del prompt.                                 |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).            |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).     |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                        |
+
 
 ### Esempio
 
@@ -236,6 +238,13 @@ $time\
 $status\
 $shell\
 $character"""
+```
+
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+
+```toml
+# Move the directory to the second line
+format="$all$directory$character"
 ```
 
 ## AWS
