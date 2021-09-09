@@ -351,7 +351,7 @@ discharging_symbol = "💀 "
 
 ### Indicador de batería
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. El valor por defecto es el siguiente:
+La opción de configuración `display` se utiliza para definir cuándo debe mostrarse el indicador de batería (threshold), cuál símbolo se utilizaría (symbol), y cómo sería (style). Si no se provee ningún valor para `display`, El valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
