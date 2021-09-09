@@ -143,7 +143,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: advertencia Esto cambiará en el futuro. Sólo se admite la versión nu v0.33 o superior. ::: Añade lo siguiente a tu archivo de configuración nu. Puedes comprobar la ubicación de este archivo ejecutando `ruta de configuración` en nu.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Añade lo siguiente al final de `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
