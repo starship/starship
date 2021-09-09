@@ -56,7 +56,7 @@ starship_preexec() {
 if [[ -z ${precmd_functions[(re)starship_precmd]} ]]; then
     precmd_functions+=(starship_precmd)
 fi
-if [[ -z ${preexec_function[(re)starship_preexec]} ]]; then
+if [[ -z ${preexec_functions[(re)starship_preexec]} ]]; then
     preexec_functions+=(starship_preexec)
 fi
 
