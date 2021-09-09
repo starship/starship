@@ -351,7 +351,7 @@ discharging_symbol = "💀 "
 
 ### Indicador de batería
 
-La opción de configuración `display` se utiliza para definir cuándo debe mostrarse el indicador de batería (threshold), cuál símbolo se utilizaría (symbol), y cómo sería (style). Si no se provee ningún valor para `display`, El valor por defecto es el siguiente:
+La opción de configuración `display` se utiliza para definir cuándo debe mostrarse el indicador de batería (threshold), cuál símbolo se utilizaría (symbol), y cómo sería (style). Si no se provee ningún valor para `display`, el valor por defecto es el siguiente:
 
 ```toml
 [[battery.display]]
@@ -359,11 +359,11 @@ threshold = 10
 style = "bold red"
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+El valor por defecto para las opciones `charging_symbol` y `discharging_symbol` son respectivamente los valores `charging_symbol` y `discharging_symbol` de las opciones de `battery`.
 
 #### Opciones
 
-The `display` option is an array of the following table.
+La opción `display` es un arreglo de la siguiente tabla.
 
 | Opción               | Por defecto | Descripción                                                                                                                             |
 | -------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------- |
@@ -390,24 +390,24 @@ discharging_symbol = 💦
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+El módulo `character` muestra un caracter (normalmente una flecha) tras el texto que introduces en el terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+El caracter te dirá si el último comando fue exitoso o no. Se puede hacer de dos maneras:
 
 - Cambiando el color (`red`/`green`)
 - Cambiando la forma (`.`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
 ::: aviso
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` no es compatible con el intérprete de comandos Elvish y Nu.
 
 :::
 
 ::: aviso
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` sólo es compatible con Fish y ZSH.
 
 :::
 
@@ -460,7 +460,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://cmake.org/). Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
 - El directorio actual contiene un archivo `CMakeCache.txt`
@@ -490,29 +490,29 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains any files ending in `.cob` or `.COB`
-- The current directory contains any files ending in `.cbl` or `.CBL`
+- El directorio actual contiene cualquier archivo que termine en `.cob` o `.COB`
+- El directorio actual contiene cualquier archivo que termine en `.cbl` o `.CBL`
 
 ### Opciones
 
 | Opción              | Por defecto                          | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                                 |
+| `symbol`            | `"⚙️ "`                              | El símbolo usado antes de mostrar la versión de COBOL.                                  |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `style`             | `"bold blue"`                        | El estilo del módulo.                                                                   |
 | `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                                            |
+| `disabled`          | `false`                              | Deshabilita el módulo `cobol`.                                                          |
 
 ### Variables
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v3.1.2.0` | The version of `cobol`                 |
+| version   | `v3.1.2.0` | La versión de `cobol`                  |
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
