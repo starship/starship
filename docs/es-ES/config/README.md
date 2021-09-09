@@ -2311,7 +2311,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = "python3"
 ```
 
@@ -2319,7 +2319,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# No se dispara con archivos con extensión py
 detect_extensions = []
 ```
 
@@ -2327,10 +2327,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Muestra la versión de python desde dentro de un entorno virtual local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
+# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
