@@ -14,7 +14,7 @@ pub struct TextSegment {
 }
 
 impl TextSegment {
-    // Returns the ANSIString of the segment value, not including its prefix and suffix
+    // Returns the ANSIString of the segment value
     fn ansi_string(&self) -> ANSIString {
         match self.style {
             Some(style) => style.paint(&self.value),
