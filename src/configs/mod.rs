@@ -47,6 +47,7 @@ pub mod openstack;
 pub mod package;
 pub mod perl;
 pub mod php;
+pub mod pulumi;
 pub mod purescript;
 pub mod python;
 pub mod red;
@@ -122,6 +123,7 @@ pub struct FullConfig<'a> {
     package: package::PackageConfig<'a>,
     perl: perl::PerlConfig<'a>,
     php: php::PhpConfig<'a>,
+    pulumi: pulumi::PulumiConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
     red: red::RedConfig<'a>,
@@ -195,6 +197,7 @@ impl<'a> Default for FullConfig<'a> {
             package: Default::default(),
             perl: Default::default(),
             php: Default::default(),
+            pulumi: Default::default(),
             purescript: Default::default(),
             python: Default::default(),
             red: Default::default(),

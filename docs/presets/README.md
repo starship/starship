@@ -205,6 +205,9 @@ format = '\[[$symbol($version)]($style)\]'
 [php]
 format = '\[[$symbol($version)]($style)\]'
 
+[pulumi]
+format = '\[[$symbol$stack]($style)\]'
+
 [purescript]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -354,6 +357,9 @@ symbol = "pl "
 [php]
 symbol = "php "
 
+[pulumi]
+symbol = "pulumi "
+
 [purescript]
 symbol = "purs "
 
@@ -438,6 +444,9 @@ format = 'via [$symbol]($style)'
 
 [php]
 format = 'via [$symbol]($style)'
+
+[pulumi]
+format = 'via [$symbol$stack]($style)'
 
 [purescript]
 format = 'via [$symbol]($style)'

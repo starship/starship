@@ -42,6 +42,7 @@ mod openstack;
 mod package;
 mod perl;
 mod php;
+mod pulumi;
 mod purescript;
 mod python;
 mod red;
@@ -123,6 +124,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "package" => package::module(context),
             "perl" => perl::module(context),
             "php" => php::module(context),
+            "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
             "rlang" => rlang::module(context),
