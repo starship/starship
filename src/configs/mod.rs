@@ -21,6 +21,7 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fill;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -96,6 +97,7 @@ pub struct FullConfig<'a> {
     elm: elm::ElmConfig<'a>,
     env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     erlang: erlang::ErlangConfig<'a>,
+    fill: fill::FillConfig<'a>,
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
@@ -169,6 +171,7 @@ impl<'a> Default for FullConfig<'a> {
             elm: Default::default(),
             env_var: Default::default(),
             erlang: Default::default(),
+            fill: Default::default(),
             gcloud: Default::default(),
             git_branch: Default::default(),
             git_commit: Default::default(),

@@ -16,6 +16,7 @@ mod elixir;
 mod elm;
 mod env_var;
 mod erlang;
+mod fill;
 mod gcloud;
 mod git_branch;
 mod git_commit;
@@ -97,6 +98,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
             "env_var" => env_var::module(context),
+            "fill" => fill::module(context),
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),
@@ -181,6 +183,7 @@ pub fn description(module: &str) -> &'static str {
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
+        "fill" => "Fills the remaining space on the line with a pad string",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
