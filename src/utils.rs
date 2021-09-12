@@ -224,7 +224,11 @@ active boot switches: -d:release\n",
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
             })
-        }
+        },
+        "pulumi version" => Some(CommandOutput{
+            stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
+            stderr: String::default(),
+        }),
         "purs --version" => Some(CommandOutput {
             stdout: String::from("0.13.5\n"),
             stderr: String::default(),

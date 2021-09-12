@@ -175,6 +175,8 @@ fn pulumi_home_dir(context: &Context) -> Option<PathBuf> {
 
 #[cfg(test)]
 mod tests {
+    use std::io;
+
     use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
@@ -232,16 +234,32 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    fn version_render() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let pulumi_file = File::create(dir.path().join("Pulumi.yaml"))?;
+        pulumi_file.sync_all()?;
+        let rendered = ModuleRenderer::new("pulumi")
+            .path(dir.path())
+            .config(toml::toml! {
+                [pulumi]
+                format = "with [$version]($style) "
+            })
+            .collect();
+        dir.close()?;
+        let expected = format!("with {} ", Color::Fixed(5).bold().paint("v1.2.3-ver"));
+
+        assert_eq!(expected, rendered.expect("a result"));
+        Ok(())
+    }
+
+    #[test]
     /// This test confirms a full render. This means finding a Pulumi.yml file,
     /// tracing back to the backing workspace settings file, and printing the
     /// stack name.
-    ///
-    /// To do this, we need to create these files.
-    fn test_render_valid_paths() -> std::io::Result<()> {
-        use std::io::Write;
+    fn render_valid_paths() -> io::Result<()> {
+        use io::Write;
         let dir = tempfile::tempdir()?;
-        let root = std::fs::canonicalize(dir.into_path()).unwrap();
+        let root = std::fs::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
         yaml.sync_all()?;
@@ -270,6 +288,7 @@ mod tests {
             .collect();
         let expected = format!("in {} ", Color::Fixed(5).bold().paint("🚀 launch"));
         assert_eq!(expected, rendered.expect("a result"));
+        dir.close()?;
         Ok(())
     }
 }
