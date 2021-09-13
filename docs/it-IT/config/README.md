@@ -1056,6 +1056,35 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 format = "via [e $version](bold red) "
 ```
 
+## Fill
+
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+
+### Options
+
+| Opzione  | Default        | Descrizione                       |
+| -------- | -------------- | --------------------------------- |
+| `symbol` | `"."`          | The symbol used to fill the line. |
+| `style`  | `"bold black"` | The style for the module.         |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+format="AA $fill BB $fill CC"
+
+[fill]
+symbol = "-"
+style = "bold green"
+```
+
+Produces a prompt that looks like:
+
+```
+AA -------------------------------------------- BB -------------------------------------------- CC
+
+```
+
 ## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
@@ -2904,16 +2933,16 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Options
 
-| Opzione             | Default                              | Descrizione                                                                                  |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                   |
-| `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                                          |
-| `detect_extensions` | `[]`                                 | Quali estensioni dovrebbero attivare questo modulo.                                          |
-| `detect_files`      | `["Vagrantfile"]`                    | Quali nomi di file dovrebbero attivare questo modulo.                                        |
-| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
-| `style`             | `"cyan bold"`                        | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                                               |
+| Opzione             | Default                              | Descrizione                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                       |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `["Vagrantfile"]`                    | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"cyan bold"`                        | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
 ### Variables
 
