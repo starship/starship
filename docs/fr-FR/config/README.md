@@ -1056,6 +1056,35 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 format = "via [e $version](bold red) "
 ```
 
+## Fill
+
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+
+### Options
+
+| Option   | Défaut         | Description                       |
+| -------- | -------------- | --------------------------------- |
+| `symbol` | `"."`          | The symbol used to fill the line. |
+| `style`  | `"bold black"` | Le style du module.               |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+format="AA $fill BB $fill CC"
+
+[fill]
+symbol = "-"
+style = "bold green"
+```
+
+Produces a prompt that looks like:
+
+```
+AA -------------------------------------------- BB -------------------------------------------- CC
+
+```
+
 ## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
@@ -2009,7 +2038,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 | Option                    | Défaut                                                                     | Description                                                                                |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | La chaîne de format pour le module.                                                        |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                                          |
 | `version_format`          | `"v${raw}"`                                                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml.                                    |
 | `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch.                                    |
@@ -2140,7 +2169,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | Option              | Défaut                                                                                                   | Description                                                                                |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | La chaîne de format pour le module.                                                        |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                                          |
 | `version_format`    | `"v${raw}"`                                                                                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                                      |
 | `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Quelles extensions devraient activer ce module.                                            |
@@ -2765,7 +2794,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 | Option              | Défaut                               | Description                                                                                |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol$workspace]($style) "` | La chaîne de format pour le module.                                                        |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                                          |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                                      |
 | `detect_extensions` | `["tf", "hcl"]`                      | Quelles extensions devraient activer ce module.                                            |
@@ -2819,7 +2848,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Option            | Défaut                  | Description                                                                                                                        |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | La chaîne de format pour le module.                                                                                                |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
