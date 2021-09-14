@@ -99,7 +99,7 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
 
     let mut contents = String::new();
     file.read_to_string(&mut contents).ok()?;
-    let name = YamlLoader::load_from_str(&mut contents).ok().map(
+    let name = YamlLoader::load_from_str(&contents).ok().map(
         |mut yaml| -> Option<Option<String>> {
             log::trace!("Parsed {:?} into yaml", project_file);
             let yaml = yaml.swap_remove(0);
