@@ -466,3 +466,60 @@ format = 'via [$symbol]($style)'
 [zig]
 format = 'via [$symbol]($style)'
 ```
+
+## Pure
+
+This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+
+![Screenshot of Hide Runtime Versions preset](/presets/pure-prompt.png)
+
+### Configuration
+
+```toml
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$character"""
+
+[directory]
+style = "blue"
+
+[character]
+success_symbol = "[❯](5)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "242"
+
+[git_status]
+format = "[[$conflicted$deleted$renamed$modified$staged$untracked](218) $ahead_behind$stashed]($style)"
+style = "cyan"
+diverged = "*"
+untracked = "*"
+modified = "*"
+staged = "*"
+renamed = "*"
+deleted = "*"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "242"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "242"
+```
