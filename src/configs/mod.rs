@@ -76,6 +76,7 @@ pub use starship_root::*;
 pub struct FullConfig<'a> {
     // Root config
     pub format: &'a str,
+    pub right_format: &'a str,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -150,6 +151,7 @@ impl<'a> Default for FullConfig<'a> {
     fn default() -> Self {
         Self {
             format: "$all",
+            right_format: "",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -234,6 +236,19 @@ mod test {
         let cfg_table = full_cfg.as_table().unwrap();
         for module in ALL_MODULES {
             assert!(cfg_table.contains_key(*module));
+        }
+    }
+
+    #[test]
+    fn root_in_full_config() {
+        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
+        let cfg_table = full_cfg.as_table().unwrap();
+
+        let root_cfg = Value::try_from(StarshipRootConfig::default()).unwrap();
+        let root_table = root_cfg.as_table().unwrap();
+        for (option, default_value) in root_table.iter() {
+            assert!(cfg_table.contains_key(option));
+            assert_eq!(&cfg_table[option], default_value);
         }
     }
 }
