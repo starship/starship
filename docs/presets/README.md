@@ -471,7 +471,7 @@ format = 'via [$symbol]($style)'
 
 This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Hide Runtime Versions preset](/presets/pure-prompt.png)
+![Screenshot of Pure preset](/presets/pure-prompt.png)
 
 ### Configuration
 
