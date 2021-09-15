@@ -99,16 +99,17 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
 
     let mut contents = String::new();
     file.read_to_string(&mut contents).ok()?;
-    let name = YamlLoader::load_from_str(&contents).ok().map(
-        |mut yaml| -> Option<Option<String>> {
-            log::trace!("Parsed {:?} into yaml", project_file);
-            let yaml = yaml.swap_remove(0);
-            yaml.into_hash().map(|mut hash| -> Option<String> {
-                hash.remove(&Yaml::String("name".to_string()))?
-                    .into_string()
-            })
-        },
-    )???;
+    let name =
+        YamlLoader::load_from_str(&contents)
+            .ok()
+            .map(|yaml| -> Option<Option<String>> {
+                log::trace!("Parsed {:?} into yaml", project_file);
+                let yaml = yaml.into_iter().next()?;
+                yaml.into_hash().map(|mut hash| -> Option<String> {
+                    hash.remove(&Yaml::String("name".to_string()))?
+                        .into_string()
+                })
+            })???;
     log::trace!("Found project name: {:?}", name);
 
     let workspace_file = get_pulumi_workspace(context, &name, project_file)
