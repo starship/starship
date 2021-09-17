@@ -75,7 +75,7 @@ Un groupe de texte se compose de deux parties différentes.
 
 La première partie, qui est entourée dans un `[]`, est une [chaîne de formatage](#format-strings). Vous pouvez y ajouter des textes, des variables, ou même des groupes de texte imbriqués.
 
-La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#style-strings). Ceci peut être utilisé pour styliser la première partie.
+La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#style-strings). This can be used to style the first part.
 
 Par exemple :
 
