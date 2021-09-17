@@ -176,11 +176,12 @@ Aturan `format` bawaan digunakan untuk mendefinisikan format pada prompt, apabil
 ```toml
 format = "$all"
 
-# yang mana ekuivalen dengan
+# Which is equivalent to
 format = """
 $username\
 $hostname\
 $shlvl\
+$singularity\
 $kubernetes\
 $directory\
 $vcsh\
@@ -193,6 +194,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$cobol\
 $dart\
 $deno\
 $dotnet\
@@ -204,6 +206,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$lua\
 $nim\
 $nodejs\
 $ocaml\
@@ -211,6 +214,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$rlang\
 $red\
 $ruby\
 $rust\
@@ -231,7 +235,6 @@ $crystal\
 $custom\
 $cmd_duration\
 $line_break\
-$lua\
 $jobs\
 $battery\
 $time\
