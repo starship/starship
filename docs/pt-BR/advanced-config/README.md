@@ -68,9 +68,9 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Enable Right Prompt
+## Ativando o Prompt Direito
 
-Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+Alguns shells suportam um prompt no lado direito que renderiza na mesma linha do input. Starship consegue definir o conteúdo do prompt direito usando a opção `right_format`. Qualquer módulo pode ser usado no `format` é suportado o `right_format`. A variável `$all` só irá alterar os módulos que não usaram de forma explicita o `format` ou `right_format`.
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
@@ -81,14 +81,14 @@ Note: The right prompt is a single line following the input location. To right a
 ```toml
 # ~/.config/starship.toml
 
-# A minimal left prompt
+# Um prompt esquerdo minimo 
 format = """$character"""
 
-# move the rest of the prompt to the right
+# Move o resto do prompt para direita
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+Gera um prompt parecido com o seguinte:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
