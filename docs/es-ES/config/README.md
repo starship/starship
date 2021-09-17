@@ -75,7 +75,7 @@ Un grupo de texto se compone de dos partes diferentes.
 
 La primera parte, que está encerrada en un `[]`, es una [cadena de formato](#format-strings). Se puede agregar textos, variables, o incluso grupos de texto anidados.
 
-En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#style-strings). Se puede utilizar el estilo de la primera parte.
+En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#style-strings). This can be used to style the first part.
 
 Por ejemplo:
 
