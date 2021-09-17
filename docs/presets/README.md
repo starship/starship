@@ -501,7 +501,7 @@ format = "[$branch]($style)"
 style = "242"
 
 [git_status]
-format = "[[$conflicted$deleted$renamed$modified$staged$untracked](218) $ahead_behind$stashed]($style)"
+format = "[[$conflicted$deleted$renamed$modified$untracked](218) $ahead_behind$stashed]($style)"
 style = "cyan"
 diverged = "*"
 untracked = "*"
