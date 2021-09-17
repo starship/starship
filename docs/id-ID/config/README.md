@@ -75,7 +75,7 @@ Grup teks dibuat dengan dua bagian yang berbeda.
 
 Bagian pertama, yang mana diapit dalam sebuah `[]`, merupakan sebuah [format string](#format-strings). Kamu bisa menambahkan teks, variabel, atau bahkan grup teks bercabang di dalamnya.
 
-Pada bagian kedua, yang mana diapit dalam sebuah `()`, merupakan sebuah [penataan string](#style-strings). Bagian ini dapat digunakan untuk menata bagian pertama.
+Pada bagian kedua, yang mana diapit dalam sebuah `()`, merupakan sebuah [penataan string](#style-strings). This can be used to style the first part.
 
 Sebagai contoh:
 
