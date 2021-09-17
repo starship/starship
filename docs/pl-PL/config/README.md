@@ -75,7 +75,7 @@ Grupa tekstowa składa się z dwóch oddzielnych części.
 
 Pierwsza część, otoczona `[]`, to [ciąg formatujący](#format-strings). You can add texts, variables, or even nested text groups in it.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
 Na przykład:
 
