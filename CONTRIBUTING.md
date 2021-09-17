@@ -225,3 +225,26 @@ This is our preferred process for opening a PR on GitHub:
 5. Create a pull request from your branch to `starship/master`
 6. No need to assign the pull request to anyone, we'll review it when we can
 7. When the changes have been reviewed and approved, someone will squash and merge for you
+
+## New Module Checklist
+
+We love getting new modules for starship! While we try to keep the barrier for
+writing new modules low, starship provides a lot of functionality for a module,
+which requires quite a few things be done. These are listed here to help
+everyone remember what they are. Don't worry: most of them are quite simple!
+
+- [ ] Add a section to `docs/config/README.md` describing the module. At bare
+      minimum, it should do the following:
+  - [ ] Document options and variables for the module's configuration
+  - [ ] Explain when the module will be displayed
+- [ ] Add the variable to the appropriate location in the 
+      "Default Prompt Format" section of the documentation
+- [ ] Add an appropriate choice of presets to each set in `docs/presets/README.md`
+- [ ] Create configs structs/traits in `src/configs/<module>.rs` and add to the
+      appropriate locations in:
+  - [ ] `PROMPT_ORDER` (`src/configs/starship_root.rs`)
+  - [ ] `FullConfig` and the `Default` impl (`src/configs/mod.rs`)
+  - [ ] `ALL_MODULES` (`src/module.rs`)
+
+Finally, you should make sure to write your module's code in `src/modules`
+and add any commands that need to be mocked when testing in `src/utils.rs`.
