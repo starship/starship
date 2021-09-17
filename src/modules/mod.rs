@@ -181,6 +181,8 @@ pub fn description(module: &str) -> &'static str {
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
+        "elixir" => "The currently installed versions of Elixir and OTP",
+        "elm" => "The currently installed version of Elm",
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
         "fill" => "Fills the remaining space on the line with a pad string",
@@ -212,22 +214,37 @@ pub fn description(module: &str) -> &'static str {
         "php" => "The currently installed version of PHP",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
-        "rlang" => "The currently installed version of R",
         "red" => "The currently installed version of Red",
+        "rlang" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
         "scala" => "The currently installed version of Scala",
-        "swift" => "The currently installed version of Swift",
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
+        "singularity" => "The currently used Singularity image",
         "status" => "The status of the last command",
+        "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
         "username" => "The active user's username",
-        "vlang" => "The currently installed version of V",
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",
+        "vlang" => "The currently installed version of V",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::module::ALL_MODULES;
+
+    #[test]
+    fn all_modules_have_description() {
+        for module in ALL_MODULES {
+            println!("Checking if {:?} has a description", module);
+            assert_ne!(description(module), "<no description>");
+        }
     }
 }
