@@ -75,7 +75,7 @@ Um grupo de texto é composto por duas partes diferentes.
 
 A primeira parte, é contida em um `[]`, é uma [formatação de string](#format-strings). Você pode adicionar textos, variáveis ou até mesmos grupo de textos aninhados.
 
-Na segunda parte, é composta por um `()`, é uma [estilização de string](#style-strings). Este pode ser usado para estilizar a primeira parte.
+Na segunda parte, é composta por um `()`, é uma [estilização de string](#style-strings). This can be used to style the first part.
 
 Por exemplo:
 
