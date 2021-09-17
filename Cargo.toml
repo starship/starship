@@ -63,7 +63,7 @@ quick-xml = "0.22.0"
 rand = "0.8.4"
 serde = { version = "1.0.130", features = ["derive"] }
 indexmap = { version ="1.7.0", features = ["serde"] }
-notify-rust = { version = "4.5.1", optional = true }
+notify-rust = { version = "4.5.3", optional = true }
 semver = "1.0.4"
 which = "4.2.2"
 shadow-rs = "0.7.1"
