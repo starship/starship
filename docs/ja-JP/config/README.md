@@ -75,7 +75,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 `[]`で囲まれている最初の部分は、 [フォーマット文字列](#format-strings) です。 テキスト、変数、または入れ子になったテキストグループを追加できます。
 
-2 番目の部分では、 `()`で囲まれている [スタイル文字列](#style-strings) です。 これは最初のパートのスタイルを使用することができます。
+2 番目の部分では、 `()`で囲まれている [スタイル文字列](#style-strings) です。 This can be used to style the first part.
 
 例：
 
