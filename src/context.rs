@@ -113,10 +113,16 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // Pipestatus is an arguments list
-        let pipestatus = arguments
-            .values_of("pipestatus")
-            .map(|args| args.into_iter().map(String::from).collect());
+        // Due to shell differences, we can potentially receive individual or space
+        // separated inputs, e.g. "0", "1", "2", "0" is the same as "0 1 2 0" and 
+        // "0 1", "2 0". We need to be able to accept for all these formats
+        let pipestatus = arguments.values_of("pipestatus").map(|args| {
+            args.into_iter().map(|x| x.split_ascii_whitespace())
+                .flatten()
+                .map(|x| x.to_string())
+                .collect()
+        });
+        log::info!("Pipestatus is {:?}", pipestatus);
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
