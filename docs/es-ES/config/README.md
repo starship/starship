@@ -1548,7 +1548,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 symbol = "🌟 "
 ```
 
-## Jobs
+## Trabajos
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
@@ -1589,7 +1589,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| number    | `1`     | The number of jobs                     |
+| número    | `1`     | The number of jobs                     |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2395,7 +2395,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 | Variable | Ejemplo       | Descripción                            |
 | -------- | ------------- | -------------------------------------- |
-| version  | `v4.0.5`      | The version of `R`                     |
+| version  | `v4.0.5`      | La versión de `R`                      |
 | symbol   |               | Refleja el valor de la opción `symbol` |
 | style    | `"blue bold"` | Refleja el valor de la opción `style`  |
 
@@ -2677,7 +2677,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
-## Status
+## Estado
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
