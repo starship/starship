@@ -75,7 +75,7 @@ Un grupo de texto se compone de dos partes diferentes.
 
 La primera parte, que está encerrada en un `[]`, es una [cadena de formato](#format-strings). Se puede agregar textos, variables, o incluso grupos de texto anidados.
 
-En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#style-strings). This can be used to style the first part.
+En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#style-strings). Esto se puede utilizar para diseñar la primera parte.
 
 Por ejemplo:
 
@@ -740,18 +740,18 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                           |
 | `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                            |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                               |
+| `read_only`         | `"🔒"`                                              | El símbolo que indica el directorio actual es de sólo lectura.                   |
+| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                       |
+| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. p. ej.: "…/"                        |
+| `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio de inicio.                                   |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Por defecto | Descripción                                                                                                                                                            |
+| Opción avanzada             | Por defecto | Descripción                                                                                                                                                            |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |             | A table of substitutions to be made to the path.                                                                                                                       |
+| `sustituciones`             |             | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`         | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`      | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
@@ -786,28 +786,28 @@ truncation_length = 8
 truncation_symbol = "…/"
 ```
 
-## Docker Context
+## Contexto de Docker
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Opciones
 
-| Opción              | Por defecto                                                   | Descripción                                                                       |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | El formato del módulo.                                                            |
-| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `"blue bold"`                                                 | El estilo del módulo.                                                             |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| Opción              | Por defecto                                                   | Descripción                                                                                 |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | El formato del módulo.                                                                      |
+| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                                       |
+| `only_with_files`   | `true`                                                        | Mostrar solo cuando haya una coincidencia                                                   |
+| `detect_extensions` | `[]`                                                          | Qué extensiones deben activar este módulo (necesita `solly_with_files` para ser verdadero). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).            |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).              |
+| `style`             | `"blue bold"`                                                 | El estilo del módulo.                                                                       |
+| `disabled`          | `false`                                                       | Deshabilita el módulo `docker_context`.                                                     |
 
 ### Variables
 
 | Variable  | Ejemplo        | Descripción                            |
 | --------- | -------------- | -------------------------------------- |
-| context   | `test_context` | The current docker context             |
+| context   | `test_context` | El contexto actual de docker           |
 | symbol    |                | Refleja el valor de la opción `symbol` |
 | style\* |                | Refleja el valor de la opción `style`  |
 
@@ -824,7 +824,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+El módulo `dotnet` muestra la versión relevante del [.NET Core SDK](https://dotnet.microsoft.com/) para el directorio actual. Si el SDK ha sido anclado en el directorio actual, se mostrará la versión fijada. Otherwise the module shows the latest installed version of the SDK.
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -839,7 +839,7 @@ By default this module will only be shown in your prompt when one or more of the
 
 You'll also need the .NET Core SDK installed in order to use it correctly.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Internamente, este módulo utiliza su propio mecanismo para la detección de versiones. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
@@ -1061,14 +1061,14 @@ format = "via [e $version](bold red) "
 
 ## Fill
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. Esto es útil para alinear otros módulos.
 
 ### Opciones
 
-| Opción   | Por defecto    | Descripción                       |
-| -------- | -------------- | --------------------------------- |
-| `symbol` | `"."`          | The symbol used to fill the line. |
-| `style`  | `"bold black"` | El estilo del módulo.             |
+| Opción   | Por defecto    | Descripción                                |
+| -------- | -------------- | ------------------------------------------ |
+| `symbol` | `"."`          | El símbolo utilizado para llenar la línea. |
+| `style`  | `"bold black"` | El estilo del módulo.                      |
 
 ### Ejemplo
 
@@ -1100,16 +1100,16 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
 | `style`          | `"bold blue"`                                              | El estilo del módulo.                                           |
-| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
+| `disabled`       | `false`                                                    | Deshabilita el módulo `gcloud`.                                 |
 
 ### Variables
 
 | Variable  | Ejemplo       | Descripción                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
-| account   | `foo`         | The current GCP profile                                            |
-| domain    | `example.com` | The current GCP profile domain                                     |
-| project   |               | The current GCP project                                            |
+| cuenta    | `foo`         | El perfil actual de GCP                                            |
+| dominio   | `ejemplo.com` | The current GCP profile domain                                     |
+| proyecto  |               | The current GCP project                                            |
 | active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Refleja el valor de la opción `symbol`                             |
 | style\* |               | Refleja el valor de la opción `style`                              |
@@ -1170,7 +1170,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 | Variable      | Ejemplo  | Descripción                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| rama          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
 | symbol        |          | Refleja el valor de la opción `symbol`                                                                 |
@@ -1885,7 +1885,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| branch    | `master` | The active mercurial branch            |
+| rama      | `master` | The active mercurial branch            |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2091,7 +2091,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
 | cloud     | `corp`  | The current OpenStack cloud            |
-| project   | `dev`   | The current OpenStack project          |
+| proyecto  | `dev`   | The current OpenStack project          |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
