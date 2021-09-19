@@ -1168,13 +1168,13 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Ejemplo  | Descripción                                                                                            |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| rama          | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | Refleja el valor de la opción `symbol`                                                                 |
-| style\*     |          | Refleja el valor de la opción `style`                                                                  |
+| Variable      | Ejemplo   | Descripción                                                                                            |
+| ------------- | --------- | ------------------------------------------------------------------------------------------------------ |
+| rama          | `maestro` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin`  | The remote name.                                                                                       |
+| remote_branch | `maestro` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol        |           | Refleja el valor de la opción `symbol`                                                                 |
+| style\*     |           | Refleja el valor de la opción `style`                                                                  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1321,10 +1321,10 @@ The `git_status` module shows symbols representing the state of the repo in your
 | `up_to_date` | `""`                                            | The format of `up_to_date`          |
 | `untracked`  | `"?"`                                           | The format of `untracked`           |
 | `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
+| `modificado` | `"!"`                                           | The format of `modified`            |
 | `staged`     | `"+"`                                           | The format of `staged`              |
 | `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
+| `eliminado`  | `"✘"`                                           | The format of `deleted`             |
 | `style`      | `"bold red"`                                    | El estilo del módulo.               |
 | `disabled`   | `false`                                         | Disables the `git_status` module.   |
 
@@ -1339,7 +1339,7 @@ The following variables can be used in `format`:
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
 | `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
+| `modificado`   | Displays `modified` when there are file modifications in the working directory.                               |
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
@@ -1420,7 +1420,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | The version of `go`                    |
+| version   | `v1.12.1` | La versión de `go`                     |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1459,7 +1459,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v3.1.1` | The version of `helm`                  |
+| version   | `v3.1.1` | La versión de `helm`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1533,7 +1533,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v14`   | The version of `java`                  |
+| version   | `v14`   | La versión de `java`                   |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -1879,15 +1879,15 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `format`            | `"on [$symbol$branch]($style) "` | El formato del módulo.                                                                       |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+| `disabled`          | `true`                           | Deshabilita el módulo `hg_branch`.                                                           |
 
 ### Variables
 
-| Variable  | Ejemplo  | Descripción                            |
-| --------- | -------- | -------------------------------------- |
-| rama      | `master` | The active mercurial branch            |
-| symbol    |          | Refleja el valor de la opción `symbol` |
-| style\* |          | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo   | Descripción                            |
+| --------- | --------- | -------------------------------------- |
+| rama      | `maestro` | The active mercurial branch            |
+| symbol    |           | Refleja el valor de la opción `symbol` |
+| style\* |           | Refleja el valor de la opción `style`  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1915,7 +1915,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Opción              | Por defecto                          | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                               |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo                                                                   |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                                   |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Qué extensiones deberían activar este módulo.                                           |
@@ -2011,7 +2011,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v13.12.0` | The version of `node`                  |
+| version   | `v13.12.0` | La versión de `node`                   |
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
@@ -2026,7 +2026,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 format = "via [🤖 $version](bold green) "
 ```
 
-## OCaml
+## OCamlz
 
 The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
@@ -2056,7 +2056,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 | Variable         | Ejemplo      | Descripción                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
-| version          | `v4.10.0`    | The version of `ocaml`                                            |
+| version          | `v4.10.0`    | La versión de `ocaml`                                             |
 | switch_name      | `my-project` | The active OPAM switch                                            |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
 | symbol           |              | Refleja el valor de la opción `symbol`                            |
@@ -2179,7 +2179,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                                                     | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold 149"`                                                                                             | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                                             |
+| `disabled`          | `false`                                                                                                  | Deshabilita el módulo `perl`.                                                           |
 
 ### Variables
 
@@ -2217,7 +2217,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | `detect_files`      | `["composer.json", ".php-version"]`  | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"147 bold"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `php` module.                                                              |
+| `disabled`          | `false`                              | Desactiva el módulo `php`.                                                              |
 
 ### Variables
 
@@ -2504,7 +2504,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `["Cargo.toml"]`                     | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `rust` module.                                                             |
+| `disabled`          | `false`                              | Deshabilita el módulo `rust`.                                                           |
 
 ### Variables
 
