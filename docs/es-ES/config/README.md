@@ -2595,7 +2595,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Variable  | Por defecto | Descripción                                                |
 | --------- | ----------- | ---------------------------------------------------------- |
-| indicator |             | Mirrors the value of `indicator` for currently used shell. |
+| indicador |             | Mirrors the value of `indicator` for currently used shell. |
 
 ### Ejemplos
 
@@ -2694,7 +2694,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Opción                  | Por defecto                                                                          | Descripción                                             |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
-| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
+| `symbol`                | `"✖"`                                                                                | El símbolo mostrado en un error del programa            |
 | `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
 | `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
 | `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
@@ -2763,7 +2763,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                 |
+| version   | `v5.2.4` | La versión de `swift`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2808,12 +2808,12 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Variables
 
-| Variable  | Ejemplo    | Descripción                            |
-| --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`             |
-| workspace | `default`  | The current Terraform workspace        |
-| symbol    |            | Refleja el valor de la opción `symbol` |
-| style\* |            | Refleja el valor de la opción `style`  |
+| Variable        | Ejemplo    | Descripción                            |
+| --------------- | ---------- | -------------------------------------- |
+| version         | `v0.12.24` | The version of `terraform`             |
+| área de trabajo | `default`  | The current Terraform workspace        |
+| symbol          |            | Refleja el valor de la opción `symbol` |
+| style\*       |            | Refleja el valor de la opción `style`  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2865,7 +2865,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| time      | `13:08:10` | The current time.                     |
+| time      | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -2883,7 +2883,7 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## Nombre de usuario
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
