@@ -1059,7 +1059,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 format = "via [e $version](bold red) "
 ```
 
-## Fill
+## Llenar
 
 The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. Esto es útil para alinear otros módulos.
 
@@ -1110,7 +1110,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | cuenta    | `foo`         | El perfil actual de GCP                                            |
 | dominio   | `ejemplo.com` | The current GCP profile domain                                     |
 | proyecto  |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| activo    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Refleja el valor de la opción `symbol`                             |
 | style\* |               | Refleja el valor de la opción `style`                              |
 
@@ -1234,7 +1234,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `revertir`     | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
 | `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
 | `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
@@ -1356,9 +1356,9 @@ The following variables can be used in `diverged`:
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Descripción              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variable | Descripción                   |
+| -------- | ----------------------------- |
+| `count`  | Mostrar el número de archivos |
 
 ### Ejemplo
 
@@ -2712,7 +2712,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Variable       | Ejemplo | Descripción                                                                                 |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
+| estado         | `127`   | The exit code of the last command                                                           |
 | int            | `127`   | The exit code of the last command                                                           |
 | common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
 | signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
@@ -2853,7 +2853,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `time_format`     | ver abajo               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
 | `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
@@ -2865,7 +2865,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| time      | `13:08:10` | La hora actual.                       |
+| tiempo    | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -3016,11 +3016,11 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Ejemplo                                     | Descripción                            |
-| --------- | ------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
-| symbol    |                                             | Refleja el valor de la opción `symbol` |
-| style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
+| Variable    | Ejemplo                                     | Descripción                            |
+| ----------- | ------------------------------------------- | -------------------------------------- |
+| repositorio | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
+| symbol      |                                             | Refleja el valor de la opción `symbol` |
+| style\*   | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3071,7 +3071,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Comandos personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
