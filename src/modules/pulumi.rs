@@ -64,13 +64,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 /// can return results like `3.12.0-alpha.1630554544+f89e9a29.dirty`, which we
 /// don't want to see. Instead we display that as `3.12.0-alpha`.
 fn parse_version(version: &str) -> &str {
-    &version[0..version
-        .trim()
-        .split('.')
-        .take(3)
-        .map(&str::len)
-        .sum::<usize>()
-        + 2]
+    let mut periods = 0;
+    for (i, c) in version.as_bytes().iter().enumerate() {
+        if *c == '.' as u8 {
+            if periods == 2 {
+                return &version[0..i];
+            } else {
+                periods += 1;
+            }
+        }
+    }
+    // We didn't hit 3 periods, so we just return the whole string.
+    version
 }
 
 /// Find a file describing a Pulumi package in the current directory (or any parrent directory).
@@ -99,17 +104,16 @@ fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
 
     let mut contents = String::new();
     file.read_to_string(&mut contents).ok()?;
-    let name =
-        YamlLoader::load_from_str(&contents)
-            .ok()
-            .map(|yaml| -> Option<Option<String>> {
-                log::trace!("Parsed {:?} into yaml", project_file);
-                let yaml = yaml.into_iter().next()?;
-                yaml.into_hash().map(|mut hash| -> Option<String> {
-                    hash.remove(&Yaml::String("name".to_string()))?
-                        .into_string()
-                })
-            })???;
+    let name = YamlLoader::load_from_str(&contents).ok().and_then(
+        |yaml| -> Option<Option<String>> {
+            log::trace!("Parsed {:?} into yaml", project_file);
+            let yaml = yaml.into_iter().next()?;
+            yaml.into_hash().map(|mut hash| -> Option<String> {
+                hash.remove(&Yaml::String("name".to_string()))?
+                    .into_string()
+            })
+        },
+    )??;
     log::trace!("Found project name: {:?}", name);
 
     let workspace_file = get_pulumi_workspace(context, &name, project_file)
@@ -140,28 +144,13 @@ fn get_pulumi_workspace(context: &Context, name: &str, project_file: &Path) -> O
     } else {
         let mut hasher = Sha1::new();
         hasher.update(project_file.to_str()?.as_bytes());
-        encode_to_hex(&hasher.finalize().to_vec())
+        crate::utils::encode_to_hex(&hasher.finalize().to_vec())
     };
     let unique_file_name = format!("{}-{}-workspace.json", name, project_file);
     let mut path = pulumi_home_dir(context)?;
     path.push("workspaces");
     path.push(unique_file_name);
     Some(path)
-}
-
-const HEXTABLE: &[char] = &[
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-];
-
-/// Encode a u8 slice into a hexadecimal string.
-fn encode_to_hex(slice: &[u8]) -> String {
-    // let mut j = 0;
-    let mut dst = Vec::with_capacity(slice.len() * 2);
-    for &v in slice {
-        dst.push(HEXTABLE[(v >> 4) as usize] as u8);
-        dst.push(HEXTABLE[(v & 0x0f) as usize] as u8);
-    }
-    String::from_utf8(dst).unwrap()
 }
 
 /// Get the Pulumi home directory. We first check `PULUMI_HOME`. If that isn't
@@ -199,14 +188,6 @@ mod tests {
     fn pulumi_version_dirty() {
         let input = "3.12.0-alpha.1630554544+f89e9a29.dirty";
         assert_eq!(parse_version(input), "3.12.0-alpha");
-    }
-
-    #[test]
-    fn sha1_hex() {
-        assert_eq!(
-            encode_to_hex(&[8, 13, 9, 189, 129, 94]),
-            "080d09bd815e".to_string()
-        );
     }
 
     #[test]
@@ -287,7 +268,27 @@ mod tests {
             })
             .env("HOME", root.to_str().unwrap())
             .collect();
-        let expected = format!("in {} ", Color::Fixed(5).bold().paint("🚀 launch"));
+        let expected = format!("in {} ", Color::Fixed(5).bold().paint(" launch"));
+        assert_eq!(expected, rendered.expect("a result"));
+        dir.close()?;
+        Ok(())
+    }
+
+    #[test]
+    fn empty_config_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let yaml = File::create(dir.path().join("Pulumi.yaml"))?;
+        yaml.sync_all()?;
+
+        let rendered = ModuleRenderer::new("pulumi")
+            .path(dir.path())
+            .logical_path(dir.path())
+            .config(toml::toml! {
+                [pulumi]
+                format = "in [$symbol($stack)]($style) "
+            })
+            .collect();
+        let expected = format!("in {} ", Color::Fixed(5).bold().paint(" "));
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())

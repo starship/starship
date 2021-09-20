@@ -209,6 +209,7 @@ pub fn description(module: &str) -> &'static str {
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
+        "pulumi" => "The current stack and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "rlang" => "The currently installed version of R",

@@ -494,6 +494,21 @@ pub fn home_dir() -> Option<PathBuf> {
     directories_next::BaseDirs::new().map(|base_dirs| base_dirs.home_dir().to_owned())
 }
 
+const HEXTABLE: &[char] = &[
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+];
+
+/// Encode a u8 slice into a hexadecimal string.
+pub fn encode_to_hex(slice: &[u8]) -> String {
+    // let mut j = 0;
+    let mut dst = Vec::with_capacity(slice.len() * 2);
+    for &v in slice {
+        dst.push(HEXTABLE[(v >> 4) as usize] as u8);
+        dst.push(HEXTABLE[(v & 0x0f) as usize] as u8);
+    }
+    String::from_utf8(dst).unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -694,5 +709,13 @@ mod tests {
             stderr: String::from("stderr"),
         };
         assert_eq!(get_command_string_output(case2), "stderr");
+    }
+
+    #[test]
+    fn sha1_hex() {
+        assert_eq!(
+            encode_to_hex(&[8, 13, 9, 189, 129, 94]),
+            "080d09bd815e".to_string()
+        );
     }
 }
