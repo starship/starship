@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn parse_version(version: &str) -> &str {
     let mut periods = 0;
     for (i, c) in version.as_bytes().iter().enumerate() {
-        if *c == '.' as u8 {
+        if *c == b'.' {
             if periods == 2 {
                 return &version[0..i];
             } else {
