@@ -747,7 +747,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio de inicio.                                   |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
 
 | Opción avanzada             | Por defecto | Descripción                                                                                                                                                            |
 | --------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -771,7 +771,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable  | Ejemplo               | Descripción                           |
 | --------- | --------------------- | ------------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path            |
+| path      | `"D:/Projects"`       | La ruta de directorio actual          |
 | style\* | `"black bold dimmed"` | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -1414,7 +1414,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `["Godeps"]`                                                                   | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold cyan"`                                                                  | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                                                           |
+| `disabled`          | `false`                                                                        | Deshabilita el módulo de `golang`.                                                      |
 
 ### Variables
 
@@ -1650,7 +1650,7 @@ symbol = "∴ "
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `.kt` or a `.kts` file
+- El directorio actual contiene un archivo `.kt` o un `.kts`
 
 ### Opciones
 
@@ -1670,7 +1670,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                |
+| version   | `v1.4.21` | La versión de `kotlin`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
