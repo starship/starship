@@ -1171,7 +1171,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | Variable      | Ejemplo   | Descripción                                                                                            |
 | ------------- | --------- | ------------------------------------------------------------------------------------------------------ |
 | rama          | `maestro` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin`  | The remote name.                                                                                       |
+| remote_name   | `origen`  | El nombre remoto.                                                                                      |
 | remote_branch | `maestro` | The name of the branch tracked on `remote_name`.                                                       |
 | symbol        |           | Refleja el valor de la opción `symbol`                                                                 |
 | style\*     |           | Refleja el valor de la opción `style`                                                                  |
