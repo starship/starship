@@ -102,6 +102,19 @@ pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 ) -> Option<CommandOutput> {
     let command = display_command(&cmd, args);
     match command.as_str() {
+        "cobc -version" => Some(CommandOutput {
+            stdout: String::from("\
+cobc (GnuCOBOL) 3.1.2.0
+Copyright (C) 2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Written by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart
+Built     Dec 24 2020 19:08:58
+Packaged  Dec 23 2020 12:04:58 UTC
+C version \"10.2.0\""),
+            stderr: String::default(),
+        }),
         "crystal --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -301,15 +314,24 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     }
 }
 
-/// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
+/// Wraps ANSI color escape sequences and other interpretable characters
+/// that need to be escaped in the shell-appropriate wrappers.
 pub fn wrap_colorseq_for_shell(mut ansi: String, shell: Shell) -> String {
-    // Bash might interepret baskslashes, backticks and $
-    // see #658 for more details
-    if shell == Shell::Bash {
-        ansi = ansi.replace('\\', r"\\");
-        ansi = ansi.replace('$', r"\$");
-        ansi = ansi.replace('`', r"\`");
-    }
+    // Handle other interpretable characters
+    match shell {
+        // Bash might interepret baskslashes, backticks and $
+        // see #658 for more details
+        Shell::Bash => {
+            ansi = ansi.replace('\\', r"\\");
+            ansi = ansi.replace('$', r"\$");
+            ansi = ansi.replace('`', r"\`");
+        }
+        Shell::Zsh => {
+            // % is an escape in zsh, see PROMPT in `man zshmisc`
+            ansi = ansi.replace('%', "%%");
+        }
+        _ => {}
+    };
 
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
@@ -660,6 +682,15 @@ mod tests {
             wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
             r"\`echo a\`"
         );
+        assert_eq!(
+            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
+            test
+        );
+    }
+    #[test]
+    fn test_zsh_escape() {
+        let test = "10%";
+        assert_eq!(wrap_colorseq_for_shell(test.to_owned(), Shell::Zsh), "10%%");
         assert_eq!(
             wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
             test

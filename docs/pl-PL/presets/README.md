@@ -1,18 +1,18 @@
-# Presets
+# Gotowe konfiguracje
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez społeczność. Jeżeli chcesz zamieścić własną konfigurację, [złóż PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) z modyfikacją tego pliku! 😊
 
-## Nerd Font Symbols
+## Symbole Nerd Font
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+Poniższa konfiguracja nie zmienia nic poza znaczkami użytymi do oznaczenia poszczególnych modułów. Jeżeli nie jesteś fanem emoji, to może ci się spodobać!
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
-### Prerequisites
+### Wymagania wstępne
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Czcionka [Nerd Font](https://www.nerdfonts.com/) zainstalowana i ustawiona w twoim terminalu (w przykładzie użyto Fira Code Nerd Font)
 
-### Configuration
+### Konfiguracja
 
 ```toml
 [aws]
@@ -88,19 +88,19 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## Moduły w nawiasach kwadratowych
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Ta konfiguracja zmienia format wyświetlania wbudowanych modułów - zamiast domyślnych wyrazów ("via", "on", itp.) są wypisywane w nawiasach kwadratowych.
 
-Before:
+Przed:
 
 ![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
 
-After:
+Po:
 
 ![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
 
-### Configuration
+### Konfiguracja
 
 ```toml
 [aws]
@@ -111,6 +111,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
 format = '\[[⏱ $duration ]($style)\]'
+
+[cobol]
+format = '\[[$symbol($version)]($style)\]'
 
 [conda]
 format = '\[[$symbol$environment]($style)\]'
@@ -239,7 +242,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## Symbole "plain text"
 
 This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
 
@@ -251,7 +254,7 @@ After (Plain Text Symbols):
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
-### Configuration
+### Konfiguracja
 
 ```toml
 [character]
@@ -271,6 +274,9 @@ deleted = "x"
 
 [aws]
 symbol = "aws "
+
+[cobol]
+symbol = "cobol "
 
 [conda]
 symbol = "conda "
@@ -369,10 +375,13 @@ This preset hides the version of language runtimes. If you work in containers or
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
-### Configuration
+### Konfiguracja
 
 ```toml
 [cmake]
+format = "via [$symbol]($style)"
+
+[cobol]
 format = "via [$symbol]($style)"
 
 [crystal]

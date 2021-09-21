@@ -47,43 +47,11 @@
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
- /></a>
-  &nbsp;
-  <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
       alt="Deutsch"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
  /></a>
   &nbsp;
   <a
@@ -103,11 +71,51 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
+      alt="日本語"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/pt-BR/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
+      alt="Português do Brasil"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
+      alt="Русский"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
       alt="Tiếng Việt"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
+      alt="简体中文"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
+      alt="繁體中文"
  /></a>
 </p>
 
@@ -156,8 +164,8 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
 
+   بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
 
    **تێبینی** - بنەڕەتییەکانی سکریپتی دامەزراندن ئەتوانرێ بگۆڕدرێ سەیری یارمەتی نێوخۆیی بکە.
 

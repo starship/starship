@@ -112,6 +112,9 @@ format = '\[[$symbol($version)]($style)\]'
 [cmd_duration]
 format = '\[[⏱ $duration ]($style)\]'
 
+[cobol]
+format = '\[[$symbol($version)]($style)\]'
+
 [conda]
 format = '\[[$symbol$environment]($style)\]'
 
@@ -272,6 +275,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[cobol]
+symbol = "cobol "
+
 [conda]
 symbol = "conda "
 
@@ -363,16 +369,19 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## Ocultar versiones en tiempo de ejecución
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Esta configuración predeterminada oculta la versión de los tiempos de ejecución del idioma. Si trabajas en contenedores o entornos virtualizados, ¡ésto es para ti!
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+![Captura de pantalla ajustes de Ocultar versiones de tiempo de ejecución](/presets/hide-runtime-versions.png)
 
 ### Configuración
 
 ```toml
 [cmake]
+format = "via [$symbol]($style)"
+
+[cobol]
 format = "via [$symbol]($style)"
 
 [crystal]

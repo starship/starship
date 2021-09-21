@@ -51,43 +51,11 @@
  /></a>
   &nbsp;
   <a
-    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
- /></a>
-  &nbsp;
-  <a
     href="https://github.com/starship/starship/blob/master/docs/de-DE/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
       alt="Deutsch"
- /></a>
-  &nbsp;
-  <a
-    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
-    ><img
-      height="20"
-      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
  /></a>
   &nbsp;
   <a
@@ -103,7 +71,31 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Francés"
+      alt="Français"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
+      alt="日本語"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/pt-BR/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
+      alt="Português do Brasil"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/ru-RU/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
+      alt="Русский"
  /></a>
   &nbsp;
   <a
@@ -112,6 +104,22 @@
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
       alt="Tiếng Việt"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/zh-CN/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
+      alt="简体中文"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/zh-TW/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
+      alt="繁體中文"
  /></a>
 </p>
 
@@ -160,8 +168,8 @@
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
+   Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
    **Nota** - Los valores por defecto del guión de instalación se pueden anular (ver la ayuda incorporada).
 
@@ -266,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Añade lo siguiente al final de `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -277,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Advertencia** Esto cambiará en el futuro. Sólo se admite la versión nu v0.33 o superior. Añade lo siguiente a tu archivo de configuración nu. Puedes comprobar la ubicación de este archivo ejecutando `ruta de configuración` en nu.
 
    ```toml
    startup = [

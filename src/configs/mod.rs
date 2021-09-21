@@ -8,6 +8,7 @@ pub mod battery;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
+pub mod cobol;
 pub mod conda;
 pub mod crystal;
 pub mod custom;
@@ -20,6 +21,7 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fill;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -74,6 +76,7 @@ pub use starship_root::*;
 pub struct FullConfig<'a> {
     // Root config
     pub format: &'a str,
+    pub right_format: &'a str,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -83,6 +86,7 @@ pub struct FullConfig<'a> {
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
+    cobol: cobol::CobolConfig<'a>,
     conda: conda::CondaConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
@@ -94,6 +98,7 @@ pub struct FullConfig<'a> {
     elm: elm::ElmConfig<'a>,
     env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     erlang: erlang::ErlangConfig<'a>,
+    fill: fill::FillConfig<'a>,
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
@@ -146,6 +151,7 @@ impl<'a> Default for FullConfig<'a> {
     fn default() -> Self {
         Self {
             format: "$all",
+            right_format: "",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -155,6 +161,7 @@ impl<'a> Default for FullConfig<'a> {
             character: Default::default(),
             cmake: Default::default(),
             cmd_duration: Default::default(),
+            cobol: Default::default(),
             conda: Default::default(),
             crystal: Default::default(),
             dart: Default::default(),
@@ -166,6 +173,7 @@ impl<'a> Default for FullConfig<'a> {
             elm: Default::default(),
             env_var: Default::default(),
             erlang: Default::default(),
+            fill: Default::default(),
             gcloud: Default::default(),
             git_branch: Default::default(),
             git_commit: Default::default(),
@@ -228,6 +236,19 @@ mod test {
         let cfg_table = full_cfg.as_table().unwrap();
         for module in ALL_MODULES {
             assert!(cfg_table.contains_key(*module));
+        }
+    }
+
+    #[test]
+    fn root_in_full_config() {
+        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
+        let cfg_table = full_cfg.as_table().unwrap();
+
+        let root_cfg = Value::try_from(StarshipRootConfig::default()).unwrap();
+        let root_table = root_cfg.as_table().unwrap();
+        for (option, default_value) in root_table.iter() {
+            assert!(cfg_table.contains_key(option));
+            assert_eq!(&cfg_table[option], default_value);
         }
     }
 }

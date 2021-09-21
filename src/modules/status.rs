@@ -19,6 +19,15 @@ enum PipeStatusStatus<'a> {
 ///
 /// Will display the status only if it is not 0
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let mut module = context.new_module("status");
+    let config = StatusConfig::try_load(module.config);
+
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
+    if config.disabled {
+        return None;
+    };
+
     let exit_code = context
         .properties
         .get("status_code")
@@ -31,24 +40,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             false => PipeStatusStatus::NoPipe,
         },
     };
+
+    let pipestatus_status = match config.pipestatus {
+        true => pipestatus_status,
+        false => PipeStatusStatus::Disabled,
+    };
+
     if exit_code == "0"
         && (pipestatus_status == PipeStatusStatus::Disabled
             || pipestatus_status == PipeStatusStatus::NoPipe)
     {
         return None;
     }
-    let mut module = context.new_module("status");
-    let config = StatusConfig::try_load(module.config);
-
-    // As we default to disabled=true, we have to check here after loading our config module,
-    // before it was only checking against whatever is in the config starship.toml
-    if config.disabled {
-        return None;
-    };
-    let pipestatus_status = match config.pipestatus {
-        true => pipestatus_status,
-        false => PipeStatusStatus::Disabled,
-    };
 
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
@@ -284,7 +287,7 @@ mod tests {
             None,
         ];
 
-        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+        for (status, name) in exit_values.iter().zip(&exit_values_name) {
             let expected = name.map(std::string::ToString::to_string);
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
@@ -311,7 +314,7 @@ mod tests {
             None,
         ];
 
-        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+        for (status, name) in exit_values.iter().zip(&exit_values_name) {
             let expected = name.map(std::string::ToString::to_string);
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
@@ -340,7 +343,7 @@ mod tests {
             Some("-3"),
         ];
 
-        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+        for (status, name) in exit_values.iter().zip(&exit_values_name) {
             let expected = name.map(std::string::ToString::to_string);
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
@@ -359,7 +362,7 @@ mod tests {
         let exit_values = [1, 126, 127, 130, 131];
         let exit_values_name = ["🔴", "🚫", "🔍", "🧱", "⚡"];
 
-        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+        for (status, name) in exit_values.iter().zip(&exit_values_name) {
             let expected = Some((*name).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
@@ -385,7 +388,7 @@ mod tests {
         let exit_values = [1, 126, 127, 130, 131];
         let exit_values_name = ["🔴", "🚫", "🔍", "🔴", "🔴"];
 
-        for (status, name) in exit_values.iter().zip(exit_values_name.iter()) {
+        for (status, name) in exit_values.iter().zip(&exit_values_name) {
             let expected = Some((*name).to_string());
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
@@ -421,7 +424,7 @@ mod tests {
             "PSF 🔴=🔴 🔴 🔴",
         ];
 
-        for (status, rendered) in exit_values.iter().zip(exit_values_rendered.iter()) {
+        for (status, rendered) in exit_values.iter().zip(&exit_values_rendered) {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
@@ -465,7 +468,7 @@ mod tests {
             "PSF 🔴=🔴1 🔴1 🔴1",
         ];
 
-        for (status, rendered) in exit_values.iter().zip(exit_values_rendered.iter()) {
+        for (status, rendered) in exit_values.iter().zip(&exit_values_rendered) {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
@@ -495,16 +498,30 @@ mod tests {
     }
 
     #[test]
-    fn pipeline_disabled() {
-        let exit_values = [
-            [0, 0, 0, 0],
-            [0, 1, 2, 3],
-            [130, 126, 131, 127],
-            [1, 1, 1, 1],
-        ];
-        let exit_values_rendered = ["F 🟢", "F 🟢", "F 🧱", "F 🔴"];
+    fn successful_pipeline() {
+        let pipe_exit_code = [0, 0, 0];
 
-        for (status, rendered) in exit_values.iter().zip(exit_values_rendered.iter()) {
+        let main_exit_code = 0;
+
+        let expected = None;
+
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(&pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn pipeline_disabled() {
+        let exit_values = [[130, 126, 131, 127], [1, 1, 1, 1]];
+        let exit_values_rendered = ["F 🧱", "F 🔴"];
+
+        for (status, rendered) in exit_values.iter().zip(&exit_values_rendered) {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 
@@ -544,7 +561,7 @@ mod tests {
             "PSF 1ERROR=🟢|🟢|🟢|🔴30|🔍|🚫|🔴3|⚡|🟢|⚡|🟢|🔴",
         ];
 
-        for (status, rendered) in exit_values.iter().zip(exit_values_rendered.iter()) {
+        for (status, rendered) in exit_values.iter().zip(&exit_values_rendered) {
             let main_exit_code = status[0];
             let pipe_exit_code = &status[1..];
 

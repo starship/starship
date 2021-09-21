@@ -68,9 +68,36 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
+## Enable Right Prompt
+
+Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+
+Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+
+`right_format` is currently supported for the following shells: elvish, fish, zsh.
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+
+# A minimal left prompt
+format = """$character"""
+
+# move the rest of the prompt to the right
+right_format = """$all"""
+```
+
+Produces a prompt like the following:
+
+```
+▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
+```
+
+
 ## 風格字串
 
-風格字串是一個以空白分開的單詞清單。 單字並不會區分大小寫（換句話說，`bold` 與 `BoLd` 是被當作兩個相同的字串）。 每個單詞可以是下列其中之一：
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `斜體字`
@@ -82,14 +109,14 @@ starship_precmd_user_func="set_win_title"
   - `<color>`
   - `none`
 
-其中 `<color>` 是指定顏色用的（下面解釋）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. 單詞在字串中的順序不重要。
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未來可能會將 `none` 與其他符號一起使用的情形視為是一種錯誤。
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-一個顏色指定符號可以是下列其中之一：
+A color specifier can be one of the following:
 
  - 任一個標準終端機顏色：`black`、`red`、`green`、`blue`、`yellow`、`purple`、`cyan`、`white`。 你可以選擇性地加上前綴 `bright-` 來取得明亮版本的顏色（例如：`bright-white`）。
  - 一個 `#` 後面跟隨著六位數的十六進位數字。 這個指定了 [RGB 十六進制色碼](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
  - 一個介於 0~255 之間的數字。 這個指定了 [8-bit ANSI 色碼](https://i.stack.imgur.com/KTSQa.png)。
 
-如果前景/後景被指定了多種顏色，最後一個顏色具有最高優先性。
+If multiple colors are specified for foreground/background, the last one in the string will take priority.

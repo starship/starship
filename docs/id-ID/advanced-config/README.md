@@ -8,7 +8,7 @@ Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemud
 
 :::
 
-## Kostumisasi Perintah pre-prompt dan pre-execution Pada Bash
+## Kustomisasi Perintah pre-prompt dan pre-execution Pada Bash
 
 Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `bash`. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsimu sendiri ke dalam prosedur prompt-rendering:
 
@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan fungsi buatan tepat sebelum commands berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal *sebelum* menjalankan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
+- Untuk menjalankan fungsi yang dikustomisasi tepat sebelum commands berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal *sebelum* menjalankan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
 
 ```bash
 function blastoff(){
@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Mengubah Judul Window
 
-Beberapa prompts shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi mudah saja untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh`.
+Beberapa prompt shell dengan otomatis akan mengubah judul window-nya untukmu (mis. untuk merefleksikan direktori kerjamu). Fish bahkan mengaturnya sebagai bawaan. Starship tidak, tapi mudah saja untuk menambahkan fungsi tersebut ke dalam `bash` ataupun `zsh`.
 
 Pertama, buatlah fungsi untuk mengubah judul window (bekerja pada bash dan zsh):
 
@@ -57,9 +57,9 @@ Dalam `zsh`, pada array `precmd_functions`, tambahkan:
 precmd_functions+=(set_win_title)
 ```
 
-Kalau kamu suka hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell-mu untuk membuatnya permanen.
+Kalau kamu suka hasilnya, tambahkan baris (`~/.bashrc` or `~/.zshrc`) ke dalam file konfigurasi shell milikmu untuk membuatnya permanen.
 
-Sebagai contoh, kalau kamu mau menampilkan lokasi direktori pada judul label terminalmu, tambahkan snippet berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
+Sebagai contoh, kalau kamu mau menampilkan lokasi direktori pada judul label terminalmu, tambahkan bagian berikut ke dalam `~/.bashrc` atau `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -68,9 +68,36 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
+## Enable Right Prompt
+
+Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+
+Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+
+`right_format` saat ini hanya tersedia pada shell: elvish, fish, zsh.
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+# A minimal left prompt
+format = """$character"""
+
+# move the rest of the prompt to the right
+right_format = """$all"""
+```
+
+Menghasilkan prompt seperti berikut:
+
+```
+▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
+```
+
+
 ## Menata String
 
-Tataan pada strings merupakan sebuah kumpulan kata yang dipisahkan dengan spasi kosong. Kata-katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
+Style strings are a list of words, separated by whitespace. Kumpulan katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
 
   - `bold`
   - `italic`

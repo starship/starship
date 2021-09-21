@@ -86,6 +86,15 @@ impl<'a> StringFormatter<'a> {
         })
     }
 
+    /// A StringFormatter that does no formatting, parse just returns the raw text
+    pub fn raw(text: &'a str) -> Self {
+        Self {
+            format: vec![FormatElement::Text(text.into())],
+            variables: BTreeMap::new(),
+            style_variables: BTreeMap::new(),
+        }
+    }
+
     /// Maps variable name to its value
     ///
     /// You should provide a function or closure that accepts the variable name `name: &str` as a
@@ -248,7 +257,7 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(vec![Segment::new(style, text)]),
+                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
                         FormatElement::TextGroup(textgroup) => {
                             let textgroup = TextGroup {
                                 format: textgroup.format,
@@ -265,13 +274,11 @@ impl<'a> StringFormatter<'a> {
                                     .into_iter()
                                     .map(|mut segment| {
                                         // Derive upper style if the style of segments are none.
-                                        if segment.style.is_none() {
-                                            segment.style = style;
-                                        };
+                                        segment.set_style_if_empty(style);
                                         segment
                                     })
                                     .collect()),
-                                VariableValue::Plain(text) => Ok(vec![Segment::new(style, text)]),
+                                VariableValue::Plain(text) => Ok(Segment::from_text(style, text)),
                                 VariableValue::Meta(format) => {
                                     let formatter = StringFormatter {
                                         format,
@@ -313,9 +320,9 @@ impl<'a> StringFormatter<'a> {
                                                     VariableValue::Plain(plain_value) => {
                                                         !plain_value.is_empty()
                                                     }
-                                                    VariableValue::Styled(segments) => {
-                                                        segments.iter().any(|x| !x.value.is_empty())
-                                                    }
+                                                    VariableValue::Styled(segments) => segments
+                                                        .iter()
+                                                        .any(|x| !x.value().is_empty()),
                                                 })
                                         })
                                 })
@@ -382,8 +389,8 @@ mod tests {
     macro_rules! match_next {
         ($iter:ident, $value:literal, $($style:tt)+) => {
             let _next = $iter.next().unwrap();
-            assert_eq!(_next.value, $value);
-            assert_eq!(_next.style, $($style)+);
+            assert_eq!(_next.value(), $value);
+            assert_eq!(_next.style(), $($style)+);
         }
     }
 
@@ -502,14 +509,18 @@ mod tests {
         let styled_style = Some(Color::Green.italic());
         let styled_no_modifier_style = Some(Color::Green.normal());
 
+        let mut segments: Vec<Segment> = Vec::new();
+        segments.extend(Segment::from_text(None, "styless"));
+        segments.extend(Segment::from_text(styled_style, "styled"));
+        segments.extend(Segment::from_text(
+            styled_no_modifier_style,
+            "styled_no_modifier",
+        ));
+
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
             .map_variables_to_segments(|variable| match variable {
-                "var" => Some(Ok(vec![
-                    Segment::new(None, "styless"),
-                    Segment::new(styled_style, "styled"),
-                    Segment::new(styled_no_modifier_style, "styled_no_modifier"),
-                ])),
+                "var" => Some(Ok(segments.clone())),
                 _ => None,
             });
         let result = formatter.parse(None).unwrap();

@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "0.57.0"
+version = "0.58.0"
 edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
@@ -33,10 +33,10 @@ tls-vendored = ["native-tls/vendored"]
 clap = "2.33.3"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
-git2 = { version = "0.13.21", default-features = false }
+git2 = { version = "0.13.22", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
-serde_json = "1.0.66"
+serde_json = "1.0.68"
 rayon = "1.5.1"
 log = { version = "0.4.14", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -57,13 +57,13 @@ regex = "1.5.4"
 os_info = "3.0.7"
 urlencoding = "2.1.0"
 open = "2.0.1"
-unicode-width = "0.1.8"
+unicode-width = "0.1.9"
 term_size = "0.3.2"
 quick-xml = "0.22.0"
 rand = "0.8.4"
-serde = { version = "1.0.129", features = ["derive"] }
+serde = { version = "1.0.130", features = ["derive"] }
 indexmap = { version ="1.7.0", features = ["serde"] }
-notify-rust = { version = "4.5.1", optional = true }
+notify-rust = { version = "4.5.3", optional = true }
 semver = "1.0.4"
 which = "4.2.2"
 shadow-rs = "0.7.1"
