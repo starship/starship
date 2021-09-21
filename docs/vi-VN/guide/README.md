@@ -55,7 +55,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch"
+      alt="Tiếng Đức"
  /></a>
   &nbsp;
   <a
@@ -63,7 +63,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Español"
+      alt="Tiếng Tây Ban Nha"
  /></a>
   &nbsp;
   <a
@@ -71,7 +71,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
-      alt="Français"
+      alt="Thiếng Pháp"
  /></a>
   &nbsp;
   <a
@@ -79,7 +79,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
+      alt="Tiếng Nhật"
  /></a>
   &nbsp;
   <a
@@ -95,7 +95,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Tiếng Nga"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Tiếng Trung giản thể"
  /></a>
   &nbsp;
   <a
@@ -119,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Tiếng Trung hiện đại"
  /></a>
 </p>
 
