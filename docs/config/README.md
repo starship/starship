@@ -80,7 +80,7 @@ A text group is made up of two different parts.
 The first part, which is enclosed in a `[]`, is a [format string](#format-strings).
 You can add texts, variables, or even nested text groups in it.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
 For example:
 
@@ -190,6 +190,7 @@ format = """
 $username\
 $hostname\
 $shlvl\
+$singularity\
 $kubernetes\
 $directory\
 $vcsh\
@@ -202,6 +203,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$cobol\
 $dart\
 $deno\
 $dotnet\
@@ -213,6 +215,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$lua\
 $nim\
 $nodejs\
 $ocaml\
@@ -220,6 +223,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$rlang\
 $red\
 $ruby\
 $rust\
@@ -240,7 +244,6 @@ $crystal\
 $custom\
 $cmd_duration\
 $line_break\
-$lua\
 $jobs\
 $battery\
 $time\
@@ -1117,6 +1120,37 @@ By default the module will be shown if any of the following conditions are met:
 
 [erlang]
 format = "via [e $version](bold red) "
+```
+
+## Fill
+
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are
+present in a line they will split the space evenly between them. This is useful for aligning
+other modules.
+
+### Options
+
+| Option     | Default        | Description                            |
+| ---------- | -------------- | -------------------------------------- |
+| `symbol`   | `"."`          | The symbol used to fill the line.      |
+| `style`    | `"bold black"` | The style for the module.              |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+format="AA $fill BB $fill CC"
+
+[fill]
+symbol = "-"
+style = "bold green"
+```
+
+Produces a prompt that looks like:
+
+```
+AA -------------------------------------------- BB -------------------------------------------- CC
+
 ```
 
 ## Google Cloud (`gcloud`)

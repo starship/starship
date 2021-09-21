@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# Migrasi ke v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 merupakan rilisan dengan perubahan yang signifikan, untuk persiapan v1.0.0 yang besar. Kami membuat beberapa perubahan besar tentang bagaimana konfigurasi dilakukan pada prompt, hingga bagaimana kami mengizinkan tingkat kustomisasi yang lebih luas.
 
-This guide is intended to walk you through the breaking changes.
+Petunjuk berikut memandu kamu ke perubahan besar kami.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` kini digantikan dengan sebuah `format` root-level
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Sebelum v0.45.0, `prompt_order` dapat menerima sebuah nama modul dengan urutan yang harusya di-render oleh Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Starship v0.45.0 kini menerima nilai dari `format`, memungkinkan kustomisasi prompt di luar modul itu sendiri.
 
-**Example pre-v0.45.0 configuration**
+**Contoh konfigurasi pra-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Contoh konfigurasi v0.45.0**
 
 ```toml
 format = """\
@@ -52,20 +52,20 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Modul `prefix` dan `suffix` kini digantikan dengan `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+Sebelum v0.45.0, beberapa modul bisa menerima `prefix` dan/atau `suffix` untuk menata gayanya sesuai yang di-render modul.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Starship v0.45.0 menerima nilai `format` sebagai gantinya, memungkinkan bagaimana modul di-render untuk kustomisasi yang lebih jauh. Ketimbang membuat prefix dan suffix untuk varibel berbasis konteks, kini variabel dapat disubtitusikan dari sebuah format string, yang mana merepresantikan keluaran dari sebuah modul.
 
-**Example pre-v0.45.0 configuration**
+**Contoh konfigurasi pra-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Contoh konfigurasi v0.45.0**
 
 ```toml
 [cmd_duration]
@@ -78,14 +78,14 @@ format = "took [$duration]($style) "
 
 #### Karakter
 
-| Removed Property        | Replacement      |
-| ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
-| `use_symbol_for_status` | `error_symbol`   |
-| `style_success`         | `success_symbol` |
-| `style_failure`         | `error_symbol`   |
+| Properti Yang Digantikan | Penggantinya     |
+| ------------------------ | ---------------- |
+| `symbol`                 | `success_symbol` |
+| `use_symbol_for_status`  | `error_symbol`   |
+| `style_success`          | `success_symbol` |
+| `style_failure`          | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Sebelumnya, properti `use_symbol_for_status` digunakan untuk mengkonfigurasi prompt untuk menampilkan `error_symbol` saat perintah terakhir berakhir dengan nilai code status yang bukan nol.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+Dengan rilisnya v0.45.0, kini kita selalu menggunakan `error_symbol` setelah nilai code status yang bukan nol, menggabungkan properti `use_symbol_for_status` dan `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Untuk mengkonfigurasi prompt agar menggunakan konfigurasi `use_symbol_for_status = true`, tambahkan baris berikut ke dalam file config:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+*Catatan:* Element `character` secara otomatis menambahkan sebuah spasi setelahnya, jadi tidak seperti `format` string yang lain, kami secara spesifik tidak menambahkannya pada contoh di atas.
 
-#### Command Duration
+#### Durasi Perintah
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [cmd_duration]
@@ -125,13 +125,13 @@ error_symbol = "[✖](bold red)"
 ++ format = "took [$duration]($style) "
 ```
 
-#### Directory
+#### Direktori
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [directory]
@@ -139,14 +139,14 @@ error_symbol = "[✖](bold red)"
 ++ format = "[$path]($style)[$read_only]($read_only_style) "
 ```
 
-#### Environment Variable
+#### Variabel Environment
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [env_var]
@@ -157,12 +157,12 @@ error_symbol = "[✖](bold red)"
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [git_commit]
@@ -173,13 +173,13 @@ error_symbol = "[✖](bold red)"
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
+| `show_sync_count`        | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [git_status]
@@ -189,11 +189,11 @@ error_symbol = "[✖](bold red)"
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Sebelumnya, properti `show_sync_count` digunakan untuk mengkonfigurasi prompt untuk menampilkan jumlah commits dari branch yang terdepan atau terbelakang dari remote branch.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+Dengan rilisnya v0.45.0, hal ini kini digantikan dengan tiga properti terpisah, `ahead`, `behind`, dan `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Untuk mengkonfigurasi prompt agar menggunakan konfigurasi `show_sync_count = true`, tambahkan baris berikut ke dalam file config:
 
 ```toml
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `label`                  | `format`     |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [singularity]
@@ -235,13 +235,13 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Time
+#### Waktu
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Properti Yang Digantikan | Penggantinya  |
+| ------------------------ | ------------- |
+| `format`                 | `time_format` |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [time]
@@ -252,12 +252,12 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Properti Yang Digantikan | Penggantinya |
+| ------------------------ | ------------ |
+| `prefix`                 | `format`     |
+| `suffix`                 | `format`     |
 
-**Changes to the Default Configuration**
+**Perubahan pada konfigurasi bawaan**
 
 ```diff
 [custom.example]

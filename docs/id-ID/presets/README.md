@@ -1,16 +1,16 @@
-# Presets
+# Prasetel (Presets)
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Berikut ini adalah koleksi konfigurasi prasetel dari kumpulan komunita Starship. Jika kamu punya konfigurasi prasetel untuk dibagikan, silakan [kirim PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) untuk memperbarui file ini! 😊
 
-## Nerd Font Symbols
+## Simbol Nerd Font
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+Konfigurasi prasetel berikut tidak mengubah apapun selain simbol yang digunakan untuk masing-masing modulnya. Kalau kamu enggak suka dengan emoji, hal ini mungkin bisa menarik perhatianmu!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![Tangkapan Layar dari preset simbol Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prasyarat
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Nerd Font yang terpasang dan telah diaktifkan di dalam terminal (contoh berikut menggunakan Nerd Font Fira Code)
 
 ### Konfigurasi
 
@@ -88,17 +88,17 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## Segmen Berkurung
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk menampilkan segmennya di dalam tanda kurung daripada menggunakan susunan kata bawaan Starship ("via", "on", dll.).
 
-Before:
+Sebelum:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![Tangkapan Layar dari konfigurasi bawaan Starship](/presets/bracketed-segments-before.png)
 
-After:
+Sesudah:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![Tangkapan Layar dari Segmen Berkurung](/presets/bracketed-segments-after.png)
 
 ### Konfigurasi
 
@@ -111,6 +111,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
 format = '\[[⏱ $duration ]($style)\]'
+
+[cobol]
+format = '\[[$symbol($version)]($style)\]'
 
 [conda]
 format = '\[[$symbol$environment]($style)\]'
@@ -239,17 +242,17 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## Simbol Teks Sederhana
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+Konfigurasi prasetel berikut mengubah simbol menjadi teks sederhana. Jika terminal atau font kamu tidak mampu me-render Nerd Font atau emoji, mungkin kamu bisa mencoba konfigurasi prasetel berikut!
 
-Before (default setting with Fixedsys font):
+Sebelum (aturan bawaan dengan menggunakan font Fixedys):
 
-![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
+![Tangkapan Layar dari konfigurasi bawaan Starship dengan Font Fixedsys](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+Sesudah (Simbol Teks Sederhana):
 
-![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
+![Tangkapan Layar dari preset Simbol Teks Sederhana](/presets/plain-text-symbols-after.png)
 
 ### Konfigurasi
 
@@ -271,6 +274,9 @@ deleted = "x"
 
 [aws]
 symbol = "aws "
+
+[cobol]
+symbol = "cobol "
 
 [conda]
 symbol = "conda "
@@ -363,16 +369,19 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## Penyembunyian Versi Runtime
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Konfigurasi prasetel berikut menyembunyikan versi language runtimes. Jika kamu bekerja di dalam kontainer atau environments virtual, preset berikut cocok untukmu!
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+![Tangkapan Layar dari preset Penyembunyian Versi Runtime](/presets/hide-runtime-versions.png)
 
 ### Konfigurasi
 
 ```toml
 [cmake]
+format = "via [$symbol]($style)"
+
+[cobol]
 format = "via [$symbol]($style)"
 
 [crystal]

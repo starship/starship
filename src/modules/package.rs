@@ -84,7 +84,11 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
     let ini = Ini::load_from_str(&file_contents).ok()?;
     let raw_version = ini.get_from(Some("metadata"), "version")?;
 
-    format_version(raw_version, config.version_format)
+    if raw_version.starts_with("attr:") || raw_version.starts_with("file:") {
+        None
+    } else {
+        format_version(raw_version, config.version_format)
+    }
 }
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -606,6 +610,34 @@ license = "MIT"
     fn test_extract_setup_cfg_version_without_version() -> io::Result<()> {
         let config_name = "setup.cfg";
         let config_content = String::from("[metadata]");
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_setup_cfg_version_attr() -> io::Result<()> {
+        let config_name = "setup.cfg";
+        let config_content = String::from(
+            "[metadata]
+            version = attr: mymod.__version__",
+        );
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_setup_cfg_version_file() -> io::Result<()> {
+        let config_name = "setup.cfg";
+        let config_content = String::from(
+            "[metadata]
+            version = file: version.txt",
+        );
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;

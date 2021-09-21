@@ -3,22 +3,22 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!
-actionText: Mulai
+actionText: Mari Mulai →
 actionLink: ./guide/
 features:
   - 
-    title: Kompabilitas Yang Utama
+    title: Mengutamakan Kompabilitas
     details: Dapat bekerja di shells yang paling biasa dengan sistem operasi yang paling biasa. Bisa digunakan di mana saja!
   - 
     title: Dibuat Dengan Rust
-    details: Menggunakan kecepatan dan keamaan dari Rust, untuk membuat prompt anda bekerja secepat mungkin dan dapat diandalkan.
+    details: Menggunakan kecepatan dan keamanan dari Rust, untuk membuat prompt kamu bekerja secepat dan seandal mungkin.
   - 
-    title: Dapat Diatur
-    details: Semua detail kecil yang ada dapat kamu atur sesukamu, mungkin untuk membuat prompt yang seminimal mungkin atau kaya fitur seperti yang kamu inginkan.
+    title: Dapat Dikustomisasi
+    details: Semua detail kecil yang ada dapat kamu atur sesukamu, entah untuk membuatnya sebagai prompt yang seminimal mungkin atau mungkin kaya akan fitur sesuai keinginanmu.
 footer: Berlisensi ISC | Hak Cipta © 2019-sekarang Kontributor Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Prompt Lintas Shell"
-description: Starship merupakan prompt yang minimal, super cepat, dan sangat bisa diatur untuk semua shell! Menampilkan info yang dibutuhkan, namun tetap bisa tampil ramping dan minimal. Instalasi sederhana tersedia untuk Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, dan PowerShell.
+description: Starship merupakan sebuah prompt yang minimal, super cepat, dan sangat bisa untuk dikustomisasi untuk shell apapun! Bisa menampilkan informasi yang kamu butuhkan, namun tetap bisa tampil dengan ramping dan minimal. Instalasi sederhana tersedia untuk Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, dan PowerShell.
 ---
 
 <div class="center">
@@ -30,7 +30,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
 ### Prasyarat
 
-- [Nerd Font](https://www.nerdfonts.com/) yang telah terinstalasi dan telah diaktifkan di terminal.
+- [Nerd Font](https://www.nerdfonts.com/) yang telah terinstalasi dan telah diaktifkan di dalam terminal.
 
 ### Instalasi Sederhana
 
@@ -44,7 +44,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   Untuk memperbarui Starship, jalankan kembali skrip di atas. Hal ini dapat memperbarui versi yang terpasang tanpa menyentuh konfigurasi Starship.
+   Untuk memperbarui Starship, jalankan kembali skrip di atas. Hal ini dapat memperbarui versi yang terpasang tanpa mengubah konfigurasi Starship.
 
 
    #### Pasang Melalui Package Manager
@@ -61,7 +61,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
    scoop install starship
    ```
 
-1. Tambahkan skrip init ke file konfigurasi Shell:
+1. Tambahkan skrip init ke dalam file konfigurasi Shell:
 
 
    #### Bash
@@ -119,7 +119,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Elvish
 
-   ::: warning Cuma elvish v0.15 atau yang lebih baru yang tengah didukung. :::
+   ::: warning Hanya elvish v0.15 atau versi yang lebih baru yang mendapat dukungan pengembangan. :::
 
    Tambahkan skrip berikut pada baris akhir `~/.elvish/rc.elv`:
 
@@ -143,7 +143,7 @@ description: Starship merupakan prompt yang minimal, super cepat, dan sangat bis
 
    #### Nushell
 
-   ::: peringatan Hal ini dapat berubah di kemudian hari. Hanya nu versi v0.33 atau lebih baru yang tengah didukung. ::: Tambahkan skrip berikut ke dalam file konfigurasi nu. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
+   ::: peringatan Hal ini dapat berubah di kemudian hari. Hanya nu versi v0.33 atau versi terbaru yang mendapat dukungan pengembangan. ::: Tambahkan skrip berikut ke dalam file konfigurasi nu. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
 
    ```toml
    startup = [
