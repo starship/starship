@@ -15,6 +15,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, Instant};
+use terminal_size::terminal_size;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -138,8 +139,8 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             right,
-            width: term_size::dimensions()
-                .map(|(width, _)| width)
+            width: terminal_size()
+                .map(|(w, _)| w.0 as usize)
                 .unwrap_or_default(),
             #[cfg(test)]
             env: HashMap::new(),
