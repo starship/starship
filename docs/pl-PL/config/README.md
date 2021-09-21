@@ -1,4 +1,4 @@
-# Configuration
+# Konfiguracja
 
 To get started configuring starship, create the following file: `~/.config/starship.toml`.
 
@@ -6,7 +6,7 @@ To get started configuring starship, create the following file: `~/.config/stars
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Cała konfiguracja starship jest wykonywana w tym pliku [TOML](https://github.com/toml-lang/toml):
 
 ```toml
 # Inserts a blank line between shell prompts
@@ -21,63 +21,63 @@ success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Możesz zmienić domyślną lokalizację pliku konfiguracyjnego za pomocą zmiennej środowiskowej `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoim `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
-### Logging
+### Logi
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Starship domyślnie loguje ostrzeżenia i błędy do pliku o nazwie`~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, gdzie klucz sesji odpowiada twojej instancji terminala. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoim `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-### Terminology
+### Glosariusz
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Moduł**: Komponent wiersza poleceń, który dostarcza informacji opartych na kontekście twojego systemu operacyjnego. Przykładowo, moduł "nodejs" pokazuje wersję Node.js, która jest obecnie zainstalowana na twoim komputerze, jeżeli znajdujesz się w folderze zawierającym projekt Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Zmienna**: Mniejszy podkomponent zawierający informacje dostarczane przez moduł. Przykładowo, zmienna "version" w module "nodejs" zawiera obecną wersję Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+W ramach konwencji większość modułów posiada przedrostek w domyślnym kolorze terminala (n.p. `via` w "nodejs") oraz pojedynczy odstęp za treścią modułu.
 
-### Format Strings
+### Formatowanie
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Moduły wypisują swoje zmienne przy użyciu ciągów formatujących. Większość modułów posiada wpis o nazwie `format`, który konfiguruje format wyświetlania modułu. W ciągach formatujących można używać tekstu, zmiennych oraz grup tekstowych.
 
-#### Variable
+#### Zmienne
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. Nazwa zmiennej zawiera tylko litery, cyfry i `_`.
 
-For example:
+Na przykład:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` to ciąg formatujący ze zmienną o nazwie `version`.
+- `$git_branch$git_commit` zawiera dwie zmienne: `git_branch` i `git_commit`.
+- `$git_branch $git_commit` zawiera te dwie zmienne rozdzielone spacją.
 
-#### Text Group
+#### Grupy tekstowe
 
-A text group is made up of two different parts.
+Grupa tekstowa składa się z dwóch oddzielnych części.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Pierwsza część, otoczona `[]`, to [ciąg formatujący](#format-strings). You can add texts, variables, or even nested text groups in it.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used style the first part.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-For example:
+Na przykład:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Na przykład:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -142,12 +142,14 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                  |
-| ----------------- | ------------------------------ | ------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                          |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).        |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds). |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                    |
+| Option            | Default                        | Description                                                      |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                              |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
+| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).            |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).     |
+| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                        |
+
 
 ### Example
 
@@ -179,6 +181,7 @@ format = """
 $username\
 $hostname\
 $shlvl\
+$singularity\
 $kubernetes\
 $directory\
 $vcsh\
@@ -191,6 +194,7 @@ $hg_branch\
 $docker_context\
 $package\
 $cmake\
+$cobol\
 $dart\
 $deno\
 $dotnet\
@@ -202,6 +206,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$lua\
 $nim\
 $nodejs\
 $ocaml\
@@ -209,6 +214,7 @@ $perl\
 $php\
 $purescript\
 $python\
+$rlang\
 $red\
 $ruby\
 $rust\
@@ -229,13 +235,19 @@ $crystal\
 $custom\
 $cmd_duration\
 $line_break\
-$lua\
 $jobs\
 $battery\
 $time\
 $status\
 $shell\
 $character"""
+```
+
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+
+```toml
+# Move the directory to the second line
+format="$all$directory$character"
 ```
 
 ## AWS
@@ -479,6 +491,36 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 \*: This variable can only be used as a part of a style string
 
+## COBOL / GNUCOBOL
+
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains any files ending in `.cob` or `.COB`
+- The current directory contains any files ending in `.cbl` or `.CBL`
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                   |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `style`             | `"bold blue"`                        | The style for the module.                                                 |
+| `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `cobol` module.                                              |
+
+### Variables
+
+| Variable  | Example    | Description                          |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v3.1.2.0` | The version of `cobol`               |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
 ## Command Duration
 
 The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
@@ -530,7 +572,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current conda environment, if `$CONDA_DEFAULT_ENV` is set.
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
@@ -1017,6 +1059,35 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 format = "via [e $version](bold red) "
 ```
 
+## Fill
+
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+
+### Options
+
+| Option   | Default        | Description                       |
+| -------- | -------------- | --------------------------------- |
+| `symbol` | `"."`          | The symbol used to fill the line. |
+| `style`  | `"bold black"` | The style for the module.         |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+format="AA $fill BB $fill CC"
+
+[fill]
+symbol = "-"
+style = "bold green"
+```
+
+Produces a prompt that looks like:
+
+```
+AA -------------------------------------------- BB -------------------------------------------- CC
+
+```
+
 ## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
@@ -1205,12 +1276,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option          | Default                                                  | Description                        |
-| --------------- | -------------------------------------------------------- | ---------------------------------- |
-| `added_style`   | `"bold green"`                                           | The style for the added count.     |
-| `deleted_style` | `"bold red"`                                             | The style for the deleted count.   |
-| `format`        | `'[+$added]($added_style) [-$deleted]($deleted_style) '` | The format for the module.         |
-| `disabled`      | `true`                                                   | Disables the `git_metrics` module. |
+| Option               | Default                                                      | Description                           |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `added_style`        | `"bold green"`                                               | The style for the added count.        |
+| `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
+| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 
 ### Variables
 
@@ -1318,9 +1390,9 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-## Golang
+## Go
 
-The `golang` module shows the currently installed version of [Golang](https://golang.org/). By default the module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
@@ -2041,18 +2113,18 @@ symbol = "☁️ "
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
-- [**cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- [**nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
-- [**poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- [**python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
-- [**composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
-- [**gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
-- [**julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
-- [**mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
-- [**helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
-- [**maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
-- [**meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
-- [**vlang**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
+- [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
+- [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
+- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
+- [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
+- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
+- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
+- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
+- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -2296,7 +2368,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of R. The module will be shown if any of the following conditions are met:
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with the `.R` extension.
 - The current directory contains a file with the `.Rd` extension.
@@ -2539,7 +2611,7 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current `SHLVL` ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
 
 ### Options
 
@@ -2894,9 +2966,9 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 format = "via [⍱ $version](bold white) "
 ```
 
-## VLang
+## V
 
-The `vlang` module shows you your currently installed version of V. By default the module will be shown if any of the following conditions are met:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
@@ -2925,7 +2997,7 @@ The `vlang` module shows you your currently installed version of V. By default t
 
 ```toml
 # ~/.config/starship.toml
-[v]
+[vlang]
 format = "via [V $version](blue bold) "
 ```
 

@@ -18,7 +18,7 @@ features:
 footer: Licenza ISC | Copyright © 2019-present Starship Collaboratori
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Installazione rapida disponibile per Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh e PowerShell.
 ---
 
 <div class="center">
@@ -143,7 +143,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning Questo cambierà in futuro. È supportata solo la versione v0.33 o superiore. ::: Aggiungi quanto segue al tuo file di configurazione nu. Puoi controllare la posizione di questo file eseguendo `percorso di configurazione` in nu.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Aggiungi quanto segue alla fine di `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
