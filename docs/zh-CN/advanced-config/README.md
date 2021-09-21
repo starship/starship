@@ -97,7 +97,7 @@ Produces a prompt like the following:
 
 ## 样式设定
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+样式字符串是用空格分隔的单词列表。 其中单词不是大小写敏感的（例如 `bold` 和 `BoLd` 被视为同一字符串）。 每个单词可以是以下之一：
 
   - `bold`
   - `italic`
@@ -109,14 +109,14 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+`<color>` 是颜色说明符（下面解释）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. 字符串中的单词顺序不影响显示结果。
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未来可能会将 `none` 与其它标识符一起使用视为一种错误。
 
-A color specifier can be one of the following:
+颜色说明符可以是以下内容之一：
 
  - 标准终端颜色之一：`black`，`red`，`green`，`blue`，`yellow`，`purple`，`cyan`，`white`。 您可以使用可选前缀 `bright-` 来获取明亮版本的颜色（例如，`bright-white`）。
  - 一个 `#` 后跟一个六位十六进制数。 这将指定一个 [十六进制 RGB 颜色代码](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
  - 0-255 之间的数字。 这将指定一个 [8 位 ANSI 颜色码](https://i.stack.imgur.com/KTSQa.png)。
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+如果为文本/背景指定了多个颜色，字符串中最后指定的颜色将具有最高优先级。
