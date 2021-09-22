@@ -115,10 +115,10 @@ impl<'a> Context<'a> {
 
         let pipestatus = arguments
             .values_of("pipestatus")
-            .map(|args| Context::get_and_flatten_pipestatus(args))
+            .map(Context::get_and_flatten_pipestatus)
             .flatten();
 
-        log::info!("Pipestatus is {:?}", pipestatus);
+        log::trace!("Received completed pipestatus of {:?}", pipestatus);
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
