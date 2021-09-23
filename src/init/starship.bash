@@ -12,6 +12,8 @@
 # drawn, and only start the timer if this flag is present. That way, timing is
 # for the entire command, and not just a portion of it.
 
+STARSHIP_EXE=::STARSHIP::
+
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
@@ -20,7 +22,7 @@ starship_preexec() {
     # Avoid restarting the timer for commands in the same pipeline
     if [ "$STARSHIP_PREEXEC_READY" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
-        STARSHIP_START_TIME=$(::STARSHIP:: time)
+        STARSHIP_START_TIME=$($STARSHIP_EXE time)
     fi
 
     : "$PREV_LAST_ARG"
@@ -47,12 +49,12 @@ starship_precmd() {
 
     # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
-        STARSHIP_END_TIME=$(::STARSHIP:: time)
+        STARSHIP_END_TIME=$($STARSHIP_EXE time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS  --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$($STARSHIP_EXE prompt --terminal-width=$COLUMNS --status=$STARSHIP_CMD_STATUS  --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS")"
+        PS1="$($STARSHIP_EXE prompt --terminal-width=$COLUMNS --status=$STARSHIP_CMD_STATUS --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
@@ -93,7 +95,7 @@ else
 fi
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
-STARSHIP_START_TIME=$(::STARSHIP:: time)
+STARSHIP_START_TIME=$($STARSHIP_EXE time)
 export STARSHIP_SHELL="bash"
 
 # Set up the session key that will be used to store logs
