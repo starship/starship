@@ -31,7 +31,7 @@ fn main() {
         .multiple(true);
 
     let terminal_width_arg = Arg::with_name("terminal_width")
-        .short("t")
+        .short("w")
         .long("terminal-width")
         .value_name("TERMINAL_WIDTH")
         .help("The width of the current interactive terminal.")
