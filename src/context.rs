@@ -15,6 +15,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, Instant};
+use terminal_size::terminal_size;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -128,16 +129,11 @@ impl<'a> Context<'a> {
 
         let right = arguments.is_present("right");
 
-        let mut width = term_size::dimensions()
-            .map(|(width, _)| width)
-            .unwrap_or_default();
-        if width == 0 {
-            width = arguments
-                .value_of("terminal_width")
-                .unwrap_or("0")
-                .parse()
-                .unwrap_or(0);
-        }
+        let width = arguments
+            .value_of("terminal_width")
+            .and_then(|w| w.parse().ok())
+            .or_else(|| terminal_size().map(|(w, _)| w.0 as usize))
+            .unwrap_or(80);
 
         Context {
             config,

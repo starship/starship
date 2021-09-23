@@ -43,15 +43,8 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v2.3.4
 
-      # Cache files between builds
-      # - name: Setup | Cache Cargo
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       ~/.cargo/registry
-      #       ~/.cargo/git
-      #       target
-      #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v1
 
       - name: Setup | libdbus (ubuntu)
         if: matrix.os == 'ubuntu-latest'
@@ -79,15 +72,8 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v2.3.4
 
-      # Cache files between builds
-      # - name: Setup | Cache Cargo
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       ~/.cargo/registry
-      #       ~/.cargo/git
-      #       target
-      #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v1
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -118,15 +104,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install libdbus-1-dev
 
-      # Cache files between builds
-      - name: Setup | Cache Cargo
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-${{ matrix.rust }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v1
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
