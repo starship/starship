@@ -1705,7 +1705,7 @@ dependencies = [
  "strsim 0.10.0",
  "sys-info",
  "tempfile",
- "term_size",
+ "terminal_size",
  "toml",
  "unicode-segmentation",
  "unicode-width",
@@ -1815,10 +1815,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "term_size"
-version = "0.3.2"
+name = "terminal_size"
+version = "0.1.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e4129646ca0ed8f45d09b929036bafad5377103edd06e50bf574b353d2b08d9"
+checksum = "633c1a546cee861a1a6d0dc69ebeca693bf4296661ba7852b9d21d159e0506df"
 dependencies = [
  "libc",
  "winapi",

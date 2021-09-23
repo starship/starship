@@ -5,6 +5,7 @@ use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::time::Duration;
+use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
@@ -224,8 +225,8 @@ pub fn explain(args: ArgMatches) {
     // Overall a line looks like this: " "{module value}" ({xxxms})  -  {description}".
     const PADDING_WIDTH: usize = 11;
 
-    let desc_width = term_size::dimensions()
-        .map(|(w, _)| w)
+    let desc_width = terminal_size()
+        .map(|(w, _)| w.0 as usize)
         // Add padding length to module length to avoid text overflow. This line also assures desc_width >= 0.
         .map(|width| width - std::cmp::min(width, max_module_width + PADDING_WIDTH));
 
