@@ -30,6 +30,13 @@ fn main() {
         .long_help("Bash and Zsh supports returning codes for each process in a pipeline.")
         .multiple(true);
 
+    let terminal_width_arg = Arg::with_name("terminal_width")
+        .short("t")
+        .long("terminal-width")
+        .value_name("TERMINAL_WIDTH")
+        .help("The width of the current interactive terminal.")
+        .takes_value(true);
+
     let path_arg = Arg::with_name("path")
         .short("p")
         .long("path")
@@ -106,6 +113,7 @@ fn main() {
                 )
                 .arg(&status_code_arg)
                 .arg(&pipestatus_arg)
+                .arg(&terminal_width_arg)
                 .arg(&path_arg)
                 .arg(&logical_path_arg)
                 .arg(&cmd_duration_arg)

@@ -128,6 +128,17 @@ impl<'a> Context<'a> {
 
         let right = arguments.is_present("right");
 
+        let mut width = term_size::dimensions()
+            .map(|(width, _)| width)
+            .unwrap_or_default();
+        if width == 0 {
+            width = arguments
+                .value_of("terminal_width")
+                .unwrap_or("0")
+                .parse()
+                .unwrap_or(0);
+        }
+
         Context {
             config,
             properties,
@@ -138,9 +149,7 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             right,
-            width: term_size::dimensions()
-                .map(|(width, _)| width)
-                .unwrap_or_default(),
+            width,
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
