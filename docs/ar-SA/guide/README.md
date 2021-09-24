@@ -25,7 +25,7 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord"
+      alt="الدردشة على Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
@@ -147,7 +147,7 @@
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 التثبيت
 
 ### Prerequisites
 
@@ -160,7 +160,7 @@
 1. Install the **starship** binary:
 
 
-   #### Install Latest Version
+   #### تثبيت أحدث إصدار
 
 
    ##### From prebuilt binary, with Shell:
@@ -296,7 +296,7 @@
    prompt = "starship_prompt"
    ```
 
-## 🤝 Contributing
+## 🤝 المساهمة
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
@@ -304,7 +304,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### Code Contributors
+### المساهمات البرمجية
 
 This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
@@ -317,7 +317,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
-#### Organizations
+#### المنظمات
 
 Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
 
@@ -347,6 +347,6 @@ Please check out these previous works that helped inspire the creation of starsh
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 الترخيص
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
