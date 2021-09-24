@@ -263,7 +263,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   أضف ما يلي إلى نهاية `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -274,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   أضف ما يلي إلى نهاية `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
