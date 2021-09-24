@@ -15,7 +15,7 @@
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="إصدار Crates.io"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
@@ -30,7 +30,7 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="تابع @StarshipPrompt على تويتر"
  /></a>
 </p>
 
@@ -304,14 +304,14 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-### المساهمات البرمجية
+### المساهمون في البرمجة
 
 This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
+### المساهمون الماليون
 
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
+كن مساهماً مالياً و ساعدنا في الحفاظ على مجتمعنا. [[Contribute](https://opencollective.com/starship/contribute)]
 
 #### Individuals
 
@@ -319,7 +319,7 @@ Become a financial contributor and help us sustain our community. [[Contribute](
 
 #### المنظمات
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
+إدعم هذا المشروع مع مؤسستك. الشعار الخاص بك سوف يظهر هنا مع رابط لموقع الويب الخاص بك. [[Contribute](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
