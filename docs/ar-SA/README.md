@@ -47,7 +47,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
 
 
-   #### Install via Package Manager
+   #### التثبيت عبر مدير الحزمة
 
    With [Homebrew](https://brew.sh/):
 
