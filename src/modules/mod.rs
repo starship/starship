@@ -27,6 +27,7 @@ mod hg_branch;
 mod hostname;
 mod java;
 mod jobs;
+mod juju;
 mod julia;
 mod kotlin;
 mod kubernetes;
@@ -107,6 +108,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "hostname" => hostname::module(context),
             "java" => java::module(context),
             "jobs" => jobs::module(context),
+            "juju" => juju::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
             "kubernetes" => kubernetes::module(context),
@@ -190,6 +192,7 @@ pub fn description(module: &str) -> &'static str {
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
+        "juju" => "The current version and active model of Juju",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",

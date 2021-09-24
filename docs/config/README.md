@@ -1614,6 +1614,40 @@ number_threshold = 4
 symbol_threshold = 0
 ```
 
+## Juju
+
+The `juju` module shows the currently installed version of [Juju](https://juju.is/),
+along with the active controller and model, if set.
+
+### Options
+
+| Option     | Default                                  | Description                                      |
+| ---------- | ---------------------------------------- | ------------------------------------------------ |
+| `format`   | `"via [$symbol$version$model]($style) "` | The format for the module.                       |
+| `symbol`   | `"🔮 "`                                  | A format string representing the symbol of Juju. |
+| `style`    | `"fg:#E95420"`                           | The style for the module.                        |
+| `disabled` | `true`                                   | Disables the `juju` module.                      |
+
+### Variables
+
+| Variable | Example      | Description                          |
+| -------- | ------------ | ------------------------------------ |
+| version  | `1.2.3`      | The version of `juju`                |
+| model    | `(foo:bar)`  | The active controller and model      |
+| symbol   |              | Mirrors the value of option `symbol` |
+| style\*  |              | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[juju]
+symbol = "🐼 "
+```
+
 ## Julia
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/).

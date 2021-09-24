@@ -32,6 +32,7 @@ pub mod hg_branch;
 pub mod hostname;
 pub mod java;
 pub mod jobs;
+pub mod juju;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
@@ -106,6 +107,7 @@ pub struct FullConfig<'a> {
     hostname: hostname::HostnameConfig<'a>,
     java: java::JavaConfig<'a>,
     jobs: jobs::JobsConfig<'a>,
+    juju: juju::JujuConfig<'a>,
     julia: julia::JuliaConfig<'a>,
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
@@ -178,6 +180,7 @@ impl<'a> Default for FullConfig<'a> {
             hostname: Default::default(),
             java: Default::default(),
             jobs: Default::default(),
+            juju: Default::default(),
             julia: Default::default(),
             kotlin: Default::default(),
             kubernetes: Default::default(),
