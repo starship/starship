@@ -37,7 +37,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 1. Install the **starship** binary:
 
 
-   #### Install Latest Version
+   #### تثبيت أحدث إصدار
 
    With Shell:
 
