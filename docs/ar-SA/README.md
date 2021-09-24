@@ -132,7 +132,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   أضف ما يلي إلى نهاية `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
