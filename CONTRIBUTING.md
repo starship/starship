@@ -239,11 +239,15 @@ everyone remember what they are. Don't worry: most of them are quite simple!
 - [ ] Add the variable to the appropriate location in the "Default Prompt 
       Format" section of the documentation
 - [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
-- [ ] Create configs structs/traits in `src/configs/<module>.rs` and add to the
-      appropriate locations in:
-  - [ ] `PROMPT_ORDER` (`src/configs/starship_root.rs`)
-  - [ ] `FullConfig` and the `Default` impl (`src/configs/mod.rs`)
-  - [ ] `ALL_MODULES` (`src/module.rs`)
+- [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
+      following:
+  - [ ] An entry in `PROMPT_ORDER` (`src/configs/starship_root.rs`)
+  - [ ] An entry in `FullConfig` and the `Default` impl (`src/configs/mod.rs`)
+  - [ ] An entry in `ALL_MODULES` (`src/module.rs`)
+  - [ ] A `mod` declaration at the top of `src/modules/mod.rs`
+  - [ ] An entry in `handle()` (`src/modules/mod.rs`)
+  - [ ] A description for the `description()` function (`src/modules/mod.rs`)
 
 Finally, you should make sure to write your module's code in `src/modules`
-and add any commands that need to be mocked when testing in `src/utils.rs`.
+and add any commands that need to be mocked when testing in `src/utils.rs`. If
+your tests need to be able to mock 
