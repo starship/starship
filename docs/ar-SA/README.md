@@ -28,7 +28,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### المتطلبات الأساسية
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
