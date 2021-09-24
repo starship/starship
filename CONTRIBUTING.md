@@ -249,5 +249,5 @@ everyone remember what they are. Don't worry: most of them are quite simple!
   - [ ] A description for the `description()` function (`src/modules/mod.rs`)
 
 Finally, you should make sure to write your module's code in `src/modules`
-and add any commands that need to be mocked when testing in `src/utils.rs`. If
-your tests need to be able to mock 
+and add any commands that need to be mocked when testing in `src/utils.rs`.
+Command output can also be mocked in test by using `ModuleRenderer::cmd`.
