@@ -2,7 +2,7 @@
 
 While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
-::: warning
+::: تحذير
 
 The configurations in this section are subject to change in future releases of Starship.
 
@@ -76,7 +76,7 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh.
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
