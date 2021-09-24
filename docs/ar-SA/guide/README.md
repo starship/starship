@@ -134,12 +134,12 @@
 
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
+- **سريع:** إنها سريعة – _سريعة_ حقاً! 🚀
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **كثيرُ المزايا:** دعم لجميع الأدوات المفضلة لديك.
+- **سهل:** سريع التثبيت – استخدمه في دقائق.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>تصفّح مستندات Starship&nbsp;&nbsp;▶</strong></a>
@@ -178,7 +178,7 @@
    ```
 
 
-   #### Install via Package Manager
+   #### التثبيت عبر مدير الحزمة
 
 
    ##### Example: [Homebrew](https://brew.sh/):
