@@ -35,11 +35,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">الموقع</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">التثبيت</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">الإعدادات</a>
 </p>
 
 <p align="center">
@@ -138,7 +138,7 @@
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
-- **كثيرُ المزايا:** دعم لجميع الأدوات المفضلة لديك.
+- **كثيرة المزايا:** دعم لجميع الأدوات المفضلة لديك.
 - **سهل:** سريع التثبيت – استخدمه في دقائق.
 
 <p align="center">
@@ -169,9 +169,9 @@
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   لتحديث Starship نفسه، أعد تشغيل البرنامج النصي أعلاه. سيتم استبدال الإصدار الحالي بدون لمس تكوين Starship.
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **ملاحظة** - يمكن تجاوز الإعدادات الافتراضية لنص التثبيت لرؤية المساعدة المدمجة.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -199,7 +199,7 @@
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   أضف ما يلي إلى نهاية `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -210,7 +210,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -221,7 +221,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   أضف ما يلي إلى نهاية `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -241,7 +241,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   أضف ما يلي إلى نهاية `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -252,7 +252,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **تحذير** يدعم فقط v0.15 أو أعلى. أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **تحذير** هذا سوف يتغير في المستقبل. فقط إصدار nu v0.33 أو أعلى مدعوم. أضف ما يلي إلى ملف تكوين nu الخاص بك. يمكنك التحقق من موقع هذا الملف عن طريق تشغيل `config path` في nu.
 
    ```toml
    startup = [
@@ -298,20 +298,20 @@
 
 ## 🤝 المساهمة
 
-نبحث دائماً عن مساهمين من **جميع المستويات**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+نبحث دائماً عن مساهمين من **جميع المستويات**! إذا كنت تتطلع إلى تسهيل طريقك إلى المشروع، جرب [إنشاء اول مشكلة](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+إذا كنت تتحدث بطلاقة بلغة غير إنجليزية، فإننا نقدر أي مساعدة للحفاظ على ترجمة المستندات وتحديثها بلغات أخرى. إذا كنت ترغب في المساعدة، يمكن المساهمة بالترجمة على [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). أيضا، لا تتردد في أن تنضم لنا في [Discord](https://discord.gg/8Jzqu3T) وقُل مرحبا. 👋
+إذا كنت مهتما بالمساهمة في starship، يرجى إلقاء نظرة على [دليل المساهمة](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) لدينا. أيضا، لا تتردد في أن تنضم لنا في [Discord](https://discord.gg/8Jzqu3T) وقُل مرحبا. 👋
 
 ### المساهمون في البرمجة
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
+هذا المشروع موجود بفضل جميع الأشخاص الذين يساهمون فيه. [[ساهم](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
 <a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
 
 ### المساهمون الماليون
 
-كن مساهماً مالياً و ساعدنا في الحفاظ على مجتمعنا. [[Contribute](https://opencollective.com/starship/contribute)]
+كن مساهماً مالياً و ساعدنا في الحفاظ على مجتمعنا. [[ساهم](https://opencollective.com/starship/contribute)]
 
 #### Individuals
 
@@ -319,7 +319,7 @@ This project exists thanks to all the people who contribute. [[Contribute](https
 
 #### المنظمات
 
-إدعم هذا المشروع مع مؤسستك. الشعار الخاص بك سوف يظهر هنا مع رابط لموقع الويب الخاص بك. [[Contribute](https://opencollective.com/starship/contribute)]
+إدعم هذا المشروع مع مؤسستك. الشعار الخاص بك سوف يظهر هنا مع رابط لموقع الويب الخاص بك. [[ساهم](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
@@ -332,9 +332,9 @@ This project exists thanks to all the people who contribute. [[Contribute](https
 <a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
 
-## 💭 Inspired By
+## 💭 مستوحاة من قبل
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+يرجى التحقق من هذه الأعمال السابقة التي ساعدت على إنشاء starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
