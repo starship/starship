@@ -44,7 +44,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   لتحديث Starship نفسه، أعد تشغيل البرنامج النصي أعلاه. سيتم استبدال الإصدار الحالي بدون لمس تكوين Starship.
 
 
    #### التثبيت عبر مدير الحزمة
@@ -66,7 +66,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   أضف ما يلي إلى نهاية `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   أضف ما يلي إلى نهاية `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   أضف ما يلي إلى نهاية `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -121,7 +121,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
