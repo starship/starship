@@ -115,36 +115,21 @@ unpack() {
 }
 
 usage() {
-    cat <<EOT
-install.sh [option]
+  printf "%s\n" \
+    "install.sh [option]" \
+    "" \
+    "Fetch and install the latest version of starship, if starship is already" \
+    "installed it will be updated to the latest version."
 
-Fetch and install the latest version of starship, if starship is already
-installed it will be updated to the latest version.
-
-Options
-
-  -V, --verbose
-    Enable verbose output for the installer
-
-  -f, -y, --force, --yes
-    Skip the confirmation prompt during installation
-
-  -p, --platform
-    Override the platform identified by the installer [default: ${PLATFORM}]
-
-  -b, --bin-dir
-    Override the bin installation directory [default: ${BIN_DIR}]
-
-  -a, --arch
-    Override the architecture identified by the installer [default: ${ARCH}]
-
-  -B, --base-url
-    Override the base URL used for downloading releases [default: ${BASE_URL}]
-
-  -h, --help
-    Dispays this help message
-
-EOT
+  printf "\n%s\n" "Options"
+  printf "\t%s\n\t\t%s\n\n" \
+    "-V, --verbose" "Enable verbose output for the installer" \
+    "-f, -y, --force, --yes" "Skip the confirmation prompt during installation" \
+    "-p, --platform" "Override the platform identified by the installer [default: ${PLATFORM}]" \
+    "-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
+    "-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
+    "-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
+    "-h, --help" "Dispays this help message"
 }
 
 elevate_priv() {
@@ -288,6 +273,84 @@ check_bin_dir() {
   fi
 }
 
+print_install() {
+  # if the shell does not fit the default case change the config file
+  # and or the config cmd variable
+  for s in "bash" "zsh" "ion" "tcsh" "xonsh" "fish"
+  do
+    # shellcheck disable=SC2088
+    # we don't want these '~' expanding
+    config_file="~/.${s}rc"
+    config_cmd="eval \"\$(starship init ${s})\""
+ 
+    case ${s} in
+      ion )
+        # shellcheck disable=SC2088
+        config_file="~/.config/ion/initrc"
+        config_cmd="eval \$(starship init ${s})"
+        ;;
+      fish )
+        # shellcheck disable=SC2088
+        config_file="~/.config/fish/config.fish"
+        config_cmd="starship init fish | source"
+        ;;
+      tcsh )
+        config_cmd="eval \`starship init ${s}\`"
+        ;;
+      xonsh )
+        config_cmd="execx(\$(starship init xonsh))"
+        ;;
+    esac
+
+    printf "  %s\n  Add the following to the end of %s:\n\n\t%s\n\n" \
+      "${BOLD}${UNDERLINE}${s}${NO_COLOR}" \
+      "${BOLD}${config_file}${NO_COLOR}" \
+      "${config_cmd}"
+  done
+
+  for s in "elvish" "nushell"
+  do
+
+    warning="${BOLD}Warning${NO_COLOR}"
+    case ${s} in
+      elvish )
+        # shellcheck disable=SC2088
+        config_file="~/.elvish/rc.elv"
+        config_cmd="eval (starship init elvish)"
+        warning="${warning} Only elvish v0.15 or higher is supported."
+        ;;
+      nushell )
+        # shellcheck disable=SC2088
+        config_file="your nu config file."
+        config_cmd="startup = [
+          \"mkdir ~/.cache/starship\",
+          \"starship init nu | save ~/.cache/starship/init.nu\",
+          \"source ~/.cache/starship/init.nu\"
+        ]
+        prompt = \"starship_prompt\""
+        warning="${warning} This will change in the future.
+  Only nu version v0.33 or higher is supported.
+  You can check the location of this your config file by running config path in nu"
+        ;;
+    esac
+    printf "  %s\n  %s\n  Add the following to the end of %s:\n\n\t%s\n\n" \
+      "${BOLD}${UNDERLINE}${s}${NO_COLOR}" \
+      "${warning}" \
+      "${BOLD}${config_file}${NO_COLOR}" \
+      "${config_cmd}"
+  done
+
+  printf "  %s\n  Add the following to the end of %s:\n  %s\n\n\t%s\n\n" \
+    "${BOLD}${UNDERLINE}PowerShell${NO_COLOR}" \
+    "${BOLD}Microsoft.PowerShell_profile.ps1${NO_COLOR}" \
+    "You can check the location of this file by querying the \$PROFILE variable in PowerShell.
+  Typically the path is ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 or ~/.config/powershell/Microsoft.PowerShell_profile.ps1 on -Nix." \
+    "Invoke-Expression (&starship init powershell)"
+
+  printf "\n"
+}
+
+
 is_build_available() {
   arch="$1"
   platform="$2"
@@ -430,30 +493,7 @@ install "${EXT}"
 completed "Starship installed"
 
 printf '\n'
-info "Please follow the steps for your shell to complete the installation:
+info "Please follow the steps for your shell to complete the installation:"
 
-  ${BOLD}${UNDERLINE}Bash${NO_COLOR}
-  Add the following to the end of ${BOLD}~/.bashrc${NO_COLOR}:
+print_install
 
-      eval \"\$(starship init bash)\"
-
-  ${BOLD}${UNDERLINE}Fish${NO_COLOR}
-  Add the following to the end of ${BOLD}~/.config/fish/config.fish${NO_COLOR}:
-
-      starship init fish | source
-
-  ${BOLD}${UNDERLINE}Zsh${NO_COLOR}
-  Add the following to the end of ${BOLD}~/.zshrc${NO_COLOR}:
-
-      eval \"\$(starship init zsh)\"
-
-  ${BOLD}${UNDERLINE}Ion${NO_COLOR}
-  Add the following to the end of ${BOLD}~/.config/ion/initrc${NO_COLOR}:
-
-      eval \$(starship init ion)
-
-  ${BOLD}${UNDERLINE}Tcsh${NO_COLOR}
-  Add the following to the end of ${BOLD}~/.tcshrc${NO_COLOR}:
-
-      eval \`starship init tcsh\`
-"

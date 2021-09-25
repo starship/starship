@@ -8,7 +8,12 @@ function fish_prompt
     set STARSHIP_CMD_STATUS $status
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-    ::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=(count (jobs -p))
+    set STARSHIP_JOBS (count (jobs -p))
+    ::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --pipestatus=$pipestatus --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+end
+
+function fish_right_prompt
+    ::STARSHIP:: prompt --right --status=$STARSHIP_CMD_STATUS --pipestatus=$pipestatus --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
 end
 
 # Disable virtualenv prompt, it breaks starship

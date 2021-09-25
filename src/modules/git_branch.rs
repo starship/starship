@@ -50,13 +50,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // Truncate fields if need be
-    for e in [
+    for e in &mut [
         &mut graphemes,
         &mut remote_branch_graphemes,
         &mut remote_name_graphemes,
-    ]
-    .iter_mut()
-    {
+    ] {
         let e = &mut **e;
         let trunc_len = len.min(e.len());
         if trunc_len < e.len() {
@@ -121,9 +119,9 @@ fn get_first_grapheme(text: &str) -> &str {
 mod tests {
     use ansi_term::Color;
     use std::io;
-    use std::process::Command;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
+    use crate::utils::create_command;
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -270,12 +268,12 @@ mod tests {
     fn test_works_with_unborn_default_branch() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["init"])
             .current_dir(&repo_dir)
             .output()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["symbolic-ref", "HEAD", "refs/heads/main"])
             .current_dir(&repo_dir)
             .output()?;
@@ -297,7 +295,7 @@ mod tests {
     fn test_render_branch_only_attached_on_branch() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["checkout", "-b", "test_branch"])
             .current_dir(repo_dir.path())
             .output()?;
@@ -325,7 +323,7 @@ mod tests {
     fn test_render_branch_only_attached_on_detached() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["checkout", "@~1"])
             .current_dir(&repo_dir.path())
             .output()?;
@@ -348,12 +346,12 @@ mod tests {
     fn test_works_in_bare_repo() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["init", "--bare"])
             .current_dir(&repo_dir)
             .output()?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["symbolic-ref", "HEAD", "refs/heads/main"])
             .current_dir(&repo_dir)
             .output()?;
@@ -379,7 +377,7 @@ mod tests {
     // fn test_git_dir_env_variable() -> io::Result<()> {let repo_dir =
     // tempfile::tempdir()?;
 
-    //     Command::new("git")
+    //     create_command("git")?
     //         .args(&["init"])
     //         .current_dir(&repo_dir)
     //         .output()?;
@@ -424,7 +422,7 @@ mod tests {
     ) -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["checkout", "-b", branch_name])
             .current_dir(repo_dir.path())
             .output()?;
@@ -463,7 +461,7 @@ mod tests {
     ) -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        Command::new("git")
+        create_command("git")?
             .args(&["checkout", "-b", branch_name])
             .current_dir(repo_dir.path())
             .output()?;

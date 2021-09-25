@@ -36,8 +36,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let terraform_version = get_terraform_version(
-                        &context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
+                    let terraform_version = parse_terraform_version(
+                        context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
                     )?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
@@ -83,19 +83,18 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
     }
 }
 
-fn get_terraform_version(version: &str) -> Option<String> {
+fn parse_terraform_version(version: &str) -> Option<String> {
     // `terraform version` output looks like this
     // Terraform v0.12.14
     // With potential extra output if it detects you are not running the latest version
-    Some(
-        version
-            .lines()
-            .next()?
-            .trim_start_matches("Terraform ")
-            .trim()
-            .trim_start_matches('v')
-            .to_owned(),
-    )
+    let version = version
+        .lines()
+        .next()?
+        .trim_start_matches("Terraform ")
+        .trim()
+        .trim_start_matches('v');
+
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -107,38 +106,38 @@ mod tests {
     use std::io::{self, Write};
 
     #[test]
-    fn test_get_terraform_version_release() {
+    fn test_parse_terraform_version_release() {
         let input = "Terraform v0.12.14";
-        assert_eq!(get_terraform_version(input), Some("0.12.14".to_string()));
+        assert_eq!(parse_terraform_version(input), Some("0.12.14".to_string()));
     }
 
     #[test]
-    fn test_get_terraform_version_prerelease() {
+    fn test_parse_terraform_version_prerelease() {
         let input = "Terraform v0.12.14-rc1";
         assert_eq!(
-            get_terraform_version(input),
+            parse_terraform_version(input),
             Some("0.12.14-rc1".to_string())
         );
     }
 
     #[test]
-    fn test_get_terraform_version_development() {
+    fn test_parse_terraform_version_development() {
         let input = "Terraform v0.12.14-dev (cca89f74)";
         assert_eq!(
-            get_terraform_version(input),
+            parse_terraform_version(input),
             Some("0.12.14-dev (cca89f74)".to_string())
         );
     }
 
     #[test]
-    fn test_get_terraform_version_multiline() {
+    fn test_parse_terraform_version_multiline() {
         let input = "Terraform v0.12.13
 
 Your version of Terraform is out of date! The latest version
 is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
 
 ";
-        assert_eq!(get_terraform_version(input), Some("0.12.13".to_string()));
+        assert_eq!(parse_terraform_version(input), Some("0.12.13".to_string()));
     }
 
     #[test]

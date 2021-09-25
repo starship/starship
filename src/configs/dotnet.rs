@@ -19,13 +19,13 @@ pub struct DotnetConfig<'a> {
 impl<'a> Default for DotnetConfig<'a> {
     fn default() -> Self {
         DotnetConfig {
-            format: "[$symbol($version )(🎯 $tfm )]($style)",
+            format: "via [$symbol($version )(🎯 $tfm )]($style)",
             version_format: "v${raw}",
             symbol: ".NET ",
             style: "blue bold",
             heuristic: true,
             disabled: false,
-            detect_extensions: vec!["sln", "csproj", "fsproj", "xproj"],
+            detect_extensions: vec!["csproj", "fsproj", "xproj"],
             detect_files: vec![
                 "global.json",
                 "project.json",

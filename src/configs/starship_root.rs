@@ -7,6 +7,7 @@ use std::cmp::Ordering;
 #[derive(Clone, Serialize)]
 pub struct StarshipRootConfig<'a> {
     pub format: &'a str,
+    pub right_format: &'a str,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -26,6 +27,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "git_branch",
     "git_commit",
     "git_state",
+    "git_metrics",
     "git_status",
     "hg_branch",
     "docker_context",
@@ -33,6 +35,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
     "cmake",
+    "cobol",
     "dart",
     "deno",
     "dotnet",
@@ -88,6 +91,7 @@ impl<'a> Default for StarshipRootConfig<'a> {
     fn default() -> Self {
         StarshipRootConfig {
             format: "$all",
+            right_format: "",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -100,24 +104,30 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
         if let toml::Value::Table(config) = config {
             config.iter().for_each(|(k, v)| match k.as_str() {
                 "format" => self.format.load_config(v),
+                "right_format" => self.right_format.load_config(v),
                 "scan_timeout" => self.scan_timeout.load_config(v),
                 "command_timeout" => self.command_timeout.load_config(v),
                 "add_newline" => self.add_newline.load_config(v),
                 unknown => {
-                    if !ALL_MODULES.contains(&unknown) && unknown != "custom" {
+                    if !ALL_MODULES.contains(&unknown)
+                        && unknown != "custom"
+                        && unknown != "env_var"
+                    {
                         log::warn!("Unknown config key '{}'", unknown);
 
                         let did_you_mean = &[
                             // Root options
                             "format",
+                            "right_format",
                             "scan_timeout",
                             "command_timeout",
                             "add_newline",
                             // Modules
                             "custom",
+                            "env_var",
                         ]
                         .iter()
-                        .chain(ALL_MODULES.iter())
+                        .chain(ALL_MODULES)
                         .filter_map(|field| {
                             let score = strsim::jaro_winkler(unknown, field);
                             (score > 0.8).then(|| (score, field))

@@ -1,11 +1,13 @@
 use crate::context::{Context, Shell};
 use crate::logger::StarshipLogger;
-use crate::{config::StarshipConfig, utils::CommandOutput};
+use crate::{
+    config::StarshipConfig,
+    utils::{create_command, CommandOutput},
+};
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
 use std::path::PathBuf;
-use std::process::Command;
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -29,6 +31,17 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
     log::set_boxed_logger(Box::new(logger)).unwrap();
 });
 
+pub fn default_context() -> Context<'static> {
+    let mut context = Context::new_with_shell_and_path(
+        clap::ArgMatches::default(),
+        Shell::Unknown,
+        PathBuf::new(),
+        PathBuf::new(),
+    );
+    context.config = StarshipConfig { config: None };
+    context
+}
+
 /// Render a specific starship module by name
 pub struct ModuleRenderer<'a> {
     name: &'a str,
@@ -41,13 +54,7 @@ impl<'a> ModuleRenderer<'a> {
         // Start logger
         Lazy::force(&LOGGER);
 
-        let mut context = Context::new_with_shell_and_path(
-            clap::ArgMatches::default(),
-            Shell::Unknown,
-            PathBuf::new(),
-            PathBuf::new(),
-        );
-        context.config = StarshipConfig { config: None };
+        let context = default_context();
 
         Self { name, context }
     }
@@ -121,6 +128,25 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    #[cfg(feature = "battery")]
+    pub fn battery_info_provider(
+        mut self,
+        battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
+    ) -> Self {
+        self.context.battery_info_provider = battery_info_provider;
+        self
+    }
+
+    pub fn pipestatus(mut self, status: &[i32]) -> Self {
+        self.context.pipestatus = Some(
+            status
+                .iter()
+                .map(std::string::ToString::to_string)
+                .collect(),
+        );
+        self
+    }
+
     /// Renders the module returning its output
     pub fn collect(self) -> Option<String> {
         let ret = crate::print::get_module(self.name, self.context);
@@ -142,24 +168,24 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 
-            Command::new("git")
+            create_command("git")?
                 .current_dir(path.path())
                 .args(&["clone", "-b", "master"])
                 .arg(GIT_FIXTURE.as_os_str())
                 .arg(&path.path())
                 .output()?;
 
-            Command::new("git")
+            create_command("git")?
                 .args(&["config", "--local", "user.email", "starship@example.com"])
                 .current_dir(&path.path())
                 .output()?;
 
-            Command::new("git")
+            create_command("git")?
                 .args(&["config", "--local", "user.name", "starship"])
                 .current_dir(&path.path())
                 .output()?;
 
-            Command::new("git")
+            create_command("git")?
                 .args(&["reset", "--hard", "HEAD"])
                 .current_dir(&path.path())
                 .output()?;
@@ -169,7 +195,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
         FixtureProvider::Hg => {
             let path = tempfile::tempdir()?;
 
-            Command::new("hg")
+            create_command("hg")?
                 .current_dir(path.path())
                 .arg("clone")
                 .arg(HG_FIXTURE.as_os_str())

@@ -56,7 +56,7 @@ impl<'a> VersionFormatter<'a> {
         formatted.map(|segments| {
             segments
                 .iter()
-                .map(|segment| segment.value.as_str())
+                .map(|segment| segment.value())
                 .collect::<String>()
         })
     }

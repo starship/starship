@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let dart_version =
-                        get_dart_version(&context.exec_cmd("dart", &["--version"])?.stderr)?;
+                        parse_dart_version(&context.exec_cmd("dart", &["--version"])?.stderr)?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &dart_version,
@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_dart_version(dart_version: &str) -> Option<String> {
+fn parse_dart_version(dart_version: &str) -> Option<String> {
     Some(
         dart_version
             // split into ["Dart", "VM", "version:", "2.8.4", "(stable)", ...]

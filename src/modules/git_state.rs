@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
     let repo_root = repo.root.as_ref()?;
-    let repo_state = repo.state?;
+    let repo_state = repo.state;
 
     let state_description = get_state_description(repo_state, repo_root, &config)?;
 
@@ -177,9 +177,10 @@ mod tests {
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};
     use std::path::Path;
-    use std::process::{Command, Stdio};
+    use std::process::Stdio;
 
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -278,7 +279,7 @@ mod tests {
         A: IntoIterator<Item = S>,
         S: AsRef<OsStr>,
     {
-        let mut command = Command::new("git");
+        let mut command = create_command("git")?;
         command
             .args(args)
             .stdout(Stdio::null())
@@ -337,7 +338,7 @@ mod tests {
 
         // Ensure on the expected branch.
         // If build environment has `init.defaultBranch` global set
-        // it will default to an unknown branch, so neeed to make & change branch
+        // it will default to an unknown branch, so need to make & change branch
         run_git_cmd(
             &["checkout", "-b", "master"],
             Some(path),

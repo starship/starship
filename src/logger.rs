@@ -1,3 +1,4 @@
+use crate::utils;
 use ansi_term::Color;
 use log::{Level, LevelFilter, Metadata, Record};
 use once_cell::sync::OnceCell;
@@ -22,7 +23,7 @@ impl Default for StarshipLogger {
         let log_dir = env::var_os("STARSHIP_CACHE")
             .map(PathBuf::from)
             .unwrap_or_else(|| {
-                dirs_next::home_dir()
+                utils::home_dir()
                     .expect("Unable to find home directory")
                     .join(".cache/starship")
             });
@@ -38,7 +39,7 @@ impl Default for StarshipLogger {
             log_file_content: fs::read_to_string(&session_log_file)
                 .unwrap_or_default()
                 .lines()
-                .map(|line| line.to_string())
+                .map(std::string::ToString::to_string)
                 .collect(),
             log_file: OnceCell::new(),
             log_file_path: session_log_file,

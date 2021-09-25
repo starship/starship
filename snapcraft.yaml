@@ -42,6 +42,12 @@ description: |
 
   `Invoke-Expression (&starship init powershell)`
 
+  ### Xonsh
+
+  Add the following to the end of ~/.xonshrc:
+
+  execx($(starship init xonsh))
+
 grade: stable
 confinement: strict
 

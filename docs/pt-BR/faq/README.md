@@ -1,96 +1,96 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## Qual é a configuração usada no GIF de demonstração?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **Emulador de Terminal**: [iTerm2](https://iterm2.com/)
+  - **Tema**: Minimal
+  - **Esquema de Cores**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Fonte**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
 - **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **Configuração**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Como eu consigo obter autocompletar de comando, conforme mostrado no GIF de demonstração?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+O suporte de autocompletar, é provido pelo shell que você escolher. No caso da demonstração, é utilizado o [Fish Shell](https://fishshell.com/), que prove autocompletar como padrão. Se você usa Z Shell (zsh), Eu sugiro que você dê uma olhada no [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## De forma geral `format` e `<module>.disabled` fazem a mesma coisa?
 
-Yes, they can both be used to disable modules in the prompt. If all you plan to do is disable modules, `<module>.disabled` is the preferred way to do so for these reasons:
+Sim, ambos podem ser usados para desativar os mulos no prompt. Se seu objetivo geral é desativar modulos, `<module>.disabled` é o mais recomendado pelas seguintes razões:
 
-- Disabling modules is more explicit than omitting them from the top level `format`
-- Newly created modules will be added to the prompt as Starship is updated
+- Desabilitar módulos é mais explícito do que omiti-lo através do `format`
+- Modulos recém-criados serão adicionados quando o Starship for atualizado
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## As documentações dizem que o Starship é cross-shell. Porque minha shell preferida não é suportada?
 
-The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
+A forma em que o Starship foi construído, faz com que ele seja compatível com qualquer shell. O binário do starship é sem estado e shell agnóstico, então se o seu shell suporta customização de prompt e expansão de shell, Starship pode ser utilizado.
 
-Here's a small example getting Starship working with bash:
+Aqui está um pequeno exemplo de como o Starship funciona com o bash:
 
 ```sh
-# Get the status code from the last command executed
+# Recupera o status do último comando executado
 STATUS=$?
 
-# Get the number of jobs running.
+# Recupera o número de jobs que estão rodando.
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# Define a saída do prompt para ´starship prompt`
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-The [Bash implementation](https://github.com/starship/starship/blob/master/src/init/starship.bash) built into Starship is slightly more complex to allow for advanced features like the [Command Duration module](https://starship.rs/config/#command-duration) and to ensure that Starship is compatible with pre-installed Bash configurations.
+A [implementação do Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) embutida no Starship é um pouco mais complexa para aceitar recursos avançados como o [Módulo de duração de comando](https://starship.rs/config/#command-duration) e para garantir isto o Starship é compatível com configurações pre-instaladas.
 
-For a list of all flags accepted by `starship prompt`, use the following command:
+Para uma lista de flags aceitos pelo `starship prompt`, use o seguinte comando:
 
 ```sh
 starship prompt --help
 ```
 
-The prompt will use as much context as is provided, but no flags are "required".
+O prompt vai usar o contexto fornecido, mas nenhuma flag é obrigatória.
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Como faço para rodar o Starship em distribuições Linux com versões antigas do glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Se você está tendo um erro como "_version 'GLIBC_2.18' not found (required by starship)_" quando usa o binário prebuilt (por exemplo, no CentOS 6 ou 7), você pode usar um binário compilado com `musl` em vez do `glibc`:
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Se você vê símbolos que não reconhece você pode usar `starship explain` para exibir os módulos que estão sendo mostrados no momento.
 
-## Why don't I see a glyph symbol in my prompt?
+## Por que não consigo visualizar um simbolo glifo no meu prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+A causa mais comum é a configuração incorreta do sistema. Algumas distribuições Linux em particular não vem com suporte de fontes pronto para uso. Você deve conferir os pontos abaixo:
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
-- You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- Sua localização está configurada como UTF-8, como por exemplo `de_DE.UTF-8` ou `ja_JP.UTF-8`. Se `LC_ALL` não estiver configurado como UTF-8, [você deve mudar](https://www.tecmint.com/set-system-locales-in-linux/).
+- Você tem uma fonte de emoji instalda. A maioria dos sistemas vem com uma fonte de emoji instalada como padrão, mas alguns não (principalmente o Arch Linux). Você pode instalar uma em seu sistema, através do gerenciador de pacotes-[noto emoji](https://www.google.com/get/noto/help/emoji/) é uma escolha popular.
+- Você está usando uma [Nerd Font](https://www.nerdfonts.com/).
 
-To test your system, run the following commands in a terminal:
+Para testar seu sistema, execute o comando abaixo em um terminal:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+A primeira linha deve produzir um [emoji de cobra](https://emojipedia.org/snake/), enquanto a segunda linha deve produzir um [um simbolo de bifurcação (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Se um dos símbolos acima falhar seu sistema ainda está configurado de forma errada. Infelizmente, obter a configuração de fontes correta as vezes é difícil. Usuários no Discord podem te ajudar. Se os dois símbolos acima exibirem de forma correta, mas você ainda continua sem visualizar no Starship, [registre um erro!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Como eu desinstalo o Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+O Starship é tão fácil de desinstalar tão como é para instalar.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Remova qualquer linha da configuração do seu shell (ex: `~/.bashrc`) usada para iniciar o Starship.
+1. Delete o binário do Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Se o Starship foi instalando usando algum gerenciador de pacotes, por favor consulte as documentações do mesmo para instruções de desinstalação.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Se o Starship foi instalado usando o script de instalação, o comando abaixo irá remover o binário:
 
 ```sh
-# Locate and delete the starship binary
+# Localiza e deleta o binario do starship
 sh -c 'rm "$(which starship)"'
 ```

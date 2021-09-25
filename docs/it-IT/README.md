@@ -18,7 +18,7 @@ features:
 footer: Licenza ISC | Copyright © 2019-present Starship Collaboratori
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Installazione rapida disponibile per Bash, Fish, ZSH, Ion e PowerShell.
+description: Starship è il prompt minimalista, super veloce ed estremamente personalizzabile per qualsiasi shell! Mostra le informazioni di cui hai bisogno, rimanendo elegante e minimale. Installazione rapida disponibile per Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh e PowerShell.
 ---
 
 <div class="center">
@@ -30,7 +30,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
 ### Prerequisiti
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Un [ Nerd Font ](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale.
 
 ### Installazione Veloce
 
@@ -44,7 +44,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Per aggiornare Starship stesso, riavviare lo script sopra. Sostituirà la versione corrente senza toccare la configurazione di Starship.
 
 
    #### Installa con Package Manager
@@ -116,9 +116,10 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning È supportato solo elvish v0.15 o superiore. :::
 
    Aggiungi quanto segue alla fine di `~/.elvish/rc.elv`:
 
@@ -137,4 +138,29 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+
+   #### Nushell
+
+   ::: warning Questo cambierà in futuro. È supportata solo la versione v0.33 o superiore. ::: Aggiungi quanto segue al tuo file di configurazione nu. Puoi controllare la posizione di questo file eseguendo `percorso di configurazione` in nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Aggiungi quanto segue alla fine di `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

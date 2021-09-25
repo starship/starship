@@ -5,6 +5,7 @@ use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::time::Duration;
+use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
@@ -16,7 +17,7 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 
-pub struct Grapheme<'a>(&'a str);
+pub struct Grapheme<'a>(pub &'a str);
 
 impl<'a> Grapheme<'a> {
     pub fn width(&self) -> usize {
@@ -79,18 +80,12 @@ pub fn get_prompt(context: Context) -> String {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
-    } else {
-        log::error!("Error parsing `format`");
-        buf.push('>');
-        return buf;
-    };
-    let modules = formatter.get_variables();
+    let (formatter, modules) = load_formatter_and_modules(&context);
+
     let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules
+        // Make $all display all modules not explicitly referenced
         if module == "all" {
-            Some(Ok(PROMPT_ORDER
+            Some(Ok(all_modules_uniq(&modules)
                 .par_iter()
                 .flat_map(|module| {
                     handle_module(module, &context, &modules)
@@ -99,7 +94,7 @@ pub fn get_prompt(context: Context) -> String {
                         .collect::<Vec<Segment>>()
                 })
                 .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(&module) {
+        } else if context.is_module_disabled_in_config(module) {
             None
         } else {
             // Get segments from module
@@ -118,11 +113,16 @@ pub fn get_prompt(context: Context) -> String {
             .expect("Unexpected error returned in root format variables"),
     );
 
-    let module_strings = root_module.ansi_strings_for_shell(context.shell);
+    let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline {
         writeln!(buf).unwrap();
     }
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+
+    if context.right {
+        // right prompts generally do not allow newlines
+        buf = buf.replace('\n', "");
+    }
 
     // escape \n and ! characters for tcsh
     if let Shell::Tcsh = context.shell {
@@ -177,10 +177,10 @@ pub fn timings(args: ArgMatches) {
     println!("\n Here are the timings of modules in your prompt (>=1ms or output):");
 
     // for now we do not expect a wrap around at the end... famous last words
-    // Overall a line looks like this: " {module name}  -  {duration}  -  {module value}".
+    // Overall a line looks like this: " {module name}  -  {duration}  -  "{module value}"".
     for timing in &modules {
         println!(
-            " {}{}  -  {}{}  -   {}",
+            " {}{}  -  {}{}  -   \"{}\"",
             timing.name,
             " ".repeat(max_name_width - (timing.name_len)),
             " ".repeat(max_duration_width - (timing.duration_len)),
@@ -213,7 +213,7 @@ pub fn explain(args: ArgMatches) {
                 value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
-                desc: module.get_description().to_owned(),
+                desc: module.get_description().clone(),
                 duration: format_duration(&module.duration),
             }
         })
@@ -221,12 +221,12 @@ pub fn explain(args: ArgMatches) {
 
     let max_module_width = modules.iter().map(|i| i.value_len).max().unwrap_or(0);
 
-    // In addition to the module width itself there are also 9 padding characters in each line.
-    // Overall a line looks like this: " {module value} ({xxxms})  -  {description}".
-    const PADDING_WIDTH: usize = 9;
+    // In addition to the module width itself there are also 11 padding characters in each line.
+    // Overall a line looks like this: " "{module value}" ({xxxms})  -  {description}".
+    const PADDING_WIDTH: usize = 11;
 
-    let desc_width = term_size::dimensions()
-        .map(|(w, _)| w)
+    let desc_width = terminal_size()
+        .map(|(w, _)| w.0 as usize)
         // Add padding length to module length to avoid text overflow. This line also assures desc_width >= 0.
         .map(|width| width - std::cmp::min(width, max_module_width + PADDING_WIDTH));
 
@@ -238,7 +238,7 @@ pub fn explain(args: ArgMatches) {
             let mut escaping = false;
             // Print info
             print!(
-                " {} ({}){}  -  ",
+                " \"{}\" ({}){}  -  ",
                 info.value,
                 info.duration,
                 " ".repeat(max_module_width - (info.value_len))
@@ -288,25 +288,18 @@ pub fn explain(args: ArgMatches) {
 fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
-    let config = context.config.get_root_config();
-    let formatter = if let Ok(formatter) = StringFormatter::new(config.format) {
-        formatter
-    } else {
-        log::error!("Error parsing `format`");
-        return Vec::new();
-    };
-    let modules = formatter.get_variables();
+    let (_formatter, modules) = load_formatter_and_modules(context);
 
     for module in &modules {
         // Manually add all modules if `$all` is encountered
         if module == "all" {
-            for module in PROMPT_ORDER.iter() {
-                let modules = handle_module(module, &context, &modules);
-                prompt_order.extend(modules.into_iter());
+            for module in all_modules_uniq(&modules) {
+                let modules = handle_module(&module, context, &modules);
+                prompt_order.extend(modules);
             }
         } else {
-            let modules = handle_module(module, &context, &modules);
-            prompt_order.extend(modules.into_iter());
+            let modules = handle_module(module, context, &modules);
+            prompt_order.extend(modules);
         }
     }
 
@@ -331,14 +324,14 @@ fn handle_module<'a>(
     if ALL_MODULES.contains(&module) {
         // Write out a module if it isn't disabled
         if !context.is_module_disabled_in_config(module) {
-            modules.extend(modules::handle(module, &context));
+            modules.extend(modules::handle(module, context));
         }
     } else if module == "custom" {
         // Write out all custom modules, except for those that are explicitly set
         if let Some(custom_modules) = context.config.get_custom_modules() {
             let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
-                if should_add_implicit_custom_module(custom_module, config, &module_list) {
-                    modules::custom::module(custom_module, &context)
+                if should_add_implicit_custom_module(custom_module, config, module_list) {
+                    modules::custom::module(custom_module, context)
                 } else {
                     None
                 }
@@ -347,9 +340,9 @@ fn handle_module<'a>(
         }
     } else if let Some(module) = module.strip_prefix("custom.") {
         // Write out a custom module if it isn't disabled (and it exists...)
-        match context.is_custom_module_disabled_in_config(&module) {
+        match context.is_custom_module_disabled_in_config(module) {
             Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(&module, &context)),
+            Some(false) => modules.extend(modules::custom::module(module, context)),
             None => match context.config.get_custom_modules() {
                 Some(modules) => log::debug!(
                     "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
@@ -401,5 +394,70 @@ pub fn format_duration(duration: &Duration) -> String {
         "<1ms".to_string()
     } else {
         format!("{:?}ms", &milis)
+    }
+}
+
+/// Return the modules from $all that are not already in the list
+fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
+    let mut prompt_order: Vec<String> = Vec::new();
+    for module in PROMPT_ORDER.iter() {
+        if !module_list.contains(*module) {
+            prompt_order.push(String::from(*module))
+        }
+    }
+
+    prompt_order
+}
+
+/// Load the correct formatter for the context (ie left prompt or right prompt)
+/// and the list of all modules used in a format string
+fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
+    let config = context.config.get_root_config();
+
+    let lformatter = StringFormatter::new(config.format);
+    let rformatter = StringFormatter::new(config.right_format);
+    if lformatter.is_err() {
+        log::error!("Error parsing `format`")
+    }
+    if rformatter.is_err() {
+        log::error!("Error parsing `right_format`")
+    }
+
+    match (lformatter, rformatter) {
+        (Ok(lf), Ok(rf)) => {
+            let mut modules: BTreeSet<String> = BTreeSet::new();
+            modules.extend(lf.get_variables());
+            modules.extend(rf.get_variables());
+            if context.right {
+                (rf, modules)
+            } else {
+                (lf, modules)
+            }
+        }
+        _ => (StringFormatter::raw(">"), BTreeSet::new()),
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::config::StarshipConfig;
+    use crate::test::default_context;
+
+    #[test]
+    fn right_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_format="$character"
+                [character]
+                format=">\n>"
+            }),
+        };
+        context.right = true;
+
+        let expected = String::from(">>"); // should strip new lines
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
     }
 }

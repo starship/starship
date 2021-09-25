@@ -2,23 +2,23 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Minimalny, szybki i nieskończenie konfigurowalny wiersz poleceń dla dowolnej powłoki!
 actionText: Get Started →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
+    title: Kompatybilność przede wszystkim
     details: Works on the most common shells on the most common operating systems. Use it everywhere!
   - 
-    title: Rust-Powered
+    title: Napędzany językiem Rust
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
   - 
-    title: Customizable
+    title: Konfigurowalny
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and PowerShell.
+description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -28,26 +28,26 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### Wymagania wstępne
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
 ### Quick Install
 
-1. Install the **starship** binary:
+1. Zainstaluj plik programu **starship**:
 
 
-   #### Install Latest Version
+   #### Instalacja najnowszej wersji
 
    With Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Aby zaktualizować Starship, uruchom ponownie powyższy skrypt. Obecna wersja zostanie zastąpiona nową, bez modyfikowania konfiguracji Starship.
 
 
-   #### Install via Package Manager
+   #### Instalacja za pomocą menedżera pakietów
 
    With [Homebrew](https://brew.sh/):
 
@@ -55,18 +55,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   Za pomocą [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Dodaj na koniec pliku `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Dodaj na koniec pliku `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Dodaj na koniec pliku `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -99,7 +99,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Zazwyczaj jest to `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` lub `~/.config/powershell/Microsoft.PowerShell_profile.ps1` na -Nixie.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Dodaj na koniec pliku `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -116,11 +116,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Dodaj na koniec pliku `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -131,10 +132,35 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Dodaj na koniec pliku `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+
+   #### Nushell
+
+   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

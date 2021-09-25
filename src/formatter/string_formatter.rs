@@ -49,7 +49,7 @@ impl Error for StringFormatterError {}
 
 impl From<String> for StringFormatterError {
     fn from(error: String) -> Self {
-        StringFormatterError::Custom(error)
+        Self::Custom(error)
     }
 }
 
@@ -84,6 +84,15 @@ impl<'a> StringFormatter<'a> {
             variables,
             style_variables,
         })
+    }
+
+    /// A StringFormatter that does no formatting, parse just returns the raw text
+    pub fn raw(text: &'a str) -> Self {
+        Self {
+            format: vec![FormatElement::Text(text.into())],
+            variables: BTreeMap::new(),
+            style_variables: BTreeMap::new(),
+        }
     }
 
     /// Maps variable name to its value
@@ -186,7 +195,7 @@ impl<'a> StringFormatter<'a> {
             .par_iter_mut()
             .filter(|(_, value)| value.is_none())
             .for_each(|(key, value)| {
-                *value = mapper(key).map(|var| var.map(|var| var.into()));
+                *value = mapper(key).map(|var| var.map(std::convert::Into::into));
             });
         self
     }
@@ -207,8 +216,8 @@ impl<'a> StringFormatter<'a> {
             parse_format(
                 textgroup.format,
                 style.transpose()?,
-                &variables,
-                &style_variables,
+                variables,
+                style_variables,
             )
         }
 
@@ -248,13 +257,13 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(vec![Segment::new(style, text)]),
+                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
                         FormatElement::TextGroup(textgroup) => {
                             let textgroup = TextGroup {
                                 format: textgroup.format,
                                 style: textgroup.style,
                             };
-                            parse_textgroup(textgroup, &variables, &style_variables)
+                            parse_textgroup(textgroup, variables, style_variables)
                         }
                         FormatElement::Variable(name) => variables
                             .get(name.as_ref())
@@ -265,13 +274,11 @@ impl<'a> StringFormatter<'a> {
                                     .into_iter()
                                     .map(|mut segment| {
                                         // Derive upper style if the style of segments are none.
-                                        if segment.style.is_none() {
-                                            segment.style = style;
-                                        };
+                                        segment.set_style_if_empty(style);
                                         segment
                                     })
                                     .collect()),
-                                VariableValue::Plain(text) => Ok(vec![Segment::new(style, text)]),
+                                VariableValue::Plain(text) => Ok(Segment::from_text(style, text)),
                                 VariableValue::Meta(format) => {
                                     let formatter = StringFormatter {
                                         format,
@@ -284,7 +291,7 @@ impl<'a> StringFormatter<'a> {
                             .unwrap_or_else(|| Ok(Vec::new())),
                         FormatElement::Conditional(format) => {
                             // Show the conditional format string if all the variables inside are not
-                            // none.
+                            // none or empty string.
                             fn should_show_elements<'a>(
                                 format_elements: &[FormatElement],
                                 variables: &'a VariableMapType<'a>,
@@ -292,29 +299,32 @@ impl<'a> StringFormatter<'a> {
                                 format_elements.get_variables().iter().any(|var| {
                                     variables
                                         .get(var.as_ref())
-                                        .map(|map_result| {
+                                        // false if can't find the variable in format string
+                                        .map_or(false, |map_result| {
                                             let map_result = map_result.as_ref();
                                             map_result
                                                 .and_then(|result| result.as_ref().ok())
-                                                .map(|result| match result {
+                                                // false if the variable is None or Err, or a meta variable
+                                                // that shouldn't show
+                                                .map_or(false, |result| match result {
                                                     // If the variable is a meta variable, also
                                                     // check the format string inside it.
                                                     VariableValue::Meta(meta_elements) => {
                                                         let meta_variables =
                                                             clone_without_meta(variables);
                                                         should_show_elements(
-                                                            &meta_elements,
+                                                            meta_elements,
                                                             &meta_variables,
                                                         )
                                                     }
-                                                    _ => true,
+                                                    VariableValue::Plain(plain_value) => {
+                                                        !plain_value.is_empty()
+                                                    }
+                                                    VariableValue::Styled(segments) => segments
+                                                        .iter()
+                                                        .any(|x| !x.value().is_empty()),
                                                 })
-                                                // The variable is None or Err, or a meta variable
-                                                // that shouldn't show
-                                                .unwrap_or(false)
                                         })
-                                        // Can't find the variable in format string
-                                        .unwrap_or(false)
                                 })
                             }
 
@@ -379,8 +389,8 @@ mod tests {
     macro_rules! match_next {
         ($iter:ident, $value:literal, $($style:tt)+) => {
             let _next = $iter.next().unwrap();
-            assert_eq!(_next.value, $value);
-            assert_eq!(_next.style, $($style)+);
+            assert_eq!(_next.value(), $value);
+            assert_eq!(_next.style(), $($style)+);
         }
     }
 
@@ -499,14 +509,18 @@ mod tests {
         let styled_style = Some(Color::Green.italic());
         let styled_no_modifier_style = Some(Color::Green.normal());
 
+        let mut segments: Vec<Segment> = Vec::new();
+        segments.extend(Segment::from_text(None, "styless"));
+        segments.extend(Segment::from_text(styled_style, "styled"));
+        segments.extend(Segment::from_text(
+            styled_no_modifier_style,
+            "styled_no_modifier",
+        ));
+
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
             .map_variables_to_segments(|variable| match variable {
-                "var" => Some(Ok(vec![
-                    Segment::new(None, "styless"),
-                    Segment::new(styled_style, "styled"),
-                    Segment::new(styled_no_modifier_style, "styled_no_modifier"),
-                ])),
+                "var" => Some(Ok(segments.clone())),
                 _ => None,
             });
         let result = formatter.parse(None).unwrap();
@@ -576,6 +590,34 @@ mod tests {
         match_next!(result_iter, "$some", None);
         match_next!(result_iter, " should render but ", None);
         match_next!(result_iter, " shouldn't", None);
+    }
+
+    #[test]
+    fn test_empty() {
+        const FORMAT_STR: &str = "(@$empty)";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|var| match var {
+                "empty" => Some(Ok("")),
+                _ => None,
+            });
+        let result = formatter.parse(None).unwrap();
+        assert_eq!(result.len(), 0);
+    }
+
+    #[test]
+    fn test_styled_empty() {
+        const FORMAT_STR: &str = "[(@$empty)](red bold)";
+
+        let formatter = StringFormatter::new(FORMAT_STR)
+            .unwrap()
+            .map(|variable| match variable {
+                "empty" => Some(Ok("")),
+                _ => None,
+            });
+        let result = formatter.parse(None).unwrap();
+        assert_eq!(result.len(), 0);
     }
 
     #[test]

@@ -8,6 +8,7 @@ pub mod battery;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
+pub mod cobol;
 pub mod conda;
 pub mod crystal;
 pub mod custom;
@@ -20,9 +21,11 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fill;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
+pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
@@ -34,6 +37,7 @@ pub mod jobs;
 pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
+pub mod line_break;
 pub mod lua;
 pub mod memory_usage;
 pub mod nim;
@@ -72,15 +76,17 @@ pub use starship_root::*;
 pub struct FullConfig<'a> {
     // Root config
     pub format: &'a str,
+    pub right_format: &'a str,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
     // modules
     aws: aws::AwsConfig<'a>,
-    battery: battery::BatteryDisplayConfig<'a>,
+    battery: battery::BatteryConfig<'a>,
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
+    cobol: cobol::CobolConfig<'a>,
     conda: conda::CondaConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
@@ -90,11 +96,13 @@ pub struct FullConfig<'a> {
     dotnet: dotnet::DotnetConfig<'a>,
     elixir: elixir::ElixirConfig<'a>,
     elm: elm::ElmConfig<'a>,
-    env_var: env_var::EnvVarConfig<'a>,
+    env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     erlang: erlang::ErlangConfig<'a>,
+    fill: fill::FillConfig<'a>,
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
+    git_metrics: git_metrics::GitMetricsConfig<'a>,
     git_state: git_state::GitStateConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
     golang: go::GoConfig<'a>,
@@ -106,6 +114,7 @@ pub struct FullConfig<'a> {
     julia: julia::JuliaConfig<'a>,
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
+    line_break: line_break::LineBreakConfig,
     lua: lua::LuaConfig<'a>,
     memory_usage: memory_usage::MemoryConfig<'a>,
     nim: nim::NimConfig<'a>,
@@ -118,8 +127,8 @@ pub struct FullConfig<'a> {
     php: php::PhpConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
-    rlang: rlang::RLangConfig<'a>,
     red: red::RedConfig<'a>,
+    rlang: rlang::RLangConfig<'a>,
     ruby: ruby::RubyConfig<'a>,
     rust: rust::RustConfig<'a>,
     scala: scala::ScalaConfig<'a>,
@@ -131,8 +140,9 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
     username: username::UsernameConfig<'a>,
-    vlang: v::VConfig<'a>,
     vagrant: vagrant::VagrantConfig<'a>,
+    vcsh: vcsh::VcshConfig<'a>,
+    vlang: v::VConfig<'a>,
     zig: zig::ZigConfig<'a>,
     custom: IndexMap<String, custom::CustomConfig<'a>>,
 }
@@ -141,6 +151,7 @@ impl<'a> Default for FullConfig<'a> {
     fn default() -> Self {
         Self {
             format: "$all",
+            right_format: "",
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -150,6 +161,7 @@ impl<'a> Default for FullConfig<'a> {
             character: Default::default(),
             cmake: Default::default(),
             cmd_duration: Default::default(),
+            cobol: Default::default(),
             conda: Default::default(),
             crystal: Default::default(),
             dart: Default::default(),
@@ -161,9 +173,11 @@ impl<'a> Default for FullConfig<'a> {
             elm: Default::default(),
             env_var: Default::default(),
             erlang: Default::default(),
+            fill: Default::default(),
             gcloud: Default::default(),
             git_branch: Default::default(),
             git_commit: Default::default(),
+            git_metrics: Default::default(),
             git_state: Default::default(),
             git_status: Default::default(),
             golang: Default::default(),
@@ -175,6 +189,7 @@ impl<'a> Default for FullConfig<'a> {
             julia: Default::default(),
             kotlin: Default::default(),
             kubernetes: Default::default(),
+            line_break: Default::default(),
             lua: Default::default(),
             memory_usage: Default::default(),
             nim: Default::default(),
@@ -201,9 +216,39 @@ impl<'a> Default for FullConfig<'a> {
             time: Default::default(),
             username: Default::default(),
             vagrant: Default::default(),
+            vcsh: Default::default(),
             vlang: Default::default(),
             zig: Default::default(),
             custom: Default::default(),
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::module::ALL_MODULES;
+    use toml::value::Value;
+
+    #[test]
+    fn test_all_modules_in_full_config() {
+        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
+        let cfg_table = full_cfg.as_table().unwrap();
+        for module in ALL_MODULES {
+            assert!(cfg_table.contains_key(*module));
+        }
+    }
+
+    #[test]
+    fn root_in_full_config() {
+        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
+        let cfg_table = full_cfg.as_table().unwrap();
+
+        let root_cfg = Value::try_from(StarshipRootConfig::default()).unwrap();
+        let root_table = root_cfg.as_table().unwrap();
+        for (option, default_value) in root_table.iter() {
+            assert!(cfg_table.contains_key(option));
+            assert_eq!(&cfg_table[option], default_value);
         }
     }
 }

@@ -24,8 +24,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_root = is_root_user();
     let show_username = config.show_always
         || is_root // [1]
-        || !is_login_user(&context, &username) // [2]
-        || is_ssh_session(&context); // [3]
+        || !is_login_user(context, &username) // [2]
+        || is_ssh_session(context); // [3]
 
     if !show_username {
         return None;
@@ -64,8 +64,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn is_login_user(context: &Context, username: &str) -> bool {
     context
         .get_env("LOGNAME")
-        .map(|logname| logname == username)
-        .unwrap_or(true)
+        .map_or(true, |logname| logname == username)
 }
 
 #[cfg(target_os = "windows")]

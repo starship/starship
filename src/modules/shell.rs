@@ -24,6 +24,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Ion => Some(config.ion_indicator),
                     Shell::Elvish => Some(config.elvish_indicator),
                     Shell::Tcsh => Some(config.tcsh_indicator),
+                    Shell::Nu => Some(config.nu_indicator),
+                    Shell::Xonsh => Some(config.xonsh_indicator),
                     Shell::Unknown => Some(config.unknown_indicator),
                 },
                 _ => None,
@@ -36,6 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "ion_indicator" => Some(Ok(config.ion_indicator)),
                 "elvish_indicator" => Some(Ok(config.elvish_indicator)),
                 "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
+                "xonsh_indicator" => Some(Ok(config.xonsh_indicator)),
                 "unknown_indicator" => Some(Ok(config.unknown_indicator)),
                 _ => None,
             })
@@ -242,6 +245,64 @@ mod tests {
             .config(toml::toml! {
                 [shell]
                 elvish_indicator = "[elvish](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_nu_default_format() {
+        let expected = Some(format!("{} ", "nu"));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Nu)
+            .config(toml::toml! {
+                [shell]
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_nu_custom_format() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("nu")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Nu)
+            .config(toml::toml! {
+                [shell]
+                nu_indicator = "[nu](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_xonsh_default_format() {
+        let expected = Some(format!("{} ", "xsh"));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Xonsh)
+            .config(toml::toml! {
+                [shell]
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_xonsh_custom_format() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("xonsh")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Xonsh)
+            .config(toml::toml! {
+                [shell]
+                xonsh_indicator = "[xonsh](bold cyan)"
                 disabled = false
             })
             .collect();
