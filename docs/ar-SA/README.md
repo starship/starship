@@ -39,7 +39,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### تثبيت أحدث إصدار
 
-   بواسطة Shell:
+   بإستخدام Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
@@ -49,13 +49,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### التثبيت عبر مدير الحزم
 
-   بواسطة [Homebrew](https://brew.sh/):
+   بإستخدام [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   بواسطة [Scoop](https://scoop.sh):
+   بإستخدام [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
