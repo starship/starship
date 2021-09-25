@@ -151,7 +151,7 @@
 
 ### المتطلبات الأساسية
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- تثبيت [Nerd Font](https://www.nerdfonts.com/) وتمكينه في موجه الأوامر الخاصة بك (على سبيل المثال، جرب [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### البدء مع Starship
 
@@ -181,20 +181,20 @@
    #### التثبيت عبر مدير الحزم
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### مثال: [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### بإستخدام [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
 
 
    #### Bash
@@ -313,7 +313,7 @@
 
 كن مساهماً مالياً و ساعدنا في الحفاظ على مجتمعنا. [[ساهم](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### الأفراد
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
