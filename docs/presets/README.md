@@ -501,14 +501,14 @@ format = "[$branch]($style)"
 style = "242"
 
 [git_status]
-format = "[[$conflicted$deleted$renamed$modified$untracked](218) $ahead_behind$stashed]($style)"
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
 style = "cyan"
-diverged = "*"
-untracked = "*"
-modified = "*"
-staged = "*"
-renamed = "*"
-deleted = "*"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
 stashed = "≡"
 
 [git_state]
