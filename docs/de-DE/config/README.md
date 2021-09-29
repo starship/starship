@@ -87,11 +87,11 @@ Hier sind ein paar Beispiele:
 
 Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen der mit Beschreibungen, was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Konfigurationshandbuch](/advanced-config/).
 
-- `"fg:green bg:blue"` setzt grünen Text auf blauen Hintergrund
-- `"bg:blue fg:bright-green"` setzt hell-grünen Text auf blauen Hintergrund
-- `"bold fg:27"` setzt dicke Schrift auf [ANSI Farbe](https://i.stack.imgur.com/KTSQa.png) 27
+- `"fg:green bg:blue"` setzt grünen Text auf einem blauen Hintergrund
+- `"bg:blue fg:bright-green"` setzt hell-grünen Text auf einen blauen Hintergrund
+- `"bold fg:27"` setzt färbt fettgedruckten Text in die [ANSI Farbe](https://i.stack.imgur.com/KTSQa.png) 27
 - `"underline bg:#bf5700"` setzt unterstrichenen Text auf einen orangenen Hintergrund
-- `"bold italic fg:purple"` setzt dicke lila Kursivschrift
+- `"bold italic fg:purple"` setzt lilane fett-kursive Schrift
 - `""` deaktiviert explizit jeden Stil
 
 Wie genau sich diese Konfiguration auswirkt liegt an deinem Terminal-Emulator. Einige Emulatoren zum Beispiel werden die Farben erhellen statt Text dick zu machen, und ein paar Farbthemen benutzen dieselben Werte für normale und helle Farben. Für kursiven Text muss dein Terminal Kursivschrift unterstützen.
