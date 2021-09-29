@@ -71,21 +71,21 @@ Hier sind ein paar Beispiele:
 
 #### Textgruppe
 
-A text group is made up of two different parts.
+Eine Textgruppe besteht aus zwei verschiedenen Teilen.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Der erste Teil, welcher innerhalb eckiger Klammern `[]` ist, ist ein [formatierter string](#format-strings). Du kannst ihm Texte, Variablen oder sogar verschachtelte Textgruppen hinzufügen.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). Dies kann verwendet werden, um den ersten Teil zu gestalten.
+Der zweite Teil ist innerhalb normaler Klammern `()` und ist ein[style string](#style-strings). Dies kann verwendet werden, um den ersten Teil zu gestalten.
 
 Hier sind ein paar Beispiele:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` wird einen string `on` mit fettgedrucktem roten Text ausgeben.
+- `[⌘ $version](bold green)` wird ein Symbol `⌘` gefolgt von dem Inhalt der Variable `version` mit fettgedrucktem grünen Text ausgeben.
+- `[a [b](red) c](green)` wird `a b c` ausgeben, wobei `b` rot ist und `a` und `c` grün sind.
 
 #### Style-Strings
 
-Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen mit Beschreibungen was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Konfigurationshandbuch](/advanced-config/).
+Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen der mit Beschreibungen, was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Konfigurationshandbuch](/advanced-config/).
 
 - `"fg:green bg:blue"` setzt grünen Text auf blauen Hintergrund
 - `"bg:blue fg:bright-green"` setzt hell-grünen Text auf blauen Hintergrund
