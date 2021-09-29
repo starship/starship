@@ -6,7 +6,7 @@ Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei e
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Die gesamte Konfiguration von Starship wird über diese [TOML](https://github.com/toml-lang/toml)-Datei durchgeführt:
+Die gesamte Konfiguration von Starship erfolgt in dieser [TOML](https://github.com/toml-lang/toml)-Datei:
 
 ```toml
 # Füge eine Leerzeile zwischen den Eingabeaufforderungen ein
@@ -35,7 +35,7 @@ $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 
 ### Protokollierung
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Standardmäßig protokolliert starship Warnungen und Fehler in eine Datei names `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, wobei der session key zu der Instanz deines Terminals korrespondiert. Das kann jedoch durch die Nutzung der `STARSHIP_CACHE` Umgebungsvariable verändert werden:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
