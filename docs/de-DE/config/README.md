@@ -53,23 +53,23 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 **Variable**: Eine kleinere Unterkomponente, welche Information des Moduls enthält. Zum Beispiel enthält die Variable "version" im Modul "nodejs" die aktuelle Version von Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Die meisten Module haben einen Präfix der standardmäßigen terminal-Farbe (z.B. `via` in "nodejs") und ein Leerzeichen als Suffix.
 
-### Format Strings
+### Formatierte Strings
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Formatierte Strings sind das Format, mit dem ein Modul all seine Variablen ausgibt. Die meisten Module haben den Eintrag `format`, welcher das anzeige-Format des Moduls konfiguriert. Du kannst Texte, Variablen und Textgruppen in einem formatierten string benutzen.
 
 #### Variable
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+Eine Variable besteht aus dem `$` Symbol und dem Namen der Variable. Der Name der Variable darf nur Buchstaben, Nummern und `_` enthalten.
 
-For example:
+Hier sind ein paar Beispiele:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `$version` ist ein formatierter string mit dem Namen `version`.
+- `$git_branch$git_commit` ist ein formatierter string mit zwei Variablen, nämlich `git_branch` und `git_commit`.
+- `$git_branch $git_commit` hat die zwei Variablen mit einem Leerzeichen getrennt.
 
-#### Text Group
+#### Textgruppe
 
 A text group is made up of two different parts.
 
@@ -77,7 +77,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). Dies kann verwendet werden, um den ersten Teil zu gestalten.
 
-For example:
+Hier sind ein paar Beispiele:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ Wie genau sich diese Konfiguration auswirkt liegt an deinem Terminal-Emulator. E
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Hier sind ein paar Beispiele:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
