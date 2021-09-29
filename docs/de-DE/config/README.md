@@ -9,31 +9,31 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Die gesamte Konfiguration von Starship wird über diese [TOML](https://github.com/toml-lang/toml)-Datei durchgeführt:
 
 ```toml
-# Inserts a blank line between shell prompts
+# Füge eine Leerzeile zwischen den Eingabeaufforderungen ein
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Ersetze das "❯" Symbol der Eingabeaufforderung mit "➜"
+[character]                            # Der Name des Moduls, welches wir konfigurieren ist "character"
+success_symbol = "[➜](bold green)"     # Das "succes_symbol" Segment wird zu "➜" eingestellt und ist "bold green" (fettgedrucktes grün) gefärbt
 
-# Disable the package module, hiding it from the prompt completely
+# Deaktiviere das "package" Modul, damit es aus der Eingabeaufforderung komplett verschwindet
 [package]
 disabled = true
 ```
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Du kannst die voreingestellte Konfigurations-Datei mit der `STARSHIP_CONFIG` Umgebungsvariable verändern:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Äquivalent zur PowerShell (Windows) würdest du diese Zeile zu `$PROFILE` hinzufügen:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
-### Logging
+### Protokollierung
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
@@ -41,7 +41,7 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Äquivalent zur PowerShell (Windows) würdest du diese Zeile zu `$PROFILE` hinzufügen:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
