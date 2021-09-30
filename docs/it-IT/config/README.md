@@ -75,7 +75,7 @@ Un gruppo di testo è composto da due parti diverse.
 
 La prima parte, che è racchiusa tra `[]`, è una [format string](#format-strings). È possibile aggiungere testi, variabili o anche gruppi annidati di testo.
 
-Nella seconda parte, che è racchiusa tra `()`, è un [style string](#style-strings). This can be used to style the first part.
+Nella seconda parte, che è racchiusa tra `()`, è presente una [style string](#style-strings). Questo può essere usato per modificare lo stile della prima parte.
 
 Per esempio:
 
