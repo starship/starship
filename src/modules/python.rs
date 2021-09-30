@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

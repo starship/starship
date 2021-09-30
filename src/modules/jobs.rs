@@ -88,7 +88,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "number" => Some(Ok(module_number.clone())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

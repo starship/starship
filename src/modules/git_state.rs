@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "progress_total" => state_description.total.as_ref().map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

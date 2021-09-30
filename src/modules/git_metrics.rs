@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "deleted" => GitDiff::get_variable(config.only_nonzero_diffs, stats.deleted),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

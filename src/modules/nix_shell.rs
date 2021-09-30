@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "name" => shell_name.as_ref().map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

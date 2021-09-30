@@ -109,7 +109,7 @@ pub fn get_prompt(context: Context) -> String {
     let mut root_module = Module::new("Starship Root", "The root module", None);
     root_module.set_segments(
         formatter
-            .parse(None)
+            .parse(None, Some(&context))
             .expect("Unexpected error returned in root format variables"),
     );
 

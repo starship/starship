@@ -70,7 +70,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "context" => Some(Ok(ctx.as_str())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
