@@ -30,6 +30,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 },
                 _ => None,
             })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None
+            })
             .map(|var| match var {
                 "bash_indicator" => Some(Ok(config.bash_indicator)),
                 "fish_indicator" => Some(Ok(config.fish_indicator)),
