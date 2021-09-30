@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, RootModuleConfig, Shell};
 use crate::configs::battery::BatteryConfig;
 #[cfg(test)]
 use mockall::automock;
@@ -7,6 +7,13 @@ use crate::formatter::StringFormatter;
 
 /// Creates a module for the battery percentage and charging state
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    // TODO: Update when v1.0 printing refactor is implemented to only
+    // print escapes in a prompt context.
+    let percentage_char = match context.shell {
+        Shell::Zsh => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
+        _ => "%",
+    };
+
     let battery_status = get_battery_status(context)?;
     let BatteryStatus { state, percentage } = battery_status;
 
@@ -48,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     _ => None,
                 })
                 .map(|variable| match variable {
-                    "percentage" => Some(Ok(format!("{}%", percentage.round()))),
+                    "percentage" => Some(Ok(format!("{}{}", percentage.round(), percentage_char))),
                     _ => None,
                 });
 
