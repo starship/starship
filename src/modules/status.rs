@@ -46,9 +46,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
+    // Exit code is zero and pipestatus is all zero or disabled/missing
     if exit_code == "0"
-        && (pipestatus_status == PipeStatusStatus::Disabled
-            || pipestatus_status == PipeStatusStatus::NoPipe)
+        && (match pipestatus_status {
+            PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
+            _ => true,
+        })
     {
         return None;
     }
@@ -509,6 +512,26 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(&pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn successful_pipeline_pipestatus_enabled() {
+        let pipe_exit_code = [0, 0, 0];
+
+        let main_exit_code = 0;
+
+        let expected = None;
+
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+                pipestatus = true
             })
             .status(main_exit_code)
             .pipestatus(&pipe_exit_code)
