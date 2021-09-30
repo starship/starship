@@ -492,13 +492,13 @@ $character"""
 style = "blue"
 
 [character]
-success_symbol = "[❯](5)"
+success_symbol = "[❯](purple)"
 error_symbol = "[❯](red)"
 vicmd_symbol = "[❮](green)"
 
 [git_branch]
 format = "[$branch]($style)"
-style = "242"
+style = "bright-black"
 
 [git_status]
 format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
