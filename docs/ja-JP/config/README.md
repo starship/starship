@@ -984,7 +984,7 @@ default = "unknown user"
 
 | オプション      | デフォルト                          | 説明                                    |
 | ---------- | ------------------------------ | ------------------------------------- |
-| `symbol`   |                                | 環境変数を表示する前に使用される記号です。                 |
+| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                 |
 | `variable` |                                | 表示される環境変数です。                          |
 | `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。 |
 | `format`   | `"with [$env_value]($style) "` | moduleのフォーマットです。                      |
@@ -2578,19 +2578,19 @@ The `shell` module shows an indicator for currently used shell.
 
 ### オプション
 
-| オプション                  | デフォルト        | 説明                                                           |
-| ---------------------- | ------------ | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
-| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.                       |
-| `powershell_indicator` | `psh`        | A format string used to represent powershell.                |
-| `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                     |
-| `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
-| `format`               | `$indicator` | moduleのフォーマットです。                                             |
-| `disabled`             | `true`       | Disables the `shell` module.                                 |
+| オプション                  | デフォルト           | 説明                                                           |
+| ---------------------- | --------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `"bsh"`         | A format string used to represent bash.                      |
+| `fish_indicator`       | `"fsh"`         | A format string used to represent fish.                      |
+| `zsh_indicator`        | `"zsh"`         | A format string used to represent zsh.                       |
+| `powershell_indicator` | `"psh"`         | A format string used to represent powershell.                |
+| `ion_indicator`        | `"ion"`         | A format string used to represent ion.                       |
+| `elvish_indicator`     | `"esh"`         | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `"tsh"`         | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
+| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
+| `format`               | `"$indicator "` | moduleのフォーマットです。                                             |
+| `disabled`             | `true`          | Disables the `shell` module.                                 |
 
 ### 変数
 
@@ -3106,7 +3106,7 @@ The order in which custom modules are shown can be individually set by including
 
 | オプション         | デフォルト                           | 説明                                                                                                                                                                            |
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
+| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                       |
 | `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
