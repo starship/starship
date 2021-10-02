@@ -983,7 +983,7 @@ default = "unknown user"
 
 | Opción     | Por defecto                    | Descripción                                                                            |
 | ---------- | ------------------------------ | -------------------------------------------------------------------------------------- |
-| `symbol`   |                                | El símbolo usado antes de mostrar el valor de la variable.                             |
+| `symbol`   | `""`                           | El símbolo usado antes de mostrar el valor de la variable.                             |
 | `variable` |                                | La variable de entorno a mostrar.                                                      |
 | `default`  |                                | El valor por defecto que se mostrará cuando la variable seleccionada no está definida. |
 | `format`   | `"with [$env_value]($style) "` | El formato del módulo.                                                                 |
@@ -2577,19 +2577,19 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                 | Por defecto  | Descripción                                                          |
-| ---------------------- | ------------ | -------------------------------------------------------------------- |
-| `bash_indicator`       | `bsh`        | Una cadena de formato usada para representar Bash.                   |
-| `fish_indicator`       | `fsh`        | Una cadena de formato usada para representar Fish.                   |
-| `zsh_indicator`        | `zsh`        | Una cadena de formato usada para representar Zsh.                    |
-| `powershell_indicator` | `psh`        | Una cadena de formato usada para representar Powershell.             |
-| `ion_indicator`        | `ion`        | Una cadena de formato usada para representar Ion.                    |
-| `elvish_indicator`     | `esh`        | Una cadena de formato usada para representar Elvish.                 |
-| `tcsh_indicator`       | `tsh`        | Una cadena de formato usada para representar tcsh.                   |
-| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                             |
-| `unknown_indicator`    |              | El valor por defecto que se mostrará cuando se desconoce el comando. |
-| `format`               | `$indicator` | El formato del módulo.                                               |
-| `disabled`             | `true`       | Deshabilita el módulo `shell`.                                       |
+| Opción                 | Por defecto     | Descripción                                                          |
+| ---------------------- | --------------- | -------------------------------------------------------------------- |
+| `bash_indicator`       | `"bsh"`         | Una cadena de formato usada para representar Bash.                   |
+| `fish_indicator`       | `"fsh"`         | Una cadena de formato usada para representar Fish.                   |
+| `zsh_indicator`        | `"zsh"`         | Una cadena de formato usada para representar Zsh.                    |
+| `powershell_indicator` | `"psh"`         | Una cadena de formato usada para representar Powershell.             |
+| `ion_indicator`        | `"ion"`         | Una cadena de formato usada para representar Ion.                    |
+| `elvish_indicator`     | `"esh"`         | Una cadena de formato usada para representar Elvish.                 |
+| `tcsh_indicator`       | `"tsh"`         | Una cadena de formato usada para representar tcsh.                   |
+| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                             |
+| `unknown_indicator`    | `""`            | El valor por defecto que se mostrará cuando se desconoce el comando. |
+| `format`               | `"$indicator "` | El formato del módulo.                                               |
+| `disabled`             | `true`          | Deshabilita el módulo `shell`.                                       |
 
 ### Variables
 
@@ -3105,7 +3105,7 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 
 | Opción        | Por defecto                     | Descripción                                                                                                                                                                         |
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                                                                    |
+| `command`     | `""`                            | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                                                                    |
 | `when`        |                                 | Comando de shell usado como condición para mostrar el módulo. El módulo se mostrará si el comando devuelve un código de estado `0`.                                                 |
 | `shell`       |                                 | [Ver abajo](#custom-command-shell)                                                                                                                                                  |
 | `description` | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                                                                            |
