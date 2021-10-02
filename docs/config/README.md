@@ -1045,7 +1045,7 @@ default = "unknown user"
 
 | Option     | Default                        | Description                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
+| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
@@ -2707,19 +2707,19 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                 | Default       | Description                                                  |
-| ---------------------- | ------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`         | A format string used to represent bash.                      |
-| `fish_indicator`       | `fsh`         | A format string used to represent fish.                      |
-| `zsh_indicator`        | `zsh`         | A format string used to represent zsh.                       |
-| `powershell_indicator` | `psh`         | A format string used to represent powershell.                |
-| `ion_indicator`        | `ion`         | A format string used to represent ion.                       |
-| `elvish_indicator`     | `esh`         | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `tsh`         | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `xsh`         | A format string used to represent xonsh.                     |
-| `unknown_indicator`    |               | The default value to be displayed when the shell is unknown. |
-| `format`               | `$indicator ` | The format for the module.                                   |
-| `disabled`             | `true`        | Disables the `shell` module.                                 |
+| Option                 | Default         | Description                                                  |
+| ---------------------- | --------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `"bsh"`         | A format string used to represent bash.                      |
+| `fish_indicator`       | `"fsh"`         | A format string used to represent fish.                      |
+| `zsh_indicator`        | `"zsh"`         | A format string used to represent zsh.                       |
+| `powershell_indicator` | `"psh"`         | A format string used to represent powershell.                |
+| `ion_indicator`        | `"ion"`         | A format string used to represent ion.                       |
+| `elvish_indicator`     | `"esh"`         | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `"tsh"`         | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
+| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
+| `format`               | `"$indicator "` | The format for the module.                                   |
+| `disabled`             | `true`          | Disables the `shell` module.                                 |
 
 ### Variables
 
@@ -3256,7 +3256,7 @@ If you have an interesting example not covered there, feel free to share it ther
 
 | Option        | Default                         | Description                                                                                                                |
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
+| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                              |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code. |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                         |
 | `description` | `"<custom module>"`             | The description of the module that is shown when running `starship explain`.                                               |
