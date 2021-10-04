@@ -2791,7 +2791,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Các tuỳ chọn
 
@@ -2800,7 +2800,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `["tf", "hcl"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `[]`                                 | Tên tệp nào sẽ kích hoạt mô-đun này.                                      |
 | `detect_folders`    | `[".terraform"]`                     | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
 | `style`             | `"bold 105"`                         | Kiểu cho module.                                                          |
