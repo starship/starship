@@ -2575,25 +2575,29 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 ### Opções
 
-| Opções                 | Padrão          | Descrição                                                    |
-| ---------------------- | --------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `"bsh"`         | Uma string para representar o bash.                          |
-| `fish_indicator`       | `"fsh"`         | Uma string usada para representar o fish.                    |
-| `zsh_indicator`        | `"zsh"`         | A format string used to represent zsh.                       |
-| `powershell_indicator` | `"psh"`         | A format string used to represent powershell.                |
-| `ion_indicator`        | `"ion"`         | A format string used to represent ion.                       |
-| `elvish_indicator`     | `"esh"`         | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `"tsh"`         | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
-| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
-| `format`               | `"$indicator "` | O formato do módulo.                                         |
-| `disabled`             | `true`          | Disables the `shell` module.                                 |
+| Opções                 | Padrão                    | Descrição                                                    |
+| ---------------------- | ------------------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`                     | Uma string para representar o bash.                          |
+| `fish_indicator`       | `fsh`                     | Uma string usada para representar o fish.                    |
+| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `format`               | `"[$indicator]($style) "` | O formato do módulo.                                         |
+| `style`                | `"white bold"`            | O estilo do módulo.                                          |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variáveis
 
 | Variável  | Padrão | Descrição                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
+| style\* |        | Mirrors the value of option `style`.                       |
+
+\*: Essa variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplos
 
@@ -2604,6 +2608,7 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2928,7 +2933,7 @@ show_always = true
 
 ## Vagrant
 
-O módulo `vagrant` exibe a versão atual instalada do [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `Vagrantfile`
 
@@ -2966,7 +2971,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-O módulo `vlang` exibe a versão atual instalada do [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 - O diretório atual cotem qualquer arquivo com a extensão `.v`
 - O diretório atual contem um arquivo `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
@@ -3083,7 +3088,7 @@ These modules will be shown if any of the following conditions are met:
 
 ::: tip
 
-Vários módulos personalizados podem ser definidos usando `.`.
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
