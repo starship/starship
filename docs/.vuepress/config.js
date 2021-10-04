@@ -287,6 +287,7 @@ module.exports = {
       {
         hostname: "https://starship.rs"
       }
-    ]
+    ],
+    ['vuepress-plugin-code-copy', true]
   ]
 };
