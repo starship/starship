@@ -479,19 +479,21 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
     let mut rendered_components: Vec<String> = components
         .iter()
         .zip(&suffixes)
-        .map(render_time_component)
+        .map(|time_data| render_time_component(time_data, true))
         .collect();
     if show_millis || raw_millis < 1000 {
-        rendered_components.push(render_time_component((&millis, &"ms")));
+        let empty_if_zero = !rendered_components.is_empty();
+        rendered_components.push(render_time_component((&millis, &"ms"), empty_if_zero));
     }
     rendered_components.join("")
 }
 
 /// Render a single component of the time string, giving an empty string if component is zero
-fn render_time_component((component, suffix): (&u128, &&str)) -> String {
-    match component {
-        0 => String::new(),
-        n => format!("{}{}", n, suffix),
+fn render_time_component((component, suffix): (&u128, &&str), empty_if_zero: bool) -> String {
+    if *component == 0 && empty_if_zero {
+        String::new()
+    } else {
+        format!("{}{}", component, suffix)
     }
 }
 
