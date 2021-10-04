@@ -2791,7 +2791,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Opsi
 
@@ -2800,7 +2800,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                                   |
 | `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                               |
-| `detect_extensions` | `["tf", "hcl"]`                      | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[".terraform"]`                     | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `style`             | `"bold 105"`                         | Gaya penataan untuk modul.                                                          |
