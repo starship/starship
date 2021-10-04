@@ -24,12 +24,13 @@ function global:prompt {
 
     function Invoke-Native {
         param($Executable, $Arguments)
-        $startInfo = [System.Diagnostics.ProcessStartInfo]::new($Executable);
-        $startInfo.StandardOutputEncoding = [System.Text.Encoding]::UTF8;
-        $startInfo.RedirectStandardOutput = $true;
-        $startInfo.RedirectStandardError = $true;
-        $startInfo.CreateNoWindow = $true;
-        $startInfo.UseShellExecute = $false;
+        $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
+            StandardOutputEncoding = [System.Text.Encoding]::UTF8;
+            RedirectStandardOutput = $true;
+            RedirectStandardError = $true;
+            CreateNoWindow = $true;
+            UseShellExecute = $false;
+        };
         if ($startInfo.ArgumentList.Add) {
             # PowerShell 6+ uses .NET 5+ and supports the ArgumentList property
             # which bypasses the need for manually escaping the argument list into

@@ -46,9 +46,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
+    // Exit code is zero and pipestatus is all zero or disabled/missing
     if exit_code == "0"
-        && (pipestatus_status == PipeStatusStatus::Disabled
-            || pipestatus_status == PipeStatusStatus::NoPipe)
+        && (match pipestatus_status {
+            PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
+            _ => true,
+        })
     {
         return None;
     }
@@ -412,13 +415,13 @@ mod tests {
     #[test]
     fn pipeline_uses_pipestatus_format() {
         let exit_values = [
-            [0, 0, 0, 0],
+            [0, 1, 0, 0],
             [0, 1, 2, 3],
             [130, 126, 131, 127],
             [1, 1, 1, 1],
         ];
         let exit_values_rendered = [
-            "PSF 🟢=🟢 🟢 🟢",
+            "PSF 🟢=🔴 🟢 🟢",
             "PSF 🟢=🔴 🔴 🔴",
             "PSF 🧱=🚫 ⚡ 🔍",
             "PSF 🔴=🔴 🔴 🔴",
@@ -456,13 +459,13 @@ mod tests {
     #[test]
     fn pipeline_no_map_symbols() {
         let exit_values = [
-            [0, 0, 0, 0],
+            [0, 1, 0, 0],
             [0, 1, 2, 3],
             [130, 126, 131, 127],
             [1, 1, 1, 1],
         ];
         let exit_values_rendered = [
-            "PSF 🟢=🟢0 🟢0 🟢0",
+            "PSF 🟢=🔴1 🟢0 🟢0",
             "PSF 🟢=🔴1 🔴2 🔴3",
             "PSF INT🔴=🔴126 🔴1313 🔴127",
             "PSF 🔴=🔴1 🔴1 🔴1",
@@ -509,6 +512,26 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(&pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn successful_pipeline_pipestatus_enabled() {
+        let pipe_exit_code = [0, 0, 0];
+
+        let main_exit_code = 0;
+
+        let expected = None;
+
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+                pipestatus = true
             })
             .status(main_exit_code)
             .pipestatus(&pipe_exit_code)
