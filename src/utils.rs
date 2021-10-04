@@ -509,6 +509,10 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_0ms() {
+        assert_eq!(render_time(0_u128, true), "0ms")
+    }
+    #[test]
     fn test_500ms() {
         assert_eq!(render_time(500_u128, true), "500ms")
     }
