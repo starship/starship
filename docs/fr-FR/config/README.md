@@ -2578,25 +2578,29 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option                 | Défaut          | Description                                                  |
-| ---------------------- | --------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `"bsh"`         | Une chaîne de format utilisée pour représenter bash.         |
-| `fish_indicator`       | `"fsh"`         | Une chaîne de format utilisée pour représenter fish.         |
-| `zsh_indicator`        | `"zsh"`         | Une chaîne de format utilisée pour représenter zsh.          |
-| `powershell_indicator` | `"psh"`         | Une chaîne de format utilisée pour représenter powershell.   |
-| `ion_indicator`        | `"ion"`         | Une chaîne de format utilisée pour représenter ion.          |
-| `elvish_indicator`     | `"esh"`         | Une chaîne de format utilisée pour représenter elvish.       |
-| `tcsh_indicator`       | `"tsh"`         | Une chaîne de format utilisée pour représenter tcsh.         |
-| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
-| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
-| `format`               | `"$indicator "` | Format du module.                                            |
-| `disabled`             | `true`          | Désactive le module `shell`.                                 |
+| Option                 | Défaut                    | Description                                                  |
+| ---------------------- | ------------------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`                     | Une chaîne de format utilisée pour représenter bash.         |
+| `fish_indicator`       | `fsh`                     | Une chaîne de format utilisée pour représenter fish.         |
+| `zsh_indicator`        | `zsh`                     | Une chaîne de format utilisée pour représenter zsh.          |
+| `powershell_indicator` | `psh`                     | Une chaîne de format utilisée pour représenter powershell.   |
+| `ion_indicator`        | `ion`                     | Une chaîne de format utilisée pour représenter ion.          |
+| `elvish_indicator`     | `esh`                     | Une chaîne de format utilisée pour représenter elvish.       |
+| `tcsh_indicator`       | `tsh`                     | Une chaîne de format utilisée pour représenter tcsh.         |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `format`               | `"[$indicator]($style) "` | Format du module.                                            |
+| `style`                | `"white bold"`            | Le style du module.                                          |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variables
 
 | Variable  | Défaut | Description                                                |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
+| style\* |        | Mirrors the value of option `style`.                       |
+
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
 ### Exemples
 
@@ -2607,6 +2611,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2742,7 +2747,7 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Package.swift`
 - Le répertoire actuel contient un fichier avec l'extension `.swift`
@@ -2840,7 +2845,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Date et Heure
 
-Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2860,7 +2865,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2886,7 +2891,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
+The `username` module shows active user's username. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'utilisateur courant est root
 - L'utilisateur courant est différent de celui connecté
@@ -2931,7 +2936,7 @@ show_always = true
 
 ## Vagrant
 
-Le module `vagrant` affiche la version actuellement installée de [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `Vagrantfile`
 
@@ -3036,7 +3041,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `.zig`
 
@@ -3131,7 +3136,7 @@ The order in which custom modules are shown can be individually set by including
 
 #### Commandes shell personnalisées
 
-`shell` accepte une liste de chaînes non vide, où:
+`shell` accepts a non-empty list of strings, where:
 
 - La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
 - Other following arguments are passed to the shell.
