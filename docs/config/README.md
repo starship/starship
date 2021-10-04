@@ -2707,25 +2707,29 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                 | Default         | Description                                                  |
-| ---------------------- | --------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `"bsh"`         | A format string used to represent bash.                      |
-| `fish_indicator`       | `"fsh"`         | A format string used to represent fish.                      |
-| `zsh_indicator`        | `"zsh"`         | A format string used to represent zsh.                       |
-| `powershell_indicator` | `"psh"`         | A format string used to represent powershell.                |
-| `ion_indicator`        | `"ion"`         | A format string used to represent ion.                       |
-| `elvish_indicator`     | `"esh"`         | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `"tsh"`         | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
-| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
-| `format`               | `"$indicator "` | The format for the module.                                   |
-| `disabled`             | `true`          | Disables the `shell` module.                                 |
+| Option                 | Default                   | Description                                                  |
+| ---------------------- | ------------------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
+| `style`                | `"white bold"`            | The style for the module.                                    |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variables
 
 | Variable    | Default | Description                                                |
 | ----------- | ------- | ---------------------------------------------------------- |
 | indicator   |         | Mirrors the value of `indicator` for currently used shell. |
+| style\*     |         | Mirrors the value of option `style`.                       |
+
+\*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -2736,6 +2740,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2929,7 +2934,7 @@ If you still want to enable it, [follow the example shown below](#with-terraform
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Options
 
@@ -2937,8 +2942,8 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                              |
+| `symbol`            | `"💠"`                               | A format string shown before the terraform workspace.                     |
+| `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | The style for the module.                                                 |
