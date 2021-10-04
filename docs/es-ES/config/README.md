@@ -2577,25 +2577,29 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                 | Por defecto     | Descripción                                                          |
-| ---------------------- | --------------- | -------------------------------------------------------------------- |
-| `bash_indicator`       | `"bsh"`         | Una cadena de formato usada para representar Bash.                   |
-| `fish_indicator`       | `"fsh"`         | Una cadena de formato usada para representar Fish.                   |
-| `zsh_indicator`        | `"zsh"`         | Una cadena de formato usada para representar Zsh.                    |
-| `powershell_indicator` | `"psh"`         | Una cadena de formato usada para representar Powershell.             |
-| `ion_indicator`        | `"ion"`         | Una cadena de formato usada para representar Ion.                    |
-| `elvish_indicator`     | `"esh"`         | Una cadena de formato usada para representar Elvish.                 |
-| `tcsh_indicator`       | `"tsh"`         | Una cadena de formato usada para representar tcsh.                   |
-| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                             |
-| `unknown_indicator`    | `""`            | El valor por defecto que se mostrará cuando se desconoce el comando. |
-| `format`               | `"$indicator "` | El formato del módulo.                                               |
-| `disabled`             | `true`          | Deshabilita el módulo `shell`.                                       |
+| Opción                 | Por defecto               | Descripción                                                          |
+| ---------------------- | ------------------------- | -------------------------------------------------------------------- |
+| `bash_indicator`       | `bsh`                     | Una cadena de formato usada para representar Bash.                   |
+| `fish_indicator`       | `fsh`                     | Una cadena de formato usada para representar Fish.                   |
+| `zsh_indicator`        | `zsh`                     | Una cadena de formato usada para representar Zsh.                    |
+| `powershell_indicator` | `psh`                     | Una cadena de formato usada para representar Powershell.             |
+| `ion_indicator`        | `ion`                     | Una cadena de formato usada para representar Ion.                    |
+| `elvish_indicator`     | `esh`                     | Una cadena de formato usada para representar Elvish.                 |
+| `tcsh_indicator`       | `tsh`                     | Una cadena de formato usada para representar tcsh.                   |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                             |
+| `unknown_indicator`    |                           | El valor por defecto que se mostrará cuando se desconoce el comando. |
+| `format`               | `"[$indicator]($style) "` | El formato del módulo.                                               |
+| `style`                | `"white bold"`            | El estilo del módulo.                                                |
+| `disabled`             | `true`                    | Disables the `shell` module.                                         |
 
 ### Variables
 
 | Variable  | Por defecto | Descripción                                                                          |
 | --------- | ----------- | ------------------------------------------------------------------------------------ |
 | indicador |             | Ordena el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
+| style\* |             | Mirrors the value of option `style`.                                                 |
+
+\*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplos
 
@@ -2606,6 +2610,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2679,7 +2684,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Estado
 
-El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`.
+The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
 
 ::: consejo
 
@@ -2784,7 +2789,7 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ::: consejo
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
@@ -2839,7 +2844,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Hora
 
-El módulo `time` muestra la hora **local** actual. El valor de configuración de `format` es usado por la caja de [`chrono`](https://crates.io/crates/chrono) para controlar cómo se muestra la hora. Echa un vistazo a [los documentos de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver qué opciones están disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: consejo
 
@@ -2859,7 +2864,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `disabled`        | `true`                  | Desactiva el módulo `time`.                                                                                                                                                 |
 | `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas                                                |
 
-Si `use_12hr` es `true`, entonces `time_format` por defecto `"%r"`. De lo contrario, el valor por defecto es `"%T"`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2885,7 +2890,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nombre de usuario
 
-El módulo `username` muestra el nombre de usuario activo. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El usuario actual es root
 - El usuario actual no es el mismo que el que está conectado
@@ -2894,7 +2899,7 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se muestra
 
 ::: consejo
 
-La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION`, `SSH_CLIENT`, y `SSH_TTY`. Si su host SSH no configura estas variables, una solución es establecer una de ellas con un valor tonto.
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 :::
 
@@ -3003,7 +3008,7 @@ format = "via [V $version](blue bold) "
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. El módulo sólo se mostrará si un repositorio está actualmente en uso.
+The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
 
 ### Opciones
 
@@ -3073,9 +3078,9 @@ symbol = "⚡️ "
 
 ## Comandos personalizados
 
-Los módulos `personalizados` muestran la salida de algunos comandos arbitrarios.
+The `custom` modules show the output of some arbitrary commands.
 
-Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
+These modules will be shown if any of the following conditions are met:
 
 - El directorio actual contiene un archivo cuyo nombre está en `files`
 - El directorio actual contiene un directorio cuyo nombre está en `directories`
@@ -3085,19 +3090,19 @@ Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 
 ::: consejo
 
-Múltiples módulos personalizados pueden definirse usando una `.`.
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
 ::: consejo
 
-El orden en el que se muestran los módulos personalizados se puede establecer individualmente incluyendo `${custom.foo}` en el `format` de nivel superior (ya que incluye un punto, necesita usar `${...}`). Por defecto, el módulo `custom` simplemente mostrará todos los módulos personalizados en el orden en que fueron definidos.
+The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
 ::: consejo
 
-[El issue #1252](https://github.com/starship/starship/discussions/1252) contiene ejemplos de módulos personalizados. Si tiene un ejemplo interesante no cubierto allí, no dude en compartirlo allí!
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
 :::
 
@@ -3130,30 +3135,30 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 
 #### Comando personalizado del intérprete de comandos
 
-`shell` acepta una lista no vacía de cadenas, donde:
+`shell` accepts a non-empty list of strings, where:
 
 - La primera cadena es la ruta al intérprete de comandos a usar para ejecutar el comando.
 - Otros argumentos siguientes son pasados al shell.
 
-Si no está activado, se retornará a STARSHIP_SHELL y luego a "sh" en Linux, y "cmd /C" en Windows.
+If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
 
-El `comando` será pasado en stdin.
+The `command` will be passed in on stdin.
 
-Si no se da el `shell` o solo contiene un elemento y Starship detecta PowerShell los siguientes argumentos se añadirán automáticamente: `-NoProfile -Command -`. Este comportamiento puede evitarse pasando explícitamente argumentos al intérprete, p.ej.
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
 shell = ["pwsh", "-Command", "-"]
 ```
 
-::: advertencia Asegúrate de que tu configuración personalizada de shell salga con éxito
+::: warning Make sure your custom shell configuration exits gracefully
 
-Si establece un comando personalizado, asegúrese de que el Shell por defecto usado por starship ejecutará correctamente el comando con una salida elgante (a través de la opción `shell`).
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
 
-Por ejemplo, PowerShell requiere el parámetro `-Command` para ejecutar una sola línea. Omitir este parámetro puede arrojar a starchip a un bucle recursivo donde el shell podría intentar cargar un entorno de perfil completo con starship en sí misma y volver a ejecutar el comando personalizado, entrando en un bucle infinito.
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
 
-Se recomiendan parámetros similares a `-NoProfile` en PowerShell para otros shells para evitar tiempo extra de carga de un perfil personalizado en cada invocación de starship.
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
 
-La detección automática de shells y la adición adecuada de parámetros están actualmente implementados, pero es posible que no todos los shells estén cubiertos. Por favor, [abre un issue](https://github.com/starship/starship/issues/new/choose) con los detalles del intérprete de comandos y la configuración de Starship si te encuentras en tal escenario.
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 :::
 
