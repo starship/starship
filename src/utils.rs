@@ -483,7 +483,13 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
         .collect();
     if show_millis || raw_millis < 1000 {
         rendered_components.push(render_time_component((&millis, &"ms")));
+
+        // Default component
+        if raw_millis == 0 {
+            rendered_components.push("0ms".into())
+        }
     }
+
     rendered_components.join("")
 }
 
@@ -494,6 +500,8 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
         n => format!("{}{}", n, suffix),
     }
 }
+
+
 
 pub fn home_dir() -> Option<PathBuf> {
     directories_next::BaseDirs::new().map(|base_dirs| base_dirs.home_dir().to_owned())
