@@ -2791,7 +2791,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 By default the module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Optionen
 
@@ -2800,7 +2800,7 @@ By default the module will be shown if any of the following conditions are met:
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                              |
+| `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | Stil für dieses Modul.                                                    |
