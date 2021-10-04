@@ -2577,25 +2577,29 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Option                 | Standardwert    | Beschreibung                                                 |
-| ---------------------- | --------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `"bsh"`         | A format string used to represent bash.                      |
-| `fish_indicator`       | `"fsh"`         | A format string used to represent fish.                      |
-| `zsh_indicator`        | `"zsh"`         | A format string used to represent zsh.                       |
-| `powershell_indicator` | `"psh"`         | A format string used to represent powershell.                |
-| `ion_indicator`        | `"ion"`         | A format string used to represent ion.                       |
-| `elvish_indicator`     | `"esh"`         | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `"tsh"`         | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
-| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
-| `format`               | `"$indicator "` | The format for the module.                                   |
-| `disabled`             | `true`          | Disables the `shell` module.                                 |
+| Option                 | Standardwert              | Beschreibung                                                 |
+| ---------------------- | ------------------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
+| `style`                | `"white bold"`            | Stil für dieses Modul.                                       |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variables
 
 | Variable  | Standardwert | Beschreibung                                               |
 | --------- | ------------ | ---------------------------------------------------------- |
 | indicator |              | Mirrors the value of `indicator` for currently used shell. |
+| style\* |              | Mirrors the value of option `style`.                       |
+
+\*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -2606,6 +2610,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2839,7 +2844,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Zeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2859,7 +2864,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                                               |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                       |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Ansonsten ist der Standardwert hierfür `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2885,7 +2890,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Benutzername
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `username` module shows active user's username. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
