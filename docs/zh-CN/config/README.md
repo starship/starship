@@ -2577,25 +2577,29 @@ The `shell` module shows an indicator for currently used shell.
 
 ### 配置项
 
-| Option                 | 默认值             | 描述                                                           |
-| ---------------------- | --------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `"bsh"`         | A format string used to represent bash.                      |
-| `fish_indicator`       | `"fsh"`         | A format string used to represent fish.                      |
-| `zsh_indicator`        | `"zsh"`         | A format string used to represent zsh.                       |
-| `powershell_indicator` | `"psh"`         | A format string used to represent powershell.                |
-| `ion_indicator`        | `"ion"`         | A format string used to represent ion.                       |
-| `elvish_indicator`     | `"esh"`         | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `"tsh"`         | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `"xsh"`         | A format string used to represent xonsh.                     |
-| `unknown_indicator`    | `""`            | The default value to be displayed when the shell is unknown. |
-| `format`               | `"$indicator "` | 组件格式化模板。                                                     |
-| `disabled`             | `true`          | Disables the `shell` module.                                 |
+| Option                 | 默认值                       | 描述                                                           |
+| ---------------------- | ------------------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `format`               | `"[$indicator]($style) "` | 组件格式化模板。                                                     |
+| `style`                | `"white bold"`            | 此组件的样式。                                                      |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variables
 
 | 字段        | 默认值 | 描述                                                         |
 | --------- | --- | ---------------------------------------------------------- |
 | indicator |     | Mirrors the value of `indicator` for currently used shell. |
+| style\* |     | Mirrors the value of option `style`.                       |
+
+\*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -2606,6 +2610,7 @@ The `shell` module shows an indicator for currently used shell.
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2839,7 +2844,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2859,7 +2864,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | 禁用 `time` 组件。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默认值为 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2885,7 +2890,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-`username` 组件显示当前活跃的用户名。 此组件只有满足以下条件之一时才会被显示：
+The `username` module shows active user's username. 此组件只有满足以下条件之一时才会被显示：
 
 - 当前用户是 root
 - 当前用户与登录用户不相同
