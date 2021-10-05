@@ -212,6 +212,7 @@ $nodejs\
 $ocaml\
 $perl\
 $php\
+$pulumi\
 $purescript\
 $python\
 $rlang\
@@ -2236,11 +2237,68 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 format = "via [🔹 $version](147 bold) "
 ```
 
+## Pulumi
+
+The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+
+::: tip
+
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+
+:::
+
+Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+
+- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+
+### Opções
+
+| Opções           | Padrão                           | Descrição                                                                            |
+| ---------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                                                    |
+| `version_format` | `"v${raw}"`                      | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                       |
+| `style`          | `"bold 5"`                       | O estilo do módulo.                                                                  |
+| `disabled`       | `false`                          | Disables the `pulumi` module.                                                        |
+
+### Variáveis
+
+| Variável  | Exemplo    | Descrição                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v0.12.24` | The version of `pulumi`           |
+| stack     | `dev`      | The current Pulumi stack          |
+| symbol    |            | Espelha o valor da opção `symbol` |
+| style\* |            | Espelha o valor da opção `style`  |
+
+\*: Essa variável só pode ser usada como parte de uma string de estilo
+
+### Exemplo
+
+#### With Pulumi Version
+
+```toml
+# ~/.config/starship.toml
+
+[pulumi]
+format = "[🛥 ($version )$stack]($style) "
+```
+
+#### Without Pulumi version
+
+```toml
+# ~/.config/starship.toml
+[pulumi]
+symbol = "🛥 "
+format = "[$symbol$stack]($style) "
+
+```
+
 ## PureScript
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Opções
@@ -2286,10 +2344,10 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- O diretório atual contem um arquivo `pyproject.toml`
-- O diretório atual contem um arquivo `requirements.txt`
-- O diretório atual contem um arquivo `setup.py`
-- O diretório atual contem um arquivo `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -2321,7 +2379,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 | Variável     | Exemplo         | Descrição                                  |
 | ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | A versão do `python`                       |
+| version      | `"v3.8.1"`      | The version of `python`                    |
 | symbol       | `"🐍 "`          | Espelha o valor da opção `symbol`          |
 | style        | `"yellow bold"` | Espelha o valor da opção `style`           |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
@@ -2341,7 +2399,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Apenas use o binário `python3` para pegar a versão.
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
@@ -2349,7 +2407,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-#Não acione arquivos com a extensão py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -2357,10 +2415,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Exibe a versão do python dentro de um local venv.
+# Display the version of python from inside a local venv.
 #
-# Observe que isso só funcionará quando o venv estiver dentro do projeto e somente
-# funcionar no diretório que contém o venv dir mas talvez isso esteja ok?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
@@ -2565,7 +2623,7 @@ symbol = "🌟 "
 
 ## Shell
 
-O módulo de `shell` exibe um indicador para o shell que esta sendo usado.
+The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
@@ -2577,8 +2635,8 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 | Opções                 | Padrão                    | Descrição                                                    |
 | ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`                     | Uma string para representar o bash.                          |
-| `fish_indicator`       | `fsh`                     | Uma string usada para representar o fish.                    |
+| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
 | `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
 | `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
 | `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
@@ -2868,7 +2926,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variável  | Exemplo    | Descrição                        |
 | --------- | ---------- | -------------------------------- |
-| horário   | `13:08:10` | The current time.                |
+| time      | `13:08:10` | The current time.                |
 | style\* |            | Espelha o valor da opção `style` |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
@@ -2935,7 +2993,7 @@ show_always = true
 
 The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `Vagrantfile`
+- The current directory contains a `Vagrantfile` file
 
 ### Opções
 
@@ -2943,18 +3001,18 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"⍱ "`                               | Um formato de string que representa o simbolo do Vagrant.                            |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                                  |
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["Vagrantfile"]`                    | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"cyan bold"`                        | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Desabilita o módulo `vagrant`.                                                       |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                                       |
 
 ### Variáveis
 
 | Variável  | Exemplo          | Descrição                         |
 | --------- | ---------------- | --------------------------------- |
-| version   | `Vagrant 2.2.10` | A versão do `Vagrant`             |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`          |
 | symbol    |                  | Espelha o valor da opção `symbol` |
 | style\* |                  | Espelha o valor da opção `style`  |
 
@@ -2972,8 +3030,8 @@ format = "via [⍱ $version](bold white) "
 ## V
 
 The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
-- O diretório atual cotem qualquer arquivo com a extensão `.v`
-- O diretório atual contem um arquivo `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Opções
 
@@ -2981,18 +3039,18 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`         | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"V "`                                       | Um formato de string que representa o simbolo do V                                   |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                         |
 | `detect_extensions` | `["v"]`                                      | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                         | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"blue bold"`                                | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                      | Desabilita o módulo `vlang`.                                                         |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                         |
 
 ### Variáveis
 
 | Variável  | Exemplo | Descrição                         |
 | --------- | ------- | --------------------------------- |
-| version   | `v0.2`  | A versão do `v`                   |
+| version   | `v0.2`  | The version of `v`                |
 | symbol    |         | Espelha o valor da opção `symbol` |
 | style\* |         | Espelha o valor da opção `style`  |
 
@@ -3021,7 +3079,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | Variável  | Exemplo                                     | Descrição                         |
 | --------- | ------------------------------------------- | --------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | O nome do repositório ativo       |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name        |
 | symbol    |                                             | Espelha o valor da opção `symbol` |
 | style\* | `black bold dimmed`                         | Espelha o valor da opção `style`  |
 
@@ -3059,7 +3117,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 | Variável  | Exemplo  | Descrição                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v0.6.0` | A versão do `zig`                 |
+| version   | `v0.6.0` | The version of `zig`              |
 | symbol    |          | Espelha o valor da opção `symbol` |
 | style\* |          | Espelha o valor da opção `style`  |
 
@@ -3074,7 +3132,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 symbol = "⚡️ "
 ```
 
-## Comandos Personalizados
+## Custom commands
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -3106,32 +3164,32 @@ The order in which custom modules are shown can be individually set by including
 
 ### Opções
 
-| Opções        | Padrão                          | Descrição                                                                                                                                                                        |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                    |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                       |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                               |
-| `descrição`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                     |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                            |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                      |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                       |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                            |
-| `style`       | `"bold green"`                  | O estilo do módulo.                                                                                                                                                              |
-| `format`      | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                             |
-| `disabled`    | `false`                         | Desabilita este módulo `custom`.                                                                                                                                                 |
-| `os`          |                                 | Nome do sistema operacional onde módulo sera exibido (unix, linux, macos, windows, ... ) [Veja os possíveis valores](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
+| Opções        | Padrão                          | Descrição                                                                                                                                                                     |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
+| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
+| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
+| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
+| `style`       | `"bold green"`                  | O estilo do módulo.                                                                                                                                                           |
+| `format`      | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                          |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
+| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### Variáveis
 
-| Variável  | Descrição                         |
-| --------- | --------------------------------- |
-| output    | A saída do comando no `shell`     |
-| symbol    | Espelha o valor da opção `symbol` |
-| style\* | Espelha o valor da opção `style`  |
+| Variável  | Descrição                              |
+| --------- | -------------------------------------- |
+| output    | The output of shell command in `shell` |
+| symbol    | Espelha o valor da opção `symbol`      |
+| style\* | Espelha o valor da opção `style`       |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
-#### Comandos personalizados de shell
+#### Custom command shell
 
 `shell` accepts a non-empty list of strings, where:
 
