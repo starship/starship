@@ -1,16 +1,16 @@
-# Presets
+# پێش ڕێکخستنەکان
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+ئەمە کۆکراوەیەکە لەو پێش ڕێکخستنانەی کە لەلایەن کۆمەڵگاوە نێردراون بۆ Starship. ئەگەر پێش ڕێکخستنێکت هەیە بۆ هاوبەشکردن، تکایە [PRـێک بنێرە](https://github.com/starship/starship/edit/master/docs/presets/README.md) کە ئەم پەڕگەیە نوێبکاتەوە! 😊
 
-## Nerd Font Symbols
+## هێماکانی Nerd Font
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+ئەم پێش ڕێکخستنە هیچ شتێک ناگۆڕێت جگە لە هێماکان کە بەکارهاتوون بۆ هەر moduleـێک. ئەگەر ئیمۆجیەکان ئەو شتە نین تۆ حەزت لێیە، ئەمە ڕەنگە سەرنجت ڕاکێشێت!
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
 ### پێشمەرجەکان
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- [Nerd Font](https://www.nerdfonts.com/)ـێک دامەزرێنراوە و چالاککراوە لە تێرمیناڵەکەتدا (بۆ نموونە Fira Code Nerd Font بەکاردەهێنێ)
 
 ### ڕێکخستن
 
