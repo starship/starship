@@ -114,10 +114,12 @@ impl<'a> Context<'a> {
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
 
-        // Pipestatus is an arguments list
         let pipestatus = arguments
             .values_of("pipestatus")
-            .map(|args| args.into_iter().map(String::from).collect());
+            .map(Context::get_and_flatten_pipestatus)
+            .flatten();
+
+        log::trace!("Received completed pipestatus of {:?}", pipestatus);
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
@@ -198,6 +200,26 @@ impl<'a> Context<'a> {
             return utils::home_dir().unwrap().join(without_home);
         }
         dir
+    }
+
+    /// Reads and appropriately flattens multiple args for pipestatus
+    pub fn get_and_flatten_pipestatus(args: clap::Values) -> Option<Vec<String>> {
+        // Due to shell differences, we can potentially receive individual or space
+        // separated inputs, e.g. "0","1","2","0" is the same as "0 1 2 0" and
+        // "0 1", "2 0". We need to accept all these formats and return a Vec<String>
+        let parsed_vals = args
+            .into_iter()
+            .map(|x| x.split_ascii_whitespace())
+            .flatten()
+            .map(|x| x.to_string())
+            .collect::<Vec<String>>();
+        // If the vector is zero-length, we should pretend that we didn't get a
+        // pipestatus at all (since this is the input `--pipestatus=""`)
+        if parsed_vals.is_empty() {
+            None
+        } else {
+            Some(parsed_vals)
+        }
     }
 
     /// Create a new module
