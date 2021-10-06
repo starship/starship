@@ -12,7 +12,7 @@ This preset doesn't change anything except for the symbols used for each module.
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [aws]
@@ -100,7 +100,7 @@ After:
 
 ![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [aws]
@@ -257,7 +257,7 @@ After (Plain Text Symbols):
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [character]
@@ -381,7 +381,7 @@ This preset hides the version of language runtimes. If you work in containers or
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [cmake]
@@ -478,7 +478,7 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ![Screenshot of Pure preset](/presets/pure-prompt.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 format = """
