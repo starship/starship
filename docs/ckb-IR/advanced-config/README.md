@@ -8,9 +8,9 @@
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## فرمانە کڕیاڕخوازەکانی pre-prompt و pre-execution لە Bashـدا
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+بەپێچەوانەی شێلەکانی دیکە Bash هیچ چوارچێوەیەکی فەرمی preexec/precmdـی نییە. لەبەر ئەوە، دابین کردنی قولابە تەواو کڕیارخوازکراوەکان ئاسان نییە لە `Bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
@@ -99,9 +99,9 @@ Produces a prompt like the following:
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
-  - `bold`
-  - `italic`
-  - `underline`
+  - `تۆخ`
+  - `لار`
+  - `بنهێڵ`
   - `dimmed`
   - `inverted`
   - `bg:<color>`
