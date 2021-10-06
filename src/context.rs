@@ -131,6 +131,12 @@ impl<'a> Context<'a> {
 
         let right = arguments.is_present("right");
 
+        let width = arguments
+            .value_of("terminal_width")
+            .and_then(|w| w.parse().ok())
+            .or_else(|| terminal_size().map(|(w, _)| w.0 as usize))
+            .unwrap_or(80);
+
         Context {
             config,
             properties,
@@ -141,9 +147,7 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             right,
-            width: terminal_size()
-                .map(|(w, _)| w.0 as usize)
-                .unwrap_or_default(),
+            width,
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]

@@ -74,6 +74,7 @@ function global:prompt {
         "prompt"
         "--path=$($cwd.Path)",
         "--logical-path=$($cwd.LogicalPath)",
+        "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)",
         "--jobs=$($jobs)"
     )
     
