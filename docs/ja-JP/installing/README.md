@@ -35,9 +35,19 @@ pkg install getconf
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
+## [Funtoo Linux](https://www.funtoo.org/Welcome)
+
+### インストール
+
+On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+
+```sh
+emerge app-shells/starship
+```
+
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### バイナリの取得
+### Getting the Binary
 
 #### Imperatively
 
@@ -47,14 +57,14 @@ nix-env -iA nixos.starship
 
 #### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
 
-`home.nix`ファイルで`programs.starship`を有効にして、設定を追加してください。
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
 
 ```nix
 {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # ~/.config/starship.toml に書き込まれる設定
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
@@ -69,7 +79,7 @@ nix-env -iA nixos.starship
 }
 ```
 
-そして、次を実行してください
+then run
 
 ```sh
 home-manager switch
@@ -77,7 +87,7 @@ home-manager switch
 
 #### Declarative, system-wide, with NixOS
 
-`configuration.nix`で`environment.systemPackages`に`pkgs.starship`を追加して、次を実行してください
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch
