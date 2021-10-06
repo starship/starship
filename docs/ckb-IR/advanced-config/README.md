@@ -76,7 +76,7 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh.
 
-### Example
+### نموونە
 
 ```toml
 # ~/.config/starship.toml
