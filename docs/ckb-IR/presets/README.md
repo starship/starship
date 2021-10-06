@@ -6,7 +6,7 @@
 
 ئەم پێش ڕێکخستنە هیچ شتێک ناگۆڕێت جگە لە هێماکان کە بەکارهاتوون بۆ هەر moduleـێک. ئەگەر ئیمۆجیەکان ئەو شتە نین تۆ حەزت لێیە، ئەمە ڕەنگە سەرنجت ڕاکێشێت!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![ڕوونماوێنەیەکی پێش ڕێکخستنی هێماکانی فۆنتی Nerd](/presets/nerd-font-symbols.png)
 
 ### پێشمەرجەکان
 
@@ -94,11 +94,11 @@ This preset changes the format of all the built-in modules to show their segment
 
 پێشتر:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![ڕوونماوێنەی ڕێکخستنی بنەڕەتی Starship](/presets/bracketed-segments-before.png)
 
 دواتر:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![ڕوونماوێنەی پێشڕێکخستنی Bracketed Segments](/presets/bracketed-segments-after.png)
 
 ### ڕێکخستن
 
