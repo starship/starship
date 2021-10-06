@@ -88,15 +88,15 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## پارچە کەوانەکراوەکان
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
-Before:
+پێشتر:
 
 ![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
 
-After:
+دواتر:
 
 ![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
 
@@ -245,15 +245,15 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## هێما نووسینەکییە ئاساییەکان
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+ئەم پێش ڕێکخستنە هێماکان دەگۆڕێت بۆ نووسینی ئاسایی. ئەگەر تێرمیناڵ/فۆنتەکەت ناتوانێ NerdFonts/ئیمۆجییەکان دەربخات، لەوانەیە پیویست بکا ئەم پێش ڕێکخستنە بەکاربهێنیت!
 
-Before (default setting with Fixedsys font):
+پێشتر (ڕێکخستنی بنەڕەتی لەگەڵ فۆنتی Fixedsys):
 
 ![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+دواتر (هێما نووسینەکییە ئاساییەکان):
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
@@ -375,9 +375,9 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## شاردنەوەی وەشانەکانی کاتی جێبەجێکردن
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+ئەم پێش ڕێکخستنە وەشانی کاتی جێبەجێکردنی زمانەکان دەشارێتەوە. ئەگەر کاردەکەیت لەگەڵ containerو ژینگە خەیاڵییەکان، ئەمە بۆ تۆیە!
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
@@ -472,9 +472,9 @@ format = 'via [$symbol]($style)'
 format = 'via [$symbol]($style)'
 ```
 
-## Pure
+## بێخەوش
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+ئەم پێش ڕێکخستنە لاسایی شێواز و ڕەفتاری [Pure](https://github.com/sindresorhus/pure) دەکاتەوە.
 
 ![Screenshot of Pure preset](/presets/pure-prompt.png)
 
