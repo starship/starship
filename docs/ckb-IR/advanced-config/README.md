@@ -1,10 +1,10 @@
 # ڕێکخستنی پێشکەوتوو
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+لەگەڵ ئەوەی Starship شێڵێکە بەکارهێنانی زۆرە، هەندێک جار دەسکاری کردنی `starship.toml` بەس نییە بۆ ئەوەی وای لێبکەی هەندێک شتی دیاریکراو ئەنجام بدات. ئەم پەڕەیە ووردەکاری زیاتر ئەدات لەسەر هەندێک لە شێوازە ڕێکخستنە پێشکەوتووترەکان کە لە Starshipـدا بەکارهاتووە.
 
-::: warning
+::: ئاگادارکردنەوە
 
-The configurations in this section are subject to change in future releases of Starship.
+ڕێکخستنەکانی ئەم بەشە شایەنی گۆڕانن لە وەشانەکانی داهاتووی Starshipدا.
 
 :::
 
