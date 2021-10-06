@@ -403,13 +403,13 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
+::: ئاگادارکردنەوە
 
 `error_symbol` is not supported on elvish and nu shell.
 
 :::
 
-::: warning
+::: ئاگادارکردنەوە
 
 `vicmd_symbol` is only supported in fish and zsh.
 
@@ -1559,13 +1559,13 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: warning
+::: ئاگادارکردنەوە
 
 This module is not supported on tcsh and nu.
 
 :::
 
-::: warning
+::: ئاگادارکردنەوە
 
 The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
