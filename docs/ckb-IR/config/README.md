@@ -1,12 +1,12 @@
-# Configuration
+# ڕێکخستن
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+بۆ دەسکردن بە ڕێکخستنی Starship، پەڕگەیەک دروست بکە بەم جۆرە: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+هەموو ڕێکخستنەکان بۆ Starship ئەنجام ئەدرێن لەم پەڕگەی [TOML](https://github.com/toml-lang/toml)ـەدا:
 
 ```toml
 # Inserts a blank line between shell prompts
@@ -59,17 +59,17 @@ By convention, most modules have a prefix of default terminal color (e.g. `via` 
 
 Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
-#### Variable
+#### گۆڕاو
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
 
-For example:
+بۆ نموونە:
 
 - `$version` is a format string with a variable named `version`.
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
 - `$git_branch $git_commit` has the two variables separated with a space.
 
-#### Text Group
+#### کۆمەڵە نووسین
 
 A text group is made up of two different parts.
 
@@ -77,7 +77,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-For example:
+بۆ نموونە:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+بۆ نموونە:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
