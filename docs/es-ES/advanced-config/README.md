@@ -31,35 +31,47 @@ trap blastoff DEBUG     # Trampa DEBUG *antes* de la ejecución de Starship
 eval $(starship init bash)
 ```
 
-## Cambiar el Título de la Ventana
+## Custom pre-prompt and pre-execution Commands in PowerShell
 
-Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `Bash` o `zsh`.
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
 
-Primero, define una función para el cambio de título de la ventana (idéntico en Bash y zsh):
+Create a function named `Invoke-Starship-PreCommand`
 
-```bash
-function set_win_title(){
-    echo -ne "\033]0; TU_TÍTULO_DE_VENTANA_AQUÍ \007"
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
 }
 ```
 
-Puedes usar variables para personalizar este título (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
+## Change Window Title
 
-En `Bash`, establece que esta función sea la función precmd de Starship:
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+
+First, define a window title change function (identical in bash and zsh):
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+}
+```
+
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-En `zsh`, añade esto al array `precmd_functions`:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Si te gusta el resultado, añade estas líneas a tu archivo de configuración del intérprete de comandos (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Por ejemplo, si quieres mostrar tu directorio actual en el título de la pestaña de la terminal, añade el siguiente fragmento a tu `~/.bashrc` o `~/.zshrc`:
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -68,27 +80,38 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Gabilitar Prompt Derecho
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
 
-Algunos intérpretes de órdenes soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt correcto usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
 
-Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo fill](/config/#fill).
+Invoke-Expression (&starship init powershell)
+```
 
-`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh.
+## Enable Right Prompt
+
+Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+
+Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+
+`right_format` is currently supported for the following shells: elvish, fish, zsh.
 
 ### Ejemplo
 
 ```toml
-# ~/.config/starship. oml
+# ~/.config/starship.toml
 
-# Un prompt izquierdo mínimo
+# A minimal left prompt
 format = """$character"""
 
-# mueve el resto del mensaje a la derecha
+# move the rest of the prompt to the right
 right_format = """$all"""
 ```
 
-Produce un prompt como el siguiente:
+Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
@@ -97,7 +120,7 @@ Produce un prompt como el siguiente:
 
 ## Cadenas de estilo
 
-Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `bold` y `BoLd` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `italic`
@@ -109,14 +132,14 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
   - `<color>`
   - `none`
 
-donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Un especificador de color puede ser uno de los siguientes:
+A color specifier can be one of the following:
 
  - Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puedes agregar el prefijo `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
  - Un `#` seguido de un número hexadecimal de seis dígitos. Esto especifica un [código hexadecimal de color RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Un número entre 0-255. Esto especifica un [Código de color ANSI de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
-Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
