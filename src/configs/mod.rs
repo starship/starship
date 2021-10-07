@@ -76,8 +76,8 @@ pub use starship_root::*;
 #[serde(default)]
 pub struct FullConfig<'a> {
     // Root config
-    pub format: &'a str,
-    pub right_format: &'a str,
+    pub format: String,
+    pub right_format: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -152,8 +152,8 @@ pub struct FullConfig<'a> {
 impl<'a> Default for FullConfig<'a> {
     fn default() -> Self {
         Self {
-            format: "$all",
-            right_format: "",
+            format: "$all".to_string(),
+            right_format: "".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
