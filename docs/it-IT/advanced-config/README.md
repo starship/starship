@@ -31,41 +31,64 @@ trap blastoff DEBUG # Trap DEBUG *prima* di eseguire starship
 eval $(starship bash)
 ```
 
-## Cambia il titolo della finestra
+## Custom pre-prompt and pre-execution Commands in PowerShell
 
-Alcune shell prompt cambieranno automaticamente il titolo della finestra (ad esempio per riflettere la directory di lavoro). Fish lo fa per impostazione predefinita. Starship non lo fa, ma è abbastanza semplice aggiungere questa funzionalità a `bash` o `zsh`.
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Tuttavia, Starship dà la limitata possibilità di inserire le tue funzioni nella procedura prompt-rendering:
 
-Innanzitutto, bisogna definire una funzione per il cambio del titolo della finestra (identica sia per bash che zsh):
+Create a function named `Invoke-Starship-PreCommand`
 
-```bash
-function set_win_title(){
-    echo -ne "\033]0; IL_TUO_TITOLO_QUI \007"
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
 }
 ```
 
-Puoi usare delle variabili per personalizzare questo titolo (`$USER`, `$HOSTNAME`, e `$PWD` sono le scelte più popolari).
+## Change Window Title
 
-In `bash`, impostare questa funzione per essere la precmd Starship function:
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+
+First, define a window title change function (identical in bash and zsh):
+
+```bash
+function set_win_title(){
+    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+}
+```
+
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, aggiungi questo `precmd_functions` all'array:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Se ti piace il risultato, aggiungi queste righe al tuo file shell di configurazione (`~/.bashrc` o `~/.zshrc`) per renderlo permanente.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Ad esempio, se desideri visualizzare la directory corrente nel titolo della scheda del terminale, aggiungi la seguente snippet al tuo `~/.bashrc` or `~/.zshrc`:
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Enable Right Prompt
@@ -97,7 +120,7 @@ Produces a prompt like the following:
 
 ## Stile delle Stringhe
 
-Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le parole non sono sensibili alle maiuscole (cioè `grassetto` e `BoLd` sono considerate la stessa stringa). Ogni parola può essere una delle seguenti:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `italic`
@@ -109,14 +132,14 @@ Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le par
   - `<color>`
   - `none`
 
-dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa, anche se questo potrebbe cambiare in futuro. `inverted` scambia lo sfondo e i colori in primo piano. L'ordine delle parole nella stringa non conta.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-Il token `none` sovrascrive tutti gli altri token in una stringa se non fa parte di uno specificatore `bg:`, così ad esempio `fg:red none fg:blue` creerà una stringa senza stile. `bg:none` imposta come colore di sfondo quello predefinito così `fg:red bg:none` è equivalente a `red` o `fg:red` e `bg:green fg:red bg:none` è equivalente a `fg:red` o `red`. Potrà diventare un errore usare `none` in combinazione con altri token in futuro.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Uno colore specifico può essere uno di questi:
+A color specifier can be one of the following:
 
  - Uno dei colori standard del terminale: `nero`, `rosso`, `verde`, `blu`, `giallo`, `viola`, `ciano`, `bianco`. Puoi eventualmente utilizzare il prefisso `bright-` per ottenere la versione luminosa (es. `bright-white`).
  - Un `#` seguito da un valore esadecimale a sei cifre. Questo specifica un [colore esagesimale in RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
  - Un numero compreso tra 0-255. Specifica un [codice colore ANSI a 8 bit](https://i.stack.imgur.com/KTSQa.png).
 
-Se sono specificati più colori per il primo piano/sfondo, l'ultimo nella stringa avrà la priorità.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
