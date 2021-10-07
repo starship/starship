@@ -63,6 +63,13 @@ function global:prompt {
         $process.StandardOutput.ReadToEnd();
     }
 
+    # Invoke precmd, if specified
+    try {
+        if (Test-Path function:Invoke-Starship-PreCommand) {
+            Invoke-Starship-PreCommand
+        }
+    } catch {}
+
     $origDollarQuestion = $global:?
     $origLastExitCode = $global:LASTEXITCODE
 
