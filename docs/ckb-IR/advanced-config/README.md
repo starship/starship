@@ -31,6 +31,18 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
+## Custom pre-prompt and pre-execution Commands in PowerShell
+
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+
+Create a function named `Invoke-Starship-PreCommand`
+
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
+}
+```
+
 ## Change Window Title
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
@@ -66,6 +78,17 @@ function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Enable Right Prompt
@@ -109,7 +132,7 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `هیچ`
 
-کە `<color>` دیاریکەری ڕەنگێکە (لە ژێرەوە باسکراوە). `fg:<color>` و `<color>` لە ئێستادا هەمان شت ئەکەن، بەڵام ئەمە ڕەنگە لە داهاتووا بگۆڕێت. `inverted` ڕەنگی پاشبنەما و پێشبنەما ئەگۆڕێتەوە. ڕیزبەندی ووشەکان لە زنجیرەکەدا گرنگ نییە.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
