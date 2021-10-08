@@ -2367,7 +2367,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_extensions`  | `["py"]`                                                                                                     | Qué extensiones deben activar este módulo                                               |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                           |
+| `disabled`           | `false`                                                                                                      | Deshabilita el módulo `python`.                                                         |
 
 ::: consejo
 
@@ -2379,13 +2379,13 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Ejemplo         | Descripción                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`          | Refleja el valor de la opción `symbol`     |
-| style        | `"yellow bold"` | Refleja el valor de la opción `style`      |
-| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | The current `virtualenv` name              |
+| Variable     | Ejemplo         | Descripción                                  |
+| ------------ | --------------- | -------------------------------------------- |
+| version      | `"v3.8.1"`      | La versión de `python`                       |
+| symbol       | `"🐍 "`          | Refleja el valor de la opción `symbol`       |
+| style        | `"yellow bold"` | Refleja el valor de la opción `style`        |
+| pyenv_prefix | `"pyenv "`      | Refleja el valor de la opción `pyenv_prefix` |
+| virtualenv   | `"venv"`        | El nombre actual del `virtualenv`            |
 
 ### Ejemplo
 
@@ -2401,7 +2401,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = "python3"
 ```
 
@@ -2409,7 +2409,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# No se dispara con archivos con extensión py
 detect_extensions = []
 ```
 
@@ -2417,24 +2417,24 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Muestra la versión de python desde dentro de un entorno virtual local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
+# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.org/). El módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
+- El directorio actual contiene un archivo con la extensión `.R`.
+- El directorio actual contiene un archivo con la extensión `.Rd`.
+- El directorio actual contiene un archivo con la extensión `.Rmd`.
+- El directorio actual contiene un archivo con la extensión `.Rproj`.
+- El directorio actual contiene un archivo con la extensión `.Rsx`.
+- El directorio actual contiene un archivo `.Rprofile`
+- El directorio actual contiene una carpeta `.Rproj.user`
 
 ### Opciones
 
