@@ -1551,40 +1551,40 @@ symbol = "🌟 "
 
 ## Trabajos
 
-El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas ejecutados si hay al menos 2 tareas, o más del valor de configuración de `number_threshold`, si existe. El módulo mostrará un símbolo si hay al menos 1 tarea, o más del valor de configuración de `symbol_threshold`, si existe. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas ejecutados si hay al menos 2 tareas, o más del valor de configuración de `number_threshold`, si existe. El módulo mostrará un símbolo si hay al menos 1 tarea, o más del valor de configuración de `symbol_threshold`, si existe. Puedes establecer ambos valores a 0 para *siempre* mostrar el símbolo y el número de tareas, incluso si hay 0 tareas en ejecución.
 
-The default functionality is:
+La funcionalidad por defecto es:
 
-- 0 jobs -> Nothing is shown.
-- 1 job -> `symbol` is shown.
-- 2 jobs or more -> `symbol` + `number` are shown.
+- 0 tareas -> Nada se muestra.
+- 1 tarea -> `symbol` se muestra.
+- 2 tareas o más -> `symbol` + `number` son mostrados.
 
 ::: aviso
 
-This module is not supported on tcsh and nu.
+Este módulo no está soportado por tcsh y nu.
 
 :::
 
 ::: aviso
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+La opción `threshold` está obsoleta, pero si deseas usarla, el módulo mostrará el número de tareas en ejecución si hay más de 1 tarea, o más que el valor de configuración `threshold`, si existe. Si `threshold` se establece en 0, entonces el módulo también se mostrará cuando haya 0 tareas en ejecución.
 
 :::
 
 ### Opciones
 
-| Opción             | Por defecto                   | Descripción                                                              |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`\*    | `1`                           | Muestra el número de tareas si se exceden.                               |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                   |
-| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `"bold blue"`                 | El estilo del módulo.                                                    |
-| `disabled`         | `false`                       | Desactiva el módulo `jobs`.                                              |
- \*: This option is deprecated, please use the 
+| Opción             | Por defecto                   | Descripción                                                                        |
+| ------------------ | ----------------------------- | ---------------------------------------------------------------------------------- |
+| `threshold`\*    | `1`                           | Muestra el número de tareas si se exceden.                                         |
+| `symbol_threshold` | `1`                           | Muestra `symbol` si el conteo de tareas es al menos `symbol_threshold`.            |
+| `number_threshold` | `2`                           | Muestra el número de tareas si el conteo de tareas es al menos `symbol_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                             |
+| `symbol`           | `"✦"`                         | La cadena utilizada para representar la variable `symbol`.                         |
+| `style`            | `"bold blue"`                 | El estilo del módulo.                                                              |
+| `disabled`         | `false`                       | Desactiva el módulo `jobs`.                                                        |
+ \*: Esta opción está desaprobada, por favor utiliza las opciones 
 
-`number_threshold` and `symbol_threshold` options instead.
+`number_threshold` y `symbol_threshold` en su lugar.
 
 ### Variables
 
@@ -1609,7 +1609,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `julia` muestra la versión instalada de [Julia](https://julialang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Project.toml`
 - El directorio actual contiene un archivo `Manifest.toml`
@@ -1649,7 +1649,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `kotlin` muestra la versión instalada de [Kotlin](https://kotlinlang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.kt` o un `.kts`
 
@@ -1696,7 +1696,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
+Muestra el nombre actual del [contexto de Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) y, si se establece, el espacio de nombres del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-cluster --namespace astronaut`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
 ::: consejo
 
@@ -1739,11 +1739,11 @@ disabled = false
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-#### Regex Matching
+#### Busqueda por Regex
 
-Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+Adicional al alias simple, `context_aliases` también soporta coincidencias extendidas y renombradas usando expresiones regulares.
 
-The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+La expresión regular debe coincidir en todo el contexto de kube. los grupos de captura pueden ser referenciados usando `$name` y `$N` en el reemplazo. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
 
 Long and automatically generated cluster names can be identified and shortened using regular expressions:
 
