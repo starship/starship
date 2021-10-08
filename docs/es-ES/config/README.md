@@ -789,7 +789,7 @@ truncation_symbol = "…/"
 
 ## Contexto de Docker
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.com/engine/context/working-with-contexts/) actualmente activo si no está definido en `por defecto` o si las variables de entorno `DOCKER_HOST` o `DOCKER_CONTEXT` están definidas (como se entiende para sobrescribir el contexto en uso).
 
 ### Opciones
 
@@ -882,7 +882,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `elixir` muestra la versión instalada de [Elixir](https://elixir-lang.org/) y [Erlang/OTP](https://erlang.org/doc/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `mix.exs`.
 
@@ -921,7 +921,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `elm` muestra la versión instalada de [Elm](https://elm-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `elm.json`
 - El directorio actual contiene un archivo `elm-package.json`
@@ -963,15 +963,15 @@ format = "via [ $version](cyan bold) "
 
 ## Variable de entorno
 
-The `env_var` module displays the current value of a selected environment variables. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
+El módulo `env_var` muestra el valor actual de una variable de entorno seleccionada. El módulo se mostrará sólo si se cumplen cualquiera de las siguientes condiciones:
 
 - La opción de configuración de `variable` coincide con una variable de entorno existente
 - La opción de configuración de `variable` no está definida, pero la opción de configuración `predeterminada` se encuentra
 
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: consejo Múltiples variables de entorno pueden mostrarse usando un `.`. (ver ejemplo) Si la opción de configuración de la `variable` no está definida, el módulo mostrará el valor de la variable bajo el nombre del texto después del caracter `.`.
 
-Example: following configuration will display value of USER environment variable
+Ejemplo: la siguiente configuración mostrará el valor de la variable de entorno USER
 ```toml
 # ~/.config/starship.toml
 
@@ -1010,7 +1010,7 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-Displaying multiple environmental variables:
+Mostrando múltiples variables de entorno:
 ```toml
 # ~/.config/starship.toml
 
@@ -1023,7 +1023,7 @@ default = "unknown user"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `erlang` muestra la versión instalada de [Erlang/OTP](https://erlang.org/doc/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `rebar.config`.
 - El directorio actual contiene un fichero `erlang.mk`.
@@ -1062,7 +1062,7 @@ format = "via [e $version](bold red) "
 
 ## Llenar
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. Esto es útil para alinear otros módulos.
+El módulo `fill` llena cualquier espacio extra en la línea con un símbolo. Si múltiples módulos `fill` están presentes en una línea, dividirán el espacio equitativamente entre ellos. Esto es útil para alinear otros módulos.
 
 ### Opciones
 
@@ -1082,7 +1082,7 @@ symbol = "-"
 style = "bold green"
 ```
 
-Produces a prompt that looks like:
+Produce un prompt que se ve como:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1109,7 +1109,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 | --------- | ------------- | ----------------------------------------------------------------------------- |
 | region    | `us-central1` | La región GCP actual                                                          |
 | cuenta    | `foo`         | El perfil actual de GCP                                                       |
-| dominio   | `ejemplo.com` | The current GCP profile domain                                                |
+| dominio   | `ejemplo.com` | El dominio actual del perfil GCP                                              |
 | proyecto  |               | El proyecto GCP actual                                                        |
 | activo    | `default`     | El nombre de configuración activo escrito en `~/.config/gcloud/active_config` |
 | symbol    |               | Refleja el valor de la opción `symbol`                                        |
@@ -1265,9 +1265,9 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git Metrics
+## Métricas de Git
 
-The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+El módulo `git_metrics` mostrará el número de líneas añadidas y eliminadas en el repositorio git actual.
 
 ::: consejo
 
@@ -1279,8 +1279,8 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 | Opción               | Por defecto                                                  | Descripción                           |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `"bold green"`                                               | The style for the added count.        |
-| `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
+| `added_style`        | `"bold green"`                                               | El estilo para el recuento añadido.   |
+| `deleted_style`      | `"bold red"`                                                 | El estilo para el recuento eliminado. |
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | El formato del módulo.                |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
