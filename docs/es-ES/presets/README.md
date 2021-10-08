@@ -474,7 +474,7 @@ format = 'via [$symbol]($style)'
 
 ## Pure
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Esta configuración predeterminada emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
 
 ![Screenshot of Pure preset](/presets/pure-prompt.png)
 
