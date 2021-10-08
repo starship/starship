@@ -1,5 +1,20 @@
 use std::path::Path;
 
+pub struct Parents<'a>(Option<&'a Path>);
+
+impl<'a> Iterator for Parents<'a> {
+    type Item = &'a Path;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some(path) = self.0 {
+            self.0 = path.parent();
+            Some(path)
+        } else {
+            None
+        }
+    }
+}
+
 pub trait PathExt {
     /// Compare this path with another path, ignoring
     /// the differences between Verbatim and Non-Verbatim paths.
@@ -13,6 +28,9 @@ pub trait PathExt {
     /// E.g. `\\?\UNC\server\share\foo` => `\foo`
     /// E.g. `/foo/bar` => `/foo/bar`
     fn without_prefix(&self) -> &Path;
+    /// Creates an iterator over all parents
+    /// The first item is it self
+    fn parents(&self) -> Parents;
 }
 
 #[cfg(windows)]
@@ -80,6 +98,10 @@ impl PathExt for Path {
         let (_, path) = normalize::normalize_path(self);
         path
     }
+
+    fn parents(&self) -> Parents {
+        Parents(Some(self))
+    }
 }
 
 // NOTE: Windows path prefixes are only parsed on Windows.
@@ -99,6 +121,10 @@ impl PathExt for Path {
     #[inline]
     fn without_prefix(&self) -> &Path {
         self
+    }
+
+    fn parents(&self) -> Parents {
+        Parents(Some(self))
     }
 }
 
