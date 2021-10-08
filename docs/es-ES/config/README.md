@@ -2442,7 +2442,7 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"📐"`                                | A format string representing the symbol of R.                                           |
+| `symbol`            | `"📐"`                                | Una cadena de formato que representa el símbolo de R.                                   |
 | `style`             | `"blue bold"`                        | El estilo del módulo.                                                                   |
 | `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Qué extensiones deben activar este módulo                                               |
 | `detect_files`      | `[".Rprofile"]`                      | Qué nombres de archivo deben activar este módulo                                        |
