@@ -2447,13 +2447,13 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 | `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Qué extensiones deben activar este módulo                                               |
 | `detect_files`      | `[".Rprofile"]`                      | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`    | `[".Rproj.user"]`                    | Qué carpetas deben activar este módulo                                                  |
-| `disabled`          | `false`                              | Disables the `r` module.                                                                |
+| `disabled`          | `false`                              | Deshabilita el módulo `r`.                                                              |
 
 ### Variables
 
 | Variable | Ejemplo       | Descripción                            |
 | -------- | ------------- | -------------------------------------- |
-| version  | `v4.0.5`      | The version of `R`                     |
+| version  | `v4.0.5`      | La versión de `R`                      |
 | symbol   |               | Refleja el valor de la opción `symbol` |
 | style    | `"blue bold"` | Refleja el valor de la opción `style`  |
 
@@ -2468,9 +2468,9 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red](https://www.red-lang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- El directorio actual contiene un archivo con extensión `.red` o `.Red`
 
 ### Opciones
 
@@ -2478,18 +2478,18 @@ By default the `red` module shows the currently installed version of [Red](https
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                                         |
+| `symbol`            | `"🔺 "`                               | Una cadena de formato que representa el símbolo de Red.                                 |
 | `detect_extensions` | `["red"]`                            | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"red bold"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `red` module.                                                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `rojo`.                                                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.5.1` | The version of `red`                   |
+| version   | `v2.5.1` | La versión de `red`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2506,11 +2506,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `ruby` muestra la versión actualmente instalada de [Ruby](https://www.ruby-lang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- El directorio actual contiene un archivo `Gemfile`
+- El directorio actual contiene un archivo `.ruby-version`
+- El directorio actual contiene un archivo `.rb`
 
 ### Opciones
 
@@ -2518,18 +2518,18 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                                        |
+| `symbol`            | `"💎 "`                               | Una cadena de formato que representa el símbolo de Ruby.                                |
 | `detect_extensions` | `["rb"]`                             | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                                             |
+| `disabled`          | `false`                              | Deshabilita el módulo `ruby`.                                                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`                  |
+| version   | `v2.5.1` | La versión de `ruby`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2546,10 +2546,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://www.rust-lang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- El directorio actual contiene un archivo `Cargo.toml`
+- El directorio actual contiene un archivo con la extensión `.rs`
 
 ### Opciones
 
@@ -2557,18 +2557,18 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                                         |
+| `symbol`            | `"🦀 "`                               | Una cadena de formato que representa el símbolo de Rust                                 |
 | `detect_extensions` | `["rs"]`                             | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["Cargo.toml"]`                     | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `rust` module.                                                             |
+| `disabled`          | `false`                              | Deshabilita el módulo `rust`.                                                           |
 
 ### Variables
 
 | Variable  | Ejemplo           | Descripción                            |
 | --------- | ----------------- | -------------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`                 |
+| version   | `v1.43.0-nightly` | La versión de `rustc`                  |
 | symbol    |                   | Refleja el valor de la opción `symbol` |
 | style\* |                   | Refleja el valor de la opción `style`  |
 
@@ -2585,11 +2585,11 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `scala` muestra la versión actualmente instalada de [Scala](https://www.scala-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- El directorio actual contiene un archivo `build.sbt`, `.scalaenv` o `.sbtenv`
+- El directorio actual contiene un archivo con la extensión `.scala` o `.sbt`
+- El directorio actual contiene un directorio llamado `.metals`
 
 ### Opciones
 
@@ -2600,15 +2600,15 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `detect_extensions` | `["sbt", "scala"]`                       | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[".metals"]`                            | Qué carpetas deberían activar estos módulos.                                            |
-| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                                       |
+| `symbol`            | `"🆂 "`                                   | Una cadena de formato que representa el símbolo de Scala.                               |
 | `style`             | `"red dimmed"`                           | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                                            |
+| `disabled`          | `false`                                  | Deshabilita el módulo `scala`.                                                          |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `2.13.5` | The version of `scala`                 |
+| version   | `2.13.5` | La versión de `scala`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2625,7 +2625,7 @@ symbol = "🌟 "
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+El módulo `shell` muestra un indicador para el intérprete de comandos actualmente utilizado.
 
 ::: consejo
 
@@ -2635,27 +2635,27 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                 | Por defecto               | Descripción                                                  |
-| ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
-| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
-| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
-| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
-| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
-| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
-| `format`               | `"[$indicator]($style) "` | El formato del módulo.                                       |
-| `style`                | `"white bold"`            | El estilo del módulo.                                        |
-| `disabled`             | `true`                    | Disables the `shell` module.                                 |
+| Opción                 | Por defecto               | Descripción                                                             |
+| ---------------------- | ------------------------- | ----------------------------------------------------------------------- |
+| `bash_indicator`       | `bsh`                     | Una cadena de formato usada para representar bash.                      |
+| `fish_indicator`       | `fsh`                     | Una cadena de formato usada para representar fish.                      |
+| `zsh_indicator`        | `zsh`                     | Una cadena de formato usada para representar zsh.                       |
+| `powershell_indicator` | `psh`                     | Una cadena de formato usada para representar powershell.                |
+| `ion_indicator`        | `ion`                     | Una cadena de formato usada para representar ion.                       |
+| `elvish_indicator`     | `esh`                     | Una cadena de formato usada para representar elvish.                    |
+| `tcsh_indicator`       | `tsh`                     | Una cadena de formato usada para representar tcsh.                      |
+| `xonsh_indicator`      | `xsh`                     | Una cadena de formato usada para representar xonsh.                     |
+| `unknown_indicator`    |                           | El valor por defecto que se mostrará cuando se desconoce el intérprete. |
+| `format`               | `"[$indicator]($style) "` | El formato del módulo.                                                  |
+| `style`                | `"white bold"`            | El estilo del módulo.                                                   |
+| `disabled`             | `true`                    | Deshabilita el módulo `shell`.                                          |
 
 ### Variables
 
-| Variable  | Por defecto | Descripción                                                |
-| --------- | ----------- | ---------------------------------------------------------- |
-| indicator |             | Mirrors the value of `indicator` for currently used shell. |
-| style\* |             | Mirrors the value of option `style`.                       |
+| Variable  | Por defecto | Descripción                                                                           |
+| --------- | ----------- | ------------------------------------------------------------------------------------- |
+| indicator |             | Refleja el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
+| style\* |             | Refleja el valor de la opción `style`.                                                |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2674,13 +2674,13 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+El módulo `shlvl` muestra la variable de entorno [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") actual, si está establecido en un número y reúne o supera el umbral especificado.
 
 ### Opciones
 
 | Opción      | Por defecto                  | Descripción                                                   |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                            |
+| `threshold` | `2`                          | Mostrar el umbral.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                        |
 | `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
@@ -2804,7 +2804,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2948,7 +2948,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -3098,7 +3098,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - The current directory contains a `.zig` file
 
