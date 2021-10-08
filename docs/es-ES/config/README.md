@@ -176,7 +176,7 @@ La varieble `format` por defecto se utiliza para definir el formato del prompt, 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# El cual es equivalente a
 format = """
 $username\
 $hostname\
