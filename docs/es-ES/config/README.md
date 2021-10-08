@@ -1277,22 +1277,22 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción               | Por defecto                                                  | Descripción                           |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `"bold green"`                                               | El estilo para el recuento añadido.   |
-| `deleted_style`      | `"bold red"`                                                 | El estilo para el recuento eliminado. |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | El formato del módulo.                |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| Opción               | Por defecto                                                  | Descripción                                        |
+| -------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| `added_style`        | `"bold green"`                                               | El estilo para el recuento añadido.                |
+| `deleted_style`      | `"bold red"`                                                 | El estilo para el recuento eliminado.              |
+| `only_nonzero_diffs` | `true`                                                       | Mostrar sólo el estado de los elementos cambiados. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | El formato del módulo.                             |
+| `disabled`           | `true`                                                       | Deshabilita el módulo `git_metrics`.               |
 
 ### Variables
 
-| Variable          | Ejemplo | Descripción                                 |
-| ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variable          | Ejemplo | Descripción                                   |
+| ----------------- | ------- | --------------------------------------------- |
+| added             | `1`     | El número actual de líneas añadidas           |
+| deleted           | `2`     | El número actual de líneas eliminadas         |
+| added_style\*   |         | Refleja el valor de la opción `added_style`   |
+| deleted_style\* |         | Refleja el valor de la opción `deleted_style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1319,7 +1319,7 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 | `ahead`      | `"⇡"`                                           | El formato de `ahead`                    |
 | `behind`     | `"⇣"`                                           | El formato de `behind`                   |
 | `diverged`   | `"⇕"`                                           | El formato de `diverged`                 |
-| `up_to_date` | `""`                                            | The format of `up_to_date`               |
+| `up_to_date` | `""`                                            | El formato de `up_to_date`               |
 | `untracked`  | `"?"`                                           | El formato de `untracked`                |
 | `stashed`    | `"$"`                                           | El formato de `stashed`                  |
 | `modificado` | `"!"`                                           | El formato de `modified`                 |
@@ -1333,18 +1333,18 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 Las siguientes variables se pueden utilizar en `format`:
 
-| Variable       | Descripción                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                    |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                             |
-| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                             |
-| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                         |
-| `modificado`   | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                          |
-| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                                    |
-| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                            |
-| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                       |
-| style\*      | Refleja el valor de la opción `style`                                                                         |
+| Variable       | Descripción                                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `all_status`   | Atajo para `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                               |
+| `ahead_behind` | Muestra la cadena de formato de `diverged` `ahead` o `behind` o `up_to_date` basado en el estado actual del repositorio. |
+| `conflicted`   | Muestra `conflicted` cuando esta rama tiene conflictos de fusión.                                                        |
+| `untracked`    | Muestra `untracked` cuando hay archivos sin rastrear en el directorio de trabajo.                                        |
+| `stashed`      | Muestra `stashed` cuando existe un "stash" para el repositorio local.                                                    |
+| `modificado`   | Muestra `modified` cuando hay modificaciones de archivo en el directorio de trabajo.                                     |
+| `staged`       | Muestra `staged` cuando se ha añadido un nuevo archivo al área de "stash".                                               |
+| `renamed`      | Muestra `renamed` cuando un archivo renombrado ha sido añadido al área de "stash".                                       |
+| `deleted`      | Muestra `deleted` cuando un archivo ha sido añadido al área de "stash".                                                  |
+| style\*      | Refleja el valor de la opción `style`                                                                                    |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1393,7 +1393,7 @@ behind = "⇣${count}"
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `go.mod`
 - El directorio actual contiene un archivo `go.sum`
@@ -1438,7 +1438,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `helm` muestra la versión instalada de [Helm](https://helm.sh/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `helmfile.yaml`
 - El directorio actual contiene un archivo `Chart.yaml`
@@ -1512,7 +1512,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `java` muestra la versión instalada de [Java](https://www.oracle.com/java/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, o `build.boot`
 - El directorio actual contiene un archivo con la extensión `.java`, `.class`, `.gradle` o `.jar`, `.clj` o `.cljc`
@@ -1551,7 +1551,7 @@ symbol = "🌟 "
 
 ## Trabajos
 
-El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas ejecutados si hay al menos 2 tareas, o más del valor de configuración de `number_threshold`, si existe. El módulo mostrará un símbolo si hay al menos 1 tarea, o más del valor de configuración de `symbol_threshold`, si existe. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
