@@ -2119,7 +2119,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - [**Poetry**](https://python-poetry.org/) – La versión del paquete `poetry` se extrae del `pyproject.toml` presente en el directorio actual
 - [**Python**](https://www.python.org) – La versión del paquete `python` se extrae del `setup.cfg` presente en el directorio actual
 - [**Composer**](https://getcomposer.org/) – La versión del paquete `composer` se extrae del `composer.json` presente en el directorio actual
-- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
+- [**Gradle**](https://gradle.org/) – La versión del paquete `gradle` es extraída del `build.gradle` presente en directorio actual
 - [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
 - [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
 - [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
