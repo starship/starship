@@ -31,6 +31,7 @@ impl<'a> Default for PythonConfig<'a> {
             disabled: false,
             detect_extensions: vec!["py"],
             detect_files: vec![
+                ".envrc",
                 "requirements.txt",
                 ".python-version",
                 "pyproject.toml",
