@@ -55,6 +55,7 @@ mod shell;
 mod shlvl;
 mod singularity;
 mod status;
+mod sudo;
 mod swift;
 mod terraform;
 mod time;
@@ -139,6 +140,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
+            "sudo" => sudo::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -226,6 +228,7 @@ pub fn description(module: &str) -> &'static str {
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
         "status" => "The status of the last command",
+        "sudo" => "The current status of sudo cached credentials",
         "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
