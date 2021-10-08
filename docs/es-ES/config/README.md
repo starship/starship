@@ -2725,7 +2725,7 @@ El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/si
 
 | Variable  | Ejemplo      | Descripción                            |
 | --------- | ------------ | -------------------------------------- |
-| env       | `centos.img` | The current Singularity image          |
+| env       | `centos.img` | La imagen de Singularity actual        |
 | symbol    |              | Refleja el valor de la opción `symbol` |
 | style\* |              | Refleja el valor de la opción `style`  |
 
@@ -2742,7 +2742,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`.
 
 ::: consejo
 
@@ -2750,7 +2750,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: advertencia Este módulo no es compatible con los intérpretes de comandos Elvish y Nu. :::
 
 ### Opciones
 
