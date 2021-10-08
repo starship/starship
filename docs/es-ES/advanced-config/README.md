@@ -31,11 +31,11 @@ trap blastoff DEBUG     # Trampa DEBUG *antes* de la ejecución de Starship
 eval $(starship init bash)
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## Comandos pre-prompt y pre-ejecución personalizados en PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
+Powershell no posee un framework oficial de preexec/precmd como la mayoría de los demás intérpretes de comandos. Debido a esto, es difícil proporcionar "hooks" totalmente personalizables en `Powershell`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
 
-Create a function named `Invoke-Starship-PreCommand`
+Crea una función llamada `Invoke-Starship-PreCommand`
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -43,9 +43,9 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## Cambiar el Título de la Ventana
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
 First, define a window title change function (identical in bash and zsh):
 
