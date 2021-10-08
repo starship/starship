@@ -6,7 +6,7 @@ Aquí hay una colección de ajustes por defecto creados por la comunidad de Star
 
 Este ajuste por defecto no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
 
-![Captura de pantalla de los ajustes por defecto de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
+![Captura de pantalla de ajustes de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prerequisitos
 
@@ -98,7 +98,7 @@ Antes:
 
 Después:
 
-![Captura de pantalla de los ajustes predeterminados de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
+![Captura de pantalla de ajustes de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
 
 ### Configuración
 
@@ -255,7 +255,7 @@ Antes (configuración por defecto con Fuente Fixedsys):
 
 Después (Símbolos de texto sin formato):
 
-![Captura de pantalla de los ajustes predeterminados de los Símbolos de Nerd Font](/presets/plain-text-symbols-after.png)
+![Captura de pantalla de los ajustes de los Símbolos de Texto Plano](/presets/plain-text-symbols-after.png)
 
 ### Configuración
 
@@ -476,7 +476,7 @@ format = 'via [$symbol]($style)'
 
 Esta configuración predeterminada emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/pure-prompt.png)
+![Captura de pantalla de ajustes de Pure](/presets/pure-prompt.png)
 
 ### Configuración
 
