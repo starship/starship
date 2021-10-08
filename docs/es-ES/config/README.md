@@ -2678,20 +2678,20 @@ El módulo `shlvl` muestra la variable de entorno [`SHLVL`](https://tldp.org/LDP
 
 ### Opciones
 
-| Opción      | Por defecto                  | Descripción                                                   |
-| ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Mostrar el umbral.                                            |
-| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                        |
-| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
-| `style`     | `"bold yellow"`              | El estilo del módulo.                                         |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
+| Opción      | Por defecto                  | Descripción                                                       |
+| ----------- | ---------------------------- | ----------------------------------------------------------------- |
+| `threshold` | `2`                          | Mostrar el umbral.                                                |
+| `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                            |
+| `symbol`    | `"↕️  "`                     | El símbolo utilizado para representar el `SHLVL`.                 |
+| `repeat`    | `false`                      | Hace que el `symbol` se repita con la cantidad actual de `SHLVL`. |
+| `style`     | `"bold yellow"`              | El estilo del módulo.                                             |
+| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.                                    |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | The current value of `SHLVL`           |
+| shlvl     | `3`     | El valor actual de `SHLVL`             |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2710,16 +2710,16 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
+El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/singularity/) actual, si se encuentra dentro de un contenedor y `$SINGULARITY_NAME` está establecido.
 
 ### Opciones
 
-| Opción     | Por defecto                      | Descripción                                      |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                           |
-| `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                            |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| Opción     | Por defecto                      | Descripción                                                         |
+| ---------- | -------------------------------- | ------------------------------------------------------------------- |
+| `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                                              |
+| `symbol`   | `""`                             | Una cadena de formato que se muestra antes del nombre de la imagen. |
+| `style`    | `"bold dimmed blue"`             | El estilo del módulo.                                               |
+| `disabled` | `false`                          | Deshabilita el módulo de `singularity`.                             |
 
 ### Variables
 
