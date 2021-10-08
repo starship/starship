@@ -2292,6 +2292,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `setup.py` file
 - The current directory contains a `tox.ini` file
+- The current directory contains a `.envrc` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -2307,7 +2308,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Quais extensões devem acionar este módulo                                              |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | []                                                                                     |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini", ".envrc"]` | []                                                                                     |
 | `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                  |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
