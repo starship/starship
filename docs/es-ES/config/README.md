@@ -2241,18 +2241,18 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+El módulo `pulumi` muestra la pila [Pulumi](https://www.pulumi.com/docs/intro/concepts/stack/) y la versión seleccionados actualmente.
 
 ::: consejo
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+Por defecto la versión de Pulumi no se muestra, ya que toma un orden de magnitud más largo para cargar que la mayoría de los plugins (~70ms). Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-pulumi-version).
 
 :::
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- El directorio actual contiene `Pulumi.yaml` o `Pulumi.yml`
+- Un directorio padre contiene `Pulumi.yaml` o `Pulumi.yml`
 
 ### Opciones
 
@@ -2260,16 +2260,16 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | ---------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`         | `"via [$symbol$stack]($style) "` | La cadena de formato para el módulo.                                                    |
 | `version_format` | `"v${raw}"`                      | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                          |
+| `symbol`         | `" "`                           | Una cadena de formato que se muestra antes de la pila de Pulumi.                        |
 | `style`          | `"bold 5"`                       | El estilo del módulo.                                                                   |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                                           |
+| `disabled`       | `false`                          | Deshabilita el módulo `pulumi`.                                                         |
 
 ### Variables
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | The version of `pulumi`                |
-| stack     | `dev`      | The current Pulumi stack               |
+| version   | `v0.12.24` | La versión de `pulumi`                 |
+| stack     | `dev`      | La pila actual de Pulumi               |
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
@@ -2277,7 +2277,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### With Pulumi Version
+#### Con la versión de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2286,7 +2286,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = "[🛥 ($version )$stack]($style) "
 ```
 
-#### Without Pulumi version
+#### Sin versión de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2298,10 +2298,10 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `purescript` muestra la versión instalada de [PureScript](https://www.purescript.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `spago.dhall` file
-- The current directory contains a file with the `.purs` extension
+- El directorio actual contiene un archivo `spago.dhall`
+- El directorio actual contiene un archivo con la extensión `.purs`
 
 ### Opciones
 
@@ -2309,18 +2309,18 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript.                            |
+| `symbol`            | `"<=> "`                       | El símbolo usado antes de mostrar la versión de PureScript.                             |
 | `detect_extensions` | `["purs"]`                           | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["spago.dhall"]`                    | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold white"`                       | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                       |
+| `disabled`          | `false`                              | Deshabilita el módulo `purescript`.                                                     |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `0.13.5` | The version of `purescript`            |
+| version   | `0.13.5` | La versión de `purescript`             |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2337,21 +2337,21 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+El módulo `python` muestra la versión instalada de [Python](https://www.python.org/) y el entorno virtual actual [Python](https://docs.python.org/tutorial/venv.html) si uno está activado.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Si `pyenv_version_name` se establece en `true`, mostrará el nombre de la versión de pyenv. De lo contrario, se mostrará el número de versión de `python --version`.
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- El directorio actual contiene un archivo `.python-version`
+- El directorio actual contiene un archivo `Pipfile`
+- El directorio actual contiene un archivo `__init__.py`
+- El directorio actual contiene un archivo `pyproject.toml`
+- El directorio actual contiene un archivo `requirements.txt`
+- El directorio actual contiene un archivo `setup.py`
+- El directorio actual contiene un archivo `tox.ini`
+- El directorio actual contiene un archivo con la extensión `.py`.
+- Un entorno virtual está activado actualmente
 
 ### Opciones
 
@@ -2359,11 +2359,11 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | El formato del módulo.                                                                  |
 | `version_format`     | `"v${raw}"`                                                                                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                       |
+| `symbol`             | `"🐍 "`                                                                                                       | Una cadena de formato que representa el símbolo de Python                               |
 | `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                   |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                         |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                         |
-| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version.  |
+| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                            |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefijo antes de mostrar la versión de pyenv sólo se utiliza si se utiliza pyenv        |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configura los binarios de python que Starship debería ejecutar al obtener la versión.   |
 | `detect_extensions`  | `["py"]`                                                                                                     | Qué extensiones deben activar este módulo                                               |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
