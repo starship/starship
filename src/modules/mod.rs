@@ -43,6 +43,7 @@ mod openstack;
 mod package;
 mod perl;
 mod php;
+mod pulumi;
 mod purescript;
 mod python;
 mod red;
@@ -125,6 +126,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "package" => package::module(context),
             "perl" => perl::module(context),
             "php" => php::module(context),
+            "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
             "rlang" => rlang::module(context),
@@ -212,6 +214,7 @@ pub fn description(module: &str) -> &'static str {
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
+        "pulumi" => "The current stack and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "red" => "The currently installed version of Red",
