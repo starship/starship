@@ -2371,9 +2371,9 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ::: consejo
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+La variable `python_binary` acepta una cadena o una lista de cadenas. Starship intentará ejecutar cada binario hasta que obtenga un resultado. Ten en cuenta que sólo puedes cambiar el binario que Starship ejecuta para obtener la versión de Python no los argumentos que se utilizan.
 
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+Los valores por defecto y el orden para `python_binary` fue elegido para identificar primero la versión de Python en un entorno virtualenv/conda (que actualmente añade un `python`, no importa si apunta a `python3` o `python2`). Esto tiene el efecto secundario que si todavía tienes un sistema de Python 2 instalado, puede ser recogido antes de cualquier Python 3 (al menos en las Distros de Linux que siempre enlazan `/usr/bin/python` a Python 2). Si ya no trabajas con Python 2 pero no puedes removerlo del sistema, cambiando esto a `"python3"` ocultará cualquier versión de Python 2, ver ejemplo a continuación.
 
 :::
 
@@ -2756,15 +2756,15 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 | Opción                  | Por defecto                                                                          | Descripción                                             |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
-| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
-| `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
+| `format`                | `"[$symbol$status]($style) "`                                                        | El formato del módulo                                   |
+| `symbol`                | `"✖"`                                                                                | El símbolo mostrado en el error del programa            |
+| `success_symbol`        | `"✔️"`                                                                               | El símbolo mostrado en el éxito del programa            |
+| `not_executable_symbol` | `"🚫"`                                                                                | El símbolo mostrado cuando el archivo no es ejecutable  |
+| `not_found_symbol`      | `"🔍"`                                                                                | El símbolo mostrado cuando no se encuentra el comando   |
+| `sigint_symbol`         | `"🧱"`                                                                                | El símbolo mostrado en SIGINT (Ctrl + c)                |
+| `signal_symbol`         | `"⚡"`                                                                                | El símbolo mostrado en cualquier señal                  |
 | `style`                 | `"bold red"`                                                                         | El estilo del módulo.                                   |
-| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
+| `recognize_signal_code` | `true`                                                                               | Habilita el mapeo de señales desde el código de salida  |
 | `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
 | `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
 | `pipestatus_separator`  | `|`                                                                                  | The symbol that separate in pipe program exit codes     |
