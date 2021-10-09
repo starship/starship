@@ -50,11 +50,8 @@ mod tests {
     fn test_sudo_not_cached() {
         let actual = ModuleRenderer::new("sudo")
             .cmd(
-                "command -v sudo",
-                Some(CommandOutput {
-                    stdout: "/usr/bin/sudo".to_string(),
-                    stderr: "".to_string(),
-                }),
+                "sudo -n true",
+                None,
             )
             .config(toml::toml! {
                 [sudo]
