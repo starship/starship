@@ -76,12 +76,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_pyenv_version(context: &Context) -> Option<String> {
-    let version_name = context
+    let mut version_name = context.get_env("PYENV_VERSION");
+
+    if version_name.is_none() {
+      version_name = Some(context
         .exec_cmd("pyenv", &["version-name"])?
         .stdout
         .trim()
-        .to_string();
-    Some(version_name)
+        .to_string())
+    }
+    
+    version_name
 }
 
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {
