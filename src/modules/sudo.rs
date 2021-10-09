@@ -45,6 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::{test::ModuleRenderer, utils::CommandOutput};
+    use ansi_term::Color;
 
     #[test]
     fn test_sudo_not_cached() {
@@ -59,6 +60,23 @@ mod tests {
             })
             .collect();
         let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_sudo_cached() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd(
+                "sudo -v",
+                None,
+            )
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+            })
+            .collect();
+        let expected = Some(format!("{}",Color::Blue.bold().paint("as 🧙‍ ")));
 
         assert_eq!(expected, actual);
     }
