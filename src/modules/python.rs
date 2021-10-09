@@ -79,13 +79,15 @@ fn get_pyenv_version(context: &Context) -> Option<String> {
     let mut version_name = context.get_env("PYENV_VERSION");
 
     if version_name.is_none() {
-      version_name = Some(context
-        .exec_cmd("pyenv", &["version-name"])?
-        .stdout
-        .trim()
-        .to_string())
+        version_name = Some(
+            context
+                .exec_cmd("pyenv", &["version-name"])?
+                .stdout
+                .trim()
+                .to_string(),
+        )
     }
-    
+
     version_name
 }
 
