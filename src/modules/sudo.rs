@@ -104,7 +104,7 @@ mod tests {
     #[cfg(not(windows))]
     fn test_doas_cached() {
         let actual = ModuleRenderer::new("sudo")
-            .cmd("doas true", None)
+            .cmd("doas -n true", None)
             .config(toml::toml! {
                 [sudo]
                 disabled = false
