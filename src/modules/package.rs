@@ -570,7 +570,6 @@ license = "MIT"
         project_dir.close()
     }
 
-
     #[test]
     fn test_node_package_version_with_non_semantic_tag() -> io::Result<()> {
         let config_name = "package.json";
