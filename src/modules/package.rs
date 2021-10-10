@@ -8,6 +8,7 @@ use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
 use regex::Regex;
 use serde_json as json;
+use serde_yaml as yaml;
 
 /// Creates a module with the current package version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -224,8 +225,10 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
 }
 
 fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let cmd_output = context.exec_cmd("shards", &["version"])?;
-    let raw_version = cmd_output.stdout.as_str();
+    let file_contents = utils::read_file(&context.current_dir.join("shard.yml")).ok()?;
+
+    let data: yaml::Value = yaml::from_str(&file_contents).ok()?;
+    let raw_version = data.get("version")?.as_str()?;
 
     format_version(raw_version, config.version_format)
 }
