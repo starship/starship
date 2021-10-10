@@ -83,4 +83,20 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    #[cfg(windows)]
+    fn test_allow_windows_disabled_blocks_windows() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -v", None)
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                allow_windows = false
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
 }
