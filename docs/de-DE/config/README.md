@@ -337,7 +337,7 @@ Das `battery` Modul zeigt, wie hoch der Akku des Geräts geladen ist und den akt
 | `charging_symbol`    | `" "`                            | Das Symbol das angezeigt wird wenn der Akku aufgeladen wird.                        |
 | `discharging_symbol` | `" "`                            | Das Symbol, das angezeigt wird, wenn die Batterie entladen wird.                    |
 | `unknown_symbol`     | `" "`                            | Das Symbol, das angezeigt wird, wenn der Batteriezustand unbekannt ist.             |
-| `empty_symbol`       | `" "`                            | The symbol shown when the battery state is empty.                                   |
+| `empty_symbol`       | `" "`                            | Das Symbol, das angezeigt wird, wenn die Batterie leer ist.                         |
 | `format`             | `"[$symbol$percentage]($style) "` | Das Format für das Modul.                                                           |
 | `display`            | [link](#battery-display)          | Stellt den Grenzwert ein ab dem der Ladezustand (das battery-Modul) angezeigt wird. |
 | `disabled`           | `false`                           | Wenn der Wert auf `true` steht, wird das Akkustand-Modul deaktiviert.               |
