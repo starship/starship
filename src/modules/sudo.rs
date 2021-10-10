@@ -85,6 +85,38 @@ mod tests {
     }
 
     #[test]
+    #[cfg(not(windows))]
+    fn test_doas_not_cached() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("doas -n true", None)
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                binary = "doas"
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[cfg(not(windows))]
+    fn test_doas_cached() {
+        let actual = ModuleRenderer::new("sudo")
+            .cmd("doas true", None)
+            .config(toml::toml! {
+                [sudo]
+                disabled = false
+                binary = "doas"
+            })
+            .collect();
+        let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙‍ ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     #[cfg(windows)]
     fn test_allow_windows_disabled_blocks_windows() {
         let actual = ModuleRenderer::new("sudo")
