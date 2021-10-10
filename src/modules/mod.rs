@@ -228,7 +228,7 @@ pub fn description(module: &str) -> &'static str {
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
         "status" => "The status of the last command",
-        "sudo" => "The current status of sudo cached credentials",
+        "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
