@@ -558,6 +558,20 @@ license = "MIT"
     }
 
     #[test]
+    fn test_crystal_shard_version() -> io::Result<()> {
+        let config_name = "shard.yml";
+        let config_content = "name: starship\nversion: 1.2.3\n".to_string();
+
+        let project_dir = create_project_dir()?;
+
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+
+        project_dir.close()
+    }
+
+
+    #[test]
     fn test_node_package_version_with_non_semantic_tag() -> io::Result<()> {
         let config_name = "package.json";
         let config_content = json::json!({
