@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="Portugiesisch (Brasilien)"
  /></a>
   &nbsp;
   <a
@@ -134,15 +134,15 @@
 
 **Der minimalistische, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Schnell:** sie ist schnell – _sehr, sehr_ schnell! 🚀
+- **Konfigurierbar:** konfiguriere jedes Detail der Prompt.
+- **Universal:** funktioniert mit jeder Shell, auf jedem Betriebssystem.
+- **Intelligent:** zeigt relevante Informationen auf einen Blick.
+- **Funktionsreich:** unterstützt alle deine Lieblingswerkzeuge.
+- **Einfach:** schnell zu installieren – Betriebsbereit in nur wenigen Minuten.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Schau dir die Starship-Dokumentation an&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -171,7 +171,7 @@
 
    Um Starship selbst zu aktualisieren, lasse das Skript oben nochmal laufen. Es wird die vorhandene Version ersetzen, ohne die Konfiguration von Starship zu berühren.
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **Hinweis** - Die Standardwerte des Installationsskripts können überschrieben werden, sehen Sie die integrierte Hilfe.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -252,7 +252,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
+   **Warnung** Nur elvish v0.15 oder höher wird unterstützt. Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -274,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Füge folgendes an das Ende von `~/.xonshrc` hinzu:
 
    ```sh
    # ~/.xonshrc
@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Warnung** Dies wird sich in Zukunft ändern. Es wird nur nu Version v0.33 oder höher unterstützt. Füge folgendes zu deiner nu Konfigurationsdatei hinzu. Du kannst den Speicherort dieser Datei überprüfen, indem du `config path` in nu ausführst.
 
    ```toml
    startup = [
@@ -311,15 +311,15 @@ Das Projekt existiert dank aller der, die Mitwirken. [[Mitmachen](https://github
 
 ### Finanzielle Unterstützung
 
-Become a financial contributor and help us sustain our community. [[Mitmachen](https://opencollective.com/starship/contribute)]
+Werde ein finanzieller Beitragszahler und hilf uns, unsere Community zu erhalten. [[Mitmachen](https://opencollective.com/starship/contribute)]
 
-#### Individuals
+#### Privatpersonen
 
 <a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
 
 #### Organisationen
 
-Support this project with your organization. Your logo will show up here with a link to your website. [[Mitmachen](https://opencollective.com/starship/contribute)]
+Unterstütze dieses Projekt mit deiner Organisation. Dein Logo wird hier mit einem Link zu deiner Website erscheinen. [[Mitmachen](https://opencollective.com/starship/contribute)]
 
 <a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
