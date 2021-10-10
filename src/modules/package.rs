@@ -223,6 +223,13 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
     format_version(raw_version, config.version_format)
 }
 
+fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let cmd_output = context.exec_cmd("shards", &["version"])?;
+    let raw_version = cmd_output.stdout.as_str();
+
+    format_version(raw_version, config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -237,6 +244,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_helm_package_version,
         get_maven_version,
         get_meson_version,
+        get_shard_version,
         get_vmod_version,
         get_vpkg_version,
     ];
