@@ -1,3 +1,5 @@
+use std::env;
+
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::sudo::SudoConfig;
@@ -12,7 +14,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let is_sudo_cached = context.exec_cmd("sudo", &["-n", "true"]).is_some();
+    if !config.allow_windows && env::consts::FAMILY == "windows" {
+        return None;
+    }
+
+    let binary = config.binary.trim();
+    let is_sudo_cached = context.exec_cmd(binary, &["-n", "true"]).is_some();
 
     if !is_sudo_cached {
         return None;
