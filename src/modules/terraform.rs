@@ -1,10 +1,10 @@
 use super::{Context, Module, ModuleConfig};
 
-use crate::configs::terraform::TerraformConfig;
+use crate::configs::terraform::{TerraformConfig, TFENV_VERSION_FILE};
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 use crate::utils;
 
-use crate::formatter::VersionFormatter;
 use std::io;
 use std::path::PathBuf;
 
@@ -35,17 +35,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
-                    let terraform_version = parse_terraform_version(
-                        context.exec_cmd("terraform", &["version"])?.stdout.as_str(),
-                    )?;
-                    VersionFormatter::format_module_version(
-                        module.get_name(),
-                        &terraform_version,
-                        config.version_format,
-                    )
-                }
-                .map(Ok),
+                "version" => get_cli_version(&module, context, &config).map(Ok),
+                "tfenvversion" => get_tfenv_version(context, &module, &config).map(Ok),
                 "workspace" => get_terraform_workspace(context).map(Ok),
                 _ => None,
             })
@@ -61,6 +52,59 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn get_cli_version(module: &Module, ctx: &Context, cfg: &TerraformConfig) -> Option<String> {
+    let version = parse_terraform_version(&ctx.exec_cmd("terraform", &["version"])?.stdout)?;
+    format(module, &version, cfg)
+}
+
+fn parse_terraform_version(version: &str) -> Option<String> {
+    // `terraform version` output looks like this
+    // Terraform v0.12.14
+    // With potential extra output if it detects you are not running the latest version
+    let version = version
+        .lines()
+        .next()?
+        .trim_start_matches("Terraform ")
+        .trim()
+        .trim_start_matches('v');
+
+    Some(version.to_string())
+}
+
+fn format(module: &Module, version: &str, cfg: &TerraformConfig) -> Option<String> {
+    VersionFormatter::format_module_version(module.get_name(), version, cfg.version_format)
+}
+
+fn get_tfenv_version(ctx: &Context, module: &Module, cfg: &TerraformConfig) -> Option<String> {
+    ctx.get_env("TFENV_TERRAFORM_VERSION")
+        .or_else(|| try_tfenv_file(ctx))
+        .and_then(parse_tfenv_version)
+        .and_then(|version| format(module, &version, cfg))
+}
+
+fn try_tfenv_file(ctx: &Context) -> Option<String> {
+    let file_path = ctx.current_dir.join(TFENV_VERSION_FILE);
+    if !file_path.exists() || !file_path.is_file() {
+        return None;
+    }
+    utils::read_file(file_path).ok()
+}
+
+fn parse_tfenv_version(version: String) -> Option<String> {
+    // Tfenv versions are simply exact versions starship expects, like 0.6.16 or 1.0.8
+    // so the only thing to be done is to remove newline.
+    // It is possible to specify version like `latest:^0.8` and it's left as is,
+    // because it's not possible to determine the exact version without calling
+    // `terraform` binary.
+    let version = version.lines().next()?.trim();
+    if version.is_empty() {
+        log::warn!("The terraform version is blank");
+        None
+    } else {
+        Some(format!("{} ", version))
+    }
 }
 
 // Determines the currently selected workspace (see https://github.com/hashicorp/terraform/blob/master/command/meta.go for the original implementation)
@@ -83,26 +127,12 @@ fn get_terraform_workspace(context: &Context) -> Option<String> {
     }
 }
 
-fn parse_terraform_version(version: &str) -> Option<String> {
-    // `terraform version` output looks like this
-    // Terraform v0.12.14
-    // With potential extra output if it detects you are not running the latest version
-    let version = version
-        .lines()
-        .next()?
-        .trim_start_matches("Terraform ")
-        .trim()
-        .trim_start_matches('v');
-
-    Some(version.to_string())
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use std::fs::{self, File};
+    use std::fs::{self, create_dir_all, File};
     use std::io::{self, Write};
 
     #[test]
@@ -288,5 +318,154 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
 
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn test_render_when_version_file_present() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".terraform-version");
+        let mut file = File::create(version_filepath)?;
+        file.write_all(b"0.6.16")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.6.16 default")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_render_when_version_in_file_is_regex() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".terraform-version");
+        let mut file = File::create(version_filepath)?;
+        file.write_all(b"latest:^0.8")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 vlatest:^0.8 default")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_render_when_version_in_file_is_blank() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".terraform-version");
+        let mut file = File::create(version_filepath)?;
+        file.write_all(b"    ")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 default")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_render_when_file_not_existing() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".tf");
+        let _file = File::create(version_filepath)?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 default")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_render_but_there_is_directory_instead_of_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".terraform-version");
+        create_dir_all(version_filepath)?;
+
+        let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
+        let expected = None;
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_render_when_file_present_but_overridden_by_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".terraform-version");
+        let mut file = File::create(version_filepath)?;
+        file.write_all(b"0.6.16")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("terraform")
+            .env("TFENV_TERRAFORM_VERSION", "0.12.11")
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.11 default")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_render_with_only_env_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let version_filepath = dir.path().join(".tf");
+        let _file = File::create(version_filepath)?;
+
+        let actual = ModuleRenderer::new("terraform")
+            .env("TFENV_TERRAFORM_VERSION", "0.12.10")
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Fixed(105).bold().paint("💠 v0.12.10 default")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn test_parse_tfenv_version() {
+        let test_cases = vec![
+            ("1.0.8", Some("1.0.8 ".to_string())),
+            (" ", None),
+            ("", None),
+            ("\n", None),
+            ("latest:^0.8", Some("latest:^0.8 ".to_string())),
+            (
+                r#"0.12.11
+
+Other, not important
+lines
+"#,
+                Some("0.12.11 ".to_string()),
+            ),
+        ];
+
+        for test_case in test_cases {
+            let actual = parse_tfenv_version(test_case.0.to_string());
+            let expected = test_case.1;
+
+            assert_eq!(actual, expected);
+        }
     }
 }
