@@ -2233,8 +2233,8 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
 - [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
-- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
