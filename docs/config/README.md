@@ -112,6 +112,18 @@ For example:
 - When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
 
+::: tip
+
+By default, icons tools will still be displayed, even if the tool is not installed on your system. If you do not want this behaviour, you can edit the configuration file to replace `via [$symbol($version )]($style)` with `(via [$symbol$version]($style))` so that the icon will only be displayed if you have it installed on your system (meaning that `$version` is not `None`).
+
+You will find below an example command to update your configuration file and apply this behaviour to all plugins.
+
+```bash
+starship print-config | sed -E 's/(format.*=.*)(via.*\$version.*)'\''/\1(\2)'\''/' > ~/.config/starship.toml
+```
+
+:::
+
 #### Escapable characters
 
 The following symbols have special usage in a format string.
