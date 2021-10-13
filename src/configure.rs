@@ -3,6 +3,7 @@ use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
 use std::process::Stdio;
+use std::str::FromStr;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
@@ -10,9 +11,8 @@ use crate::configs::PROMPT_ORDER;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
-use toml::map::Map;
-use toml::value::Table;
 use toml::Value;
+use toml_edit::Document;
 
 #[cfg(not(windows))]
 const STD_EDITOR: &str = "vi";
@@ -20,39 +20,31 @@ const STD_EDITOR: &str = "vi";
 const STD_EDITOR: &str = "notepad.exe";
 
 pub fn update_configuration(name: &str, value: &str) {
-    let keys: Vec<&str> = name.split('.').collect();
-    if keys.len() != 2 {
-        log::error!("Please pass in a config key with a '.'");
-        process::exit(1);
-    }
+    let mut doc = get_configuration_edit();
 
-    if let Some(table) = get_configuration().as_table_mut() {
-        if !table.contains_key(keys[0]) {
-            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+    let mut current_item = &mut doc.root;
+
+    for key in name.split('.') {
+        if !current_item.is_table_like() {
+            log::error!("This command can only index into TOML tables");
+            process::exit(1);
         }
 
-        if let Some(values) = table.get(keys[0]).unwrap().as_table() {
-            let mut updated_values = values.clone();
+        let table = current_item.as_table_like_mut().unwrap();
 
-            if value.parse::<bool>().is_ok() {
-                updated_values.insert(
-                    keys[1].to_string(),
-                    Value::Boolean(value.parse::<bool>().unwrap()),
-                );
-            } else if value.parse::<i64>().is_ok() {
-                updated_values.insert(
-                    keys[1].to_string(),
-                    Value::Integer(value.parse::<i64>().unwrap()),
-                );
-            } else {
-                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
-            }
-
-            table.insert(keys[0].to_string(), Value::Table(updated_values));
+        if !table.contains_key(key) {
+            table.insert(key, toml_edit::table());
         }
 
-        write_configuration(table);
+        current_item = table.get_mut(key).unwrap();
     }
+
+    let new_value = toml_edit::Value::from_str(value)
+        .map(toml_edit::Item::Value)
+        .unwrap_or_else(|_| toml_edit::value(value.to_string()));
+
+    *current_item = new_value;
+    write_configuration(&doc)
 }
 
 pub fn print_configuration(use_default: bool) {
@@ -96,42 +88,39 @@ pub fn print_configuration(use_default: bool) {
 }
 
 pub fn toggle_configuration(name: &str, key: &str) {
-    if let Some(table) = get_configuration().as_table_mut() {
-        match table.get(name) {
-            Some(v) => {
-                if let Some(values) = v.as_table() {
-                    let mut updated_values = values.clone();
+    let mut doc = get_configuration_edit();
 
-                    let current: bool = match updated_values.get(key) {
-                        Some(v) => match v.as_bool() {
-                            Some(b) => b,
-                            _ => {
-                                log::error!(
-                                    "Given config key '{}' must be in 'boolean' format",
-                                    key
-                                );
-                                process::exit(1);
-                            }
-                        },
+    let table = doc.as_table_mut();
+
+    match table.get_mut(name) {
+        Some(v) => {
+            if let Some(values) = v.as_table_like_mut() {
+                let current: bool = match values.get(key) {
+                    Some(v) => match v.as_bool() {
+                        Some(b) => b,
                         _ => {
-                            log::error!("Given config key '{}' must be exist in config file", key);
+                            log::error!("Given config key '{}' must be in 'boolean' format", key);
                             process::exit(1);
                         }
-                    };
+                    },
+                    _ => {
+                        log::error!("Given config key '{}' must be exist in config file", key);
+                        process::exit(1);
+                    }
+                };
 
-                    updated_values.insert(key.to_string(), Value::Boolean(!current));
+                let new_value = toml_edit::value(!current);
 
-                    table.insert(name.to_string(), Value::Table(updated_values));
+                values.insert(key, new_value);
 
-                    write_configuration(table);
-                }
+                write_configuration(&doc);
             }
-            _ => {
-                log::error!("Given module '{}' not found in config file", name);
-                process::exit(1);
-            }
-        };
-    }
+        }
+        _ => {
+            log::error!("Given module '{}' not found in config file", name);
+            process::exit(1);
+        }
+    };
 }
 
 pub fn get_configuration() -> Value {
@@ -142,11 +131,35 @@ pub fn get_configuration() -> Value {
         .expect("Failed to load starship config")
 }
 
-pub fn write_configuration(table: &mut Table) {
+pub fn get_configuration_edit() -> Document {
+    let file_path = get_config_path();
+    let toml_content = match utils::read_file(&file_path) {
+        Ok(content) => {
+            log::trace!("Config file content: \"\n{}\"", &content);
+            Some(content)
+        }
+        Err(e) => {
+            let level = if e.kind() == ErrorKind::NotFound {
+                log::Level::Debug
+            } else {
+                log::Level::Error
+            };
+
+            log::log!(level, "Unable to read config file content: {}", &e);
+            None
+        }
+    };
+
+    toml_content
+        .unwrap_or_default()
+        .parse::<Document>()
+        .expect("Failed to load starship config")
+}
+
+pub fn write_configuration(doc: &Document) {
     let config_path = get_config_path();
 
-    let config_str =
-        toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
+    let config_str = doc.to_string();
 
     File::create(&config_path)
         .and_then(|mut file| file.write_all(config_str.as_ref()))

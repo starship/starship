@@ -264,6 +264,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "combine"
+version = "4.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a909e4d93292cd8e9c42e189f61681eff9d67b6541f96b8a1a737f23737bd001"
+dependencies = [
+ "bytes",
+ "memchr",
+]
+
+[[package]]
 name = "concurrent-queue"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -800,6 +810,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af25a77299a7f711a01975c35a6a424eb6862092cc2d6c72c4ed6cbc56dfc1fa"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "kstring"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e8d7e992938cc9078c8db5fd5bdc400e7f9da6efa384c280902a8922b676221"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -1764,6 +1783,7 @@ dependencies = [
  "tempfile",
  "terminal_size",
  "toml",
+ "toml_edit",
  "unicode-segmentation",
  "unicode-width",
  "urlencoding",
@@ -1944,6 +1964,18 @@ checksum = "a31142970826733df8241ef35dc040ef98c679ab14d7c3e54d827099b3acecaa"
 dependencies = [
  "indexmap",
  "serde",
+]
+
+[[package]]
+name = "toml_edit"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0a0ddb4919e3b49fe9e08e7921d69445bb00ce95a2ea807bb8826cde6610455"
+dependencies = [
+ "combine",
+ "indexmap",
+ "itertools",
+ "kstring",
 ]
 
 [[package]]
