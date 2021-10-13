@@ -18,8 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let binary = config.binary.trim();
-    let is_sudo_cached = context.exec_cmd(binary, &["-n", "true"]).is_some();
+    let is_sudo_cached = context.exec_cmd("sudo", &["-n", "true"]).is_some();
 
     if !is_sudo_cached {
         return None;
@@ -58,6 +57,7 @@ mod tests {
     #[cfg(not(windows))]
     fn test_sudo_not_cached() {
         let actual = ModuleRenderer::new("sudo")
+            .cmd("sudo -k", None)
             .cmd("sudo -n true", None)
             .config(toml::toml! {
                 [sudo]
@@ -77,38 +77,6 @@ mod tests {
             .config(toml::toml! {
                 [sudo]
                 disabled = false
-            })
-            .collect();
-        let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙‍ ")));
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    #[cfg(not(windows))]
-    fn test_doas_not_cached() {
-        let actual = ModuleRenderer::new("sudo")
-            .cmd("doas -n true", None)
-            .config(toml::toml! {
-                [sudo]
-                disabled = false
-                binary = "doas"
-            })
-            .collect();
-        let expected = None;
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    #[cfg(not(windows))]
-    fn test_doas_cached() {
-        let actual = ModuleRenderer::new("sudo")
-            .cmd("doas -n true", None)
-            .config(toml::toml! {
-                [sudo]
-                disabled = false
-                binary = "doas"
             })
             .collect();
         let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙‍ ")));

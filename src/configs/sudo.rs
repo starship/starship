@@ -9,7 +9,6 @@ pub struct SudoConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub allow_windows: bool,
-    pub binary: &'a str,
     pub disabled: bool,
 }
 
@@ -20,7 +19,6 @@ impl<'a> Default for SudoConfig<'a> {
             symbol: "🧙‍ ",
             style: "bold blue",
             allow_windows: false,
-            binary: "sudo",
             disabled: true,
         }
     }
