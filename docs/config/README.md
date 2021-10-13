@@ -2957,9 +2957,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | Option         | Default                 | Description                                                  |
 | -------------- | ----------------------- | ------------------------------------------------------------ |
 | `format`       | `[as $symbol]($style)"` | The format of the module                                     |
-| `symbol`       | `"🧙‍ "`                 | The symbol displayed when credentials are cached             |
+| `symbol`       | `"🧙 "`                 | The symbol displayed when credentials are cached             |
 | `style`        | `"bold blue"`           | The style for the module.                                    |
-| `binary`       | `sudo`                  | The binary executed to verify credentials.                   |
 | `allow_windows`| `false`                 | Since windows has no default sudo, default is disabled.      |
 | `disabled`     | `true`                  | Disables the `sudo` module.                                  |
 
@@ -2967,7 +2966,6 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable  | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
-| binary    |         | Mirrors the value of option `binary` |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\*   |         | Mirrors the value of option `style`  |
 
@@ -2975,7 +2973,6 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Example
 
-#### With `sudo`
 ```toml
 
 # ~/.config/starship.toml
@@ -2986,20 +2983,9 @@ symbol = "👩‍💻 "
 disabled = false
 ```
 
-#### With `doas`
 ```toml
-
-# ~/.config/starship.toml
-
-[sudo]
-binary = "doas"
-disabled = false
-```
-
-#### On Windows
-```toml
-
-# ~/.config/starship.toml
+# On windows
+# $HOME\.starship\config.toml
 
 [sudo]
 allow_windows = true

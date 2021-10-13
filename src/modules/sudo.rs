@@ -79,7 +79,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙‍ ")));
+        let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙 ")));
 
         assert_eq!(expected, actual);
     }

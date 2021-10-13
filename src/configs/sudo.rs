@@ -16,7 +16,7 @@ impl<'a> Default for SudoConfig<'a> {
     fn default() -> Self {
         SudoConfig {
             format: "[as $symbol]($style)",
-            symbol: "🧙‍ ",
+            symbol: "🧙 ",
             style: "bold blue",
             allow_windows: false,
             disabled: true,
