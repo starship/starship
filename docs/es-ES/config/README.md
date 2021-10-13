@@ -2111,7 +2111,7 @@ symbol = "☁️ "
 
 ## Versión del paquete
 
-El módulo `package` se muestra cuando el directorio actual es el repositorio de un paquete, y muestra su versión actual. El módulo actualmente soporta los paquetes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` y `helm`.
+El módulo `package` se muestra cuando el directorio actual es el repositorio de un paquete, y muestra su versión actual. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm` and `shards` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – La versión del paquete `npm` se extrae del `package.json` presente en el directorio actual
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – La versión del paquete `cargo` se extrae del `Cargo.toml` presente en el directorio actual
@@ -2125,7 +2125,8 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - [**Help**](https://helm.sh/docs/helm/helm_package/) - La versión del paquete `helm` se extrae del `Chart.yaml` presente en el directorio actual
 - [**Maven**](https://maven.apache.org/) - La versión de paquete `maven` se extrae del `pom.xml` presente en el directorio actual
 - [**Meson**](https://mesonbuild.com/) - La versión del paquete `meson` se extrae del `meson.build` presente en el directorio actual
-- [**V**](https://vlang.io) - La versión del paquete `vlang` se extrae del `v.mod` presente en el directorio actual
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
 
