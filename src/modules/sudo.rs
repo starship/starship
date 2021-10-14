@@ -57,7 +57,6 @@ mod tests {
     #[cfg(not(windows))]
     fn test_sudo_not_cached() {
         let actual = ModuleRenderer::new("sudo")
-            .cmd("sudo -k", None)
             .cmd("sudo -n true", None)
             .config(toml::toml! {
                 [sudo]
@@ -73,7 +72,7 @@ mod tests {
     #[cfg(not(windows))]
     fn test_sudo_cached() {
         let actual = ModuleRenderer::new("sudo")
-            .cmd("sudo -v", None)
+            .cmd("sudo -n true", None)
             .config(toml::toml! {
                 [sudo]
                 disabled = false
@@ -88,7 +87,7 @@ mod tests {
     #[cfg(windows)]
     fn test_allow_windows_disabled_blocks_windows() {
         let actual = ModuleRenderer::new("sudo")
-            .cmd("sudo -v", None)
+            .cmd("sudo -n true", None)
             .config(toml::toml! {
                 [sudo]
                 disabled = false
