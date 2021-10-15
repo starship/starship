@@ -22,12 +22,25 @@ const STD_EDITOR: &str = "notepad.exe";
 pub fn update_configuration(name: &str, value: &str) {
     let mut doc = get_configuration_edit();
 
+    match handle_update_configuration(&mut doc, name, value) {
+        Err(e) => {
+            eprintln!("{}", e);
+            process::exit(1);
+        }
+        _ => write_configuration(&doc),
+    }
+}
+
+fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> Result<(), String> {
     let mut current_item = &mut doc.root;
 
     for key in name.split('.') {
         if !current_item.is_table_like() {
-            log::error!("This command can only index into TOML tables");
-            process::exit(1);
+            return Err("This command can only index into TOML tables".to_owned());
+        }
+
+        if key.is_empty() {
+            return Err("Empty table keys are not supported".to_owned());
         }
 
         let table = current_item.as_table_like_mut().unwrap();
@@ -48,7 +61,8 @@ pub fn update_configuration(name: &str, value: &str) {
     }
 
     *current_item = new_value;
-    write_configuration(&doc)
+
+    Ok(())
 }
 
 pub fn print_configuration(use_default: bool) {
@@ -94,40 +108,42 @@ pub fn print_configuration(use_default: bool) {
 pub fn toggle_configuration(name: &str, key: &str) {
     let mut doc = get_configuration_edit();
 
-    let table = doc.as_table_mut();
-
-    match table.get_mut(name) {
-        Some(v) => {
-            if let Some(values) = v.as_table_like_mut() {
-                let current: bool = match values.get(key) {
-                    Some(v) => match v.as_bool() {
-                        Some(b) => b,
-                        _ => {
-                            log::error!("Given config key '{}' must be in 'boolean' format", key);
-                            process::exit(1);
-                        }
-                    },
-                    _ => {
-                        log::error!("Given config key '{}' must be exist in config file", key);
-                        process::exit(1);
-                    }
-                };
-
-                let mut new_value = toml_edit::value(!current);
-                // Above code already checks if key exists and if it is a value (bool)
-                *new_value.as_value_mut().unwrap().decor_mut() =
-                    values.get(key).unwrap().as_value().unwrap().decor().clone();
-
-                values.insert(key, new_value);
-
-                write_configuration(&doc);
-            }
-        }
-        _ => {
-            log::error!("Given module '{}' not found in config file", name);
+    match handle_toggle_configuration(&mut doc, name, key) {
+        Err(e) => {
+            eprintln!("{}", e);
             process::exit(1);
         }
-    };
+        _ => write_configuration(&doc),
+    }
+}
+
+fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Result<(), String> {
+    if name.is_empty() || key.is_empty() {
+        return Err("Empty table keys are not supported".to_owned());
+    }
+
+    let table = doc.as_table_mut();
+
+    let values = table
+        .get_mut(name)
+        .ok_or_else(|| format!("Given module '{}' not found in config file", name))?
+        .as_table_like_mut()
+        .ok_or_else(|| format!("Given config entry '{}' is not a module", key))?;
+
+    let old_value = values
+        .get(key)
+        .ok_or_else(|| format!("Given config key '{}' must exist in config file", key))?;
+
+    let old = old_value
+        .as_bool()
+        .ok_or_else(|| format!("Given config key '{}' must be in 'boolean' format", key))?;
+
+    let mut new_value = toml_edit::value(!old);
+    // Above code already checks if it is a value (bool)
+    *new_value.as_value_mut().unwrap().decor_mut() = old_value.as_value().unwrap().decor().clone();
+
+    values.insert(key, new_value);
+    Ok(())
 }
 
 pub fn get_configuration() -> Value {
@@ -280,5 +296,149 @@ mod tests {
     fn visual_not_set_editor_not_set() {
         let actual = get_editor_internal(None, None);
         assert_eq!(STD_EDITOR, actual);
+    }
+
+    fn create_doc() -> Document {
+        let config = concat!(
+            " # comment\n",
+            "  [status] # comment\n",
+            "disabled =    false # comment\n",
+            "# comment\n",
+            "\n"
+        );
+
+        config.parse::<Document>().unwrap()
+    }
+
+    #[test]
+    fn test_toggle_simple() {
+        let mut doc = create_doc();
+
+        assert!(!doc["status"]["disabled"].as_bool().unwrap());
+
+        handle_toggle_configuration(&mut doc, "status", "disabled").unwrap();
+
+        assert!(doc["status"]["disabled"].as_bool().unwrap());
+
+        let new_config = concat!(
+            " # comment\n",
+            "  [status] # comment\n",
+            "disabled =    true # comment\n",
+            "# comment\n",
+            "\n"
+        );
+
+        assert_eq!(doc.to_string(), new_config)
+    }
+
+    #[test]
+    fn test_toggle_missing_module() {
+        let mut doc = create_doc();
+        assert!(handle_toggle_configuration(&mut doc, "missing_module", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_toggle_missing_key() {
+        let mut doc = create_doc();
+        assert!(handle_toggle_configuration(&mut doc, "status", "missing").is_err());
+    }
+
+    #[test]
+    fn test_toggle_wrong_type() {
+        let mut doc = create_doc();
+        doc["status"]["disabled"] = toml_edit::value("a");
+
+        assert!(handle_toggle_configuration(&mut doc, "status", "disabled").is_err());
+
+        doc["format"] = toml_edit::value("$all");
+
+        assert!(handle_toggle_configuration(&mut doc, "format", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_toggle_empty() {
+        let mut doc = create_doc();
+
+        doc["status"][""] = toml_edit::value(true);
+        doc[""]["disabled"] = toml_edit::value(true);
+
+        assert!(handle_toggle_configuration(&mut doc, "status", "").is_err());
+        assert!(handle_toggle_configuration(&mut doc, "", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_update_config_wrong_type() {
+        let mut doc = create_doc();
+
+        assert!(
+            handle_update_configuration(&mut doc, "status.disabled.not_a_table", "true").is_err()
+        );
+    }
+
+    #[test]
+    fn test_update_config_simple() {
+        let mut doc = create_doc();
+
+        assert!(!doc["status"]["disabled"].as_bool().unwrap());
+
+        handle_update_configuration(&mut doc, "status.disabled", "true").unwrap();
+
+        assert!(doc["status"]["disabled"].as_bool().unwrap());
+
+        let new_config = concat!(
+            " # comment\n",
+            "  [status] # comment\n",
+            "disabled =    true # comment\n",
+            "# comment\n",
+            "\n"
+        );
+
+        assert_eq!(doc.to_string(), new_config)
+    }
+
+    #[test]
+    fn test_update_config_parse() {
+        let mut doc = create_doc();
+
+        handle_update_configuration(&mut doc, "test", "true").unwrap();
+
+        assert!(doc["test"].as_bool().unwrap());
+
+        handle_update_configuration(&mut doc, "test", "0").unwrap();
+
+        assert_eq!(doc["test"].as_integer().unwrap(), 0);
+
+        handle_update_configuration(&mut doc, "test", "0.0").unwrap();
+
+        assert!(doc["test"].is_float());
+
+        handle_update_configuration(&mut doc, "test", "a string").unwrap();
+
+        assert_eq!(doc["test"].as_str().unwrap(), "a string");
+
+        handle_update_configuration(&mut doc, "test", "\"true\"").unwrap();
+
+        assert_eq!(doc["test"].as_str().unwrap(), "true");
+    }
+
+    #[test]
+    fn test_update_config_empty() {
+        let mut doc = create_doc();
+
+        assert!(handle_update_configuration(&mut doc, "", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, ".....", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, "a.a.a..a.a", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, "a.a.a.a.a.", "true").is_err());
+    }
+
+    #[test]
+    fn test_update_config_deep() {
+        let mut doc = create_doc();
+
+        handle_update_configuration(&mut doc, "a.b.c.d.e.f.g.h", "true").unwrap();
+
+        assert!(doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
+            .as_bool()
+            .unwrap())
     }
 }
