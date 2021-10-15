@@ -39,9 +39,13 @@ pub fn update_configuration(name: &str, value: &str) {
         current_item = table.get_mut(key).unwrap();
     }
 
-    let new_value = toml_edit::Value::from_str(value)
+    let mut new_value = toml_edit::Value::from_str(value)
         .map(toml_edit::Item::Value)
-        .unwrap_or_else(|_| toml_edit::value(value.to_string()));
+        .unwrap_or_else(|_| toml_edit::value(value));
+
+    if let Some(value) = current_item.as_value() {
+        *new_value.as_value_mut().unwrap().decor_mut() = value.decor().clone();
+    }
 
     *current_item = new_value;
     write_configuration(&doc)
@@ -109,7 +113,10 @@ pub fn toggle_configuration(name: &str, key: &str) {
                     }
                 };
 
-                let new_value = toml_edit::value(!current);
+                let mut new_value = toml_edit::value(!current);
+                // Above code already checks if key exists and if it is a value (bool)
+                *new_value.as_value_mut().unwrap().decor_mut() =
+                    values.get(key).unwrap().as_value().unwrap().decor().clone();
 
                 values.insert(key, new_value);
 
