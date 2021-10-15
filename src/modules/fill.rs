@@ -39,4 +39,30 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn module_disabled() {
+        let actual = ModuleRenderer::new("fill")
+            .config(toml::toml! {
+                [fill]
+                disabled = true
+            })
+            .collect();
+        let expected = Option::<String>::None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn module_enabled() {
+        let actual = ModuleRenderer::new("fill")
+            .config(toml::toml! {
+                [fill]
+                disabled = false
+            })
+            .collect();
+        let expected = Some(format!("{}", Color::Black.bold().paint(".")));
+
+        assert_eq!(expected, actual);
+    }
 }
