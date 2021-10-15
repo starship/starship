@@ -10,6 +10,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("fill");
     let config: FillConfig = FillConfig::try_load(module.config);
 
+    if config.disabled {
+        return None;
+    }
+
     let style = parse_style_string(config.style);
 
     module.set_segments(vec![Segment::fill(style, config.symbol)]);
