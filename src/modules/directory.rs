@@ -4,7 +4,7 @@ use super::utils::directory_nix as directory_utils;
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
-use path_slash::PathExt;
+use path_slash::{PathExt, PathBufExt};
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -92,7 +92,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = prefix + &dir_string;
+    let displayed_path = PathBuf::from_slash(prefix + &dir_string).to_string_lossy().into_owned();
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
