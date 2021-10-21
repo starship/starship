@@ -495,7 +495,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+`COBOL` モジュールは、現在インストールされているCOBOLのバージョンを表示します。 By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains any files ending in `.cob` or `.COB`
 - The current directory contains any files ending in `.cbl` or `.CBL`
