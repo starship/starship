@@ -1,7 +1,7 @@
 [package]
 name = "starship"
 version = "0.58.0"
-edition = "2018"
+edition = "2021"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
 documentation = "https://starship.rs/guide/"
