@@ -1066,10 +1066,11 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### Options
 
-| Option   | Défaut         | Description                       |
-| -------- | -------------- | --------------------------------- |
-| `symbol` | `"."`          | The symbol used to fill the line. |
-| `style`  | `"bold black"` | Le style du module.               |
+| Option     | Défaut         | Description                       |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `"."`          | The symbol used to fill the line. |
+| `style`    | `"bold black"` | Le style du module.               |
+| `disabled` | `false`        | Disables the `fill` module        |
 
 ### Exemple
 
