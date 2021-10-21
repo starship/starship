@@ -1135,6 +1135,7 @@ other modules.
 | ---------- | -------------- | -------------------------------------- |
 | `symbol`   | `"."`          | The symbol used to fill the line.      |
 | `style`    | `"bold black"` | The style for the module.              |
+| `disabled` | `false`        | Disables the `fill` module             |
 
 ### Example
 
