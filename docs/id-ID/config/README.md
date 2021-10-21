@@ -1066,10 +1066,11 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### Opsi
 
-| Opsi     | Bawaan         | Deskripsi                         |
-| -------- | -------------- | --------------------------------- |
-| `symbol` | `"."`          | The symbol used to fill the line. |
-| `style`  | `"bold black"` | Gaya penataan untuk modul.        |
+| Opsi       | Bawaan         | Deskripsi                         |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `"."`          | The symbol used to fill the line. |
+| `style`    | `"bold black"` | Gaya penataan untuk modul.        |
+| `disabled` | `false`        | Disables the `fill` module        |
 
 ### Contoh
 
