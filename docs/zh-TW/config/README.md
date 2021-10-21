@@ -1066,10 +1066,11 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### 選項
 
-| Option   | 預設             | 說明                                |
-| -------- | -------------- | --------------------------------- |
-| `symbol` | `"."`          | The symbol used to fill the line. |
-| `style`  | `"bold black"` | 這個模組的風格。                          |
+| Option     | 預設             | 說明                                |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `"."`          | The symbol used to fill the line. |
+| `style`    | `"bold black"` | 這個模組的風格。                          |
+| `disabled` | `false`        | Disables the `fill` module        |
 
 ### 範例
 
