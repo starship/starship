@@ -1066,10 +1066,11 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn | Mặc định       | Mô tả                             |
-| -------- | -------------- | --------------------------------- |
-| `symbol` | `"."`          | The symbol used to fill the line. |
-| `style`  | `"bold black"` | Kiểu cho module.                  |
+| Tuỳ chọn   | Mặc định       | Mô tả                             |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `"."`          | The symbol used to fill the line. |
+| `style`    | `"bold black"` | Kiểu cho module.                  |
+| `disabled` | `false`        | Disables the `fill` module        |
 
 ### Ví dụ
 
