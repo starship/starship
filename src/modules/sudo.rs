@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use ansi_term::Color;
 
     #[test]
@@ -72,7 +72,13 @@ mod tests {
     #[cfg(not(windows))]
     fn test_sudo_cached() {
         let actual = ModuleRenderer::new("sudo")
-            .cmd("sudo -n true", None)
+            .cmd(
+                "sudo -n true",
+                Some(CommandOutput {
+                    stdout: "".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
             .config(toml::toml! {
                 [sudo]
                 disabled = false
