@@ -467,6 +467,11 @@ fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 
 // Render the time into a nice human-readable string
 pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
+    // Make sure it renders something if the time equals zero instead of an empty string
+    if raw_millis == 0 {
+        return "0ms".into();
+    }
+
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
     let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
@@ -483,11 +488,6 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
         .collect();
     if show_millis || raw_millis < 1000 {
         rendered_components.push(render_time_component((&millis, &"ms")));
-
-        // Default component
-        if raw_millis == 0 {
-            rendered_components.push("0ms".into())
-        }
     }
     rendered_components.join("")
 }
