@@ -1,2 +1,6 @@
-# std::process::Command::new may inadvertly run executables from the current working directory
-disallowed-methods = ["std::process::Command::new"]
+disallowed-methods = [
+    # std::process::Command::new may inadvertly run executables from the current working directory
+    "std::process::Command::new",
+    # Setting environment variables can cause issues with non-rust code
+    "std::env::set_var"
+]

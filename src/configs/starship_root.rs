@@ -53,6 +53,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "ocaml",
     "perl",
     "php",
+    "pulumi",
     "purescript",
     "python",
     "rlang",

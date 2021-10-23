@@ -42,6 +42,21 @@ trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
+## Custom pre-prompt and pre-execution Commands in PowerShell
+
+PowerShell does not have a formal preexec/precmd framework like most other shells.
+Because of this, it is difficult to provide fully customizable hooks in `powershell`.
+However, Starship does give you limited ability to insert your own functions
+into the prompt-rendering procedure:
+
+Create a function named `Invoke-Starship-PreCommand`
+
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
+}
+```
+
 ## Change Window Title
 
 Some shell prompts will automatically change the window title for you (e.g. to
@@ -83,6 +98,17 @@ function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Enable Right Prompt
