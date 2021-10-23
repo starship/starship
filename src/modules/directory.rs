@@ -50,17 +50,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("Display dir: {:?}", &display_dir);
 
     // Attempt repository path contraction (if we are in a git repository)
-    let repo = if config.truncate_to_repo {
-        context.get_repo().ok()
+    // Otherwise use the logical path, automatically contracting
+    let repo = context.get_repo().ok();
+    let dir_string = if config.truncate_to_repo {
+        repo.and_then(|r| r.root.as_ref())
+            .filter(|root| *root != &home_dir)
+            .and_then(|root| contract_repo_path(display_dir, root))
     } else {
         None
     };
-    let dir_string = repo
-        .and_then(|r| r.root.as_ref())
-        .filter(|root| *root != &home_dir)
-        .and_then(|root| contract_repo_path(display_dir, root));
 
-    // Otherwise use the logical path, automatically contracting
     // the home directory if required.
     let dir_string =
         dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
@@ -92,15 +91,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let repo = &context.get_repo().ok()?;
-    let path_vec = match &repo.root {
+    let path_vec = match &repo.and_then(|r| r.root.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let repo_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = repo_path.split('/').collect();
             let after_str = repo_path.replacen(repo_path_vec[0], "", 1);
-            let after_dir_num: Vec<&str> = after_str.split('/').collect();
+            let after_dir_num = after_str.split('/').count();
 
-            if ((after_dir_num.len() - 1) as i64) < config.truncation_length {
+            if ((after_dir_num - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&repo_path, "");
                 [prefix + &before, root.to_string(), after_str]
