@@ -225,3 +225,29 @@ This is our preferred process for opening a PR on GitHub:
 5. Create a pull request from your branch to `starship/master`
 6. No need to assign the pull request to anyone, we'll review it when we can
 7. When the changes have been reviewed and approved, someone will squash and merge for you
+
+## New Module Checklist
+
+We love getting new modules for starship! While we try to keep the barrier for
+writing new modules low, starship provides a lot of functionality for a module,
+which requires quite a few things be done. These are listed here to help
+everyone remember what they are. Don't worry: most of them are quite simple!
+
+- [ ] Add a section to `docs/config/README.md` describing the module, and 
+      its configuration options/variables (more documentation is often
+      appropriate--this is a bare minimum).
+- [ ] Add the variable to the appropriate location in the "Default Prompt 
+      Format" section of the documentation
+- [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
+- [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
+      following:
+  - [ ] An entry in `PROMPT_ORDER` (`src/configs/starship_root.rs`)
+  - [ ] An entry in `FullConfig` and the `Default` impl (`src/configs/mod.rs`)
+  - [ ] An entry in `ALL_MODULES` (`src/module.rs`)
+  - [ ] A `mod` declaration at the top of `src/modules/mod.rs`
+  - [ ] An entry in `handle()` (`src/modules/mod.rs`)
+  - [ ] A description for the `description()` function (`src/modules/mod.rs`)
+
+Finally, you should make sure to write your module's code in `src/modules`
+and add any commands that need to be mocked when testing in `src/utils.rs`.
+Command output can also be mocked in test by using `ModuleRenderer::cmd`.

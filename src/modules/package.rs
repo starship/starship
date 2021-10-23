@@ -223,6 +223,15 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
     format_version(raw_version, config.version_format)
 }
 
+fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("shard.yml")).ok()?;
+
+    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let raw_version = data.first()?["version"].as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -237,6 +246,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_helm_package_version,
         get_maven_version,
         get_meson_version,
+        get_shard_version,
         get_vmod_version,
         get_vpkg_version,
     ];
@@ -543,6 +553,19 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("semantic"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_crystal_shard_version() -> io::Result<()> {
+        let config_name = "shard.yml";
+        let config_content = "name: starship\nversion: 1.2.3\n".to_string();
+
+        let project_dir = create_project_dir()?;
+
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+
         project_dir.close()
     }
 

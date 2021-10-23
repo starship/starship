@@ -173,23 +173,23 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             starship.sprint_posix()?
         ),
         _ => {
-            let quoted_arg = shell_words::quote(shell_basename);
-            println!(
-                "printf \"\\n%s is not yet supported by starship.\\n\
-                 For the time being, we support the following shells:\\n\
-                 * bash\\n\
-                 * elvish\\n\
-                 * fish\\n\
-                 * ion\\n\
-                 * powershell\\n\
-                 * tcsh\\n\
-                 * zsh\\n\
-                 * nu\\n\
-                 * xonsh\\n\
-                 \\n\
+            eprintln!(
+                "{0} is not yet supported by starship.\n\
+                 For the time being, we support the following shells:\n\
+                 * bash\n\
+                 * elvish\n\
+                 * fish\n\
+                 * ion\n\
+                 * powershell\n\
+                 * tcsh\n\
+                 * zsh\n\
+                 * nu\n\
+                 * xonsh\n\
+                 \n\
                  Please open an issue in the starship repo if you would like to \
-                 see support for %s:\\nhttps://github.com/starship/starship/issues/new\\n\\n\" {0} {0}",
-                quoted_arg
+                 see support for {0}:\n\
+                 https://github.com/starship/starship/issues/new\n",
+                shell_basename
             )
         }
     };
