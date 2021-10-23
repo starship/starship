@@ -712,7 +712,7 @@ it would have been `nixpkgs/pkgs`.
 | `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `highlight_repo_root_style` | `"bold red"`                               | The style for the root of the git repo when `truncate_to_repo` option is set to false.|
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.|
 | `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                           |
 
 <details>
