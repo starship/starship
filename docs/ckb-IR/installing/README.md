@@ -11,7 +11,7 @@ There are so many platforms out there that they didn't fit into the main README.
 
 ## [Chocolatey](https://chocolatey.org)
 
-### Prerequisites
+### پێشمەرجەکان
 
 Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
 
@@ -23,7 +23,7 @@ choco install starship
 
 ## [termux](https://termux.com)
 
-### Prerequisites
+### پێشمەرجەکان
 
 ```sh
 pkg install getconf
@@ -32,7 +32,7 @@ pkg install getconf
 ### Installation
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)

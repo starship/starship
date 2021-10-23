@@ -4,31 +4,49 @@ use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 use std::str::FromStr;
 
+use chrono::DateTime;
+
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::aws::AwsConfig;
 use crate::formatter::StringFormatter;
+use crate::utils::render_time;
 
 type Profile = String;
 type Region = String;
 
-fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> Option<Region> {
-    let config_location = context
+fn get_credentials_file_path(context: &Context) -> Option<PathBuf> {
+    context
+        .get_env("AWS_CREDENTIALS_FILE")
+        .and_then(|path| PathBuf::from_str(&path).ok())
+        .or_else(|| {
+            let mut home = context.get_home()?;
+            home.push(".aws/credentials");
+            Some(home)
+        })
+}
+
+fn get_config_file_path(context: &Context) -> Option<PathBuf> {
+    context
         .get_env("AWS_CONFIG_FILE")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
             let mut home = context.get_home()?;
             home.push(".aws/config");
             Some(home)
-        })?;
+        })
+}
+
+fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> Option<Region> {
+    let config_location = get_config_file_path(context)?;
 
     let file = File::open(&config_location).ok()?;
     let reader = BufReader::new(file);
     let lines = reader.lines().filter_map(Result::ok);
 
-    let region_line = if let Some(ref aws_profile) = aws_profile {
+    let region_line = if let Some(aws_profile) = aws_profile {
         lines
-            .skip_while(|line| line != &format!("[profile {}]", aws_profile))
+            .skip_while(|line| line != &format!("[profile {}]", &aws_profile))
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("region"))
@@ -47,7 +65,7 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
 }
 
 fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
-    let profile_env_vars = vec!["AWSU_PROFILE", "AWS_VAULT", "AWS_PROFILE"];
+    let profile_env_vars = vec!["AWSU_PROFILE", "AWS_VAULT", "AWSUME_PROFILE", "AWS_PROFILE"];
     let profile = profile_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var));
@@ -58,11 +76,44 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
         (Some(ref p), None) => (
-            Some(p.to_owned()),
+            Some(p.clone()),
             get_aws_region_from_config(context, Some(p)),
         ),
         (None, None) => (None, get_aws_region_from_config(context, None)),
     }
+}
+
+fn get_credentials_duration(context: &Context, aws_profile: Option<&Profile>) -> Option<i64> {
+    let expiration_env_vars = vec!["AWS_SESSION_EXPIRATION", "AWSUME_EXPIRATION"];
+    let expiration_date = if let Some(expiration_date) = expiration_env_vars
+        .iter()
+        .find_map(|env_var| context.get_env(env_var))
+    {
+        chrono::DateTime::parse_from_rfc3339(&expiration_date).ok()
+    } else {
+        let credentials_location = get_credentials_file_path(context)?;
+
+        let file = File::open(&credentials_location).ok()?;
+        let reader = BufReader::new(file);
+        let lines = reader.lines().filter_map(Result::ok);
+
+        let profile_line = if let Some(aws_profile) = aws_profile {
+            format!("[{}]", aws_profile)
+        } else {
+            "[default]".to_string()
+        };
+
+        let expiration_date_line = lines
+            .skip_while(|line| line != &profile_line)
+            .skip(1)
+            .take_while(|line| !line.starts_with('['))
+            .find(|line| line.starts_with("expiration"))?;
+
+        let expiration_date = expiration_date_line.split('=').nth(1)?.trim();
+        DateTime::parse_from_rfc3339(expiration_date).ok()
+    }?;
+
+    Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
 }
 
 fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
@@ -87,6 +138,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
 
+    let duration = {
+        get_credentials_duration(context, aws_profile.as_ref()).map(|duration| {
+            if duration > 0 {
+                render_time((duration * 1000) as u128, false)
+            } else {
+                config.expiration_symbol.to_string()
+            }
+        })
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -100,6 +161,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "profile" => aws_profile.as_ref().map(Ok),
                 "region" => mapped_region.as_ref().map(Ok),
+                "duration" => duration.as_ref().map(Ok),
                 _ => None,
             })
             .parse(None)
@@ -209,6 +271,20 @@ mod tests {
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-awsu ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_from_awsume() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWSUME_PROFILE", "astronauts-awsume")
+            .env("AWS_PROFILE", "astronauts-profile")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts-awsume ")
         ));
 
         assert_eq!(expected, actual);
@@ -378,6 +454,142 @@ region = us-east-2
             })
             .collect();
         let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn expiration_date_set() {
+        use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
+
+        let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
+            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0),
+            Utc,
+        );
+
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                show_duration = true
+            })
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
+                "AWS_SESSION_EXPIRATION",
+                now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
+            )
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (ap-northeast-2) [30m]")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn expiration_date_set_from_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let credentials_path = dir.path().join("credentials");
+        let mut file = File::create(&credentials_path)?;
+
+        use chrono::{DateTime, NaiveDateTime, Utc};
+
+        let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
+            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0),
+            Utc,
+        );
+
+        let expiration_date = now_plus_half_hour.to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
+
+        file.write_all(
+            format!(
+                "[astronauts]
+aws_access_key_id=dummy
+aws_secret_access_key=dummy
+expiration={}
+",
+                expiration_date
+            )
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                show_duration = true
+            })
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
+                "AWS_CREDENTIALS_FILE",
+                credentials_path.to_string_lossy().as_ref(),
+            )
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (ap-northeast-2) [30m]")
+        ));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn profile_and_region_set_show_duration() {
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                show_duration = true
+            })
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn expiration_date_set_expired() {
+        use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
+
+        let now: DateTime<Utc> = chrono::DateTime::from_utc(
+            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() - 1800, 0),
+            Utc,
+        );
+
+        let symbol = "!!!";
+
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                show_duration = true
+                expiration_symbol = symbol
+            })
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
+                "AWS_SESSION_EXPIRATION",
+                now.to_rfc3339_opts(SecondsFormat::Secs, true),
+            )
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint(format!("☁️  astronauts (ap-northeast-2) [{}]", symbol))
+        ));
 
         assert_eq!(expected, actual);
     }

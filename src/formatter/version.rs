@@ -56,9 +56,23 @@ impl<'a> VersionFormatter<'a> {
         formatted.map(|segments| {
             segments
                 .iter()
-                .map(|segment| segment.value.as_str())
+                .map(|segment| segment.value())
                 .collect::<String>()
         })
+    }
+
+    pub fn format_module_version(
+        module_name: &str,
+        version: &str,
+        version_format: &str,
+    ) -> Option<String> {
+        match VersionFormatter::format_version(version, version_format) {
+            Ok(formatted) => Some(formatted),
+            Err(error) => {
+                log::warn!("Error formatting `{}` version:\n{}", module_name, error);
+                Some(format!("v{}", version))
+            }
+        }
     }
 }
 

@@ -1,18 +1,18 @@
-# FAQ
+# Najczęściej zadawane pytania (FAQ)
 
-## What is the configuration used in the demo GIF?
+## Jakiej konfiguracji użyto w GIFie demonstracyjnym?
 
-- **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
-  - **Prompt**: [Starship](https://starship.rs/)
+- **Emulator terminala**: [iTerm2](https://iterm2.com/)
+  - **Motyw**: Minimal
+  - **Schemat kolorów**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **Czcionka**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **Powłoka**: [Fish Shell](https://fishshell.com/)
+  - **Konfiguracja**: [Pliki Dotfile użytkownika matchai](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **Wiersz poleceń**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Jak uzyskać uzupełniania poleceń pokazane na GIFie demonstracyjnym?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Uzupełnianie, znane też jako autouzupełnianie, jest dostarczane przez używaną przez ciebie powłokę. W przypadku demo, jest to powłoka [Fish Shell](https://fishshell.com/), która domyślnie zapewnia uzupełnianie. Jeśli używasz Z Shell (zsh), zalecamy zapoznać się z [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Yes, they can both be used to disable modules in the prompt. If all you plan to 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Dokumentacja stwierdza że Starship jest wieloplatformowy. Dlaczego moja preferowana powłoka nie jest obsługiwana?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
@@ -48,17 +48,17 @@ starship prompt --help
 
 The prompt will use as much context as is provided, but no flags are "required".
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## Jak uruchomić Starship na dystrybucjach systemu Linux ze starszymi wersjami glibc?
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+Jeżeli podczas używania gotowych instalacji (np. na CentOS 6 lub 7) pojawia się błąd w stylu "_version 'GLIBC_2.18' not found (required by starship)_", możesz użyć instalacji zbudowanej za pomocą `musl` zamiast `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## I see symbols I don't understand or expect, what do they mean?
+## W wierszu poleceń zauważyłem symbole których się nie spodziewałem bądź nie rozumiem. Co one oznaczają?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Jeśli zauważyłeś symbole których nie rozpoznajesz, możesz użyć `starship explain` aby uzyskać szczegółowy opis obecnie wyświetlanych modułów.
 
 ## Why don't I see a glyph symbol in my prompt?
 
@@ -79,16 +79,16 @@ The first line should produce a [snake emoji](https://emojipedia.org/snake/), wh
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Jak odinstalować Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship można odinstalować równie łatwo jak przebiega proces instalacji.
 
-1. Remove any lines in your shell config (e.g. `~/.bashrc`) used to initialize Starship.
-1. Delete the Starship binary.
+1. Usuń zawartość konfiguracji powłoki (np. `~/.bashrc`) służącą do zainicjalizowania Starship.
+1. Usuń plik wykonywalny programu Starship.
 
 If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Locate and delete the starship binary

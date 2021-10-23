@@ -2,6 +2,8 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::kotlin::KotlinConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
+use crate::utils::get_command_string_output;
 
 use regex::Regex;
 const KOTLIN_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+[\\d\\.]+[\\d\\.]+)";
@@ -34,11 +36,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let kotlin_version = format_kotlin_version(&get_kotlin_version(
-                        context,
-                        &config.kotlin_binary,
-                    )?)?;
-                    Some(Ok(kotlin_version))
+                    let kotlin_version = get_kotlin_version(context, config.kotlin_binary)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &kotlin_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -57,28 +61,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_kotlin_version(context: &Context, kotlin_binary: &str) -> Option<String> {
-    match context.exec_cmd(kotlin_binary, &["-version"]) {
-        Some(output) => {
-            if output.stdout.is_empty() {
-                Some(output.stderr)
-            } else {
-                Some(output.stdout)
-            }
-        }
-        None => None,
-    }
+    let command = context.exec_cmd(kotlin_binary, &["-version"])?;
+    let kotlin_version_string = get_command_string_output(command);
+
+    parse_kotlin_version(&kotlin_version_string)
 }
 
-fn format_kotlin_version(kotlin_stdout: &str) -> Option<String> {
+fn parse_kotlin_version(kotlin_stdout: &str) -> Option<String> {
     // kotlin -version output looks like this:
     // Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)
-
     // kotlinc -version output looks like this:
     // info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)
     let re = Regex::new(KOTLIN_VERSION_PATTERN).ok()?;
     let captures = re.captures(kotlin_stdout)?;
     let version = &captures["version"];
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -159,20 +156,20 @@ mod tests {
     }
 
     #[test]
-    fn test_format_kotlin_version_from_runtime() {
+    fn test_parse_kotlin_version_from_runtime() {
         let kotlin_input = "Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)";
         assert_eq!(
-            format_kotlin_version(kotlin_input),
-            Some("v1.4.21".to_string())
+            parse_kotlin_version(kotlin_input),
+            Some("1.4.21".to_string())
         );
     }
 
     #[test]
-    fn test_format_kotlin_version_from_compiler() {
+    fn test_parse_kotlin_version_from_compiler() {
         let kotlin_input = "info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)";
         assert_eq!(
-            format_kotlin_version(kotlin_input),
-            Some("v1.4.21".to_string())
+            parse_kotlin_version(kotlin_input),
+            Some("1.4.21".to_string())
         );
     }
 }

@@ -2,7 +2,6 @@ use quick_xml::events::Event;
 use quick_xml::Reader;
 use std::ffi::OsStr;
 use std::iter::Iterator;
-use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::str;
 
@@ -12,6 +11,7 @@ use crate::formatter::StringFormatter;
 use crate::utils;
 
 type JValue = serde_json::Value;
+use crate::formatter::VersionFormatter;
 
 const GLOBAL_JSON_FILE: &str = "global.json";
 const PROJECT_JSON_FILE: &str = "project.json";
@@ -64,7 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         get_version_from_cli(context)
                     };
-                    version.map(|v| Ok(v.0))
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &version?,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 "tfm" => find_current_tfm(&dotnet_files).map(Ok),
                 _ => None,
@@ -134,7 +139,7 @@ fn estimate_dotnet_version(
     files: &[DotNetFile],
     current_dir: &Path,
     repo_root: Option<&Path>,
-) -> Option<Version> {
+) -> Option<String> {
     let get_file_of_type = |t: FileType| files.iter().find(|f| f.file_type == t);
 
     // It's important to check for a global.json or a solution file first,
@@ -169,8 +174,8 @@ fn estimate_dotnet_version(
 ///       (Unless there is a git repository, and the parent is above the root of that repository)
 ///     - The root of the git repository
 ///       (If there is one)
-fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<Version> {
-    let current_dir_is_repo_root = repo_root.map(|r| r == current_dir).unwrap_or(false);
+fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> Option<String> {
+    let current_dir_is_repo_root = repo_root.map_or(false, |r| r == current_dir);
     let parent_dir = if current_dir_is_repo_root {
         // Don't scan the parent directory if it's above the root of a git repository
         None
@@ -181,7 +186,7 @@ fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> 
     // Check the parent directory, or otherwise the repository root, for a global.json
     let mut check_dirs = parent_dir
         .iter()
-        .chain(repo_root.iter())
+        .chain(&repo_root)
         .copied() // Copies the reference, not the Path itself
         .collect::<Vec<&Path>>();
 
@@ -196,7 +201,7 @@ fn try_find_nearby_global_json(current_dir: &Path, repo_root: Option<&Path>) -> 
         .find_map(|d| check_directory_for_global_json(d))
 }
 
-fn check_directory_for_global_json(path: &Path) -> Option<Version> {
+fn check_directory_for_global_json(path: &Path) -> Option<String> {
     let global_json_path = path.join(GLOBAL_JSON_FILE);
     log::debug!(
         "Checking if global.json exists at: {}",
@@ -209,7 +214,7 @@ fn check_directory_for_global_json(path: &Path) -> Option<Version> {
     }
 }
 
-fn get_pinned_sdk_version_from_file(path: &Path) -> Option<Version> {
+fn get_pinned_sdk_version_from_file(path: &Path) -> Option<String> {
     let json_text = crate::utils::read_file(path).ok()?;
     log::debug!(
         "Checking if .NET SDK version is pinned in: {}",
@@ -218,7 +223,7 @@ fn get_pinned_sdk_version_from_file(path: &Path) -> Option<Version> {
     get_pinned_sdk_version(&json_text)
 }
 
-fn get_pinned_sdk_version(json: &str) -> Option<Version> {
+fn get_pinned_sdk_version(json: &str) -> Option<String> {
     let parsed_json: JValue = serde_json::from_str(json).ok()?;
 
     match parsed_json {
@@ -230,9 +235,8 @@ fn get_pinned_sdk_version(json: &str) -> Option<Version> {
                     match version {
                         JValue::String(version_string) => {
                             let mut buffer = String::with_capacity(version_string.len() + 1);
-                            buffer.push('v');
                             buffer.push_str(version_string);
-                            Some(Version(buffer))
+                            Some(buffer)
                         }
                         _ => None,
                     }
@@ -270,8 +274,8 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
 
     match extension_lower.as_ref().map(|f| f.as_ref()) {
         Some("sln") => return Some(FileType::SolutionFile),
-        Some("csproj") | Some("fsproj") | Some("xproj") => return Some(FileType::ProjectFile),
-        Some("props") | Some("targets") => return Some(FileType::MsBuildFile),
+        Some("csproj" | "fsproj" | "xproj") => return Some(FileType::ProjectFile),
+        Some("props" | "targets") => return Some(FileType::MsBuildFile),
         _ => (),
     };
 
@@ -282,12 +286,12 @@ fn map_str_to_lower(value: Option<&OsStr>) -> Option<String> {
     Some(value?.to_str()?.to_ascii_lowercase())
 }
 
-fn get_version_from_cli(context: &Context) -> Option<Version> {
+fn get_version_from_cli(context: &Context) -> Option<String> {
     let version_output = context.exec_cmd("dotnet", &["--version"])?;
-    Some(Version(format!("v{}", version_output.stdout.trim())))
+    Some(format!("v{}", version_output.stdout.trim()))
 }
 
-fn get_latest_sdk_from_cli(context: &Context) -> Option<Version> {
+fn get_latest_sdk_from_cli(context: &Context) -> Option<String> {
     match context.exec_cmd("dotnet", &["--list-sdks"]) {
         Some(sdks_output) => {
             fn parse_failed<T>() -> Option<T> {
@@ -305,9 +309,8 @@ fn get_latest_sdk_from_cli(context: &Context) -> Option<Version> {
             if take_until > 1 {
                 let version = &latest_sdk[..take_until];
                 let mut buffer = String::with_capacity(version.len() + 1);
-                buffer.push('v');
                 buffer.push_str(version);
-                Some(Version(buffer))
+                Some(buffer)
             } else {
                 parse_failed()
             }
@@ -338,29 +341,20 @@ enum FileType {
     MsBuildFile,
 }
 
-struct Version(String);
-
-impl Deref for Version {
-    type Target = String;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
     use ansi_term::Color;
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
-    use std::process::Command;
     use tempfile::{self, TempDir};
 
     #[test]
     fn shows_nothing_in_directory_with_zero_relevant_files() -> io::Result<()> {
         let workspace = create_workspace(false)?;
-        expect_output(&workspace.path(), None);
+        expect_output(workspace.path(), None);
         workspace.close()
     }
 
@@ -369,8 +363,11 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "Directory.Build.props", None)?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
+            workspace.path(),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -380,8 +377,11 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "Directory.Build.targets", None)?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
+            workspace.path(),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -391,8 +391,11 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "Packages.props", None)?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
+            workspace.path(),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -401,10 +404,7 @@ mod tests {
     fn shows_latest_in_directory_with_solution() -> io::Result<()> {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "solution.sln", None)?;
-        expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
-        );
+        expect_output(workspace.path(), None);
         workspace.close()
     }
 
@@ -414,9 +414,9 @@ mod tests {
         let csproj = make_csproj_with_tfm("TargetFramework", "netstandard2.0");
         touch_path(&workspace, "project.csproj", Some(&csproj))?;
         expect_output(
-            &workspace.path(),
+            workspace.path(),
             Some(format!(
-                "{}",
+                "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
@@ -428,8 +428,11 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.fsproj", None)?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
+            workspace.path(),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -439,8 +442,11 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.xproj", None)?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
+            workspace.path(),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -450,8 +456,11 @@ mod tests {
         let workspace = create_workspace(false)?;
         touch_path(&workspace, "project.json", None)?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v3.1.103 "))),
+            workspace.path(),
+            Some(format!(
+                "via {}",
+                Color::Blue.bold().paint(".NET v3.1.103 ")
+            )),
         );
         workspace.close()
     }
@@ -462,8 +471,8 @@ mod tests {
         let global_json = make_pinned_sdk_json("1.2.3");
         touch_path(&workspace, "global.json", Some(&global_json))?;
         expect_output(
-            &workspace.path(),
-            Some(format!("{}", Color::Blue.bold().paint(".NET v1.2.3 "))),
+            workspace.path(),
+            Some(format!("via {}", Color::Blue.bold().paint(".NET v1.2.3 "))),
         );
         workspace.close()
     }
@@ -478,7 +487,7 @@ mod tests {
         expect_output(
             &workspace.path().join("project"),
             Some(format!(
-                "{}",
+                "via {}",
                 Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
@@ -499,7 +508,7 @@ mod tests {
         expect_output(
             &workspace.path().join("deep/path/to/project"),
             Some(format!(
-                "{}",
+                "via {}",
                 Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
@@ -514,7 +523,7 @@ mod tests {
         expect_output(
             workspace.path(),
             Some(format!(
-                "{}",
+                "via {}",
                 Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
@@ -529,7 +538,7 @@ mod tests {
         expect_output(
             workspace.path(),
             Some(format!(
-                "{}",
+                "via {}",
                 Color::Blue
                     .bold()
                     .paint(".NET v3.1.103 🎯 netstandard2.0;net461 ")
@@ -542,7 +551,7 @@ mod tests {
         let repo_dir = tempfile::tempdir()?;
 
         if is_repo {
-            Command::new("git")
+            create_command("git")?
                 .args(&["init", "--quiet"])
                 .current_dir(repo_dir.path())
                 .output()?;
@@ -613,7 +622,7 @@ mod tests {
     "#;
 
         let version = get_pinned_sdk_version(json_text).unwrap();
-        assert_eq!("v1.2.3", version.0);
+        assert_eq!("1.2.3", version);
     }
 
     #[test]

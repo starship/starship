@@ -58,12 +58,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = repo
         .and_then(|r| r.root.as_ref())
         .filter(|root| *root != &home_dir)
-        .and_then(|root| contract_repo_path(&display_dir, root));
+        .and_then(|root| contract_repo_path(display_dir, root));
 
     // Otherwise use the logical path, automatically contracting
     // the home directory if required.
     let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(&display_dir, &home_dir, &home_symbol));
+        dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -79,7 +79,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(&display_dir, &home_dir, &home_symbol);
+            let contracted_home_dir = contract_path(display_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
                 contracted_home_dir,
@@ -132,7 +132,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "before_root_path" => Some(Ok(&path_vec[0])),
                 "repo_root" => Some(Ok(&path_vec[1])),
                 "read_only" => {
-                    if is_readonly_dir(&physical_dir) {
+                    if is_readonly_dir(physical_dir) {
                         Some(Ok(&lock_symbol))
                     } else {
                         None
@@ -280,7 +280,7 @@ fn real_path<P: AsRef<Path>>(path: P) -> PathBuf {
 /// substitutions, in order, on the path. Any non-pair of strings is ignored.
 fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -> String {
     let mut substituted_dir = dir_string;
-    for substitution_pair in substitutions.iter() {
+    for substitution_pair in substitutions {
         substituted_dir = substituted_dir.replace(substitution_pair.0, substitution_pair.1);
     }
     substituted_dir
@@ -325,14 +325,14 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
+    use crate::utils::home_dir;
     use ansi_term::Color;
-    use dirs_next::home_dir;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
     use std::os::windows::fs::symlink_dir as symlink;
     use std::path::Path;
-    use std::process::Command;
     use std::{fs, io};
     use tempfile::TempDir;
 
@@ -357,7 +357,7 @@ mod tests {
         let repo_variations = [repo_dir.clone(), repo_dir.canonicalize().unwrap()];
         for src_dir in &src_variations {
             for repo_dir in &repo_variations {
-                let output = contract_repo_path(&src_dir, &repo_dir);
+                let output = contract_repo_path(src_dir, repo_dir);
                 assert_eq!(output, Some("rocket-controls/src".to_string()));
             }
         }
@@ -470,7 +470,7 @@ mod tests {
     }
 
     fn init_repo(path: &Path) -> io::Result<()> {
-        Command::new("git")
+        create_command("git")?
             .args(&["init"])
             .current_dir(path)
             .output()
@@ -521,7 +521,7 @@ mod tests {
             let tmp_dir = TempDir::new_in(home_dir().unwrap().as_path())?;
             let dir = tmp_dir.path().join("src/fuel-gauge");
             fs::create_dir_all(&dir)?;
-            init_repo(&tmp_dir.path())?;
+            init_repo(tmp_dir.path())?;
 
             let actual = ModuleRenderer::new("directory")
                 .config(toml::toml! {

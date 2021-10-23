@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::nim::NimConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Nim version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -33,7 +34,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .exec_cmd("nim", &["--version"])
                     .map(|command_output| command_output.stdout)
                     .and_then(|nim_version_output| {
-                        Some(format!("v{}", parse_nim_version(&nim_version_output)?))
+                        let nim_version = parse_nim_version(&nim_version_output)?;
+                        VersionFormatter::format_module_version(
+                            module.get_name(),
+                            nim_version,
+                            config.version_format,
+                        )
                     })
                     .map(Ok),
                 _ => None,
@@ -79,8 +85,8 @@ mod tests {
             .iter()
             .any(|&v| parse_nim_version(v).is_some());
 
-        assert_eq!(true, all_some);
-        assert_eq!(true, all_none);
+        assert!(all_some);
+        assert!(all_none);
 
         let sample_nimc_output = "Nim Compiler Version 1.2.0 [Linux: amd64]
             Compiled at 2020-04-03

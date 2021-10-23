@@ -7,6 +7,8 @@
 # after drawing the prompt. This ensures that the timing for one command is only
 # ever drawn once (for the prompt immediately after it is run).
 
+zmodload zsh/parameter  # Needed to access jobstates variable for STARSHIP_JOBS_COUNT
+
 # Defines a function `__starship_get_time` that sets the time since epoch in millis in STARSHIP_CAPTURED_TIME.
 if [[ $ZSH_VERSION == ([1-4]*) ]]; then
     # ZSH <= 5; Does not have a built-in variable so we will rely on Starship's inbuilt time function.
@@ -24,7 +26,7 @@ fi
 # Will be run before every prompt draw
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$?
+    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
 
     # Compute cmd_duration, if we have a time to consume, otherwise clear the
     # previous duration
@@ -34,6 +36,10 @@ starship_precmd() {
     else
         unset STARSHIP_DURATION
     fi
+
+    # Use length of jobstates array as number of jobs. Expansion fails inside
+    # quotes so we set it here and then use the value later on.
+    STARSHIP_JOBS_COUNT=${#jobstates}
 }
 starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
@@ -50,7 +56,7 @@ starship_preexec() {
 if [[ -z ${precmd_functions[(re)starship_precmd]} ]]; then
     precmd_functions+=(starship_precmd)
 fi
-if [[ -z ${preexec_function[(re)starship_preexec]} ]]; then
+if [[ -z ${preexec_functions[(re)starship_preexec]} ]]; then
     preexec_functions+=(starship_preexec)
 fi
 
@@ -60,15 +66,14 @@ starship_zle-keymap-select() {
 }
 
 ## Check for existing keymap-select widget.
-local existing_keymap_select_fn=$widgets[zle-keymap-select];
 # zle-keymap-select is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
-existing_keymap_select_fn=${existing_keymap_select_fn//user:};
-if [[ -z ${existing_keymap_select_fn} ]]; then
+__starship_preserved_zle_keymap_select=${widgets[zle-keymap-select]#user:}
+if [[ -z $__starship_preserved_zle_keymap_select ]]; then
     zle -N zle-keymap-select starship_zle-keymap-select;
 else
     # Define a wrapper fn to call the original widget fn and then Starship's.
     starship_zle-keymap-select-wrapped() {
-        ${existing_keymap_select_fn} "$@";
+        $__starship_preserved_zle_keymap_select "$@";
         starship_zle-keymap-select "$@";
     }
     zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
@@ -85,5 +90,8 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
-setopt prompt{percent,subst}
-PROMPT='$(::STARSHIP:: prompt --keymap=${KEYMAP} --status=${STARSHIP_CMD_STATUS} --cmd-duration=${STARSHIP_DURATION} --jobs=%j)'
+setopt promptsubst
+
+PROMPT='$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+

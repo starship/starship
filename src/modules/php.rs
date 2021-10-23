@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current PHP version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,14 +31,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let php_cmd_output = context.exec_cmd(
+                    let php_version = context.exec_cmd(
                         "php",
                         &[
                             "-nr",
                             "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;",
                         ],
-                    )?;
-                    Some(Ok(format_php_version(&php_cmd_output.stdout)))
+                    )?.stdout;
+                    VersionFormatter::format_module_version(module.get_name(), &php_version, config.version_format).map(Ok)
                 }
                 _ => None,
             })
@@ -55,23 +56,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_php_version(php_version: &str) -> String {
-    format!("v{}", php_version)
-}
-
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
-
-    #[test]
-    fn test_format_php_version() {
-        let input = "7.3.8";
-        assert_eq!(format_php_version(input), "v7.3.8".to_string());
-    }
 
     #[test]
     fn folder_without_php_files() -> io::Result<()> {

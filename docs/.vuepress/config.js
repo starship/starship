@@ -8,7 +8,7 @@ module.exports = {
     "/de-DE/": {
       lang: "de-DE",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
+      description: "Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!"
     },
     "/es-ES/": {
       lang: "es-ES",
@@ -20,15 +20,25 @@ module.exports = {
       title: "Starship",
       description: "L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !"
     },
+    "/ja-JP/": {
+      lang: "ja-JP",
+      title: "Starship",
+      description: "シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！"
+    },
+    "/pt-BR/": {
+      lang: "pt-BR",
+      title: "Starship",
+      description: "O prompt minimalista, extremamente rápido e infinitamente personalizável para qualquer shell!"
+    },
     "/ru-RU/": {
       lang: "ru-RU",
       title: "Starship",
       description: "Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!"
     },
-    "/ja-JP/": {
-      lang: "ja-JP",
+    "/vi-VN/": {
+      lang: "vi-VN",
       title: "Starship",
-      description: "シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！"
+      description: "Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!"
     },
     "/zh-CN/": {
       lang: "zh-CN",
@@ -38,25 +48,20 @@ module.exports = {
     "/zh-TW/": {
       lang: "zh-TW",
       title: "Starship",
-      description: "The minimal, blazing-fast, and infinitely customizable prompt for any shell!"
-    },
-    "/vi-VN/": {
-      lang: "vi-VN",
-      title: "Starship",
-      description: "Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!"
+      description: "適合任何 shell 的最小、極速、無限客製化的提示字元！"
     }
   },
   // prettier-ignore
   head: [
     ["link", { rel: "icon", href: "/icon.png" }],
     ["meta", { property: "og:title", content: "Starship: Cross-Shell Prompt" }],
-    ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
+    ["meta", { property: "og:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and Powershell."}],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:url", content: "https://starship.rs/" }],
     ["meta", { property: "og:image", content: "https://starship.rs/icon.png" }],
     ["meta", { name: "twitter:card", content: "summary"}],
     ["meta", { name: "twitter:title", content: "Starship: Cross-Shell Prompt"}],
-    ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, and Powershell."}],
+    ["meta", { name: "twitter:description", content: "Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and Powershell."}],
     ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png"}],
     ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt"}],
   ],
@@ -155,25 +160,6 @@ module.exports = {
           ["/fr-FR/presets/", "Paramètres par défaut"]
         ]
       },
-      "/ru-RU/": {
-        // text for the language dropdown
-        selectText: "Языки",
-        // label for this locale in the language dropdown
-        label: "Русский",
-        // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "Редактировать эту страницу на GitHub",
-        // Custom navbar values
-        nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
-        // Custom sidebar values
-        sidebar: [
-          "/ru-RU/",
-          ["/ru-RU/guide/", "Руководство"],
-          ["/ru-RU/config/", "Настройка"],
-          ["/ru-RU/advanced-config/", "Расширенная Настройка"],
-          ["/ru-RU/faq/", "Часто Задаваемые Вопросы"],
-          ["/ru-RU/presets/", "Предустановки"]
-        ]
-      },
       "/ja-JP/": {
         // text for the language dropdown
         selectText: "言語",
@@ -194,40 +180,42 @@ module.exports = {
           ["/ja-JP/migrating-to-0.45.0/", "v0.45への移行"]
         ]
       },
-      "/zh-TW/": {
+      "/pt-BR/": {
         // text for the language dropdown
-        selectText: "語言",
+        selectText: "Languages",
         // label for this locale in the language dropdown
-        label: "繁體中文",
+        label: "Português do Brasil",
         // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "在 GitHub 上修改此頁面",
+        editLinkText: "Edite esta página no Github",
         // Custom navbar values
-        nav: [{ text: "設定", link: "/zh-TW/config/" }],
+        nav: [{ text: "Configuração", link: "/pt-BR/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/zh-TW/",
-          ["/zh-TW/guide/", "指引"],
-          ["/zh-TW/config/", "設定"],
-          ["/zh-TW/advanced-config/", "進階設定"]
+          "/pt-BR/",
+          ["/pt-BR/guide/", "Guia"],
+          ["/pt-BR/config/", "Configuração"],
+          ["/pt-BR/advanced-config/", "Configuração avançada"],
+          ["/pt-BR/faq/", "Perguntas frequentes"],
+          ["/pt-BR/presets/", "Predefinições"]
         ]
       },
-      "/zh-CN/": {
+      "/ru-RU/": {
         // text for the language dropdown
-        selectText: "语言",
+        selectText: "Языки",
         // label for this locale in the language dropdown
-        label: "简体中文",
+        label: "Русский",
         // Custom text for edit link. Defaults to "Edit this page"
-        editLinkText: "在 GitHub 上修改此页",
+        editLinkText: "Редактировать эту страницу на GitHub",
         // Custom navbar values
-        nav: [{ text: "配置", link: "/zh-CN/config/" }],
+        nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
         // Custom sidebar values
         sidebar: [
-          "/zh-CN/",
-          ["/zh-CN/guide/", "指南"],
-          ["/zh-CN/config/", "配置"],
-          ["/zh-CN/advanced-config/", "高级配置"],
-          ["/zh-CN/faq/", "常见问题"],
-          ["/zh-CN/presets/", "社区配置分享"]
+          "/ru-RU/",
+          ["/ru-RU/guide/", "Руководство"],
+          ["/ru-RU/config/", "Настройка"],
+          ["/ru-RU/advanced-config/", "Расширенная Настройка"],
+          ["/ru-RU/faq/", "Часто Задаваемые Вопросы"],
+          ["/ru-RU/presets/", "Предустановки"]
         ]
       },
       "/vi-VN/": {
@@ -249,6 +237,42 @@ module.exports = {
           ["/vi-VN/presets/", "Mẫu thiết lập"]
         ]
       }
+    },
+    "/zh-TW/": {
+      // text for the language dropdown
+      selectText: "語言",
+      // label for this locale in the language dropdown
+      label: "繁體中文",
+      // Custom text for edit link. Defaults to "Edit this page"
+      editLinkText: "在 GitHub 上修改此頁面",
+      // Custom navbar values
+      nav: [{ text: "設定", link: "/zh-TW/config/" }],
+      // Custom sidebar values
+      sidebar: [
+        "/zh-TW/",
+        ["/zh-TW/guide/", "指引"],
+        ["/zh-TW/config/", "設定"],
+        ["/zh-TW/advanced-config/", "進階設定"]
+      ]
+    },
+    "/zh-CN/": {
+      // text for the language dropdown
+      selectText: "语言",
+      // label for this locale in the language dropdown
+      label: "简体中文",
+      // Custom text for edit link. Defaults to "Edit this page"
+      editLinkText: "在 GitHub 上修改此页",
+      // Custom navbar values
+      nav: [{ text: "配置", link: "/zh-CN/config/" }],
+      // Custom sidebar values
+      sidebar: [
+        "/zh-CN/",
+        ["/zh-CN/guide/", "指南"],
+        ["/zh-CN/config/", "配置"],
+        ["/zh-CN/advanced-config/", "高级配置"],
+        ["/zh-CN/faq/", "常见问题"],
+        ["/zh-CN/presets/", "社区配置分享"]
+      ]
     }
   },
   plugins: [
@@ -263,6 +287,7 @@ module.exports = {
       {
         hostname: "https://starship.rs"
       }
-    ]
+    ],
+    ['vuepress-plugin-code-copy', true]
   ]
 };

@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::go::GoConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Go version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,8 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    format_go_version(&context.exec_cmd("go", &["version"])?.stdout.as_str())
-                        .map(Ok)
+                    let golang_version =
+                        parse_go_version(&context.exec_cmd("go", &["version"])?.stdout)?;
+
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &golang_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -49,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_go_version(go_stdout: &str) -> Option<String> {
+fn parse_go_version(go_stdout: &str) -> Option<String> {
     // go version output looks like this:
     // go version go1.13.3 linux/amd64
 
@@ -63,7 +71,7 @@ fn format_go_version(go_stdout: &str) -> Option<String> {
         // return "1.12.4"
         .next()?;
 
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -181,6 +189,6 @@ mod tests {
     #[test]
     fn test_format_go_version() {
         let input = "go version go1.12 darwin/amd64";
-        assert_eq!(format_go_version(input), Some("v1.12".to_string()));
+        assert_eq!(parse_go_version(input), Some("1.12".to_string()));
     }
 }

@@ -1,21 +1,21 @@
-# 🚀 Advanced Installation
+# 🚀 進階安裝
 
-To install starship, you need to do two things:
+要安裝 starship，你必須做兩件事：
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. 下載 **starship** 執行檔到你的電腦裡
+1. 修改 shell 的初始化腳本，讓其使用 starship 作為提示字元
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+對大部分的使用者來說，在[主頁面](/guide/#🚀-installation)的安裝指引皆足以正常運作。 然而，對於一些較特別的平台，我們需要不同的安裝指引。
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+有太多平台不適用於主要的 README.md 檔案了，所以這裡有一些來自社群的其他平台的安裝指引。 你的平台不在這裡嗎？ 如果你找出怎麼安裝，請幫我們加上你的指引！
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### 先決要求
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+前往[Chocolatey 安裝頁面](https://chocolatey.org/install)，並且跟隨指引來安裝 Chocolatey。
 
-### Installation
+### 安裝
 
 ```powershell
 choco install starship
@@ -29,25 +29,25 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### 安裝
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### 獲得執行檔
 
-#### Imperatively
+#### 命令式
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### 聲明式、單個使用者，使用 [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+在 `home.nix` 檔案中，啟用 `programs.starship` 模組，並且添加你的設定：
 
 ```nix
 {
@@ -69,15 +69,15 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+然後執行
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### 聲明式、全系統，使用 NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+將 `pkgs.starship` 添加至 `configuration.nix` 檔案內的 `environment.systemPackages` 下，並且執行
 
 ```sh
 sudo nixos-rebuild switch

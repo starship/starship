@@ -2,6 +2,8 @@ use crate::configs::scala::ScalaConfig;
 use crate::formatter::StringFormatter;
 
 use super::{Context, Module, RootModuleConfig};
+use crate::formatter::VersionFormatter;
+use crate::utils::get_command_string_output;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("scala");
@@ -31,7 +33,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let scala_version = get_scala_version(context)?;
-                    Some(Ok(scala_version))
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &scala_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -50,24 +57,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_scala_version(context: &Context) -> Option<String> {
-    let output = context.exec_cmd("scalac", &["-version"])?;
-    let scala_version = if output.stdout.is_empty() {
-        output.stderr
-    } else {
-        output.stdout
-    };
+    let command = context.exec_cmd("scalac", &["-version"])?;
+    let scala_version_string = get_command_string_output(command);
 
-    parse_scala_version(&scala_version)
+    parse_scala_version(&scala_version_string)
 }
 
-fn parse_scala_version(scala_version: &str) -> Option<String> {
-    let version = scala_version
+fn parse_scala_version(scala_version_string: &str) -> Option<String> {
+    let version = scala_version_string
         // split into ["Scala", "compiler", "version", "2.13.5", "--", ...]
         .split_whitespace()
         // take "2.13.5"
         .nth(3)?;
 
-    Some(format!("v{}", &version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -82,7 +85,7 @@ mod tests {
     fn test_parse_scala_version() {
         let scala_2_13 =
             "Scala compiler version 2.13.5 -- Copyright 2002-2020, LAMP/EPFL and Lightbend, Inc.";
-        assert_eq!(parse_scala_version(scala_2_13), Some("v2.13.5".to_string()));
+        assert_eq!(parse_scala_version(scala_2_13), Some("2.13.5".to_string()));
     }
 
     #[test]
@@ -90,7 +93,7 @@ mod tests {
         let dotty_version = "Scala compiler version 3.0.0-RC1 -- Copyright 2002-2021, LAMP/EPFL";
         assert_eq!(
             parse_scala_version(dotty_version),
-            Some("v3.0.0-RC1".to_string())
+            Some("3.0.0-RC1".to_string())
         );
     }
 

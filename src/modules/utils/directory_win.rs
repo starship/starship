@@ -1,10 +1,9 @@
 extern crate winapi;
 
-use std::iter;
 use std::mem;
 use std::os::windows::ffi::OsStrExt;
 use std::path::Path;
-use winapi::ctypes::c_void;
+
 use winapi::shared::minwindef::{BOOL, DWORD};
 use winapi::um::handleapi;
 use winapi::um::processthreadsapi;
@@ -13,7 +12,7 @@ use winapi::um::winnt::{
     SecurityImpersonation, BOOLEAN, DACL_SECURITY_INFORMATION, FILE_ALL_ACCESS,
     FILE_GENERIC_EXECUTE, FILE_GENERIC_READ, FILE_GENERIC_WRITE, GENERIC_MAPPING,
     GROUP_SECURITY_INFORMATION, HANDLE, LPCWSTR, OWNER_SECURITY_INFORMATION, PRIVILEGE_SET,
-    PSECURITY_DESCRIPTOR, STANDARD_RIGHTS_READ, TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY,
+    STANDARD_RIGHTS_READ, TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY,
 };
 
 /// Checks if the current user has write access right to the `folder_path`
@@ -22,11 +21,7 @@ use winapi::um::winnt::{
 /// the current process access token and directory's security descriptor.
 /// Does not work for network drives and always returns true
 pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'static str> {
-    let folder_name: Vec<u16> = folder_path
-        .as_os_str()
-        .encode_wide()
-        .chain(iter::once(0))
-        .collect();
+    let folder_name: Vec<u16> = folder_path.as_os_str().encode_wide().chain([0]).collect();
 
     if is_network_path(&folder_name) {
         log::info!(
@@ -59,7 +54,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'stati
         securitybaseapi::GetFileSecurityW(
             folder_name.as_ptr(),
             OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
-            buf.as_mut_ptr() as *mut c_void,
+            buf.as_mut_ptr().cast::<std::ffi::c_void>(),
             length,
             &mut length,
         )
@@ -105,7 +100,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'stati
     unsafe { securitybaseapi::MapGenericMask(&mut access_rights, &mut mapping) };
     let rc = unsafe {
         securitybaseapi::AccessCheck(
-            buf.as_mut_ptr() as PSECURITY_DESCRIPTOR,
+            buf.as_mut_ptr().cast::<std::ffi::c_void>(),
             impersonated_token,
             access_rights,
             &mut mapping,

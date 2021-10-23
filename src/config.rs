@@ -87,12 +87,12 @@ impl<'a> ModuleConfig<'a> for u64 {
             Value::Integer(value) => {
                 // Converting i64 to u64
                 if *value > 0 {
-                    Some(*value as u64)
+                    Some(*value as Self)
                 } else {
                     None
                 }
             }
-            Value::String(value) => value.parse::<u64>().ok(),
+            Value::String(value) => value.parse::<Self>().ok(),
             _ => None,
         }
     }
@@ -109,12 +109,12 @@ impl<'a> ModuleConfig<'a> for usize {
         match config {
             Value::Integer(value) => {
                 if *value > 0 {
-                    Some(*value as usize)
+                    Some(*value as Self)
                 } else {
                     None
                 }
             }
-            Value::String(value) => value.parse::<usize>().ok(),
+            Value::String(value) => value.parse::<Self>().ok(),
             _ => None,
         }
     }
@@ -139,9 +139,9 @@ where
     S: Clone,
 {
     fn from_config(config: &'a Value) -> Option<Self> {
-        let mut hm = HashMap::default();
+        let mut hm = Self::default();
 
-        for (x, y) in config.as_table()?.iter() {
+        for (x, y) in config.as_table()? {
             hm.insert(x.clone(), T::from_config(y)?);
         }
 
@@ -155,9 +155,9 @@ where
     S: Clone,
 {
     fn from_config(config: &'a Value) -> Option<Self> {
-        let mut im = IndexMap::default();
+        let mut im = Self::default();
 
-        for (x, y) in config.as_table()?.iter() {
+        for (x, y) in config.as_table()? {
             im.insert(x.clone(), T::from_config(y)?);
         }
 
@@ -185,7 +185,7 @@ where
 {
     fn from_config(config: &'a Value) -> Option<Self> {
         if let Some(item) = T::from_config(config) {
-            return Some(VecOr(vec![item]));
+            return Some(Self(vec![item]));
         }
 
         let vec = config
@@ -194,7 +194,7 @@ where
             .map(|value| T::from_config(value))
             .collect::<Option<Vec<T>>>()?;
 
-        Some(VecOr(vec))
+        Some(Self(vec))
     }
 }
 
@@ -207,11 +207,11 @@ impl StarshipConfig {
     /// Initialize the Config struct
     pub fn initialize() -> Self {
         if let Some(file_data) = Self::config_from_file() {
-            StarshipConfig {
+            Self {
                 config: Some(file_data),
             }
         } else {
-            StarshipConfig {
+            Self {
                 config: Some(Value::Table(toml::value::Table::new())),
             }
         }
@@ -226,7 +226,7 @@ impl StarshipConfig {
         } else {
             // Default to using ~/.config/starship.toml
             log::debug!("STARSHIP_CONFIG is not set");
-            let config_path = dirs_next::home_dir()?.join(".config/starship.toml");
+            let config_path = utils::home_dir()?.join(".config/starship.toml");
             let config_path_str = config_path.to_str()?.to_owned();
             log::debug!("Using default config path: {}", config_path_str);
             config_path_str
@@ -342,6 +342,10 @@ impl StarshipConfig {
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
     }
+    /// Get the table of all the registered env_var modules, if any
+    pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
+        self.get_config(&["env_var"])?.as_table()
+    }
 
     pub fn get_root_config(&self) -> StarshipRootConfig {
         if let Some(root_config) = &self.config {
@@ -359,7 +363,8 @@ impl StarshipConfig {
  - 'underline'
  - 'bold'
  - 'italic'
- - '<color>'        (see the parse_color_string doc for valid color strings)
+ - 'inverted'
+ - '<color>'       (see the parse_color_string doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
@@ -383,6 +388,7 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "bold" => Some(style.bold()),
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
+                    "inverted" => Some(style.reverse()),
                     // When the string is supposed to be a color:
                     // Decide if we yield none, reset background or set color.
                     color_string => {
@@ -501,7 +507,7 @@ mod tests {
         rust_config.load_config(&config);
 
         assert_eq!(rust_config.symbol, "T ");
-        assert_eq!(rust_config.disabled, true);
+        assert!(rust_config.disabled);
         assert_eq!(rust_config.some_array, vec!["A"]);
     }
 
@@ -629,7 +635,7 @@ mod tests {
     #[test]
     fn test_from_bool() {
         let config = Value::Boolean(true);
-        assert_eq!(<bool>::from_config(&config).unwrap(), true);
+        assert!(<bool>::from_config(&config).unwrap());
     }
 
     #[test]
@@ -675,7 +681,7 @@ mod tests {
     }
 
     #[test]
-    fn table_get_styles_bold_italic_underline_green_dimmy_silly_caps() {
+    fn table_get_styles_bold_italic_underline_green_dimmed_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
         let mystyle = <Style>::from_config(&config).unwrap();
         assert!(mystyle.is_bold);
@@ -689,6 +695,27 @@ mod tests {
                 .italic()
                 .underline()
                 .dimmed()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_inverted_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD InVeRTed");
+        let mystyle = <Style>::from_config(&config).unwrap();
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_reverse);
+        assert_eq!(
+            mystyle,
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .reverse()
                 .fg(Color::Green)
         );
     }

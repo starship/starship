@@ -1,13 +1,13 @@
 # FAQ
 
-## What is the configuration used in the demo GIF?
+## ئەو ڕێکخستنە چییە لە GIF پێشاندانەکەدا بەکارهاتووە؟
 
 - **Terminal Emulator**: [iTerm2](https://iterm2.com/)
-  - **Theme**: Minimal
-  - **Color Scheme**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-- **Shell**: [Fish Shell](https://fishshell.com/)
-  - **Configuration**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
+  - **ڕووکار**:‌ Minimal
+  - **شێوازی ڕەنگەکان**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
+  - **فۆنت**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **شێڵ**: [شێڵی Fish](https://fishshell.com/)
+  - **ڕێکخستن**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Prompt**: [Starship](https://starship.rs/)
 
 ## How do I get command completion as shown in the demo GIF?
@@ -53,7 +53,7 @@ The prompt will use as much context as is provided, but no flags are "required".
 If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- --platform unknown-linux-musl
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
 ## I see symbols I don't understand or expect, what do they mean?
@@ -88,7 +88,7 @@ Starship is just as easy to uninstall as it is to install in the first place.
 
 If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
 
-If Starship was installed using the `curl | bash` script, the following command will delete the binary:
+If Starship was installed using the install script, the following command will delete the binary:
 
 ```sh
 # Locate and delete the starship binary

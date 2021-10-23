@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::julia::JuliaConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 /// Creates a module with the current Julia version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,10 +31,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => format_julia_version(
-                    &context.exec_cmd("julia", &["--version"])?.stdout.as_str(),
-                )
-                .map(Ok),
+                "version" => {
+                    let julia_version =
+                        parse_julia_version(&context.exec_cmd("julia", &["--version"])?.stdout)?;
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        &julia_version,
+                        config.version_format,
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None)
@@ -50,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_julia_version(julia_stdout: &str) -> Option<String> {
+fn parse_julia_version(julia_stdout: &str) -> Option<String> {
     // julia version output looks like this:
     // julia version 1.4.0
 
@@ -62,7 +69,7 @@ fn format_julia_version(julia_stdout: &str) -> Option<String> {
         .split_whitespace()
         .next()?;
 
-    Some(format!("v{}", version))
+    Some(version.to_string())
 }
 
 #[cfg(test)]
@@ -121,8 +128,8 @@ mod tests {
     }
 
     #[test]
-    fn test_format_julia_version() {
+    fn test_parse_julia_version() {
         let input = "julia version 1.4.0";
-        assert_eq!(format_julia_version(input), Some("v1.4.0".to_string()));
+        assert_eq!(parse_julia_version(input), Some("1.4.0".to_string()));
     }
 }

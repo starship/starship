@@ -18,7 +18,7 @@ features:
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Быстрая установка доступна для Bash, Fish, ZSH, Ion и PowerShell.
+description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
 ---
 
 <div class="center">
@@ -27,6 +27,10 @@ description: Starship - минимальная, быстрая и бесконе
     <source src="/demo.mp4" type="video/mp4">
   </video>
 </div>
+
+### Требования
+
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
 
 ### Быстрая установка
 
@@ -38,9 +42,9 @@ description: Starship - минимальная, быстрая и бесконе
    Через Bash:
 
    ```sh
-   curl -fsSL https://starship.rs/install.sh | bash
+   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Для обновления Starship перезапустите этот скрипт. Он заменит текущую версию без изменения конфигурации.
 
 
    #### Установить через менеджер пакетов
@@ -112,11 +116,12 @@ description: Starship - минимальная, быстрая и бесконе
    eval $(starship init ion)
    ```
 
+
    #### Elvish
 
    ::: warning Only elvish v0.15 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -127,10 +132,35 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Добавьте следующее в конец `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
 
    eval `starship init tcsh`
+   ```
+
+
+   #### Nushell
+
+   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+
+   ```toml
+   startup = [
+    "mkdir ~/.cache/starship",
+    "starship init nu | save ~/.cache/starship/init.nu",
+    "source ~/.cache/starship/init.nu"
+   ]
+   prompt = "starship_prompt"
+   ```
+
+
+   #### Xonsh
+
+   Add the following to the end of `~/.xonshrc`:
+
+   ```sh
+   # ~/.xonshrc
+
+   execx($(starship init xonsh))
    ```

@@ -1,21 +1,21 @@
-# 🚀 Advanced Installation
+# 🚀 Installazione Avanzata
 
-To install starship, you need to do two things:
+Per installare starship, è necessario fare due cose:
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. Ottieni il binario **starship** sul tuo computer
+1. Indica alla tua shell di usare il binario starship come prompt modificando i suoi script in init
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Per la maggior parte degli utenti, le istruzioni nella [pagina principale](/guide/#🚀-installation) funzioneranno bene. Tuttavia, per alcune piattaforme più specializzate, sono necessarie istruzioni diverse.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Ci sono così tante piattaforme là fuori che non sono tutte inserite nel README.md principale, così ecco alcune istruzioni di installazione per altre piattaforme della community. La tua non c'è? Per favore, aggiungilo qui se capisci che manca!
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### Prerequisiti
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Vai alla pagina di installazione [Chocolatey](https://chocolatey.org/install) e segui le istruzioni per installare Chocolatey.
 
-### Installation
+### Installazione
 
 ```powershell
 choco install starship
@@ -29,25 +29,25 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### Installazione
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Ottenere il Binario
 
-#### Imperatively
+#### Imperativo
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Dichiarativo, singolo utente, tramite [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Abilita il modulo `programs.starship` nel tuo file `home.nix` e aggiungi le tue impostazioni
 
 ```nix
 {
@@ -69,15 +69,15 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+poi eseguire
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Dichiarativa, di sistema, con NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Aggiungi `pkgs.starship` a `environment.systemPackages` in `configuration.nix`, poi esegui
 
 ```sh
 sudo nixos-rebuild switch

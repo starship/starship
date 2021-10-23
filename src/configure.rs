@@ -2,10 +2,12 @@ use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
-use std::process::Command;
+use std::process::Stdio;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
+use crate::configs::PROMPT_ORDER;
+use crate::utils;
 use std::fs::File;
 use std::io::Write;
 use toml::map::Map;
@@ -70,7 +72,26 @@ pub fn print_configuration(use_default: bool) {
 
     let string_config = toml::to_string_pretty(&config).unwrap();
 
-    println!("# Warning: This config does not include keys that have an unset value");
+    println!("# Warning: This config does not include keys that have an unset value\n");
+    println!(
+        "# $all is shorthand for {}",
+        PROMPT_ORDER
+            .iter()
+            .map(|module_name| format!("${}", module_name))
+            .collect::<String>()
+    );
+
+    // Unwrapping is fine because config is based on FullConfig
+    let custom_modules = config.get("custom").unwrap().as_table().unwrap();
+    if !use_default && !custom_modules.is_empty() {
+        println!(
+            "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
+            custom_modules
+                .keys()
+                .map(|module_name| format!("${{custom.{}}}", module_name))
+                .collect::<String>()
+        );
+    }
     println!("{}", string_config);
 }
 
@@ -136,7 +157,11 @@ pub fn edit_configuration() {
     let config_path = get_config_path();
     let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
 
-    let command = Command::new(&editor_cmd[0])
+    let command = utils::create_command(&editor_cmd[0])
+        .expect("Unable to locate editor in $PATH.")
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
         .args(&editor_cmd[1..])
         .arg(config_path)
         .status();
@@ -177,7 +202,7 @@ fn get_config_path() -> OsString {
     if let Some(config_path) = env::var_os("STARSHIP_CONFIG") {
         return config_path;
     }
-    dirs_next::home_dir()
+    utils::home_dir()
         .expect("couldn't find home directory")
         .join(".config")
         .join("starship.toml")

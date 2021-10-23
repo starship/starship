@@ -9,10 +9,16 @@ use crate::utils;
 /// Creates a module with the currently active Docker context
 ///
 /// Will display the Docker context if the following criteria are met:
-///     - There is a file named `$HOME/.docker/config.json`
+///     - There is a non-empty enviroment variable named DOCKER_HOST
+///     - Or there is a non-empty enviroment variable named DOCKER_CONTEXT
+///     - Or there is a file named `$HOME/.docker/config.json`
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
 ///     - The value of `currentContext` is not `default`
+///     - If multiple criterias are met, we use the following order to define the docker context:
+///     - DOCKER_HOST, DOCKER_CONTEXT, $HOME/.docker/config.json, $DOCKER_CONFIG/config.json
+///     - (This is the same order docker follows, as DOCKER_HOST and DOCKER_CONTEXT override the
+///     config)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("docker_context");
     let config: DockerContextConfig = DockerContextConfig::try_load(module.config);
@@ -35,50 +41,46 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     )
     .join("config.json");
 
-    if !docker_config.exists() {
-        return None;
-    }
+    let docker_context_env = std::array::IntoIter::new(["DOCKER_HOST", "DOCKER_CONTEXT"])
+        .find_map(|env| context.get_env(env));
 
-    let json = utils::read_file(docker_config).ok()?;
-    let parsed_json = serde_json::from_str(&json).ok()?;
-
-    match parsed_json {
-        serde_json::Value::Object(root) => {
-            let current_context = root.get("currentContext")?;
-            match current_context {
-                serde_json::Value::String(ctx) => {
-                    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-                        formatter
-                            .map_meta(|variable, _| match variable {
-                                "symbol" => Some(config.symbol),
-                                _ => None,
-                            })
-                            .map_style(|variable| match variable {
-                                "style" => Some(Ok(config.style)),
-                                _ => None,
-                            })
-                            .map(|variable| match variable {
-                                "context" => Some(Ok(ctx)),
-                                _ => None,
-                            })
-                            .parse(None)
-                    });
-
-                    module.set_segments(match parsed {
-                        Ok(segments) => segments,
-                        Err(error) => {
-                            log::warn!("Error in module `docker_context`:\n{}", error);
-                            return None;
-                        }
-                    });
-
-                    Some(module)
-                }
-                _ => None,
+    let ctx = match docker_context_env {
+        Some(data) => data,
+        _ => {
+            if !docker_config.exists() {
+                return None;
             }
+            let json = utils::read_file(docker_config).ok()?;
+            let parsed_json: serde_json::Value = serde_json::from_str(&json).ok()?;
+            parsed_json.get("currentContext")?.as_str()?.to_owned()
         }
-        _ => None,
-    }
+    };
+
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|variable, _| match variable {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "context" => Some(Ok(ctx.as_str())),
+                _ => None,
+            })
+            .parse(None)
+    });
+
+    module.set_segments(match parsed {
+        Ok(segments) => segments,
+        Err(error) => {
+            log::warn!("Error in module `docker_context`:\n{}", error);
+            return None;
+        }
+    });
+    Some(module)
 }
 
 #[cfg(test)]
@@ -259,6 +261,107 @@ mod tests {
             .collect();
 
         let expected = None;
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_host_env() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_HOST", "udp://starship@127.0.0.1:53")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
+        ));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_context_env() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONTEXT", "starship")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_context_overrides_config() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(&cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONTEXT", "starship")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_host_overrides_docker_context_env_and_conf() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(&cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_HOST", "udp://starship@127.0.0.1:53")
+            .env("DOCKER_CONTEXT", "starship")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
+        ));
 
         assert_eq!(expected, actual);
 

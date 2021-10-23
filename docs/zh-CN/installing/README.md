@@ -1,11 +1,11 @@
-# 🚀 Advanced Installation
+# 🚀 高级安装
 
-To install starship, you need to do two things:
+安装Starship有以下两个步骤：
 
-1. Get the **starship** binary onto your computer
-1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
+1. 下载 **starship** 的可执行文件
+1. 修改 shell 的初始化脚本，让 starship 显示命令提示符
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+大部分用户按照[主页](/guide/#🚀-installation)上的步骤安装即可， 但有一些特殊系统上的安装步骤不同。
 
 There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
 
@@ -13,9 +13,9 @@ There are so many platforms out there that they didn't fit into the main README.
 
 ### 前置要求
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+按照 [Chocolatey 安装页面](https://chocolatey.org/install)上的步骤安装 Chocolatey。
 
-### Installation
+### 安装
 
 ```powershell
 choco install starship
@@ -29,10 +29,10 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### 安装
 
 ```sh
-curl -fsSL https://starship.rs/install.sh | bash -s -- -b /data/data/com.termux/files/usr/bin
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Nix](https://nixos.wiki/wiki/Nix)

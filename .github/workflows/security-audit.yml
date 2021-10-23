@@ -1,4 +1,3 @@
----
 name: Security audit
 on:
   pull_request:
@@ -13,9 +12,10 @@ on:
     - cron: '0 0 * * *'
 jobs:
   security_audit:
+    if: (github.event_name == 'schedule' && github.repository == 'starship/starship') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions-rs/audit-check@v1
+      - uses: actions/checkout@v2.3.5
+      - uses: actions-rs/audit-check@v1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

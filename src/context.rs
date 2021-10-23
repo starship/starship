@@ -3,17 +3,19 @@ use crate::module::Module;
 use crate::utils::{exec_cmd, CommandOutput};
 
 use crate::modules;
+use crate::utils::{self, home_dir};
 use clap::ArgMatches;
-use dirs_next::home_dir;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
 use std::collections::{HashMap, HashSet};
 use std::env;
-use std::ffi::OsString;
+use std::ffi::{OsStr, OsString};
+use std::fmt::Debug;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, Instant};
+use terminal_size::terminal_size;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -36,11 +38,20 @@ pub struct Context<'a> {
     /// Properties to provide to modules.
     pub properties: HashMap<&'a str, String>,
 
+    /// Pipestatus of processes in pipe
+    pub pipestatus: Option<Vec<String>>,
+
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
 
     /// The shell the user is assumed to be running
     pub shell: Shell,
+
+    /// Construct the right prompt instead of the left prompt
+    pub right: bool,
+
+    /// Width of terminal, or zero if width cannot be detected.
+    pub width: usize,
 
     /// A HashMap of environment variable mocks
     #[cfg(test)]
@@ -49,6 +60,9 @@ pub struct Context<'a> {
     /// A HashMap of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
+
+    #[cfg(feature = "battery")]
+    pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
     /// Timeout for the execution of commands
     cmd_timeout: Duration,
@@ -71,7 +85,7 @@ impl<'a> Context<'a> {
             .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
             .unwrap_or_default();
 
-        // Retrive the "logical directory".
+        // Retrieve the "logical directory".
         // If the path argument is not set fall back to the PWD env variable set by many shells
         // or to the other path.
         let logical_path = arguments
@@ -93,14 +107,19 @@ impl<'a> Context<'a> {
         let config = StarshipConfig::initialize();
 
         // Unwrap the clap arguments into a simple hashtable
-        // we only care about single arguments at this point, there isn't a
-        // use-case for a list of arguments yet.
         let properties: HashMap<&str, std::string::String> = arguments
             .args
             .iter()
             .filter(|(_, v)| !v.vals.is_empty())
             .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
             .collect();
+
+        let pipestatus = arguments
+            .values_of("pipestatus")
+            .map(Context::get_and_flatten_pipestatus)
+            .flatten();
+
+        log::trace!("Received completed pipestatus of {:?}", pipestatus);
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
@@ -110,18 +129,31 @@ impl<'a> Context<'a> {
 
         let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
 
+        let right = arguments.is_present("right");
+
+        let width = arguments
+            .value_of("terminal_width")
+            .and_then(|w| w.parse().ok())
+            .or_else(|| terminal_size().map(|(w, _)| w.0 as usize))
+            .unwrap_or(80);
+
         Context {
             config,
             properties,
+            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
+            right,
+            width,
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
             cmd: HashMap::new(),
+            #[cfg(feature = "battery")]
+            battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             cmd_timeout,
         }
     }
@@ -138,7 +170,9 @@ impl<'a> Context<'a> {
     // Retrives a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env.get(key.as_ref()).map(|val| val.to_string())
+        self.env
+            .get(key.as_ref())
+            .map(std::string::ToString::to_string)
     }
 
     #[cfg(not(test))]
@@ -163,9 +197,29 @@ impl<'a> Context<'a> {
     pub fn expand_tilde(dir: PathBuf) -> PathBuf {
         if dir.starts_with("~") {
             let without_home = dir.strip_prefix("~").unwrap();
-            return dirs_next::home_dir().unwrap().join(without_home);
+            return utils::home_dir().unwrap().join(without_home);
         }
         dir
+    }
+
+    /// Reads and appropriately flattens multiple args for pipestatus
+    pub fn get_and_flatten_pipestatus(args: clap::Values) -> Option<Vec<String>> {
+        // Due to shell differences, we can potentially receive individual or space
+        // separated inputs, e.g. "0","1","2","0" is the same as "0 1 2 0" and
+        // "0 1", "2 0". We need to accept all these formats and return a Vec<String>
+        let parsed_vals = args
+            .into_iter()
+            .map(|x| x.split_ascii_whitespace())
+            .flatten()
+            .map(|x| x.to_string())
+            .collect::<Vec<String>>();
+        // If the vector is zero-length, we should pretend that we didn't get a
+        // pipestatus at all (since this is the input `--pipestatus=""`)
+        if parsed_vals.is_empty() {
+            None
+        } else {
+            Some(parsed_vals)
+        }
     }
 
     /// Create a new module
@@ -207,31 +261,20 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, std::io::Error> {
-        self.repo
-            .get_or_try_init(|| -> Result<Repo, std::io::Error> {
-                let repository = if env::var("GIT_DIR").is_ok() {
-                    Repository::open_from_env().ok()
-                } else {
-                    Repository::discover(&self.current_dir).ok()
-                };
-                let branch = repository
-                    .as_ref()
-                    .and_then(|repo| get_current_branch(repo));
-                let root = repository
-                    .as_ref()
-                    .and_then(|repo| repo.workdir().map(Path::to_path_buf));
-                let state = repository.as_ref().map(|repo| repo.state());
-                let remote = repository
-                    .as_ref()
-                    .and_then(|repo| get_remote_repository_info(repo));
-                Ok(Repo {
-                    branch,
-                    root,
-                    state,
-                    remote,
-                })
+    pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
+        self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
+            let repository = if env::var("GIT_DIR").is_ok() {
+                Repository::open_from_env()
+            } else {
+                Repository::discover(&self.current_dir)
+            }?;
+            Ok(Repo {
+                branch: get_current_branch(&repository),
+                root: repository.workdir().map(Path::to_path_buf),
+                state: repository.state(),
+                remote: get_remote_repository_info(&repository),
             })
+        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
@@ -251,6 +294,8 @@ impl<'a> Context<'a> {
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
+            "nu" => Shell::Nu,
+            "xonsh" => Shell::Xonsh,
             _ => Shell::Unknown,
         }
     }
@@ -261,18 +306,19 @@ impl<'a> Context<'a> {
 
     /// Execute a command and return the output on stdout and stderr if successful
     #[inline]
-    pub fn exec_cmd(&self, cmd: &str, args: &[&str]) -> Option<CommandOutput> {
+    pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+        &self,
+        cmd: T,
+        args: &[U],
+    ) -> Option<CommandOutput> {
         #[cfg(test)]
         {
-            let command = match args.len() {
-                0 => cmd.to_owned(),
-                _ => format!("{} {}", cmd, args.join(" ")),
-            };
+            let command = crate::utils::display_command(&cmd, args);
             if let Some(output) = self.cmd.get(command.as_str()) {
                 return output.clone();
             }
         }
-        exec_cmd(cmd, args, self.cmd_timeout)
+        exec_cmd(&cmd, args, self.cmd_timeout)
     }
 }
 
@@ -330,7 +376,7 @@ impl DirContents {
             start.elapsed()
         );
 
-        Ok(DirContents {
+        Ok(Self {
             files,
             file_names,
             folders,
@@ -381,7 +427,7 @@ pub struct Repo {
     pub root: Option<PathBuf>,
 
     /// State
-    pub state: Option<RepositoryState>,
+    pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,
@@ -445,7 +491,7 @@ fn get_current_branch(repository: &Repository) -> Option<String> {
                     .trim()
                     .split('/')
                     .last()
-                    .map(|r| r.to_owned())
+                    .map(std::borrow::ToOwned::to_owned)
             } else {
                 None
             };
@@ -487,6 +533,8 @@ pub enum Shell {
     Zsh,
     Elvish,
     Tcsh,
+    Nu,
+    Xonsh,
     Unknown,
 }
 
@@ -512,58 +560,46 @@ mod tests {
         let empty = testdir(&[])?;
         let empty_dc = DirContents::from_path(empty.path())?;
 
-        assert_eq!(
-            ScanDir {
-                dir_contents: &empty_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            false
-        );
+        assert!(!ScanDir {
+            dir_contents: &empty_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
         let rust_dc = DirContents::from_path(rust.path())?;
-        assert_eq!(
-            ScanDir {
-                dir_contents: &rust_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            false
-        );
+        assert!(!ScanDir {
+            dir_contents: &rust_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
         let java_dc = DirContents::from_path(java.path())?;
-        assert_eq!(
-            ScanDir {
-                dir_contents: &java_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            false
-        );
+        assert!(!ScanDir {
+            dir_contents: &java_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
         let node_dc = DirContents::from_path(node.path())?;
-        assert_eq!(
-            ScanDir {
-                dir_contents: &node_dc,
-                files: &["package.json"],
-                extensions: &["js"],
-                folders: &["node_modules"],
-            }
-            .is_match(),
-            true
-        );
+        assert!(ScanDir {
+            dir_contents: &node_dc,
+            files: &["package.json"],
+            extensions: &["js"],
+            folders: &["node_modules"],
+        }
+        .is_match());
         node.close()?;
 
         Ok(())
@@ -628,7 +664,7 @@ mod tests {
 
     #[test]
     fn context_constructor_should_fall_back_to_tilde_replacement_when_canonicalization_fails() {
-        use dirs_next::home_dir;
+        use utils::home_dir;
 
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();

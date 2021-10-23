@@ -5,6 +5,7 @@ use std::path::Path;
 
 use crate::configs::ocaml::OCamlConfig;
 use crate::formatter::StringFormatter;
+use crate::formatter::VersionFormatter;
 
 #[derive(Debug, PartialEq)]
 enum SwitchType {
@@ -63,7 +64,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         context.exec_cmd("ocaml", &["-vnum"])?.stdout
                     };
-                    Some(Ok(format!("v{}", &ocaml_version.trim())))
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        ocaml_version.trim(),
+                        config.version_format,
+                    )
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -86,7 +92,7 @@ fn get_opam_switch(context: &Context) -> Option<OpamSwitch> {
         .exec_cmd("opam", &["switch", "show", "--safe"])?
         .stdout;
 
-    parse_opam_switch(&opam_switch.trim())
+    parse_opam_switch(opam_switch.trim())
 }
 
 fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
@@ -168,7 +174,7 @@ mod tests {
         File::create(dir.path().join("package.json"))?.sync_all()?;
         fs::write(
             dir.path().join("package.lock"),
-            "{\"dependencies\": {\"ocaml\": \"4.8.1000\"}}",
+            r#"{"dependencies": {"ocaml": "4.8.1000"}}"#,
         )?;
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
@@ -351,6 +357,35 @@ mod tests {
     }
 
     #[test]
+    fn with_global_opam_switch_custom_indicator() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.ml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ocaml")
+            .config(toml::toml! {
+                [ocaml]
+                global_switch_indicator = "g/"
+            })
+            .cmd(
+                "opam switch show --safe",
+                Some(CommandOutput {
+                    stdout: String::from("ocaml-base-compiler.4.10.0\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow
+                .bold()
+                .paint("🐫 v4.10.0 (g/ocaml-base-compiler.4.10.0) ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn with_local_opam_switch() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.ml"))?.sync_all()?;
@@ -368,6 +403,33 @@ mod tests {
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐫 v4.10.0 (*my-project) ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn with_local_opam_switch_custom_indicator() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.ml"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ocaml")
+            .config(toml::toml! {
+                [ocaml]
+                local_switch_indicator = "^"
+            })
+            .cmd(
+                "opam switch show --safe",
+                Some(CommandOutput {
+                    stdout: String::from("/path/to/my-project\n"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐫 v4.10.0 (^my-project) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
