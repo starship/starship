@@ -1,10 +1,10 @@
-# Ajustes por defecto
+# Preajustes
 
-Aquí hay una colección de ajustes por defecto creados por la comunidad de Starship. ¡Si quieres compartir un ajuste por defecto, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
+Aqui tienes una colección de preajustes creados por la comunidad de Starship. ¡Si quieres compartir un preajuste, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
 
 ## Símbolos de Nerd Font
 
-Este ajuste por defecto no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
+Este preajuste no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
 
 ![Captura de pantalla de ajustes de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
 
