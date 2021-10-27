@@ -6,7 +6,7 @@ Aqui tienes una colección de preajustes creados por la comunidad de Starship. �
 
 Este preajuste no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
 
-![Captura de pantalla de ajustes de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
+![Captura de pantalla del preajuste de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prerequisitos
 
@@ -90,7 +90,7 @@ symbol = "ﯣ "
 
 ## Segmentos entre Corchetes
 
-Este ajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción predeterminada de Starship ("via", "on", etc.).
+Este preajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción por defecto de Starship ("via", "on", etc.).
 
 Antes:
 
@@ -98,7 +98,7 @@ Antes:
 
 Después:
 
-![Captura de pantalla de ajustes de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
+![Captura de pantalla del preajuste de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
 
 ### Configuración
 
@@ -247,7 +247,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Símbolos de texto sin formato
 
-Este ajuste preestablecido cambia los símbolos a texto sin formato. Si tu terminal/fuente no pudo renderizar el NerdFonts/emojis, ¡tal vez podría probar este ajuste preestablecido!
+Este preajuste cambia los símbolos a texto sin formato. Si tu terminal/fuente no pudo renderizar el NerdFonts/emojis, ¡tal vez podría probar este preajuste!
 
 Antes (configuración por defecto con Fuente Fixedsys):
 
@@ -255,7 +255,7 @@ Antes (configuración por defecto con Fuente Fixedsys):
 
 Después (Símbolos de texto sin formato):
 
-![Captura de pantalla de los ajustes de los Símbolos de Texto Plano](/presets/plain-text-symbols-after.png)
+![Captura de pantalla del ajuste de los Símbolos de Texto Plano](/presets/plain-text-symbols-after.png)
 
 ### Configuración
 
@@ -377,9 +377,9 @@ symbol = "swift "
 
 ## Ocultar versiones en tiempo de ejecución
 
-Esta configuración predeterminada oculta la versión de los tiempos de ejecución del idioma. Si trabajas en contenedores o entornos virtualizados, ¡ésto es para ti!
+Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si trabajas en contenedores o entornos virtualizados, ¡ésto es para ti!
 
-![Captura de pantalla ajustes de Ocultar versiones de tiempo de ejecución](/presets/hide-runtime-versions.png)
+![Captura de pantalla del preajuste de Ocultar de versiones de tiempo de ejecución](/presets/hide-runtime-versions.png)
 
 ### Configuración
 
@@ -474,9 +474,9 @@ format = 'via [$symbol]($style)'
 
 ## Pure
 
-Esta configuración predeterminada emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
+Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
 
-![Captura de pantalla de ajustes de Pure](/presets/pure-prompt.png)
+![Captura de pantalla del ajuste de Pure](/presets/pure-prompt.png)
 
 ### Configuración
 
