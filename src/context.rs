@@ -351,7 +351,8 @@ impl DirContents {
         fs::read_dir(base)?
             .enumerate()
             .take_while(|(n, _)| {
-                n & 0xFF != 0 // only check timeout once every 2^8 entries
+                cfg!(test) // ignore timeout during tests
+                || n & 0xFF != 0 // only check timeout once every 2^8 entries
                 || start.elapsed() < timeout
             })
             .filter_map(|(_, entry)| entry.ok())
