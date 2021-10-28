@@ -1573,4 +1573,25 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn convert_slash_false() -> io::Result<()> {
+        let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
+        let dir = tmp_dir.path().join("starship");
+        fs::create_dir_all(&dir)?;
+
+        let actual = ModuleRenderer::new("directory").config(toml::toml! {
+            [directory]
+            convert_slash = false
+        }).path(dir).collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan
+                .bold()
+                .paint(format!("~/{}/starship", name))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
 }
