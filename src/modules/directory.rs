@@ -4,7 +4,7 @@ use super::utils::directory_nix as directory_utils;
 use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
-use path_slash::{PathExt, PathBufExt};
+use path_slash::{PathBufExt, PathExt};
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -92,7 +92,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = PathBuf::from_slash(prefix + &dir_string).to_string_lossy().into_owned();
+    let displayed_path = if config.convert_slash {
+        from_slash(&(prefix + &dir_string))
+    } else {
+        prefix + &dir_string
+    };
     let lock_symbol = String::from(config.read_only);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -292,6 +296,10 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
         })
         .collect::<Vec<_>>()
         .join("/")
+}
+
+fn from_slash(path: &str) -> String {
+    return PathBuf::from_slash(path).to_string_lossy().into_owned();
 }
 
 #[cfg(test)]
@@ -546,7 +554,7 @@ mod tests {
                 home_symbol = "🚀"
             })
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀")));
+        let expected = Some(from_slash(&format!("{} ", Color::Cyan.bold().paint("🚀"))));
 
         assert_eq!(expected, actual);
     }
@@ -560,7 +568,10 @@ mod tests {
                 home_symbol = "🚀"
             })
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("🚀/path/subpath")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("🚀/path/subpath")
+        )));
 
         assert_eq!(expected, actual);
     }
@@ -577,10 +588,10 @@ mod tests {
                 "a/b/c" = "d"
             })
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("net/workspace/d/dev")
-        ));
+        )));
 
         assert_eq!(expected, actual);
     }
@@ -595,7 +606,10 @@ mod tests {
                 "/to/sub" = "/wrong/order"
             })
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("/correct/order")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("/correct/order")
+        )));
 
         assert_eq!(expected, actual);
     }
@@ -613,12 +627,12 @@ mod tests {
                 "regular" = strange_sub
             })
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint(format!("/foo/bar/{}/path", strange_sub))
-        ));
+        )));
 
         assert_eq!(expected, actual);
     }
@@ -632,7 +646,9 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!("~/{}/starship", name))
+            Color::Cyan
+                .bold()
+                .paint(from_slash(&format!("~/{}/starship", name)))
         ));
 
         assert_eq!(expected, actual);
@@ -646,12 +662,12 @@ mod tests {
         fs::create_dir_all(&dir)?;
 
         let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint(format!("{}/engine/schematics", name))
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -671,12 +687,12 @@ mod tests {
             })
             .path(&dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint(format!("~/{}/st/schematics", name.split_at(3).0))
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -694,7 +710,7 @@ mod tests {
             })
             .path("/")
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("/")));
+        let expected = Some(from_slash(&format!("{} ", Color::Cyan.bold().paint("/"))));
 
         assert_eq!(expected, actual);
     }
@@ -706,12 +722,12 @@ mod tests {
         fs::create_dir_all(&dir)?;
 
         let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint(format!("{}/thrusters/rocket", name))
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -730,12 +746,12 @@ mod tests {
             })
             .path(&dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint(truncate(dir.to_slash_lossy(), 100))
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -755,12 +771,12 @@ mod tests {
             })
             .path(&dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint(to_fish_style(100, dir.to_slash_lossy(), ""))
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -779,10 +795,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint(format!("{}/rocket", name))
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -804,10 +820,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!(
+            Color::Cyan.bold().paint(from_slash(&format!(
                 "{}/thrusters/rocket",
                 to_fish_style(1, dir.to_slash_lossy(), "/thrusters/rocket")
-            ))
+            )))
         ));
 
         assert_eq!(expected, actual);
@@ -1237,10 +1253,10 @@ mod tests {
             })
             .path(Path::new("/a/four/element/path"))
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("…/four/element/path")
-        ));
+        )));
         assert_eq!(expected, actual);
     }
 
@@ -1254,10 +1270,10 @@ mod tests {
             })
             .path(Path::new("/a/four/element/path"))
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("/a/four/element/path")
-        ));
+        )));
         assert_eq!(expected, actual);
     }
 
@@ -1275,10 +1291,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint(format!("…/{}/a/subpath", name))
-        ));
+        )));
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
@@ -1298,10 +1314,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint(format!("~/{}/a/subpath", name))
-        ));
+        )));
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
@@ -1322,7 +1338,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/src/sub/path")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("…/src/sub/path")
+        )));
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
@@ -1344,10 +1363,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("…/repo/src/sub/path")
-        ));
+        )));
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
@@ -1364,7 +1383,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("C:/temp")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("C:/temp")
+        )));
         assert_eq!(expected, actual);
     }
 
@@ -1380,7 +1402,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("…/temp")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("…/temp")
+        )));
         assert_eq!(expected, actual);
     }
 
@@ -1407,10 +1432,10 @@ mod tests {
         fs::create_dir_all(&path)?;
         let logical_path = "Logical:/fuel-gauge";
 
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("Logical:/fuel-gauge")
-        ));
+        )));
 
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1433,10 +1458,10 @@ mod tests {
         fs::create_dir_all(&path)?;
         let logical_path = "Logical:/fuel-gauge";
 
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
-        ));
+        )));
 
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
@@ -1459,10 +1484,10 @@ mod tests {
         // We expect this prefix to be trimmed before being rendered.
         let sys32_path = Path::new(r"\\?\C:\Windows\System32");
 
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("C:/Windows/System32")
-        ));
+        )));
 
         // Note: We have disable the read_only settings here due to false positives when running
         // the tests on Windows as a non-admin.
@@ -1489,10 +1514,10 @@ mod tests {
 
         // NOTE: path-slash doesn't convert slashes which are part of path prefixes under Windows,
         // which is why the first part of this string still includes backslashes
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint(r"\\server\share/a/b/c")
-        ));
+        )));
 
         let actual = ModuleRenderer::new("directory")
             .config(toml::toml! {
