@@ -182,6 +182,18 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_policyfile_rb() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("Policyfile.rb"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("chef").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🍳 v12.21.14 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn test_format_chef_version() {
         let input = "Chef: 12.21.14";
         assert_eq!(parse_chef_version(input), Some("12.21.14".to_string()));

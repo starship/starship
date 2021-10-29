@@ -29,6 +29,7 @@ impl<'a> Default for ChefConfig<'a> {
                 "kitchen.yml",
                 "metadata.rb",
                 "metadata.json",
+                "Policyfile.rb",
             ],
             detect_folders: vec![
                 "cookbooks",

@@ -497,20 +497,21 @@ the module will be activated if any of the following conditions are met:
 - The current directory contains a `kitchen.yml` file
 - The current directory contains a `metadata.rb` file
 - The current directory contains a `metadata.json` file
+- The current directory contains a `Policyfile.rb` file
 - The current directory contains a `cookbooks` directory
 - The current directory contains a `recipes` directory
 
 ### Options
 
-| Option              | Default                                                                                          | Description                                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                                             | The format for the module.                                               |
-| `version_format`    | `"v${raw}"`                                                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
-| `symbol`            | `"🍳 "`                                                                                          | The symbol used before the version of chef.                              |
-| `detect_files`      | `["Berksfile", "Berksfile.lock", ".kitchen.yml", "kitchen.yml", "metadata.rb", "metadata.json"]` | Which filenames should trigger this module                               |
-| `detect_folders`    | `["cookbooks", "recipes"]`                                                                       | Which folders should trigger this module                                 |
-| `style`             | `"bold red"`                                                                                     | The style for the module.                                                |
-| `disabled`          | `false`                                                                                          | Disables the `chef` module.                                              |
+| Option              | Default                                                                                                           | Description                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                              | The format for the module.                                               |
+| `version_format`    | `"v${raw}"`                                                                                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
+| `symbol`            | `"🍳 "`                                                                                                           | The symbol used before the version of chef.                              |
+| `detect_files`      | `["Berksfile", "Berksfile.lock", ".kitchen.yml", "kitchen.yml", "metadata.rb", "metadata.json", "Policyfile.rb"]` | Which filenames should trigger this module                               |
+| `detect_folders`    | `["cookbooks", "recipes"]`                                                                                        | Which folders should trigger this module                                 |
+| `style`             | `"bold red"`                                                                                                      | The style for the module.                                                |
+| `disabled`          | `false`                                                                                                           | Disables the `chef` module.                                              |
 
 ### Variables
 
