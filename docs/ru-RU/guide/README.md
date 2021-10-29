@@ -181,7 +181,7 @@
    #### Установить через менеджер пакетов
 
 
-   ##### [Homebrew](https://brew.sh/):
+   ##### С [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
