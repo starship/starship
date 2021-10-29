@@ -181,7 +181,7 @@
    #### 通过软件包管理器安装
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### 使用 [Homebrew](https://brew.sh/)：
 
    ```sh
    brew install starship
