@@ -181,7 +181,7 @@
    #### 패키지 매니저를 이용한 설치
 
 
-   ##### 예제: [Homebrew](https://brew.sh/):
+   ##### [Homebrew](https://brew.sh/)를 통한 설치:
 
    ```sh
    brew install starship
