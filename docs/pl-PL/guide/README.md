@@ -181,7 +181,7 @@
    #### Instalacja za pomocą menedżera pakietów
 
 
-   ##### Przykład: [Homebrew](https://brew.sh/):
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
