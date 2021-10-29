@@ -181,7 +181,7 @@
    #### التثبيت عبر مدير الحزم
 
 
-   ##### مثال: [Homebrew](https://brew.sh/):
+   ##### بإستخدام [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
