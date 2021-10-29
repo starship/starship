@@ -181,7 +181,7 @@
    #### パッケージマネージャー経由でインストール
 
 
-   ##### 例: [Homebrew の場合](https://brew.sh/):
+   ##### [ Homebrew ](https://brew.sh/)の場合：
 
    ```sh
    brew install starship
