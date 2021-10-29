@@ -109,6 +109,9 @@ After:
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
+[chef]
+format = '\[[$symbol($version )]($style)\]'
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -291,6 +294,9 @@ symbol = "conda "
 [crystal]
 symbol = "cr "
 
+[chef]
+symbol = "chef "
+
 [cmake]
 symbol = "cmake "
 
@@ -388,6 +394,9 @@ This preset hides the version of language runtimes. If you work in containers or
 ### Configuration
 
 ```toml
+[chef]
+format = "via [$symbol]($style)"
+
 [cmake]
 format = "via [$symbol]($style)"
 
