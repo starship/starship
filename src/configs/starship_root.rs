@@ -34,6 +34,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "package",
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
+    "chef",
     "cmake",
     "cobol",
     "dart",

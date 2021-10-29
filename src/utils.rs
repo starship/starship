@@ -288,6 +288,10 @@ Target: x86_64-apple-darwin19.4.0\n",
             stdout: String::from("0.6.0\n"),
             stderr: String::default(),
         }),
+        "chef-client --version" => Some(CommandOutput {
+            stdout: String::from("Chef: 12.21.14"),
+            stderr: String::default(),
+        }),
         "cmake --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
