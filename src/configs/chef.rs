@@ -23,14 +23,15 @@ impl<'a> Default for ChefConfig<'a> {
             style: "bold red",
             disabled: false,
             detect_files: vec![
-                "metadata.rb",
-                "metadata.json",
                 "Berksfile",
                 "Berksfile.lock",
                 ".kitchen.yml",
                 "kitchen.yml",
+                "metadata.rb",
+                "metadata.json",
             ],
             detect_folders: vec![
+                "cookbooks",
                 "recipes",
             ],
         }

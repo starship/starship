@@ -108,6 +108,19 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_cookbooks() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let cookbooks = dir.path().join("cookbooks");
+        fs::create_dir_all(&cookbooks)?;
+
+        let actual = ModuleRenderer::new("chef").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Red.bold().paint("🍳 v12.21.14 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_recipes() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let recipes = dir.path().join("recipes");
