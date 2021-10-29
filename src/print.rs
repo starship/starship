@@ -62,7 +62,7 @@ pub fn prompt(args: ArgMatches) {
 }
 
 pub fn get_prompt(context: Context) -> String {
-    let config = context.config.get_root_config();
+    let config = &context.root_config;
     let mut buf = String::new();
 
     match std::env::var_os("TERM") {
@@ -412,10 +412,10 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
 /// Load the correct formatter for the context (ie left prompt or right prompt)
 /// and the list of all modules used in a format string
 fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
-    let config = context.config.get_root_config();
+    let config = &context.root_config;
 
-    let lformatter = StringFormatter::new(config.format);
-    let rformatter = StringFormatter::new(config.right_format);
+    let lformatter = StringFormatter::new(&config.format);
+    let rformatter = StringFormatter::new(&config.right_format);
     if lformatter.is_err() {
         log::error!("Error parsing `format`")
     }
@@ -454,6 +454,7 @@ mod test {
                 format=">\n>"
             }),
         };
+        context.root_config.right_format = "$character".to_string();
         context.right = true;
 
         let expected = String::from(">>"); // should strip new lines

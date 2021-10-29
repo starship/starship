@@ -1,4 +1,3 @@
-use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
 use indexmap::IndexMap;
@@ -60,6 +59,12 @@ where
 impl<'a> ModuleConfig<'a> for &'a str {
     fn from_config(config: &'a Value) -> Option<Self> {
         config.as_str()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for String {
+    fn from_config(config: &'a Value) -> Option<Self> {
+        config.as_str().map(std::borrow::ToOwned::to_owned)
     }
 }
 
@@ -345,14 +350,6 @@ impl StarshipConfig {
     /// Get the table of all the registered env_var modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
-    }
-
-    pub fn get_root_config(&self) -> StarshipRootConfig {
-        if let Some(root_config) = &self.config {
-            StarshipRootConfig::load(root_config)
-        } else {
-            StarshipRootConfig::default()
-        }
     }
 }
 
