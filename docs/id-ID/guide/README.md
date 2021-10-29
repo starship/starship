@@ -181,7 +181,7 @@
    #### Pasang Melalui Package Manager
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### Dengan [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
