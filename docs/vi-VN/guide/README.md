@@ -181,7 +181,7 @@
    #### Cài đặt thông qua Trình quản lí gói
 
 
-   ##### Ví dụ: [Homebrew](https://brew.sh/):
+   ##### Với [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
