@@ -177,7 +177,7 @@
    #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
 
-   ##### نموونە: [Homebrew](https://brew.sh/):
+   ##### لەگەڵ [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
