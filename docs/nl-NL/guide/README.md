@@ -179,7 +179,7 @@
    #### Installeren via pakketbeheerder
 
 
-   ##### Voorbeeld: [Homebrew](https://brew.sh/):
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
