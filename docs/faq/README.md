@@ -77,7 +77,7 @@ explain the currently showing modules.
 ## Starship is doing something unexpected, how can I debug it?
 
 You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs
-can be very verbose so it is often usefu to use the `module` command if you are
+can be very verbose so it is often useful to use the `module` command if you are
 trying to debug a particular module, for example, if you are trying to debug
 the `rust` module you could run the following command to get the trace
 logs and output from the module.
