@@ -839,7 +839,10 @@ mod tests {
         init_repo(&repo_dir).unwrap();
 
         let actual = ModuleRenderer::new("directory").path(repo_dir).collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("rocket-controls")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("rocket-controls")
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -855,10 +858,10 @@ mod tests {
         init_repo(&repo_dir).unwrap();
 
         let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls/src")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -874,10 +877,10 @@ mod tests {
         init_repo(&repo_dir).unwrap();
 
         let actual = ModuleRenderer::new("directory").path(dir).collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -901,12 +904,12 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint("above-repo/rocket-controls/src/meters/fuel-gauge")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -931,13 +934,13 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
-            Color::Cyan.bold().paint(format!(
+            Color::Cyan.bold().paint(from_slash(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
-            ))
-        ));
+            )))
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -964,10 +967,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!(
+            Color::Cyan.bold().paint(from_slash(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
-            ))
+            )))
         ));
 
         assert_eq!(expected, actual);
@@ -992,12 +995,12 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint("rocket-controls/src/meters/fuel-gauge")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1014,10 +1017,10 @@ mod tests {
         symlink(&repo_dir, &symlink_dir)?;
 
         let actual = ModuleRenderer::new("directory").path(symlink_dir).collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls-symlink")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1038,10 +1041,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory")
             .path(symlink_src_dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls-symlink/src")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1062,10 +1065,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory")
             .path(symlink_src_dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("src/meters/fuel-gauge")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1095,12 +1098,12 @@ mod tests {
             })
             .path(symlink_src_dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint("above-repo/rocket-controls-symlink/src/meters/fuel-gauge")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1133,10 +1136,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!(
+            Color::Cyan.bold().paint(from_slash(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
-            ))
+            )))
         ));
 
         assert_eq!(expected, actual);
@@ -1170,10 +1173,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!(
+            Color::Cyan.bold().paint(from_slash(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
-            ))
+            )))
         ));
 
         assert_eq!(expected, actual);
@@ -1204,12 +1207,12 @@ mod tests {
             })
             .path(symlink_src_dir)
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
                 .paint("rocket-controls-symlink/src/meters/fuel-gauge")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1234,10 +1237,10 @@ mod tests {
             })
             .path(repo_dir.join("src/loop/loop"))
             .collect();
-        let expected = Some(format!(
+        let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan.bold().paint("rocket-controls/src/loop/loop")
-        ));
+        )));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1421,7 +1424,10 @@ mod tests {
             })
             .path(dir)
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("…\\temp")));
+        let expected = Some(from_slash(&format!(
+            "{} ",
+            Color::Cyan.bold().paint("…\\temp")
+        )));
         assert_eq!(expected, actual);
     }
 
@@ -1580,15 +1586,16 @@ mod tests {
         let dir = tmp_dir.path().join("starship");
         fs::create_dir_all(&dir)?;
 
-        let actual = ModuleRenderer::new("directory").config(toml::toml! {
-            [directory]
-            convert_slash = false
-        }).path(dir).collect();
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                convert_slash = false
+            })
+            .path(dir)
+            .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint(format!("~/{}/starship", name))
+            Color::Cyan.bold().paint(format!("~/{}/starship", name))
         ));
 
         assert_eq!(expected, actual);
