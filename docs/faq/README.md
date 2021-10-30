@@ -61,6 +61,35 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 If you see symbols that you don't recognise you can use `starship explain` to
 explain the currently showing modules.
 
+## Starship is doing something unexpected, how can I debug it?
+
+You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs
+can be very verbose so it is often usefu to use the `module` command if you are
+trying to debug a particular module, for example, if you are trying to debug
+the `rust` module you could run the following command to get the trace
+logs and output from the module.
+
+```sh
+env STARHIP_LOG=trace starship module rust
+```
+
+If starship is being slow you can try using the `timings` command to see if
+there is a particular module or command that to blame.
+
+```sh
+env STARHIP_LOG=trace starship timings
+```
+
+This will output the trace log and a breakdown of all modules that either took
+more than 1ms to execute or produced some output.
+
+Finally if you find a bug you can use the `bug-report` command to create a
+Github issue.
+
+```sh
+starship bug-report
+```
+
 ## Why don't I see a glyph symbol in my prompt?
 
 The most common cause of this is system misconfiguration. Some Linux distros in
