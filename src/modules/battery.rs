@@ -52,7 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     _ => None,
                 });
 
-            match formatter.parse(None) {
+            match formatter.parse(None, Some(context)) {
                 Ok(format_string) => {
                     module.set_segments(format_string);
                     Some(module)

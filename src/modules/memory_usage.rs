@@ -86,7 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "swap_pct" if total_swap_kib > 0 => Some(Ok(&swap_pct)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

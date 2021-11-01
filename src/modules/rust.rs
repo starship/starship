@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => get_module_version(context, &config).map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
