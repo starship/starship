@@ -1,6 +1,6 @@
 use byte_unit::{Byte, ByteUnit};
 
-use super::{Context, Module, RootModuleConfig, Shell};
+use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
@@ -12,8 +12,8 @@ fn format_kib(n_kib: u64) -> String {
     display_bytes
 }
 
-fn format_pct(pct_number: f64, pct_sign: &str) -> String {
-    format!("{:.0}{}", pct_number, pct_sign)
+fn format_pct(pct_number: f64) -> String {
+    format!("{:.0}%", pct_number)
 }
 
 fn format_usage_total(usage: u64, total: u64) -> String {
@@ -24,13 +24,6 @@ fn format_usage_total(usage: u64, total: u64) -> String {
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("memory_usage");
     let config = MemoryConfig::try_load(module.config);
-
-    // TODO: Update when v1.0 printing refactor is implemented to only
-    // print escapes in a prompt context.
-    let pct_sign = match context.shell {
-        Shell::Zsh => "%%", // % is an escape in zsh, see PROMPT in `man zshmisc`
-        _ => "%",
-    };
 
     // As we default to disabled=true, we have to check here after loading our config module,
     // before it was only checking against whatever is in the config starship.toml
@@ -54,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let used_memory_kib = system.total.saturating_sub(avail_memory_kib);
     let total_memory_kib = system.total;
     let ram_used = (used_memory_kib as f64 / total_memory_kib as f64) * 100.;
-    let ram_pct = format_pct(ram_used, pct_sign);
+    let ram_pct = format_pct(ram_used);
 
     let threshold = config.threshold;
     if ram_used.round() < threshold as f64 {
@@ -65,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let total_swap_kib = system.swap_total;
     let used_swap_kib = system.swap_total.saturating_sub(system.swap_free);
     let percent_swap_used = (used_swap_kib as f64 / total_swap_kib as f64) * 100.;
-    let swap_pct = format_pct(percent_swap_used, pct_sign);
+    let swap_pct = format_pct(percent_swap_used);
     let swap = format_usage_total(used_swap_kib, total_swap_kib);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
