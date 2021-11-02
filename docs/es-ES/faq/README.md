@@ -83,7 +83,7 @@ This will output the trace log and a breakdown of all modules that either took m
 Finally if you find a bug you can use the `bug-report` command to create a Github issue.
 
 ```sh
-starship bug-report
+reporte de error starship
 ```
 
 ## Why don't I see a glyph symbol in my prompt?
