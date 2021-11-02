@@ -1070,7 +1070,7 @@ El módulo `fill` llena cualquier espacio extra en la línea con un símbolo. Si
 | ---------- | -------------- | ------------------------------------------ |
 | `symbol`   | `"."`          | El símbolo utilizado para llenar la línea. |
 | `style`    | `"bold black"` | El estilo del módulo.                      |
-| `disabled` | `false`        | Disables the `fill` module                 |
+| `disabled` | `false`        | Deshabilita el módulo `fill`               |
 
 ### Ejemplo
 
