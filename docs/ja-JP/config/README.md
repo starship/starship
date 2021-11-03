@@ -380,16 +380,16 @@ style = "bold red"
 #### 設定例
 
 ```toml
-[[battery.display]]  # "bold red"のスタイルとバッテリー残量が0%~10%の放電時のシンボル
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow"のスタイルとバッテリー残量が10%~30%の放電時の💦シンボル
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
+discharging_symbol = "💦"
 
-# 残量が30%以上の場合バッテリーインジケータは表示されません
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
