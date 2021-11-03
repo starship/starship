@@ -60,7 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "branch" => Some(Ok(truncated_and_symbol.as_str())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

@@ -43,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "stack" => stack_name(&project_file, context).map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     match parsed {

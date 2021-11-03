@@ -178,7 +178,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
    #### Install via Package Manager
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### With [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship

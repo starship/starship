@@ -49,49 +49,52 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 let info = Arc::clone(&info);
                 let segments = match variable {
                     "stashed" => info.get_stashed().and_then(|count| {
-                        format_count(config.stashed, "git_status.stashed", count)
+                        format_count(config.stashed, "git_status.stashed", context, count)
                     }),
                     "ahead_behind" => info.get_ahead_behind().and_then(|(ahead, behind)| {
                         let (ahead, behind) = (ahead?, behind?);
                         if ahead > 0 && behind > 0 {
-                            format_text(config.diverged, "git_status.diverged", |variable| {
-                                match variable {
+                            format_text(
+                                config.diverged,
+                                "git_status.diverged",
+                                context,
+                                |variable| match variable {
                                     "ahead_count" => Some(ahead.to_string()),
                                     "behind_count" => Some(behind.to_string()),
                                     _ => None,
-                                }
-                            })
+                                },
+                            )
                         } else if ahead > 0 && behind == 0 {
-                            format_count(config.ahead, "git_status.ahead", ahead)
+                            format_count(config.ahead, "git_status.ahead", context, ahead)
                         } else if behind > 0 && ahead == 0 {
-                            format_count(config.behind, "git_status.behind", behind)
+                            format_count(config.behind, "git_status.behind", context, behind)
                         } else {
-                            format_symbol(config.up_to_date, "git_status.up_to_date")
+                            format_symbol(config.up_to_date, "git_status.up_to_date", context)
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
-                        format_count(config.conflicted, "git_status.conflicted", count)
+                        format_count(config.conflicted, "git_status.conflicted", context, count)
                     }),
                     "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted, "git_status.deleted", count)
+                        format_count(config.deleted, "git_status.deleted", context, count)
                     }),
                     "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed, "git_status.renamed", count)
+                        format_count(config.renamed, "git_status.renamed", context, count)
                     }),
                     "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified, "git_status.modified", count)
+                        format_count(config.modified, "git_status.modified", context, count)
                     }),
-                    "staged" => info
-                        .get_staged()
-                        .and_then(|count| format_count(config.staged, "git_status.staged", count)),
+                    "staged" => info.get_staged().and_then(|count| {
+                        format_count(config.staged, "git_status.staged", context, count)
+                    }),
                     "untracked" => info.get_untracked().and_then(|count| {
-                        format_count(config.untracked, "git_status.untracked", count)
+                        format_count(config.untracked, "git_status.untracked", context, count)
                     }),
                     _ => None,
                 };
                 segments.map(Ok)
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -288,14 +291,19 @@ impl RepoStatus {
     }
 }
 
-fn format_text<F>(format_str: &str, config_path: &str, mapper: F) -> Option<Vec<Segment>>
+fn format_text<F>(
+    format_str: &str,
+    config_path: &str,
+    context: &Context,
+    mapper: F,
+) -> Option<Vec<Segment>>
 where
     F: Fn(&str) -> Option<String> + Send + Sync,
 {
     if let Ok(formatter) = StringFormatter::new(format_str) {
         formatter
             .map(|variable| mapper(variable).map(Ok))
-            .parse(None)
+            .parse(None, Some(context))
             .ok()
     } else {
         log::warn!("Error parsing format string `{}`", &config_path);
@@ -303,19 +311,29 @@ where
     }
 }
 
-fn format_count(format_str: &str, config_path: &str, count: usize) -> Option<Vec<Segment>> {
+fn format_count(
+    format_str: &str,
+    config_path: &str,
+    context: &Context,
+    count: usize,
+) -> Option<Vec<Segment>> {
     if count == 0 {
         return None;
     }
 
-    format_text(format_str, config_path, |variable| match variable {
-        "count" => Some(count.to_string()),
-        _ => None,
-    })
+    format_text(
+        format_str,
+        config_path,
+        context,
+        |variable| match variable {
+            "count" => Some(count.to_string()),
+            _ => None,
+        },
+    )
 }
 
-fn format_symbol(format_str: &str, config_path: &str) -> Option<Vec<Segment>> {
-    format_text(format_str, config_path, |_variable| None)
+fn format_symbol(format_str: &str, config_path: &str, context: &Context) -> Option<Vec<Segment>> {
+    format_text(format_str, config_path, context, |_variable| None)
 }
 
 #[cfg(test)]

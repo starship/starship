@@ -48,7 +48,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "user" => Some(Ok(&username)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
     module.set_segments(match parsed {
         Ok(segments) => segments,

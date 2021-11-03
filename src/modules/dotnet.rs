@@ -74,7 +74,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "tfm" => find_current_tfm(&dotnet_files).map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

@@ -322,25 +322,8 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
     }
 }
 
-/// Wraps ANSI color escape sequences and other interpretable characters
-/// that need to be escaped in the shell-appropriate wrappers.
-pub fn wrap_colorseq_for_shell(mut ansi: String, shell: Shell) -> String {
-    // Handle other interpretable characters
-    match shell {
-        // Bash might interepret baskslashes, backticks and $
-        // see #658 for more details
-        Shell::Bash => {
-            ansi = ansi.replace('\\', r"\\");
-            ansi = ansi.replace('$', r"\$");
-            ansi = ansi.replace('`', r"\`");
-        }
-        Shell::Zsh => {
-            // % is an escape in zsh, see PROMPT in `man zshmisc`
-            ansi = ansi.replace('%', "%%");
-        }
-        _ => {}
-    };
-
+/// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
+pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
     wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
@@ -678,47 +661,6 @@ mod tests {
         assert_eq!(&bresult5, "");
     }
 
-    #[test]
-    fn test_bash_escape() {
-        let test = "$(echo a)";
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
-            r"\$(echo a)"
-        );
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"\$(echo a)";
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
-            r"\\\$(echo a)"
-        );
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"`echo a`";
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
-            r"\`echo a\`"
-        );
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-    #[test]
-    fn test_zsh_escape() {
-        let test = "10%";
-        assert_eq!(wrap_colorseq_for_shell(test.to_owned(), Shell::Zsh), "10%%");
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
     #[test]
     fn test_get_command_string_output() {
         let case1 = CommandOutput {

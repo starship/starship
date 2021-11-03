@@ -407,7 +407,7 @@ style = "bold red"
 [[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
+discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
 
@@ -3354,6 +3354,19 @@ By default, the `custom` module will simply show all custom modules in the order
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules.
 If you have an interesting example not covered there, feel free to share it there!
+
+:::
+
+::: warning Command output is printed unescaped to the prompt
+
+Whatever output the command generates is printed unmodified in the prompt. This means if the output
+contains special sequences that are interpreted by your shell they will be expanded when displayed.
+These special sequences are shell specific, e.g. you can write a command module that writes bash sequences,
+e.g. `\h`, but this module will not work in a fish or zsh shell.
+
+Format strings can also contain shell specific prompt sequences, e.g.
+[Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html),
+[Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 

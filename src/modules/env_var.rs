@@ -68,7 +68,7 @@ fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Op
                 "env_value" => Some(Ok(&env_value)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
