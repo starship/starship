@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -61,12 +61,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn version_from_chef_gem() -> Option<String> {
-    // Find Ruby
+    // Find the embedded Ruby used by the chef-client
     let chef_client_path = find_chef_client()?;
     let cc_str = chef_client_path.as_str();
     let chef_client_contents = utils::read_file(cc_str.to_string()).ok()?;
 
-    // Ruby's path
+    // Get Ruby's path
     let re = Regex::new(r#"#!(.+)/ruby --disable-gems"#).unwrap();
     let ruby_path = re
         .captures(chef_client_contents.as_str())
@@ -74,8 +74,8 @@ fn version_from_chef_gem() -> Option<String> {
         .get(1)
         .unwrap()
         .as_str();
-    // println!("ruby path: {}", ruby_path.as_str());
 
+    // /opt/chefdk/embedded is slightly irrelevant as it can be installed elsewhere
     // /opt/chefdk/embedded/bin
     let path = Path::new(ruby_path);
     // /opt/chefdk/embedded
@@ -83,6 +83,7 @@ fn version_from_chef_gem() -> Option<String> {
     // /opt/chefdk/embedded/lib/ruby/gems
     let gems_path = base.join("lib").join("ruby").join("gems");
 
+    // 2.5.0, chef only packs one version of ruby and therefor one set of gems
     let ruby_version = match fs::read_dir(gems_path).unwrap().nth(0).unwrap() {
         Err(error) => {
             log::warn!("Error in module `chef`:\n{}", error);
@@ -92,9 +93,9 @@ fn version_from_chef_gem() -> Option<String> {
             version
         },
     };
-
     let ruby_version_string = ruby_version.path().into_os_string().into_string().unwrap();
 
+    // /opt/chefdk/embedded/lib/ruby/gems/2.5.0/gems
     let full_gems_path = base
         .join("lib")
         .join("ruby")
@@ -102,15 +103,19 @@ fn version_from_chef_gem() -> Option<String> {
         .join(ruby_version_string)
         .join("gems");
 
+    // gem format chef-x.x.x
     let re = Regex::new(r"chef-\d+\.\d+\.\d+").unwrap();
 
     if full_gems_path.is_dir() {
+        // Iterate over directories
         for entry in fs::read_dir(full_gems_path).ok()? {
             let entry = entry.ok()?;
             let path = entry.path();
 
             if let Some(file_name) = path.file_name().unwrap().to_str() {
+                // Match the chef gem
                 if re.is_match(file_name) {
+                    // Split the version off
                     let v = file_name.split("chef-");
 
                     let version: Vec<&str> = v.collect();
@@ -124,6 +129,7 @@ fn version_from_chef_gem() -> Option<String> {
 }
 
 fn find_chef_client() -> Option<String> {
+    // Get the chef-client path
     let chef_client_path = which::which("chef-client");
     let full_path = match chef_client_path {
         Ok(full_path) => {
@@ -131,7 +137,8 @@ fn find_chef_client() -> Option<String> {
             full_path
         }
         Err(error) => {
-            log::trace!("Unable to find chef-client in PATH, {:?}", error);
+            log::warn!("Error in module `chef`:\n{}", error);
+            log::warn!("Unable to find chef-client in PATH, {:?}", error);
             return None;
         }
     };
