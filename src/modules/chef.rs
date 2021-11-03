@@ -3,6 +3,11 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::chef::ChefConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
+use crate::utils;
+
+use regex::Regex;
+use std::fs;
+use std::path::Path;
 
 /// Creates a module with the current Chef Client version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -30,8 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let chef_version =
-                        parse_chef_version(&context.exec_cmd("chef-client", &["--version"])?.stdout)?;
+                    let chef_version = version_from_chef_gem()?;
 
                     VersionFormatter::format_module_version(
                         module.get_name(),
@@ -56,17 +60,88 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_chef_version(chef_stdout: &str) -> Option<String> {
-    let version = chef_stdout
-        .splitn(2, "Chef: ")
-        .nth(1)?;
+fn version_from_chef_gem() -> Option<String> {
+    // Find Ruby
+    let chef_client_path = find_chef_client()?;
+    let cc_str = chef_client_path.as_str();
+    let chef_client_contents = utils::read_file(cc_str.to_string()).ok()?;
 
-    Some(version.to_string())
+    // Ruby's path
+    let re = Regex::new(r#"#!(.+)/ruby --disable-gems"#).unwrap();
+    let ruby_path = re
+        .captures(chef_client_contents.as_str())
+        .unwrap()
+        .get(1)
+        .unwrap()
+        .as_str();
+    // println!("ruby path: {}", ruby_path.as_str());
+
+    // /opt/chefdk/embedded/bin
+    let path = Path::new(ruby_path);
+    // /opt/chefdk/embedded
+    let base = path.parent().unwrap();
+    // /opt/chefdk/embedded/lib/ruby/gems
+    let gems_path = base.join("lib").join("ruby").join("gems");
+
+    let ruby_version = match fs::read_dir(gems_path).unwrap().nth(0).unwrap() {
+        Err(error) => {
+            log::warn!("Error in module `chef`:\n{}", error);
+            return None;
+        }
+        Ok(version) => {
+            version
+        },
+    };
+
+    let ruby_version_string = ruby_version.path().into_os_string().into_string().unwrap();
+
+    let full_gems_path = base
+        .join("lib")
+        .join("ruby")
+        .join("gems")
+        .join(ruby_version_string)
+        .join("gems");
+
+    let re = Regex::new(r"chef-\d+\.\d+\.\d+").unwrap();
+
+    if full_gems_path.is_dir() {
+        for entry in fs::read_dir(full_gems_path).ok()? {
+            let entry = entry.ok()?;
+            let path = entry.path();
+
+            if let Some(file_name) = path.file_name().unwrap().to_str() {
+                if re.is_match(file_name) {
+                    let v = file_name.split("chef-");
+
+                    let version: Vec<&str> = v.collect();
+                    return Some(version[1].to_string())
+                }
+            }
+        }
+    }
+
+    None
+}
+
+fn find_chef_client() -> Option<String> {
+    let chef_client_path = which::which("chef-client");
+    let full_path = match chef_client_path {
+        Ok(full_path) => {
+            log::trace!("Using {:?} as chef-client", full_path);
+            full_path
+        }
+        Err(error) => {
+            log::trace!("Unable to find chef-client in PATH, {:?}", error);
+            return None;
+        }
+    };
+
+    let path_str = full_path.into_os_string().into_string().unwrap();
+    Some(path_str)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::fs::{self, File};
@@ -193,9 +268,9 @@ mod tests {
         dir.close()
     }
 
-    #[test]
-    fn test_format_chef_version() {
-        let input = "Chef: 12.21.14";
-        assert_eq!(parse_chef_version(input), Some("12.21.14".to_string()));
-    }
+    // #[test]
+    // fn test_format_chef_version() {
+    //     let input = "Chef: 12.21.14";
+    //     assert_eq!(parse_chef_version(input), Some("12.21.14".to_string()));
+    // }
 }
