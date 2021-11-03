@@ -386,7 +386,7 @@ style = "bold red"
 [[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
+discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
 
