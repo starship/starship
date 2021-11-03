@@ -379,16 +379,16 @@ Opsi dari `display` merupakan sebuah array dari tabel berikut.
 #### Contoh
 
 ```toml
-[[battery.display]]  # "bold red" untuk corak gaya dan discharging_symbol ketika kapasitasnya berada di antara 0% dan 10%
+[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" untuk corak gaya dan simbol 💦 ketika kapasitasnya berada di antara 10% dan 30%
+[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
+discharging_symbol = "💦"
 
-# ketika kapasitasnya di atas 30%, indikator baterai tidak akan ditampilkan
+# when capacity is over 30%, the battery indicator will not be displayed
 
 ```
 
