@@ -2509,11 +2509,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+デフォルトでは`ruby`モジュールは現在インストールされている[Ruby](https://www.ruby-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- カレントディレクトリに`Gemfile`ファイルが含まれている
+- カレントディレクトリに `.ruby-version` ファイルが含まれている
+- カレントディレクトリに `.rb` ファイルが含まれている
 
 ### オプション
 
@@ -2521,12 +2521,12 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.       |
+| `symbol`            | `"💎 "`                               | Rubyのシンボルを表すフォーマット文字列.                                 |
 | `detect_extensions` | `["rb"]`                             | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `ruby` module.                            |
+| `disabled`          | `false`                              | `ruby`モジュールを無効にします。                                    |
 
 ### 変数
 
