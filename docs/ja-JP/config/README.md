@@ -828,7 +828,7 @@ format = "via [🐋 $context](blue bold)"
 
 `dotnet`モジュールはカレントディレクトリに関係する[.NET Core SDK](https://dotnet.microsoft.com/)のバージョンを表示します。 もし SDKは現在のディレクトリに固定されているのであれば、その固定されたバージョンが表示されます。 それ以外の場合、モジュール SDKの最新のインストールバージョンを示します。
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+デフォルトでは、このモジュールは現在のディレクトリに以下のファイルが 存在する場合にのみプロンプトで表示されます:
 
 - `global.json`
 - `project.json`
@@ -1063,7 +1063,7 @@ format = "via [e $version](bold red) "
 
 ## Fill
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+`fill` モジュールは行の余分なスペースを記号で埋めます。 一行に複数の`fill`モジュールが存在する場合、それらはスペースを均等に分割します。 これは、他のモジュールの位置合わせに便利です。
 
 ### オプション
 
