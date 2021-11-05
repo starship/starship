@@ -113,7 +113,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
         config.format
     } else {
-        config.highlight_repo_root_format
+        config.repo_root_format
     };
     let repo_root_style = config.repo_root_style.unwrap_or(config.style);
 
