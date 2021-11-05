@@ -13,6 +13,7 @@ pub struct RubyConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub detect_variables: Vec<&'a str>,
 }
 
 impl<'a> Default for RubyConfig<'a> {
@@ -26,6 +27,7 @@ impl<'a> Default for RubyConfig<'a> {
             detect_extensions: vec!["rb"],
             detect_files: vec!["Gemfile", ".ruby-version"],
             detect_folders: vec![],
+            detect_variables: vec!["RUBY_VERSION", "RBENV_VERSION"],
         }
     }
 }
