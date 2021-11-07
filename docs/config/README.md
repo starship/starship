@@ -2644,6 +2644,8 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `.rb` file
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
+Starship gets the current Ruby version by running `ruby -v`.
+
 ### Options
 
 | Option              | Default                              | Description                                                               |
