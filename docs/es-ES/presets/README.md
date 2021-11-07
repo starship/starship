@@ -1,12 +1,12 @@
-# Ajustes por defecto
+# Preajustes
 
-Aquí hay una colección de ajustes por defecto creados por la comunidad de Starship. ¡Si quieres compartir un ajuste por defecto, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
+Aqui tienes una colección de preajustes creados por la comunidad de Starship. ¡Si quieres compartir un preajuste, por favor, [envía un PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) actualizando este archivo! 😊
 
 ## Símbolos de Nerd Font
 
-Este ajuste por defecto no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
+Este preajuste no modifica nada excepto los símbolos usados para cada módulo. Si los emojis no son lo tuyo, ¡esto podría llamar tu atención!
 
-![Captura de pantalla de los ajustes por defecto de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
+![Captura de pantalla del preajuste de los Símbolos de Nerd Font](/presets/nerd-font-symbols.png)
 
 ### Prerequisitos
 
@@ -90,7 +90,7 @@ symbol = "ﯣ "
 
 ## Segmentos entre Corchetes
 
-Este ajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción predeterminada de Starship ("via", "on", etc.).
+Este preajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción por defecto de Starship ("via", "on", etc.).
 
 Antes:
 
@@ -98,7 +98,7 @@ Antes:
 
 Después:
 
-![Captura de pantalla de los ajustes predeterminados de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
+![Captura de pantalla del preajuste de los Segmentos entre Corchetes](/presets/bracketed-segments-after.png)
 
 ### Configuración
 
@@ -202,6 +202,9 @@ format = '\[[$symbol($version)]($style)\]'
 [php]
 format = '\[[$symbol($version)]($style)\]'
 
+[pulumi]
+format = '\[[$symbol$stack]($style)\]'
+
 [purescript]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -244,7 +247,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Símbolos de texto sin formato
 
-Este ajuste preestablecido cambia los símbolos a texto sin formato. Si tu terminal/fuente no pudo renderizar el NerdFonts/emojis, ¡tal vez podría probar este ajuste preestablecido!
+Este preajuste cambia los símbolos a texto sin formato. Si tu terminal/fuente no pudo renderizar el NerdFonts/emojis, ¡tal vez podría probar este preajuste!
 
 Antes (configuración por defecto con Fuente Fixedsys):
 
@@ -252,7 +255,7 @@ Antes (configuración por defecto con Fuente Fixedsys):
 
 Después (Símbolos de texto sin formato):
 
-![Captura de pantalla de los ajustes predeterminados de los Símbolos de Nerd Font](/presets/plain-text-symbols-after.png)
+![Captura de pantalla del ajuste de los Símbolos de Texto Plano](/presets/plain-text-symbols-after.png)
 
 ### Configuración
 
@@ -350,6 +353,9 @@ symbol = "pl "
 [php]
 symbol = "php "
 
+[pulumi]
+symbol = "pulumi "
+
 [purescript]
 symbol = "purs "
 
@@ -371,9 +377,9 @@ symbol = "swift "
 
 ## Ocultar versiones en tiempo de ejecución
 
-Esta configuración predeterminada oculta la versión de los tiempos de ejecución del idioma. Si trabajas en contenedores o entornos virtualizados, ¡ésto es para ti!
+Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si trabajas en contenedores o entornos virtualizados, ¡ésto es para ti!
 
-![Captura de pantalla ajustes de Ocultar versiones de tiempo de ejecución](/presets/hide-runtime-versions.png)
+![Captura de pantalla del preajuste de Ocultar de versiones de tiempo de ejecución](/presets/hide-runtime-versions.png)
 
 ### Configuración
 
@@ -435,6 +441,9 @@ format = 'via [$symbol]($style)'
 [php]
 format = 'via [$symbol]($style)'
 
+[pulumi]
+format = 'via [$symbol$stack]($style)'
+
 [purescript]
 format = 'via [$symbol]($style)'
 
@@ -461,4 +470,61 @@ format = 'via [$symbol]($style)'
 
 [zig]
 format = 'via [$symbol]($style)'
+```
+
+## Pure
+
+Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
+
+![Captura de pantalla del ajuste de Pure](/presets/pure-prompt.png)
+
+### Configuración
+
+```toml
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$character"""
+
+[directory]
+style = "blue"
+
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bright-black"
 ```

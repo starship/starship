@@ -31,41 +31,64 @@ trap blastoff DEBUG     # Pièger DEBUG *avant* l'initialisation de starship
 eval $(starship init bash)
 ```
 
-## Modifier le titre des fenêtres
+## Custom pre-prompt and pre-execution Commands in PowerShell
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter votre répertoire de travail). Fish le fait même par défaut. Starship ne le fait pas, mais il est assez simple d'ajouter cette fonctionnalité à `bash` ou `zsh`.
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
 
-Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
+Create a function named `Invoke-Starship-PreCommand`
 
-```bash
-function set_titre_fenetre(){
-    echo -ne "\033]0; VOTRE_TITRE_ICI\007"
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
 }
 ```
 
-Vous pouvez utiliser des variables pour personnaliser ce titre (`$USER`, `$HOSTNAME`, et `$PWD` sont des choix populaires).
+## Change Window Title
 
-Dans `bash`, définissez cette fonction comme la fonction précommande Starship :
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
 
-```bash
-starship_precmd_user_func="set_titre_fenetre"
-```
-
-Dans `zsh`, ajoutez ceci au tableau `precmd_functions` :
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
-precmd_functions+=(set_titre_fenetre)
+function set_win_title(){
+    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+}
 ```
 
-Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-Par exemple, si vous voulez afficher votre répertoire actuel dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
+In `bash`, set this function to be the precmd starship function:
+
+```bash
+starship_precmd_user_func="set_win_title"
+```
+
+In `zsh`, add this to the `precmd_functions` array:
+
+```bash
+precmd_functions+=(set_win_title)
+```
+
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Enable Right Prompt

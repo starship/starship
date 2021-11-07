@@ -1,16 +1,16 @@
 # ڕێکخستنی پێشکەوتوو
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+لەگەڵ ئەوەی Starship شێڵێکە بەکارهێنانی زۆرە، هەندێک جار دەسکاری کردنی `starship.toml` بەس نییە بۆ ئەوەی وای لێبکەی هەندێک شتی دیاریکراو ئەنجام بدات. ئەم پەڕەیە ووردەکاری زیاتر ئەدات لەسەر هەندێک لە شێوازە ڕێکخستنە پێشکەوتووترەکان کە لە Starshipـدا بەکارهاتووە.
 
-::: warning
+::: ئاگادارکردنەوە
 
-The configurations in this section are subject to change in future releases of Starship.
+ڕێکخستنەکانی ئەم بەشە شایەنی گۆڕانن لە وەشانەکانی داهاتووی Starshipدا.
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## فرمانە کڕیاڕخوازەکانی pre-prompt و pre-execution لە Bashـدا
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+بەپێچەوانەی شێلەکانی دیکە Bash هیچ چوارچێوەیەکی فەرمی preexec/precmdـی نییە. لەبەر ئەوە، دابین کردنی قولابە تەواو کڕیارخوازکراوەکان ئاسان نییە لە `Bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
@@ -29,6 +29,18 @@ function blastoff(){
 }
 trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
+```
+
+## Custom pre-prompt and pre-execution Commands in PowerShell
+
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+
+Create a function named `Invoke-Starship-PreCommand`
+
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
+}
 ```
 
 ## Change Window Title
@@ -68,6 +80,17 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
+```
+
 ## Enable Right Prompt
 
 Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
@@ -76,7 +99,7 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh.
 
-### Example
+### نموونە
 
 ```toml
 # ~/.config/starship.toml
@@ -99,15 +122,15 @@ Produces a prompt like the following:
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
-  - `bold`
-  - `italic`
-  - `underline`
-  - `dimmed`
-  - `inverted`
+  - `تۆخ`
+  - `لار`
+  - `بنهێڵ`
+  - `کاڵ کراو`
+  - `پێچەوانە کراو`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
-  - `none`
+  - `هیچ`
 
 where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
