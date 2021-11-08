@@ -49,15 +49,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("Physical dir: {:?}", &physical_dir);
     log::debug!("Display dir: {:?}", &display_dir);
 
-    // Attempt repository path contraction (if we are in a git repository)
-    let repo = if config.truncate_to_repo {
-        context.get_repo().ok()
+    // Attempt repository path contraction (if we are in a git/marked repository)
+    let repo: Option<&Path> = if config.truncate_to_repo {
+        context
+            .get_repo()
+            .ok()
+            .and_then(|r| r.root.as_deref())
+            .or_else(|| {
+                if !config.repo_markers.is_empty() {
+                    for path in physical_dir.parents() {
+                        for &name in &config.repo_markers {
+                            if path.join(name).exists() {
+                                return Some(path);
+                            }
+                        }
+                    }
+                }
+                None
+            })
     } else {
         None
     };
     let dir_string = repo
-        .and_then(|r| r.root.as_ref())
-        .filter(|root| *root != &home_dir)
+        .filter(|root| *root != home_dir)
         .and_then(|root| contract_repo_path(display_dir, root));
 
     // Otherwise use the logical path, automatically contracting

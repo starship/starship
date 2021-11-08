@@ -8,6 +8,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
+    pub repo_markers: Vec<&'a str>,
     pub substitutions: IndexMap<String, &'a str>,
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,
@@ -25,6 +26,7 @@ impl<'a> Default for DirectoryConfig<'a> {
         DirectoryConfig {
             truncation_length: 3,
             truncate_to_repo: true,
+            repo_markers: Vec::new(),
             fish_style_pwd_dir_length: 0,
             use_logical_path: true,
             substitutions: IndexMap::new(),
