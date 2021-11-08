@@ -2642,6 +2642,9 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
+- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+
+Starship gets the current Ruby version by running `ruby -v`.
 
 ### Options
 
@@ -2653,6 +2656,7 @@ The module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
