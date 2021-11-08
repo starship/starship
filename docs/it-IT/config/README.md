@@ -2513,6 +2513,9 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
+- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+
+Starship gets the current Ruby version by running `ruby -v`.
 
 ### Opzioni
 
@@ -2524,6 +2527,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | `detect_extensions` | `["rb"]`                             | Quali estensioni dovrebbero attivare questo modulo.                                          |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Quali nomi di file dovrebbero attivare questo modulo.                                        |
 | `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                                      |
 | `style`             | `"bold red"`                         | Lo stile per il modulo.                                                                      |
 | `disabled`          | `false`                              | Disables the `ruby` module.                                                                  |
 
