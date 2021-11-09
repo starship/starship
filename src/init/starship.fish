@@ -20,6 +20,7 @@ function fish_right_prompt
         case '*'
             set STARSHIP_KEYMAP insert
     end
+    set STARSHIP_CMD_PIPESTATUS $pipestatus
     set STARSHIP_CMD_STATUS $status
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
