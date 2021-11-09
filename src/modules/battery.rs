@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::battery::BatteryConfig;
 #[cfg(test)]
 use mockall::automock;
+use starship_battery as battery;
 
 use crate::formatter::StringFormatter;
 
