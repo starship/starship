@@ -306,7 +306,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 ## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 
