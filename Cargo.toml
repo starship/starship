@@ -25,6 +25,7 @@ maintenance = { status = "actively-developed" }
 [features]
 default = ["battery", "http"]
 http = ["attohttpc"]
+battery = ["starship-battery"]
 # Vendor OpenSSL, use this if you have trouble cross-compiling starship
 tls-vendored = ["native-tls/vendored"]
 
@@ -41,7 +42,7 @@ rayon = "1.5.1"
 log = { version = "0.4.14", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-battery = { version = "0.7.8", optional = true }
+starship-battery = { version = "0.7.9", optional = true }
 path-slash = "0.1.4"
 unicode-segmentation = "1.8.0"
 gethostname = "0.2.1"
