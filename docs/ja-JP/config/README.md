@@ -747,7 +747,7 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | `read_only_style`   | `"red"`                                            | 読み取り専用シンボルのスタイルです。                                                                     |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. 例: "…/"                                       |
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
+| `home_symbol`       | `"~"`                                              | ホームディレクトリを示すシンボルです。                                                                    |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -2304,7 +2304,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `spago.dhall` file
+- カレントディレクトリに`spago.dhall`ファイルが含まれている
 - The current directory contains a file with the `.purs` extension
 
 ### オプション
@@ -2343,19 +2343,19 @@ format = "via [$symbol$version](bold white)"
 
 The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+`pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
+- カレントディレクトリに`.python-version`ファイルが含まれている
+- カレントディレクトリに`Pipfile`ファイルが含まれている
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- カレントディレクトリに`pyproject.toml`ファイルが含まれている
+- カレントディレクトリに`requirements.txt`ファイルが含まれている
+- カレントディレクトリに`setup.py`ファイルが含まれている
+- カレントディレクトリに`tox.ini`ファイルが含まれている
+- カレントディレクトリに`.py`の拡張子のファイルが含まれている.
+- 仮想環境がアクティブである
 
 ### オプション
 
@@ -2365,13 +2365,13 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `version_format`     | `"v${raw}"`                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
+| `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | どのファイル名がこのモジュールをアクティブにするか                                                              |
 | `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                              |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                  |
 
 ::: tip
 
@@ -2472,7 +2472,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2531,7 +2531,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                               |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module. |
 | `style`             | `"bold red"`                         | モジュールのスタイルです。                                           |
-| `disabled`          | `false`                              | Disables the `ruby` module.                             |
+| `disabled`          | `false`                              | `ruby`モジュールを無効にします。                                     |
 
 ### 変数
 
@@ -2554,10 +2554,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+デフォルトでは`rust`モジュールは現在インストールされている[Rust](https://www.rust-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- カレントディレクトリに`Cargo.toml`ファイルが含まれている
+- カレントディレクトリに`.rs`の拡張子のファイルが含まれている
 
 ### オプション
 
@@ -2565,18 +2565,18 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust        |
+| `symbol`            | `"🦀 "`                               | Rustのシンボルを表すフォーマット文字列                                  |
 | `detect_extensions` | `["rs"]`                             | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["Cargo.toml"]`                     | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `rust` module.                            |
+| `disabled`          | `false`                              | `rust`モジュールを無効にします。                                    |
 
 ### 変数
 
 | 変数        | 設定例               | 説明                     |
 | --------- | ----------------- | ---------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc` |
+| version   | `v1.43.0-nightly` | `rustc`のバージョン          |
 | symbol    |                   | オプション `記号` の値をミラーする    |
 | style\* |                   | オプション `style` の値をミラーする |
 
@@ -2663,7 +2663,7 @@ The `shell` module shows an indicator for currently used shell.
 | 変数        | デフォルト | 説明                                                         |
 | --------- | ----- | ---------------------------------------------------------- |
 | indicator |       | Mirrors the value of `indicator` for currently used shell. |
-| style\* |       | Mirrors the value of option `style`.                       |
+| style\* |       | オプション `style` の値をミラーする.                                    |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
@@ -2812,7 +2812,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2861,7 +2861,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.terraform` folder
+- カレントディレクトリに`.terraform`フォルダが含まれている
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### オプション
@@ -2875,7 +2875,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[".terraform"]`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold 105"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `terraform` module.                       |
+| `disabled`          | `false`                              | `terraform`モジュールを無効にします。                               |
 
 ### 変数
 
@@ -2910,7 +2910,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip
 
@@ -2920,23 +2920,23 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                                                                                                                 |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| オプション             | デフォルト                   | 説明                                                                                                    |
+| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
+| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                                   |
+| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
+| `style`           | `"bold yellow"`         | モジュールのスタイルです。                                                                                         |
+| `utc_time_offset` | `"local"`               | 使用するUTCオフセットを設定します。 Range from -24 &lt; x &lt; 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。   |
+| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
 | 変数        | 設定例        | 説明                     |
 | --------- | ---------- | ---------------------- |
-| time      | `13:08:10` | The current time.      |
+| 時刻        | `13:08:10` | The current time.      |
 | style\* |            | オプション `style` の値をミラーする |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
@@ -2954,14 +2954,14 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## ユーザー名
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- カレントユーザーがroot
+- カレントユーザーが、ログインしているユーザーとは異なる
+- ユーザーがSSHセッションとして接続されている
+- `show_always`変数がtrueに設定されている
 
 ::: tip
 
@@ -2971,13 +2971,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### オプション
 
-| オプション         | デフォルト                   | 説明                                    |
-| ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。                      |
-| `show_always` | `false`                 | Always shows the `username` module.   |
-| `disabled`    | `false`                 | Disables the `username` module.       |
+| オプション         | デフォルト                   | 説明                        |
+| ------------- | ----------------------- | ------------------------- |
+| `style_root`  | `"bold red"`            | ユーザーがrootのときに使用されるスタイルです。 |
+| `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。    |
+| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。          |
+| `show_always` | `false`                 | `username`モジュールを常に表示します。  |
+| `disabled`    | `false`                 | `username`モジュールを無効にします。   |
 
 ### 変数
 
@@ -3106,7 +3106,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - The current directory contains a `.zig` file
 
@@ -3186,8 +3186,8 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                       |
+| `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
