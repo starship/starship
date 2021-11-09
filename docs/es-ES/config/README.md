@@ -735,17 +735,18 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 ### Opciones
 
-| Opción              | Por defecto                                        | Descripción                                                                    |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `truncation_length` | `3`                                                | El número de directorios padre a los que se debe truncar el directorio actual. |
-| `truncate_to_repo`  | `true`                                             | Trunca o no hasta la raíz del repositorio git en el que estés.                 |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                         |
-| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                          |
-| `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                             |
-| `read_only`         | `"🔒"`                                              | El símbolo que indica el directorio actual es de sólo lectura.                 |
-| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                     |
-| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. p. ej.: "…/"                      |
-| `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio de inicio.                                 |
+| Opción              | Por defecto                                        | Descripción                                                                            |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | El número de directorios padre a los que se debe truncar el directorio actual.         |
+| `truncate_to_repo`  | `true`                                             | Trunca o no hasta la raíz del repositorio git en el que estés.                         |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                                 |
+| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                                  |
+| `disabled`          | `false`                                            | Deshabilita el módulo `directory`.                                                     |
+| `read_only`         | `"🔒"`                                              | El símbolo que indica el directorio actual es de sólo lectura.                         |
+| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                             |
+| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. p. ej.: "…/"                              |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
