@@ -735,17 +735,18 @@ format = "via [🦕 $version](green bold) "
 
 ### Опции
 
-| Параметр            | По умолчанию                                       | Описание                                                                     |
-| ------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Количество родительских папок, к которым должен быть усечен текущий каталог. |
-| `truncate_to_repo`  | `true`                                             | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.  |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Формат модуля.                                                               |
-| `style`             | `"bold cyan"`                                      | Стиль модуля.                                                                |
-| `disabled`          | `false`                                            | Отключает модуль `directory`.                                                |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                        |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                          |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                            |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                        |
+| Параметр            | По умолчанию                                       | Описание                                                                               |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | Количество родительских папок, к которым должен быть усечен текущий каталог.           |
+| `truncate_to_repo`  | `true`                                             | Следует или нет обрезать до корня репозитория git, в котором вы находитесь.            |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Формат модуля.                                                                         |
+| `style`             | `"bold cyan"`                                      | Стиль модуля.                                                                          |
+| `disabled`          | `false`                                            | Отключает модуль `directory`.                                                          |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                                  |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                                    |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                      |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
 
 <details>
 <summary>Этот модуль имеет несколько расширенных опций конфигурации, которые контролируют отображение каталога.</summary>
@@ -2513,6 +2514,9 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
+- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+
+Starship gets the current Ruby version by running `ruby -v`.
 
 ### Опции
 
@@ -2524,6 +2528,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | Стиль модуля.                                                             |
 | `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
