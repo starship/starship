@@ -735,17 +735,18 @@ format = "via [🦕 $version](green bold) "
 
 ### 配置项
 
-| Option              | 默认值                                                | 描述                                                    |
-| ------------------- | -------------------------------------------------- | ----------------------------------------------------- |
-| `truncation_length` | `3`                                                | 当前目录路径被截断后最多保留的父目录数量。                                 |
-| `truncate_to_repo`  | `true`                                             | 是否只截断到您当前处于的 git 仓库根目录下。                              |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | 组件格式化模板。                                              |
-| `style`             | `"bold cyan"`                                      | 此组件的样式。                                               |
-| `disabled`          | `false`                                            | 禁用 `directory` 组件。                                    |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only. |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                   |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"     |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                 |
+| Option              | 默认值                                                | 描述                                                                                     |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | 当前目录路径被截断后最多保留的父目录数量。                                                                  |
+| `truncate_to_repo`  | `true`                                             | 是否只截断到您当前处于的 git 仓库根目录下。                                                               |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | 组件格式化模板。                                                                               |
+| `style`             | `"bold cyan"`                                      | 此组件的样式。                                                                                |
+| `disabled`          | `false`                                            | 禁用 `directory` 组件。                                                                     |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                                  |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                                    |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                      |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
 
 <details>
 <summary>此组件有几个高级配置选项来控制当前目录路径的显示方式。</summary>
