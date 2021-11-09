@@ -736,17 +736,18 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| オプション               | デフォルト                                              | 説明                                               |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| `truncation_length` | `3`                                                | 現在のディレクトリを切り捨てる親フォルダーの数です。                       |
-| `truncate_to_repo`  | `true`                                             | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                    |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | moduleのフォーマットです。                                 |
-| `style`             | `"bold cyan"`                                      | モジュールのスタイルです。                                    |
-| `disabled`          | `false`                                            | `directory`モジュールを無効にします。                         |
-| `read_only`         | `"🔒"`                                              | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。              |
-| `read_only_style`   | `"red"`                                            | 読み取り専用シンボルのスタイルです。                               |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. 例: "…/" |
-| `home_symbol`       | `"~"`                                              | ホームディレクトリを示すシンボルです。                              |
+| オプション               | デフォルト                                              | 説明                                                                                     |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | 現在のディレクトリを切り捨てる親フォルダーの数です。                                                             |
+| `truncate_to_repo`  | `true`                                             | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                                                          |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | moduleのフォーマットです。                                                                       |
+| `style`             | `"bold cyan"`                                      | モジュールのスタイルです。                                                                          |
+| `disabled`          | `false`                                            | `directory`モジュールを無効にします。                                                               |
+| `read_only`         | `"🔒"`                                              | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                                                    |
+| `read_only_style`   | `"red"`                                            | 読み取り専用シンボルのスタイルです。                                                                     |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. 例: "…/"                                       |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
