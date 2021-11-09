@@ -1,8 +1,8 @@
 [package]
 name = "starship"
-version = "0.58.0"
+version = "1.0.0"
 edition = "2021"
-authors = ["Matan Kushner <hello@matchai.me>"]
+authors = ["Starship Contributors"]
 homepage = "https://starship.rs"
 documentation = "https://starship.rs/guide/"
 repository = "https://github.com/starship/starship"
@@ -15,7 +15,7 @@ description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
 # Keep `/` in front of `README.md` to exclude localized readmes
-include = ["src/**/*", "build.rs", "Cross.toml", "LICENSE", "/README.md"]
+include = ["src/**/*", "build.rs", "Cross.toml", "LICENSE", "README.md"]
 
 [badges]
 is-it-maintained-issue-resolution = { repository = "starship/starship" }
@@ -28,7 +28,6 @@ http = ["attohttpc"]
 battery = ["starship-battery"]
 # Vendor OpenSSL, use this if you have trouble cross-compiling starship
 tls-vendored = ["native-tls/vendored"]
-
 
 [dependencies]
 clap = "2.33.3"
