@@ -306,7 +306,7 @@ Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin h
 
 ## Cảm hứng
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Xin hãy xem qua những công việc này trước đây, những thứ đã giúp truyền cảm hứng để tạo ra starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt cho những phi hành gia.
 
@@ -321,4 +321,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 Giấy phép
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Bản quyền © 2019-nay, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Dự án này được [ISC](https://github.com/starship/starship/blob/master/LICENSE) cấp phép.
