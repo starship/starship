@@ -306,7 +306,7 @@ Se sei interessato ad aiutare a contribuire a Starship, dai un'occhiata alla nos
 
 ## 💭 Ispirato Da
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Ti invito di controllare questi lavori precedenti che hanno contribuito a ispirare la creazione di Starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Un prompt ZSH per astronauti.
 
@@ -321,4 +321,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 Licenza
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-presente, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Questo progetto è sotto licenza [ISC](https://github.com/starship/starship/blob/master/LICENSE).
