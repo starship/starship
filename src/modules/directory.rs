@@ -54,7 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok();
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.root.as_ref())
-            .filter(|root| *root != &home_dir)
+            .filter(|&root| root != &home_dir)
             .and_then(|root| contract_repo_path(display_dir, root))
     } else {
         None
@@ -93,15 +93,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.and_then(|r| r.root.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
-            let repo_path = contract_repo_path(display_dir, repo_root)?;
-            let repo_path_vec: Vec<&str> = repo_path.split('/').collect();
-            let after_str = repo_path.replacen(repo_path_vec[0], "", 1);
-            let after_dir_num = after_str.split('/').count();
+            let contracted_path = contract_repo_path(display_dir, repo_root)?;
+            let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+            let num_segments_after_root = after_repo_root.split('/').count();
 
-            if ((after_dir_num - 1) as i64) < config.truncation_length {
+            if ((num_segments_after_root - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
-                let before = dir_string.replace(&repo_path, "");
-                [prefix + &before, root.to_string(), after_str]
+                let before = dir_string.replace(&contracted_path, "");
+                [prefix + &before, root.to_string(), after_repo_root]
             } else {
                 ["".to_string(), "".to_string(), prefix + &dir_string]
             }
