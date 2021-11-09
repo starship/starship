@@ -1,10 +1,15 @@
----
 style: github
 template: RELEASE.tpl.md
 info:
   repository_url: https://github.com/starship/starship
 options:
-  commits: {}
+  commits:
+    # filters:
+    #   Type:
+    #     - feat
+    #     - fix
+    #     - perf
+    #     - refactor
   commit_groups:
     sort_by: Custom
     title_order:
