@@ -306,7 +306,7 @@ Jeżeli chcesz wspomóc tworzenie starship, zapoznaj się z naszym [Poradnikiem 
 
 ## 💭Inspiracje
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Zapoznaj się z wcześniejszymi projektami które zainspirowały nas do stworzenia starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Wiersz poleceń ZSH dla astronautów.
 
