@@ -63,7 +63,7 @@ Format strings are the format that a module prints all its variables with. Most 
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
 
-For example:
+على سبيل المثال:
 
 - `$version` is a format string with a variable named `version`.
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
@@ -100,7 +100,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+على سبيل المثال:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -274,7 +274,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Variables
 
-| Variable  | Example          | الوصف                                       |
+| Variable  | مثال             | الوصف                                       |
 | --------- | ---------------- | ------------------------------------------- |
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
@@ -342,7 +342,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -376,7 +376,7 @@ The `display` option is an array of the following table.
 | `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
 | `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
-#### Example
+#### مثال
 
 ```toml
 [[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
@@ -427,9 +427,9 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Variables
 
-| Variable | Example | الوصف                                                                 |
-| -------- | ------- | --------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Variable | مثال | الوصف                                                                 |
+| -------- | ---- | --------------------------------------------------------------------- |
+| symbol   |      | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
 ### Examples
 
@@ -484,7 +484,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v3.17.3` | The version of cmake                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -514,7 +514,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### Variables
 
-| Variable  | Example    | الوصف                                |
+| Variable  | مثال       | الوصف                                |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v3.1.2.0` | The version of `cobol`               |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -554,14 +554,14 @@ Showing desktop notifications requires starship to be built with `rust-notify` s
 
 ### Variables
 
-| Variable  | Example  | الوصف                                   |
+| Variable  | مثال     | الوصف                                   |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -594,7 +594,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Variables
 
-| Variable    | Example      | الوصف                                |
+| Variable    | مثال         | الوصف                                |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current conda environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -602,7 +602,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -633,7 +633,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -641,7 +641,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -673,7 +673,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -681,7 +681,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -710,13 +710,13 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.8.3` | The version of `deno`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -771,14 +771,14 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Variable  | Example               | الوصف                               |
+| Variable  | مثال                  | الوصف                               |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `"D:/Projects"`       | The current directory path          |
 | style\* | `"black bold dimmed"` | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -807,7 +807,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Variable  | Example        | الوصف                                |
+| Variable  | مثال           | الوصف                                |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | symbol    |                | Mirrors the value of option `symbol` |
@@ -815,7 +815,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -861,7 +861,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Variable  | Example          | الوصف                                                              |
+| Variable  | مثال             | الوصف                                                              |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
@@ -870,7 +870,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -902,7 +902,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variables
 
-| Variable    | Example | الوصف                                |
+| Variable    | مثال    | الوصف                                |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -911,7 +911,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -945,7 +945,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -953,7 +953,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -983,17 +983,17 @@ default = "unknown user"
 
 ### Options
 
-| Option     | الافتراضي                      | الوصف                                                                        |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Option      | الافتراضي                      | الوصف                                                                        |
+| ----------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`    | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable`  |                                | The environment variable to be displayed.                                    |
+| `الافتراضي` |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`    | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `disabled`  | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
-| Variable  | Example                                     | الوصف                                      |
+| Variable  | مثال                                        | الوصف                                      |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
@@ -1001,7 +1001,7 @@ default = "unknown user"
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1044,7 +1044,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1052,7 +1052,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1073,7 +1073,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | `style`    | `"bold black"` | The style for the module.         |
 | `disabled` | `false`        | Disables the `fill` module        |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1107,13 +1107,13 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Variables
 
-| Variable  | Example       | الوصف                                                              |
+| Variable  | مثال          | الوصف                                                              |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `الافتراضي`   | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Mirrors the value of option `symbol`                               |
 | style\* |               | Mirrors the value of option `style`                                |
 
@@ -1171,7 +1171,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Example  | الوصف                                                                                                  |
+| Variable      | مثال     | الوصف                                                                                                  |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
@@ -1181,7 +1181,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1210,14 +1210,14 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | Example   | الوصف                               |
+| Variable  | مثال      | الوصف                               |
 | --------- | --------- | ----------------------------------- |
 | hash      | `b703eb3` | The current git commit hash         |
 | style\* |           | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1248,7 +1248,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Variable         | Example    | الوصف                               |
+| Variable         | مثال       | الوصف                               |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -1257,7 +1257,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1289,16 +1289,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable          | Example | الوصف                                       |
-| ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variable          | مثال | الوصف                                       |
+| ----------------- | ---- | ------------------------------------------- |
+| added             | `1`  | The current number of added lines           |
+| deleted           | `2`  | The current number of deleted lines         |
+| added_style\*   |      | Mirrors the value of option `added_style`   |
+| deleted_style\* |      | Mirrors the value of option `deleted_style` |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1363,7 +1363,7 @@ The following variables can be used in `conflicted`, `ahead`, `behind`, `untrack
 | -------- | ------------------------ |
 | `count`  | Show the number of files |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1421,7 +1421,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.12.1` | The version of `go`                  |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1429,7 +1429,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1460,7 +1460,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1468,7 +1468,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1493,14 +1493,14 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
-| --------- | ------- | ------------------------------------ |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | مثال | الوصف                                |
+| --------- | ---- | ------------------------------------ |
+| symbol    |      | Mirrors the value of option `symbol` |
+| style\* |      | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1534,15 +1534,15 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
-| --------- | ------- | ------------------------------------ |
-| version   | `v14`   | The version of `java`                |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | مثال  | الوصف                                |
+| --------- | ----- | ------------------------------------ |
+| version   | `v14` | The version of `java`                |
+| symbol    |       | Mirrors the value of option `symbol` |
+| style\* |       | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1590,15 +1590,15 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
-| --------- | ------- | ------------------------------------ |
-| number    | `1`     | The number of jobs                   |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | مثال | الوصف                                |
+| --------- | ---- | ------------------------------------ |
+| number    | `1`  | The number of jobs                   |
+| symbol    |      | Mirrors the value of option `symbol` |
+| style\* |      | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1632,7 +1632,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1640,7 +1640,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1671,7 +1671,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1679,7 +1679,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1718,7 +1718,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Example              | الوصف                                    |
+| Variable  | مثال                 | الوصف                                    |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-cluster`   | The current kubernetes context           |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -1727,7 +1727,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1772,7 +1772,7 @@ The `line_break` module separates the prompt into two lines.
 | ---------- | --------- | ------------------------------------------------------------------ |
 | `disabled` | `false`   | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1805,7 +1805,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1813,7 +1813,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1846,7 +1846,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable         | Example       | الوصف                                                              |
+| Variable         | مثال          | الوصف                                                              |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -1857,7 +1857,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1886,7 +1886,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | branch    | `master` | The active mercurial branch          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1894,7 +1894,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1929,7 +1929,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1937,7 +1937,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -1964,7 +1964,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
+| Variable  | مثال    | الوصف                                |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
@@ -1973,7 +1973,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2012,7 +2012,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variables
 
-| Variable  | Example    | الوصف                                |
+| Variable  | مثال       | الوصف                                |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v13.12.0` | The version of `node`                |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -2020,7 +2020,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2057,7 +2057,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Variables
 
-| Variable         | Example      | الوصف                                                             |
+| Variable         | مثال         | الوصف                                                             |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
@@ -2067,7 +2067,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2091,16 +2091,16 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
-| --------- | ------- | ------------------------------------ |
-| cloud     | `corp`  | The current OpenStack cloud          |
-| project   | `dev`   | The current OpenStack project        |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | مثال   | الوصف                                |
+| --------- | ------ | ------------------------------------ |
+| cloud     | `corp` | The current OpenStack cloud          |
+| project   | `dev`  | The current OpenStack project        |
+| symbol    |        | Mirrors the value of option `symbol` |
+| style\* |        | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2145,7 +2145,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2153,7 +2153,7 @@ The `package` module is shown when the current directory is the repository for a
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2187,13 +2187,13 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variables
 
-| Variable  | Example   | الوصف                                |
+| Variable  | مثال      | الوصف                                |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2225,7 +2225,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2233,7 +2233,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2269,7 +2269,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | الوصف                                |
+| Variable  | مثال       | الوصف                                |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `pulumi`              |
 | stack     | `dev`      | The current Pulumi stack             |
@@ -2278,7 +2278,7 @@ By default the module will be shown if any of the following conditions are met:
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 #### With Pulumi Version
 
@@ -2321,7 +2321,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2329,7 +2329,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2382,7 +2382,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Example         | الوصف                                      |
+| Variable     | مثال            | الوصف                                      |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
 | symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
@@ -2390,7 +2390,7 @@ The default values and order for `python_binary` was chosen to first identify th
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2454,13 +2454,13 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### Variables
 
-| Variable | Example       | الوصف                                |
+| Variable | مثال          | الوصف                                |
 | -------- | ------------- | ------------------------------------ |
 | version  | `v4.0.5`      | The version of `R`                   |
 | symbol   |               | Mirrors the value of option `symbol` |
 | style    | `"blue bold"` | Mirrors the value of option `style`  |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2490,7 +2490,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `red`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2498,7 +2498,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2534,7 +2534,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `ruby`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2542,7 +2542,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2573,7 +2573,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| Variable  | Example           | الوصف                                |
+| Variable  | مثال              | الوصف                                |
 | --------- | ----------------- | ------------------------------------ |
 | version   | `v1.43.0-nightly` | The version of `rustc`               |
 | symbol    |                   | Mirrors the value of option `symbol` |
@@ -2581,7 +2581,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2613,7 +2613,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `2.13.5` | The version of `scala`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2621,7 +2621,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2696,15 +2696,15 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
-| --------- | ------- | ------------------------------------ |
-| shlvl     | `3`     | The current value of `SHLVL`         |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | مثال | الوصف                                |
+| --------- | ---- | ------------------------------------ |
+| shlvl     | `3`  | The current value of `SHLVL`         |
+| symbol    |      | Mirrors the value of option `symbol` |
+| style\* |      | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2730,7 +2730,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variables
 
-| Variable  | Example      | الوصف                                |
+| Variable  | مثال         | الوصف                                |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current Singularity image        |
 | symbol    |              | Mirrors the value of option `symbol` |
@@ -2738,7 +2738,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2780,7 +2780,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable       | Example | الوصف                                                                                       |
+| Variable       | مثال    | الوصف                                                                                       |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
 | status         | `127`   | The exit code of the last command                                                           |
 | int            | `127`   | The exit code of the last command                                                           |
@@ -2794,7 +2794,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 
@@ -2831,7 +2831,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2839,7 +2839,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2878,16 +2878,16 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | الوصف                                |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Variable  | مثال        | الوصف                                |
+| --------- | ----------- | ------------------------------------ |
+| version   | `v0.12.24`  | The version of `terraform`           |
+| workspace | `الافتراضي` | The current Terraform workspace      |
+| symbol    |             | Mirrors the value of option `symbol` |
+| style\* |             | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 #### With Terraform Version
 
@@ -2933,14 +2933,14 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 ### Variables
 
-| Variable  | Example    | الوصف                               |
+| Variable  | مثال       | الوصف                               |
 | --------- | ---------- | ----------------------------------- |
 | time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -2980,12 +2980,12 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Variable | Example      | الوصف                                                                                       |
+| Variable | مثال         | الوصف                                                                                       |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -3019,7 +3019,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variables
 
-| Variable  | Example          | الوصف                                |
+| Variable  | مثال             | الوصف                                |
 | --------- | ---------------- | ------------------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
 | symbol    |                  | Mirrors the value of option `symbol` |
@@ -3027,7 +3027,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -3057,13 +3057,13 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Variables
 
-| Variable  | Example | الوصف                                |
-| --------- | ------- | ------------------------------------ |
-| version   | `v0.2`  | The version of `v`                   |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | مثال   | الوصف                                |
+| --------- | ------ | ------------------------------------ |
+| version   | `v0.2` | The version of `v`                   |
+| symbol    |        | Mirrors the value of option `symbol` |
+| style\* |        | Mirrors the value of option `style`  |
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -3086,7 +3086,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Example                                     | الوصف                                |
+| Variable  | مثال                                        | الوصف                                |
 | --------- | ------------------------------------------- | ------------------------------------ |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
 | symbol    |                                             | Mirrors the value of option `symbol` |
@@ -3094,7 +3094,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -3124,7 +3124,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Variables
 
-| Variable  | Example  | الوصف                                |
+| Variable  | مثال     | الوصف                                |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3132,7 +3132,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 \*: This variable can only be used as a part of a style string
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
@@ -3186,7 +3186,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `الوصف`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
@@ -3235,7 +3235,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 
 :::
 
-### Example
+### مثال
 
 ```toml
 # ~/.config/starship.toml
