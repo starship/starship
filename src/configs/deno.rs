@@ -24,7 +24,7 @@ impl<'a> Default for DenoConfig<'a> {
             style: "green bold",
             disabled: false,
             detect_extensions: vec![],
-            detect_files: vec!["mod.ts", "deps.ts", "mod.js", "deps.js"],
+            detect_files: vec!["deno.json", "deno.jsonc", "mod.ts", "deps.ts", "mod.js", "deps.js"],
             detect_folders: vec![],
         }
     }
