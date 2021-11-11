@@ -40,11 +40,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         host.as_ref()
     };
+    let (_choose_style, choose_config) = if ssh_connection.is_some() {
+        ("ssh_style", config.ssh_style)
+    } else {
+        ("style", config.style)
+    };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                _choose_style => Some(Ok(choose_config)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -124,7 +129,7 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", ssh_style().paint(hostname)));
 
         assert_eq!(expected, actual);
     }
@@ -164,5 +169,8 @@ mod tests {
 
     fn style() -> Style {
         Color::Green.bold().dimmed()
+    }
+    fn ssh_style() -> Style {
+        Color::Yellow.bold()
     }
 }
