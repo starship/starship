@@ -32,9 +32,17 @@ pub fn update_configuration(name: &str, value: &str) {
 }
 
 fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> Result<(), String> {
-    let mut current_item = &mut doc.root;
+    let mut keys = name.split('.');
 
-    for key in name.split('.') {
+    let first_key = keys.next().unwrap_or_default();
+    if first_key.is_empty() {
+        return Err("Empty table keys are not supported".to_owned());
+    }
+
+    let table = doc.as_table_mut();
+    let mut current_item = table.entry(first_key).or_insert_with(toml_edit::table);
+
+    for key in keys {
         if !current_item.is_table_like() {
             return Err("This command can only index into TOML tables".to_owned());
         }
@@ -429,6 +437,7 @@ mod tests {
         assert!(handle_update_configuration(&mut doc, ".....", "true").is_err());
         assert!(handle_update_configuration(&mut doc, "a.a.a..a.a", "true").is_err());
         assert!(handle_update_configuration(&mut doc, "a.a.a.a.a.", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, ".a.a.a.a.a", "true").is_err());
     }
 
     #[test]
