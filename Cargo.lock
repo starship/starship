@@ -769,6 +769,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "is_debug"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06d198e9919d9822d5f7083ba8530e04de87841eaf21ead9af8f2304efd57c89"
+
+[[package]]
 name = "itertools"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1672,12 +1678,13 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.7.2"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7900a3c58381cac8ec6f4f4a44bec7c4e6d221c19851034d7251ec185afbb32"
+checksum = "790bb44e86d1699729a2868a829b9cf0f9ff09d5ba30544143db5372b6bc7565"
 dependencies = [
  "chrono",
  "git2",
+ "is_debug",
 ]
 
 [[package]]
