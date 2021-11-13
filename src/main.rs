@@ -168,7 +168,7 @@ fn main() {
                             .takes_value(false),
                     )
                     .arg(
-                        Arg::with_name("path")
+                        Arg::with_name("name")
                             .help("Configuration keys to print")
                             .multiple(true)
                             .required(false),
@@ -272,7 +272,7 @@ fn main() {
         ("print-config", Some(sub_m)) => {
             let print_default = sub_m.is_present("default");
             let paths = sub_m
-                .values_of("path")
+                .values_of("name")
                 .map(|paths| paths.collect::<Vec<&str>>())
                 .unwrap_or_default();
             configure::print_configuration(print_default, &paths)
