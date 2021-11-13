@@ -81,24 +81,32 @@ pub fn print_configuration(use_default: bool, paths: &[&str]) {
     };
 
     println!("# Warning: This config does not include keys that have an unset value\n");
-    println!(
-        "# $all is shorthand for {}",
-        PROMPT_ORDER
-            .iter()
-            .map(|module_name| format!("${}", module_name))
-            .collect::<String>()
-    );
 
-    // Unwrapping is fine because config is based on FullConfig
-    let custom_modules = config.get("custom").unwrap().as_table().unwrap();
-    if !use_default && !custom_modules.is_empty() {
+    // These are only used for format specifiers so don't print them if we aren't showing formats.
+    if paths.is_empty()
+        || paths
+            .iter()
+            .any(|&path| path == "format" || path == "right_format")
+    {
         println!(
-            "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
-            custom_modules
-                .keys()
-                .map(|module_name| format!("${{custom.{}}}", module_name))
+            "# $all is shorthand for {}",
+            PROMPT_ORDER
+                .iter()
+                .map(|module_name| format!("${}", module_name))
                 .collect::<String>()
         );
+
+        // Unwrapping is fine because config is based on FullConfig
+        let custom_modules = config.get("custom").unwrap().as_table().unwrap();
+        if !use_default && !custom_modules.is_empty() {
+            println!(
+                "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
+                custom_modules
+                    .keys()
+                    .map(|module_name| format!("${{custom.{}}}", module_name))
+                    .collect::<String>()
+            );
+        }
     }
 
     let print_config = if paths.is_empty() {
