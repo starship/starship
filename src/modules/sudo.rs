@@ -93,7 +93,13 @@ mod tests {
     #[cfg(windows)]
     fn test_allow_windows_disabled_blocks_windows() {
         let actual = ModuleRenderer::new("sudo")
-            .cmd("sudo -n true", None)
+            .cmd(
+                "sudo -n true",
+                Some(CommandOutput {
+                    stdout: "".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+             )
             .config(toml::toml! {
                 [sudo]
                 disabled = false
