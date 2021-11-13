@@ -169,7 +169,7 @@ fn main() {
                     )
                     .arg(
                         Arg::with_name("path")
-                            .help("Configuration section or value to print")
+                            .help("Configuration keys to print")
                             .multiple(true)
                             .required(false),
                     ),
