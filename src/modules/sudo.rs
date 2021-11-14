@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -54,7 +54,6 @@ mod tests {
     use ansi_term::Color;
 
     #[test]
-    #[cfg(not(windows))]
     fn test_sudo_not_cached() {
         let actual = ModuleRenderer::new("sudo")
             .cmd("sudo -n true", None)
@@ -70,7 +69,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg(not(windows))]
     fn test_sudo_cached() {
         let actual = ModuleRenderer::new("sudo")
             .cmd(
