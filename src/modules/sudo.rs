@@ -99,7 +99,7 @@ mod tests {
                     stdout: "".to_owned(),
                     stderr: "".to_owned(),
                 }),
-             )
+            )
             .config(toml::toml! {
                 [sudo]
                 disabled = false
