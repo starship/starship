@@ -61,6 +61,7 @@ mod tests {
             .config(toml::toml! {
                 [sudo]
                 disabled = false
+                allow_windows = true
             })
             .collect();
         let expected = None;
@@ -82,6 +83,7 @@ mod tests {
             .config(toml::toml! {
                 [sudo]
                 disabled = false
+                allow_windows = true
             })
             .collect();
         let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙 ")));
