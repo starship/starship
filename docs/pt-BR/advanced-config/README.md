@@ -31,9 +31,9 @@ trap blastoff DEBUG     # Trap Inicia o debug antes de iniciar o starship
 eval $(starship init bash)
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## Comandos personalizados de pre-prompt e pre-execution no PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
+O PowerShell não possui uma estrutura formal para os hooks preexec/precmd como a maioria dos outros shells. Por esse motivo, é difícil fornecer hooks totalmente customizáveis no `powershell`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
 Create a function named `Invoke-Starship-PreCommand`
 
