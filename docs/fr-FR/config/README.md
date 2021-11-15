@@ -234,6 +234,7 @@ $openstack\
 $env_var\
 $crystal\
 $custom\
+$sudo\
 $cmd_duration\
 $line_break\
 $jobs\
@@ -2810,9 +2811,59 @@ disabled = false
 
 ```
 
+## Sudo
+
+The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+
+::: tip
+
+Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
+
+:::
+
+### Options
+
+| Option          | Défaut                  | Description                                             |
+| --------------- | ----------------------- | ------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | The format of the module                                |
+| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
+| `style`         | `"bold blue"`           | Le style du module.                                     |
+| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
+| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+
+### Variables
+
+| Variable  | Exemple | Description                            |
+| --------- | ------- | -------------------------------------- |
+| symbol    |         | Reflète la valeur de l'option `symbol` |
+| style\* |         | Reflète la valeur de l'option `style`  |
+
+\* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
+
+### Exemple
+
+```toml
+
+# ~/.config/starship.toml
+
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = false
+```
+
+```toml
+# On windows
+# $HOME\.starship\config.toml
+
+[sudo]
+allow_windows = true
+disabled = false
+```
+
 ## Swift
 
-Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Package.swift`
 - Le répertoire actuel contient un fichier avec l'extension `.swift`
@@ -2823,18 +2874,18 @@ Par défaut, le module `swift` affiche la version actuellement installée de [Sw
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐦 "`                               | Une chaîne de caractères représentant le symbole de Swift                                  |
+| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                                           |
 | `detect_extensions` | `["swift"]`                          | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `["Package.swift"]`                  | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"bold 202"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Désactiver le module `swift`.                                                              |
+| `disabled`          | `false`                              | Disables the `swift` module.                                                               |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | La version de `swift`                  |
+| version   | `v5.2.4` | The version of `swift`                 |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -2870,18 +2921,18 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol$workspace]($style) "` | La chaîne de format pour le module.                                                        |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💠"`                                | Une chaîne de format montrée avant l'espace de travail terraform.                          |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                                      |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[".terraform"]`                     | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"bold 105"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Désactive le module `terraform`.                                                           |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                                           |
 
 ### Variables
 
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | La version de `terraform`              |
+| version   | `v0.12.24` | The version of `terraform`             |
 | workspace | `default`  | The current Terraform workspace        |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
@@ -2910,7 +2961,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Date et Heure
 
-Le module `time` affiche l'heure actuelle **localement**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -2920,17 +2971,17 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option            | Défaut                  | Description                                                                                                                                                        |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `format`          | `"at [$time]($style) "` | La chaîne de format pour le module.                                                                                                                                |
-| `use_12hr`        | `false`                 | Activer le format 12h                                                                                                                                              |
-| `time_format`     | voir plus bas           | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                                  |
-| `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                     |
-| `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Range from -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
-| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
+| Option            | Défaut                  | Description                                                                                                                        |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | La chaîne de format pour le module.                                                                                                |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -2954,9 +3005,9 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Nom d'utilisateur
+## Username
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
+The `username` module shows active user's username. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'utilisateur courant est root
 - L'utilisateur courant est différent de celui connecté
@@ -2971,13 +3022,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Défaut                  | Description                                      |
-| ------------- | ----------------------- | ------------------------------------------------ |
-| `style_root`  | `"bold green"`          | Le style utilisé quand l'utilisateur est root.   |
-| `style_user`  | `"bold yellow"`         | Le style utilisé pour les utilisateurs non-root. |
-| `format`      | `"[$user]($style) in "` | Format du module.                                |
-| `show_always` | `false`                 | Toujours afficher le module `username`.          |
-| `disabled`    | `false`                 | Désactiver le module `username`.                 |
+| Option        | Défaut                  | Description                           |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold green"`          | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | Format du module.                     |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### Variables
 
@@ -3001,7 +3052,7 @@ show_always = true
 
 ## Vagrant
 
-Le module `vagrant` affiche la version actuellement installée de [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `Vagrantfile`
 
@@ -3011,18 +3062,18 @@ Le module `vagrant` affiche la version actuellement installée de [Vagrant](http
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"⍱ "`                               | Une chaîne de caractères représentant le symbole de Vagrant.                               |
+| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                                        |
 | `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `["Vagrantfile"]`                    | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"cyan bold"`                        | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Désactive le module `vagrant`.                                                             |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                                             |
 
 ### Variables
 
 | Variable  | Exemple          | Description                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | La version de `Vagrant`                |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
 | symbol    |                  | Reflète la valeur de l'option `symbol` |
 | style\* |                  | Reflète la valeur de l'option `style`  |
 
@@ -3049,18 +3100,18 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`         | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"V "`                                       | Une chaîne de caractères représentant le symbole de V                                      |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                               |
 | `detect_extensions` | `["v"]`                                      | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[]`                                         | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"blue bold"`                                | Le style du module.                                                                        |
-| `disabled`          | `false`                                      | Désactive le module `vlang`.                                                               |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                               |
 
 ### Variables
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v0.2`  | La version de `v`                      |
+| version   | `v0.2`  | The version of `v`                     |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -3078,20 +3129,20 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Options
 
-| Option     | Défaut                           | Description                                          |
-| ---------- | -------------------------------- | ---------------------------------------------------- |
-| `symbol`   |                                  | Le symbole utilisé avant d'afficher le nom du dépôt. |
-| `style`    | `"bold yellow"`                  | Le style du module.                                  |
-| `format`   | `"vcsh [$symbol$repo]($style) "` | Format du module.                                    |
-| `disabled` | `false`                          | Désactive le module `vcsh`.                          |
+| Option     | Défaut                           | Description                                            |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `style`    | `"bold yellow"`                  | Le style du module.                                    |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | Format du module.                                      |
+| `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
 ### Variables
 
-| Variable  | Exemple                                         | Description                            |
-| --------- | ----------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` si dans un dépôt VCSH nommé dotfiles | The active repository name             |
-| symbol    |                                                 | Reflète la valeur de l'option `symbol` |
-| style\* | `black bold dimmed`                             | Reflète la valeur de l'option `style`  |
+| Variable  | Exemple                                     | Description                            |
+| --------- | ------------------------------------------- | -------------------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
+| symbol    |                                             | Reflète la valeur de l'option `symbol` |
+| style\* | `black bold dimmed`                         | Reflète la valeur de l'option `style`  |
 
 \* : Cette variable ne peut être utilisée que comme partie d'une chaîne de style
 
@@ -3106,7 +3157,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `.zig`
 
@@ -3116,9 +3167,9 @@ Par défaut, le module `zig` affiche la version actuellement installée de [Zig]
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"↯ "`                               | Le symbole utilisé avant d'afficher la version de Zig.                                     |
+| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                                      |
 | `style`             | `"bold yellow"`                      | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Désactive le module `zig`.                                                                 |
+| `disabled`          | `false`                              | Disables the `zig` module.                                                                 |
 | `detect_extensions` | `["zig"]`                            | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
@@ -3127,7 +3178,7 @@ Par défaut, le module `zig` affiche la version actuellement installée de [Zig]
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | La version de `zig`                    |
+| version   | `v0.6.0` | The version of `zig`                   |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -3191,10 +3242,10 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
-| `symbol`      | `""`                            | Le symbole utilisé avant d'afficher la sortie de la commande.                                                                                                                 |
+| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
 | `style`       | `"bold green"`                  | Le style du module.                                                                                                                                                           |
 | `format`      | `"[$symbol($output )]($style)"` | Format du module.                                                                                                                                                             |
-| `disabled`    | `false`                         | Désactive le module `custom`.                                                                                                                                                 |
+| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
 | `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
 
 ### Variables
@@ -3209,7 +3260,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 #### Commandes shell personnalisées
 
-`shell` accepte une liste de chaînes non vide, où:
+`shell` accepts a non-empty list of strings, where:
 
 - La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
 - Other following arguments are passed to the shell.
