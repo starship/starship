@@ -73,7 +73,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     Ok(())
 }
 
-pub fn print_configuration(use_default: bool) {
+pub fn print_configuration(use_default: bool, paths: &[&str]) {
     let config = if use_default {
         // Get default config
         let default_config = crate::configs::FullConfig::default();
@@ -88,29 +88,98 @@ pub fn print_configuration(use_default: bool) {
         toml::value::Value::try_from(user_config).unwrap()
     };
 
-    let string_config = toml::to_string_pretty(&config).unwrap();
-
     println!("# Warning: This config does not include keys that have an unset value\n");
-    println!(
-        "# $all is shorthand for {}",
-        PROMPT_ORDER
-            .iter()
-            .map(|module_name| format!("${}", module_name))
-            .collect::<String>()
-    );
 
-    // Unwrapping is fine because config is based on FullConfig
-    let custom_modules = config.get("custom").unwrap().as_table().unwrap();
-    if !use_default && !custom_modules.is_empty() {
+    // These are only used for format specifiers so don't print them if we aren't showing formats.
+    if paths.is_empty()
+        || paths
+            .iter()
+            .any(|&path| path == "format" || path == "right_format")
+    {
         println!(
-            "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
-            custom_modules
-                .keys()
-                .map(|module_name| format!("${{custom.{}}}", module_name))
+            "# $all is shorthand for {}",
+            PROMPT_ORDER
+                .iter()
+                .map(|module_name| format!("${}", module_name))
                 .collect::<String>()
         );
+
+        // Unwrapping is fine because config is based on FullConfig
+        let custom_modules = config.get("custom").unwrap().as_table().unwrap();
+        if !use_default && !custom_modules.is_empty() {
+            println!(
+                "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
+                custom_modules
+                    .keys()
+                    .map(|module_name| format!("${{custom.{}}}", module_name))
+                    .collect::<String>()
+            );
+        }
     }
+
+    let print_config = if paths.is_empty() {
+        config
+    } else {
+        extract_toml_paths(config, paths)
+    };
+
+    let string_config = toml::to_string_pretty(&print_config).unwrap();
+
     println!("{}", string_config);
+}
+
+fn extract_toml_paths(mut config: toml::Value, paths: &[&str]) -> toml::Value {
+    // Extract all the requested sections into a new configuration.
+    let mut subset = toml::value::Table::new();
+    let config = if let Some(config) = config.as_table_mut() {
+        config
+    } else {
+        // This function doesn't make any sense if the root is not a table.
+        return toml::Value::Table(subset);
+    };
+
+    'paths: for &path in paths {
+        let path_segments: Vec<_> = path.split('.').collect();
+        let (&end, parents) = path_segments.split_last().unwrap_or((&"", &[]));
+
+        // Locate the parent table to remove the value from.
+        let mut source_cursor = &mut *config;
+        for &segment in parents {
+            source_cursor = if let Some(child) = source_cursor
+                .get_mut(segment)
+                .and_then(|value| value.as_table_mut())
+            {
+                child
+            } else {
+                // We didn't find a value for this path, so move on to the next path.
+                continue 'paths;
+            }
+        }
+
+        // Extract the value to move.
+        let value = if let Some(value) = source_cursor.remove(end) {
+            value
+        } else {
+            // We didn't find a value for this path, so move on to the next path.
+            continue 'paths;
+        };
+
+        // Create a destination for that value.
+        let mut destination_cursor = &mut subset;
+        for &segment in &path_segments[..path_segments.len() - 1] {
+            // Because we initialize `subset` to be a table, and only add additional values that
+            // exist in `config`, it's impossible for the value here to not be a table.
+            destination_cursor = destination_cursor
+                .entry(segment)
+                .or_insert_with(|| toml::Value::Table(toml::value::Table::new()))
+                .as_table_mut()
+                .unwrap();
+        }
+
+        destination_cursor.insert(end.to_owned(), value);
+    }
+
+    toml::Value::Table(subset)
 }
 
 pub fn toggle_configuration(name: &str, key: &str) {
@@ -304,6 +373,54 @@ mod tests {
     fn visual_not_set_editor_not_set() {
         let actual = get_editor_internal(None, None);
         assert_eq!(STD_EDITOR, actual);
+    }
+
+    #[test]
+    fn test_extract_toml_paths() {
+        let config = toml::toml! {
+            extract_root = true
+            ignore_root = false
+
+            [extract_section]
+            ok = true
+
+            [extract_section.subsection]
+            ok = true
+
+            [ignore_section]
+            ok = false
+
+            [extract_subsection]
+            ok = false
+
+            [extract_subsection.extracted]
+            ok = true
+
+            [extract_subsection.ignored]
+            ok = false
+        };
+        let expected_config = toml::toml! {
+            extract_root = true
+
+            [extract_section]
+            ok = true
+
+            [extract_section.subsection]
+            ok = true
+
+            [extract_subsection.extracted]
+            ok = true
+        };
+        let actual_config = extract_toml_paths(
+            config,
+            &[
+                "extract_root",
+                "extract_section",
+                "extract_subsection.extracted",
+            ],
+        );
+
+        assert_eq!(expected_config, actual_config);
     }
 
     fn create_doc() -> Document {
