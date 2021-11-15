@@ -35,7 +35,7 @@ eval $(starship init bash)
 
 O PowerShell não possui uma estrutura formal para os hooks preexec/precmd como a maioria dos outros shells. Por esse motivo, é difícil fornecer hooks totalmente customizáveis no `powershell`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
-Create a function named `Invoke-Starship-PreCommand`
+Crie uma função chamada `Invoke-Starship-PreCommand`
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -80,7 +80,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+Você também pode definir uma saída semelhante com o PowerShell criando uma função chamada `Invoke-Starship-PreCommand`.
 
 ```powershell
 # edit $PROFILE
