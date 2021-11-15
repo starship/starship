@@ -76,6 +76,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "env_var",
     "crystal",
     "custom",
+    "sudo",
     "cmd_duration",
     "line_break",
     "jobs",

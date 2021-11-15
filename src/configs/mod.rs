@@ -61,6 +61,7 @@ pub mod shlvl;
 pub mod singularity;
 mod starship_root;
 pub mod status;
+pub mod sudo;
 pub mod swift;
 pub mod terraform;
 pub mod time;
@@ -138,6 +139,7 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     singularity: singularity::SingularityConfig<'a>,
     status: status::StatusConfig<'a>,
+    sudo: sudo::SudoConfig<'a>,
     swift: swift::SwiftConfig<'a>,
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
@@ -214,6 +216,7 @@ impl<'a> Default for FullConfig<'a> {
             shlvl: Default::default(),
             singularity: Default::default(),
             status: Default::default(),
+            sudo: Default::default(),
             swift: Default::default(),
             terraform: Default::default(),
             time: Default::default(),
