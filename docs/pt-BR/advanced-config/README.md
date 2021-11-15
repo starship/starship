@@ -95,9 +95,9 @@ Invoke-Expression (&starship init powershell)
 
 Alguns shells suportam um prompt no lado direito que renderiza na mesma linha do input. Starship consegue definir o conteúdo do prompt direito usando a opção `right_format`. Qualquer módulo pode ser usado no `format` é suportado o `right_format`. A variável `$all` só irá alterar os módulos que não usaram de forma explicita o `format` ou `right_format`.
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+Nota: O prompt direito é uma linha única seguindo o local de entrada. Para alinhar à direita os módulos acima a linha de entrada em um prompt de várias linhas, consulte o [módulo fill](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh.
+`right_format` é atualmente suportado para os seguintes shells: elvish, fish, zsh.
 
 ### Exemplo
 
