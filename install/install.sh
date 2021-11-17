@@ -149,24 +149,29 @@ elevate_priv() {
 install() {
   ext="$1"
 
-  if test_writeable "${BIN_DIR}"; then
-    sudo=""
-    msg="Installing Starship, please wait…"
-  else
-    warn "Escalated permissions are required to install to ${BIN_DIR}"
-    elevate_priv
-    sudo="sudo"
-    msg="Installing Starship as root, please wait…"
-  fi
-  info "$msg"
-
   archive=$(get_tmpfile "$ext")
 
   # download to the temp file
   download "${archive}" "${URL}"
-
-  # unpack the temp file to the bin dir, using sudo if required
-  unpack "${archive}" "${BIN_DIR}" "${sudo}"
+  
+  starship_checksum="$HOME"/.starship-checksum
+  checksum="$(sha256sum "$archive" | awk '{ print $1 }')"
+  if [[ checksum != "$(cat "$starship_checksum")" ]]; then
+    if test_writeable "${BIN_DIR}"; then
+      sudo=""
+      msg="Installing Starship, please wait…"
+    else
+      warn "Escalated permissions are required to install to ${BIN_DIR}"
+      elevate_priv
+      sudo="sudo"
+      msg="Installing Starship as root, please wait…"
+    fi
+    info "$msg"
+    
+    # unpack the temp file to the bin dir, using sudo if required
+    unpack "${archive}" "${BIN_DIR}" "${sudo}"
+  fi
+  echo "$checksum" > "$starship_checksum"
 }
 
 # Currently supporting:
