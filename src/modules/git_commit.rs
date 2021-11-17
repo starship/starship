@@ -68,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "tag" => format_tag(config.tag_symbol, &tag_name),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

@@ -151,7 +151,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "active" => Some(Ok(gcloud_context.config_name.clone())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

@@ -31,6 +31,18 @@ trap blastoff DEBUG     # Trampa DEBUG *antes* de la ejecución de Starship
 eval $(starship init bash)
 ```
 
+## Comandos pre-prompt y pre-ejecución personalizados en PowerShell
+
+Powershell no posee un framework oficial de preexec/precmd como la mayoría de los demás intérpretes de comandos. Debido a esto, es difícil proporcionar "hooks" totalmente personalizables en `Powershell`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
+
+Crea una función llamada `Invoke-Starship-PreCommand`
+
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
+}
+```
+
 ## Cambiar el Título de la Ventana
 
 Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `Bash` o `zsh`.
@@ -39,7 +51,7 @@ Primero, define una función para el cambio de título de la ventana (idéntico 
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; TU_TÍTULO_DE_VENTANA_AQUÍ \007"
+    echo -ne "\033]0; TU_TITULO_DE_VENTANA_AQUI \007"
 }
 ```
 
@@ -68,9 +80,20 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Gabilitar Prompt Derecho
+También puede establecer una salida similar con PowerShell creando una función llamada `Invoke-Starship-PreCommand`.
 
-Algunos intérpretes de órdenes soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt correcto usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
+```
+
+## Habilitar Prompt a la Derecha
+
+Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt derecho usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo fill](/config/#fill).
 

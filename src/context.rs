@@ -1,4 +1,5 @@
-use crate::config::StarshipConfig;
+use crate::config::{RootModuleConfig, StarshipConfig};
+use crate::configs::StarshipRootConfig;
 use crate::module::Module;
 use crate::utils::{exec_cmd, CommandOutput};
 
@@ -64,8 +65,8 @@ pub struct Context<'a> {
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
-    /// Timeout for the execution of commands
-    cmd_timeout: Duration,
+    /// Starship root config
+    pub root_config: StarshipRootConfig,
 }
 
 impl<'a> Context<'a> {
@@ -127,7 +128,10 @@ impl<'a> Context<'a> {
         let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
         let logical_dir = logical_path;
 
-        let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
+        let root_config = config
+            .config
+            .as_ref()
+            .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
         let right = arguments.is_present("right");
 
@@ -154,7 +158,7 @@ impl<'a> Context<'a> {
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
-            cmd_timeout,
+            root_config,
         }
     }
 
@@ -279,8 +283,8 @@ impl<'a> Context<'a> {
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
         self.dir_contents.get_or_try_init(|| {
-            let timeout = Duration::from_millis(self.config.get_root_config().scan_timeout);
-            DirContents::from_path_with_timeout(&self.current_dir, timeout)
+            let timeout = self.root_config.scan_timeout;
+            DirContents::from_path_with_timeout(&self.current_dir, Duration::from_millis(timeout))
         })
     }
 
@@ -318,7 +322,11 @@ impl<'a> Context<'a> {
                 return output.clone();
             }
         }
-        exec_cmd(&cmd, args, self.cmd_timeout)
+        exec_cmd(
+            &cmd,
+            args,
+            Duration::from_millis(self.root_config.command_timeout),
+        )
     }
 }
 
@@ -351,7 +359,8 @@ impl DirContents {
         fs::read_dir(base)?
             .enumerate()
             .take_while(|(n, _)| {
-                n & 0xFF != 0 // only check timeout once every 2^8 entries
+                cfg!(test) // ignore timeout during tests
+                || n & 0xFF != 0 // only check timeout once every 2^8 entries
                 || start.elapsed() < timeout
             })
             .filter_map(|(_, entry)| entry.ok())

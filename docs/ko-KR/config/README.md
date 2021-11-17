@@ -212,6 +212,7 @@ $nodejs\
 $ocaml\
 $perl\
 $php\
+$pulumi\
 $purescript\
 $python\
 $rlang\
@@ -385,7 +386,7 @@ style = "bold red"
 [[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
+discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
 
@@ -734,17 +735,18 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Options
 
-| Option              | Default                                            | Description                                                                      |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in. |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                       |
-| `style`             | `"bold cyan"`                                      | The style for the module.                                                        |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                 |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                            |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| Option              | Default                                            | Description                                                                            |
+| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.        |
+| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in.       |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                             |
+| `style`             | `"bold cyan"`                                      | The style for the module.                                                              |
+| `disabled`          | `false`                                            | Disables the `directory` module.                                                       |
+| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                                  |
+| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                                    |
+| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                      |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -788,7 +790,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Options
 
@@ -983,7 +985,7 @@ default = "unknown user"
 
 | Option     | Default                        | Description                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   |                                | The symbol used before displaying the variable value.                        |
+| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
 | `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
@@ -1065,10 +1067,11 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### Options
 
-| Option   | Default        | Description                       |
-| -------- | -------------- | --------------------------------- |
-| `symbol` | `"."`          | The symbol used to fill the line. |
-| `style`  | `"bold black"` | The style for the module.         |
+| Option     | Default        | Description                       |
+| ---------- | -------------- | --------------------------------- |
+| `symbol`   | `"."`          | The symbol used to fill the line. |
+| `style`    | `"bold black"` | The style for the module.         |
+| `disabled` | `false`        | Disables the `fill` module        |
 
 ### Example
 
@@ -2110,7 +2113,7 @@ symbol = "☁️ "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix` and `helm` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm` and `shards` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2124,6 +2127,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
 - [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
@@ -2236,6 +2240,63 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 [php]
 format = "via [🔹 $version](147 bold) "
+```
+
+## Pulumi
+
+The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+
+::: tip
+
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+
+:::
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+
+### Options
+
+| Option           | Default                          | Description                                                               |
+| ---------------- | -------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                                         |
+| `version_format` | `"v${raw}"`                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                            |
+| `style`          | `"bold 5"`                       | The style for the module.                                                 |
+| `disabled`       | `false`                          | Disables the `pulumi` module.                                             |
+
+### Variables
+
+| Variable  | Example    | Description                          |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | The version of `pulumi`              |
+| stack     | `dev`      | The current Pulumi stack             |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+#### With Pulumi Version
+
+```toml
+# ~/.config/starship.toml
+
+[pulumi]
+format = "[🛥 ($version )$stack]($style) "
+```
+
+#### Without Pulumi version
+
+```toml
+# ~/.config/starship.toml
+[pulumi]
+symbol = "🛥 "
+format = "[$symbol$stack]($style) "
+
 ```
 
 ## PureScript
@@ -2453,6 +2514,9 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
+- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+
+Starship gets the current Ruby version by running `ruby -v`.
 
 ### Options
 
@@ -2464,6 +2528,7 @@ By default the `ruby` module shows the currently installed version of [Ruby](htt
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
@@ -2577,25 +2642,29 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Options
 
-| Option                 | Default      | Description                                                  |
-| ---------------------- | ------------ | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`        | A format string used to represent bash.                      |
-| `fish_indicator`       | `fsh`        | A format string used to represent fish.                      |
-| `zsh_indicator`        | `zsh`        | A format string used to represent zsh.                       |
-| `powershell_indicator` | `psh`        | A format string used to represent powershell.                |
-| `ion_indicator`        | `ion`        | A format string used to represent ion.                       |
-| `elvish_indicator`     | `esh`        | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `tsh`        | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `xsh`        | A format string used to represent xonsh.                     |
-| `unknown_indicator`    |              | The default value to be displayed when the shell is unknown. |
-| `format`               | `$indicator` | The format for the module.                                   |
-| `disabled`             | `true`       | Disables the `shell` module.                                 |
+| Option                 | Default                   | Description                                                  |
+| ---------------------- | ------------------------- | ------------------------------------------------------------ |
+| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
+| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
+| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
+| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
+| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
+| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
+| `style`                | `"white bold"`            | The style for the module.                                    |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variables
 
 | Variable  | Default | Description                                                |
 | --------- | ------- | ---------------------------------------------------------- |
 | indicator |         | Mirrors the value of `indicator` for currently used shell. |
+| style\* |         | Mirrors the value of option `style`.                       |
+
+\*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -2606,6 +2675,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 fish_indicator = ""
 powershell_indicator = "_"
 unknown_indicator = "mystery shell"
+style = "cyan bold"
 disabled = false
 ```
 
@@ -2791,7 +2861,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf` or `.hcl` extensions
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Options
 
@@ -2800,7 +2870,7 @@ By default the module will be shown if any of the following conditions are met:
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
-| `detect_extensions` | `["tf", "hcl"]`                      | Which extensions should trigger this module.                              |
+| `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | The style for the module.                                                 |
@@ -3101,11 +3171,19 @@ The order in which custom modules are shown can be individually set by including
 
 :::
 
+::: warning Command output is printed unescaped to the prompt
+
+Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+
+Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+
+:::
+
 ### Options
 
 | Option        | Default                         | Description                                                                                                                                                                   |
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     |                                 | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
+| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
 | `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
@@ -3164,12 +3242,12 @@ Automatic detection of shells and proper parameters addition are currently imple
 
 [custom.foo]
 command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters
+files = ["foo"]       # can specify filters but wildcards are not supported
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-files = ["*.pst"]
+extensions = ["pst"]  # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```

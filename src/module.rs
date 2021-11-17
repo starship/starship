@@ -65,6 +65,7 @@ pub const ALL_MODULES: &[&str] = &[
     "shlvl",
     "singularity",
     "status",
+    "sudo",
     "swift",
     "terraform",
     "time",

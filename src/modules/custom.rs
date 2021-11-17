@@ -56,7 +56,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
+            .map_no_escaping(|variable| match variable {
                 "output" => {
                     let output = exec_command(config.command, &config.shell.0)?;
                     let trimmed = output.trim();
@@ -69,7 +69,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     match parsed {

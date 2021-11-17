@@ -1,8 +1,8 @@
 [package]
 name = "starship"
-version = "0.58.0"
-edition = "2018"
-authors = ["Matan Kushner <hello@matchai.me>"]
+version = "1.0.0"
+edition = "2021"
+authors = ["Starship Contributors"]
 homepage = "https://starship.rs"
 documentation = "https://starship.rs/guide/"
 repository = "https://github.com/starship/starship"
@@ -15,7 +15,7 @@ description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
 # Keep `/` in front of `README.md` to exclude localized readmes
-include = ["src/**/*", "build.rs", "Cross.toml", "LICENSE", "/README.md"]
+include = ["src/**/*", "build.rs", "Cross.toml", "LICENSE", "README.md"]
 
 [badges]
 is-it-maintained-issue-resolution = { repository = "starship/starship" }
@@ -25,30 +25,30 @@ maintenance = { status = "actively-developed" }
 [features]
 default = ["battery", "http"]
 http = ["attohttpc"]
+battery = ["starship-battery"]
 # Vendor OpenSSL, use this if you have trouble cross-compiling starship
 tls-vendored = ["native-tls/vendored"]
-
 
 [dependencies]
 clap = "2.33.3"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
-git2 = { version = "0.13.23", default-features = false }
+git2 = { version = "0.13.24", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
-serde_json = "1.0.68"
+serde_json = "1.0.70"
 rayon = "1.5.1"
 log = { version = "0.4.14", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-battery = { version = "0.7.8", optional = true }
+starship-battery = { version = "0.7.9", optional = true }
 path-slash = "0.1.4"
 unicode-segmentation = "1.8.0"
 gethostname = "0.2.1"
 once_cell = "1.8.0"
 chrono = "0.4.19"
-sys-info = "0.9.0"
-byte-unit = "4.0.12"
+sys-info = "0.9.1"
+byte-unit = "4.0.13"
 starship_module_config_derive = { version = "0.2.1", path = "starship_module_config_derive" }
 yaml-rust = "0.4.5"
 pest = "2.1.3"
@@ -63,13 +63,14 @@ quick-xml = "0.22.0"
 rand = "0.8.4"
 serde = { version = "1.0.130", features = ["derive"] }
 indexmap = { version ="1.7.0", features = ["serde"] }
-notify-rust = { version = "4.5.4", optional = true }
+notify-rust = { version = "4.5.5", optional = true }
 semver = "1.0.4"
 which = "4.2.2"
-shadow-rs = "0.7.1"
+shadow-rs = "0.8.0"
 versions = "3.0.3"
 strsim = "0.10.0"
 sha-1 = "0.9.8"
+toml_edit = "0.9.1"
 
 process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
 
@@ -91,7 +92,7 @@ winapi = { version = "0.3.9", features = [
 nix = "0.23.0"
 
 [build-dependencies]
-shadow-rs = "0.7.1"
+shadow-rs = "0.8.0"
 
 [dev-dependencies]
 tempfile = "3.2.0"

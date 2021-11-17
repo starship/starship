@@ -15,7 +15,7 @@
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="إصدار Crates.io"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
@@ -25,21 +25,21 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord"
+      alt="الدردشة على Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="تابع @StarshipPrompt على تويتر"
  /></a>
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">الموقع</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">التثبيت</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">الإعدادات</a>
 </p>
 
 <p align="center">
@@ -134,33 +134,33 @@
 
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
+- **سريع:** إنها سريعة – _سريعة_ حقاً! 🚀
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **كثيرة المزايا:** دعم لجميع الأدوات المفضلة لديك.
+- **سهل:** سريع التثبيت – استخدمه في دقائق.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>تصفّح مستندات Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 التثبيت
 
-### Prerequisites
+### المتطلبات الأساسية
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- تثبيت [Nerd Font](https://www.nerdfonts.com/) وتمكينه في موجه الأوامر الخاصة بك (على سبيل المثال، جرب [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Getting Started
+### البدء مع Starship
 
 **Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
 1. Install the **starship** binary:
 
 
-   #### Install Latest Version
+   #### تثبيت أحدث إصدار
 
 
    ##### From prebuilt binary, with Shell:
@@ -169,37 +169,37 @@
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   لتحديث Starship نفسه، أعد تشغيل البرنامج النصي أعلاه. سيتم استبدال الإصدار الحالي بدون لمس تكوين Starship.
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **ملاحظة** - يمكن تجاوز الإعدادات الافتراضية لنص التثبيت لرؤية المساعدة المدمجة.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
    ```
 
 
-   #### Install via Package Manager
+   #### التثبيت عبر مدير الحزم
 
 
-   ##### Example: [Homebrew](https://brew.sh/):
+   ##### بإستخدام [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
 
-   ##### With [Scoop](https://scoop.sh):
+   ##### بإستخدام [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-2. Add the init script to your shell's config file:
+2. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   أضف ما يلي إلى نهاية `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -210,7 +210,7 @@
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -221,7 +221,7 @@
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   أضف ما يلي إلى نهاية `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -241,7 +241,7 @@
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   أضف ما يلي إلى نهاية `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -252,7 +252,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **تحذير** يدعم فقط v0.15 أو أعلى. أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -263,7 +263,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   أضف ما يلي إلى نهاية `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -274,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   أضف ما يلي إلى نهاية `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **تحذير** هذا سوف يتغير في المستقبل. فقط إصدار nu v0.33 أو أعلى مدعوم. أضف ما يلي إلى ملف تكوين nu الخاص بك. يمكنك التحقق من موقع هذا الملف عن طريق تشغيل `config path` في nu.
 
    ```toml
    startup = [
@@ -296,43 +296,15 @@
    prompt = "starship_prompt"
    ```
 
-## 🤝 Contributing
+## 🤝 المساهمة
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+نبحث دائماً عن مساهمين من **جميع المستويات**! إذا كنت تتطلع إلى تسهيل طريقك إلى المشروع، جرب [إنشاء اول مشكلة](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+إذا كنت تتحدث بطلاقة بلغة غير إنجليزية، فإننا نقدر أي مساعدة للحفاظ على ترجمة المستندات وتحديثها بلغات أخرى. إذا كنت ترغب في المساعدة، يمكن المساهمة بالترجمة على [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+إذا كنت مهتما بالمساهمة في starship، يرجى إلقاء نظرة على [دليل المساهمة](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) لدينا. أيضا، لا تتردد في أن تنضم لنا في [Discord](https://discord.gg/8Jzqu3T) وقُل مرحبا. 👋
 
-### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
-<a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/starship/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/starship/contribute)]
-
-<a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/2/website"><img src="https://opencollective.com/starship/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/3/website"><img src="https://opencollective.com/starship/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/4/website"><img src="https://opencollective.com/starship/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/5/website"><img src="https://opencollective.com/starship/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/6/website"><img src="https://opencollective.com/starship/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/7/website"><img src="https://opencollective.com/starship/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
-
-## 💭 Inspired By
+## 💭 مستوحاة من قبل
 
 Please check out these previous works that helped inspire the creation of starship. 🙏
 
@@ -347,6 +319,6 @@ Please check out these previous works that helped inspire the creation of starsh
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 الترخيص
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

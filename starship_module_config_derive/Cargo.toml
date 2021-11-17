@@ -1,7 +1,7 @@
 [package]
 name = "starship_module_config_derive"
 version = "0.2.1"
-edition = "2018"
+edition = "2021"
 authors = ["Matan Kushner <hello@matchai.me>"]
 homepage = "https://starship.rs"
 documentation = "https://starship.rs/guide/"

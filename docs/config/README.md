@@ -243,6 +243,7 @@ $openstack\
 $env_var\
 $crystal\
 $custom\
+$sudo\
 $cmd_duration\
 $line_break\
 $jobs\
@@ -406,7 +407,7 @@ style = "bold red"
 [[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
-discharging_symbol = 💦
+discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
 
@@ -786,14 +787,14 @@ it would have been `nixpkgs/pkgs`.
 | `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                            |
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.|
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                           |
 | `convert_slash`     | `true`                                             | Convert slash on output on Windows                                               |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                                                                                                                            |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Advanced Opt-------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`     | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`  | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
@@ -837,9 +838,10 @@ truncation_symbol = "…/"
 ## Docker Context
 
 The `docker_context` module shows the currently active
-[Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to
-`default` or if the `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant
-to override the context in use).
+[Docker context](https://docs.docker.com/engine/context/working-with-contexts/)
+if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or
+`DOCKER_CONTEXT` environment variables are set (as they are meant to override
+the context in use).
 
 ### Options
 
@@ -1136,6 +1138,7 @@ other modules.
 | ---------- | -------------- | -------------------------------------- |
 | `symbol`   | `"."`          | The symbol used to fill the line.      |
 | `style`    | `"bold black"` | The style for the module.              |
+| `disabled` | `false`        | Disables the `fill` module             |
 
 ### Example
 
@@ -2641,6 +2644,9 @@ The module will be shown if any of the following conditions are met:
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
 - The current directory contains a `.rb` file
+- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+
+Starship gets the current Ruby version by running `ruby -v`.
 
 ### Options
 
@@ -2652,6 +2658,7 @@ The module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
@@ -2939,6 +2946,58 @@ format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
+```
+
+## Sudo
+
+The `sudo` module displays if sudo credentials are currently cached.
+The module will only be shown if credentials are cached.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option         | Default                 | Description                                                  |
+| -------------- | ----------------------- | ------------------------------------------------------------ |
+| `format`       | `[as $symbol]($style)"` | The format of the module                                     |
+| `symbol`       | `"🧙 "`                 | The symbol displayed when credentials are cached             |
+| `style`        | `"bold blue"`           | The style for the module.                                    |
+| `allow_windows`| `false`                 | Since windows has no default sudo, default is disabled.      |
+| `disabled`     | `true`                  | Disables the `sudo` module.                                  |
+
+### Variables
+
+| Variable  | Example | Description                          |
+| --------- | ------- | ------------------------------------ |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\*   |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+
+# ~/.config/starship.toml
+
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = false
+```
+
+```toml
+# On windows
+# $HOME\.starship\config.toml
+
+[sudo]
+allow_windows = true
+disabled = false
 ```
 
 ## Swift
@@ -3315,6 +3374,19 @@ By default, the `custom` module will simply show all custom modules in the order
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules.
 If you have an interesting example not covered there, feel free to share it there!
+
+:::
+
+::: warning Command output is printed unescaped to the prompt
+
+Whatever output the command generates is printed unmodified in the prompt. This means if the output
+contains special sequences that are interpreted by your shell they will be expanded when displayed.
+These special sequences are shell specific, e.g. you can write a command module that writes bash sequences,
+e.g. `\h`, but this module will not work in a fish or zsh shell.
+
+Format strings can also contain shell specific prompt sequences, e.g.
+[Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html),
+[Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 

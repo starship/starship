@@ -3,17 +3,17 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+actionText: البدء مع Starship ←
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: التوافق أولاً
+    details: يعمل على أكثر موجهات الأوامر شيوعاً في أكثر نظم التشغيل شيوعاً. استخدمه في كل مكان!
   - 
     title: Rust-Powered
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
   - 
-    title: Customizable
+    title: قابل للتخصيص
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
@@ -28,45 +28,45 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### المتطلبات الأساسية
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- تثبيت [Nerd Font](https://www.nerdfonts.com/) وتمكينه في موجه الأوامر الخاصة بك.
 
-### Quick Install
+### تثبيت سريع
 
-1. Install the **starship** binary:
+1. تثبيت **starship**:
 
 
-   #### Install Latest Version
+   #### تثبيت أحدث إصدار
 
-   With Shell:
+   بإستخدام Shell:
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   لتحديث Starship نفسه، أعد تشغيل البرنامج النصي أعلاه. سيتم استبدال الإصدار الحالي بدون لمس تكوين Starship.
 
 
-   #### Install via Package Manager
+   #### التثبيت عبر مدير الحزم
 
-   With [Homebrew](https://brew.sh/):
+   بإستخدام [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   بإستخدام [Scoop](https://scoop.sh):
 
    ```powershell
    scoop install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. أضف البرنامج النصي إلى ملف تهيئة موجه الأوامر:
 
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   أضف ما يلي إلى نهاية `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   أضف ما يلي إلى نهاية `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   أضف ما يلي إلى نهاية `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -119,9 +119,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: تحذير يدعم فقط elvish v0.15 أو أعلى. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -132,7 +132,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   أضف ما يلي إلى نهاية `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -143,7 +143,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: تحذير هذا سوف يتغير في المستقبل. فقط إصدار nu v0.33 أو أعلى مدعوم. ::: أضف ما يلي إلى ملف تكوين nu الخاص بك. يمكنك التحقق من موقع هذا الملف عن طريق تشغيل `config path` في nu.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   أضف ما يلي إلى نهاية `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc

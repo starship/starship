@@ -143,7 +143,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning Dies wird sich in der Zukunft ändern. Es wird nur nu Version v0.33 oder höher unterstützt. ::: Füge Folgendes zu deiner nu Konfigurationsdatei hinzu. Du kannst den Speicherort dieser Datei überprüfen, indem du `config path` in nu ausführst.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Füge folgendes an das Ende von `~/.xonshrc` hinzu:
 
    ```sh
    # ~/.xonshrc

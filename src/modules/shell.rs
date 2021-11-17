@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "unknown_indicator" => Some(Ok(config.unknown_indicator)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

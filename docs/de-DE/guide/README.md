@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="Portugiesisch (Brasilien)"
  /></a>
   &nbsp;
   <a
@@ -95,7 +95,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Russisch"
  /></a>
   &nbsp;
   <a
@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamesisch"
  /></a>
   &nbsp;
   <a
@@ -132,17 +132,17 @@
   align="right"
  />
 
-**Der minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!**
+**Der minimalistische, super schnelle und unendlich anpassbare Prompt für jede Shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Schnell:** sie ist schnell – _sehr, sehr_ schnell! 🚀
+- **Konfigurierbar:** konfiguriere jedes Detail der Prompt.
+- **Universal:** funktioniert mit jeder Shell, auf jedem Betriebssystem.
+- **Intelligent:** zeigt relevante Informationen auf einen Blick.
+- **Funktionsreich:** unterstützt alle deine Lieblingswerkzeuge.
+- **Einfach:** schnell zu installieren – Betriebsbereit in nur wenigen Minuten.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Schau dir die Starship-Dokumentation an&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -171,7 +171,7 @@
 
    Um Starship selbst zu aktualisieren, lasse das Skript oben nochmal laufen. Es wird die vorhandene Version ersetzen, ohne die Konfiguration von Starship zu berühren.
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **Hinweis** - Die Standardwerte des Installationsskripts können überschrieben werden, sehen Sie die integrierte Hilfe.
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -181,7 +181,7 @@
    #### Installation mithilfe eines Paket-Managers
 
 
-   ##### Beispiel: [Homebrew](https://brew.sh/):
+   ##### Mit [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -252,7 +252,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
+   **Warnung** Nur elvish v0.15 oder höher wird unterstützt. Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -274,7 +274,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Füge folgendes an das Ende von `~/.xonshrc` hinzu:
 
    ```sh
    # ~/.xonshrc
@@ -285,7 +285,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **Warnung** Dies wird sich in Zukunft ändern. Es wird nur nu Version v0.33 oder höher unterstützt. Füge folgendes zu deiner nu Konfigurationsdatei hinzu. Du kannst den Speicherort dieser Datei überprüfen, indem du `config path` in nu ausführst.
 
    ```toml
    startup = [
@@ -304,37 +304,9 @@ Wenn du eine andere Sprache flüssig sprichts, würden wir uns sehr freuen wenn 
 
 Falls du an Starship mitwirken willst, wirf bitte einen Blick auf den [Leitfaden zum Mitwirken](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Schau auch gerne auf unserem [Discord-Server](https://discord.gg/8Jzqu3T) vorbei. 👋
 
-### Mitwirkenden
-
-Das Projekt existiert dank aller der, die Mitwirken. [[Mitmachen](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
-<a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
-
-### Finanzielle Unterstützung
-
-Become a financial contributor and help us sustain our community. [[Mitmachen](https://opencollective.com/starship/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
-
-#### Organisationen
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Mitmachen](https://opencollective.com/starship/contribute)]
-
-<a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/2/website"><img src="https://opencollective.com/starship/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/3/website"><img src="https://opencollective.com/starship/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/4/website"><img src="https://opencollective.com/starship/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/5/website"><img src="https://opencollective.com/starship/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/6/website"><img src="https://opencollective.com/starship/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/7/website"><img src="https://opencollective.com/starship/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
-
 ## 💭 Inspiriert durch
 
-Bitte schaue dir diese früheren Projekte an, die dazu beigetragen haben, Starship zu kreieren. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - Ein ZSH-Prompt für Astronauten.
 
@@ -344,9 +316,9 @@ Bitte schaue dir diese früheren Projekte an, die dazu beigetragen haben, Starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship Raketen-Symbol">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 Lizenz
 
-Copyright © 2019-heute [Starship-Mitwirkende](https://github.com/starship/starship/graphs/contributors).<br /> Dieses Projekt ist [ISC](https://github.com/starship/starship/blob/master/LICENSE) lizenziert.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

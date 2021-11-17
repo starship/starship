@@ -31,11 +31,23 @@ trap blastoff DEBUG     # Trap Inicia o debug antes de iniciar o starship
 eval $(starship init bash)
 ```
 
-## Altera o título da janela
+## Custom pre-prompt and pre-execution Commands in PowerShell
 
-Alguns shell prompts iram alterar o titulo da janela automaticamente para você (e.x: para espelhar o diretório atual). Fish faz isso por padrão. Starship não faz isso, mas é bastante simples adicionar esta funcionalidade ao `bash` ou `zsh`.
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
-Primeiro, defina uma função de alteração de titulo de janela (é o mesmo para bash e zsh):
+Create a function named `Invoke-Starship-PreCommand`
+
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
+}
+```
+
+## Change Window Title
+
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
 function set_win_title(){
@@ -43,23 +55,23 @@ function set_win_title(){
 }
 ```
 
-Você pode usar variáveis para customizar o titulo (`$USER`, `$HOSTNAME`, e `$PWD` são escolhas populares).
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-No `bash`, defina esta função como a precedente da função starship:
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-No `zsh`, adicione no array `precmd_functions`:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Se você gostar do resultado, adicione esta linha ao seu arquivo de configuração de shell (`~/.bashrc` or `~/.zshrc`) para torna-lo permanente.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Por exemplo, se você quiser exibir seu diretório atual no seu titulo de aba do terminal, adicione o seguinte snippet ao seu `~/.bashrc` ou `~/.zshrc`:
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -68,9 +80,20 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-## Ativando o Prompt Direito
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
 
-Alguns shells suportam um prompt no lado direito que renderiza na mesma linha do input. Starship consegue definir o conteúdo do prompt direito usando a opção `right_format`. Qualquer módulo pode ser usado no `format` é suportado o `right_format`. A variável `$all` só irá alterar os módulos que não usaram de forma explicita o `format` ou `right_format`.
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
+```
+
+## Enable Right Prompt
+
+Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
@@ -81,14 +104,14 @@ Note: The right prompt is a single line following the input location. To right a
 ```toml
 # ~/.config/starship.toml
 
-# Um prompt esquerdo minimo 
+# A minimal left prompt
 format = """$character"""
 
-# Move o resto do prompt para direita
+# move the rest of the prompt to the right
 right_format = """$all"""
 ```
 
-Gera um prompt parecido com o seguinte:
+Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s

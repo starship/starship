@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -76,12 +76,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_pyenv_version(context: &Context) -> Option<String> {
-    let version_name = context
-        .exec_cmd("pyenv", &["version-name"])?
-        .stdout
-        .trim()
-        .to_string();
-    Some(version_name)
+    let mut version_name = context.get_env("PYENV_VERSION");
+
+    if version_name.is_none() {
+        version_name = Some(
+            context
+                .exec_cmd("pyenv", &["version-name"])?
+                .stdout
+                .trim()
+                .to_string(),
+        )
+    }
+
+    version_name
 }
 
 fn get_python_version(context: &Context, config: &PythonConfig) -> Option<String> {

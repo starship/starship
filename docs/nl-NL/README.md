@@ -143,7 +143,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning This will change in the future. ::: Add the following to your nu config file. De locatie van hiervan kunt u vinden door `config path` uit te voeren in nushell.
 
    ```toml
    startup = [
