@@ -55,14 +55,25 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.root.as_ref())
             .filter(|&root| root != &home_dir)
-            .and_then(|root| contract_repo_path(display_dir, root))
+            .and_then(|root| {
+                if config.repo_contraction {
+                    contract_repo_path(display_dir, root)
+                } else {
+                    Some(display_dir.to_slash_lossy())
+                }
+            })
     } else {
         None
     };
 
     // the home directory if required.
-    let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
+    let dir_string = dir_string.unwrap_or_else(|| {
+        if config.path_contraction {
+            contract_path(display_dir, &home_dir, &home_symbol)
+        } else {
+            display_dir.to_slash_lossy()
+        }
+    });
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -71,18 +82,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let dir_string = truncate(dir_string, config.truncation_length as usize);
+    let truncated_dir_string = truncate(dir_string, config.truncation_length as usize);
 
-    let prefix = if is_truncated(&dir_string, &home_symbol) {
+    let prefix = if is_truncated(&truncated_dir_string, &home_symbol) {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(display_dir, &home_dir, &home_symbol);
+            let dir_string = if config.path_contraction {
+                contract_path(display_dir, &home_dir, &home_symbol)
+            } else {
+                display_dir.to_slash_lossy()
+            };
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
-                contracted_home_dir,
-                &dir_string,
+                dir_string,
+                &truncated_dir_string,
             )
         } else {
             String::from(config.truncation_symbol)
@@ -93,20 +108,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.and_then(|r| r.root.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
-            let contracted_path = contract_repo_path(display_dir, repo_root)?;
+            let contracted_path = if config.repo_contraction {
+                contract_repo_path(display_dir, repo_root)?
+            } else {
+                display_dir.to_slash_lossy()
+            };
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
 
             if ((num_segments_after_root - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
-                let before = dir_string.replace(&contracted_path, "");
+                let before = truncated_dir_string.replace(&contracted_path, "");
                 [prefix + &before, root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                [
+                    "".to_string(),
+                    "".to_string(),
+                    prefix + &truncated_dir_string,
+                ]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => [
+            "".to_string(),
+            "".to_string(),
+            prefix + &truncated_dir_string,
+        ],
     };
 
     let lock_symbol = String::from(config.read_only);
