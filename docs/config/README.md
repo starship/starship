@@ -1398,10 +1398,8 @@ current directory.
 | `up_to_date` | `""`                                          | The format of `up_to_date`          |
 | `untracked`  | `"?"`                                         | The format of `untracked`           |
 | `stashed`    | `"$"`                                         | The format of `stashed`             |
-| `modified`   | `"!"`                                         | The format of `modified`            |
+| `work_dir`   | `"!"`                                         | The format of `work_dir`            |
 | `staged`     | `"+"`                                         | The format of `staged`              |
-| `renamed`    | `"»"`                                         | The format of `renamed`             |
-| `deleted`    | `"✘"`                                         | The format of `deleted`             |
 | `style`      | `"bold red"`                                  | The style for the module.           |
 | `disabled`   | `false`                                       | Disables the `git_status` module.   |
 
@@ -1409,18 +1407,16 @@ current directory.
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                                 |
-| -------------- | ----------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                 |
+| Variable       | Description                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Shortcut for`$conflicted$stashed$work_dir$staged$untracked`                                                   |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                 |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                               |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                            |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                             |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                       |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                  |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                               |
-| style\*        | Mirrors the value of option `style`                                                                         |
+| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
+| `work_dir`     | Displays `work_dir` when there are file modifications in the working directory.                               |
+| `staged`       | Displays `staged` when there are files in the the staging area.                                               |
+| style\*        | Mirrors the value of option `style`                                                                           |
 
 \*: This variable can only be used as a part of a style string
 
@@ -1431,7 +1427,26 @@ The following variables can be used in `diverged`:
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `staged`:
+
+| Variable        | Description                                  |
+| --------------  | -------------------------------------------- |
+| `added_count`   | Number of added files in the staging area    |
+| `deleted_count` | Number of deleted files in the staging area  |
+| `modified_count`| Number of modified files in the staging area |
+| `renamed_count` | Number of renamed files in the staging area  |
+| `count`         | Sum of all the variables above               |
+
+The following variables can be used in `work_dir`:
+
+| Variable        | Description                                       |
+| --------------  | ------------------------------------------------- |
+| `added_count`   | Number of added files in the working directory    |
+| `deleted_count` | Number of deleted files in the working directory  |
+| `modified_count`| Number of modified files in the working directory |
+| `count`         | Sum of all the variables above                    |
+
+The following variables can be used in `conflicted`, `ahead`, `behind`, and `untracked`:
 
 | Variable | Description              |
 | -------- | ------------------------ |
@@ -1450,10 +1465,8 @@ diverged = "😵"
 up_to_date = "✓"
 untracked = "🤷‍"
 stashed = "📦"
-modified = "📝"
+work_dir = "📝"
 staged = '[++\($count\)](green)'
-renamed = "👅"
-deleted = "🗑"
 ```
 
 Show ahead/behind count of the branch being tracked
