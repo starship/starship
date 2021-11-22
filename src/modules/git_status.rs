@@ -9,7 +9,7 @@ use crate::segment::Segment;
 use std::ffi::OsStr;
 use std::sync::Arc;
 
-const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
+const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$work_dir$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -23,9 +23,7 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
-///   - `+` — A new file has been added to the staging area
-///   - `»` — A renamed file has been added to the staging area
-///   - `✘` — A file's deletion has been added to the staging area
+///   - `+` — There are file modifications in the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let info = Arc::new(GitStatusInfo::load(context));
 
@@ -75,17 +73,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "conflicted" => info.get_conflicted().and_then(|count| {
                         format_count(config.conflicted, "git_status.conflicted", context, count)
                     }),
-                    "deleted" => info.get_deleted().and_then(|count| {
-                        format_count(config.deleted, "git_status.deleted", context, count)
+                    "work_dir" => info.get_work_dir().and_then(|work_dir_status| {
+                        let total_count = work_dir_status.total();
+                        format_multivar_count(
+                            config.work_dir,
+                            "git_status.work_dir",
+                            context,
+                            |variable| match variable {
+                                "added_count" => Some(work_dir_status.added.to_string()),
+                                "count" => Some(total_count.to_string()),
+                                "deleted_count" => Some(work_dir_status.deleted.to_string()),
+                                "modified_count" => Some(work_dir_status.modified.to_string()),
+                                _ => None,
+                            },
+                            total_count,
+                        )
                     }),
-                    "renamed" => info.get_renamed().and_then(|count| {
-                        format_count(config.renamed, "git_status.renamed", context, count)
-                    }),
-                    "modified" => info.get_modified().and_then(|count| {
-                        format_count(config.modified, "git_status.modified", context, count)
-                    }),
-                    "staged" => info.get_staged().and_then(|count| {
-                        format_count(config.staged, "git_status.staged", context, count)
+                    "staged" => info.get_staged().and_then(|staging_status| {
+                        let total_count = staging_status.total();
+                        format_multivar_count(
+                            config.staged,
+                            "git_status.staged",
+                            context,
+                            |variable| match variable {
+                                "added_count" => Some(staging_status.added.to_string()),
+                                "count" => Some(total_count.to_string()),
+                                "deleted_count" => Some(staging_status.deleted.to_string()),
+                                "modified_count" => Some(staging_status.modified.to_string()),
+                                "renamed_count" => Some(staging_status.renamed.to_string()),
+                                _ => None,
+                            },
+                            total_count,
+                        )
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
                         format_count(config.untracked, "git_status.untracked", context, count)
@@ -159,19 +178,11 @@ impl<'a> GitStatusInfo<'a> {
         self.get_repo_status().map(|data| data.conflicted)
     }
 
-    pub fn get_deleted(&self) -> Option<usize> {
-        self.get_repo_status().map(|data| data.deleted)
+    pub fn get_work_dir(&self) -> Option<WorkDirStatus> {
+        self.get_repo_status().map(|data| data.work_dir)
     }
 
-    pub fn get_renamed(&self) -> Option<usize> {
-        self.get_repo_status().map(|data| data.renamed)
-    }
-
-    pub fn get_modified(&self) -> Option<usize> {
-        self.get_repo_status().map(|data| data.modified)
-    }
-
-    pub fn get_staged(&self) -> Option<usize> {
+    pub fn get_staged(&self) -> Option<StagingStatus> {
         self.get_repo_status().map(|data| data.staged)
     }
 
@@ -225,44 +236,85 @@ fn get_stashed_count(context: &Context) -> Option<usize> {
 }
 
 #[derive(Default, Debug, Copy, Clone)]
+struct WorkDirStatus {
+    added: usize,
+    deleted: usize,
+    modified: usize,
+}
+
+impl WorkDirStatus {
+    fn total(self) -> usize {
+        self.added + self.deleted + self.modified
+    }
+}
+
+#[derive(Default, Debug, Copy, Clone)]
+struct StagingStatus {
+    added: usize,
+    deleted: usize,
+    modified: usize,
+    renamed: usize,
+}
+
+impl StagingStatus {
+    fn total(self) -> usize {
+        self.added + self.deleted + self.modified + self.renamed
+    }
+}
+
+#[derive(Default, Debug, Copy, Clone)]
 struct RepoStatus {
     ahead: Option<usize>,
     behind: Option<usize>,
     conflicted: usize,
-    deleted: usize,
-    renamed: usize,
-    modified: usize,
-    staged: usize,
+    work_dir: WorkDirStatus,
+    staged: StagingStatus,
     untracked: usize,
 }
 
 impl RepoStatus {
-    fn is_deleted(short_status: &str) -> bool {
-        // is_wt_deleted || is_index_deleted
-        short_status.contains('D')
+    fn is_staging_deleted(short_status: &str) -> bool {
+        short_status.starts_with('D')
     }
 
-    fn is_modified(short_status: &str) -> bool {
-        // is_wt_modified || is_wt_added
-        short_status.ends_with('M') || short_status.ends_with('A')
+    fn is_work_dir_deleted(short_status: &str) -> bool {
+        short_status.ends_with('D')
     }
 
-    fn is_staged(short_status: &str) -> bool {
-        // is_index_modified || is_index_added
-        short_status.starts_with('M') || short_status.starts_with('A')
+    fn is_staging_modified(short_status: &str) -> bool {
+        short_status.starts_with('M')
+    }
+
+    fn is_work_dir_modified(short_status: &str) -> bool {
+        short_status.ends_with('M')
+    }
+
+    fn is_staging_added(short_status: &str) -> bool {
+        short_status.starts_with('A')
+    }
+
+    fn is_workdir_added(short_status: &str) -> bool {
+        short_status.ends_with('A')
     }
 
     fn parse_normal_status(&mut self, short_status: &str) {
-        if Self::is_deleted(short_status) {
-            self.deleted += 1;
+        if Self::is_staging_deleted(short_status) {
+            self.staged.deleted += 1
         }
-
-        if Self::is_modified(short_status) {
-            self.modified += 1;
+        if Self::is_work_dir_deleted(short_status) {
+            self.work_dir.deleted += 1
         }
-
-        if Self::is_staged(short_status) {
-            self.staged += 1;
+        if Self::is_staging_modified(short_status) {
+            self.staged.modified += 1
+        }
+        if Self::is_work_dir_modified(short_status) {
+            self.work_dir.modified += 1
+        }
+        if Self::is_staging_added(short_status) {
+            self.staged.added += 1
+        }
+        if Self::is_workdir_added(short_status) {
+            self.work_dir.added += 1
         }
     }
 
@@ -270,7 +322,7 @@ impl RepoStatus {
         match s.chars().next() {
             Some('1') => self.parse_normal_status(&s[2..4]),
             Some('2') => {
-                self.renamed += 1;
+                self.staged.renamed += 1;
                 self.parse_normal_status(&s[2..4])
             }
             Some('u') => self.conflicted += 1,
@@ -309,6 +361,23 @@ where
         log::warn!("Error parsing format string `{}`", &config_path);
         None
     }
+}
+
+fn format_multivar_count<F>(
+    format_str: &str,
+    config_path: &str,
+    context: &Context,
+    mapper: F,
+    total_count: usize,
+) -> Option<Vec<Segment>>
+where
+    F: Fn(&str) -> Option<String> + Send + Sync,
+{
+    if total_count == 0 {
+        return None;
+    }
+
+    format_text(format_str, config_path, context, mapper)
 }
 
 fn format_count(
