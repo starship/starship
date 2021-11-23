@@ -9,8 +9,8 @@ use crate::utils;
 /// Creates a module with the currently active Docker context
 ///
 /// Will display the Docker context if the following criteria are met:
-///     - There is a non-empty enviroment variable named DOCKER_HOST
-///     - Or there is a non-empty enviroment variable named DOCKER_CONTEXT
+///     - There is a non-empty environment variable named DOCKER_HOST
+///     - Or there is a non-empty environment variable named DOCKER_CONTEXT
 ///     - Or there is a file named `$HOME/.docker/config.json`
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
