@@ -165,7 +165,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    ##### From prebuilt binary, with Shell:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -fsSL https://starship.rs/install.sh | sh
    ```
 
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
@@ -173,7 +173,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    **Note** - The defaults of the install script can be overridden see the built-in help.
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
+   curl -fsSL https://starship.rs/install.sh | sh -s -- --help
    ```
 
    #### Install via Package Manager
