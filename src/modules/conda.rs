@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let conda_env = truncate(conda_env, config.truncation_length);
+    let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
