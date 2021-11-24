@@ -108,10 +108,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
         _ => ["".to_string(), "".to_string(), prefix + &dir_string],
     };
-	
-	if config.convert_slash {
-		path_vec.iter_mut().for_each(|i| *i = from_slash(&i));
-	}
+
+    if config.convert_slash {
+        path_vec.iter_mut().for_each(|i| *i = from_slash(i));
+    }
 
     let lock_symbol = String::from(config.read_only);
     let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
