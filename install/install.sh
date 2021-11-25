@@ -347,6 +347,11 @@ print_install() {
   Typically the path is ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 or ~/.config/powershell/Microsoft.PowerShell_profile.ps1 on -Nix." \
     "Invoke-Expression (&starship init powershell)"
 
+  printf "  %s\n You need to use Clink with Cmd. Add the following to a file %s and place this file in Clink scripts directory:\n\n\t%s\n\n" \
+    "${BOLD}${UNDERLINE}Cmd${NO_COLOR}" \
+    "${BOLD}starship.lua${NO_COLOR}" \
+    "load(io.popen('starship init cmd'):read(\"*a\"))()"
+
   printf "\n"
 }
 

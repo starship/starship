@@ -271,6 +271,16 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
    execx($(starship init xonsh))
    ```
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
    #### Nushell
 
    **Warning** This will change in the future. Only nu version v0.33 or higher is supported.

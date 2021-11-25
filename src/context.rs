@@ -300,6 +300,7 @@ impl<'a> Context<'a> {
             "tcsh" => Shell::Tcsh,
             "nu" => Shell::Nu,
             "xonsh" => Shell::Xonsh,
+            "cmd" => Shell::Cmd,
             _ => Shell::Unknown,
         }
     }
@@ -544,6 +545,7 @@ pub enum Shell {
     Tcsh,
     Nu,
     Xonsh,
+    Cmd,
     Unknown,
 }
 
