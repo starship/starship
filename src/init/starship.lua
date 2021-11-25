@@ -13,6 +13,9 @@ clink.onbeginedit(function ()
 end)
 
 clink.onendedit(function (curr_line)
+  if starship_precmd_user_func ~= nil then
+    starship_precmd_user_func(curr_line)
+  end
   start_time = os.clock()
   if string.len(string.gsub(curr_line, '^%s*(.-)%s*$', '%1')) == 0 then
     is_line_empty = true
@@ -22,6 +25,9 @@ clink.onendedit(function (curr_line)
 end)
 
 function custom_prompt:filter(prompt)
+  if starship_preprompt_user_func ~= nil then
+    starship_preprompt_user_func(prompt)
+  end
   return io.popen("::STARSHIP:: prompt"
     .." --status="..os.geterrorlevel()
     .." --cmd-duration="..math.floor(curr_duration*1000)
