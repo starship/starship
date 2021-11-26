@@ -1113,7 +1113,7 @@ assembly / assemblyMergeStrategy := {
 }
 ";
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
@@ -1127,7 +1127,7 @@ ThisBuild / version := \"1.2.3\"
 scalaVersion := \"2.13.7\"
 ";
         let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
