@@ -709,34 +709,38 @@ mod tests {
     }
 
     #[test]
-    fn shows_modified() -> io::Result<()> {
+    fn shows_work_dir_modified_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_modified(repo_dir.path())?;
+        create_work_dir_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                work_dir = "!$modified_count"
+            })
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("!");
+        let expected = format_output("!1");
 
         assert_eq!(expected, actual);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_modified_with_count() -> io::Result<()> {
+    fn shows_staged_modified_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_modified(repo_dir.path())?;
+        create_staged_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                modified = "!$count"
+                staged = "+$modified_count"
             })
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("!1");
+        let expected = format_output("+1");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -822,7 +826,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("»");
+        let expected = format_output("+");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -837,7 +841,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                renamed = "»$count"
+                staged = "»$renamed_count"
             })
             .path(&repo_dir.path())
             .collect();
@@ -856,41 +860,45 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("»!");
+        let expected = format_output("!+");
 
         assert_eq!(expected, actual);
         repo_dir.close()
     }
 
     #[test]
-    fn shows_deleted_file() -> io::Result<()> {
+    fn shows_work_dir_deleted_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_deleted(repo_dir.path())?;
-
-        let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
-            .collect();
-        let expected = format_output("✘");
-
-        assert_eq!(expected, actual);
-        repo_dir.close()
-    }
-
-    #[test]
-    fn shows_deleted_file_with_count() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
-
-        create_deleted(repo_dir.path())?;
+        create_work_dir_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
-                deleted = "✘$count"
+                work_dir = "!$deleted_count"
             })
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("✘1");
+        let expected = format_output("!1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_deleted_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_deleted(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+$deleted_count"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("+1");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -930,7 +938,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("✘?");
+        let expected = format_output("!?");
 
         assert_eq!(expected, actual);
         worktree_dir.close()?;
@@ -1077,8 +1085,20 @@ mod tests {
         Ok(())
     }
 
-    fn create_modified(repo_dir: &Path) -> io::Result<()> {
+    fn create_work_dir_modified(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
+
+        Ok(())
+    }
+
+    fn create_staged_modified(repo_dir: &Path) -> io::Result<()> {
+        File::create(repo_dir.join("readme.md"))?.sync_all()?;
+
+        create_command("git")?
+            .args(&["add", "-A"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
 
         Ok(())
     }
@@ -1147,7 +1167,19 @@ mod tests {
         Ok(())
     }
 
-    fn create_deleted(repo_dir: &Path) -> io::Result<()> {
+    fn create_staged_deleted(repo_dir: &Path) -> io::Result<()> {
+        fs::remove_file(repo_dir.join("readme.md"))?;
+
+        create_command("git")?
+            .args(&["add", "-A"])
+            .current_dir(repo_dir)
+            .output()?;
+        barrier();
+
+        Ok(())
+    }
+
+    fn create_work_dir_deleted(repo_dir: &Path) -> io::Result<()> {
         fs::remove_file(repo_dir.join("readme.md"))?;
 
         Ok(())
