@@ -273,7 +273,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

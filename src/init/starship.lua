@@ -1,4 +1,8 @@
-local custom_prompt = clink.promptfilter(5)
+if (clink.version_encoded or 0) < 10020030 then
+  error("Starship requires a newer version of Clink; please upgrade to Clink v1.2.30 or later.")
+end
+
+local starship_prompt = clink.promptfilter(5)
 
 start_time = os.clock()
 end_time = 0
@@ -24,7 +28,7 @@ clink.onendedit(function (curr_line)
   end
 end)
 
-function custom_prompt:filter(prompt)
+function starship_prompt:filter(prompt)
   if starship_preprompt_user_func ~= nil then
     starship_preprompt_user_func(prompt)
   end
@@ -36,7 +40,7 @@ function custom_prompt:filter(prompt)
   ):read("*a")
 end
 
-function custom_prompt:rightfilter(prompt)
+function starship_prompt:rightfilter(prompt)
   return io.popen("::STARSHIP:: prompt --right"
     .." --status="..os.geterrorlevel()
     .." --cmd-duration="..math.floor(curr_duration*1000)
@@ -45,13 +49,12 @@ function custom_prompt:rightfilter(prompt)
   ):read("*a")
 end
 
-local characterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+local characterset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 local randomkey = ""
 math.randomseed(os.time())
-
 for i = 1, 16 do
-  local rand = math.random(#characterSet)
-  randomkey = randomkey..string.sub(characterSet, rand, rand)
+  local rand = math.random(#characterset)
+  randomkey = randomkey..string.sub(characterset, rand, rand)
 end
 
 os.setenv('STARSHIP_SHELL', 'cmd')
