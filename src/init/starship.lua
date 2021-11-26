@@ -32,7 +32,7 @@ function starship_prompt:filter(prompt)
   if starship_preprompt_user_func ~= nil then
     starship_preprompt_user_func(prompt)
   end
-  return io.popen("::STARSHIP:: prompt"
+  return io.popen([[::STARSHIP::]].." prompt"
     .." --status="..os.geterrorlevel()
     .." --cmd-duration="..math.floor(curr_duration*1000)
     .." --terminal-width="..console.getwidth()
@@ -41,7 +41,7 @@ function starship_prompt:filter(prompt)
 end
 
 function starship_prompt:rightfilter(prompt)
-  return io.popen("::STARSHIP:: prompt --right"
+  return io.popen([[::STARSHIP::]].." prompt --right"
     .." --status="..os.geterrorlevel()
     .." --cmd-duration="..math.floor(curr_duration*1000)
     .." --terminal-width="..console.getwidth()

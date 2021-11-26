@@ -48,9 +48,7 @@ impl StarshipPath {
     }
     /// Cmd specific path escaping
     fn sprint_cmd(&self) -> io::Result<String> {
-        self.str_path()
-            .map(|s| s.replace("\\", "\\\\"))
-            .map(|s| format!("\\\"{}\\\"", s))
+        self.str_path().map(|s| format!("\"{}\"", s))
     }
     fn sprint_posix(&self) -> io::Result<String> {
         // On non-Windows platform, return directly.
@@ -295,7 +293,7 @@ mod tests {
         let starship_path = StarshipPath {
             native_path: PathBuf::from(r"C:\starship.exe"),
         };
-        assert_eq!(starship_path.sprint_cmd()?, r#"\"C:\\starship.exe\""#);
+        assert_eq!(starship_path.sprint_cmd()?, r#""C:\starship.exe""#);
         Ok(())
     }
 
@@ -306,7 +304,7 @@ mod tests {
         };
         assert_eq!(
             starship_path.sprint_cmd()?,
-            r#"\"C:\\Cool Tools\\starship.exe\""#
+            r#""C:\Cool Tools\starship.exe""#
         );
         Ok(())
     }
