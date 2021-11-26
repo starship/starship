@@ -197,6 +197,13 @@ fn get_vpkg_version(context: &Context, config: &PackageConfig) -> Option<String>
     format_version(raw_version, config.version_format)
 }
 
+fn get_sbt_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("build.sbt")).ok()?;
+    let re = Regex::new(r"(?m)^(.*/)*\s*version\s*:=\s*.(?P<version>[\d\.]+)").unwrap();
+    let caps = re.captures(&file_contents)?;
+    format_version(&caps["version"], config.version_format)
+}
+
 fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = utils::read_file(&context.current_dir.join("Cargo.toml")).ok()?;
 
@@ -249,6 +256,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_shard_version,
         get_vmod_version,
         get_vpkg_version,
+        get_sbt_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1088,6 +1096,39 @@ Module {
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_sbt_version() -> io::Result<()> {
+        let config_name = "build.sbt";
+        let config_content = "\
+name := \"starship\"
+version := \"1.2.3\"
+scalaVersion := \"2.13.7\"
+
+assembly / assemblyMergeStrategy := {
+  case PathList(\"META-INF\", _ @ _*) => MergeStrategy.discard
+  case _ => MergeStrategy.first
+}
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_sbt_version_thisbuild() -> io::Result<()> {
+        let config_name = "build.sbt";
+        let config_content = "\
+name := \"starship\"
+ThisBuild / version := \"1.2.3\"
+scalaVersion := \"2.13.7\"
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
 
