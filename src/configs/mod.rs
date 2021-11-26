@@ -4,6 +4,7 @@ use serde::{self, Serialize};
 use starship_module_config_derive::ModuleConfig;
 
 pub mod aws;
+pub mod azure;
 pub mod battery;
 pub mod character;
 pub mod cmake;
@@ -84,6 +85,7 @@ pub struct FullConfig<'a> {
     pub add_newline: bool,
     // modules
     aws: aws::AwsConfig<'a>,
+    azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
@@ -161,6 +163,7 @@ impl<'a> Default for FullConfig<'a> {
             add_newline: true,
 
             aws: Default::default(),
+            azure: Default::default(),
             battery: Default::default(),
             character: Default::default(),
             cmake: Default::default(),
