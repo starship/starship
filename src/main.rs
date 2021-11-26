@@ -27,7 +27,7 @@ fn main() {
         .long("pipestatus")
         .value_name("PIPESTATUS")
         .help("Status codes from a command pipeline")
-        .long_help("Bash and Zsh supports returning codes for each process in a pipeline.")
+        .long_help("Bash, Fish and Zsh support returning codes for each process in a pipeline.")
         .multiple(true);
 
     let terminal_width_arg = Arg::with_name("terminal_width")
@@ -72,8 +72,7 @@ fn main() {
         .short("k")
         .long("keymap")
         .value_name("KEYMAP")
-        // fish/zsh only
-        .help("The keymap of fish/zsh")
+        .help("The keymap of cmd/fish/zsh")
         .takes_value(true);
 
     let jobs_arg = Arg::with_name("jobs")

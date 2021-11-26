@@ -447,7 +447,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 

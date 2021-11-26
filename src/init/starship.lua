@@ -32,6 +32,7 @@ function custom_prompt:filter(prompt)
     .." --status="..os.geterrorlevel()
     .." --cmd-duration="..math.floor(curr_duration*1000)
     .." --terminal-width="..console.getwidth()
+    .." --keymap="..rl.getvariable('keymap')
   ):read("*a")
 end
 
@@ -40,6 +41,7 @@ function custom_prompt:rightfilter(prompt)
     .." --status="..os.geterrorlevel()
     .." --cmd-duration="..math.floor(curr_duration*1000)
     .." --terminal-width="..console.getwidth()
+    .." --keymap="..rl.getvariable('keymap')
   ):read("*a")
 end
 
