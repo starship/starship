@@ -161,6 +161,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
             .stderr(Stdio::piped());
 
         handle_powershell(&mut command, &forced_shell, shell_args);
+        handle_cmd(&mut command, &forced_shell, shell_args);
 
         if let Ok(mut child) = command.spawn() {
             child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
@@ -244,6 +245,15 @@ fn handle_powershell(command: &mut Command, shell: &str, shell_args: &[&str]) {
 
     if is_powershell && shell_args.is_empty() {
         command.arg("-NoProfile").arg("-Command").arg("-");
+    }
+}
+
+#[cfg(windows)]
+fn handle_cmd(command: &mut Command, shell: &str, shell_args: &[&str]) {
+    let is_cmd = shell.ends_with("cmd.exe") || shell.ends_with("cmd");
+
+    if is_cmd && shell_args.is_empty() {
+        command.arg("/C");
     }
 }
 
