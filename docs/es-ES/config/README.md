@@ -2129,6 +2129,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - [**Meson**](https://mesonbuild.com/) - La versión del paquete `meson` se extrae del `meson.build` presente en el directorio actual
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
 

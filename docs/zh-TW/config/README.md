@@ -2129,6 +2129,7 @@ The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠️ 顯示出來的版本是從你的現在資料夾之中擷取出來的，並非從套件管理員取得。
 

@@ -2129,6 +2129,7 @@ Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠️ Die angezeigte Version ist die des Pakets, dessen Quellcode im Verzeichnis liegt, nicht die des Paketmanagers.
 
