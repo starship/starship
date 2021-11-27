@@ -60,6 +60,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None
     };
 
+    let mut is_truncated = dir_string.is_some();
+
     // the home directory if required.
     let dir_string =
         dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
@@ -71,9 +73,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let dir_string = truncate(dir_string, config.truncation_length as usize);
+    let dir_string =
+        if let Some(truncated) = truncate(&dir_string, config.truncation_length as usize) {
+            is_truncated = true;
+            truncated
+        } else {
+            dir_string
+        };
 
-    let prefix = if is_truncated(&dir_string, &home_symbol) {
+    let prefix = if is_truncated {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
@@ -172,12 +180,6 @@ fn remove_extended_path_prefix(path: String) -> String {
         return p.to_string();
     }
     path
-}
-
-fn is_truncated(path: &str, home_symbol: &str) -> bool {
-    !(path.starts_with(&home_symbol)
-        || PathBuf::from(path).has_root()
-        || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
@@ -771,11 +773,12 @@ mod tests {
             })
             .path(&dir)
             .collect();
+        let dir_str = dir.to_slash_lossy();
         let expected = Some(from_slash(&format!(
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(truncate(dir.to_slash_lossy(), 100))
+                .paint(truncate(&dir_str, 100).unwrap_or(dir_str))
         )));
 
         assert_eq!(expected, actual);
