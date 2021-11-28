@@ -1234,7 +1234,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | Option           | Default                                                  | Description                                                     |
 | ---------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.      |
+| `symbol`         | `"☁️ "`                                                  | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                          | Table of region aliases to display in addition to the GCP name. |
 | `style`          | `"bold blue"`                                            | The style for the module.                                       |
 | `disabled`       | `false`                                                  | Disables the `gcloud` module.                                   |
@@ -1729,16 +1729,17 @@ then the module will also show when there are 0 jobs running.
 
 ### Options
 
-| Option                                                                                                  | Default                       | Description                                                              |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*                                                                                            | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold`                                                                                      | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold`                                                                                      | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`                                                                                                | `"[$symbol$number]($style) "` | The format for the module.                                               |
-| `symbol`                                                                                                | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`                                                                                                 | `"bold blue"`                 | The style for the module.                                                |
-| `disabled`                                                                                              | `false`                       | Disables the `jobs` module.                                              |
-| *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead. |                               |                                                                          |
+| Option             | Default                       | Description                                                              |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | The format for the module.                                               |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | The style for the module.                                                |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+
+*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1808,21 +1809,21 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Options
 
-| Option     | Default                     | Description                                                                                                                          |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show IP address when connected to an SSH session.                                                                               |
-| `format`   | `"[$localipv4]($style) "`     | The format for the module.                                                                                                           |
-| `style`    | `"bold yellow"`              | The style for the module.                                                                                                            |
-| `disabled` | `false`                     | Disables the `localip` module.                                                                                                      |
+| Option     | Default                   | Description                                            |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | The format for the module.                             |
+| `style`    | `"bold yellow"`           | The style for the module.                              |
+| `disabled` | `false`                   | Disables the `localip` module.                         |
 
 ### Variables
 
-| Variable    | Example      | Description                          |
-| --------    | -------      | ------------------------------------ |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address    |
-| style\*     |              | Mirrors the value of option `style`  |
+| Variable  | Example      | Description                         |
+| --------- | ------------ | ----------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
+| style\*   |              | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1831,7 +1832,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 [localip]
 ssh_only = false
-format =  "@[$localipv4](bold red) "
+format = "@[$localipv4](bold red) "
 disabled = false
 ```
 
@@ -2927,7 +2928,7 @@ set to a number and meets or exceeds the specified threshold.
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
-| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | The style for the module.                                     |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
@@ -3004,22 +3005,12 @@ This module is not supported on nu shell.
 
 ### Options
 
-| Option                  | Default                                                                       | Description                                             |
-| ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                 | The format of the module                                |
-| `symbol`                | `"✖"`                                                                         | The symbol displayed on program error                   |
-| `success_symbol`        | `"✔️"`                                                                        | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                         | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                         | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                         | The symbol displayed on any signal                      |
-| `style`                 | `"bold red"`                                                                  | The style for the module.                               |
-| `recognize_signal_code` | `true`                                                                        | Enable signal mapping from exit code                    |
-| `map_symbol`            | `false`                                                                       | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                       | Enable pipestatus reporting                             |
-| `pipestatus_separator`  | `                                                                             | `                                                       |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                        | Disables the `status` module.                           |
+# | Option | Default | Description || ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------- || `format` | `"[$symbol$status]($style) "` | The format of the module || `symbol` | `"✖"` | The symbol displayed on program error || `success_symbol` | `"✔️"` | The symbol displayed on program success || `not_executable_symbol` | `"🚫"` | The symbol displayed when file isn't executable || `not_found_symbol` | `"🔍"` | The symbol displayed when the command can't be found || `sigint_symbol` | `"🧱"` | The symbol displayed on SIGINT (Ctrl + c) || `signal_symbol` | `"⚡"` | The symbol displayed on any signal || `style` | `"bold red"` | The style for the module. || `recognize_signal_code` | `true` | Enable signal mapping from exit code || `map_symbol` | `false` | Enable symbols mapping from exit code || `pipestatus` | `false` | Enable pipestatus reporting |<<<<<<< HEAD| `pipestatus_separator` | `|` |
+
+| `pipestatus_separator` | `|` | The symbol that separate in pipe program exit codes |
+>>>>>>> 7c1ac0c8 (feat(localip): add module to print the current ipv4 address)
+| `pipestatus_format` | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
+| `disabled` | `true` | Disables the `status` module. |
 
 ### Variables
 
