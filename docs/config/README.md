@@ -192,6 +192,7 @@ format = "$all"
 format = """
 $username\
 $hostname\
+$localip\
 $shlvl\
 $singularity\
 $kubernetes\
@@ -1799,6 +1800,39 @@ By default the module will be shown if any of the following conditions are met:
 
 [julia]
 symbol = "∴ "
+```
+
+## localip
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Options
+
+| Option     | Default                     | Description                                                                                                                          |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                      | Only show IP address when connected to an SSH session.                                                                               |
+| `format`   | `"[$hostname]($style)"`     | The format for the module.                                                                                                           |
+| `style`    | `"bold yellow"`              | The style for the module.                                                                                                            |
+| `disabled` | `false`                     | Disables the `localip` module.                                                                                                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format =  "@[$localip](bold red) "
+disabled = false
 ```
 
 ## Kotlin
