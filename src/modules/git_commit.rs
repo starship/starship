@@ -1,6 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
 use crate::formatter::string_formatter::StringFormatterError;
-use git2::Repository;
 use git2::Time;
 
 use crate::configs::git_commit::GitCommitConfig;
@@ -14,8 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitCommitConfig = GitCommitConfig::try_load(module.config);
 
     let repo = context.get_repo().ok()?;
-    let repo_root = repo.root.as_ref()?;
-    let git_repo = Repository::open(repo_root).ok()?;
+    let git_repo = repo.open().ok()?;
 
     let is_detached = git_repo.head_detached().ok()?;
     if config.only_detached && !is_detached {

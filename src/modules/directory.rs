@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Otherwise use the logical path, automatically contracting
     let repo = context.get_repo().ok();
     let dir_string = if config.truncate_to_repo {
-        repo.and_then(|r| r.root.as_ref())
+        repo.and_then(|r| r.workdir.as_ref())
             .filter(|&root| root != &home_dir)
             .and_then(|root| contract_repo_path(display_dir, root))
     } else {
@@ -99,7 +99,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let path_vec = match &repo.and_then(|r| r.root.as_ref()) {
+    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
