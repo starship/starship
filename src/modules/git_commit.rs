@@ -146,10 +146,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_hash))
-                .to_string()
+            Color::Green.bold().paint(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -179,10 +176,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_hash))
-                .to_string()
+            Color::Green.bold().paint(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -226,10 +220,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_hash))
-                .to_string()
+            Color::Green.bold().paint(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -272,7 +263,6 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
         ));
 
         assert_eq!(expected, actual);
@@ -324,7 +314,6 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
         ));
 
         assert_eq!(expected, actual);
@@ -396,7 +385,6 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
         ));
 
         assert_eq!(expected, actual);
