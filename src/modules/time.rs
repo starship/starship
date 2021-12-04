@@ -54,7 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "time" => Some(Ok(&formatted_time_string)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

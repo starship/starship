@@ -2,6 +2,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::battery::BatteryConfig;
 #[cfg(test)]
 use mockall::automock;
+use starship_battery as battery;
 
 use crate::formatter::StringFormatter;
 
@@ -52,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     _ => None,
                 });
 
-            match formatter.parse(None) {
+            match formatter.parse(None, Some(context)) {
                 Ok(format_string) => {
                     module.set_segments(format_string);
                     Some(module)

@@ -1,6 +1,5 @@
 use super::{Context, Module, RootModuleConfig};
 use crate::formatter::string_formatter::StringFormatterError;
-use git2::Repository;
 use git2::Time;
 
 use crate::configs::git_commit::GitCommitConfig;
@@ -14,8 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitCommitConfig = GitCommitConfig::try_load(module.config);
 
     let repo = context.get_repo().ok()?;
-    let repo_root = repo.root.as_ref()?;
-    let git_repo = Repository::open(repo_root).ok()?;
+    let git_repo = repo.open().ok()?;
 
     let is_detached = git_repo.head_detached().ok()?;
     if config.only_detached && !is_detached {
@@ -68,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "tag" => format_tag(config.tag_symbol, &tag_name),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -146,10 +144,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_hash))
-                .to_string()
+            Color::Green.bold().paint(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -179,10 +174,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_hash))
-                .to_string()
+            Color::Green.bold().paint(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -226,10 +218,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
-                .bold()
-                .paint(format!("({})", expected_hash))
-                .to_string()
+            Color::Green.bold().paint(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -272,7 +261,6 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
         ));
 
         assert_eq!(expected, actual);
@@ -324,7 +312,6 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
         ));
 
         assert_eq!(expected, actual);
@@ -396,7 +383,6 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
-                .to_string()
         ));
 
         assert_eq!(expected, actual);

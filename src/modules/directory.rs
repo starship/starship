@@ -50,17 +50,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     log::debug!("Display dir: {:?}", &display_dir);
 
     // Attempt repository path contraction (if we are in a git repository)
-    let repo = if config.truncate_to_repo {
-        context.get_repo().ok()
+    // Otherwise use the logical path, automatically contracting
+    let repo = context.get_repo().ok();
+    let dir_string = if config.truncate_to_repo {
+        repo.and_then(|r| r.workdir.as_ref())
+            .filter(|&root| root != &home_dir)
+            .and_then(|root| contract_repo_path(display_dir, root))
     } else {
         None
     };
-    let dir_string = repo
-        .and_then(|r| r.root.as_ref())
-        .filter(|root| *root != &home_dir)
-        .and_then(|root| contract_repo_path(display_dir, root));
 
-    // Otherwise use the logical path, automatically contracting
+    let mut is_truncated = dir_string.is_some();
+
     // the home directory if required.
     let dir_string =
         dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
@@ -72,9 +73,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let dir_string = substitute_path(dir_string, &config.substitutions);
 
     // Truncate the dir string to the maximum number of path components
-    let dir_string = truncate(dir_string, config.truncation_length as usize);
+    let dir_string =
+        if let Some(truncated) = truncate(&dir_string, config.truncation_length as usize) {
+            is_truncated = true;
+            truncated
+        } else {
+            dir_string
+        };
 
-    let prefix = if is_truncated(&dir_string, &home_symbol) {
+    let prefix = if is_truncated {
         // Substitutions could have changed the prefix, so don't allow them and
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
@@ -92,18 +99,44 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let displayed_path = prefix + &dir_string;
-    let lock_symbol = String::from(config.read_only);
+    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
+        Some(repo_root) if config.repo_root_style.is_some() => {
+            let contracted_path = contract_repo_path(display_dir, repo_root)?;
+            let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
+            let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
+            let num_segments_after_root = after_repo_root.split('/').count();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            if ((num_segments_after_root - 1) as i64) < config.truncation_length {
+                let root = repo_path_vec[0];
+                let before = dir_string.replace(&contracted_path, "");
+                [prefix + &before, root.to_string(), after_repo_root]
+            } else {
+                ["".to_string(), "".to_string(), prefix + &dir_string]
+            }
+        }
+        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+    };
+
+    let lock_symbol = String::from(config.read_only);
+    let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
+        config.format
+    } else {
+        config.repo_root_format
+    };
+    let repo_root_style = config.repo_root_style.unwrap_or(config.style);
+
+    let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
+                "repo_root_style" => Some(Ok(repo_root_style)),
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&displayed_path)),
+                "path" => Some(Ok(&path_vec[2])),
+                "before_root_path" => Some(Ok(&path_vec[0])),
+                "repo_root" => Some(Ok(&path_vec[1])),
                 "read_only" => {
                     if is_readonly_dir(physical_dir) {
                         Some(Ok(&lock_symbol))
@@ -113,7 +146,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -143,12 +176,6 @@ fn remove_extended_path_prefix(path: String) -> String {
         return p.to_string();
     }
     path
-}
-
-fn is_truncated(path: &str, home_symbol: &str) -> bool {
-    !(path.starts_with(&home_symbol)
-        || PathBuf::from(path).has_root()
-        || (cfg!(target_os = "windows") && PathBuf::from(String::from(path) + r"\").has_root()))
 }
 
 fn is_readonly_dir(path: &Path) -> bool {
@@ -730,11 +757,12 @@ mod tests {
             })
             .path(&dir)
             .collect();
+        let dir_str = dir.to_slash_lossy();
         let expected = Some(format!(
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(truncate(dir.to_slash_lossy(), 100))
+                .paint(truncate(&dir_str, 100).unwrap_or(dir_str))
         ));
 
         assert_eq!(expected, actual);
@@ -1506,6 +1534,60 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
+    #[test]
+    fn highlight_git_root_dir() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncate_to_repo = true
+                repo_root_style = "bold red"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint("/src/sub/path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn highlight_git_root_dir_config_change() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncation_symbol = "…/"
+                truncate_to_repo = false
+                repo_root_style = "green"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{} ",
+            Color::Cyan.bold().paint("…/above/"),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint("/src/sub/path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
     #[cfg(any(unix, target_os = "redox"))]
     fn invalid_path() -> PathBuf {

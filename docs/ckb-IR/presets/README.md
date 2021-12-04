@@ -1,18 +1,18 @@
-# Presets
+# پێش ڕێکخستنەکان
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+ئەمە کۆکراوەیەکە لەو پێش ڕێکخستنانەی کە لەلایەن کۆمەڵگاوە نێردراون بۆ Starship. ئەگەر پێش ڕێکخستنێکت هەیە بۆ هاوبەشکردن، تکایە [PRـێک بنێرە](https://github.com/starship/starship/edit/master/docs/presets/README.md) کە ئەم پەڕگەیە نوێبکاتەوە! 😊
 
-## Nerd Font Symbols
+## هێماکانی Nerd Font
 
-This preset doesn't change anything except for the symbols used for each module. If emojis aren't your thing, this might catch your eye!
+ئەم پێش ڕێکخستنە هیچ شتێک ناگۆڕێت جگە لە هێماکان کە بەکارهاتوون بۆ هەر moduleـێک. ئەگەر ئیمۆجیەکان ئەو شتە نین تۆ حەزت لێیە، ئەمە ڕەنگە سەرنجت ڕاکێشێت!
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+![ڕوونماوێنەیەکی پێش ڕێکخستنی هێماکانی فۆنتی Nerd](/presets/nerd-font-symbols.png)
 
 ### پێشمەرجەکان
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- [Nerd Font](https://www.nerdfonts.com/)ـێک دامەزرێنراوە و چالاککراوە لە تێرمیناڵەکەتدا (بۆ نموونە Fira Code Nerd Font بەکاردەهێنێ)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [aws]
@@ -88,19 +88,19 @@ symbol = " "
 symbol = "ﯣ "
 ```
 
-## Bracketed Segments
+## پارچە کەوانەکراوەکان
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
-Before:
+پێشتر:
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+![ڕوونماوێنەی ڕێکخستنی بنەڕەتی Starship](/presets/bracketed-segments-before.png)
 
-After:
+دواتر:
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+![ڕوونماوێنەی پێشڕێکخستنی Bracketed Segments](/presets/bracketed-segments-after.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [aws]
@@ -202,6 +202,9 @@ format = '\[[$symbol($version)]($style)\]'
 [php]
 format = '\[[$symbol($version)]($style)\]'
 
+[pulumi]
+format = '\[[$symbol$stack]($style)\]'
+
 [purescript]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -242,19 +245,19 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## هێما نووسینەکییە ئاساییەکان
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+ئەم پێش ڕێکخستنە هێماکان دەگۆڕێت بۆ نووسینی ئاسایی. ئەگەر تێرمیناڵ/فۆنتەکەت ناتوانێ NerdFonts/ئیمۆجییەکان دەربخات، لەوانەیە پیویست بکا ئەم پێش ڕێکخستنە بەکاربهێنیت!
 
-Before (default setting with Fixedsys font):
+پێشتر (ڕێکخستنی بنەڕەتی لەگەڵ فۆنتی Fixedsys):
 
 ![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+دواتر (هێما نووسینەکییە ئاساییەکان):
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [character]
@@ -350,6 +353,9 @@ symbol = "pl "
 [php]
 symbol = "php "
 
+[pulumi]
+symbol = "pulumi "
+
 [purescript]
 symbol = "purs "
 
@@ -369,13 +375,13 @@ symbol = "scala "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## شاردنەوەی وەشانەکانی کاتی جێبەجێکردن
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+ئەم پێش ڕێکخستنە وەشانی کاتی جێبەجێکردنی زمانەکان دەشارێتەوە. ئەگەر کاردەکەیت لەگەڵ containerو ژینگە خەیاڵییەکان، ئەمە بۆ تۆیە!
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
-### Configuration
+### ڕێکخستن
 
 ```toml
 [cmake]
@@ -435,6 +441,9 @@ format = 'via [$symbol]($style)'
 [php]
 format = 'via [$symbol]($style)'
 
+[pulumi]
+format = 'via [$symbol$stack]($style)'
+
 [purescript]
 format = 'via [$symbol]($style)'
 
@@ -461,4 +470,61 @@ format = 'via [$symbol]($style)'
 
 [zig]
 format = 'via [$symbol]($style)'
+```
+
+## بێخەوش
+
+ئەم پێش ڕێکخستنە لاسایی شێواز و ڕەفتاری [Pure](https://github.com/sindresorhus/pure) دەکاتەوە.
+
+![Screenshot of Pure preset](/presets/pure-prompt.png)
+
+### ڕێکخستن
+
+```toml
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$character"""
+
+[directory]
+style = "blue"
+
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bright-black"
 ```

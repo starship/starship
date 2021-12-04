@@ -8,6 +8,7 @@ use crate::formatter::{StringFormatter, VersionFormatter};
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
 ///     - Current directory contains a `Gemfile` or `.ruby-version` file
+///     - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("ruby");
     let config = RubyConfig::try_load(module.config);
@@ -19,7 +20,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&config.detect_folders)
         .is_match();
 
-    if !is_rb_project {
+    let is_rb_env = &config
+        .detect_variables
+        .iter()
+        .any(|variable| context.get_env(variable).is_some());
+
+    if !is_rb_project && !is_rb_env {
         return None;
     }
 
@@ -41,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -125,6 +131,33 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
+        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn with_ruby_version_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("ruby")
+            .path(dir.path())
+            .env("RUBY_VERSION", "2.5.1")
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn with_rbenv_version_env() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("ruby")
+            .path(dir.path())
+            .env("RBENV_VERSION", "2.6.8")
+            .collect();
+
+        // rbenv variable is only detected; its value is not used
         let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
         assert_eq!(expected, actual);
         dir.close()

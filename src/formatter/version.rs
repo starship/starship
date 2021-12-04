@@ -51,7 +51,7 @@ impl<'a> VersionFormatter<'a> {
                 },
                 _ => None,
             })
-            .parse(None);
+            .parse(None, None);
 
         formatted.map(|segments| {
             segments

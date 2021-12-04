@@ -54,7 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let version = if enable_heuristic {
-                        let repo_root = context.get_repo().ok().and_then(|r| r.root.as_deref());
+                        let repo_root = context.get_repo().ok().and_then(|r| r.workdir.as_deref());
                         estimate_dotnet_version(
                             context,
                             &dotnet_files,
@@ -74,7 +74,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "tfm" => find_current_tfm(&dotnet_files).map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

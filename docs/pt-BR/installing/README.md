@@ -35,9 +35,19 @@ pkg install getconf
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
+## [Funtoo Linux](https://www.funtoo.org/Welcome)
+
+### Instalação
+
+On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+
+```sh
+emerge app-shells/starship
+```
+
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Obtendo o Binário
+### Getting the Binary
 
 #### Imperativamente
 
@@ -47,7 +57,7 @@ nix-env -iA nixos.starship
 
 #### Declarativo, usuário único, via [home-manager](https://github.com/nix-community/home-manager)
 
-Ative o modulo `programs.starship` em seu arquivo `home.nix`, e adicione suas configurações
+Enable the `programs.starship` module in your `home.nix` file, and add your settings
 
 ```nix
 {
@@ -69,7 +79,7 @@ Ative o modulo `programs.starship` em seu arquivo `home.nix`, e adicione suas co
 }
 ```
 
-então execute
+then run
 
 ```sh
 home-manager switch
@@ -77,7 +87,7 @@ home-manager switch
 
 #### Declarativo, em todo o sistema com NixOS
 
-Adicione `pkgs.starship` em `environment.systemPackages` no arquivo `configuration.nix`, então execute
+Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
 
 ```sh
 sudo nixos-rebuild switch

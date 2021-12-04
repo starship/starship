@@ -83,7 +83,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="پورتوگالیی بەڕازیل"
  /></a>
   &nbsp;
   <a
@@ -177,7 +177,7 @@
    #### دابمەزرێنە لەڕێگەی بەڕێوبەری گورزەوە
 
 
-   ##### نموونە: [Homebrew](https://brew.sh/):
+   ##### لەگەڵ [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -270,7 +270,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   ئەمەی دێت زیادبکە بۆ کۆتایی پەڕگەی `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -281,7 +281,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **ئاگادارکردنەوە** ئەمە لە داهاتوودا دەگۆڕێت. تەنها وەشانی v0.33 یان بەرزتری nu پشتگیریکراوە. ئەمەی خوارەوە زیادبکە بۆ پەڕگەی ڕێکخستنی nuـەکەت. ئەتوانی شوێنی ئەم پەڕگەیە بپشکنی بە جێبەجێکردنی `config path` لە nu دا.
 
    ```toml
    startup = [
@@ -300,37 +300,9 @@
 
 ئەگەر حەزئەکەیت یارمەتی بدەیت بە بەژداریکردن لە starship، تکایە سەیری [ڕێبەری بەژداریکردن](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)ـەکەمان بکە. هەروەها، شەرم مەکە وەرە نێوە [ڕاژەی Discord](https://discord.gg/8Jzqu3T)ـەکەمانەوە و سڵاوێک بکە. 👋
 
-### بەژداریکردن بە کۆد
-
-سوپاس بۆ هەموو ئەو کەسانەی کە بەژدارییان کردووە تا ئەم پڕۆژەیە هەبێت. [[بەژداربە](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)].
-<a href="https://github.com/starship/starship/graphs/contributors"><img src="https://opencollective.com/starship/contributors.svg?width=890&button=false" /></a>
-
-### بەژداریکەرە داراییەکان
-
-ببە بەژداریکەرێکی دارایی و یارمەتیمان بدە بەردەوامبین لە کۆمەڵگەکەماندا. [[بەژداربە](https://opencollective.com/starship/contribute)]
-
-#### تاکە کەسەکان
-
-<a href="https://opencollective.com/starship"><img src="https://opencollective.com/starship/individuals.svg?width=890"></a>
-
-#### ڕێکخراوەکان
-
-پشتگیری ئەم پڕۆژەیە بکە لەڕێی ڕێکخراوەکەتەوە. لۆگۆکەت لێرە دەردەکەوێ لەگەڵ بەستەرێک بۆ ماڵپەڕەکەت. [[بەژداربە](https://opencollective.com/starship/contribute)]
-
-<a href="https://opencollective.com/starship/organization/0/website"><img src="https://opencollective.com/starship/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/1/website"><img src="https://opencollective.com/starship/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/2/website"><img src="https://opencollective.com/starship/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/3/website"><img src="https://opencollective.com/starship/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/4/website"><img src="https://opencollective.com/starship/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/5/website"><img src="https://opencollective.com/starship/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/6/website"><img src="https://opencollective.com/starship/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/7/website"><img src="https://opencollective.com/starship/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/8/website"><img src="https://opencollective.com/starship/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/starship/organization/9/website"><img src="https://opencollective.com/starship/organization/9/avatar.svg"></a>
-
 ## 💭 ئیلهامبەخشەکان
 
-تکایە ئەم کارە کۆنانە سەیربکەوە کە ئیلهامی دروستکردنی starship دا. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - یەکێ لە promptـەکانی ZSH بۆ ئاسمانەوانان.
 
@@ -340,9 +312,9 @@
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="ئایکۆنی مووشەکی Starship">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 مۆڵەتنامە
 
-هەموو مافێکی پارێزراوە © 2019-ئێستا، [بەژداریکەرانی Starship](https://github.com/starship/starship/graphs/contributors). <br />ئەم پڕۆژەیە لە ژێر مۆڵەتنامەی [ISC](https://github.com/starship/starship/blob/master/LICENSE)ـە.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

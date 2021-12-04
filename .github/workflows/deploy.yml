@@ -60,11 +60,11 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       # Cache files between builds
       - name: Setup | Cache Cargo
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: |
             ~/.cargo/registry
@@ -119,14 +119,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
 
       - name: Setup | Go
         uses: actions/setup-go@v2
         with:
-          go-version: "^1.15.7"
+          go-version: "1.16"
 
       - name: Setup | Artifacts
         uses: actions/download-artifact@v2
@@ -136,7 +136,7 @@ jobs:
 
       - name: Setup | Release notes
         run: |
-          GO111MODULE=on go get github.com/git-chglog/git-chglog/cmd/git-chglog@0.9.1
+          go install github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.0
           git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
 
       - name: Build | Publish
@@ -152,7 +152,7 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -181,7 +181,7 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       - name: Setup | Install dependencies
         run: npm install

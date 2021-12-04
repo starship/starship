@@ -143,7 +143,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning This will change in the future. nu バージョン 0.33 以降のみサポートされます。 ::: Add the following to your nu config file. nu で`config path`を実行することで、設定ファイルの場所を確認できます。
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   `~/.xonshrc` の最後に以下を追加してください:
 
    ```sh
    # ~/.xonshrc

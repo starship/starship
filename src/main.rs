@@ -166,6 +166,12 @@ fn main() {
                             .long("default")
                             .help("Print the default instead of the computed config")
                             .takes_value(false),
+                    )
+                    .arg(
+                        Arg::with_name("name")
+                            .help("Configuration keys to print")
+                            .multiple(true)
+                            .required(false),
                     ),
             )
             .subcommand(
@@ -265,7 +271,11 @@ fn main() {
         }
         ("print-config", Some(sub_m)) => {
             let print_default = sub_m.is_present("default");
-            configure::print_configuration(print_default)
+            let paths = sub_m
+                .values_of("name")
+                .map(|paths| paths.collect::<Vec<&str>>())
+                .unwrap_or_default();
+            configure::print_configuration(print_default, &paths)
         }
         ("toggle", Some(sub_m)) => {
             if let Some(name) = sub_m.value_of("name") {

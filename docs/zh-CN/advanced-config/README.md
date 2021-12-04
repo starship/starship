@@ -21,7 +21,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). 然而，您**必须**在捕捉 DEBUG 信号*之前*启动 Starship！ Starship 可以保留 DEBUG trap 的值，但如果该 trap 在 starship 启动后被覆盖，一些功能将会被破坏。
+- 要在一个命令运行前运行自定义函数，您可以使用 [`DEBUG` trap 机制](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)。 然而，您**必须**在捕捉 DEBUG 信号*之前*启动 Starship！ Starship 可以保留 DEBUG trap 的值，但如果该 trap 在 starship 启动后被覆盖，一些功能将会被破坏。
 
 ```bash
 function blastoff(){
@@ -31,11 +31,23 @@ trap blastoff DEBUG     # 启动 starship *之前* 设置 DEBUG trap
 eval $(starship init bash)
 ```
 
-## 更改窗口标题
+## Custom pre-prompt and pre-execution Commands in PowerShell
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish 甚至默认会执行此功能。 Starship 没有实现此功能，但将这个功能添加到 `bash` 或 `zsh` 是相当简单的。
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
 
-首先，定义窗口标题更改函数（在 bash 和 zsh 中相同）：
+Create a function named `Invoke-Starship-PreCommand`
+
+```powershell
+function Invoke-Starship-PreCommand {
+    $host.ui.Write("🚀")
+}
+```
+
+## Change Window Title
+
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
 function set_win_title(){
@@ -43,15 +55,15 @@ function set_win_title(){
 }
 ```
 
-您可以使用变量来定制标题（常用的有 `$USER`，`$HOSTNAME` 和 `$PWD`）。
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-在 `bash` 中，设置此函数为 starship 预执行函数：
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-在 `zsh`中，将此函数添加到 `reservmd_functions` 列表：
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
@@ -66,6 +78,17 @@ function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+
+```powershell
+# edit $PROFILE
+function Invoke-Starship-PreCommand {
+  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+}
+
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Enable Right Prompt

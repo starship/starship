@@ -5,9 +5,9 @@ use std::cmp::Ordering;
 
 // On changes please also update the `FullConfig` struct in `mod.rs`
 #[derive(Clone, Serialize)]
-pub struct StarshipRootConfig<'a> {
-    pub format: &'a str,
-    pub right_format: &'a str,
+pub struct StarshipRootConfig {
+    pub format: String,
+    pub right_format: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -76,6 +76,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "env_var",
     "crystal",
     "custom",
+    "sudo",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -88,11 +89,11 @@ pub const PROMPT_ORDER: &[&str] = &[
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
-impl<'a> Default for StarshipRootConfig<'a> {
+impl<'a> Default for StarshipRootConfig {
     fn default() -> Self {
         StarshipRootConfig {
-            format: "$all",
-            right_format: "",
+            format: "$all".to_string(),
+            right_format: "".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -100,7 +101,7 @@ impl<'a> Default for StarshipRootConfig<'a> {
     }
 }
 
-impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
+impl<'a> ModuleConfig<'a> for StarshipRootConfig {
     fn load_config(&mut self, config: &'a toml::Value) {
         if let toml::Value::Table(config) = config {
             config.iter().for_each(|(k, v)| match k.as_str() {

@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
             .map(
-                |ec| match format_exit_code(ec.as_str(), config.format, None, &config) {
+                |ec| match format_exit_code(ec.as_str(), config.format, None, &config, context) {
                     Ok(segments) => segments
                         .into_iter()
                         .map(|s| s.to_string())
@@ -79,7 +79,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config);
+    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -96,6 +96,7 @@ fn format_exit_code<'a>(
     format: &'a str,
     pipestatus: Option<&str>,
     config: &'a StatusConfig,
+    context: &'a Context,
 ) -> Result<Vec<Segment>, StringFormatterError> {
     let exit_code_int: ExitCode = match exit_code.parse() {
         Ok(i) => i,
@@ -148,10 +149,10 @@ fn format_exit_code<'a>(
             .map(|variable| match variable {
                 "status" => Some(Ok(exit_code)),
                 "int" => Some(Ok(exit_code)),
-                "maybe_int" => Ok(maybe_exit_code_number.as_deref()).transpose(),
-                "common_meaning" => Ok(common_meaning.as_deref()).transpose(),
+                "maybe_int" => Ok(maybe_exit_code_number).transpose(),
+                "common_meaning" => Ok(common_meaning).transpose(),
                 "signal_number" => Ok(signal_number.as_deref()).transpose(),
-                "signal_name" => Ok(signal_name.as_deref()).transpose(),
+                "signal_name" => Ok(signal_name).transpose(),
                 "pipestatus" => {
                     let pipestatus = pipestatus.unwrap_or_else(|| {
                         // We might enter this case if pipestatus hasn't
@@ -164,7 +165,7 @@ fn format_exit_code<'a>(
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     })
 }
 

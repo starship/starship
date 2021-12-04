@@ -44,7 +44,7 @@ impl GcloudContext {
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("account"))?;
-        let account = account_line.splitn(2, '=').nth(1)?.trim();
+        let account = account_line.split_once('=')?.1.trim();
         let mut segments = account.splitn(2, '@');
         Some((
             segments.next().map(String::from)?,
@@ -60,7 +60,7 @@ impl GcloudContext {
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("project"))?;
-        let project = project_line.splitn(2, '=').nth(1)?.trim();
+        let project = project_line.split_once('=')?.1.trim();
         Some(project.to_string())
     }
 
@@ -72,7 +72,7 @@ impl GcloudContext {
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("region"))?;
-        let region = region_line.splitn(2, '=').nth(1)?.trim();
+        let region = region_line.split_once('=')?.1.trim();
         Some(region.to_string())
     }
 }
@@ -151,7 +151,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "active" => Some(Ok(gcloud_context.config_name.clone())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
