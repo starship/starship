@@ -231,6 +231,7 @@ $memory_usage\
 $aws\
 $gcloud\
 $openstack\
+$azure\
 $env_var\
 $crystal\
 $custom\
@@ -324,6 +325,31 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+
+### Options
+
+| Zmienne    | Default                                  | Description                                |
+| ---------- | ---------------------------------------- | ------------------------------------------ |
+| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`    | `"blue bold"`                            | The style used in the format.              |
+| `disabled` | `true`                                   | Disables the `azure` module.               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -987,7 +1013,7 @@ default = "unknown user"
 | Option     | Default                        | Description                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
-| `zmienne`  |                                | The environment variable to be displayed.                                    |
+| `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
