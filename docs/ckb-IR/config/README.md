@@ -231,6 +231,7 @@ $memory_usage\
 $aws\
 $gcloud\
 $openstack\
+$azure\
 $env_var\
 $crystal\
 $custom\
@@ -324,6 +325,31 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+
+### Options
+
+| گۆڕاو      | Default                                  | Description                                |
+| ---------- | ---------------------------------------- | ------------------------------------------ |
+| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`    | `"blue bold"`                            | The style used in the format.              |
+| `disabled` | `true`                                   | Disables the `azure` module.               |
+
+### نموونە
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -987,7 +1013,7 @@ default = "unknown user"
 | Option     | Default                        | Description                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
-| `گۆڕاو`    |                                | The environment variable to be displayed.                                    |
+| `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
@@ -1965,12 +1991,12 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| گۆڕاو     | نموونە   | Description                          |
-| --------- | -------- | ------------------------------------ |
-| state     | `بێخەوش` | The state of the nix-shell           |
-| name      | `lorri`  | The name of the nix-shell            |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| گۆڕاو     | نموونە  | Description                          |
+| --------- | ------- | ------------------------------------ |
+| state     | `pure`  | The state of the nix-shell           |
+| name      | `lorri` | The name of the nix-shell            |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\* |         | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
