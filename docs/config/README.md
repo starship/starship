@@ -347,7 +347,7 @@ symbol = "🅰 "
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscrtiption, as defined in the `~/.azure/azureProfile.json`.
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Options
 

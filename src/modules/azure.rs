@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let subscription_name: Option<SubscriptionName> = get_azure_subscription_name(context);
     if subscription_name.is_none() {
-        log::error!("Could not find Azure subscription name");
+        log::info!("Could not find Azure subscription name");
         return None;
     };
 
@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `azure`:\n{}", error);
+            log::info!("Error in module `azure`:\n{}", error);
             return None;
         }
     });
@@ -57,17 +57,7 @@ fn get_azure_subscription_name(context: &Context) -> Option<SubscriptionName> {
     let mut config_path = get_config_file_location(context)?;
     config_path.push("azureProfile.json");
 
-    if !config_path.exists() {
-        log::error!("Could not find azureProfile.json");
-        return None;
-    }
-
     let parsed_json = parse_json(&config_path)?;
-
-    if parsed_json.is_null() {
-        log::error!("Could not parse azureProfile.json");
-        return None;
-    }
 
     let subscriptions = parsed_json.get("subscriptions")?.as_array()?;
     let subscription_name = subscriptions.iter().find_map(|s| {
@@ -80,7 +70,7 @@ fn get_azure_subscription_name(context: &Context) -> Option<SubscriptionName> {
     if subscription_name.is_some() {
         subscription_name
     } else {
-        log::error!("Could not find subscription name");
+        log::info!("Could not find subscription name");
         None
     }
 }
@@ -109,7 +99,7 @@ fn parse_json(json_file_path: &Path) -> Option<JValue> {
     if let Ok(parsed_json) = serde_json::from_slice(decodedbuffer) {
         Some(parsed_json)
     } else {
-        log::error!("Failed to parse json");
+        log::info!("Failed to parse json");
         None
     }
 }
@@ -142,21 +132,7 @@ mod tests {
         let azure_profile_contents = r#"{
             "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
             "subscriptions": [
-              {
-                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
-                "name": "Subscription 1",
-                "state": "Enabled",
-                "user": {
-                  "name": "user@domain.com",
-                  "type": "user"
-                },
-                "isDefault": true,
-                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
-                "environmentName": "AzureCloud",
-                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
-                "managedByTenants": []
-              },
-              {
+                {
                 "id": "f568c543-d12e-de0b-3d85-69843598b565",
                 "name": "Subscription 2",
                 "state": "Enabled",
@@ -178,10 +154,23 @@ mod tests {
                   "name": "user@domain.com",
                   "type": "user"
                 },
-                "isDefault": false,
                 "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
                 "environmentName": "AzureCloud",
                 "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "Subscription 1",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
                 "managedByTenants": []
               }
             ]
