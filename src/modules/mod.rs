@@ -1,5 +1,6 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
+mod azure;
 mod character;
 mod cmake;
 mod cmd_duration;
@@ -84,6 +85,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
+            "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "character" => character::module(context),
@@ -171,6 +173,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
+        "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
