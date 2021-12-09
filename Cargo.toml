@@ -61,7 +61,7 @@ unicode-width = "0.1.9"
 terminal_size = "0.1.17"
 quick-xml = "0.22.0"
 rand = "0.8.4"
-serde = { version = "1.0.130", features = ["derive"] }
+serde = { version = "1.0.131", features = ["derive"] }
 indexmap = { version ="1.7.0", features = ["serde"] }
 notify-rust = { version = "4.5.5", optional = true }
 semver = "1.0.4"
