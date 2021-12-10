@@ -1,7 +1,7 @@
 use crate::config::{RootModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
-use crate::utils::{exec_cmd, CommandOutput};
+use crate::utils::{create_command, exec_timeout, CommandOutput};
 
 use crate::modules;
 use crate::utils::{self, home_dir};
@@ -316,16 +316,27 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
+        log::trace!(
+            "Executing command {:?} with args {:?} from context",
+            cmd,
+            args
+        );
         #[cfg(test)]
         {
             let command = crate::utils::display_command(&cmd, args);
-            if let Some(output) = self.cmd.get(command.as_str()) {
-                return output.clone();
+            if let Some(output) = self
+                .cmd
+                .get(command.as_str())
+                .cloned()
+                .or_else(|| crate::utils::mock_cmd(&cmd, args))
+            {
+                return output;
             }
         }
-        exec_cmd(
-            &cmd,
-            args,
+        let mut cmd = create_command(cmd).ok()?;
+        cmd.args(args).current_dir(&self.current_dir);
+        exec_timeout(
+            &mut cmd,
             Duration::from_millis(self.root_config.command_timeout),
         )
     }
