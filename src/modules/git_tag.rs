@@ -88,7 +88,16 @@ mod tests {
     #[test]
     fn test_render_tag() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
-        let config = GitTagConfig::default();
+
+        create_command("git")?
+            .args(&["tag", "tag1"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["tag", "tag2"])
+            .current_dir(repo_dir.path())
+            .output()?;
 
         let git_output = create_command("git")?
             .args(&["tag", "--list", "--contains", "HEAD"])
@@ -98,19 +107,21 @@ mod tests {
         let expected_tags = str::from_utf8(&git_output)
             .unwrap()
             .lines()
+            .rev()
             .collect::<Vec<&str>>()
             .join(", ");
 
-        let actual = ModuleRenderer::new("git_tag")
-            .path(&repo_dir.path())
-            .collect();
-
+        let config = GitTagConfig::default();
         let expected = Some(format!(
             "{} ",
             Color::Yellow
                 .bold()
                 .paint(format!("({}{})", config.symbol, expected_tags))
         ));
+
+        let actual = ModuleRenderer::new("git_tag")
+            .path(&repo_dir.path())
+            .collect();
 
         assert_eq!(expected, actual);
         repo_dir.close()
