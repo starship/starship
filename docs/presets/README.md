@@ -41,6 +41,9 @@ symbol = " "
 [git_branch]
 symbol = " "
 
+[git_tag]
+symbol = " "
+
 [golang]
 symbol = " "
 
@@ -275,8 +278,8 @@ success_symbol = "[>](bold green)"
 error_symbol = "[x](bold red)"
 vicmd_symbol = "[<](bold green)"
 
-[git_commit]
-tag_symbol = " tag "
+[git_tag]
+tag_symbol = "tag "
 
 [git_status]
 ahead = ">"
