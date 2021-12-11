@@ -10,8 +10,12 @@ vimcmd_visual_symbol = "[<](bold yellow)"
 vimcmd_replace_symbol = "[<](bold purple)"
 vimcmd_replace_one_symbol = "[<](bold purple)"
 
-[git_commit]
-tag_symbol = " tag "
+[git_branch]
+symbol = "git "
+truncation_symbol = "..."
+
+[git_tags]
+symbol = "tag "
 
 [git_status]
 ahead = ">"
@@ -100,10 +104,6 @@ truncation_symbol = "..."
 
 [gcloud]
 symbol = "gcp "
-
-[git_branch]
-symbol = "git "
-truncation_symbol = "..."
 
 [gleam]
 symbol = "gleam "

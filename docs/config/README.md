@@ -275,6 +275,7 @@ $fossil_branch\
 $fossil_metrics\
 $git_branch\
 $git_commit\
+$git_tags\
 $git_state\
 $git_metrics\
 $git_status\
@@ -1945,28 +1946,24 @@ ignore_branches = ['master', 'main']
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+The `git_commit` module shows the current commit hash of the repo in your current directory.
 
 ### Options
 
-| Option               | Default                      | Description                                                                          |
-| -------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
-| `commit_hash_length` | `7`                          | The length of the displayed git commit hash.                                         |
-| `format`             | `'[\($hash$tag\)]($style) '` | The format for the module.                                                           |
-| `style`              | `'bold green'`               | The style for the module.                                                            |
-| `only_detached`      | `true`                       | Only show git commit hash when in detached `HEAD` state                              |
-| `tag_disabled`       | `true`                       | Disables showing tag info in `git_commit` module.                                    |
-| `tag_max_candidates` | `0`                          | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `' 🏷  '`                     | Tag symbol prefixing the info shown                                                  |
-| `disabled`           | `false`                      | Disables the `git_commit` module.                                                    |
+| Option               | Default                  | Description                                             |
+| -------------------- | ------------------------ | ------------------------------------------------------- |
+| `commit_hash_length` | `7`                      | The length of the displayed git commit hash.            |
+| `format`             | `'[\($hash\)]($style) '` | The format for the module.                              |
+| `style`              | `'bold green'`           | The style for the module.                               |
+| `only_detached`      | `true`                   | Only show git commit hash when in detached `HEAD` state |
+| `disabled`           | `false`                  | Disables the `git_commit` module.                       |
 
 ### Variables
 
-| Variable | Example   | Description                                  |
-| -------- | --------- | -------------------------------------------- |
-| hash     | `b703eb3` | The current git commit hash                  |
-| tag      | `v1.0.0`  | The tag name if showing tag info is enabled. |
-| style\*  |           | Mirrors the value of option `style`          |
+| Variable | Example   | Description                         |
+| -------- | --------- | ----------------------------------- |
+| hash     | `b703eb3` | The current git commit hash         |
+| style\*  |           | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
 
@@ -1977,7 +1974,38 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 [git_commit]
 commit_hash_length = 4
-tag_symbol = '🔖 '
+```
+
+## Git Tag
+
+The `git_tags` module shows the tags of the current commit of the repo in your current directory.
+
+### Options
+
+| Option      | Default                         | Description                          |
+| ----------- | ------------------------------- | ------------------------------------ |
+| `format`    | `'[\($symbol$tags\)]($style) '` | The format for the module.           |
+| `symbol`    | `'🏷 '`                          | The symbol prefixing the info shown. |
+| `separator` | `' '`                           | The separator between multiple tags. |
+| `style`     | `'bold yellow'`                 | The style for the module.            |
+| `disabled`  | `false`                         | Disables the `git_tags` module.      |
+
+### Variables
+
+| Variable | Example | Description                         |
+| -------- | ------- | ----------------------------------- |
+| tags     | `v1.0`  | The current git tag                 |
+| style\*  |         | Mirrors the value of option `style` |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_tags]
+symbol = " "
 ```
 
 ## Git State

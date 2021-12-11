@@ -8,6 +8,7 @@ $username\
 $directory\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
+$git_tags\
 $git_status\
 [](fg:#FCA17D bg:#86BBD8)\
 $c\
@@ -97,6 +98,11 @@ format = '[ $symbol ($version) ]($style)'
 symbol = ""
 style = "bg:#FCA17D"
 format = '[ $symbol $branch ]($style)'
+
+[git_tags]
+symbol = " "
+style = "bg:#FCA17D"
+format = '[ $symbol $tags ]($style)'
 
 [git_status]
 style = "bg:#FCA17D"

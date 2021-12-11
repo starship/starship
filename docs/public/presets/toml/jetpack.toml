@@ -22,6 +22,7 @@ $directory\
 $vcsh\
 $fossil_branch\
 $git_branch\
+$git_tags\
 $git_commit\
 $git_state\
 $git_status\
