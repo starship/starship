@@ -38,7 +38,8 @@ mod git_branch;
 mod git_commit;
 mod git_metrics;
 mod git_state;
-pub(crate) mod git_status;
+mod git_status;
+mod git_tags;
 mod gleam;
 mod golang;
 mod gradle;
@@ -160,6 +161,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),
+            "git_tags" => git_tags::module(context),
             "git_metrics" => git_metrics::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
@@ -296,7 +298,8 @@ pub fn description(module: &str) -> &'static str {
         "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
-        "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
+        "git_commit" => "The active commit of the repo in your current directory",
+        "git_tags" => "The tags of the active commit of the repo in your current directory",
         "git_metrics" => "The currently added/deleted lines in your repo",
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",

@@ -8,6 +8,7 @@ $username\
 $directory\
 [](fg:color_yellow bg:color_aqua)\
 $git_branch\
+$git_tags\
 $git_status\
 [](fg:color_aqua bg:color_blue)\
 $c\
