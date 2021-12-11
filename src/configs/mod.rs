@@ -30,6 +30,7 @@ pub mod git_commit;
 pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
+pub mod git_tag;
 pub mod go;
 pub mod helm;
 pub mod hg_branch;

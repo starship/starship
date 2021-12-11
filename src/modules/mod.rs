@@ -25,6 +25,7 @@ mod git_commit;
 mod git_metrics;
 mod git_state;
 mod git_status;
+mod git_tag;
 mod golang;
 mod helm;
 mod hg_branch;
@@ -112,6 +113,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_metrics" => git_metrics::module(context),
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
+            "git_tag" => git_tag::module(context),
             "golang" => golang::module(context),
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
