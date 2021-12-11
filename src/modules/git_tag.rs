@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "tags" => Some(Ok(tag_names.join(" "))),
+                "tags" => Some(Ok(tag_names.join(config.separator))),
                 _ => None,
             })
             .parse(None, Some(context))

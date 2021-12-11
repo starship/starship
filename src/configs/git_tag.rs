@@ -8,6 +8,7 @@ pub struct GitTagConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
+    pub separator: &'a str,
     pub disabled: bool,
 }
 
@@ -17,6 +18,7 @@ impl<'a> Default for GitTagConfig<'a> {
             format: "[\\($symbol$tags\\)]($style) ",
             symbol: "🏷 ",
             style: "yellow bold",
+            separator: " ",
             disabled: false,
         }
     }
