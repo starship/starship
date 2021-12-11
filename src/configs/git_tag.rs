@@ -14,7 +14,7 @@ pub struct GitTagConfig<'a> {
 impl<'a> Default for GitTagConfig<'a> {
     fn default() -> Self {
         GitTagConfig {
-            format: "[\\($symbol$tag\\)]($style) ",
+            format: "[\\($symbol$tags\\)]($style) ",
             symbol: "🏷 ",
             style: "yellow bold",
             disabled: false,

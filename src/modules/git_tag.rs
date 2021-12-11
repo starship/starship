@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "tag" => Some(Ok(tag_names.join(", "))),
+                "tags" => Some(Ok(tag_names.join(" "))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -109,7 +109,7 @@ mod tests {
             .lines()
             .rev()
             .collect::<Vec<&str>>()
-            .join(", ");
+            .join(" ");
 
         let config = GitTagConfig::default();
         let expected = Some(format!(
