@@ -111,6 +111,7 @@ pub struct FullConfig<'a> {
     gcloud: gcloud::GcloudConfig<'a>,
     git_branch: git_branch::GitBranchConfig<'a>,
     git_commit: git_commit::GitCommitConfig<'a>,
+    git_tag: git_tag::GitTagConfig<'a>,
     git_metrics: git_metrics::GitMetricsConfig<'a>,
     git_state: git_state::GitStateConfig<'a>,
     git_status: git_status::GitStatusConfig<'a>,
