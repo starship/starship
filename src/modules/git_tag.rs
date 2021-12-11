@@ -34,6 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
+    if tag_names.is_empty() {
+        return None;
+    }
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
