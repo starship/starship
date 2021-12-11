@@ -193,6 +193,7 @@ impl<'a> Default for FullConfig<'a> {
             gcloud: Default::default(),
             git_branch: Default::default(),
             git_commit: Default::default(),
+            git_tag: Default::default(),
             git_metrics: Default::default(),
             git_state: Default::default(),
             git_status: Default::default(),
