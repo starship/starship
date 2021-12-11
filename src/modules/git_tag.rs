@@ -90,7 +90,7 @@ mod tests {
     }
 
     #[test]
-    fn test_omit_if_no_tags() -> io::Result<()> {
+    fn show_nothing_if_no_tags() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let actual = ModuleRenderer::new("git_tag")
