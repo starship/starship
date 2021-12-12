@@ -61,7 +61,7 @@ Formatierte Strings sind das Format, mit dem ein Modul all seine Variablen ausgi
 
 #### Variable
 
-Eine Variable besteht aus dem `$` Symbol und dem Namen der Variable. Der Name der Variable darf nur Buchstaben, Nummern und `_` enthalten.
+Eine Variable besteht aus dem `$` Symbol und dem Namen der Variable. The name of a variable can only contain letters, numbers and `_`.
 
 Hier sind ein paar Beispiele:
 
@@ -106,18 +106,11 @@ Hier sind ein paar Beispiele:
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Special characters
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
@@ -642,7 +635,7 @@ format = "[$symbol$environment](dimmed green) "
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `shard.yml`-Datei
+- The current directory contains a `shard.yml` file
 - The current directory contains a `.cr` file
 
 ### Optionen
@@ -683,7 +676,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
-- Das aktuelle Verzeichnis enthält `pubspec.yaml`, `pubspec.yml` oder `pubspec.lock`
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Optionen
 
@@ -912,7 +905,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `mix.exs`-Datei.
+- The current directory contains a `mix.exs` file.
 
 ### Optionen
 
@@ -951,8 +944,8 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `elm.json`-Datei
-- Das aktuelle Verzeichnis enthält eine `elm-package.json`-Datei
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains a `*.elm` files
@@ -1053,8 +1046,8 @@ default = "unknown user"
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `rebar.config`-Datei.
-- Das aktuelle Verzeichnis enthält eine `erlang.mk`-Datei.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Optionen
 
@@ -1424,14 +1417,14 @@ behind = "⇣${count}"
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
-- Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
-- Das aktuelle Verzeichnis enthält eine `glide.yaml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.yml`-Datei
-- Das aktuelle Verzeichnis enthält eine `Gopkg.lock`-Datei
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
-- Das aktuelle Verzeichnis enthält ein `Godeps`-Verzeichnis
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.go`-Erweiterung
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Optionen
 
@@ -1469,7 +1462,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `helmfile.yaml`-Datei
+- The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
 ### Optionen
@@ -1936,7 +1929,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `nim.cfg`-Datei
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2016,10 +2009,10 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `package.json`-Datei
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
-- Das aktuelle Verzeichnis enthält ein `node_modules`-Verzeichnis
+- The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
 - The current directory contains a file with the `.ts` extension
 
@@ -2234,7 +2227,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `composer.json`-Datei
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2331,7 +2324,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `spago.dhall`-Datei
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Optionen
@@ -2374,15 +2367,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `.python-version`-Datei
-- Das aktuelle Verzeichnis enthält eine `Pipfile`-Datei
+- The current directory contains a `.python-version` file
+- The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- Das aktuelle Verzeichnis enthält eine `pyproject.toml`-Datei
-- Das aktuelle Verzeichnis enthält eine `requirements.txt`-Datei
-- Das aktuelle Verzeichnis enthält eine `setup.py`-Datei
-- Das aktuelle Verzeichnis enthält eine `tox.ini`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.py`-Erweiterung.
-- Ein virtualenv ist momentan aktiv
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
+- A virtual environment is currently activated
 
 ### Optionen
 
@@ -2539,9 +2532,9 @@ symbol = "🔴 "
 
 By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
+- The current directory contains a `.rb` file
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
 Starship gets the current Ruby version by running `ruby -v`.
@@ -2583,8 +2576,8 @@ symbol = "🔺 "
 
 By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Optionen
 
@@ -2938,7 +2931,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Optionen
@@ -3035,10 +3028,10 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- Der aktuelle Benutzer ist root
-- Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
-- Der Benutzer ist über eine SSH-Sitzung verbunden
-- Die Variale `show_always` ist auf `true` gesetzt
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
