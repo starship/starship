@@ -61,7 +61,7 @@ Bằng việc quy ước, đa số các module có một tiền tố của termi
 
 #### Biến
 
-Một biến chứa một kí hiệu `$` theo sau bởi tên biến. Tên của một biến chỉ chứa các kí tự, các số và `_`.
+Một biến chứa một kí hiệu `$` theo sau bởi tên biến. The name of a variable can only contain letters, numbers and `_`.
 
 Ví dụ:
 
@@ -106,18 +106,11 @@ Ví dụ:
 - `(một vài văn bản)` sẽ không hiển thị thứ gì khi không có những biến bọc trong các dấu ngoặc.
 - Khi `$all` là một shortcut cho `\[$a$b\]`, `($all)` sẽ không hiển thị chỉ khi `$a` và `$b` đều là `None`. Cái này làm việc giống như `(\[$a$b\] )`.
 
-#### Các kí tự Escapable
+#### Special characters
 
-Các kí hiệu sau có các sử dụng đặc biệt trong một định dạng chuỗi. Nếu bạn muốn in các kí tự sau, bạn phải đặt trước chúng kí tự backslash (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Lưu ý rằng `toml` có [cú pháp escape riêng của nó](https://github.com/toml-lang/toml#user-content-string). Nó được khuyến nghị để sử dụng một literal string (`''`) trong cấu hình của bạn. Nếu bạn muốn sử dụng một kí tự cơ bản (`""`), chú ý đặt backslash `\` trước nó.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Ví dụ, khi bạn muốn in một kí hiệu `$` trên một dòng mới, các cấu hình sau cho `định dạng` tương đương:
 
@@ -425,8 +418,8 @@ The `character` module shows a character (usually an arrow) beside where the tex
 
 The character will tell you whether the last command was successful or not. It can do this in two ways:
 
-- thay đổi màu(`đỏ`/`xanh lá`)
-- thay đổi hình dạng (`❯`/`✖`)
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
@@ -493,8 +486,8 @@ vicmd_symbol = "[V](bold green) "
 
 The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
-- Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
+- The current directory contains a `CMakeLists.txt` file
+- The current directory contains a `CMakeCache.txt` file
 
 ### Các tuỳ chọn
 
@@ -642,8 +635,8 @@ format = "[$symbol$environment](dimmed green) "
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `shard.yml`
-- Đường dẫn hiện tại chứa một tập tin `.cr`
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
 ### Các tuỳ chọn
 
@@ -681,9 +674,9 @@ format = "via [✨ $version](bold blue) "
 
 The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
-- Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
-- Đường dẫn hiện tại chứa một tệp tin `pubspec.yaml`, `pubspec.yml` hoặc `pubspec.lock`
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Các tuỳ chọn
 
@@ -912,7 +905,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Các tuỳ chọn
 
@@ -951,11 +944,11 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `elm.json`
-- Đường dẫn hiện tại chứa một tập tin `elm-package.json`
-- Đường dẫn hiện tại chứa một tệp tin `.elm-version`
-- Đường dẫn hiện tại chứa một thư mục `elm-stuff`
-- Đường dẫn hiện tại chứa một tập tin `*.elm`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
 
 ### Các tuỳ chọn
 
@@ -993,8 +986,8 @@ format = "via [ $version](cyan bold) "
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
-- Tùy chọn `variable` khớp với mootjj biến môi trường tồn tại
-- Tùy chọn `variable` không được định nghĩa, nhưng tùy chọn `default` là
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
@@ -1053,8 +1046,8 @@ default = "unknown user"
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `rebar.config`.
-- Đường dẫn hiện tại chứa một tập tin `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Các tuỳ chọn
 
@@ -1424,14 +1417,14 @@ behind = "⇣${count}"
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Thư mục hiện tại chứa một tập tin `go.mod`
-- Đường dẫn hiện tại chứa một tập tin `go.sum`
-- Thư mục hiện tại chứa một tập tin `glide.yaml`
-- Thư mục hiện tại chứa một tập tin `Gopkg.yml`
-- Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
-- Thư mục hiện tại chứa một tệp tin `.go-version`
-- Thư mục hiện tại chứa một thư mục `Godeps`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.go`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Các tuỳ chọn
 
@@ -1469,8 +1462,8 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `helmfile.yaml`
-- Thư mục hiện tại chứa một tập tin `Chart.yaml`
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
 
 ### Các tuỳ chọn
 
@@ -1543,8 +1536,8 @@ disabled = false
 
 The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Thư mục hiện tại chứa một tệp tin `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc`
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Các tuỳ chọn
 
@@ -1640,9 +1633,9 @@ symbol_threshold = 0
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Thư mục hiện tại chứa một tệp tin `Project.toml`
-- Thư mục hiện tại chứa một tập tin `Manifest.toml`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.jl`
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
 
 ### Các tuỳ chọn
 
@@ -1680,7 +1673,7 @@ symbol = "∴ "
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Thư mục hiện tại chứa một tệp tin `.kt` hoặc một tệp tin `.kts`
+- The current directory contains a `.kt` or a `.kts` file
 
 ### Các tuỳ chọn
 
@@ -1936,7 +1929,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2016,7 +2009,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
@@ -2234,7 +2227,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2331,7 +2324,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
 
-- Đường dẫn hiện tại chứa một tập tin `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Các tuỳ chọn
@@ -2377,10 +2370,10 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- Đường dẫn hiện tại chứa một tập tin `pyproject.toml`
-- Đường dẫn hiện tại chứa một tập tin `requirements.txt`
-- Đường dẫn hiện tại chứa một tập tin `setup.py`
-- Đường dẫn hiện tại chứa một tập tin `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
