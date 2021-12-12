@@ -61,7 +61,7 @@ Format strings are the format that a module prints all its variables with. Most 
 
 #### گۆڕاو
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable only contains letters, numbers and `_`.
+A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
 بۆ نموونە:
 
@@ -106,18 +106,11 @@ A conditional format string wrapped in `(` and `)` will not render if all variab
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Special characters
 
-The following symbols have special usage in a format string. If you want to print the following symbols, you have to escape them with a backslash (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string). It is recommended to use a literal string (`''`) in your config. If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
