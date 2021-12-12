@@ -61,7 +61,7 @@ Les chaînes de formatage sont le format avec lequel un module affiche toutes se
 
 #### Variable
 
-Une variable contient un symbole `$` suivi du nom de la variable. Le nom d'une variable ne contient que des lettres, des chiffres et `_`.
+Une variable contient un symbole `$` suivi du nom de la variable. The name of a variable can only contain letters, numbers and `_`.
 
 Par exemple :
 
@@ -106,18 +106,11 @@ Par exemple :
 - `(some text)` ne montrera toujours rien puisqu'il n'y a pas de variables enveloppées dans les accolades.
 - Lorsque `$all` est un raccourci pour `\[$a$b\]`, `($all)` ne montrera rien que si `$a` et `$b` sont tous les deux `None`. Cela fonctionne comme `(\[$a$b\] )`.
 
-#### Caractère d’échappement
+#### Special characters
 
-Les symboles suivants ont une utilisation spéciale dans une chaîne de formatage. Si vous voulez afficher les symboles suivants, vous devez les échapper avec un antislash (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Notez que `toml` a [sa propre syntaxe d'échappement](https://github.com/toml-lang/toml#user-content-string). Il est recommandé d'utiliser une chaîne littérale (`''`) dans votre configuration. Si vous voulez utiliser une chaîne de base (`""`), faites attention à l'échappement de l'antislash `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Par exemple, lorsque vous voulez imprimer un symbole `$` sur une nouvelle ligne, les configurations suivantes pour le `formatage` sont équivalentes :
 
@@ -425,8 +418,8 @@ The `character` module shows a character (usually an arrow) beside where the tex
 
 The character will tell you whether the last command was successful or not. It can do this in two ways:
 
-- changement de couleur (`red`/`green`)
-- changement de forme (`❯`/`✖`)
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
@@ -493,8 +486,8 @@ vicmd_symbol = "[V](bold green) "
 
 The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
-- Le répertoire actuel contient un fichier `CMakeLists.txt`
-- Le répertoire actuel contient un fichier ` CMakeCache.txt`
+- The current directory contains a `CMakeLists.txt` file
+- The current directory contains a `CMakeCache.txt` file
 
 ### Options
 
@@ -642,8 +635,8 @@ format = "[$symbol$environment](dimmed green) "
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `shard.yml`
-- Le répertoire courant contient un fichier `.cr`
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
 ### Options
 
@@ -681,9 +674,9 @@ format = "via [✨ $version](bold blue) "
 
 The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `.dart`
-- Le répertoire courant contient un répertoire `.dart_tool`
-- Le répertoire courant contient un fichier `pubspec.yaml`, `pubspec.yml` ou `pubspec.lock`
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Options
 
@@ -720,7 +713,7 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
-- Le répertoire courant contient un fichier `mod.ts`, `mod.js`, `deps.ts` ou `deps.ts`
+- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Options
 
@@ -912,7 +905,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Options
 
@@ -951,11 +944,11 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `elm.json`
-- Le répertoire courant contient un fichier `elm-package.json`
-- Le répertoire courant contient un fichier `elm-version`
-- Le répertoire courant contient un dossier `elm-stuff`
-- Le répertoire courant contient des fichiers `*.elm`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
 
 ### Options
 
@@ -993,8 +986,8 @@ format = "via [ $version](cyan bold) "
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
-- L'option `variable` correspond à une variable d'environnement existante
-- L'option `variable` n'est pas définie, mais l'option `default` l'est
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
@@ -1053,8 +1046,8 @@ default = "unknown user"
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `rebar.config`.
-- Le répertoire courant contient un fichier `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Options
 
@@ -1424,14 +1417,14 @@ behind = "⇣${count}"
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `go.mod`
-- Le répertoire courant contient un fichier `go.sum`
-- Le répertoire courant contient un fichier `glide.yaml`
-- Le répertoire courant contient un fichier `Gopkg.yml`
-- Le répertoire courant contient un fichier `Gopkg.lock`
-- Le répertoire courant contient un fichier `.go-version`
-- Le répertoire courant contient un répertoire `Godeps`
-- Le répertoire actuel contient un fichier avec l'extension `.go`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Options
 
@@ -1469,8 +1462,8 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `helmfile.yaml`
-- Le répertoire courant contient un fichier `Chart.yml`
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
 
 ### Options
 
@@ -1543,8 +1536,8 @@ disabled = false
 
 The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire actuel contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, ou `build.boot`
-- Le répertoire actuel contient un fichier avec l'extension `.java`, `.class`, `. gradle`, `.jar`, `.clj`, ou `.cljc`
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Options
 
@@ -1640,9 +1633,9 @@ symbol_threshold = 0
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `Project.toml`
-- Le répertoire courant contient un fichier `Manifest.toml`
-- Le répertoire actuel contient un fichier avec l'extension `.jl`
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
 
 ### Options
 
@@ -1680,7 +1673,7 @@ symbol = "∴ "
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `.kt` ou `.kts`
+- The current directory contains a `.kt` or a `.kts` file
 
 ### Options
 
@@ -1812,9 +1805,9 @@ disabled = true
 
 The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `.lua-version`
-- Le répertoire courant contient un répertoire `lua`
-- Le répertoire actuel contient un fichier avec l'extension `.lua`
+- The current directory contains a `.lua-version` file
+- The current directory contains a `lua` directory
+- The current directory contains a file with the `.lua` extension
 
 ### Options
 
@@ -1936,10 +1929,10 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `nim.cfg`
-- Le répertoire actuel contient un fichier avec l'extension `.nim`
-- Le répertoire actuel contient un fichier avec l'extension `.nims`
-- Le répertoire actuel contient un fichier avec l'extension `.nimble`
+- The current directory contains a `nim.cfg` file
+- The current directory contains a file with the `.nim` extension
+- The current directory contains a file with the `.nims` extension
+- The current directory contains a file with the `.nimble` extension
 
 ### Options
 
@@ -2016,12 +2009,12 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `package.json`
-- Le répertoire courant contient un fichier `.node-version`
-- Le répertoire courant contient un fichier `.nvmrc`
-- Le répertoire courant contient un répertoire `node_modules`
-- Le répertoire actuel contient un fichier avec l'extension `.js`, `.mjs` ou `.cjs`
-- Le répertoire actuel contient un fichier avec l'extension `.ts`
+- The current directory contains a `package.json` file
+- The current directory contains a `.node-version` file
+- The current directory contains a `.nvmrc` file
+- The current directory contains a `node_modules` directory
+- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
+- The current directory contains a file with the `.ts` extension
 
 ### Options
 
@@ -2060,12 +2053,12 @@ format = "via [🤖 $version](bold green) "
 
 The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier avec l'extension `.opam` ou le répertoire `_opam`
-- Le répertoire courant contient un répertoire `esy.lock`
-- Le répertoire courant contient un fichier `dune` ou `dune-project`
-- Le répertoire courant contient un fichier `jbuild` ou `jbuild-ignore`
-- Le répertoire courant contient un fichier `.merlin`
-- Le répertoire actuel contient un fichier avec l'extension `.ml`, `.mli`, `.re` ou `.rei`
+- The current directory contains a file with `.opam` extension or `_opam` directory
+- The current directory contains a `esy.lock` directory
+- The current directory contains a `dune` or `dune-project` file
+- The current directory contains a `jbuild` or `jbuild-ignore` file
+- The current directory contains a `.merlin` file
+- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
 
 ### Options
 
@@ -2194,11 +2187,11 @@ format = "via [🎁 $version](208 bold) "
 
 The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `Makefile.PL` ou `Build.PL`
-- Le répertoire courant contient un fichier `cpanfile` ou `cpanfile.snapshot`
-- Le répertoire courant contient un fichier `META.json` ou `META.yml`
-- Le répertoire courant contient un fichier `.perl-version`
-- Le répertoire courant contient un fichier `.pl`, `.pm` ou `.pod`
+- The current directory contains a `Makefile.PL` or `Build.PL` file
+- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
+- The current directory contains a `META.json` file or `META.yml` file
+- The current directory contains a `.perl-version` file
+- The current directory contains a `.pl`, `.pm` or `.pod`
 
 ### Options
 
@@ -2234,9 +2227,9 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `composer.json`
-- Le répertoire courant contient un fichier `.php-version`
-- Le répertoire courant contient un fichier avec l'extension `.php`
+- The current directory contains a `composer.json` file
+- The current directory contains a `.php-version` file
+- The current directory contains a `.php` extension
 
 ### Options
 
@@ -2331,8 +2324,8 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `spago.dhall`
-- Le répertoire actuel contient un fichier avec l'extension `.purs`
+- The current directory contains a `spago.dhall` file
+- The current directory contains a file with the `.purs` extension
 
 ### Options
 
@@ -2374,15 +2367,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `.python-version`
-- Le répertoire courant contient un fichier `Pipfile`
-- Le répertoire courant contient un fichier `__init__.py`
-- Le répertoire courant contient un fichier `pyproject.toml`
-- Le répertoire courant contient un fichier `requirements.txt`
-- Le répertoire courant contient un fichier `setup.py`
-- Le répertoire courant contient un fichier `tox.ini`
-- Le répertoire actuel contient un fichier avec l'extension `.py`.
-- Un environnement virtuel est actuellement activé
+- The current directory contains a `.python-version` file
+- The current directory contains a `Pipfile` file
+- The current directory contains a `__init__.py` file
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
+- The current directory contains a file with the `.py` extension.
+- A virtual environment is currently activated
 
 ### Options
 
@@ -2459,13 +2452,13 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
 
-- Le répertoire actuel contient un fichier avec l'extension `.R`.
-- Le répertoire actuel contient un fichier avec l'extension `.Rd`.
-- Le répertoire actuel contient un fichier avec l'extension `.Rmd`.
-- Le répertoire actuel contient un fichier avec l'extension `.Rproj`.
-- Le répertoire actuel contient un fichier avec l'extension `.Rsx`.
-- Le répertoire courant contient un fichier `.Rprofile`
-- Le répertoire courant contient un dossier `.Rproj.user`
+- The current directory contains a file with the `.R` extension.
+- The current directory contains a file with the `.Rd` extension.
+- The current directory contains a file with the `.Rmd` extension.
+- The current directory contains a file with the `.Rproj` extension.
+- The current directory contains a file with the `.Rsx` extension.
+- The current directory contains a `.Rprofile` file
+- The current directory contains a `.Rproj.user` folder
 
 ### Options
 
@@ -2501,7 +2494,7 @@ format = "with [📐 $version](blue bold) "
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Le répertoire actuel contient un fichier avec l'extension `.red` ou `.reds`
+- The current directory contains a file with `.red` or `.reds` extension
 
 ### Options
 
@@ -2539,9 +2532,9 @@ symbol = "🔴 "
 
 By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Le répertoire courant contient un fichier `Gemfile`
-- Le répertoire courant contient un fichier `.ruby-version`
-- Le répertoire courant contient un fichier `.rb`
+- The current directory contains a `Gemfile` file
+- The current directory contains a `.ruby-version` file
+- The current directory contains a `.rb` file
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
 Starship gets the current Ruby version by running `ruby -v`.
@@ -2583,8 +2576,8 @@ symbol = "🔺 "
 
 By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Le répertoire courant contient un fichier `Cargo.toml`
-- Le répertoire actuel contient un fichier avec l'extension `.rs`
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Options
 
@@ -2622,9 +2615,9 @@ format = "via [⚙️ $version](red bold)"
 
 The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `build.sbt`, `.scalaenv` ou `.sbtenv`
-- Le répertoire actuel contient un fichier avec l'extension `.scala` ou `.sbt`
-- Le répertoire courant contient un répertoire nommé `.metals`
+- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- The current directory contains a file with the `.scala` or `.sbt` extension
+- The current directory contains a directory named `.metals`
 
 ### Options
 
@@ -2891,8 +2884,8 @@ disabled = false
 
 By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
-- Le répertoire courant contient un fichier `Package.swift`
-- Le répertoire actuel contient un fichier avec l'extension `.swift`
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
 
 ### Options
 
@@ -2938,7 +2931,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un dossier `.terraform`
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Options
@@ -3035,10 +3028,10 @@ time_range = "10:00:00-14:00:00"
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
-- L'utilisateur courant est root
-- L'utilisateur courant est différent de celui connecté
-- L'utilisateur est actuellement connecté à une session SSH
-- La variable `show_always` a comme valeur true
+- The current user is root
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -3080,7 +3073,7 @@ show_always = true
 
 The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le répertoire courant contient un fichier `Vagrantfile`
+- The current directory contains a `Vagrantfile` file
 
 ### Options
 
@@ -3117,8 +3110,8 @@ format = "via [⍱ $version](bold white) "
 ## V
 
 The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
-- Le répertoire courant contient un fichier avec l'extension `.v`
-- Le répertoire courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Options
 
@@ -3185,7 +3178,7 @@ format = "[🆅 $repo](bold blue) "
 
 By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
-- Le répertoire courant contient un fichier `.zig`
+- The current directory contains a `.zig` file
 
 ### Options
 
@@ -3288,7 +3281,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 `shell` accepts a non-empty list of strings, where:
 
-- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
+- The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
