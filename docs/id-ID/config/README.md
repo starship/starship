@@ -61,7 +61,7 @@ Format string merupakan format yang sebuah modul gunakan untuk menampilkan semua
 
 #### Variabel
 
-Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. Nama dari sebuah variabel hanya boleh berisikan huruf, angka, dan `_`.
+Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. The name of a variable can only contain letters, numbers and `_`.
 
 Sebagai contoh:
 
@@ -106,18 +106,11 @@ Sebagai contoh:
 - `(sembarang)` akan selalu tidak menampilkan apapun karena tidak ada variabel yang dibungkus dalam kurung kurawal.
 - Tatkala `$all` digunakan sebagai shortcut untuk `\[$a$b\]`, `($all)` tidak akan menampilkan apapun jika nilai `$a` dan `$b` adalah `None`. Berlaku juga dengan `(\[$a$b\] )`.
 
-#### Pembebasan Karakter
+#### Special characters
 
-Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus membebaskannya (escape) dengan garis miring terbalik (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Perhatikan bahwa `toml` memiliki [sintaksi bebasnya sendiri](https://github.com/toml-lang/toml#user-content-string). Disarankan halnya untukmu menggunakan string literal (`''`) dalam konfigurasimu. Jika kamu mau memakai string standar (`""`), ingatlah untuk membebaskan garis miring terbalik `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Sebagai contoh, ketika kamu ingin menampilkan simbol `$` pada sebuah baris baru, konfigurasi berikut sama halnya pada `format`:
 
@@ -425,8 +418,8 @@ The `character` module shows a character (usually an arrow) beside where the tex
 
 The character will tell you whether the last command was successful or not. It can do this in two ways:
 
-- mengganti warna (`red`/`green`)
-- mengganti bentuk (`❯`/`✖`)
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
@@ -493,8 +486,8 @@ vicmd_symbol = "[V](bold green) "
 
 The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
-- Direktori terkini yang berisikan sebuah file `CMakeLists.txt`
-- Direktori terkini yang berisikan sebuah file `CMakeCache.txt`
+- The current directory contains a `CMakeLists.txt` file
+- The current directory contains a `CMakeCache.txt` file
 
 ### Opsi
 
@@ -642,8 +635,8 @@ format = "[$symbol$environment](dimmed green) "
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `shard.yml`
-- Direktori terkini yang berisikan sebuah file `.cr`
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
 ### Opsi
 
@@ -681,9 +674,9 @@ format = "via [✨ $version](bold blue) "
 
 The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file berekstensi `.dart`
-- Direktori terkini yang berisikan sebuah direktori `dart_tool`
-- Direktori terkini yang berisikan sebuah file `pubspec.yaml`, `pubspec.yml` atau `pubspec.lock`
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Opsi
 
@@ -720,7 +713,7 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
-- Direktori terkini yang berisikan sebuah file `mod.ts`, `mod.js`, `deps.ts` atau `deps.js`
+- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opsi
 
@@ -912,7 +905,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Opsi
 
@@ -951,11 +944,11 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `elm.json`
-- Direktori terkini yang berisikan sebuah file `elm-package.json`
-- Direktori terkini yang berisikan sebuah file `elm-version`
-- Direktori terkini yang berisikan sebuah folder`elm-stuff`
-- Direktori terkini yang berisikan sebuah file `*.elm`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
 
 ### Opsi
 
@@ -993,8 +986,8 @@ format = "via [ $version](cyan bold) "
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
-- Opsi konfigurasi `variable` cocok dengan variabel environment yang ada
-- Opsi konfigurasi `variable` tidak didefinisikan, tapi opsi konfigurasi `default` yang didefinisikan
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
@@ -1053,8 +1046,8 @@ default = "unknown user"
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `rebar.config`.
-- Direktori terkini yang berisikan sebuah file `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Opsi
 
@@ -1424,9 +1417,9 @@ behind = "⇣${count}"
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `go.mod`
-- Direktori terkini yang berisikan sebuah file `go.sum`
-- Direktori terkini yang berisikan sebuah file `glide.yaml`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
@@ -1469,7 +1462,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `helmfile.yaml`
+- The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
 ### Opsi
@@ -1936,7 +1929,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2016,7 +2009,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
@@ -2234,7 +2227,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2331,7 +2324,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori terkini yang berisikan sebuah file `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Opsi
@@ -2377,10 +2370,10 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- Direktori terkini yang berisikan sebuah file `pyproject.toml`
-- Direktori terkini yang berisikan sebuah file `requirements.txt`
-- Direktori terkini yang berisikan sebuah file `setup.py`
-- Direktori terkini yang berisikan sebuah file `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
