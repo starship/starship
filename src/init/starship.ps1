@@ -63,15 +63,15 @@ function global:prompt {
         $process.StandardOutput.ReadToEnd();
     }
 
+    $origDollarQuestion = $global:?
+    $origLastExitCode = $global:LASTEXITCODE
+
     # Invoke precmd, if specified
     try {
         if (Test-Path function:Invoke-Starship-PreCommand) {
             Invoke-Starship-PreCommand
         }
     } catch {}
-
-    $origDollarQuestion = $global:?
-    $origLastExitCode = $global:LASTEXITCODE
 
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
