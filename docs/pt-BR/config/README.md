@@ -61,7 +61,7 @@ Formatar uma string é a forma de como o módulo ira imprimir suas variáveis. A
 
 #### Variável
 
-Uma variável contem um simbolo `$` seguido pelo nome da variável. O nome da variável contem apenas letras, números e `_`.
+Uma variável contem um simbolo `$` seguido pelo nome da variável. The name of a variable can only contain letters, numbers and `_`.
 
 Por exemplo:
 
@@ -106,18 +106,11 @@ Por exemplo:
 - `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
 - Quando usar `$all` é um atalho para `\[$a$b\]`, `($all)` vai exibir nada somente quando `$a` e `$b` são `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
 
-#### Caractere de escape
+#### Special characters
 
-Os símbolos a seguir tem uso especial em uma formatação de string. Se você quer imprimir os símbolos a seguir você deve adicionar uma barra invertida (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Observe que `toml` tem [sua própria sintaxe de escape](https://github.com/toml-lang/toml#user-content-string). É recomendado usar uma string literal (`''`) no seu arquivo de configuração. Se você quer usar uma string básica (`""`), preste atenção ao usar a barra invertida `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Por exemplo, quando você quer imprimir um simbolo `$` em uma nova linha, as configurações de `format` a seguir são equivalentes:
 
@@ -425,8 +418,8 @@ The `character` module shows a character (usually an arrow) beside where the tex
 
 The character will tell you whether the last command was successful or not. It can do this in two ways:
 
-- alterando a cor (`red`/`green`)
-- alterando a forma (`❯`/`✖`)
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
@@ -493,8 +486,8 @@ vicmd_symbol = "[V](bold green) "
 
 The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
-- O diretorio atual cotem um arquivo `CMakeLists.txt`
-- O diretorio atual tem um arquivo `CMakeCache.txt`
+- The current directory contains a `CMakeLists.txt` file
+- The current directory contains a `CMakeCache.txt` file
 
 ### Opções
 
@@ -642,8 +635,8 @@ format = "[$symbol$environment](dimmed green) "
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `shard.yml`
-- O diretório atual contem um arquivo `.cr`
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
 ### Opções
 
@@ -681,9 +674,9 @@ format = "via [✨ $version](bold blue) "
 
 The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem algum arquivo com extensão `.dart`
-- O diretório atual contem um diretório `.dart_tool`
-- O diretório atual contem um arquivo `pubspec.yaml`, `pubspec.yml` ou `pubspec.lock`
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Opções
 
@@ -720,7 +713,7 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
-- O diretório contem um arquivo `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
+- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opções
 
@@ -912,7 +905,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Opções
 
@@ -951,11 +944,11 @@ symbol = "🔮 "
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `elm.json`
-- O diretório atual contem o arquivo `elm-package.json`
-- O diretório atual contem um arquivo `.elm-version`
-- O diretório atual contem uma pasta `elm-stuff`
-- O diretório contem arquivos `*.elm`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains a `*.elm` files
 
 ### Opções
 
@@ -993,8 +986,8 @@ format = "via [ $version](cyan bold) "
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
-- A opção de configuração da `variable` corresponde a uma variável existente
-- A configuração `variable` não está definida, mas a `default` está
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
@@ -1053,8 +1046,8 @@ default = "unknown user"
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `rebar.config`.
-- O diretório atual contem um arquivo `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Opções
 
@@ -1424,14 +1417,14 @@ behind = "⇣${count}"
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `go.mod`
-- O diretório atual contem um arquivo `go.sum`
-- O diretório atual contem um arquivo `glide.yaml`
-- O diretório atual contem um arquivo `Gopkg.yml`
-- O diretório atual contém um arquivo `Gopkg.lock`
-- O diretório atual contem um arquivo `.go-version`
-- O diretório atual contem um diretório `Godeps`
-- O diretório atual contem arquivos com a extensão `.go`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Opções
 
@@ -1469,8 +1462,8 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `helmfile.yaml`
-- O diretório atual contem um arquivo `Chart.yaml`
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
 
 ### Opções
 
@@ -1543,8 +1536,8 @@ disabled = false
 
 The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contenha algum dos arquivos `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot`
-- O diretório atual contenha arquivos com as extensões `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc`
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Opções
 
@@ -1584,9 +1577,9 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 The default functionality is:
 
-- 0 jobs -> Nada é exibido.
-- 1 job -> `symbol` é exibido.
-- 2 jobs or more -> `symbol` + `number` é exibido.
+- 0 jobs -> Nothing is shown.
+- 1 job -> `symbol` is shown.
+- 2 jobs or more -> `symbol` + `number` are shown.
 
 ::: warning
 
@@ -1640,9 +1633,9 @@ symbol_threshold = 0
 
 The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `Project.toml`
-- O diretório atual contem um arquivo `Manifest.toml`
-- O diretório atual contem arquivos com a extensão `.jl`
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
 
 ### Opções
 
@@ -1680,7 +1673,7 @@ symbol = "∴ "
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `.kt` ou um arquivo `.kts`
+- The current directory contains a `.kt` or a `.kts` file
 
 ### Opções
 
@@ -1936,7 +1929,7 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2016,7 +2009,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem o arquivo `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
@@ -2234,7 +2227,7 @@ format = "via [🦪 $version]($style) "
 
 The `php` module shows the currently installed version of [PHP](https://www.php.net/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2331,7 +2324,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Opções
@@ -2377,10 +2370,10 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- O diretório atual contem um arquivo `pyproject.toml`
-- O diretório atual contem um arquivo `requirements.txt`
-- O diretório atual contem um arquivo `setup.py`
-- O diretório atual contem um arquivo `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -3080,7 +3073,7 @@ show_always = true
 
 The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- O diretório atual contem um arquivo `Vagrantfile`
+- The current directory contains a `Vagrantfile` file
 
 ### Opções
 
@@ -3117,8 +3110,8 @@ format = "via [⍱ $version](bold white) "
 ## V
 
 The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
-- O diretório atual cotem qualquer arquivo com a extensão `.v`
-- O diretório atual contem um arquivo `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Opções
 
