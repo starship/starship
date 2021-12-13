@@ -143,10 +143,10 @@ Produces a prompt like the following:
 
 ## Continuation Prompt
 
-Some shells support a continuation prompt which is rendered instead of the normal prompt when the
-user has entered an uncomplete statement that needs to be continued.
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the
+user has entered an uncomplete statement (such as a single left parenthesis).
 
-Starship can set the continuation prompt format by setting the `continuation_format` field. The
+Starship can set the continuation prompt format using the `continuation_format` option. The
 default format is `"$character"`.
 
 Note: Continuation prompts are only available in the following shells:
