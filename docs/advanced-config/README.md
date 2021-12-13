@@ -141,6 +141,34 @@ Produces a prompt like the following:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
+## Continuation Prompt
+
+Some shells support a continuation prompt which is rendered instead of the normal prompt when the
+user has entered an uncomplete statement that needs to be continued.
+
+Starship can set the continuation prompt format by setting the `continuation_format` field. The
+default format is `"$character"`.
+
+Note: Continuation prompts are only available in the following shells:
+
+  - `bash`
+  - `zsh`
+  - `PowerShell`
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+# A continuation prompt that displays two characters
+continuation_format = """$character$character"""
+```
+
+Produces a continuation prompt like the following:
+
+```
+▶▶
+```
 
 ## Style Strings
 

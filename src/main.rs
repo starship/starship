@@ -112,6 +112,11 @@ fn main() {
                             .long("right")
                             .help("Print the right prompt (instead of the standard left prompt)"),
                     )
+                    .arg(
+                        Arg::with_name("continuation")
+                            .long("continuation")
+                            .help("Print the continuation prompt (instead of the standard prompt)"),
+                    )
                     .arg(&status_code_arg)
                     .arg(&pipestatus_arg)
                     .arg(&terminal_width_arg)

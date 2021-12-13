@@ -8,6 +8,7 @@ use std::cmp::Ordering;
 pub struct StarshipRootConfig {
     pub format: String,
     pub right_format: String,
+    pub continuation_format: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -95,6 +96,7 @@ impl<'a> Default for StarshipRootConfig {
         StarshipRootConfig {
             format: "$all".to_string(),
             right_format: "".to_string(),
+            continuation_format: "$character".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -108,6 +110,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig {
             config.iter().for_each(|(k, v)| match k.as_str() {
                 "format" => self.format.load_config(v),
                 "right_format" => self.right_format.load_config(v),
+                "continuation_format" => self.continuation_format.load_config(v),
                 "scan_timeout" => self.scan_timeout.load_config(v),
                 "command_timeout" => self.command_timeout.load_config(v),
                 "add_newline" => self.add_newline.load_config(v),
@@ -122,6 +125,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig {
                             // Root options
                             "format",
                             "right_format",
+                            "continuation_format",
                             "scan_timeout",
                             "command_timeout",
                             "add_newline",

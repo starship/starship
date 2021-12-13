@@ -25,6 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let exit_code = props.get("status_code").map_or("0", String::as_str);
     let keymap = props.get("keymap").map_or("viins", String::as_str);
     let exit_success = exit_code == "0";
+    let continuation = context.continuation;
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -39,7 +40,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let symbol = match mode {
         ShellEditMode::Normal => config.vicmd_symbol,
         ShellEditMode::Insert => {
-            if exit_success {
+            if continuation {
+                config.continuation_symbol
+            } else if exit_success {
                 config.success_symbol
             } else {
                 config.error_symbol
