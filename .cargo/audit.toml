@@ -1,9 +1,5 @@
 [advisories]
 ignore = [
-    # difference is unmaintained
-    # Only used in test code
-    # Tracked in #2835
-    "RUSTSEC-2020-0095",
     # Out-of-bounds write in nix::unistd::getgrouplist
     # Tracked in #3140
     "RUSTSEC-2021-0119",

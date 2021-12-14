@@ -62,10 +62,10 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
     // go version go1.13.3 linux/amd64
 
     let version = go_stdout
-        // split into ["", "1.12.4 linux/amd64"]
-        .splitn(2, "go version go")
+        // split into ("", "1.12.4 linux/amd64")
+        .split_once("go version go")?
         // return "1.12.4 linux/amd64"
-        .nth(1)?
+        .1
         // split into ["1.12.4", "linux/amd64"]
         .split_whitespace()
         // return "1.12.4"
