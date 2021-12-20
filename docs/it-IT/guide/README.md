@@ -35,11 +35,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Sito web</a>
+  <a href="https://starship.rs/it-IT/">Sito web</a>
   ·
   <a href="#🚀-installation">Installazione</a>
   ·
-  <a href="https://starship.rs/config/">Configurazione</a>
+  <a href="https://starship.rs/it-IT/config/">Configurazione</a>
 </p>
 
 <p align="center">
@@ -155,7 +155,7 @@
 
 ### Inizia
 
-**Nota**: a causa della proliferazione di piattaforme diverse, un sottoinsieme di piattaforme supportate sono mostrate di seguito. Non riesci a vedere la tua? Dai un'occhiata alle [istruzioni aggiuntive della piattaforma](https://starship.rs/installing/).
+**Nota**: a causa della proliferazione di piattaforme diverse, un sottoinsieme di piattaforme supportate sono mostrate di seguito. Non riesci a vedere la tua? Dai un'occhiata alle [istruzioni aggiuntive della piattaforma](https://starship.rs/it-IT/installing/).
 
 1. Installa il binario **starship**:
 
