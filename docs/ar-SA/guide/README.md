@@ -157,7 +157,7 @@
 
 **Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
 
-1. Install the **starship** binary:
+1. تثبيت **starship**:
 
 
    #### تثبيت أحدث إصدار
@@ -306,7 +306,7 @@
 
 ## 💭 مستوحاة من قبل
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+يرجى التحقق من هذه الأعمال السابقة التي ساعدت على إنشاء starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 

@@ -223,6 +223,9 @@ format = '\[[$symbol($version)]($style)\]'
 [scala]
 format = '\[[$symbol($version)]($style)\]'
 
+[sudo]
+format = '\[[as $symbol]\]
+
 [swift]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -370,6 +373,9 @@ symbol = "rs "
 
 [scala]
 symbol = "scala "
+
+[sudo]
+symbol = "sudo "
 
 [swift]
 symbol = "swift "

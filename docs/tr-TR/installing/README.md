@@ -47,7 +47,7 @@ emerge app-shells/starship
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Binary Alma
 
 #### Zorunlu olarak
 
@@ -57,7 +57,7 @@ nix-env -iA nixos.starship
 
 #### Açıklayıcı, tek kullanıcı, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+`home.nix` dosyanızda, `programs.starship` modülünü etkinleştirin, ayarlarınızı ekleyin
 
 ```nix
 {
@@ -79,7 +79,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+sonra çalıştırın
 
 ```sh
 home-manager switch

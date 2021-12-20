@@ -306,7 +306,7 @@
 
 ## 💭 發想來自
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+請看之前這些幫助我們創造 Starship 的前任作品。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 給太空人的 ZSH 提示。
 
@@ -321,4 +321,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 許可
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 這個專案使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 許可。
