@@ -106,6 +106,11 @@ fn format_exit_code<'a>(
         }
     };
 
+    let hex_status = exit_code
+        .parse::<i32>()
+        .ok()
+        .map(|code| format!("0x{:X}", code));
+
     let common_meaning = status_common_meaning(exit_code_int);
 
     let raw_signal_number = match config.recognize_signal_code {
@@ -148,6 +153,7 @@ fn format_exit_code<'a>(
             })
             .map(|variable| match variable {
                 "status" => Some(Ok(exit_code)),
+                "hex_status" => Ok(hex_status.as_deref().or(Some(exit_code))).transpose(),
                 "int" => Some(Ok(exit_code)),
                 "maybe_int" => Ok(maybe_exit_code_number).transpose(),
                 "common_meaning" => Ok(common_meaning).transpose(),
@@ -274,6 +280,29 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+    }
+
+    #[test]
+    fn failure_hex_status() {
+        let exit_values = [1, 2, 130, -2147467260];
+        let string_values = ["0x1", "0x2", "0x82", "0x80004004"];
+
+        for (exit_value, string_value) in exit_values.iter().zip(string_values) {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red.bold().paint(format!("✖{}", string_value))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    symbol = "✖"
+                    disabled = false
+                    format = "[${symbol}${hex_status}]($style) "
+                })
+                .status(*exit_value)
                 .collect();
             assert_eq!(expected, actual);
         }
