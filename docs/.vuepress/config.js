@@ -20,6 +20,16 @@ module.exports = {
       title: "Starship",
       description: "L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !"
     },
+    "/id-ID/": {
+      lang: "id-ID",
+      title: "Starship",
+      description: "Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!"
+    },
+    "/it-IT/": {
+      lang: "it-IT",
+      title: "Starship",
+      description: "Il prompt minimalista, super veloce e infinitamente personalizzabile per qualsiasi shell!"
+    },
     "/ja-JP/": {
       lang: "ja-JP",
       title: "Starship",
@@ -158,6 +168,44 @@ module.exports = {
           ["/fr-FR/advanced-config/", "Configuration avancée"],
           ["/fr-FR/faq/", "Foire aux questions"],
           ["/fr-FR/presets/", "Paramètres par défaut"]
+        ]
+      },
+      "/id-ID/": {
+        // text for the language dropdown
+        selectText: "Languages",
+        // label for this locale in the language dropdown
+        label: "Bahasa Indonesia",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Sunting halaman ini di Github",
+        // Custom navbar values
+        nav: [{ text: "Konfigurasi", link: "/id-ID/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/id-ID/",
+          ["/id-ID/guide/", "Petunjuk"],
+          ["/id-ID/config/", "Konfigurasi"],
+          ["/id-ID/advanced-config/", "Konfigurasi Lanjutan"],
+          ["/id-ID/faq/", "Pertanyaan Umum"],
+          ["/id-ID/presets/", "Prasetel"]
+        ]
+      },
+      "/it-IT/": {
+        // text for the language dropdown
+        selectText: "Languages",
+        // label for this locale in the language dropdown
+        label: "Italiano",
+        // Custom text for edit link. Defaults to "Edit this page"
+        editLinkText: "Modifica questa pagina in Github",
+        // Custom navbar values
+        nav: [{ text: "Configuration", link: "/it-IT/config/" }],
+        // Custom sidebar values
+        sidebar: [
+          "/it-IT/",
+          ["/it-IT/guide/", "Guide"],
+          ["/it-IT/config/", "Configurazione"],
+          ["/it-IT/advanced-config/", "Configurazione Avanzata"],
+          ["/it-IT/faq/", "FAQ"],
+          ["/it-IT/presets/", "Preset"]
         ]
       },
       "/ja-JP/": {
