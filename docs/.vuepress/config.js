@@ -88,8 +88,9 @@ module.exports = {
     editLinks: true,
     // enables Algolia DocSearch
     algolia: {
-      apiKey: "107bdc34b894d5d1dd0824b420184c2d",
-      indexName: "starship"
+      apiKey: "44118471f56286dcda7db941a043370d",
+      indexName: "starship",
+      appId: "M3XUO3SQOR"
     },
     locales: {
       "/": {
