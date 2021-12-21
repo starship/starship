@@ -2801,17 +2801,18 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                                                                        |
-| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| status         | `127`   | El código de salida del último comando                                                                             |
-| int            | `127`   | El código de salida del último comando                                                                             |
-| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                                         |
-| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada                                       |
-| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada                                    |
-| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado                               |
-| pipestatus     |         | Renderizado en los códigos de salida de los programas del pipeline, esto sólo está disponible en pipestatus_format |
-| symbol         |         | Refleja el valor de la opción `symbol`                                                                             |
-| style\*      |         | Refleja el valor de la opción `style`                                                                              |
+| Variable       | Ejemplo | Descripción                                                                                 |
+| -------------- | ------- | ------------------------------------------------------------------------------------------- |
+| status         | `127`   | El código de salida del último comando                                                      |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
+| int            | `127`   | El código de salida del último comando                                                      |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
+| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
+| symbol         |         | Refleja el valor de la opción `symbol`                                                      |
+| style\*      |         | Refleja el valor de la opción `style`                                                       |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
