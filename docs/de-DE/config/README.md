@@ -2804,6 +2804,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | Variable       | Beispiel | Beschreibung                                                                                |
 | -------------- | -------- | ------------------------------------------------------------------------------------------- |
 | status         | `127`    | The exit code of the last command                                                           |
+| hex_status     | `0x7F`   | The exit code of the last command in hex                                                    |
 | int            | `127`    | The exit code of the last command                                                           |
 | common_meaning | `ERROR`  | Meaning of the code if not a signal                                                         |
 | signal_number  | `9`      | Signal number corresponding to the exit code, only if signalled                             |
