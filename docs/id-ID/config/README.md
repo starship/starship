@@ -723,7 +723,7 @@ Modul `deno` menampilkan versi terkini dari [Deno](https://deno.land/) yang terp
 | `version_format`    | `"v${raw}"`                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `🦕 "`                                        | Sebuah format string yang melambangkan simbol Deno                                  |
 | `detect_extensions` | `[]`                                         | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                         | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `style`             | `"green bold"`                               | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                                      | Menonaktifkan modul `deno`.                                                         |
