@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="Português (Brasil)"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Ruso"
  /></a>
   &nbsp;
   <a
@@ -119,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamita"
  /></a>
   &nbsp;
   <a
@@ -127,7 +127,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Chino Mandarín"
  /></a>
   &nbsp;
   <a
@@ -135,7 +135,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Chino Tradicional"
  /></a>
 </p>
 
