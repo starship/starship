@@ -9,6 +9,7 @@ use std::time::Duration;
 // Default ordering is handled in configs/starship_root.rs
 pub const ALL_MODULES: &[&str] = &[
     "aws",
+    "azure",
     #[cfg(feature = "battery")]
     "battery",
     "character",
@@ -65,6 +66,7 @@ pub const ALL_MODULES: &[&str] = &[
     "shlvl",
     "singularity",
     "status",
+    "sudo",
     "swift",
     "terraform",
     "time",

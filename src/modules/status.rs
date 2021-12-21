@@ -149,10 +149,10 @@ fn format_exit_code<'a>(
             .map(|variable| match variable {
                 "status" => Some(Ok(exit_code)),
                 "int" => Some(Ok(exit_code)),
-                "maybe_int" => Ok(maybe_exit_code_number.as_deref()).transpose(),
-                "common_meaning" => Ok(common_meaning.as_deref()).transpose(),
+                "maybe_int" => Ok(maybe_exit_code_number).transpose(),
+                "common_meaning" => Ok(common_meaning).transpose(),
                 "signal_number" => Ok(signal_number.as_deref()).transpose(),
-                "signal_name" => Ok(signal_name.as_deref()).transpose(),
+                "signal_name" => Ok(signal_name).transpose(),
                 "pipestatus" => {
                     let pipestatus = pipestatus.unwrap_or_else(|| {
                         // We might enter this case if pipestatus hasn't

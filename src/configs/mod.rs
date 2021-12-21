@@ -4,6 +4,7 @@ use serde::{self, Serialize};
 use starship_module_config_derive::ModuleConfig;
 
 pub mod aws;
+pub mod azure;
 pub mod battery;
 pub mod character;
 pub mod cmake;
@@ -61,6 +62,7 @@ pub mod shlvl;
 pub mod singularity;
 mod starship_root;
 pub mod status;
+pub mod sudo;
 pub mod swift;
 pub mod terraform;
 pub mod time;
@@ -83,6 +85,7 @@ pub struct FullConfig<'a> {
     pub add_newline: bool,
     // modules
     aws: aws::AwsConfig<'a>,
+    azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
@@ -138,6 +141,7 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     singularity: singularity::SingularityConfig<'a>,
     status: status::StatusConfig<'a>,
+    sudo: sudo::SudoConfig<'a>,
     swift: swift::SwiftConfig<'a>,
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
@@ -159,6 +163,7 @@ impl<'a> Default for FullConfig<'a> {
             add_newline: true,
 
             aws: Default::default(),
+            azure: Default::default(),
             battery: Default::default(),
             character: Default::default(),
             cmake: Default::default(),
@@ -214,6 +219,7 @@ impl<'a> Default for FullConfig<'a> {
             shlvl: Default::default(),
             singularity: Default::default(),
             status: Default::default(),
+            sudo: Default::default(),
             swift: Default::default(),
             terraform: Default::default(),
             time: Default::default(),

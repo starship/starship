@@ -65,7 +65,7 @@ You can use texts, variables and text groups in a format string.
 #### Variable
 
 A variable contains a `$` symbol followed by the name of the variable.
-The name of a variable only contains letters, numbers and `_`.
+The name of a variable can only contain letters, numbers and `_`.
 
 For example:
 
@@ -112,21 +112,13 @@ For example:
 - When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Special characters
 
-The following symbols have special usage in a format string.
-If you want to print the following symbols, you have to escape them with a backslash (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string).
-It is recommended to use a literal string (`''`) in your config.
-If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string).
+It is recommended to use a literal string (surrounded by single quotes) in your config.
+If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
@@ -240,9 +232,11 @@ $memory_usage\
 $aws\
 $gcloud\
 $openstack\
+$azure\
 $env_var\
 $crystal\
 $custom\
+$sudo\
 $cmd_duration\
 $line_break\
 $jobs\
@@ -341,6 +335,31 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+
+### Options
+
+| Variable          | Default                                  | Description                                |
+| ----------------- | ---------------------------------------- | ------------------------------------------ |
+| `format`          | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`          | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`           | `"blue bold"`                            | The style used in the format.              |
+| `disabled`        | `true`                                  | Disables the `azure` module.               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -2238,6 +2257,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -2945,6 +2965,58 @@ format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
+```
+
+## Sudo
+
+The `sudo` module displays if sudo credentials are currently cached.
+The module will only be shown if credentials are cached.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option         | Default                 | Description                                                  |
+| -------------- | ----------------------- | ------------------------------------------------------------ |
+| `format`       | `[as $symbol]($style)"` | The format of the module                                     |
+| `symbol`       | `"🧙 "`                 | The symbol displayed when credentials are cached             |
+| `style`        | `"bold blue"`           | The style for the module.                                    |
+| `allow_windows`| `false`                 | Since windows has no default sudo, default is disabled.      |
+| `disabled`     | `true`                  | Disables the `sudo` module.                                  |
+
+### Variables
+
+| Variable  | Example | Description                          |
+| --------- | ------- | ------------------------------------ |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\*   |         | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+
+# ~/.config/starship.toml
+
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = false
+```
+
+```toml
+# On windows
+# $HOME\.starship\config.toml
+
+[sudo]
+allow_windows = true
+disabled = false
 ```
 
 ## Swift

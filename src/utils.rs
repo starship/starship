@@ -454,6 +454,11 @@ fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 
 // Render the time into a nice human-readable string
 pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
+    // Make sure it renders something if the time equals zero instead of an empty string
+    if raw_millis == 0 {
+        return "0ms".into();
+    }
+
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
     let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
@@ -505,6 +510,10 @@ pub fn encode_to_hex(slice: &[u8]) -> String {
 mod tests {
     use super::*;
 
+    #[test]
+    fn test_0ms() {
+        assert_eq!(render_time(0_u128, true), "0ms")
+    }
     #[test]
     fn test_500ms() {
         assert_eq!(render_time(500_u128, true), "500ms")

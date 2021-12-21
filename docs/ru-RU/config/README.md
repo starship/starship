@@ -61,7 +61,7 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 
 #### Переменная
 
-Переменная содержит символ `$`, за которым следует имя переменной. Имя переменной содержит только буквы, цифры и `_`.
+Переменная содержит символ `$`, за которым следует имя переменной. The name of a variable can only contain letters, numbers and `_`.
 
 Например:
 
@@ -106,18 +106,11 @@ $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 - `(некоторый текст)` всегда не показывает ничего, поскольку в скобках нет переменных.
 - Когда `$all` является ярлыком для `\[$a$b\]`, `($all)` будет показываться только если `$a` и `$b` не являются `None`. Это работает так же, как `(\[$a$b\] )`.
 
-#### Символ экранирования
+#### Special characters
 
-Следующие символы имеют особое значение в формате. Если вы хотите напечатать следующие символы, вам нужно экранировать их обратной косой чертой (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Обратите внимание, что `toml` имеет [свой собственный синтаксис для экранирования](https://github.com/toml-lang/toml#user-content-string). В конфигурации рекомендуется использовать строку с знаком (`''`). Если вы хотите использовать базовую строку (`""`), обратите внимание на то, чтобы избежать обратной косой черты `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Например, когда вы хотите напечатать символ `$` на новой строке, следующие настройки для `формата` эквивалентны:
 
@@ -231,9 +224,11 @@ $memory_usage\
 $aws\
 $gcloud\
 $openstack\
+$azure\
 $env_var\
 $crystal\
 $custom\
+$sudo\
 $cmd_duration\
 $line_break\
 $jobs\
@@ -323,6 +318,31 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+
+### Опции
+
+| Переменная | По умолчанию                             | Описание                                   |
+| ---------- | ---------------------------------------- | ------------------------------------------ |
+| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`    | `"blue bold"`                            | The style used in the format.              |
+| `disabled` | `true`                                   | Disables the `azure` module.               |
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Батарея
@@ -2129,6 +2149,7 @@ symbol = "☁️ "
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠ Показана версия пакета, исходный код которого находится в текущем каталоге, а не в менеджере пакетов.
 
@@ -2303,7 +2324,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `spago.dhall` file
+- Текущий каталог содержит файл `spago.dhall`
 - The current directory contains a file with the `.purs` extension
 
 ### Опции
@@ -2346,15 +2367,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
+- Текущий каталог содержит файл `.python-version`
+- Текущий каталог содержит файл `Pipfile`
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- Текущий каталог содержит файл `pyproject.toml`
+- Текущий каталог содержит файл `requirements.txt`
+- Текущий каталог содержит файл `setup.py`
+- Текущий каталог содержит файл `tox.ini`
+- Текущий каталог содержит файл с расширением `.py`.
+- Виртуальная среда в данный момент активирована
 
 ### Опции
 
@@ -2364,7 +2385,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`     | `"v${raw}"`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | Стиль модуля.                                                                          |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
+| `pyenv_version_name` | `false`                                                                                                      | Использовать pyenv для получения версии Python                                         |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
@@ -2471,7 +2492,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2509,11 +2530,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- Текущий каталог содержит файл `Gemfile`
+- Текущий каталог содержит файл `.ruby-version`
+- Текущий каталог содержит файл `.rb`
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
 Starship gets the current Ruby version by running `ruby -v`.
@@ -2530,7 +2551,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
+| `disabled`          | `false`                              | Отключает модуль `ruby`.                                                  |
 
 ### Переменные
 
@@ -2553,10 +2574,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- Текущий каталог содержит файл `Cargo.toml`
+- Текущий каталог содержит файл с расширением `.rs`
 
 ### Опции
 
@@ -2569,7 +2590,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `"bold red"`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Disables the `rust` module.                                               |
+| `disabled`          | `false`                              | Отключает модуль `rust`.                                                  |
 
 ### Переменные
 
@@ -2662,7 +2683,7 @@ The `shell` module shows an indicator for currently used shell.
 | Переменная | По умолчанию | Описание                                                   |
 | ---------- | ------------ | ---------------------------------------------------------- |
 | indicator  |              | Mirrors the value of `indicator` for currently used shell. |
-| style\*  |              | Mirrors the value of option `style`.                       |
+| style\*  |              | Отражает значение параметра `style`.                       |
 
 \*: Эта переменная может использоваться только в качестве части строки style
 
@@ -2809,9 +2830,59 @@ disabled = false
 
 ```
 
+## Sudo
+
+The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+
+::: tip Подсказка
+
+По умолчанию этот модуль отключен. Чтобы включить его, установите `disabled` на `false` в файле конфигурации.
+
+:::
+
+### Опции
+
+| Параметр        | По умолчанию            | Описание                                                |
+| --------------- | ----------------------- | ------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | The format of the module                                |
+| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
+| `style`         | `"bold blue"`           | Стиль модуля.                                           |
+| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
+| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+
+### Переменные
+
+| Переменная | Пример | Описание                             |
+| ---------- | ------ | ------------------------------------ |
+| symbol     |        | Отражает значение параметра `symbol` |
+| style\*  |        | Отражает значение параметра `style`  |
+
+\*: Эта переменная может использоваться только в качестве части строки style
+
+### Пример
+
+```toml
+
+# ~/.config/starship.toml
+
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = false
+```
+
+```toml
+# On windows
+# $HOME\.starship\config.toml
+
+[sudo]
+allow_windows = true
+disabled = false
+```
+
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -2860,7 +2931,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.terraform` folder
+- Текущий каталог содержит папку `.terraform`
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Опции
@@ -2874,7 +2945,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
+| `disabled`          | `false`                              | Отключает модуль `terraform`.                                             |
 
 ### Переменные
 
@@ -2909,7 +2980,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Время
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
 ::: tip Подсказка
 
@@ -2919,23 +2990,23 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ### Опции
 
-| Параметр          | По умолчанию            | Описание                                                                                                                           |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Параметр          | По умолчанию            | Описание                                                                                                                                                      |
+| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                                             |
+| `use_12hr`        | `false`                 | Включить 12-часовое форматирование                                                                                                                            |
+| `time_format`     | см. ниже                | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.                             |
+| `style`           | `"bold yellow"`         | Стиль модуля времени                                                                                                                                          |
+| `utc_time_offset` | `"local"`               | Устанавливает смещение UTC. Range from -24 &lt; x &lt; 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
+| `disabled`        | `true`                  | Отключает модуль `time`.                                                                                                                                      |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                         |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Иначе по умолчанию используется `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Переменные
 
 | Переменная | Пример     | Описание                            |
 | ---------- | ---------- | ----------------------------------- |
-| time       | `13:08:10` | The current time.                   |
+| время      | `13:08:10` | The current time.                   |
 | style\*  |            | Отражает значение параметра `style` |
 
 \*: Эта переменная может использоваться только в качестве части строки style
@@ -2953,14 +3024,14 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## Имя пользователя
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Модуль `username` показывает имя активного пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- Текущий пользователь - root
+- Текущий пользователь отличается от залогиненного
+- Пользователь подключен к SSH-сессии
+- Переменная `show_always` равна true
 
 ::: tip Подсказка
 
@@ -2970,13 +3041,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Опции
 
-| Параметр      | По умолчанию            | Описание                              |
-| ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | Формат модуля.                        |
-| `show_always` | `false`                 | Always shows the `username` module.   |
-| `disabled`    | `false`                 | Disables the `username` module.       |
+| Параметр      | По умолчанию            | Описание                                                |
+| ------------- | ----------------------- | ------------------------------------------------------- |
+| `style_root`  | `"bold red"`            | Стиль, используемый для пользователя root.              |
+| `style_user`  | `"bold yellow"`         | Стиль, используемый для всех пользователей, кроме root. |
+| `format`      | `"[$user]($style) in "` | Формат модуля.                                          |
+| `show_always` | `false`                 | Всегда показывать модуль `username`.                    |
+| `disabled`    | `false`                 | Отключает модуль `username`.                            |
 
 ### Переменные
 
@@ -3105,7 +3176,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current directory contains a `.zig` file
 
@@ -3186,7 +3257,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `описание`    | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |

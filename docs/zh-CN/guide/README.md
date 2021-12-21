@@ -298,7 +298,7 @@
 
 ## 🤝 贡献
 
-我们一直在寻找贡献者！你都可以参与贡献 ** 不论你的技能如何 **。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻找贡献者！**不论你的技能如何**你都可以参与贡献 。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
@@ -306,7 +306,7 @@ If you are fluent in a non-English language, we greatly appreciate any help keep
 
 ## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - A ZSH prompt for astronauts.
 

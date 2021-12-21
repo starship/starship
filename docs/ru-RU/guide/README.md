@@ -306,7 +306,7 @@
 
 ## 💭 Вдохновления
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Пожалуйста, ознакомьтесь с этими предыдущими работами, которые помогли вдохновить создание Starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - командная строка ZSH для астронавтов.
 
@@ -316,9 +316,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Иконка ракеты Starship">
 </p>
 
 ## 📝 Лицензия
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Авторское право © 2019-настоящее, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Этот проект [ISC](https://github.com/starship/starship/blob/master/LICENSE) лицензирован.

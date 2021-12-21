@@ -302,7 +302,7 @@
 
 ## 💭 ئیلهامبەخشەکان
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+تکایە ئەم کارە کۆنانە سەیربکەوە کە ئیلهامی دروستکردنی starship دا. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - یەکێ لە promptـەکانی ZSH بۆ ئاسمانەوانان.
 
@@ -312,9 +312,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="ئایکۆنی مووشەکی Starship">
 </p>
 
 ## 📝 مۆڵەتنامە
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+هەموو مافێکی پارێزراوە © 2019-ئێستا، [بەژداریکەرانی Starship](https://github.com/starship/starship/graphs/contributors). <br />ئەم پڕۆژەیە لە ژێر مۆڵەتنامەی [ISC](https://github.com/starship/starship/blob/master/LICENSE)ـە.

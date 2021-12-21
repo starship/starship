@@ -274,7 +274,8 @@ impl<'a> Context<'a> {
             }?;
             Ok(Repo {
                 branch: get_current_branch(&repository),
-                root: repository.workdir().map(Path::to_path_buf),
+                workdir: repository.workdir().map(Path::to_path_buf),
+                path: Path::to_path_buf(repository.path()),
                 state: repository.state(),
                 remote: get_remote_repository_info(&repository),
             })
@@ -433,13 +434,23 @@ pub struct Repo {
 
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
-    pub root: Option<PathBuf>,
+    pub workdir: Option<PathBuf>,
+
+    /// The path of the repository's `.git` directory.
+    pub path: PathBuf,
 
     /// State
     pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,
+}
+
+impl Repo {
+    /// Opens the associated git repository.
+    pub fn open(&self) -> Result<Repository, git2::Error> {
+        Repository::open(&self.path)
+    }
 }
 
 /// Remote repository

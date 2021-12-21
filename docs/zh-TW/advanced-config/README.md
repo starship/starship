@@ -43,33 +43,33 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## 改變視窗標題
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish 甚至預設就會這樣做。 Starship 沒有幫你這樣做，但是可以用直覺的方式加入這個功能到 `bash` 或 `zsh` 之中。
 
-First, define a window title change function (identical in bash and zsh):
+首先，定義一個改變視窗標題的函式（在 bash 與 zsh 之中都一樣）：
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
+    echo -ne "\033]0; 你的標題在此 \007"
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+你可以利用變數來自定義這個標題（`$USER`、`$HOSTNAME` 與 `$PWD` 是很受歡迎的選項）。
 
-In `bash`, set this function to be the precmd starship function:
+在 `bash` 中，將這個函式設定為 Starship 的預執行函式：
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+在 `zsh` 中，將這個函式加入 `precmd_functions` 陣列：
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+如果你喜歡這個結果，把這幾行加入你的 shell 設定檔中(`~/.bashrc` or `~/.zsrhc`)來將此設為永久設定。
 
 For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
@@ -120,7 +120,7 @@ Produces a prompt like the following:
 
 ## 風格字串
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+風格字串是一個以空白分開的單詞清單。 單字並不會區分大小寫（換句話說，`bold` 與 `BoLd` 是被當作兩個相同的字串）。 每個單詞可以是下列其中之一：
 
   - `bold`
   - `斜體字`
@@ -132,14 +132,14 @@ Style strings are a list of words, separated by whitespace. The words are not ca
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+其中 `<color>` 是指定顏色用的（下面解釋）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. 單詞在字串中的順序不重要。
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未來可能會將 `none` 與其他符號一起使用的情形視為是一種錯誤。
 
-A color specifier can be one of the following:
+一個顏色指定符號可以是下列其中之一：
 
  - 任一個標準終端機顏色：`black`、`red`、`green`、`blue`、`yellow`、`purple`、`cyan`、`white`。 你可以選擇性地加上前綴 `bright-` 來取得明亮版本的顏色（例如：`bright-white`）。
  - 一個 `#` 後面跟隨著六位數的十六進位數字。 這個指定了 [RGB 十六進制色碼](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
  - 一個介於 0~255 之間的數字。 這個指定了 [8-bit ANSI 色碼](https://i.stack.imgur.com/KTSQa.png)。
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+如果前景/後景被指定了多種顏色，最後一個顏色具有最高優先性。

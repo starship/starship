@@ -62,10 +62,10 @@ fn parse_julia_version(julia_stdout: &str) -> Option<String> {
     // julia version 1.4.0
 
     let version = julia_stdout
-        // split into ["", "1.4.0"]
-        .splitn(2, "julia version")
+        // split into ("", "1.4.0")
+        .split_once("julia version")?
         // return "1.4.0"
-        .nth(1)?
+        .1
         .split_whitespace()
         .next()?;
 

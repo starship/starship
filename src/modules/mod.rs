@@ -1,5 +1,6 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
+mod azure;
 mod character;
 mod cmake;
 mod cmd_duration;
@@ -55,6 +56,7 @@ mod shell;
 mod shlvl;
 mod singularity;
 mod status;
+mod sudo;
 mod swift;
 mod terraform;
 mod time;
@@ -83,6 +85,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
+            "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "character" => character::module(context),
@@ -139,6 +142,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
+            "sudo" => sudo::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -169,6 +173,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
+        "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
@@ -226,6 +231,7 @@ pub fn description(module: &str) -> &'static str {
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
         "status" => "The status of the last command",
+        "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",

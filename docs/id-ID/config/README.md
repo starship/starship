@@ -61,7 +61,7 @@ Format string merupakan format yang sebuah modul gunakan untuk menampilkan semua
 
 #### Variabel
 
-Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. Nama dari sebuah variabel hanya boleh berisikan huruf, angka, dan `_`.
+Variabel memilki simbol `$` yang diikuti dengan nama variabelnya. The name of a variable can only contain letters, numbers and `_`.
 
 Sebagai contoh:
 
@@ -106,18 +106,11 @@ Sebagai contoh:
 - `(sembarang)` akan selalu tidak menampilkan apapun karena tidak ada variabel yang dibungkus dalam kurung kurawal.
 - Tatkala `$all` digunakan sebagai shortcut untuk `\[$a$b\]`, `($all)` tidak akan menampilkan apapun jika nilai `$a` dan `$b` adalah `None`. Berlaku juga dengan `(\[$a$b\] )`.
 
-#### Pembebasan Karakter
+#### Special characters
 
-Simbol-simbol berikut mempunyai kegunaan yang spesial dalam format srting. Jika kamu ingin menampilkan simbol-simbol berikut, kamu harus membebaskannya (escape) dengan garis miring terbalik (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Perhatikan bahwa `toml` memiliki [sintaksi bebasnya sendiri](https://github.com/toml-lang/toml#user-content-string). Disarankan halnya untukmu menggunakan string literal (`''`) dalam konfigurasimu. Jika kamu mau memakai string standar (`""`), ingatlah untuk membebaskan garis miring terbalik `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Sebagai contoh, ketika kamu ingin menampilkan simbol `$` pada sebuah baris baru, konfigurasi berikut sama halnya pada `format`:
 
@@ -231,9 +224,11 @@ $memory_usage\
 $aws\
 $gcloud\
 $openstack\
+$azure\
 $env_var\
 $crystal\
 $custom\
+$sudo\
 $cmd_duration\
 $line_break\
 $jobs\
@@ -323,6 +318,31 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+
+### Opsi
+
+| Variabel   | Bawaan                                   | Deskripsi                                  |
+| ---------- | ---------------------------------------- | ------------------------------------------ |
+| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`    | `"blue bold"`                            | The style used in the format.              |
+| `disabled` | `true`                                   | Disables the `azure` module.               |
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Baterai
@@ -746,7 +766,7 @@ Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root r
 | `read_only_style`   | `"red"`                                            | Corak gaya untuk simbol read only.                                                     |
 | `truncation_symbol` | `""`                                               | Simbol untuk awalan jalur yang disingkat. misalnya: ".../"                             |
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
+| `home_symbol`       | `"~"`                                              | Simbol yang mengindikasikan direktori home.                                            |
 
 <details>
 <summary>Modul ini memilki beberapa opsi konfigurasi lanjutan yang mengontrol bagaimana direktori ditampilkan.</summary>
@@ -2129,6 +2149,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
 
@@ -2303,7 +2324,7 @@ format = "[$symbol$stack]($style) "
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `spago.dhall` file
+- Direktori terkini yang berisikan sebuah file `spago.dhall`
 - The current directory contains a file with the `.purs` extension
 
 ### Opsi
@@ -2349,10 +2370,10 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
+- Direktori terkini yang berisikan sebuah file `pyproject.toml`
+- Direktori terkini yang berisikan sebuah file `requirements.txt`
+- Direktori terkini yang berisikan sebuah file `setup.py`
+- Direktori terkini yang berisikan sebuah file `tox.ini`
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -2662,7 +2683,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variabel  | Bawaan | Deskripsi                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Mirrors the value of option `style`.                       |
+| style\* |        | Menyalin nilai dari opsi `style`.                          |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -2807,6 +2828,56 @@ format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 
+```
+
+## Sudo
+
+The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+
+::: saran
+
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Opsi
+
+| Opsi            | Bawaan                  | Deskripsi                                               |
+| --------------- | ----------------------- | ------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | The format of the module                                |
+| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
+| `style`         | `"bold blue"`           | Gaya penataan untuk modul.                              |
+| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
+| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+
+### Variabel
+
+| Variabel  | Contoh | Deskripsi                         |
+| --------- | ------ | --------------------------------- |
+| symbol    |        | Menyalin nilai dari opsi `symbol` |
+| style\* |        | Menyalin nilai dari opsi `style`  |
+
+\*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+
+# ~/.config/starship.toml
+
+[sudo]
+style = "bold green"
+symbol = "👩‍💻 "
+disabled = false
+```
+
+```toml
+# On windows
+# $HOME\.starship\config.toml
+
+[sudo]
+allow_windows = true
+disabled = false
 ```
 
 ## Swift
@@ -3100,7 +3171,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "[🆅 $repo](bold blue) "
+format = "via [✨ $repo](bold blue) "
 ```
 
 ## Zig
@@ -3186,7 +3257,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `deskripsi`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
