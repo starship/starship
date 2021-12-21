@@ -169,7 +169,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: github_release
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v1.12
+      - uses: mislav/bump-homebrew-formula-action@v1.13
         with:
           formula-name: starship
         env:
