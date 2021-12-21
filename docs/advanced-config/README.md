@@ -144,7 +144,7 @@ Produces a prompt like the following:
 ## Continuation Prompt
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the
-user has entered an uncomplete statement (such as a single left parenthesis).
+user has entered an incomplete statement (such as a single left parenthesis).
 
 Starship can set the continuation prompt format using the `continuation_format` option. The
 default format is `"$character"`.
