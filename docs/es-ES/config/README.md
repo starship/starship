@@ -703,7 +703,7 @@ El módulo `deno` le muestra la versión instalada de [Deno](https://deno.land/)
 | `version_format`    | `"v${raw}"`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🦕 "`                                       | Una cadena de formato que representa el símbolo de Deno                                 |
 | `detect_extensions` | `[]`                                         | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"green bold"`                               | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                                      | Deshabilita el módulo `deno`.                                                           |
