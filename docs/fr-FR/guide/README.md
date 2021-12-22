@@ -63,7 +63,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Espagnol"
+      alt="Español"
  /></a>
   &nbsp;
   <a
