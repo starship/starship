@@ -75,7 +75,7 @@ Un groupe de texte se compose de deux parties différentes.
 
 La première partie, qui est entourée dans un `[]`, est une [chaîne de formatage](#format-strings). Vous pouvez y ajouter des textes, des variables, ou même des groupes de texte imbriqués.
 
-La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#style-strings). This can be used to style the first part.
+La deuxième partie, qui est entourée par `()`, est une [chaîne de style](#style-strings). Elle peut être utilisée pour styliser la première partie.
 
 Par exemple :
 
@@ -106,7 +106,7 @@ Par exemple :
 - `(some text)` ne montrera toujours rien puisqu'il n'y a pas de variables enveloppées dans les accolades.
 - Lorsque `$all` est un raccourci pour `\[$a$b\]`, `($all)` ne montrera rien que si `$a` et `$b` sont tous les deux `None`. Cela fonctionne comme `(\[$a$b\] )`.
 
-#### Special characters
+#### Caractères spéciaux
 
 The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
