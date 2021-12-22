@@ -108,9 +108,9 @@ Par exemple :
 
 #### Caractères spéciaux
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+Les caractères suivants ont une utilisation spéciale dans les chaines de formatage et doivent être échappées : `$ \ [ ] ( )`.
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+Notez que TOML a [à la fois des chaines basiques et des chaines littérales](https://toml.io/en/v1.0.0#string). Il est recommandé d'utiliser une chaine littérale (entourée de guillemets simples) dans votre configuration. Si vous voulez utiliser une chaîne basique (entourée de guillemets doubles), vous devez échapper l'antislash lui-même (c-à-d. utiliser `\\`).
 
 Par exemple, lorsque vous voulez imprimer un symbole `$` sur une nouvelle ligne, les configurations suivantes pour le `formatage` sont équivalentes :
 
@@ -169,7 +169,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Ce qui équivaut à
 format = """
 $username\
 $hostname\
@@ -239,10 +239,10 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+Si vous voulez étendre le format par défaut, pour pouvoir utiliser `$all` ; les modules que vous ajouter explicitement au format ne seront pas dupliqués. Par ex.
 
 ```toml
-# Move the directory to the second line
+# Déplacer le répertoire à la seconde ligne
 format="$all$directory$character"
 ```
 
@@ -329,7 +329,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Variable   | Default                                  | Description                                |
 | ---------- | ---------------------------------------- | ------------------------------------------ |
 | `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `symbol`   | `"ﴃ "`                                   | Le symbole utilisé dans le format.         |
 | `style`    | `"blue bold"`                            | The style used in the format.              |
 | `disabled` | `true`                                   | Disables the `azure` module.               |
 
@@ -425,7 +425,7 @@ Par défaut, il ne change que la couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` n’est pas supporté sur elvish et nu shell.
 
 :::
 
