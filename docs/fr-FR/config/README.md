@@ -992,11 +992,11 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
-Example: following configuration will display value of USER environment variable
+Exemple : la configuration suivante va afficher la valeur de la variable d’environnement UTILISATEUR
 ```toml
 # ~/.config/starship.toml
 
-[env_var.USER]
+[env_var.UTILISATEUR]
 default = "utilisateur inconnu"
 ```
 :::
@@ -1038,7 +1038,7 @@ Afficher plusieurs variables d’environnement :
 [env_var.SHELL]
 variable = "SHELL"
 default = "shell inconnu"
-[env_var.USER]
+[env_var.UTILISATEUR]
 default = "utilisateur inconnu"
 ```
 
@@ -1087,11 +1087,11 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### Options
 
-| Option     | Défaut         | Description                       |
-| ---------- | -------------- | --------------------------------- |
-| `symbol`   | `"."`          | The symbol used to fill the line. |
-| `style`    | `"bold black"` | Le style du module.               |
-| `disabled` | `false`        | Disables the `fill` module        |
+| Option     | Défaut         | Description                               |
+| ---------- | -------------- | ----------------------------------------- |
+| `symbol`   | `"."`          | Le symbole utilisé pour remplir la ligne. |
+| `style`    | `"bold black"` | Le style du module.                       |
+| `disabled` | `false`        | Désactive le module `fill`                |
 
 ### Exemple
 
