@@ -18,7 +18,7 @@ features:
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship : Invite Multi-Shell"
-description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh et PowerShell.
 ---
 
 <div class="center">
@@ -143,7 +143,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Nushell
 
-   ::: warning This will change in the future. Seule la version nu v0.33 ou supérieure est prise en charge. ::: Add the following to your nu config file. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
+   ::: warning Cela va changer dans le futur. Seule la version nu v0.33 ou supérieure est prise en charge. Ajoutez ce qui suit à votre fichier de configuration nu. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
 
    ```toml
    startup = [
