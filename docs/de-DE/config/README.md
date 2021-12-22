@@ -1,6 +1,6 @@
 # Konfiguration
 
-Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
+Um mit der Konfiguration von Starship zu beginnen, muss eine leere Datei in diesem Pfad erstellt werden: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
@@ -21,13 +21,13 @@ success_symbol = "[➜](bold green)"     # Das "succes_symbol" Segment wird zu "
 disabled = true
 ```
 
-Du kannst die voreingestellte Konfigurations-Datei mit der `STARSHIP_CONFIG` Umgebungsvariable verändern:
+Die voreingestellte Konfigurations-Datei kann mit der `STARSHIP_CONFIG` Umgebungsvariable verändert werden. Hier z. Bsp. für die BASH shell, hinzuzufügen zur ~/. bashrc:
 
 ```sh
 export STARSHIP_CONFIG=~/.starship/config.toml
 ```
 
-Äquivalent zur PowerShell (Windows) würdest du diese Zeile zu `$PROFILE` hinzufügen:
+Für die Windows PowerShell diese Zeile zum `$PROFILE` hinzufügen:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
@@ -41,7 +41,7 @@ Standardmäßig protokolliert Starship Warnungen und Fehler in einer Datei names
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Äquivalent zur PowerShell (Windows) würdest du diese Zeile zu `$PROFILE` hinzufügen:
+Äquivalent ist in der Windows PowerShell diese Zeile zum `$PROFILE` hinzuzufügen:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
@@ -96,23 +96,23 @@ Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies
 
 Wie genau sich diese Konfiguration auswirkt liegt an deinem Terminal-Emulator. Einige Emulatoren zum Beispiel werden die Farben erhellen statt Text dick zu machen, und ein paar Farbthemen benutzen dieselben Werte für normale und helle Farben. Für kursiven Text muss dein Terminal Kursivschrift unterstützen.
 
-#### Conditional Format Strings
+#### Bedingte Formatierung
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Ein Formatierungszeichenkette (string) in `(` and `)` eingeklammert wird nicht ausgewertet wenn alle darin benutzten Variablen leer oder undefiniert sind.
 
 Hier sind ein paar Beispiele:
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- `(@$region)` ist die Variable `region` undefiniert (`None`) oder eine leere Zeichenkette (`""`) dann wird nichts angezeigt, ansonsten <0>@</0> gefolgt von dem Inhalt der Variablen.
+- `(some text)` zeigt nichts an, weil der Text in Klammern keine Variablen enthält.
+- Wenn `$all` eine Abkürzung für `\[$a$b\]` ist, dann zeigt `($all)` nur nichts an wenn `$a` and `$b` beide undefiniert (`None`) sind. Dasselbe passiert mit `(\[$a$b\] )`.
 
-#### Special characters
+#### Spezielle Zeichen
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+Die folgenden Zeichen habe eine spezielle Bedeutung in Formatstrings und müssen durch einen vorangestellten Backslash '\' besonders markiert werden (escaped): `$ \ [ ] ( )`.
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+Wichtig: TOML hat sowohl Basis-Zeichenketten (basic strings, eingeschlossen in " ") und literale Zeichenketten (literal strings, eingeschlossenin ' '). Empfehlung ist nur literale Zeichenketten (in ' ') in der Konfigurationsdatei zu verwenden. Wenn man Basis-Zeichenketten (in " ") verwenden will, dann muss man den Backslash mit einem Backslash markieren (d.h. '\\' verwenden).
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+Die folgenden Bespiele für eine Formatierungszeichenkette sind gleich, wenn man ein `$` Symbol in einer neuen Zeile ausgeben will:
 
 ```toml
 # with basic string
@@ -135,13 +135,13 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 
 ### Optionen
 
-| Option            | Standardwert                   | Beschreibung                                                     |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                              |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
-| `scan_timeout`    | `30`                           | Timeout für das Scannen von Dateien (in Millisekunden).          |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).     |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                        |
+| Option            | Standardwert                   | Beschreibung                                                      |
+| ----------------- | ------------------------------ | ----------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Das Aussehen des Prompts festlegen.                               |
+| `right_format`    | `""`                           | Sieh [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
+| `scan_timeout`    | `30`                           | Timeout für das Scannen von Dateien (in Millisekunden).           |
+| `command_timeout` | `500`                          | Maximale Zeit für von Starship ausgeführte Kommandos.             |
+| `add_newline`     | `true`                         | Fügt leere Zeilen zwischen Shell Prompts ein.                     |
 
 
 ### Beispiel
@@ -162,7 +162,7 @@ scan_timeout = 10
 add_newline = false
 ```
 
-### Default Prompt Format
+### Vordefiniertes Aussehen des Prompts
 
 The default `format` is used to define the format of the prompt, if empty or no `format` is provided. Die Standardwerte sind folgende:
 
