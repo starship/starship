@@ -326,12 +326,12 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Options
 
-| Variable   | Default                                  | Description                                |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`   | `"ﴃ "`                                   | Le symbole utilisé dans le format.         |
-| `style`    | `"blue bold"`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Variable   | Default                                  | Description                                            |
+| ---------- | ---------------------------------------- | ------------------------------------------------------ |
+| `format`   | `"on [$symbol($subscription)]($style) "` | Le format utilisé pour faire le rendu du module Azure. |
+| `symbol`   | `"ﴃ "`                                   | Le symbole utilisé dans le format.                     |
+| `style`    | `"blue bold"`                            | Le style utilisé dans le format.                       |
+| `disabled` | `true`                                   | Désactive le module `azure`.                           |
 
 ### Exemple
 
@@ -516,27 +516,27 @@ Le module `cmake` affiche la version actuellement installée de [CMake](https://
 
 The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
 
-- The current directory contains any files ending in `.cob` or `.COB`
-- The current directory contains any files ending in `.cbl` or `.CBL`
+- Le répertoire courant contient un fichier finissant par `.cob` ou `.COB`
+- Le répertoire courant contiens un fichier finissant par `.cbl` ou `.CBL`
 
 ### Options
 
 | Option              | Défaut                               | Description                                                                                |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                                    |
+| `symbol`            | `"⚙️ "`                              | Le symbole utilisé avant d’afficher la version de COBOL.                                   |
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `style`             | `"bold blue"`                        | Le style du module.                                                                        |
 | `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                                               |
+| `disabled`          | `false`                              | Désactive le module `cobol`.                                                               |
 
 ### Variables
 
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v3.1.2.0` | The version of `cobol`                 |
+| version   | `v3.1.2.0` | La version de `cobol`                  |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
@@ -984,7 +984,7 @@ format = "via [ $version](cyan bold) "
 
 ## Variable d'environnement
 
-The `env_var` module displays the current value of a selected environment variables. Le module est affiché si l'une de ces conditions est remplie :
+Le module `env_var` affiche la valeur actuelle de la variable d’environnement choisie. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'option `variable` correspond à une variable d'environnement existante
 - L'option `variable` n'est pas définie, mais l'option `default` l'est
@@ -997,7 +997,7 @@ Example: following configuration will display value of USER environment variable
 # ~/.config/starship.toml
 
 [env_var.USER]
-default = "unknown user"
+default = "utilisateur inconnu"
 ```
 :::
 
@@ -1031,15 +1031,15 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-Displaying multiple environmental variables:
+Afficher plusieurs variables d’environnement :
 ```toml
 # ~/.config/starship.toml
 
 [env_var.SHELL]
 variable = "SHELL"
-default = "unknown shell"
+default = "shell inconnu"
 [env_var.USER]
-default = "unknown user"
+default = "utilisateur inconnu"
 ```
 
 ## Erlang
