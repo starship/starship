@@ -61,7 +61,7 @@ Formatar uma string é a forma de como o módulo ira imprimir suas variáveis. A
 
 #### Variável
 
-Uma variável contem um simbolo `$` seguido pelo nome da variável. The name of a variable can only contain letters, numbers and `_`.
+Uma variável contem um simbolo `$` seguido pelo nome da variável. O nome de uma variável pode apenas conter letras, números e `_`.
 
 Por exemplo:
 
@@ -75,7 +75,7 @@ Um grupo de texto é composto por duas partes diferentes.
 
 A primeira parte, é contida em um `[]`, é uma [formatação de string](#format-strings). Você pode adicionar textos, variáveis ou até mesmos grupo de textos aninhados.
 
-Na segunda parte, é composta por um `()`, é uma [estilização de string](#style-strings). This can be used to style the first part.
+Na segunda parte, é composta por um `()`, é uma [estilização de string](#style-strings). Isto pode ser usado para estilizar a primeira parte.
 
 Por exemplo:
 
