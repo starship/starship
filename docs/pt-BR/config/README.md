@@ -106,11 +106,11 @@ Por exemplo:
 - `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
 - Quando usar `$all` é um atalho para `\[$a$b\]`, `($all)` vai exibir nada somente quando `$a` e `$b` são `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
 
-#### Special characters
+#### Caracteres Especiais
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+O símbolos a seguir tem um uso na formatação de string e deve ser escapados `$ \ [ ] ( )`.
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+Note que TOML tem [string básicas e strings literais](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 Por exemplo, quando você quer imprimir um simbolo `$` em uma nova linha, as configurações de `format` a seguir são equivalentes:
 
@@ -138,7 +138,7 @@ Está é a lista de opções de configuração de prompt.
 | Opções            | Padrão                         | Descrição                                                              |
 | ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
 | `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                         |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)       |
+| `right_format`    | `""`                           | Veja [Ativa o prompt direito](/advanced-config/#enable-right-prompt)   |
 | `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                |
 | `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos). |
 | `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                          |
