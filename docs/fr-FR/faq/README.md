@@ -66,13 +66,13 @@ Si vous voyez des symboles que vous ne reconnaissez pas, vous pouvez utiliser `s
 
 ## Starship fait quelque chose d’inattendu, comment puis-je le déboguer ?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+Vous pouvez activer les journaux de débogage en utilisant la variable d’environnement `STARSHIP_LOG`. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+Si starship est lent, vous pouvez essayer d’utiliser la commande `timings` pour voir si un module ou une commande particulière est à blâmer.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
