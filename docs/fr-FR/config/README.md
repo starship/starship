@@ -2771,7 +2771,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+Le module `status` affiche le code de sortie de la commande précédente. Le module ne sera affiché que si le code de sortie n’est pas `0`.
 
 ::: tip
 
@@ -2779,7 +2779,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: warning Ce module n’est pas supporté sur elvish et nu shell. :::
 
 ### Options
 
@@ -2804,10 +2804,10 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 | Variable       | Exemple | Description                                                                                 |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
-| int            | `127`   | The exit code of the last command                                                           |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
+| status         | `127`   | Le code de sortie de la dernière commande                                                   |
+| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                           |
+| int            | `127`   | Le code de sortie de la dernière commande                                                   |
+| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                                |
 | signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
@@ -2874,7 +2874,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# Sous Windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -2934,7 +2934,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un dossier `.terraform`
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+- Le répertoire courant contient un fichier avec l’extension `.tf`, `.tfplan` ou `.tfstate`
 
 ### Options
 
