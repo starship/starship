@@ -64,7 +64,7 @@ Starship executes different commands to get information to display in the prompt
 
 Si vous voyez des symboles que vous ne reconnaissez pas, vous pouvez utiliser `starship explain` pour obtenir des explications concernant les modules actuellement affichés.
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship fait quelque chose d’inattendu, comment puis-je le déboguer ?
 
 You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+Finalement, si vous trouvez un bug, vous pouvez utiliser la commande `bug-report` pour créer un ticket GitHub.
 
 ```sh
 starship bug-report
