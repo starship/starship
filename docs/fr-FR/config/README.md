@@ -61,7 +61,7 @@ Les chaînes de formatage sont le format avec lequel un module affiche toutes se
 
 #### Variable
 
-Une variable contient un symbole `$` suivi du nom de la variable. The name of a variable can only contain letters, numbers and `_`.
+Une variable contient un symbole `$` suivi du nom de la variable. Le nom d’une variable peut seulement container des lettres, des nombres et `_`.
 
 Par exemple :
 
@@ -102,7 +102,7 @@ Une chaîne de formatage conditionnel enveloppée dans `(` et `)` ne sera pas re
 
 Par exemple :
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
+- `(@$region)` n’affichera rien si la variable `region` est `None` or une chaine vide, sinon `@` suivi par la valeur de region.
 - `(some text)` ne montrera toujours rien puisqu'il n'y a pas de variables enveloppées dans les accolades.
 - Lorsque `$all` est un raccourci pour `\[$a$b\]`, `($all)` ne montrera rien que si `$a` et `$b` sont tous les deux `None`. Cela fonctionne comme `(\[$a$b\] )`.
 
@@ -514,7 +514,7 @@ Le module `cmake` affiche la version actuellement installée de [CMake](https://
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+Le module `cobol` affiche la version de COBOL installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier finissant par `.cob` ou `.COB`
 - Le répertoire courant contiens un fichier finissant par `.cbl` ou `.CBL`
@@ -593,7 +593,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+Le module `conda` affiche l’environnement [Conda](https://docs.conda.io/en/latest/) courant, si `$CONDA_DEFAULT_ENV` est définie.
 
 ::: tip
 
