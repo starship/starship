@@ -755,18 +755,18 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                                            |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué.  |
-| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.          |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                      |
-| `style`             | `"bold cyan"`                                      | Le style du module.                                                                    |
-| `disabled`          | `false`                                            | Désactive le module `directory`.                                                       |
-| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                   |
-| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                  |
-| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                   |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
-| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                          |
+| Option              | Défaut                                             | Description                                                                           |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué. |
+| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.         |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                     |
+| `style`             | `"bold cyan"`                                      | Le style du module.                                                                   |
+| `disabled`          | `false`                                            | Désactive le module `directory`.                                                      |
+| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                  |
+| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                 |
+| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                  |
+| `repo_root_style`   | `None`                                             | Le style pour la racine du dépôt git quand l’option `truncate_to_repo` est à false.   |
+| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                         |
 
 <details>
 <summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
@@ -1081,9 +1081,9 @@ Le module `erlang` montre la version actuellement installée de [Erlang/OTP](htt
 format = "via [e $version](bold red) "
 ```
 
-## Fill
+## Remplissage
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+Le module `fill` remplit l’espace restant sur la ligne avec un symbole. Si plusieurs modules `fill` sont présents sur une ligne, ils divisent de manière égale l’espace entre eux. C’est utile pour aligner d’autres modules.
 
 ### Options
 
@@ -1104,7 +1104,7 @@ symbol = "-"
 style = "bold green"
 ```
 
-Produces a prompt that looks like:
+Produit une invite qui ressemble à :
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -2992,15 +2992,15 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option            | Défaut                  | Description                                                                                                                                                        |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `format`          | `"at [$time]($style) "` | La chaîne de format pour le module.                                                                                                                                |
-| `use_12hr`        | `false`                 | Activer le format 12h                                                                                                                                              |
-| `time_format`     | voir plus bas           | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                                  |
-| `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                     |
-| `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Range from -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
-| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                       |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                              |
+| Option            | Défaut                  | Description                                                                                                                                                           |
+| ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | La chaîne de format pour le module.                                                                                                                                   |
+| `use_12hr`        | `false`                 | Activer le format 12h                                                                                                                                                 |
+| `time_format`     | voir plus bas           | Le [format chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilisé pour formater l'heure.                                                     |
+| `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                        |
+| `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Intervalle de -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
+| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                          |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                                 |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3056,7 +3056,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | Variable | Exemple      | Description                                                                                 |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
+| `user`   | `"matchai"`  | L’identifiant de l’utilisateur courant.                                                     |
 
 ### Exemple
 
@@ -3111,7 +3111,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 - Le répertoire courant contient un fichier avec l'extension `.v`
 - Le répertoire courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
@@ -3214,7 +3214,7 @@ Par défaut, le module `zig` affiche la version actuellement installée de [Zig]
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Commandes personnalisées
 
 The `custom` modules show the output of some arbitrary commands.
 
