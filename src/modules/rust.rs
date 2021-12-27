@@ -75,9 +75,9 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
     // - `rustup show active-toolchain`
     // - `rustup which`
     if let Some(toolchain) = env_rustup_toolchain(context)
-        .or_else(|| execute_rustup_override_list(&context.current_dir))
+        .or_else(|| execute_rustup_override_list(context))
         .or_else(|| find_rust_toolchain_file(context))
-        .or_else(execute_rustup_default)
+        .or_else(|| execute_rustup_default(context))
     {
         match execute_rustup_run_rustc_version(&toolchain) {
             RustupRunRustcVersionOutcome::RustcVersion(rustc_version) => {
@@ -101,25 +101,22 @@ fn env_rustup_toolchain(context: &Context) -> Option<String> {
     Some(val.trim().to_owned())
 }
 
-fn execute_rustup_override_list(cwd: &Path) -> Option<String> {
-    let Output { stdout, .. } = create_command("rustup")
-        .ok()?
-        .args(&["override", "list"])
-        .output()
-        .ok()?;
-    let stdout = String::from_utf8(stdout).ok()?;
-    extract_toolchain_from_rustup_override_list(&stdout, cwd)
+fn execute_rustup_override_list(context: &Context) -> Option<String> {
+    extract_toolchain_from_rustup_override_list(
+        &context.exec_cmd("rustup", &["override", "list"])?.stdout,
+        &context.current_dir,
+    )
 }
 
-fn execute_rustup_default() -> Option<String> {
-    let Output { stdout, .. } = create_command("rustup")
-        .ok()?
-        .args(&["default"])
-        .output()
-        .ok()?;
-    let stdout = String::from_utf8(stdout).ok()?;
-
-    stdout.split_whitespace().next().map(str::to_owned)
+fn execute_rustup_default(context: &Context) -> Option<String> {
+    // `rustup default` output is:
+    //    stable-x86_64-apple-darwin (default)
+    context
+        .exec_cmd("rustup", &["default"])?
+        .stdout
+        .split_whitespace()
+        .next()
+        .map(str::to_owned)
 }
 
 fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Option<String> {
