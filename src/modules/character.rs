@@ -22,9 +22,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
 
     let props = &context.properties;
-    let exit_code = props.get("status_code").map_or("0", String::as_str);
-    let keymap = props.get("keymap").map_or("viins", String::as_str);
-    let exit_success = exit_code == "0";
+    let exit_code = props.status_code;
+    let keymap = props.keymap.as_str();
+    let exit_success = exit_code.unwrap_or_default() == 0;
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".

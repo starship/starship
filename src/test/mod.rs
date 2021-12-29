@@ -1,4 +1,4 @@
-use crate::context::{Context, Shell};
+use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::{RootModuleConfig, StarshipConfig},
@@ -34,8 +34,9 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
-        clap::ArgMatches::default(),
+        Default::default(),
         Shell::Unknown,
+        Target::Main,
         PathBuf::new(),
         PathBuf::new(),
     );
@@ -103,15 +104,13 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    pub fn jobs(mut self, jobs: u64) -> Self {
-        self.context.properties.insert("jobs", jobs.to_string());
+    pub fn jobs(mut self, jobs: i64) -> Self {
+        self.context.properties.jobs = jobs;
         self
     }
 
     pub fn cmd_duration(mut self, duration: u64) -> Self {
-        self.context
-            .properties
-            .insert("cmd_duration", duration.to_string());
+        self.context.properties.cmd_duration = duration as u128;
         self
     }
 
@@ -119,14 +118,12 @@ impl<'a> ModuleRenderer<'a> {
     where
         T: Into<String>,
     {
-        self.context.properties.insert("keymap", keymap.into());
+        self.context.properties.keymap = keymap.into();
         self
     }
 
     pub fn status(mut self, status: i32) -> Self {
-        self.context
-            .properties
-            .insert("status_code", status.to_string());
+        self.context.properties.status_code = Some(status);
         self
     }
 
@@ -140,7 +137,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn pipestatus(mut self, status: &[i32]) -> Self {
-        self.context.pipestatus = Some(
+        self.context.properties.pipestatus = Some(
             status
                 .iter()
                 .map(std::string::ToString::to_string)

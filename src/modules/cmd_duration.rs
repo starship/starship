@@ -20,7 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let elapsed = context.get_cmd_duration()?;
+    let elapsed = context.properties.cmd_duration;
     let config_min = config.min_time as u128;
 
     if elapsed < config_min {

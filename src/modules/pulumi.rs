@@ -168,9 +168,9 @@ mod tests {
     use std::io;
 
     use super::*;
+    use crate::context::Target;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
-    use clap::ArgMatches;
 
     #[test]
     fn pulumi_version_release() {
@@ -192,7 +192,7 @@ mod tests {
 
     #[test]
     fn get_home_dir() {
-        let mut context = Context::new(ArgMatches::default());
+        let mut context = Context::new(Default::default(), Target::Main);
         context.env.insert("HOME", "/home/sweet/home".to_string());
         assert_eq!(
             pulumi_home_dir(&context),
@@ -204,7 +204,7 @@ mod tests {
 
     #[test]
     fn test_get_pulumi_workspace() {
-        let mut context = Context::new(ArgMatches::default());
+        let mut context = Context::new(Default::default(), Target::Main);
         context.env.insert("HOME", "/home/sweet/home".to_string());
         let name = "foobar";
         let project_file = PathBuf::from("/hello/Pulumi.yaml");
