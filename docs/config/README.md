@@ -1587,10 +1587,10 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable | Example    | Description                          |
+| -------- | ---------- | ------------------------------------ |
+| hostname | `computer` | The hostname of the computer         |
+| style\*  |            | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
