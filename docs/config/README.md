@@ -806,7 +806,8 @@ it would have been `nixpkgs/pkgs`.
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.|
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                           |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
