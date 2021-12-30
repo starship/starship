@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. 아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
+   **Warning** Only elvish v0.17 or higher is supported. 아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
 
    ```sh
    # ~/.elvish/rc.elv
