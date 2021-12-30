@@ -714,20 +714,20 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 `deno`モジュールは、現在インストールされている[Deno](https://deno.land/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
-- カレントディレクトリに`mod.ts`、`mod.js`、`deps.ts`か`deps.js`が含まれている
+- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### オプション
 
-| オプション               | デフォルト                                        | 説明                                                     |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`         | moduleのフォーマットです。                                       |
-| `version_format`    | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🦕 "`                                       | Dart のシンボルを表すフォーマット文字列                                 |
-| `detect_extensions` | `[]`                                         | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                         | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `"green bold"`                               | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                      | `deno`モジュールを無効化します。                                    |
+| オプション               | デフォルト                                                                   | 説明                                                     |
+| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                    | moduleのフォーマットです。                                       |
+| `version_format`    | `"v${raw}"`                                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🦕 "`                                                                  | Dart のシンボルを表すフォーマット文字列                                 |
+| `detect_extensions` | `[]`                                                                    | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"green bold"`                                                          | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                 | `deno`モジュールを無効化します。                                    |
 
 ### 変数
 
@@ -1514,10 +1514,10 @@ format = "via [⎈ $version](bold white) "
 
 ### 変数
 
-| 変数        | 設定例 | 説明                     |
-| --------- | --- | ---------------------- |
-| symbol    |     | オプション `記号` の値をミラーする    |
-| style\* |     | オプション `style` の値をミラーする |
+| 変数        | 設定例        | 説明                           |
+| --------- | ---------- | ---------------------------- |
+| hostname  | `computer` | The hostname of the computer |
+| style\* |            | オプション `style` の値をミラーする       |
 
 \*: この変数はスタイル文字列の一部としてのみ使用できます
 
