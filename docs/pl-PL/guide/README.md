@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **Uwaga** Działa tylko dla wersji powłoki elvish v0.15 lub wyższej. Dodaj na koniec pliku `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. Dodaj na koniec pliku `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
