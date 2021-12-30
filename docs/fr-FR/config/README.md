@@ -755,18 +755,19 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                                           |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué. |
-| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.         |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                     |
-| `style`             | `"bold cyan"`                                      | Le style du module.                                                                   |
-| `disabled`          | `false`                                            | Désactive le module `directory`.                                                      |
-| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                  |
-| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                 |
-| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                  |
-| `repo_root_style`   | `None`                                             | Le style pour la racine du dépôt git quand l’option `truncate_to_repo` est à false.   |
-| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                         |
+| Option              | Défaut                                             | Description                                                                             |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué.   |
+| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.           |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                       |
+| `style`             | `"bold cyan"`                                      | Le style du module.                                                                     |
+| `disabled`          | `false`                                            | Désactive le module `directory`.                                                        |
+| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                    |
+| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                   |
+| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                    |
+| `repo_root_style`   | `None`                                             | Le style pour la racine du dépôt git quand l’option `truncate_to_repo` est à false.     |
+| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                           |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
