@@ -713,20 +713,20 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 Modul `deno` menampilkan versi terkini dari [Deno](https://deno.land/) yang terpasang. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
-- Direktori terkini yang berisikan sebuah file `mod.ts`, `mod.js`, `deps.ts` atau `deps.js`
+- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opsi
 
-| Opsi                | Bawaan                                       | Deskripsi                                                                           |
-| ------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Format dari modul.                                                                  |
-| `version_format`    | `"v${raw}"`                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `🦕 "`                                        | Sebuah format string yang melambangkan simbol Deno                                  |
-| `detect_extensions` | `[]`                                         | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                         | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `"green bold"`                               | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                      | Menonaktifkan modul `deno`.                                                         |
+| Opsi                | Bawaan                                                                  | Deskripsi                                                                           |
+| ------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                    | Format dari modul.                                                                  |
+| `version_format`    | `"v${raw}"`                                                             | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `🦕 "`                                                                   | Sebuah format string yang melambangkan simbol Deno                                  |
+| `detect_extensions` | `[]`                                                                    | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `"green bold"`                                                          | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                                 | Menonaktifkan modul `deno`.                                                         |
 
 ### Variabel
 
@@ -1513,10 +1513,10 @@ The `hostname` module shows the system hostname.
 
 ### Variabel
 
-| Variabel  | Contoh | Deskripsi                         |
-| --------- | ------ | --------------------------------- |
-| symbol    |        | Menyalin nilai dari opsi `symbol` |
-| style\* |        | Menyalin nilai dari opsi `style`  |
+| Variabel  | Contoh     | Deskripsi                        |
+| --------- | ---------- | -------------------------------- |
+| hostname  | `computer` | The hostname of the computer     |
+| style\* |            | Menyalin nilai dari opsi `style` |
 
 \*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
