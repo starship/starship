@@ -119,7 +119,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning Only elvish v0.17 or higher is supported. :::
 
    Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
