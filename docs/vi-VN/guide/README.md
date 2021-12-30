@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **Cảnh báo** Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
