@@ -713,20 +713,20 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### 選項
 
-| Option              | 預設                                           | 說明                                                                        |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `"green bold"`                               | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                      | Disables the `deno` module.                                               |
+| Option              | 預設                                                                      | 說明                                                                        |
+| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                    | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                                                  | A format string representing the symbol of Deno                           |
+| `detect_extensions` | `[]`                                                                    | Which extensions should trigger this module.                              |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                    | Which folders should trigger this module.                                 |
+| `style`             | `"green bold"`                                                          | 這個模組的風格。                                                                  |
+| `disabled`          | `false`                                                                 | Disables the `deno` module.                                               |
 
 ### Variables
 
@@ -1513,10 +1513,10 @@ format = "via [⎈ $version](bold white) "
 
 ### Variables
 
-| 變數        | 範例 | 說明                                   |
-| --------- | -- | ------------------------------------ |
-| symbol    |    | Mirrors the value of option `symbol` |
-| style\* |    | Mirrors the value of option `style`  |
+| 變數        | 範例         | 說明                                  |
+| --------- | ---------- | ----------------------------------- |
+| hostname  | `computer` | The hostname of the computer        |
+| style\* |            | Mirrors the value of option `style` |
 
 \*: This variable can only be used as a part of a style string
 
