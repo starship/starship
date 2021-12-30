@@ -99,7 +99,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let mut path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
+    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
@@ -117,9 +117,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         _ => ["".to_string(), "".to_string(), prefix + &dir_string],
     };
 
-    if config.use_os_path_sep {
-        path_vec.iter_mut().for_each(|i| *i = convert_path_sep(i));
-    }
+    let path_vec = if config.use_os_path_sep {
+        path_vec.map(|i| convert_path_sep(&i))
+    } else {
+        path_vec
+    };
 
     let lock_symbol = String::from(config.read_only);
     let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
