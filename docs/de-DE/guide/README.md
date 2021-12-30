@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **Warnung** Nur elvish v0.15 oder höher wird unterstützt. Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
+   **Warning** Only elvish v0.17 or higher is supported. Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
    ```sh
    # ~/.elvish/rc.elv
