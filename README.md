@@ -258,7 +258,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported.
+   **Warning** Only elvish v0.17 or higher is supported.
    Add the following to the end of `~/.elvish/rc.elv`:
 
    ```sh
