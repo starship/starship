@@ -755,18 +755,19 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 
 ### Opções
 
-| Opções              | Padrão                                             | Descrição                                                                              |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | O número de pastas pais do diretório atual que serão truncadas.                        |
-| `truncate_to_repo`  | `true`                                             | Seu diretório será truncado ou não para a raiz do repositório git atual.               |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                                   |
-| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                                    |
-| `disabled`          | `false`                                            | Desabilita o módulo `directory`.                                                       |
-| `read_only`         | `"🔒"`                                              | O simbolo que indica que o diretório atual é somente leitura.                          |
-| `read_only_style`   | `"red"`                                            | O estilo para o simbolo de somente leitura.                                            |
-| `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                                 |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
-| `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                               |
+| Opções              | Padrão                                             | Descrição                                                                               |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | O número de pastas pais do diretório atual que serão truncadas.                         |
+| `truncate_to_repo`  | `true`                                             | Seu diretório será truncado ou não para a raiz do repositório git atual.                |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                                    |
+| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                                     |
+| `disabled`          | `false`                                            | Desabilita o módulo `directory`.                                                        |
+| `read_only`         | `"🔒"`                                              | O simbolo que indica que o diretório atual é somente leitura.                           |
+| `read_only_style`   | `"red"`                                            | O estilo para o simbolo de somente leitura.                                             |
+| `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                                  |
+| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
+| `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                                |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
