@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **警告** elvish v0.15 以上のみがサポートされています。 `~/.elvish/rc.elv` の最後に以下を追記してください。
+   **Warning** Only elvish v0.17 or higher is supported. `~/.elvish/rc.elv` の最後に以下を追記してください。
 
    ```sh
    # ~/.elvish/rc.elv
