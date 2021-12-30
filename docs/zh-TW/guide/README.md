@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **注意** 只支援 elvish v0.15 以上的版本。 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
+   **Warning** Only elvish v0.17 or higher is supported. 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
