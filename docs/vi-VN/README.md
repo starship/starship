@@ -119,7 +119,7 @@ eval $(starship init ion)
 
    #### Elvish
 
-   ::: warning Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. :::
+   ::: warning Only elvish v0.17 or higher is supported. :::
 
    Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 
