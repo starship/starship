@@ -1336,22 +1336,23 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### オプション
 
-| オプション        | デフォルト                                           | 説明                         |
-| ------------ | ----------------------------------------------- | -------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット  |
-| `conflicted` | `"="`                                           | このブランチにはマージの競合があります。       |
-| `ahead`      | `"⇡"`                                           | `ahead`のフォーマット             |
-| `behind`     | `"⇣"`                                           | `behind`のフォーマット            |
-| `diverged`   | `"⇕"`                                           | `diverged`のフォーマット          |
-| `up_to_date` | `""`                                            | The format of `up_to_date` |
-| `untracked`  | `"?"`                                           | The format of `untracked`  |
-| `stashed`    | `"$"`                                           | The format of `stashed`    |
-| `modified`   | `"!"`                                           | The format of `modified`   |
-| `staged`     | `"+"`                                           | The format of `staged`     |
-| `renamed`    | `"»"`                                           | The format of `renamed`    |
-| `deleted`    | `"✘"`                                           | The format of `deleted`    |
-| `style`      | `"bold red"`                                    | モジュールのスタイルです。              |
-| `disabled`   | `false`                                         | `git_status`モジュールを無効にします。  |
+| オプション               | デフォルト                                           | 説明                                |
+| ------------------- | ----------------------------------------------- | --------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット         |
+| `conflicted`        | `"="`                                           | このブランチにはマージの競合があります。              |
+| `ahead`             | `"⇡"`                                           | `ahead`のフォーマット                    |
+| `behind`            | `"⇣"`                                           | `behind`のフォーマット                   |
+| `diverged`          | `"⇕"`                                           | `diverged`のフォーマット                 |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`        |
+| `untracked`         | `"?"`                                           | The format of `untracked`         |
+| `stashed`           | `"$"`                                           | The format of `stashed`           |
+| `modified`          | `"!"`                                           | The format of `modified`          |
+| `staged`            | `"+"`                                           | The format of `staged`            |
+| `renamed`           | `"»"`                                           | The format of `renamed`           |
+| `deleted`           | `"✘"`                                           | The format of `deleted`           |
+| `style`             | `"bold red"`                                    | モジュールのスタイルです。                     |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.     |
+| `disabled`          | `false`                                         | Disables the `git_status` module. |
 
 ### 変数
 
