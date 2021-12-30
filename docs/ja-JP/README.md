@@ -119,7 +119,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Elvish
 
-   ::: warning elvish v0.15以上のみサポートされています。 :::
+   ::: warning Only elvish v0.17 or higher is supported. :::
 
    `~/.elvish/rc.elv` の最後に以下を追記してください。
 
