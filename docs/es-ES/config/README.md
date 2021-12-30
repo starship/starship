@@ -1335,22 +1335,23 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 ### Opciones
 
-| Opción       | Por defecto                                     | Descripción                              |
-| ------------ | ----------------------------------------------- | ---------------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato por defecto para `git_status` |
-| `conflicted` | `"="`                                           | Esta rama tiene conflictos de fusión.    |
-| `ahead`      | `"⇡"`                                           | El formato de `ahead`                    |
-| `behind`     | `"⇣"`                                           | El formato de `behind`                   |
-| `diverged`   | `"⇕"`                                           | El formato de `diverged`                 |
-| `up_to_date` | `""`                                            | El formato de `up_to_date`               |
-| `untracked`  | `"?"`                                           | El formato de `untracked`                |
-| `stashed`    | `"$"`                                           | El formato de `stashed`                  |
-| `modified`   | `"!"`                                           | El formato de `modified`                 |
-| `staged`     | `"+"`                                           | El formato de `staged`                   |
-| `renamed`    | `"»"`                                           | El formato de `renamed`                  |
-| `deleted`    | `"✘"`                                           | El formato de `deleted`                  |
-| `style`      | `"bold red"`                                    | El estilo del módulo.                    |
-| `disabled`   | `false`                                         | Desactiva el módulo `git_status`.        |
+| Opción              | Por defecto                                     | Descripción                              |
+| ------------------- | ----------------------------------------------- | ---------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato por defecto para `git_status` |
+| `conflicted`        | `"="`                                           | Esta rama tiene conflictos de fusión.    |
+| `ahead`             | `"⇡"`                                           | El formato de `ahead`                    |
+| `behind`            | `"⇣"`                                           | El formato de `behind`                   |
+| `diverged`          | `"⇕"`                                           | El formato de `diverged`                 |
+| `up_to_date`        | `""`                                            | El formato de `up_to_date`               |
+| `untracked`         | `"?"`                                           | El formato de `untracked`                |
+| `stashed`           | `"$"`                                           | El formato de `stashed`                  |
+| `modified`          | `"!"`                                           | El formato de `modified`                 |
+| `staged`            | `"+"`                                           | El formato de `staged`                   |
+| `renamed`           | `"»"`                                           | El formato de `renamed`                  |
+| `deleted`           | `"✘"`                                           | El formato de `deleted`                  |
+| `style`             | `"bold red"`                                    | El estilo del módulo.                    |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.            |
+| `disabled`          | `false`                                         | Disables the `git_status` module.        |
 
 ### Variables
 
