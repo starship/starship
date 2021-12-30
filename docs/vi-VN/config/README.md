@@ -1335,22 +1335,23 @@ Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạn
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                                        | Mô tả                               |
-| ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status` |
-| `conflicted` | `"="`                                           | Nhánh này có nhiều merge conflicts. |
-| `ahead`      | `"⇡"`                                           | Định dạng của `ahead`               |
-| `behind`     | `"⇣"`                                           | Định dạng của `behind`              |
-| `diverged`   | `"⇕"`                                           | Định dạng của `diverged`            |
-| `up_to_date` | `""`                                            | The format of `up_to_date`          |
-| `untracked`  | `"?"`                                           | Định dạng của `untracked`           |
-| `stashed`    | `"$"`                                           | Định dạng của `stashed`             |
-| `modified`   | `"!"`                                           | Định dạng của `modified`            |
-| `staged`     | `"+"`                                           | Định dạng của `modified`            |
-| `renamed`    | `"»"`                                           | Định dạng của `renamed`             |
-| `deleted`    | `"✘"`                                           | Định dạng của `deleted`             |
-| `style`      | `"bold red"`                                    | Kiểu cho module.                    |
-| `disabled`   | `false`                                         | Vô hiệu `git_status` module.        |
+| Tuỳ chọn            | Mặc định                                        | Mô tả                               |
+| ------------------- | ----------------------------------------------- | ----------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status` |
+| `conflicted`        | `"="`                                           | Nhánh này có nhiều merge conflicts. |
+| `ahead`             | `"⇡"`                                           | Định dạng của `ahead`               |
+| `behind`            | `"⇣"`                                           | Định dạng của `behind`              |
+| `diverged`          | `"⇕"`                                           | Định dạng của `diverged`            |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`          |
+| `untracked`         | `"?"`                                           | Định dạng của `untracked`           |
+| `stashed`           | `"$"`                                           | Định dạng của `stashed`             |
+| `modified`          | `"!"`                                           | Định dạng của `modified`            |
+| `staged`            | `"+"`                                           | Định dạng của `modified`            |
+| `renamed`           | `"»"`                                           | Định dạng của `renamed`             |
+| `deleted`           | `"✘"`                                           | Định dạng của `deleted`             |
+| `style`             | `"bold red"`                                    | Kiểu cho module.                    |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.       |
+| `disabled`          | `false`                                         | Disables the `git_status` module.   |
 
 ### Các biến
 
