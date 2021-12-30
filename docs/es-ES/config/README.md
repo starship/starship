@@ -713,20 +713,20 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 El módulo `deno` le muestra la versión instalada de [Deno](https://deno.land/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
-- El directorio actual contiene un archivo `mod.ts`, `mod.js`, `deps.ts` o `deps.js`
+- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Opciones
 
-| Opción              | Por defecto                                  | Descripción                                                                             |
-| ------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | El formato del módulo.                                                                  |
-| `version_format`    | `"v${raw}"`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                       | Una cadena de formato que representa el símbolo de Deno                                 |
-| `detect_extensions` | `[]`                                         | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo.                                    |
-| `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.                                              |
-| `style`             | `"green bold"`                               | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                      | Deshabilita el módulo `deno`.                                                           |
+| Opción              | Por defecto                                                             | Descripción                                                                             |
+| ------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                    | El formato del módulo.                                                                  |
+| `version_format`    | `"v${raw}"`                                                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                                                  | Una cadena de formato que representa el símbolo de Deno                                 |
+| `detect_extensions` | `[]`                                                                    | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                    | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `"green bold"`                                                          | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                                                 | Deshabilita el módulo `deno`.                                                           |
 
 ### Variables
 
@@ -1513,10 +1513,10 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Variables
 
-| Variable  | Ejemplo | Descripción                            |
-| --------- | ------- | -------------------------------------- |
-| symbol    |         | Refleja el valor de la opción `symbol` |
-| style\* |         | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo    | Descripción                           |
+| --------- | ---------- | ------------------------------------- |
+| hostname  | `computer` | The hostname of the computer          |
+| style\* |            | Refleja el valor de la opción `style` |
 
 \*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
