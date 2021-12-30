@@ -1335,22 +1335,23 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### 配置项
 
-| Option       | 默认值                                             | 描述                                  |
-| ------------ | ----------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                           | 这个分支有合并冲突。                          |
-| `ahead`      | `"⇡"`                                           | The format of `ahead`               |
-| `behind`     | `"⇣"`                                           | The format of `behind`              |
-| `diverged`   | `"⇕"`                                           | The format of `diverged`            |
-| `up_to_date` | `""`                                            | The format of `up_to_date`          |
-| `untracked`  | `"?"`                                           | The format of `untracked`           |
-| `stashed`    | `"$"`                                           | The format of `stashed`             |
-| `modified`   | `"!"`                                           | The format of `modified`            |
-| `staged`     | `"+"`                                           | The format of `staged`              |
-| `renamed`    | `"»"`                                           | The format of `renamed`             |
-| `deleted`    | `"✘"`                                           | The format of `deleted`             |
-| `style`      | `"bold red"`                                    | 此组件的样式。                             |
-| `disabled`   | `false`                                         | 禁用 `git_status` 组件。                 |
+| Option              | 默认值                                             | 描述                                  |
+| ------------------- | ----------------------------------------------- | ----------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted`        | `"="`                                           | 这个分支有合并冲突。                          |
+| `ahead`             | `"⇡"`                                           | The format of `ahead`               |
+| `behind`            | `"⇣"`                                           | The format of `behind`              |
+| `diverged`          | `"⇕"`                                           | The format of `diverged`            |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`          |
+| `untracked`         | `"?"`                                           | The format of `untracked`           |
+| `stashed`           | `"$"`                                           | The format of `stashed`             |
+| `modified`          | `"!"`                                           | The format of `modified`            |
+| `staged`            | `"+"`                                           | The format of `staged`              |
+| `renamed`           | `"»"`                                           | The format of `renamed`             |
+| `deleted`           | `"✘"`                                           | The format of `deleted`             |
+| `style`             | `"bold red"`                                    | 此组件的样式。                             |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.       |
+| `disabled`          | `false`                                         | Disables the `git_status` module.   |
 
 ### Variables
 
