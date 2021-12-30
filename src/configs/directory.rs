@@ -20,7 +20,7 @@ pub struct DirectoryConfig<'a> {
     pub read_only_style: &'a str,
     pub truncation_symbol: &'a str,
     pub home_symbol: &'a str,
-    pub convert_slash: bool,
+    pub use_os_path_sep: bool,
 }
 
 impl<'a> Default for DirectoryConfig<'a> {
@@ -40,7 +40,7 @@ impl<'a> Default for DirectoryConfig<'a> {
             read_only_style: "red",
             truncation_symbol: "",
             home_symbol: "~",
-            convert_slash: true,
+            use_os_path_sep: true,
         }
     }
 }
