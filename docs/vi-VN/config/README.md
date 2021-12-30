@@ -713,20 +713,20 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                     | Mô tả                                                                     |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | Định dạng cho module.                                                     |
-| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                       | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                         | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `"green bold"`                               | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                      | Disables the `deno` module.                                               |
+| Tuỳ chọn            | Mặc định                                                                | Mô tả                                                                     |
+| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                    | Định dạng cho module.                                                     |
+| `version_format`    | `"v${raw}"`                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                                                  | A format string representing the symbol of Deno                           |
+| `detect_extensions` | `[]`                                                                    | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `[]`                                                                    | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"green bold"`                                                          | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                                                 | Disables the `deno` module.                                               |
 
 ### Các biến
 
@@ -1513,10 +1513,10 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các biến
 
-| Biến      | Ví dụ | Mô tả                            |
-| --------- | ----- | -------------------------------- |
-| symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |       | Giá trị ghi đè của `style`       |
+| Biến      | Ví dụ      | Mô tả                        |
+| --------- | ---------- | ---------------------------- |
+| hostname  | `computer` | The hostname of the computer |
+| style\* |            | Giá trị ghi đè của `style`   |
 
 \*: Biến này có thể chỉ được sử dụng như một phần của style string
 
