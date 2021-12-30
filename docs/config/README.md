@@ -1407,22 +1407,23 @@ current directory.
 
 ### Options
 
-| Option       | Default                                       | Description                         |
-| ------------ | --------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                         | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                         | The format of `ahead`               |
-| `behind`     | `"⇣"`                                         | The format of `behind`              |
-| `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `up_to_date` | `""`                                          | The format of `up_to_date`          |
-| `untracked`  | `"?"`                                         | The format of `untracked`           |
-| `stashed`    | `"$"`                                         | The format of `stashed`             |
-| `modified`   | `"!"`                                         | The format of `modified`            |
-| `staged`     | `"+"`                                         | The format of `staged`              |
-| `renamed`    | `"»"`                                         | The format of `renamed`             |
-| `deleted`    | `"✘"`                                         | The format of `deleted`             |
-| `style`      | `"bold red"`                                  | The style for the module.           |
-| `disabled`   | `false`                                       | Disables the `git_status` module.   |
+| Option              | Default                                       | Description                         |
+| ------------------- | --------------------------------------------- | ----------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted`        | `"="`                                         | This branch has merge conflicts.    |
+| `ahead`             | `"⇡"`                                         | The format of `ahead`               |
+| `behind`            | `"⇣"`                                         | The format of `behind`              |
+| `diverged`          | `"⇕"`                                         | The format of `diverged`            |
+| `up_to_date`        | `""`                                          | The format of `up_to_date`          |
+| `untracked`         | `"?"`                                         | The format of `untracked`           |
+| `stashed`           | `"$"`                                         | The format of `stashed`             |
+| `modified`          | `"!"`                                         | The format of `modified`            |
+| `staged`            | `"+"`                                         | The format of `staged`              |
+| `renamed`           | `"»"`                                         | The format of `renamed`             |
+| `deleted`           | `"✘"`                                         | The format of `deleted`             |
+| `style`             | `"bold red"`                                  | The style for the module.           |
+| `ignore_submodules` | `false`                                       | Ignore changes to submodules.       |
+| `disabled`          | `false`                                       | Disables the `git_status` module.   |
 
 ### Variables
 
