@@ -119,7 +119,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Elvish
 
-   ::: warning Nur elvish v0.15 oder höher ist unterstützt. :::
+   ::: warning Only elvish v0.17 or higher is supported. :::
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
