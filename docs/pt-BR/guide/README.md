@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **Atenção** Apenas a versão v0.15 ou superior do elvish é suportada. Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
