@@ -264,7 +264,7 @@
 
    #### Elvish
 
-   **ئاگادارکردنەوە** تەنها elvish v0.15 یان بەرزتر پشتگیری کراوە. ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
