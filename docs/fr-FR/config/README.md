@@ -2676,10 +2676,11 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `elvish_indicator`     | `esh`                     | Une chaîne de format utilisée pour représenter elvish.       |
 | `tcsh_indicator`       | `tsh`                     | Une chaîne de format utilisée pour représenter tcsh.         |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | Format du module.                                            |
 | `style`                | `"white bold"`            | Le style du module.                                          |
-| `disabled`             | `true`                    | Désactive le module `shell`.                                 |
+| `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
 ### Variables
 
