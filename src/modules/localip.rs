@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let localip = local_ipaddress::get().unwrap();
+    let localip = local_ipaddress::get().unwrap_or_default();
     if localip.is_empty() {
         log::warn!("unable to determine local ipv4 address");
         return None;
@@ -88,7 +88,7 @@ mod tests {
                 ssh_only = false
             })
             .collect();
-        let expected = Some(format!("@{}", style().paint(localip)));
+        let expected = Some(format!("{}", style().paint(localip)));
 
         assert_eq!(expected, actual);
     }
@@ -117,7 +117,7 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("@{}", style().paint(localip)));
+        let expected = Some(format!("{}", style().paint(localip)));
 
         assert_eq!(expected, actual);
     }
