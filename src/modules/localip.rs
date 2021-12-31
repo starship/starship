@@ -35,7 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "localip" => Some(Ok(&localip)),
+                "localipv4" => Some(Ok(&localip)),
                 _ => None,
             })
             .parse(None, Some(context))

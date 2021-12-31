@@ -192,7 +192,7 @@ format = "$all"
 format = """
 $username\
 $hostname\
-$localip\
+$localipv4\
 $shlvl\
 $singularity\
 $kubernetes\
@@ -1811,7 +1811,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | Option     | Default                     | Description                                                                                                                          |
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only` | `true`                      | Only show IP address when connected to an SSH session.                                                                               |
-| `format`   | `"[$hostname]($style)"`     | The format for the module.                                                                                                           |
+| `format`   | `"[$localipv4]($style) "`     | The format for the module.                                                                                                           |
 | `style`    | `"bold yellow"`              | The style for the module.                                                                                                            |
 | `disabled` | `false`                     | Disables the `localip` module.                                                                                                      |
 
@@ -1819,7 +1819,6 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 | Variable | Example | Description                          |
 | -------- | ------- | ------------------------------------ |
-| symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
@@ -1831,7 +1830,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 [localip]
 ssh_only = false
-format =  "@[$localip](bold red) "
+format =  "@[$localipv4](bold red) "
 disabled = false
 ```
 
