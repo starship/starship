@@ -119,7 +119,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning Seul elvish v0.17 ou supérieur est pris en charge. :::
 
    Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 
