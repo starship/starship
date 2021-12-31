@@ -97,7 +97,7 @@ Invoke-Expression (&starship init powershell)
 
 注意: 右プロンプトは入力の場所に続く単一の行です。 複数行のプロンプトで入力行の上を右寄せにするには、[fillモジュール](/config/#fill)を参照してください。
 
-`right_format` は現在、次のシェルでサポートされています: elvish, fish, zsh
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh.
 
 ### 設定例
 
