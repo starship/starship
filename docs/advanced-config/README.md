@@ -147,13 +147,13 @@ Some shells support a continuation prompt along with the normal prompt. This pro
 
 Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[❯](bold yellow)"`.
 
+Note: `continuation_prompt` should be set to a literal string without any variables.
+
 Note: Continuation prompts are only available in the following shells:
 
   - `bash`
   - `zsh`
   - `PowerShell`
-
-Note: Unlike `format` and `right_format`, the `continuation_prompt` is only set a single time; when `starship init` is called for one of the available shells. This may break modules used in `continuation_prompt` that depend on being called after every command.
 
 ### Example
 
