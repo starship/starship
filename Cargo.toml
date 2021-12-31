@@ -70,7 +70,7 @@ shadow-rs = "0.8.1"
 versions = "3.0.3"
 strsim = "0.10.0"
 sha-1 = "0.10.0"
-toml_edit = "0.12.1"
+toml_edit = "0.12.2"
 
 process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
 
