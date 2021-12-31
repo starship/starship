@@ -60,6 +60,6 @@ assignees: ''
 #### Starship Configuration
 <!-- Can be found in  ~/.config/starship.toml -->
 
-```
+```toml
 # Your configuration here
 ```
