@@ -417,7 +417,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
 
     let lformatter = StringFormatter::new(&config.format);
     let rformatter = StringFormatter::new(&config.right_format);
-    let cformatter = StringFormatter::new(&config.continuation_format);
+    let cformatter = StringFormatter::new(&config.continuation_prompt);
     if lformatter.is_err() {
         log::error!("Error parsing `format`")
     }
@@ -425,16 +425,17 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
         log::error!("Error parsing `right_format`")
     }
     if cformatter.is_err() {
-        log::error!("Error parsing `continuation_format`")
+        log::error!("Error parsing `continuation_prompt`")
     }
 
     match (lformatter, rformatter, cformatter) {
         (Ok(lf), Ok(rf), Ok(cf)) => {
             let mut modules: BTreeSet<String> = BTreeSet::new();
-            modules.extend(lf.get_variables());
-            modules.extend(rf.get_variables());
+            if !context.continuation {
+                modules.extend(lf.get_variables());
+                modules.extend(rf.get_variables());
+            }
             if context.continuation {
-                modules.extend(cf.get_variables());
                 (cf, modules)
             } else if context.right {
                 (rf, modules)
@@ -475,16 +476,13 @@ mod test {
         let mut context = default_context();
         context.config = StarshipConfig {
             config: Some(toml::toml! {
-                continuation_format="$character"
-                add_newline=true
-                [character]
-                continuation_symbol="::::"
+                continuation_prompt="><>"
             }),
         };
-        context.root_config.continuation_format = "$character".to_string();
+        context.root_config.continuation_prompt = "><>".to_string();
         context.continuation = true;
 
-        let expected = String::from(":::: "); // character module should add a space
+        let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
     }

@@ -143,14 +143,13 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option                | Default                         | Description                                                      |
-| --------------------- | ------------------------------- | ---------------------------------------------------------------- |
-| `format`              | [link](#default-prompt-format)  | Configure the format of the prompt.                              |
-| `right_format`        | `""`                            | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
-| `continuation_format` | `"$character"`                  | See [Continuation Prompt](/advanced-config/#continuation-prompt) |
-| `scan_timeout`        | `30`                            | Timeout for starship to scan files (in milliseconds).            |
-| `command_timeout`     | `500`                           | Timeout for commands executed by starship (in milliseconds).     |
-| `add_newline`         | `true`                          | Inserts blank line between shell prompts.                        |
+| Option            | Default                         | Description                                                      |
+| ----------------- | ------------------------------- | ---------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format)  | Configure the format of the prompt.                              |
+| `right_format`    | `""`                            | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
+| `scan_timeout`    | `30`                            | Timeout for starship to scan files (in milliseconds).            |
+| `command_timeout` | `500`                           | Timeout for commands executed by starship (in milliseconds).     |
+| `add_newline`     | `true`                          | Inserts blank line between shell prompts.                        |
 
 
 ### Example
@@ -458,28 +457,21 @@ look at [this example](#with-custom-error-shape).
 
 :::
 
-::: warning
-
-`continuation_symbol` is only supported in bash, zsh, and PowerShell.
-
-:::
-
 ### Options
 
-| Option                | Default              | Description                                                                                 |
-| --------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
-| `format`              | `"$symbol "`         | The format string used before the text input.                                               |
-| `success_symbol`      | `"[❯](bold green)"`  | The format string used before the text input if the previous command succeeded.             |
-| `error_symbol`        | `"[❯](bold red)"`    | The format string used before the text input if the previous command failed.                |
-| `continuation_symbol` | `"[❯](bold yellow)"` | The format string used before the text input if the previous command needs to be continued. |
-| `vicmd_symbol`        | `"[❮](bold green)"`  | The format string used before the text input if the shell is in vim normal mode.            |
-| `disabled`            | `false`              | Disables the `character` module.                                                            |
+| Option           | Default             | Description                                                                      |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
+| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
+| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
+| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
+| `disabled`       | `false`             | Disables the `character` module.                                                 |
 
 ### Variables
 
-| Variable | Example | Description                                                                                   |
-| -------- | ------- | --------------------------------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `continuation_symbol`, or `vicmd_symbol` |
+| Variable | Example | Description                                                           |
+| -------- | ------- | --------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
 ### Examples
 
@@ -491,7 +483,6 @@ look at [this example](#with-custom-error-shape).
 [character]
 success_symbol = "[➜](bold green) "
 error_symbol = "[✗](bold red) "
-continuation_symbol = "[‒](bold yellow) "
 ```
 
 #### Without custom error shape
@@ -502,7 +493,6 @@ continuation_symbol = "[‒](bold yellow) "
 [character]
 success_symbol = "[➜](bold green) "
 error_symbol = "[➜](bold red) "
-continuation_symbol = "[➜](bold yellow) "
 ```
 
 #### With custom vim shape

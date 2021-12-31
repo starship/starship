@@ -143,11 +143,9 @@ Produces a prompt like the following:
 
 ## Continuation Prompt
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the
-user has entered an incomplete statement (such as a single left parenthesis).
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship can set the continuation prompt format using the `continuation_format` option. The
-default format is `"$character"`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[❯](bold yellow)"`.
 
 Note: Continuation prompts are only available in the following shells:
 
@@ -155,19 +153,15 @@ Note: Continuation prompts are only available in the following shells:
   - `zsh`
   - `PowerShell`
 
+Note: Unlike `format` and `right_format`, the `continuation_prompt` is only set a single time; when `starship init` is called for one of the available shells. This may break modules used in `continuation_prompt` that depend on being called after every command.
+
 ### Example
 
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two characters
-continuation_format = """$character$character"""
-```
-
-Produces a continuation prompt like the following:
-
-```
-▶▶
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = "▶▶"
 ```
 
 ## Style Strings

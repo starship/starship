@@ -80,7 +80,7 @@ pub struct FullConfig<'a> {
     // Root config
     pub format: String,
     pub right_format: String,
-    pub continuation_format: String,
+    pub continuation_prompt: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -159,7 +159,7 @@ impl<'a> Default for FullConfig<'a> {
         Self {
             format: "$all".to_string(),
             right_format: "".to_string(),
-            continuation_format: "$character".to_string(),
+            continuation_prompt: "[❯](bold yellow)".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
