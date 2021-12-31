@@ -97,7 +97,7 @@ Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en 
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo fill](/config/#fill).
 
-`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh.
 
 ### Ejemplo
 
