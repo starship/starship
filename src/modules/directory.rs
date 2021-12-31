@@ -118,20 +118,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let mut dir_components = path_vec[2]
-        .split("/")
+        .split('/')
         .map(|s| s.to_string())
         .collect::<Vec<String>>();
     if let Some(cwd_string) = dir_components.pop() {
         if !dir_components.is_empty() {
             dir_components.push("".to_string())
         }
-        path_vec.append(&mut vec![dir_components.join("/"), cwd_string.to_string()])
+        path_vec.append(&mut vec![dir_components.join("/"), cwd_string])
     } else {
         path_vec.append(&mut vec!["".to_string(), "".to_string()]);
     }
 
     let path_vec = if config.use_os_path_sep {
-        path_vec.iter().map(|i| convert_path_sep(&i)).collect()
+        path_vec.iter().map(|i| convert_path_sep(i)).collect()
     } else {
         path_vec
     };
