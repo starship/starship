@@ -109,12 +109,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             if ((num_segments_after_root - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                [prefix + &before, root.to_string(), after_repo_root, "".to_string()]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                ["".to_string(), "".to_string(), prefix + &dir_string, "".to_string()]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => ["".to_string(), "".to_string(), prefix + &dir_string, "".to_string()],
+    };
+
+    let mut dir_components = path_vec[2].split("/").map(|s| s.to_string()).collect::<Vec<String>>();
+    let path_vec = if let Some(cwd_string) = dir_components.pop() {
+        if !dir_components.is_empty() {
+            dir_components.push("".to_string())
+        }
+        [path_vec[0].clone(), path_vec[1].clone(), dir_components.join("/"), cwd_string.to_string()]
+    }else{
+        path_vec
     };
 
     let path_vec = if config.use_os_path_sep {
@@ -130,6 +140,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.repo_root_format
     };
     let repo_root_style = config.repo_root_style.unwrap_or(config.style);
+    let cwd_style = config.cwd_style.unwrap_or(config.style);
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
@@ -137,9 +148,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 "repo_root_style" => Some(Ok(repo_root_style)),
+                "cwd_style" => Some(Ok(cwd_style)),
                 _ => None,
             })
             .map(|variable| match variable {
+                "cwd" => Some(Ok(&path_vec[3])),
                 "path" => Some(Ok(&path_vec[2])),
                 "before_root_path" => Some(Ok(&path_vec[0])),
                 "repo_root" => Some(Ok(&path_vec[1])),
