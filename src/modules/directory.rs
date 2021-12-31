@@ -99,7 +99,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
+    let mut path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
@@ -109,26 +109,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             if ((num_segments_after_root - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root, "".to_string()]
+                vec![prefix + &before, root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string, "".to_string()]
+                vec!["".to_string(), "".to_string(), prefix + &dir_string]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string, "".to_string()],
+        _ => vec!["".to_string(), "".to_string(), prefix + &dir_string],
     };
 
-    let mut dir_components = path_vec[2].split("/").map(|s| s.to_string()).collect::<Vec<String>>();
-    let path_vec = if let Some(cwd_string) = dir_components.pop() {
+    let mut dir_components = path_vec[2]
+        .split("/")
+        .map(|s| s.to_string())
+        .collect::<Vec<String>>();
+    if let Some(cwd_string) = dir_components.pop() {
         if !dir_components.is_empty() {
             dir_components.push("".to_string())
         }
-        [path_vec[0].clone(), path_vec[1].clone(), dir_components.join("/"), cwd_string.to_string()]
-    }else{
-        path_vec
-    };
+        path_vec.append(&mut vec![dir_components.join("/"), cwd_string.to_string()])
+    } else {
+        path_vec.append(&mut vec!["".to_string(), "".to_string()]);
+    }
 
     let path_vec = if config.use_os_path_sep {
-        path_vec.map(|i| convert_path_sep(&i))
+        path_vec.iter().map(|i| convert_path_sep(&i)).collect()
     } else {
         path_vec
     };
@@ -152,7 +155,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "cwd" => Some(Ok(&path_vec[3])),
+                "cwd" => Some(Ok(&path_vec[4])),
+                "dirs" => Some(Ok(&path_vec[3])),
                 "path" => Some(Ok(&path_vec[2])),
                 "before_root_path" => Some(Ok(&path_vec[0])),
                 "repo_root" => Some(Ok(&path_vec[1])),
