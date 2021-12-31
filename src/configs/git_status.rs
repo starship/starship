@@ -18,6 +18,7 @@ pub struct GitStatusConfig<'a> {
     pub modified: &'a str,
     pub staged: &'a str,
     pub untracked: &'a str,
+    pub ignore_submodules: bool,
     pub disabled: bool,
 }
 
@@ -37,6 +38,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             modified: "!",
             staged: "+",
             untracked: "?",
+            ignore_submodules: false,
             disabled: false,
         }
     }

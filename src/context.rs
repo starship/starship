@@ -1,7 +1,7 @@
 use crate::config::{RootModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
-use crate::utils::{exec_cmd, CommandOutput};
+use crate::utils::{create_command, exec_timeout, CommandOutput};
 
 use crate::modules;
 use crate::utils::{self, home_dir};
@@ -274,7 +274,8 @@ impl<'a> Context<'a> {
             }?;
             Ok(Repo {
                 branch: get_current_branch(&repository),
-                root: repository.workdir().map(Path::to_path_buf),
+                workdir: repository.workdir().map(Path::to_path_buf),
+                path: Path::to_path_buf(repository.path()),
                 state: repository.state(),
                 remote: get_remote_repository_info(&repository),
             })
@@ -316,16 +317,27 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
+        log::trace!(
+            "Executing command {:?} with args {:?} from context",
+            cmd,
+            args
+        );
         #[cfg(test)]
         {
             let command = crate::utils::display_command(&cmd, args);
-            if let Some(output) = self.cmd.get(command.as_str()) {
-                return output.clone();
+            if let Some(output) = self
+                .cmd
+                .get(command.as_str())
+                .cloned()
+                .or_else(|| crate::utils::mock_cmd(&cmd, args))
+            {
+                return output;
             }
         }
-        exec_cmd(
-            &cmd,
-            args,
+        let mut cmd = create_command(cmd).ok()?;
+        cmd.args(args).current_dir(&self.current_dir);
+        exec_timeout(
+            &mut cmd,
             Duration::from_millis(self.root_config.command_timeout),
         )
     }
@@ -434,13 +446,23 @@ pub struct Repo {
 
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
-    pub root: Option<PathBuf>,
+    pub workdir: Option<PathBuf>,
+
+    /// The path of the repository's `.git` directory.
+    pub path: PathBuf,
 
     /// State
     pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,
+}
+
+impl Repo {
+    /// Opens the associated git repository.
+    pub fn open(&self) -> Result<Repository, git2::Error> {
+        Repository::open(&self.path)
+    }
 }
 
 /// Remote repository

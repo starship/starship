@@ -73,6 +73,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "aws",
     "gcloud",
     "openstack",
+    "azure",
     "env_var",
     "crystal",
     "custom",

@@ -306,7 +306,7 @@
 
 ## 💭影響を受けたプロダクト
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
 
@@ -321,4 +321,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。

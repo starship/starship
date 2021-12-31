@@ -77,7 +77,7 @@ You can use texts, variables and text groups in a format string.
 #### Variable
 
 A variable contains a `$` symbol followed by the name of the variable.
-The name of a variable only contains letters, numbers and `_`.
+The name of a variable can only contain letters, numbers and `_`.
 
 For example:
 
@@ -124,21 +124,13 @@ For example:
 - When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
 
-#### Escapable characters
+#### Special characters
 
-The following symbols have special usage in a format string.
-If you want to print the following symbols, you have to escape them with a backslash (`\`).
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-- \$
-- \\
-- [
-- ]
-- (
-- )
-
-Note that `toml` has [its own escape syntax](https://github.com/toml-lang/toml#user-content-string).
-It is recommended to use a literal string (`''`) in your config.
-If you want to use a basic string (`""`), pay attention to escape the backslash `\`.
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string).
+It is recommended to use a literal string (surrounded by single quotes) in your config.
+If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
@@ -252,6 +244,7 @@ $memory_usage\
 $aws\
 $gcloud\
 $openstack\
+$azure\
 $env_var\
 $crystal\
 $custom\
@@ -354,6 +347,31 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+```
+
+## Azure
+
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+
+### Options
+
+| Variable          | Default                                  | Description                                |
+| ----------------- | ---------------------------------------- | ------------------------------------------ |
+| `format`          | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`          | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`           | `"blue bold"`                            | The style used in the format.              |
+| `disabled`        | `true`                                  | Disables the `azure` module.               |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($subscription)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -741,20 +759,20 @@ format = "via [🔰 $version](bold red) "
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/).
 By default the module will be shown if any of the following conditions are met:
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Options
 
-| Option              | Default                                           | Description                                                               |
-| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`              | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                           | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                              | Which extensions should trigger this module.                              |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]`      | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                              | Which folders should trigger this module.                                 |
-| `style`             | `"green bold"`                                    | The style for the module.                                                 |
-| `disabled`          | `false`                                           | Disables the `deno` module.                                               |
+| Option              | Default                                                                 | Description                                                               |
+| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                    | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦕 "`                                                                 | A format string representing the symbol of Deno                           |
+| `detect_extensions` | `[]`                                                                    | Which extensions should trigger this module.                              |
+| `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                    | Which folders should trigger this module.                                 |
+| `style`             | `"green bold"`                                                          | The style for the module.                                                 |
+| `disabled`          | `false`                                                                 | Disables the `deno` module.                                               |
 
 ### Variables
 
@@ -800,7 +818,8 @@ it would have been `nixpkgs/pkgs`.
 | `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                              |
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                |
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.|
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                           |
+| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -1400,22 +1419,23 @@ current directory.
 
 ### Options
 
-| Option       | Default                                       | Description                         |
-| ------------ | --------------------------------------------- | ----------------------------------- |
-| `format`     | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted` | `"="`                                         | This branch has merge conflicts.    |
-| `ahead`      | `"⇡"`                                         | The format of `ahead`               |
-| `behind`     | `"⇣"`                                         | The format of `behind`              |
-| `diverged`   | `"⇕"`                                         | The format of `diverged`            |
-| `up_to_date` | `""`                                          | The format of `up_to_date`          |
-| `untracked`  | `"?"`                                         | The format of `untracked`           |
-| `stashed`    | `"$"`                                         | The format of `stashed`             |
-| `modified`   | `"!"`                                         | The format of `modified`            |
-| `staged`     | `"+"`                                         | The format of `staged`              |
-| `renamed`    | `"»"`                                         | The format of `renamed`             |
-| `deleted`    | `"✘"`                                         | The format of `deleted`             |
-| `style`      | `"bold red"`                                  | The style for the module.           |
-| `disabled`   | `false`                                       | Disables the `git_status` module.   |
+| Option              | Default                                       | Description                         |
+| ------------------- | --------------------------------------------- | ----------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted`        | `"="`                                         | This branch has merge conflicts.    |
+| `ahead`             | `"⇡"`                                         | The format of `ahead`               |
+| `behind`            | `"⇣"`                                         | The format of `behind`              |
+| `diverged`          | `"⇕"`                                         | The format of `diverged`            |
+| `up_to_date`        | `""`                                          | The format of `up_to_date`          |
+| `untracked`         | `"?"`                                         | The format of `untracked`           |
+| `stashed`           | `"$"`                                         | The format of `stashed`             |
+| `modified`          | `"!"`                                         | The format of `modified`            |
+| `staged`            | `"+"`                                         | The format of `staged`              |
+| `renamed`           | `"»"`                                         | The format of `renamed`             |
+| `deleted`           | `"✘"`                                         | The format of `deleted`             |
+| `style`             | `"bold red"`                                  | The style for the module.           |
+| `ignore_submodules` | `false`                                       | Ignore changes to submodules.       |
+| `disabled`          | `false`                                       | Disables the `git_status` module.   |
 
 ### Variables
 
@@ -1581,10 +1601,10 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable | Example    | Description                          |
+| -------- | ---------- | ------------------------------------ |
+| hostname | `computer` | The hostname of the computer         |
+| style\*  |            | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
 
@@ -2251,6 +2271,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your
 > current directory, not your package manager.
@@ -2798,6 +2819,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
 | `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
+| `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
 | `style`                | `"white bold"`            | The style for the module.                                    |
@@ -2935,6 +2957,7 @@ This module is not supported on elvish and nu shell.
 | Variable                | Example | Description                                                             |
 | ----------------------- | ------- | ----------------------------------------------------------------------- |
 | status                  | `127`   | The exit code of the last command                                       |
+| hex_status              | `0x7F`  | The exit code of the last command in hex                                |
 | int                     | `127`   | The exit code of the last command                                       |
 | common_meaning          | `ERROR` | Meaning of the code if not a signal                                     |
 | signal_number           | `9`     | Signal number corresponding to the exit code, only if signalled         |

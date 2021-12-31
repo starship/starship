@@ -27,10 +27,10 @@ const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$st
 ///   - `»` — A renamed file has been added to the staging area
 ///   - `✘` — A file's deletion has been added to the staging area
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let info = Arc::new(GitStatusInfo::load(context));
-
     let mut module = context.new_module("git_status");
     let config: GitStatusConfig = GitStatusConfig::try_load(module.config);
+
+    let info = Arc::new(GitStatusInfo::load(context, config.clone()));
 
     //Return None if not in git repository
     context.get_repo().ok()?;
@@ -116,14 +116,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
+    config: GitStatusConfig<'a>,
     repo_status: OnceCell<Option<RepoStatus>>,
     stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
-    pub fn load(context: &'a Context) -> Self {
+    pub fn load(context: &'a Context, config: GitStatusConfig<'a>) -> Self {
         Self {
             context,
+            config,
             repo_status: OnceCell::new(),
             stashed_count: OnceCell::new(),
         }
@@ -135,7 +137,7 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_repo_status(&self) -> &Option<RepoStatus> {
         self.repo_status
-            .get_or_init(|| match get_repo_status(self.context) {
+            .get_or_init(|| match get_repo_status(self.context, &self.config) {
                 Some(repo_status) => Some(repo_status),
                 None => {
                     log::debug!("get_repo_status: git status execution failed");
@@ -181,21 +183,37 @@ impl<'a> GitStatusInfo<'a> {
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
-fn get_repo_status(context: &Context) -> Option<RepoStatus> {
+fn get_repo_status(context: &Context, config: &GitStatusConfig) -> Option<RepoStatus> {
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-    let status_output = context.exec_cmd(
-        "git",
-        &[
-            OsStr::new("-C"),
-            context.current_dir.as_os_str(),
-            OsStr::new("--no-optional-locks"),
-            OsStr::new("status"),
-            OsStr::new("--porcelain=2"),
-            OsStr::new("--branch"),
-        ],
-    )?;
+    let mut args = vec![
+        OsStr::new("-C"),
+        context.current_dir.as_os_str(),
+        OsStr::new("--no-optional-locks"),
+        OsStr::new("status"),
+        OsStr::new("--porcelain=2"),
+    ];
+
+    // for performance reasons, only pass flags if necessary...
+    let has_ahead_behind = !config.ahead.is_empty() || !config.behind.is_empty();
+    let has_up_to_date_diverged = !config.up_to_date.is_empty() || !config.diverged.is_empty();
+    if has_ahead_behind || has_up_to_date_diverged {
+        args.push(OsStr::new("--branch"));
+    }
+
+    // ... and add flags that omit information the user doesn't want
+    let has_untracked = !config.untracked.is_empty();
+    if !has_untracked {
+        args.push(OsStr::new("--untracked-files=no"));
+    }
+    if config.ignore_submodules {
+        args.push(OsStr::new("--ignore-submodules=dirty"));
+    } else if !has_untracked {
+        args.push(OsStr::new("--ignore-submodules=untracked"));
+    }
+
+    let status_output = context.exec_cmd("git", &args)?;
     let statuses = status_output.stdout.lines();
 
     statuses.for_each(|status| {

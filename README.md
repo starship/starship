@@ -75,6 +75,22 @@
   /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+  /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+  /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
@@ -242,7 +258,7 @@ shown below. Can't see yours? Have a look at the [extra platform instructions](h
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported.
+   **Warning** Only elvish v0.17 or higher is supported.
    Add the following to the end of `~/.elvish/rc.elv`:
 
    ```sh

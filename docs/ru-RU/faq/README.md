@@ -105,7 +105,7 @@ The first line should produce a [snake emoji](https://emojipedia.org/snake/), wh
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## Как удалить Starship?
 
 Starship is just as easy to uninstall as it is to install in the first place.
 

@@ -1,7 +1,6 @@
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, RootModuleConfig};
-use git2::Repository;
 
 use crate::configs::git_branch::GitBranchConfig;
 use crate::formatter::StringFormatter;
@@ -27,11 +26,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
 
-    if let Some(repo_root) = repo.root.as_ref() {
-        let git_repo = Repository::open(repo_root).ok()?;
-        let is_detached = git_repo.head_detached().ok()?;
-        if config.only_attached && is_detached {
-            return None;
+    if config.only_attached {
+        if let Ok(git_repo) = repo.open() {
+            if git_repo.head_detached().ok()? {
+                return None;
+            }
         }
     }
 
@@ -242,8 +241,8 @@ mod tests {
             "",
             format!(
                 "branch: {} {} ",
-                Color::Blue.bold().paint("1337_hello_world").to_string(),
-                Color::Red.paint("THE COLORS").to_string()
+                Color::Blue.bold().paint("1337_hello_world"),
+                Color::Red.paint("THE COLORS")
             ),
         )
     }
@@ -257,10 +256,7 @@ mod tests {
             symbol = "git: "
             style = "green"
         "#,
-            format!(
-                "git: {}",
-                Color::Green.paint("1337_hello_world").to_string(),
-            ),
+            format!("git: {}", Color::Green.paint("1337_hello_world"),),
         )
     }
 
