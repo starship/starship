@@ -15,7 +15,7 @@ impl<'a> Default for LocalipConfig<'a> {
     fn default() -> Self {
         LocalipConfig {
             ssh_only: true,
-            format: "@[$localipv4]($style) ",
+            format: "[$localipv4]($style) ",
             style: "yellow bold",
             disabled: false,
         }

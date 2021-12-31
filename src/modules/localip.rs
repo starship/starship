@@ -88,7 +88,7 @@ mod tests {
                 ssh_only = false
             })
             .collect();
-        let expected = Some(format!("{}", style().paint(localip)));
+        let expected = Some(format!("{} ", style().paint(localip)));
 
         assert_eq!(expected, actual);
     }
@@ -117,7 +117,7 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("{}", style().paint(localip)));
+        let expected = Some(format!("{} ", style().paint(localip)));
 
         assert_eq!(expected, actual);
     }
