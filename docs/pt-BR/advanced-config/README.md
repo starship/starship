@@ -97,7 +97,7 @@ Alguns shells suportam um prompt no lado direito que renderiza na mesma linha do
 
 Nota: O prompt direito é uma linha única seguindo o local de entrada. Para alinhar à direita os módulos acima a linha de entrada em um prompt de várias linhas, consulte o [módulo fill](/config/#fill).
 
-`right_format` é atualmente suportado para os seguintes shells: elvish, fish, zsh.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh.
 
 ### Exemplo
 
