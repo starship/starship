@@ -88,159 +88,160 @@ fn main() {
         .help("Print the main initialization script (as opposed to the init stub)");
 
     let long_version = crate::shadow::clap_version();
-    let mut app =
-        App::new("starship")
-            .about("The cross-shell prompt for astronauts. ☄🌌️")
-            // pull the version number from Cargo.toml
-            .version(shadow::PKG_VERSION)
-            .long_version(long_version.as_str())
-            // pull the authors from Cargo.toml
-            .author(crate_authors!())
-            .after_help("https://github.com/starship/starship")
-            .setting(AppSettings::SubcommandRequiredElseHelp)
-            .subcommand(
-                SubCommand::with_name("init")
-                    .about("Prints the shell function used to execute starship")
-                    .arg(&shell_arg)
-                    .arg(&init_scripts_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("prompt")
-                    .about("Prints the full starship prompt")
-                    .arg(
-                        Arg::with_name("right")
-                            .long("right")
-                            .help("Print the right prompt (instead of the standard left prompt)"),
-                    )
-                    .arg(
-                        Arg::with_name("continuation")
-                            .long("continuation")
-                            .help("Print the continuation prompt (instead of the standard left prompt)")
-                            .conflicts_with("right"),
-                    )
-                    .arg(&status_code_arg)
-                    .arg(&pipestatus_arg)
-                    .arg(&terminal_width_arg)
-                    .arg(&path_arg)
-                    .arg(&logical_path_arg)
-                    .arg(&cmd_duration_arg)
-                    .arg(&keymap_arg)
-                    .arg(&jobs_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("module")
-                    .about("Prints a specific prompt module")
-                    .arg(
-                        Arg::with_name("name")
-                            .help("The name of the module to be printed")
-                            .required(true)
-                            .required_unless("list"),
-                    )
-                    .arg(
-                        Arg::with_name("list")
-                            .short("l")
-                            .long("list")
-                            .help("List out all supported modules"),
-                    )
-                    .arg(&status_code_arg)
-                    .arg(&pipestatus_arg)
-                    .arg(&terminal_width_arg)
-                    .arg(&path_arg)
-                    .arg(&logical_path_arg)
-                    .arg(&cmd_duration_arg)
-                    .arg(&keymap_arg)
-                    .arg(&jobs_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("config")
-                    .alias("configure")
-                    .about("Edit the starship configuration")
-                    .arg(
-                        Arg::with_name("name")
-                            .help("Configuration key to edit")
-                            .required(false)
-                            .requires("value"),
-                    )
-                    .arg(Arg::with_name("value").help("Value to place into that key")),
-            )
-            .subcommand(
-                SubCommand::with_name("print-config")
-                    .about("Prints the computed starship configuration")
-                    .arg(
-                        Arg::with_name("default")
-                            .short("d")
-                            .long("default")
-                            .help("Print the default instead of the computed config")
-                            .takes_value(false),
-                    )
-                    .arg(
-                        Arg::with_name("name")
-                            .help("Configuration keys to print")
-                            .multiple(true)
-                            .required(false),
-                    ),
-            )
-            .subcommand(
-                SubCommand::with_name("toggle")
-                    .about("Toggle a given starship module")
-                    .arg(
-                        Arg::with_name("name")
-                            .help("The name of the module to be toggled")
-                            .required(true),
-                    )
-                    .arg(
-                        Arg::with_name("key")
-                            .help("The key of the config to be toggled")
-                            .required(false)
-                            .required_unless("name"),
-                    ),
-            )
-            .subcommand(SubCommand::with_name("bug-report").about(
+    let mut app = App::new("starship")
+        .about("The cross-shell prompt for astronauts. ☄🌌️")
+        // pull the version number from Cargo.toml
+        .version(shadow::PKG_VERSION)
+        .long_version(long_version.as_str())
+        // pull the authors from Cargo.toml
+        .author(crate_authors!())
+        .after_help("https://github.com/starship/starship")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand(
+            SubCommand::with_name("init")
+                .about("Prints the shell function used to execute starship")
+                .arg(&shell_arg)
+                .arg(&init_scripts_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("prompt")
+                .about("Prints the full starship prompt")
+                .arg(
+                    Arg::with_name("right")
+                        .long("right")
+                        .help("Print the right prompt (instead of the standard left prompt)"),
+                )
+                .arg(
+                    Arg::with_name("continuation")
+                        .long("continuation")
+                        .help("Print the continuation prompt (instead of the standard left prompt)")
+                        .conflicts_with("right"),
+                )
+                .arg(&status_code_arg)
+                .arg(&pipestatus_arg)
+                .arg(&terminal_width_arg)
+                .arg(&path_arg)
+                .arg(&logical_path_arg)
+                .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
+                .arg(&jobs_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("module")
+                .about("Prints a specific prompt module")
+                .arg(
+                    Arg::with_name("name")
+                        .help("The name of the module to be printed")
+                        .required(true)
+                        .required_unless("list"),
+                )
+                .arg(
+                    Arg::with_name("list")
+                        .short("l")
+                        .long("list")
+                        .help("List out all supported modules"),
+                )
+                .arg(&status_code_arg)
+                .arg(&pipestatus_arg)
+                .arg(&terminal_width_arg)
+                .arg(&path_arg)
+                .arg(&logical_path_arg)
+                .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
+                .arg(&jobs_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("config")
+                .alias("configure")
+                .about("Edit the starship configuration")
+                .arg(
+                    Arg::with_name("name")
+                        .help("Configuration key to edit")
+                        .required(false)
+                        .requires("value"),
+                )
+                .arg(Arg::with_name("value").help("Value to place into that key")),
+        )
+        .subcommand(
+            SubCommand::with_name("print-config")
+                .about("Prints the computed starship configuration")
+                .arg(
+                    Arg::with_name("default")
+                        .short("d")
+                        .long("default")
+                        .help("Print the default instead of the computed config")
+                        .takes_value(false),
+                )
+                .arg(
+                    Arg::with_name("name")
+                        .help("Configuration keys to print")
+                        .multiple(true)
+                        .required(false),
+                ),
+        )
+        .subcommand(
+            SubCommand::with_name("toggle")
+                .about("Toggle a given starship module")
+                .arg(
+                    Arg::with_name("name")
+                        .help("The name of the module to be toggled")
+                        .required(true),
+                )
+                .arg(
+                    Arg::with_name("key")
+                        .help("The key of the config to be toggled")
+                        .required(false)
+                        .required_unless("name"),
+                ),
+        )
+        .subcommand(
+            SubCommand::with_name("bug-report").about(
                 "Create a pre-populated GitHub issue with information about your configuration",
-            ))
-            .subcommand(
-                SubCommand::with_name("time")
-                    .about("Prints time in milliseconds")
-                    .settings(&[AppSettings::Hidden]),
-            )
-            .subcommand(
-                SubCommand::with_name("explain")
-                    .about("Explains the currently showing modules")
-                    .arg(&status_code_arg)
-                    .arg(&pipestatus_arg)
-                    .arg(&terminal_width_arg)
-                    .arg(&path_arg)
-                    .arg(&logical_path_arg)
-                    .arg(&cmd_duration_arg)
-                    .arg(&keymap_arg)
-                    .arg(&jobs_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("timings")
-                    .about("Prints timings of all active modules")
-                    .arg(&status_code_arg)
-                    .arg(&pipestatus_arg)
-                    .arg(&terminal_width_arg)
-                    .arg(&path_arg)
-                    .arg(&logical_path_arg)
-                    .arg(&cmd_duration_arg)
-                    .arg(&keymap_arg)
-                    .arg(&jobs_arg),
-            )
-            .subcommand(
-                SubCommand::with_name("completions")
-                    .about("Generate starship shell completions for your shell to stdout")
-                    .arg(
-                        Arg::with_name("shell")
-                            .takes_value(true)
-                            .possible_values(&Shell::variants())
-                            .help("the shell to generate completions for")
-                            .value_name("SHELL")
-                            .required(true)
-                            .env("STARSHIP_SHELL"),
-                    ),
-            )
-            .subcommand(SubCommand::with_name("session").about("Generate random session key"));
+            ),
+        )
+        .subcommand(
+            SubCommand::with_name("time")
+                .about("Prints time in milliseconds")
+                .settings(&[AppSettings::Hidden]),
+        )
+        .subcommand(
+            SubCommand::with_name("explain")
+                .about("Explains the currently showing modules")
+                .arg(&status_code_arg)
+                .arg(&pipestatus_arg)
+                .arg(&terminal_width_arg)
+                .arg(&path_arg)
+                .arg(&logical_path_arg)
+                .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
+                .arg(&jobs_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("timings")
+                .about("Prints timings of all active modules")
+                .arg(&status_code_arg)
+                .arg(&pipestatus_arg)
+                .arg(&terminal_width_arg)
+                .arg(&path_arg)
+                .arg(&logical_path_arg)
+                .arg(&cmd_duration_arg)
+                .arg(&keymap_arg)
+                .arg(&jobs_arg),
+        )
+        .subcommand(
+            SubCommand::with_name("completions")
+                .about("Generate starship shell completions for your shell to stdout")
+                .arg(
+                    Arg::with_name("shell")
+                        .takes_value(true)
+                        .possible_values(&Shell::variants())
+                        .help("the shell to generate completions for")
+                        .value_name("SHELL")
+                        .required(true)
+                        .env("STARSHIP_SHELL"),
+                ),
+        )
+        .subcommand(SubCommand::with_name("session").about("Generate random session key"));
 
     let matches = app.clone().get_matches();
 
