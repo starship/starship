@@ -46,8 +46,8 @@ impl StarshipPath {
             .map(|s| s.replace("'", "''"))
             .map(|s| format!("'{}'", s))
     }
-    /// Cmd specific path escaping
-    fn sprint_cmd(&self) -> io::Result<String> {
+    /// Command Shell specific path escaping
+    fn sprint_cmdexe(&self) -> io::Result<String> {
         self.str_path().map(|s| format!("\"{}\"", s))
     }
     fn sprint_posix(&self) -> io::Result<String> {
@@ -176,7 +176,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
         ),
-        "cmd" => print_script(CMD_INIT, &StarshipPath::init()?.sprint_cmd()?),
+        "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
             eprintln!(
                 "{0} is not yet supported by starship.\n\
@@ -265,7 +265,7 @@ const NU_INIT: &str = include_str!("starship.nu");
 
 const XONSH_INIT: &str = include_str!("starship.xsh");
 
-const CMD_INIT: &str = include_str!("starship.lua");
+const CMDEXE_INIT: &str = include_str!("starship.lua");
 
 #[cfg(test)]
 mod tests {
@@ -289,21 +289,21 @@ mod tests {
     }
 
     #[test]
-    fn escape_cmd() -> io::Result<()> {
+    fn escape_cmdexe() -> io::Result<()> {
         let starship_path = StarshipPath {
             native_path: PathBuf::from(r"C:\starship.exe"),
         };
-        assert_eq!(starship_path.sprint_cmd()?, r#""C:\starship.exe""#);
+        assert_eq!(starship_path.sprint_cmdexe()?, r#""C:\starship.exe""#);
         Ok(())
     }
 
     #[test]
-    fn escape_space_cmd() -> io::Result<()> {
+    fn escape_space_cmdexe() -> io::Result<()> {
         let starship_path = StarshipPath {
             native_path: PathBuf::from(r"C:\Cool Tools\starship.exe"),
         };
         assert_eq!(
-            starship_path.sprint_cmd()?,
+            starship_path.sprint_cmdexe()?,
             r#""C:\Cool Tools\starship.exe""#
         );
         Ok(())
