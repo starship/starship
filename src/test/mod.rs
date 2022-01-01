@@ -137,7 +137,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn pipestatus(mut self, status: &[i32]) -> Self {
-        self.context.properties.pipestatus = Some(
+        self.context.pipestatus = Some(
             status
                 .iter()
                 .map(std::string::ToString::to_string)

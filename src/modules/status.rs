@@ -30,7 +30,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let exit_code = context.properties.status_code.unwrap_or_default();
 
-    let pipestatus_status = match &context.properties.pipestatus {
+    let pipestatus_status = match &context.pipestatus {
         None => PipeStatusStatus::Disabled,
         Some(ps) => match ps.len() > 1 {
             true => PipeStatusStatus::Pipe(ps),

@@ -41,6 +41,9 @@ pub struct Context<'a> {
     /// Properties to provide to modules.
     pub properties: Properties,
 
+    /// Pipestatus of processes in pipe
+    pub pipestatus: Option<Vec<String>>,
+
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
 
@@ -106,10 +109,13 @@ impl<'a> Context<'a> {
         logical_path: PathBuf,
     ) -> Context<'a> {
         let config = StarshipConfig::initialize();
-        log::trace!(
-            "Received completed pipestatus of {:?}",
-            properties.pipestatus
-        );
+
+        let pipestatus = properties
+            .pipestatus
+            .as_deref()
+            .map(Context::get_and_flatten_pipestatus)
+            .flatten();
+        log::trace!("Received completed pipestatus of {:?}", pipestatus);
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
@@ -127,6 +133,7 @@ impl<'a> Context<'a> {
         Context {
             config,
             properties,
+            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
@@ -189,12 +196,13 @@ impl<'a> Context<'a> {
     }
 
     /// Reads and appropriately flattens multiple args for pipestatus
-    pub fn get_and_flatten_pipestatus(args: clap::Values) -> Option<Vec<String>> {
+    // TODO: Replace with value_delimiter = ' ' clap option?
+    pub fn get_and_flatten_pipestatus(args: &[String]) -> Option<Vec<String>> {
         // Due to shell differences, we can potentially receive individual or space
         // separated inputs, e.g. "0","1","2","0" is the same as "0 1 2 0" and
         // "0 1", "2 0". We need to accept all these formats and return a Vec<String>
         let parsed_vals = args
-            .into_iter()
+            .iter()
             .map(|x| x.split_ascii_whitespace())
             .flatten()
             .map(|x| x.to_string())
@@ -567,7 +575,7 @@ pub struct Properties {
     pub status_code: Option<i32>,
     /// Bash and Zsh support returning codes for each process in a pipeline.
     #[clap(long)]
-    pub pipestatus: Option<Vec<String>>,
+    pipestatus: Option<Vec<String>>,
     /// The width of the current interactive terminal.
     #[clap(short = 'w', long, default_value_t=default_width())]
     terminal_width: usize,
