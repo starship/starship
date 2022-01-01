@@ -121,7 +121,7 @@ Produces a prompt like the following:
 
 Einige Shells unterstützen einen speziellen Fortsetzungsprompt zusätzlich zum normalen Prompt. Dieser Prompt wird anstelle des normalen Prompts ausgegeben, wenn der Benutzer ein unvollständiges Kommando eingegeben hat (etwa wie eine einzelne linke Klammer oder ein einzelnes Anführungszeichen).
 
-Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. Der Standard Prompt ist `"[❯](bold yellow)"`.
+Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `"[∙](bright-black) "`.
 
 Hinweis: Die `continuation_prompt` Anweisung sollte auf einen literalen String ohne Variablen gesetzt werden.
 
