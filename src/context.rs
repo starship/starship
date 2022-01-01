@@ -587,8 +587,8 @@ pub struct Properties {
     #[clap(short = 'P', long)]
     logical_path: Option<PathBuf>,
     /// The execution duration of the last command, in milliseconds
-    #[clap(short = 'd', long, default_value = "0")]
-    pub cmd_duration: u128,
+    #[clap(short = 'd', long)]
+    pub cmd_duration: Option<u128>,
     /// The keymap of fish/zsh
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
@@ -605,7 +605,7 @@ impl Default for Properties {
             terminal_width: default_width(),
             path: None,
             logical_path: None,
-            cmd_duration: 0,
+            cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
         }

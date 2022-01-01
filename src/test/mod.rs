@@ -110,7 +110,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn cmd_duration(mut self, duration: u64) -> Self {
-        self.context.properties.cmd_duration = duration as u128;
+        self.context.properties.cmd_duration = Some(duration as u128);
         self
     }
 
