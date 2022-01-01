@@ -3,55 +3,25 @@ use super::{Context, Module};
 use crate::config::RootModuleConfig;
 use crate::configs::env_var::EnvVarConfig;
 use crate::formatter::StringFormatter;
-use crate::segment::Segment;
 
 /// Creates env_var_module displayer which displays all configured environmental variables
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let config_table = context.config.get_env_var_modules()?;
-    let mut env_modules = config_table
-        .iter()
-        .filter(|(_, config)| config.is_table())
-        .filter_map(|(variable, _)| env_var_module(vec!["env_var", variable], context))
-        .collect::<Vec<Module>>();
-    // Old configuration is present in starship configuration
-    if config_table.iter().any(|(_, config)| !config.is_table()) {
-        if let Some(fallback_env_var_module) = env_var_module(vec!["env_var"], context) {
-            env_modules.push(fallback_env_var_module);
-        }
-    }
-    Some(env_var_displayer(env_modules, context))
-}
-
-/// A utility module to display multiple env_variable modules
-fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Module<'a> {
-    let mut module = context.new_module("env_var_displayer");
-
-    let module_segments = modules
-        .into_iter()
-        .flat_map(|module| module.segments)
-        .collect::<Vec<Segment>>();
-    module.set_segments(module_segments);
-    module
-}
-
-/// Creates a module with the value of the chosen environment variable
-///
-/// Will display the environment variable's value if all of the following criteria are met:
-///     - env_var.disabled is absent or false
-///     - env_var.variable is defined
-///     - a variable named as the value of env_var.variable is defined
-fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module(&module_config_path.join("."));
-    let config_value = context.config.get_config(&module_config_path);
-    let config = EnvVarConfig::load(config_value.expect(
+pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
+    let toml_config = context.config.get_env_var_module_config(name).expect(
         "modules::env_var::module should only be called after ensuring that the module exists",
-    ));
+    );
+    let config: EnvVarConfig = EnvVarConfig::load(toml_config);
 
     if config.disabled {
         return None;
     };
 
-    let variable_name = get_variable_name(module_config_path, &config);
+    let mut module = Module::new(
+        &format!("env_var.{}", name),
+        config.description,
+        Some(toml_config),
+    );
+
+    let variable_name = get_variable_name(vec!["env_var", name], &config);
 
     let env_value = get_env_value(context, variable_name?, config.default)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -74,7 +44,7 @@ fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Op
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `env_var`:\n{}", error);
+            log::warn!("Error in module `env_var.{}`:\n{}", name, error);
             return None;
         }
     });
@@ -248,6 +218,24 @@ mod test {
             "with {} with {} ",
             style().paint(TEST_VAR_VALUE),
             style().paint(TEST_VAR_VALUE)
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn display_single_with_multiple_defined() {
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                [env_var.TEST_VAR2]
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .env("TEST_VAR2", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!(
+            "with {} ",
+            style().paint(TEST_VAR_VALUE),
         ));
 
         assert_eq!(expected, actual);

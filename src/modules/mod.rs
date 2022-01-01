@@ -15,7 +15,7 @@ mod docker_context;
 mod dotnet;
 mod elixir;
 mod elm;
-mod env_var;
+pub(crate) mod env_var;
 mod erlang;
 mod fill;
 mod gcloud;
@@ -101,7 +101,6 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
-            "env_var" => env_var::module(context),
             "fill" => fill::module(context),
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),

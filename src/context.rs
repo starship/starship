@@ -258,6 +258,15 @@ impl<'a> Context<'a> {
         Some(disabled == Some(true))
     }
 
+    /// Return whether the specified env_var module has a `disabled` option set to true.
+    /// If it doesn't exist, `None` is returned.
+    pub fn is_env_var_module_disabled_in_config(&self, name: &str) -> Option<bool> {
+        let config = self.config.get_env_var_module_config(name)?;
+        let disabled = Some(config).and_then(|table| table.as_table()?.get("disabled")?.as_bool());
+
+        Some(disabled == Some(true))
+    }
+
     // returns a new ScanDir struct with reference to current dir_files of context
     // see ScanDir for methods
     pub fn try_begin_scan(&'a self) -> Option<ScanDir<'a>> {

@@ -142,7 +142,13 @@ pub fn module(module_name: &str, args: ArgMatches) {
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
-    modules::handle(module_name, &context).map(|m| m.to_string())
+    Some(
+        handle_module(module_name, &context, &BTreeSet::new())
+            .iter()
+            .map(|m| m.to_string())
+            .collect::<Vec<String>>()
+            .join(""),
+    )
 }
 
 pub fn timings(args: ArgMatches) {
@@ -313,8 +319,15 @@ fn handle_module<'a>(
     module_list: &BTreeSet<String>,
 ) -> Vec<Module<'a>> {
     struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
+    struct DebugEnvVarModules<'tmp>(&'tmp toml::value::Table);
 
     impl Debug for DebugCustomModules<'_> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_list().entries(self.0.keys()).finish()
+        }
+    }
+
+    impl Debug for DebugEnvVarModules<'_> {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             f.debug_list().entries(self.0.keys()).finish()
         }
@@ -356,6 +369,37 @@ fn handle_module<'a>(
                     ),
             },
         }
+    } else if module == "env_var" {
+        // Write out all env_var modules, except for those that are explicitly set
+        if let Some(env_var_modules) = context.config.get_env_var_modules() {
+            let env_var_modules = env_var_modules
+                .iter()
+                .filter_map(|(env_var_module, config)| {
+                    if should_add_implicit_env_var_module(env_var_module, config, module_list) {
+                        modules::env_var::module(env_var_module, context)
+                    } else {
+                        None
+                    }
+                });
+            modules.extend(env_var_modules);
+        }
+    } else if let Some(module) = module.strip_prefix("env_var.") {
+        // Write out a custom module if it isn't disabled (and it exists...)
+        match context.is_env_var_module_disabled_in_config(module) {
+            Some(true) => (), // Module is disabled, we don't add it to the prompt
+            Some(false) => modules.extend(modules::env_var::module(module, context)),
+            None => match context.config.get_env_var_modules() {
+                Some(modules) => log::debug!(
+                    "top level format contains env_var module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
+                    module,
+                    DebugEnvVarModules(&modules),
+                    ),
+                None => log::debug!(
+                    "top level format contains env_var module \"{}\", but no configuration was provided.",
+                    module,
+                    ),
+            },
+        }
     } else {
         log::debug!(
             "Expected top level format to contain value from {:?}. Instead received {}",
@@ -373,6 +417,28 @@ fn should_add_implicit_custom_module(
     module_list: &BTreeSet<String>,
 ) -> bool {
     let explicit_module_name = format!("custom.{}", custom_module);
+    let is_explicitly_specified = module_list.contains(&explicit_module_name);
+
+    if is_explicitly_specified {
+        // The module is already specified explicitly, so we skip it
+        return false;
+    }
+
+    let false_value = toml::Value::Boolean(false);
+
+    !config
+        .get("disabled")
+        .unwrap_or(&false_value)
+        .as_bool()
+        .unwrap_or(false)
+}
+
+fn should_add_implicit_env_var_module(
+    env_var_module: &str,
+    config: &toml::Value,
+    module_list: &BTreeSet<String>,
+) -> bool {
+    let explicit_module_name = format!("env_var.{}", env_var_module);
     let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {

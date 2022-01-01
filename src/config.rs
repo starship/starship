@@ -343,13 +343,40 @@ impl StarshipConfig {
         module_config
     }
 
+    /// Get the subset of the table for a env_var module by its name
+    pub fn get_env_var_module_config(&self, module_name: &str) -> Option<&Value> {
+        let config_path = if !module_name.is_empty() {
+            vec!["env_var", module_name]
+        } else {
+            vec!["env_var"]
+        };
+        let module_config = self.get_config(&config_path);
+        if module_config.is_some() {
+            log::debug!(
+                "env_var config found for \"{}\": {:?}",
+                &module_name,
+                &module_config
+            );
+        }
+        module_config
+    }
+
     /// Get the table of all the registered custom modules, if any
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
     }
     /// Get the table of all the registered env_var modules, if any
-    pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
-        self.get_config(&["env_var"])?.as_table()
+    pub fn get_env_var_modules(&self) -> Option<toml::value::Table> {
+        let config_table = self.get_config(&["env_var"])?.as_table()?;
+
+        // Old configuration is present in starship configuration
+        if config_table.iter().any(|(_, config)| !config.is_table()) {
+            let mut wrapper_config_table = toml::value::Table::new();
+            wrapper_config_table.insert("".to_string(), toml::Value::Table(config_table.clone()));
+            return Some(wrapper_config_table);
+        }
+
+        Some(config_table.clone())
     }
 }
 

@@ -12,6 +12,7 @@ pub struct EnvVarConfig<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default: Option<&'a str>,
     pub format: &'a str,
+    pub description: &'a str,
     pub disabled: bool,
 }
 
@@ -23,6 +24,7 @@ impl<'a> Default for EnvVarConfig<'a> {
             variable: None,
             default: None,
             format: "with [$env_value]($style) ",
+            description: "<env_var module>",
             disabled: false,
         }
     }
