@@ -117,15 +117,15 @@ Produces a prompt like the following:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## In-Bearbeitungs-Prompt
+## Fortsetzungsprompt
 
-Einige Shells unterstützen einen speziellen In-Bearbeitungs-Prompt zusätzlich zum normalen Prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+Einige Shells unterstützen einen speziellen Fortsetzungsprompt zusätzlich zum normalen Prompt. Dieser Prompt wird anstelle des normalen Prompts ausgegeben, wenn der Benutzer ein unvollständiges Kommando eingegeben hat (etwa wie eine einzelne linke Klammer oder ein einzelnes Anführungszeichen).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[❯](bold yellow)"`.
+Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. Der Standard Prompt ist `"[❯](bold yellow)"`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Hinweis: Die `continuation_prompt` Anweisung sollte auf einen literalen String ohne Variablen gesetzt werden.
 
-Note: Continuation prompts are only available in the following shells:
+Hinweis: Fortsetzungs-Prompts sind nur für folgende Shells verfügbar:
 
   - `bash`
   - `zsh`
@@ -136,25 +136,25 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Ein Fortsetzungs-Prompt der 2 ausgefüllte Pfeile darstellt
 continuation_prompt = "▶▶"
 ```
 
 ## Style-Strings
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Stil-Zeichenketten sind eine Liste von Wörtern, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
 
-  - `bold`
-  - `italic`
-  - `underline`
-  - `dimmed`
-  - `inverted`
+  - `fett`
+  - `kursiv`
+  - `unterstrichen`
+  - `gedimmt`
+  - `invertiert`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
-  - `none`
+  - `keins`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe, das kann sich in Zukunft aber ändern. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
