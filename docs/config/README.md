@@ -192,7 +192,7 @@ format = "$all"
 format = """
 $username\
 $hostname\
-$localipv4\
+$localip\
 $shlvl\
 $singularity\
 $kubernetes\
