@@ -51,6 +51,9 @@ pub struct Context<'a> {
     /// Construct the right prompt instead of the left prompt
     pub right: bool,
 
+    /// Construct the continuation prompt instead of the normal prompt
+    pub continuation: bool,
+
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
 
@@ -134,6 +137,7 @@ impl<'a> Context<'a> {
             .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
         let right = arguments.is_present("right");
+        let continuation = arguments.is_present("continuation");
 
         let width = arguments
             .value_of("terminal_width")
@@ -151,6 +155,7 @@ impl<'a> Context<'a> {
             repo: OnceCell::new(),
             shell,
             right,
+            continuation,
             width,
             #[cfg(test)]
             env: HashMap::new(),

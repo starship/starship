@@ -1,7 +1,6 @@
 #!/usr/bin/env pwsh
 
-function global:prompt {
-        
+function Get-Arguments {
     function Get-Cwd {
         $cwd = Get-Location
         $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
@@ -21,57 +20,6 @@ function global:prompt {
                 };
         }
     }
-
-    function Invoke-Native {
-        param($Executable, $Arguments)
-        $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
-            StandardOutputEncoding = [System.Text.Encoding]::UTF8;
-            RedirectStandardOutput = $true;
-            RedirectStandardError = $true;
-            CreateNoWindow = $true;
-            UseShellExecute = $false;
-        };
-        if ($startInfo.ArgumentList.Add) {
-            # PowerShell 6+ uses .NET 5+ and supports the ArgumentList property
-            # which bypasses the need for manually escaping the argument list into
-            # a command string.
-            foreach ($arg in $Arguments) {
-                $startInfo.ArgumentList.Add($arg);
-            }
-        }
-        else {
-            # Build an arguments string which follows the C++ command-line argument quoting rules
-            # See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
-            $escaped = $Arguments | ForEach-Object {
-                $s = $_ -Replace '(\\+)"','$1$1"'; # Escape backslash chains immediately preceding quote marks.
-                $s = $s -Replace '(\\+)$','$1$1';  # Escape backslash chains immediately preceding the end of the string.
-                $s = $s -Replace '"','\"';         # Escape quote marks.
-                "`"$s`""                           # Quote the argument.
-            }
-            $startInfo.Arguments = $escaped -Join ' ';
-        }
-        $process = [System.Diagnostics.Process]::Start($startInfo)
-
-        # stderr isn't displayed with this style of invocation
-        # Manually write it to console
-        $stderr = $process.StandardError.ReadToEnd().Trim()
-        if ($stderr -ne '') {
-            # Write-Error doesn't work here
-            $host.ui.WriteErrorLine($stderr)
-        }
-
-        $process.StandardOutput.ReadToEnd();
-    }
-
-    $origDollarQuestion = $global:?
-    $origLastExitCode = $global:LASTEXITCODE
-
-    # Invoke precmd, if specified
-    try {
-        if (Test-Path function:Invoke-Starship-PreCommand) {
-            Invoke-Starship-PreCommand
-        }
-    } catch {}
 
     # @ makes sure the result is an array even if single or no values are returned
     $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
@@ -103,6 +51,64 @@ function global:prompt {
 
     $arguments += "--status=$($lastExitCodeForPrompt)"
 
+	return $arguments
+}
+
+function Invoke-Native {
+	param($Executable, $Arguments)
+	$startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
+		StandardOutputEncoding = [System.Text.Encoding]::UTF8;
+		RedirectStandardOutput = $true;
+		RedirectStandardError = $true;
+		CreateNoWindow = $true;
+		UseShellExecute = $false;
+	};
+	if ($startInfo.ArgumentList.Add) {
+		# PowerShell 6+ uses .NET 5+ and supports the ArgumentList property
+		# which bypasses the need for manually escaping the argument list into
+		# a command string.
+		foreach ($arg in $Arguments) {
+			$startInfo.ArgumentList.Add($arg);
+		}
+	}
+	else {
+		# Build an arguments string which follows the C++ command-line argument quoting rules
+		# See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
+		$escaped = $Arguments | ForEach-Object {
+			$s = $_ -Replace '(\\+)"','$1$1"'; # Escape backslash chains immediately preceding quote marks.
+			$s = $s -Replace '(\\+)$','$1$1';  # Escape backslash chains immediately preceding the end of the string.
+			$s = $s -Replace '"','\"';         # Escape quote marks.
+			"`"$s`""                           # Quote the argument.
+		}
+		$startInfo.Arguments = $escaped -Join ' ';
+	}
+	$process = [System.Diagnostics.Process]::Start($startInfo)
+
+	# stderr isn't displayed with this style of invocation
+	# Manually write it to console
+	$stderr = $process.StandardError.ReadToEnd().Trim()
+	if ($stderr -ne '') {
+		# Write-Error doesn't work here
+		$host.ui.WriteErrorLine($stderr)
+	}
+
+	$process.StandardOutput.ReadToEnd();
+}
+
+function global:prompt {
+    $origDollarQuestion = $global:?
+    $origLastExitCode = $global:LASTEXITCODE
+
+    # Invoke precmd, if specified
+    try {
+        if (Test-Path function:Invoke-Starship-PreCommand) {
+            Invoke-Starship-PreCommand
+        }
+    } catch {}
+
+	# Get arguments for starship prompt
+	$arguments = Get-Arguments
+
     # Invoke Starship
     Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
 
@@ -129,6 +135,14 @@ function global:prompt {
     }
 
 }
+
+# Get arguments for starship continuation prompt
+$arguments = Get-Arguments
+$arguments += "--continuation"
+
+# Invoke Starship and set continuation prompt
+$continuation = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+Set-PSReadLineOption -ContinuationPrompt $continuation
 
 # Disable virtualenv prompt, it breaks starship
 $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
