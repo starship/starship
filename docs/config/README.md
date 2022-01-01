@@ -1819,7 +1819,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 | Variable    | Example      | Description                          |
 | --------    | -------      | ------------------------------------ |
-| localipv4\* | 192.168.1.13 | Contains the primary IPv4 address    |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address    |
 | style\*     |              | Mirrors the value of option `style`  |
 
 \*: This variable can only be used as a part of a style string
