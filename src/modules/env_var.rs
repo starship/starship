@@ -233,10 +233,7 @@ mod test {
             .env("TEST_VAR", TEST_VAR_VALUE)
             .env("TEST_VAR2", TEST_VAR_VALUE)
             .collect();
-        let expected = Some(format!(
-            "with {} ",
-            style().paint(TEST_VAR_VALUE),
-        ));
+        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE),));
 
         assert_eq!(expected, actual);
     }
