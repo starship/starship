@@ -15,6 +15,7 @@ use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fmt::Debug;
 use std::fs;
+use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, Instant};
@@ -593,7 +594,7 @@ pub struct Properties {
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
     /// The number of currently running jobs
-    #[clap(short, long, default_value_t)]
+    #[clap(short, long, default_value_t, parse(try_from_str=parse_jobs))]
     pub jobs: i64,
 }
 
@@ -610,6 +611,10 @@ impl Default for Properties {
             jobs: 0,
         }
     }
+}
+
+fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
+    jobs.trim().parse::<i64>()
 }
 
 #[cfg(test)]
