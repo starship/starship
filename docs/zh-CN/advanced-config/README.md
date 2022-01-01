@@ -117,10 +117,32 @@ Produces a prompt like the following:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
+## Continuation Prompt
+
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[❯](bold yellow)"`.
+
+Note: `continuation_prompt` should be set to a literal string without any variables.
+
+Note: Continuation prompts are only available in the following shells:
+
+  - `bash`
+  - `zsh`
+  - `PowerShell`
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = "▶▶"
+```
 
 ## 样式设定
 
-样式字符串是用空格分隔的单词列表。 其中单词不是大小写敏感的（例如 `bold` 和 `BoLd` 被视为同一字符串）。 每个单词可以是以下之一：
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `italic`
@@ -132,14 +154,14 @@ Produces a prompt like the following:
   - `<color>`
   - `none`
 
-`<color>` 是颜色说明符（下面解释）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. 字符串中的单词顺序不影响显示结果。
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未来可能会将 `none` 与其它标识符一起使用视为一种错误。
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-颜色说明符可以是以下内容之一：
+A color specifier can be one of the following:
 
- - 标准终端颜色之一：`black`，`red`，`green`，`blue`，`yellow`，`purple`，`cyan`，`white`。 您可以使用可选前缀 `bright-` 来获取明亮版本的颜色（例如，`bright-white`）。
- - 一个 `#` 后跟一个六位十六进制数。 这将指定一个 [十六进制 RGB 颜色代码](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
- - 0-255 之间的数字。 这将指定一个 [8 位 ANSI 颜色码](https://i.stack.imgur.com/KTSQa.png)。
+ - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
-如果为文本/背景指定了多个颜色，字符串中最后指定的颜色将具有最高优先级。
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
