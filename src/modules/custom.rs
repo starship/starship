@@ -160,8 +160,12 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
 
+        if forced_shell.ends_with("cmd.exe") || forced_shell.ends_with("cmd") {
+            log::error!("Custom command output with Command shell is not supported. Use PowerShell instead.");
+            return None;
+        }
+
         handle_powershell(&mut command, &forced_shell, shell_args);
-        handle_cmdexe(&mut command, &forced_shell, shell_args);
 
         if let Ok(mut child) = command.spawn() {
             child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
@@ -245,15 +249,6 @@ fn handle_powershell(command: &mut Command, shell: &str, shell_args: &[&str]) {
 
     if is_powershell && shell_args.is_empty() {
         command.arg("-NoProfile").arg("-Command").arg("-");
-    }
-}
-
-#[cfg(windows)]
-fn handle_cmdexe(command: &mut Command, shell: &str, shell_args: &[&str]) {
-    let is_cmd = shell.ends_with("cmd.exe") || shell.ends_with("cmd");
-
-    if is_cmd && shell_args.is_empty() {
-        command.arg("/C");
     }
 }
 
