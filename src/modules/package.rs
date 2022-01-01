@@ -239,6 +239,15 @@ fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String
     format_version(raw_version, config.version_format)
 }
 
+fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("pubspec.yaml")).ok()?;
+
+    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let raw_version = data.first()?["version"].as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -257,6 +266,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_vmod_version,
         get_vpkg_version,
         get_sbt_version,
+        get_dart_pub_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1129,6 +1139,22 @@ scalaVersion := \"2.13.7\"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_dart_pub_version() -> io::Result<()> {
+        let config_name = "pubspec.yaml";
+        let config_content = "
+name: starship
+version: 1.0.0
+
+environment:
+  sdk: '>=2.15.0 <3.0.0'
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.0.0"), None);
         project_dir.close()
     }
 
