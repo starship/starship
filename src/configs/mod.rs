@@ -159,7 +159,7 @@ impl<'a> Default for FullConfig<'a> {
         Self {
             format: "$all".to_string(),
             right_format: "".to_string(),
-            continuation_prompt: "[∙]](bright-black) ".to_string(),
+            continuation_prompt: "[∙](bright-black) ".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
