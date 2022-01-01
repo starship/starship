@@ -117,10 +117,32 @@ Produces a prompt like the following:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
+## Continuation Prompt
+
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[❯](bold yellow)"`.
+
+Note: `continuation_prompt` should be set to a literal string without any variables.
+
+Note: Continuation prompts are only available in the following shells:
+
+  - `bash`
+  - `zsh`
+  - `PowerShell`
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = "▶▶"
+```
 
 ## Строки стиля
 
-Строки стиля - это список слов, разделенных пробелами. Слова не чувствительны к регистру (то есть `bold` и `BoLd` считаются одной строкой). Каждое слово может быть одним из следующих:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `italic`
@@ -132,14 +154,14 @@ Produces a prompt like the following:
   - `<color>`
   - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. Порядок слов в строке не имеет значения.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Цветовой спецификатор может быть одним из следующих:
+A color specifier can be one of the following:
 
- - Некоторые из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
- - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
+ - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
-Если для переднего плана/фона задано несколько цветов, то последняя из строк будет иметь приоритет.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
