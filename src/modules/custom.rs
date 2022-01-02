@@ -161,7 +161,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
             .stderr(Stdio::piped());
 
         if forced_shell.ends_with("cmd.exe") || forced_shell.ends_with("cmd") {
-            log::error!("Custom command output with Command shell is not supported. Use PowerShell instead.");
+            log::error!("Custom command output with Command shell is not supported.");
             return None;
         }
 
