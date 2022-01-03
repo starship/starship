@@ -30,7 +30,7 @@ battery = ["starship-battery"]
 tls-vendored = ["native-tls/vendored"]
 
 [dependencies]
-clap = "2.34.0"
+clap = "3.0.0"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
 git2 = { version = "0.13.25", default-features = false }
