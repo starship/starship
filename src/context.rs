@@ -568,6 +568,7 @@ fn default_width() -> usize {
     terminal_size().map_or(80, |(w, _)| w.0 as usize)
 }
 
+/// Which kind of prompt target to print (main prompt, rprompt, ...)
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Target {
     Main,
@@ -577,7 +578,6 @@ pub enum Target {
 
 /// Properties as passed on from the shell as arguments
 #[derive(Parser, Debug)]
-
 pub struct Properties {
     /// The status code of the previously run command
     #[clap(short = 's', long = "status")]
