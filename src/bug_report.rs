@@ -213,7 +213,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "elvish" => Some(".elvish/rc.elv"),
             "tcsh" => Some(".tcshrc"),
             "xonsh" => Some(".xonshrc"),
-            "cmd" => Some("starship.lua"),
+            "cmd" => Some("AppData/Local/clink/starship.lua"),
             _ => None,
         }
         .map(|path| home_dir.join(path))
