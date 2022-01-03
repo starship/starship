@@ -1,4 +1,4 @@
-use process_control::{ChildExt, Timeout};
+use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
@@ -393,7 +393,12 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
             return None;
         }
     };
-    match process.with_output_timeout(time_limit).terminating().wait() {
+    match process
+        .controlled_with_output()
+        .time_limit(time_limit)
+        .terminate_for_timeout()
+        .wait()
+    {
         Ok(Some(output)) => {
             let stdout_string = match String::from_utf8(output.stdout) {
                 Ok(stdout) => stdout,
