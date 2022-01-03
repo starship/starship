@@ -72,7 +72,7 @@ strsim = "0.10.0"
 sha-1 = "0.10.0"
 toml_edit = "0.12.3"
 
-process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
+process_control = { version = "3.2.0", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.18.0", optional = true, default-features = false, features = ["tls", "form"] }
