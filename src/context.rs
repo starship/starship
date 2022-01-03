@@ -296,6 +296,14 @@ impl<'a> Context<'a> {
         }
     }
 
+    // TODO: This should be used directly by clap parse
+    pub fn get_cmd_duration(&self) -> Option<u128> {
+        self.properties
+            .cmd_duration
+            .as_deref()
+            .and_then(|cd| cd.parse::<u128>().ok())
+    }
+
     /// Execute a command and return the output on stdout and stderr if successful
     #[inline]
     pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
@@ -589,7 +597,7 @@ pub struct Properties {
     logical_path: Option<PathBuf>,
     /// The execution duration of the last command, in milliseconds
     #[clap(short = 'd', long)]
-    pub cmd_duration: Option<u128>,
+    pub cmd_duration: Option<String>,
     /// The keymap of fish/zsh
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
