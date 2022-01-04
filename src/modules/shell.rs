@@ -11,7 +11,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let shell = context.shell;
+    let shell = &context.shell;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
