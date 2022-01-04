@@ -160,8 +160,8 @@ O token `none` sobrescreve qualquer outro token na string se ele não for part d
 
 Um especialista em cores pode ser os seguintes:
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - Uma das cores padrões do terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Você pode optar por adicionar o prefixo `bright-` para conseguir a versão mais clara (ex: `bright-white`).
+ - Um `#` seguido por seis dígitos hexadecimais. Isto especifica um [Código RGB em hexa](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Um número entre 0-255. Este especifica um [Código de cor ANSI de 8-bit](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Se múltiplas cores forem especificadas para foreground/background, o ultimo da string será o prioritário.
