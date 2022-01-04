@@ -142,7 +142,7 @@ continuation_prompt = "▶▶"
 
 ## Estilo dos textos
 
-Strings de estilo são uma lista de palavras, separadas por espaço. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Strings de estilo são uma lista de palavras, separadas por espaço. As palavras não são case sensitive ( ou seja `bold` e `BoLd` são considerados iguais). Cada palavra pode ser as seguintes:
 
   - `bold`
   - `italic`
@@ -154,11 +154,11 @@ Strings de estilo são uma lista de palavras, separadas por espaço. The words a
   - `<color>`
   - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+onde `<color>` é uma cor especifica (explicado abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, isto deve mudar no futuro. `inverted` troca a cor de background pela cor do foreground. A ordem das palavras não importa.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+O token `none` sobrescreve qualquer outro token na string se ele não for part de um `bg:` especifico, então ex: `fg:red none fg:blue` será criado uma string sem estilo. 0>bg:none</code> define o background com a cor padrão então `fg:red bg:none` é equivalente a `red` ou `fg:red` e `bg:green fg:red bg:none` é também equivalente a `fg:red` ou `red`. No futuro pode se tornar um erro usar `none` junto de outros tokens.
 
-A color specifier can be one of the following:
+Um especialista em cores pode ser os seguintes:
 
  - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
  - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
