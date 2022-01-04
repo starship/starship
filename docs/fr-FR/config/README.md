@@ -2454,7 +2454,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+Le module `rlang` affiche la version de [R](https://www.r-project.org/) actuellement installée. Le module s’affiche si l’une de ces conditions est remplie :
 
 - Le répertoire actuel contient un fichier avec l'extension `.R`.
 - Le répertoire actuel contient un fichier avec l'extension `.Rd`.
@@ -2539,9 +2539,9 @@ Par défaut, le module `ruby` affiche la version actuellement installée de [Rub
 - Le répertoire courant contient un fichier `Gemfile`
 - Le répertoire courant contient un fichier `.ruby-version`
 - Le répertoire courant contient un fichier `.rb`
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+- La variable d’environnement `RUBY_VERSION` ou `RBENV_VERSION` est définie
 
-Starship gets the current Ruby version by running `ruby -v`.
+Starship obtient la version actuelle de Ruby en exécutant `ruby -v`.
 
 ### Options
 
@@ -2550,10 +2550,10 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💎 "`                               | Une chaîne de caractères représentant le symbole de Ruby.                                  |
-| `detect_extensions` | `["rb"]`                             | Quelles extensions devraient activer ce module.                                            |
-| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Quels fichiers devraient activer ce module.                                                |
-| `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                                    |
+| `detect_extensions` | `["rb"]`                             | Les extensions qui activent ce module.                                                     |
+| `detect_files`      | `["Gemfile", ".ruby-version"]`       | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Les variables d’environnement qui activent ce module.                                      |
 | `style`             | `"bold green"`                       | Le style du module.                                                                        |
 | `disabled`          | `false`                              | Désactive le module `ruby`.                                                                |
 
