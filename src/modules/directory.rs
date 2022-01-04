@@ -629,6 +629,87 @@ mod tests {
     }
 
     #[test]
+    fn current_working_dir_custom_style() {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap().join("path/subpath"))
+            .config(toml::toml! {
+                [directory]
+                format= "[$dirs]($style)[$cwd]($cwd_style) "
+                cwd_style = "red italic"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{}{} ",
+            Color::Cyan.bold().paint(convert_path_sep("~/path/")),
+            Color::Red.italic().paint(convert_path_sep("subpath"))
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[ignore]
+    fn current_working_dir_within_git_repo() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncate_to_repo = true
+                repo_root_style = "bold red"
+                cwd_style = "italic blue"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{}{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint(convert_path_sep("/src/sub/")),
+            Color::Blue.italic().paint("path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn current_working_dir_is_git_repo() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+        fs::create_dir_all(&repo_dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                repo_root_format = "[$before_root_path]($style)[$repo_root]($repo_root_style)[$dirs]($style)[$cwd]($cwd_style) "
+                // Don't truncate the path at all.
+                truncation_length = 2
+                truncate_to_repo = false
+                cwd_style = "purple"
+                repo_root_style = "red"
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}rocket-controls{}{} ",
+            Color::Cyan.bold().paint(convert_path_sep("above-repo/")),
+            Color::Red.prefix(),
+            Color::Cyan.bold().paint(""),
+            Color::Purple.paint("")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
     fn substituted_truncated_path() {
         let actual = ModuleRenderer::new("directory")
             .path("/some/long/network/path/workspace/a/b/c/dev")
