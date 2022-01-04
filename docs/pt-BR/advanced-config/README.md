@@ -97,7 +97,7 @@ Alguns shells suportam um prompt no lado direito que renderiza na mesma linha do
 
 Nota: O prompt direito é uma linha única seguindo o local de entrada. Para alinhar à direita os módulos acima a linha de entrada em um prompt de várias linhas, consulte o [módulo fill](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh.
+`right_format` é atualmente suportado para os seguintes shells: elvish, fish, zsh, xonsh.
 
 ### Exemplo
 
@@ -117,15 +117,15 @@ Gera um prompt parecido com o seguinte:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Continuation Prompt
+## Prompt de Continução
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+Algumas shells suportam prompt de continuação juntamento com o prompt normal. Este prompt é renderizado em vez do prompt normal quando o usuário insere um comando incompleto (Como um parentese ou aspas a esquerda).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+O Starship consegue definir o prompt de continuação usando a opção `continuation_prompt`. O prompt padrão é `"[∙](bright-black) "`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Nota: `continuation_prompt` deve ser definido como uma string literal sem variáveis.
 
-Note: Continuation prompts are only available in the following shells:
+Nota: Prompt de continuação são disponíveis apenas nos shells a seguir:
 
   - `bash`
   - `zsh`
@@ -134,15 +134,15 @@ Note: Continuation prompts are only available in the following shells:
 ### Exemplo
 
 ```toml
-# ~/.config/starship.toml
+#~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Um prompt de continuação que mostra duas setas
 continuation_prompt = "▶▶"
 ```
 
 ## Estilo dos textos
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Strings de estilo são uma lista de palavras, separadas por espaço. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `italic`
