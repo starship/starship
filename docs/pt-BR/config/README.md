@@ -2410,7 +2410,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 A variável `python_binary` aceita uma string ou uma lista de strings. O Starship vai tentar executar cada binário até obter um resultado. Note que você pode apenas alterar o binário em que o Starship executa para pegar a versão do Python não os argumentos que são utilizados.
 
-O valor padrão e a ordem para o `python_binary` foram escolhidos para identificar primeiro uma versão do Python em um ambiente virtualenv/conda (que atualmente adiciona um `python`, não importa se ele aponta pro `python3` ou `python2`). Este tem efeito de lado, se você tenha um sistema com Python 2 instalado, pode ser usado antes de qualquer Python 3 (pelo menos nas Distros Linux que sempre fazem um symlink `/usr/bin/python` para Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+O valor padrão e a ordem para o `python_binary` foram escolhidos para identificar primeiro uma versão do Python em um ambiente virtualenv/conda (que atualmente adiciona um `python`, não importa se ele aponta pro `python3` ou `python2`). Este tem efeito de lado, se você tenha um sistema com Python 2 instalado, pode ser usado antes de qualquer Python 3 (pelo menos nas Distros Linux que sempre fazem um symlink `/usr/bin/python` para Python 2). Se você não trabalha mais com Python 2, mas não pode remover do sistema o Python 2, alterando este para `"python3"` vai esconder qualquer versão de Python 2, veja o exemplo abaixo.
 
 :::
 
@@ -2463,15 +2463,15 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+O módulo `rlang` exibe a versão atual instalada do [R](https://www.r-project.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
+- O diretório atual tenha um arquivo com a extensão `.R`.
+- O diretório atual tenha um arquivo com a extensão `.Rd`.
+- O diretório atual tenha um arquivo com a extensão `.Rmd`.
+- O diretório atual tenha um arquivo com a extensão `.Rproj`.
+- O diretório atual tenha um arquivo com a extensão `.Rsx`.
+- O diretório atual tenha um arquivo `.Rprofile`
+- O diretório atual tenha uma pasta `.Rpoj.user`
 
 ### Opções
 
