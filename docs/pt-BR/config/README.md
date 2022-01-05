@@ -1771,14 +1771,14 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ```toml
 [kubernetes.context_aliases]
-# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+# Contexto do OpenShift carrega o namespace e usuário no contexto kube: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
-# Or better, to rename every OpenShift cluster at once:
+# Ou melhor, para renomear cada cluster OpenShift de uma vez:
 ".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
 
-# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
-# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
-# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+# Contexto do GKE, AWS e outras provedores de nuvem normalmente carregam mais informações, como a region/zone.
+# A entrada a seguir corresponde o formato GKE (`gke_projectname_zone_cluster-name`)
+# e renomeia cada kube context em um formato mais legível (`gke-cluster-name`):
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
@@ -1803,11 +1803,11 @@ disabled = true
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `lua` exibe a versão atual instalada do [Lua](http://www.lua.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `.lua-version` file
-- The current directory contains a `lua` directory
-- The current directory contains a file with the `.lua` extension
+- O diretório atual contém um arquivo `.lua-version`
+- O diretório atual contém um diretório `lua`
+- O diretório atual tem um arquivo com a extensão `.lua`
 
 ### Opções
 
@@ -1815,7 +1815,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                                      |
+| `symbol`            | `"🌙 "`                               | Uma string que representa o simbolo do Lua.                                          |
 | `detect_extensions` | `["lua"]`                            | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[".lua-version"]`                   | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `["lua"]`                            | Quais pastas devem ativar este módulo.                                               |
