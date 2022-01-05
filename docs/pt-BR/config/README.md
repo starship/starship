@@ -2078,24 +2078,24 @@ O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/)
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | A string de formato do módulo.                                                       |
 | `version_format`          | `"v${raw}"`                                                                | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml.                              |
-| `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch.                              |
-| `local_switch_indicator`  | `"*"`                                                                      | The format string used to represent local OPAM switch.                               |
+| `symbol`                  | `"🐫 "`                                                                     | O simbolo usado antes de exibir a versão do OCaml.                                   |
+| `global_switch_indicator` | `""`                                                                       | A string usada para representar a mudança global OPAM.                               |
+| `local_switch_indicator`  | `"*"`                                                                      | A string usada para representar as mudanças locais do OPAM.                          |
 | `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Quais pastas devem ativar este módulo.                                               |
 | `style`                   | `"bold yellow"`                                                            | O estilo do módulo.                                                                  |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                                         |
+| `disabled`                | `false`                                                                    | Desabilita o módulo `ocaml`.                                                         |
 
 ### Variáveis
 
-| Variável         | Exemplo      | Descrição                                                         |
-| ---------------- | ------------ | ----------------------------------------------------------------- |
-| version          | `v4.10.0`    | The version of `ocaml`                                            |
-| switch_name      | `my-project` | The active OPAM switch                                            |
-| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
-| symbol           |              | Espelha o valor da opção `símbolo`                                |
-| style\*        |              | Espelha o valor da opção `style`                                  |
+| Variável         | Exemplo      | Descrição                                                        |
+| ---------------- | ------------ | ---------------------------------------------------------------- |
+| version          | `v4.10.0`    | A versão do `ocaml`                                              |
+| switch_name      | `my-project` | O switch OPAM ativo                                              |
+| switch_indicator |              | Espelha o valor do `indicator` para o switch ativo atual do OPAM |
+| symbol           |              | Espelha o valor da opção `símbolo`                               |
+| style\*        |              | Espelha o valor da opção `style`                                 |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -2110,23 +2110,23 @@ format = "via [🐪 $version]($style) "
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas ativa quando a env var `OS_CLOUD` esta definida, neste caso ele vai ler o arquivo `clouds.yaml` de qualquer um dos [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). para buscar o projeto atual em uso.
 
 ### Opções
 
-| Opções     | Padrão                                              | Descrição                                                      |
-| ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | O formato do módulo.                                           |
-| `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `"bold yellow"`                                     | O estilo do módulo.                                            |
-| `disabled` | `false`                                             | Disables the `openstack` module.                               |
+| Opções     | Padrão                                              | Descrição                                            |
+| ---------- | --------------------------------------------------- | ---------------------------------------------------- |
+| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | O formato do módulo.                                 |
+| `symbol`   | `"☁️ "`                                             | O simbolo usado para exibir o OpenStack cloud atual. |
+| `style`    | `"bold yellow"`                                     | O estilo do módulo.                                  |
+| `disabled` | `false`                                             | Desabilita o módulo `openstack`.                     |
 
 ### Variáveis
 
 | Variável  | Exemplo | Descrição                          |
 | --------- | ------- | ---------------------------------- |
-| cloud     | `corp`  | The current OpenStack cloud        |
-| project   | `dev`   | The current OpenStack project      |
+| cloud     | `corp`  | O OpenStack cloud atual            |
+| project   | `dev`   | O projeto OpenStack atual          |
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
@@ -2143,9 +2143,9 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Package Version
+## Versionamento de Pacotes
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+O módulo `package` é exibido quando o diretório atual é um repositorio para um pacote e exibe sua versão atual. O módulo atualmente suporta pacotes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` e `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2171,17 +2171,17 @@ The `package` module is shown when the current directory is the repository for a
 | Opções            | Padrão                            | Descrição                                                                            |
 | ----------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`          | `"is [$symbol$version]($style) "` | O formato do módulo.                                                                 |
-| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                           |
+| `symbol`          | `"📦 "`                            | O simbolo usado antes de exibir a versão do pacote.                                  |
 | `version_format`  | `"v${raw}"`                       | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `style`           | `"bold 208"`                      | O estilo do módulo.                                                                  |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.                            |
-| `disabled`        | `false`                           | Disables the `package` module.                                                       |
+| `display_private` | `false`                           | Habilita a exibição da versão para os pacotes marcados como privado.                 |
+| `disabled`        | `false`                           | Desabilita o módulo `package`.                                                       |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v1.0.0` | The version of your package        |
+| version   | `v1.0.0` | A versão do seu pacote             |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
