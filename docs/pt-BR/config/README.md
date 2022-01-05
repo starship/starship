@@ -110,7 +110,7 @@ Por exemplo:
 
 O símbolos a seguir tem um uso na formatação de string e deve ser escapados `$ \ [ ] ( )`.
 
-Note que TOML tem [string básicas e strings literais](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+Note que TOML tem [string básicas e strings literais](https://toml.io/en/v1.0.0#string). É recomendado usar um string literal(cercado por aspas simples) em seu config. Se você quiser usar uma string básica(cercado por aspas duplas), você precisa adicionar o backslash (ex: use `\\`).
 
 Por exemplo, quando você quer imprimir um simbolo `$` em uma nova linha, as configurações de `format` a seguir são equivalentes:
 
@@ -239,10 +239,10 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+Se você quer estender o formato padrão, você pode usar `$all`; Os módulos adicionado explicitamente não serão duplicados. Ex.
 
 ```toml
-# Move the directory to the second line
+# Move o diretório para segunda linha
 format="$all$directory$character"
 ```
 
@@ -322,16 +322,16 @@ symbol = "🅰 "
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+O módulo `azure` exibe a assinatura Azure atual. Isto é baseado na exibição do nome da assinatura padrão, como definido no arquivo em `~/.azure/azureProfile.json`.
 
 ### Opções
 
-| Variável   | Padrão                                   | Descrição                                  |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
-| `style`    | `"blue bold"`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Variável   | Padrão                                   | Descrição                                      |
+| ---------- | ---------------------------------------- | ---------------------------------------------- |
+| `format`   | `"on [$symbol($subscription)]($style) "` | O formato que o módulo Azure será renderizado. |
+| `symbol`   | `"ﴃ "`                                   | O símbolo usado no formato.                    |
+| `style`    | `"blue bold"`                            | O estilo usado no formato.                     |
+| `disabled` | `true`                                   | Desabilita o módulo `azure`.                   |
 
 ### Exemplo
 
