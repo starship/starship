@@ -1887,7 +1887,7 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 | symbol           | `🐏`                                             | Espelha o valor da opção `símbolo`                                                                                                                                                                                                                                                                                                                                                                     |
 | style\*        |                                                 | Espelha o valor da opção `style`                                                                                                                                                                                                                                                                                                                                                                       |
 
-\*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
+\*: Estas variaveis podem ser usadas apenas como parte da string de estilo \*\*: O arquivo SWAP é exibido somente se for identificado no sistema atual
 
 ### Exemplo
 
@@ -1903,24 +1903,24 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+O módulo `hg_branch` exibe o braço atual do repositório no diretório atual.
 
 ### Opções
 
-| Opções              | Padrão                           | Descrição                                                                                    |
-| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `" "`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `"bold purple"`                  | O estilo do módulo.                                                                          |
-| `format`            | `"on [$symbol$branch]($style) "` | O formato do módulo.                                                                         |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `"…"`                            | O simbolo usado para indicar que o nome braço foi truncado.                                  |
-| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+| Opções              | Padrão                           | Descrição                                                                               |
+| ------------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
+| `symbol`            | `" "`                           | O simbolo usado ante do marcador hg ou nome do braço do repositório no diretório atual. |
+| `style`             | `"bold purple"`                  | O estilo do módulo.                                                                     |
+| `format`            | `"on [$symbol$branch]($style) "` | O formato do módulo.                                                                    |
+| `truncation_length` | `2^63 - 1`                       | Trunca o nome do braço hg para `N` caracteres                                           |
+| `truncation_symbol` | `"…"`                            | O simbolo usado para indicar que o nome braço foi truncado.                             |
+| `disabled`          | `true`                           | Desabilita o módulo `hg_branch`.                                                        |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| branch    | `master` | The active mercurial branch        |
+| branch    | `master` | O braço mercurial ativo            |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -1939,12 +1939,12 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `nim` exibe a versão atual instalada do [Nim](https://nim-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `nim.cfg`
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nims` extension
-- The current directory contains a file with the `.nimble` extension
+- O diretório atual tenha um arquivo com a extensão `.nim`
+- O diretório atual tenha um arquivo com a extensão `.nims`
+- O diretório atual tenha um arquivo com a extensão `.nimble`
 
 ### Opções
 
@@ -1952,18 +1952,18 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo                                                                  |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                                |
+| `symbol`            | `"👑 "`                               | O simbolo usado antes de exibir a versão do Nim.                                     |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["nim.cfg"]`                        | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold yellow"`                      | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `nim` module.                                                           |
+| `disabled`          | `false`                              | Desabilita o módulo `nim`.                                                           |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v1.2.0` | The version of `nimc`              |
+| version   | `v1.2.0` | A versão do `nimc`                 |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
