@@ -2392,37 +2392,37 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Opções
 
-| Opções               | Padrão                                                                                                       | Descrição                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | O formato do módulo.                                                                   |
-| `version_format`     | `"v${raw}"`                                                                                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch`   |
-| `symbol`             | `"🐍 "`                                                                                                       | Uma string que representa o simbolo do Python                                          |
-| `style`              | `"yellow bold"`                                                                                              | O estilo do módulo.                                                                    |
-| `pyenv_version_name` | `false`                                                                                                      | Usa pyenv para pegar a versão do Python                                                |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `["py"]`                                                                                                     | Quais extensões devem acionar este módulo                                              |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | []                                                                                     |
-| `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                  |
-| `disabled`           | `false`                                                                                                      | Desabilita o módulo `python`.                                                          |
+| Opções               | Padrão                                                                                                       | Descrição                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | O formato do módulo.                                                                 |
+| `version_format`     | `"v${raw}"`                                                                                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`             | `"🐍 "`                                                                                                       | Uma string que representa o simbolo do Python                                        |
+| `style`              | `"yellow bold"`                                                                                              | O estilo do módulo.                                                                  |
+| `pyenv_version_name` | `false`                                                                                                      | Usa pyenv para pegar a versão do Python                                              |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefixo antes da versão do pyenv, apenas usado se pyenv for usado                    |
+| `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configura o binário python que o Starship vai executar para obter a versão.          |
+| `detect_extensions`  | `["py"]`                                                                                                     | Quais extensões devem acionar este módulo                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | []                                                                                   |
+| `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                |
+| `disabled`           | `false`                                                                                                      | Desabilita o módulo `python`.                                                        |
 
 ::: tip
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+A variável `python_binary` aceita uma string ou uma lista de strings. O Starship vai tentar executar cada binário até obter um resultado. Note que você pode apenas alterar o binário em que o Starship executa para pegar a versão do Python não os argumentos que são utilizados.
 
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+O valor padrão e a ordem para o `python_binary` foram escolhidos para identificar primeiro uma versão do Python em um ambiente virtualenv/conda (que atualmente adiciona um `python`, não importa se ele aponta pro `python3` ou `python2`). Este tem efeito de lado, se você tenha um sistema com Python 2 instalado, pode ser usado antes de qualquer Python 3 (pelo menos nas Distros Linux que sempre fazem um symlink `/usr/bin/python` para Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
 
 :::
 
 ### Variáveis
 
-| Variável     | Exemplo         | Descrição                                  |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | A versão do `python`                       |
-| symbol       | `"🐍 "`          | Espelha o valor da opção `símbolo`         |
-| style        | `"yellow bold"` | Espelha o valor da opção `style`           |
-| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | The current `virtualenv` name              |
+| Variável     | Exemplo         | Descrição                               |
+| ------------ | --------------- | --------------------------------------- |
+| version      | `"v3.8.1"`      | A versão do `python`                    |
+| symbol       | `"🐍 "`          | Espelha o valor da opção `símbolo`      |
+| style        | `"yellow bold"` | Espelha o valor da opção `style`        |
+| pyenv_prefix | `"pyenv "`      | Espelha o valor da opção `pyenv_prefix` |
+| virtualenv   | `"venv"`        | O nome atual do `virtualenv`            |
 
 ### Exemplo
 
@@ -2479,18 +2479,18 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"📐"`                                | A format string representing the symbol of R.                                        |
+| `symbol`            | `"📐"`                                | Uma string que representa o simbolo do R.                                            |
 | `style`             | `"blue bold"`                        | O estilo do módulo.                                                                  |
 | `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Quais extensões devem acionar este módulo                                            |
 | `detect_files`      | `[".Rprofile"]`                      | []                                                                                   |
 | `detect_folders`    | `[".Rproj.user"]`                    | Quais pastas devem ativar este módulo                                                |
-| `disabled`          | `false`                              | Disables the `r` module.                                                             |
+| `disabled`          | `false`                              | Desabilita o módulo `r`.                                                             |
 
 ### Variáveis
 
 | Variável | Exemplo       | Descrição                          |
 | -------- | ------------- | ---------------------------------- |
-| version  | `v4.0.5`      | The version of `R`                 |
+| version  | `v4.0.5`      | A versão do `R`                    |
 | symbol   |               | Espelha o valor da opção `símbolo` |
 | style    | `"blue bold"` | Espelha o valor da opção `style`   |
 
