@@ -31,7 +31,7 @@ tls-vendored = ["native-tls/vendored"]
 
 [dependencies]
 clap = { version = "3.0.4", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.0.0"
+clap_complete = "3.0.2"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
 git2 = { version = "0.13.25", default-features = false }
