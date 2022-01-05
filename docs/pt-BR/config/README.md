@@ -2278,18 +2278,18 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+O módulo `pulumi` exibe a versão do [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) selecionada.
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+Por padrão a versão do Pulumi não é exibida, pois leva um tempo maior para ser carregada. Em média a maioria dos plugins leva (~70ms). Se você ainda deseja ativa-la, [siga o exemplo abaixo](#with-pulumi-version).
 
 :::
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- O diretório atual tenha um arquivo `Pulumi.yaml` ou `Pulumi.yml`
+- Um diretório pai que tenha um arquivo `Pulumi.yaml` ou `Pulumi.yml`
 
 ### Opções
 
@@ -2297,16 +2297,16 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | ---------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`         | `"via [$symbol$stack]($style) "` | A string de formato do módulo.                                                       |
 | `version_format` | `"v${raw}"`                      | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                       |
+| `symbol`         | `" "`                           | Uma string que é exibida antes do Pulumi stack.                                      |
 | `style`          | `"bold 5"`                       | O estilo do módulo.                                                                  |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                                        |
+| `disabled`       | `false`                          | Desabilita o módulo `pulumi`.                                                        |
 
 ### Variáveis
 
 | Variável  | Exemplo    | Descrição                          |
 | --------- | ---------- | ---------------------------------- |
-| version   | `v0.12.24` | The version of `pulumi`            |
-| stack     | `dev`      | The current Pulumi stack           |
+| version   | `v0.12.24` | A versão do `pulumi`               |
+| stack     | `dev`      | A stack Pulumi atual               |
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
@@ -2887,7 +2887,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# No windows
 # $HOME\.starship\config.toml
 
 [sudo]
