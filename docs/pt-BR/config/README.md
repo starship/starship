@@ -1718,7 +1718,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Exibe o [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) nome e, se definido, o namespace do arquivo kubeconfig. O namespace precisa estar definido no arquivo kubeconfig, isto pode ser feito via `kubectl config set-context starship-cluster --namespace astronaut`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
 
 ::: tip
 
@@ -1728,13 +1728,13 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 ### Opções
 
-| Opções            | Padrão                                               | Descrição                                                             |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | O formato do módulo.                                                  |
-| `style`           | `"cyan bold"`                                        | O estilo do módulo.                                                   |
-| `context_aliases` |                                                      | Tabela de aliases de contexto para exibir.                            |
-| `disabled`        | `true`                                               | Desabilita o módulo `kubernetes`.                                     |
+| Opções            | Padrão                                               | Descrição                                                     |
+| ----------------- | ---------------------------------------------------- | ------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | Uma string que representa o simbolo exibido antes do Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | O formato do módulo.                                          |
+| `style`           | `"cyan bold"`                                        | O estilo do módulo.                                           |
+| `context_aliases` |                                                      | Tabela de aliases de contexto para exibir.                    |
+| `disabled`        | `true`                                               | Desabilita o módulo `kubernetes`.                             |
 
 ### Variáveis
 
@@ -1761,7 +1761,7 @@ disabled = false
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-#### Regex Matching
+#### Correspondência Regex
 
 Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
 
@@ -3147,16 +3147,26 @@ format = "via [V $version](blue bold) "
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+O módulo `vcsh<0> exibe o repositório <a href="https://github.com/RichiH/vcsh">VCSH</a> atual ativo.
+O módulo vai ser exibido apenas se um repositório estiver em uso.</p>
 
-### Opções
+<h3 spaces-before="0">Opções</h3>
 
-| Opções     | Padrão                           | Descrição                                              |
-| ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
-| `style`    | `"bold yellow"`                  | O estilo do módulo.                                    |
-| `format`   | `"vcsh [$symbol$repo]($style) "` | O formato do módulo.                                   |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+<table spaces-before="0">
+<thead>
+<tr>
+  <th>Opções</th>
+  <th>Padrão</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>symbol`</td> 
+
+</tr> 
+
+</tbody> </table>
 
 ### Variáveis
 
@@ -3181,7 +3191,7 @@ format = "[🆅 $repo](bold blue) "
 
 Por padrão o módulo `zig` exibe a versão atual instalada do [Zig](https://ziglang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a `.zig` file
+- O diretório atual contém arquivo com a extensão `.zig`
 
 ### Opções
 
