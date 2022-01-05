@@ -1981,7 +1981,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). The module will be shown when inside a nix-shell environment.
+O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). O módulo vai exibir quando estiver dentro de um ambiente nix-shell.
 
 ### Opções
 
@@ -1990,16 +1990,16 @@ O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | O formato do módulo.                              |
 | `symbol`     | `"❄️ "`                                        | Uma string que representa o simbolo do nix-shell. |
 | `style`      | `"bold blue"`                                  | O estilo do módulo.                               |
-| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.   |
-| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.     |
-| `disabled`   | `false`                                        | Disables the `nix_shell` module.                  |
+| `impure_msg` | `"impure"`                                     | Uma string que exibe quando o shell é impuro.     |
+| `pure_msg`   | `"pure"`                                       | Uma string que exibe quando o shell é puro.       |
+| `disabled`   | `false`                                        | Desabilita o módulo `nix_shell`.                  |
 
 ### Variáveis
 
 | Variável  | Exemplo | Descrição                          |
 | --------- | ------- | ---------------------------------- |
-| state     | `pure`  | The state of the nix-shell         |
-| name      | `lorri` | The name of the nix-shell          |
+| state     | `pure`  | O estado do nix-shell              |
+| name      | `lorri` | O nome do nix-shell                |
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
@@ -2019,34 +2019,34 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `nodejs` exibe a versão atual instalada do [Node.js](https://nodejs.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem o arquivo `package.json`
-- The current directory contains a `.node-version` file
-- The current directory contains a `.nvmrc` file
-- The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- O diretório atual tenha um arquivo `.node-version`
+- O diretório atual tenha um arquivo`.nvmrc`
+- O diretório atual tenha um diretório `node_modules`
+- O diretório atual tenha um arquivo com a extensão `.js`, `.mjs` or `.cjs`
+- O diretório atual tenha um arquivo com a extensão `.ts`
 
 ### Opções
 
-| Opções              | Padrão                               | Descrição                                                                                             |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                                  |
-| `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch`                  |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quais extensões devem ativar este módulo.                                                             |
-| `detect_files`      | `["package.json", ".node-version"]`  | Quais nomes de arquivos devem ativar este módulo.                                                     |
-| `detect_folders`    | `["node_modules"]`                   | Quais pastas devem ativar este módulo.                                                                |
-| `style`             | `"bold green"`                       | O estilo do módulo.                                                                                   |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Opções              | Padrão                               | Descrição                                                                                                |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                                     |
+| `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch`                     |
+| `symbol`            | `" "`                               | Uma string que representa o simbolo do Node.js.                                                          |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quais extensões devem ativar este módulo.                                                                |
+| `detect_files`      | `["package.json", ".node-version"]`  | Quais nomes de arquivos devem ativar este módulo.                                                        |
+| `detect_folders`    | `["node_modules"]`                   | Quais pastas devem ativar este módulo.                                                                   |
+| `style`             | `"bold green"`                       | O estilo do módulo.                                                                                      |
+| `disabled`          | `false`                              | Desabilita o módulo `nodejs`.                                                                            |
+| `not_capable_style` | `bold red`                           | O estilo para o módulo quando a propriedade engine no package.json não coincide com a versão do Node.js. |
 
 ### Variáveis
 
 | Variável  | Exemplo    | Descrição                          |
 | --------- | ---------- | ---------------------------------- |
-| version   | `v13.12.0` | The version of `node`              |
+| version   | `v13.12.0` | A versão do `node`                 |
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
@@ -2063,20 +2063,20 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
-- The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- O diretório atual contenha um arquivo com a extensão`.opam` ou um diretório `_opam`
+- O diretório atual tenha um diretório `esy.lock`
+- O diretório atual tenha um arquivo `dune` or `dune-project`
+- O diretório atual tenha um arquivo `jbuild` or `jbuild-ignore`
+- O diretório tenha um arquivo `.merlin`
+- O diretório atual tenha um arquivo com a extensão `.ml`, `.mli`, `.re` ou `.rei`
 
 ### Opções
 
 | Opções                    | Padrão                                                                     | Descrição                                                                            |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                                    |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | A string de formato do módulo.                                                       |
 | `version_format`          | `"v${raw}"`                                                                | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml.                              |
 | `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch.                              |
@@ -2210,7 +2210,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | Opções              | Padrão                                                                                                   | Descrição                                                                            |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                                    |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | A string de formato do módulo.                                                       |
 | `version_format`    | `"v${raw}"`                                                                                              | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                                |
 | `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Quais extensões devem ativar este módulo.                                            |
@@ -2295,7 +2295,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 | Opções           | Padrão                           | Descrição                                                                            |
 | ---------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                                                    |
+| `format`         | `"via [$symbol$stack]($style) "` | A string de formato do módulo.                                                       |
 | `version_format` | `"v${raw}"`                      | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                       |
 | `style`          | `"bold 5"`                       | O estilo do módulo.                                                                  |
@@ -2953,7 +2953,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 | Opções              | Padrão                               | Descrição                                                                            |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                                    |
+| `format`            | `"via [$symbol$workspace]($style) "` | A string de formato do módulo.                                                       |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                                |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Quais extensões devem ativar este módulo.                                            |
@@ -3007,7 +3007,7 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 | Opções            | Padrão                  | Descrição                                                                                                                          |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `format`          | `"at [$time]($style) "` | A string de formato do módulo.                                                                                                     |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
