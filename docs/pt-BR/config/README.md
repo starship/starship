@@ -399,16 +399,16 @@ A opção `display` é um array da seguinte tabela.
 #### Exemplo
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]]  # estilo "bold red" e o simbolo discharging_symbol quando a capacidade estiver entre 0% e10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]]  # estilo "bold yellow"  e o simbolo 💦  quando a capacidade estiver entre 10% e 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# Quando a capacidade for maior que 30%, o indicador de bateria não será exebido
 
 ```
 
@@ -514,29 +514,29 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+O módulo `cobol` exibe a versão instalada atual do COBOL. Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
 
-- The current directory contains any files ending in `.cob` or `.COB`
-- The current directory contains any files ending in `.cbl` or `.CBL`
+- O diretório atual tem qualquer arquivo com extensão `.cob` or `.COB`
+- O diretório atual tenham qualquer arquivo com extensão `.cbl` or `.CBL`
 
 ### Opções
 
 | Opções              | Padrão                               | Descrição                                                                            |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
-| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                              |
+| `symbol`            | `"⚙️ "`                              | O simbolo usado antes de exibir a versão do COBOL.                                   |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `style`             | `"bold blue"`                        | O estilo do módulo.                                                                  |
 | `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                                         |
+| `disabled`          | `false`                              | Desabilita o módulo `cobol`.                                                         |
 
 ### Variáveis
 
 | Variável  | Exemplo    | Descrição                          |
 | --------- | ---------- | ---------------------------------- |
-| version   | `v3.1.2.0` | The version of `cobol`             |
+| version   | `v3.1.2.0` | A versão do `cobol`                |
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
@@ -593,7 +593,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+O módulo `conda` exibe o ambiente atual do [Conda](https://docs.conda.io/en/latest/), se o `$CONDA_DEFAULT_ENV` estiver definido.
 
 ::: tip
 
