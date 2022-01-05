@@ -2242,7 +2242,7 @@ O módulo `php` exibe a versão atual instalada do [PHP](https://www.php.net/). 
 
 - O diretório atual contem um arquivo `composer.json`
 - O diretório atual tenha um arquivo `.php-version`
-- The current directory contains a `.php` extension
+- O diretório atual tenha um arquivo com extensão `.php`
 
 ### Opções
 
@@ -2250,18 +2250,18 @@ O módulo `php` exibe a versão atual instalada do [PHP](https://www.php.net/). 
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                                |
+| `symbol`            | `"🐘 "`                               | O simbolo usado antes de exibir a versão do PHP.                                     |
 | `detect_extensions` | `["php"]`                            | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["composer.json", ".php-version"]`  | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"147 bold"`                         | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `php` module.                                                           |
+| `disabled`          | `false`                              | Desabilita o módulo `php`.                                                           |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v7.3.8` | The version of `php`               |
+| version   | `v7.3.8` | A versão do `php`                  |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -2314,7 +2314,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### With Pulumi Version
+#### Com a versão do Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2323,7 +2323,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = "[🛥 ($version )$stack]($style) "
 ```
 
-#### Without Pulumi version
+#### Sem a versão do Pulumi
 
 ```toml
 # ~/.config/starship.toml
