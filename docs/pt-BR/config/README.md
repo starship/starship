@@ -1763,11 +1763,11 @@ disabled = false
 
 #### Correspondência Regex
 
-Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+Adicional para aliasing simples, `context_aliases` também suporta correspondência estendida e renomeação usando expressão regular.
 
-The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+A expressão regular deve coincidir com todo o contexto kube, Grupos de captura podem ser referenciados usando `$name` e `$N` na substituição. Isto esta mais explicado na documentação do [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace).
 
-Long and automatically generated cluster names can be identified and shortened using regular expressions:
+Nomes longos de clusters gerados automaticamente podem ser encurtados usando expressão regular:
 
 ```toml
 [kubernetes.context_aliases]
@@ -1820,14 +1820,14 @@ O módulo `lua` exibe a versão atual instalada do [Lua](http://www.lua.org/). P
 | `detect_files`      | `[".lua-version"]`                   | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `["lua"]`                            | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold blue"`                        | O estilo do módulo.                                                                  |
-| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.           |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                           |
+| `lua_binary`        | `"lua"`                              | Configura o binário lua que o Starship executa para pegar a versão.                  |
+| `disabled`          | `false`                              | Desabilita o módulo `lua`.                                                           |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v5.4.0` | The version of `lua`               |
+| version   | `v5.4.0` | A versão do `lua`                  |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -1844,9 +1844,9 @@ format = "via [🌕 $version](bold blue) "
 
 ## Uso de memória
 
-The `memory_usage` module shows current system memory and swap usage.
+O módulo `memory_usage` exibe o uso atual de memoria e swap.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Por padrão o uso do swap é exibido se o total de swap do sistema é diferente de zero.
 
 ::: tip
 
@@ -1856,24 +1856,36 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 ### Opções
 
-| Opções      | Padrão                                          | Descrição                                                |
-| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | O formato do módulo.                                     |
-| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
-| `style`     | `"bold dimmed white"`                           | O estilo do módulo.                                      |
-| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
+| Opções           | Padrão                                          | Descrição                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `threshold`      | `75`                                            | Esconde o uso de memoria a menos que exceda esta porcentagem.                                                                                                                                                                                                                                                                                                                                          |
+| `format`         | `"via $symbol [${ram}( \| ${swap})]($style) "` | O formato do módulo.                                                                                                                                                                                                                                                                                                                                                                                   |
+| `symbol`         | `"🐏"`                                           | O simbolo usado antes de exibir o uso de memoria.                                                                                                                                                                                                                                                                                                                                                      |
+| `style`          | `"bold dimmed white"`                           | O estilo do módulo.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `disabled`       | `true`                                          | Desabilita o módulo `memory_usage</0.</td>
+</tr>
+</tbody>
+</table>
 
-### Variáveis
+<h3 spaces-before="0">Variáveis</h3>
 
-| Variável         | Exemplo       | Descrição                                                          |
-| ---------------- | ------------- | ------------------------------------------------------------------ |
-| ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
-| ram_pct          | `48%`         | The percentage of the current system memory.                       |
-| swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
-| swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol           | `🐏`           | Espelha o valor da opção `símbolo`                                 |
-| style\*        |               | Espelha o valor da opção `style`                                   |
+<table spaces-before="0">
+<thead>
+<tr>
+  <th>Variável</th>
+  <th>Exemplo</th>
+  <th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>ram</td>
+  <td><code>31GiB/65GiB` | O uso/total de memoria RAM atual do sistema. |
+| ram_pct          | `48%`                                           | A porcentagem de uso atual da memoria do sistema.                                                                                                                                                                                                                                                                                                                                                      |
+| swap\*\*     | `1GiB/4GiB`                                     | O tamanho atual do swap do sistema.                                                                                                                                                                                                                                                                                                                                                                    |
+| swap_pct\*\* | `77%`                                           | A porcentagem atual de uso do swap.                                                                                                                                                                                                                                                                                                                                                                    |
+| symbol           | `🐏`                                             | Espelha o valor da opção `símbolo`                                                                                                                                                                                                                                                                                                                                                                     |
+| style\*        |                                                 | Espelha o valor da opção `style`                                                                                                                                                                                                                                                                                                                                                                       |
 
 \*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
 
