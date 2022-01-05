@@ -1415,7 +1415,7 @@ behind = "⇣${count}"
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `go.mod`
 - O diretório atual contem um arquivo `go.sum`
@@ -1515,7 +1515,7 @@ O módulo `hostname` exibe o nome do hostname.
 
 | Variável  | Exemplo    | Descrição                        |
 | --------- | ---------- | -------------------------------- |
-| hostname  | `computer` | The hostname of the computer     |
+| hostname  | `computer` | O hostname do computador         |
 | style\* |            | Espelha o valor da opção `style` |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
@@ -3179,7 +3179,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+Por padrão o módulo `zig` exibe a versão atual instalada do [Zig](https://ziglang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
 - The current directory contains a `.zig` file
 
@@ -3189,9 +3189,9 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                                |
+| `symbol`            | `"↯ "`                               | O simbolo usado antes de exibir a versão do Zig.                                     |
 | `style`             | `"bold yellow"`                      | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `zig` module.                                                           |
+| `disabled`          | `false`                              | Desabilita o módulo `zig`.                                                           |
 | `detect_extensions` | `["zig"]`                            | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
@@ -3315,13 +3315,13 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters but wildcards are not supported
+command = "echo foo"  # exibe a saída do comando
+files = ["foo"]       # pode exibir filtros mas wildcards não são suportados
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"]  # filters *.pst files
+extensions = ["pst"]  # filtros de arquivos *.pst
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
