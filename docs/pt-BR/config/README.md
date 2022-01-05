@@ -2335,10 +2335,10 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `purescript` exibe a versão atual instalada do [PureScript](https://www.purescript.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `spago.dhall`
-- The current directory contains a file with the `.purs` extension
+- O diretório atual tenha um arquivo com a extensão `.purs`
 
 ### Opções
 
@@ -2346,18 +2346,18 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"<=> "`                       | The symbol used before displaying the version of PureScript.                         |
+| `symbol`            | `"<=> "`                       | O simbolo usado antes de exibir a versão do PureScript.                              |
 | `detect_extensions` | `["purs"]`                           | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["spago.dhall"]`                    | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold white"`                       | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                    |
+| `disabled`          | `false`                              | Desabilita o módulo `purescript`.                                                    |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `0.13.5` | The version of `purescript`        |
+| version   | `0.13.5` | A versão do `purescript`           |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -2374,21 +2374,21 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+O módulo `python` exibe a versão atual instalada do [Python](https://www.python.org/) e o [Python virtual environment](https://docs.python.org/tutorial/venv.html) se algum estiver ativo.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Se o `pyenv_version_name` estiver definido como `true`, será exibido o nome da versão do pyenv. Caso contrario, ele exibirá o número da versão do `python --version`.
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
+- O diretório atual tenha um arquivo `.python-version`
+- O diretório atual tenha um arquivo `Pipfile`
+- O diretório atual tenha um arquivo `__init__.py`
 - O diretório atual contem um arquivo `pyproject.toml`
 - O diretório atual contem um arquivo `requirements.txt`
 - O diretório atual contem um arquivo `setup.py`
 - O diretório atual contem um arquivo `tox.ini`
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- O diretório atual tenha um arquivo com a extensão `.py`.
+- Um ambiente virtual está atualmente ativo
 
 ### Opções
 
@@ -2396,15 +2396,15 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | O formato do módulo.                                                                   |
 | `version_format`     | `"v${raw}"`                                                                                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch`   |
-| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
+| `symbol`             | `"🐍 "`                                                                                                       | Uma string que representa o simbolo do Python                                          |
 | `style`              | `"yellow bold"`                                                                                              | O estilo do módulo.                                                                    |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
+| `pyenv_version_name` | `false`                                                                                                      | Usa pyenv para pegar a versão do Python                                                |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | Quais extensões devem acionar este módulo                                              |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | []                                                                                     |
 | `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                  |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| `disabled`           | `false`                                                                                                      | Desabilita o módulo `python`.                                                          |
 
 ::: tip
 
