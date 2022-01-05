@@ -713,7 +713,7 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- O diretório atual tenha um arquivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js`
 
 ### Opções
 
@@ -755,19 +755,19 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 
 ### Opções
 
-| Opções              | Padrão                                             | Descrição                                                                               |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | O número de pastas pais do diretório atual que serão truncadas.                         |
-| `truncate_to_repo`  | `true`                                             | Seu diretório será truncado ou não para a raiz do repositório git atual.                |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                                    |
-| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                                     |
-| `disabled`          | `false`                                            | Desabilita o módulo `directory`.                                                        |
-| `read_only`         | `"🔒"`                                              | O simbolo que indica que o diretório atual é somente leitura.                           |
-| `read_only_style`   | `"red"`                                            | O estilo para o simbolo de somente leitura.                                             |
-| `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                                  |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
-| `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                                |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| Opções              | Padrão                                             | Descrição                                                                                   |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | O número de pastas pais do diretório atual que serão truncadas.                             |
+| `truncate_to_repo`  | `true`                                             | Seu diretório será truncado ou não para a raiz do repositório git atual.                    |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                                        |
+| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                                         |
+| `disabled`          | `false`                                            | Desabilita o módulo `directory`.                                                            |
+| `read_only`         | `"🔒"`                                              | O simbolo que indica que o diretório atual é somente leitura.                               |
+| `read_only_style`   | `"red"`                                            | O estilo para o simbolo de somente leitura.                                                 |
+| `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                                      |
+| `repo_root_style`   | `None`                                             | O estilo para o repositório git root quando `truncate_to_repo` estiver definido como false. |
+| `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                                    |
+| `use_os_path_sep`   | `true`                                             | Use o separador especifico do SO em vez de sempre usar `/` (ex: `\` no Windows)          |
 
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
@@ -811,7 +811,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+O módulo `docker_context` exibe o [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) ativo atualmente se não estiver definido como `default` ou se as variáveis de ambiente `DOCKER_MACHINE_NAME`, `DOCKER_HOST` ou `DOCKER_CONTEXT` estiverem definidas (iram sobrescrever o contexto atual).
 
 ### Opções
 
@@ -1082,15 +1082,15 @@ format = "via [e $version](bold red) "
 
 ## Fill
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+O módulo `fill` preenche qualquer espaço vazio da linha com um simbolo. Se múltiplos módulos `fill` estiverem presentes em uma linha, eles irão dividir o espaço entre eles. Este módulo é útil para alinhar outros módulos.
 
 ### Opções
 
-| Opções     | Padrão         | Descrição                         |
-| ---------- | -------------- | --------------------------------- |
-| `symbol`   | `"."`          | The symbol used to fill the line. |
-| `style`    | `"bold black"` | O estilo do módulo.               |
-| `disabled` | `false`        | Disables the `fill` module        |
+| Opções     | Padrão         | Descrição                               |
+| ---------- | -------------- | --------------------------------------- |
+| `symbol`   | `"."`          | O simbolo usado para preencher a linha. |
+| `style`    | `"bold black"` | O estilo do módulo.                     |
+| `disabled` | `false`        | Desabilita o módulo `fill`              |
 
 ### Exemplo
 
@@ -1103,7 +1103,7 @@ symbol = "-"
 style = "bold green"
 ```
 
-Produces a prompt that looks like:
+Produz um prompt parecido com:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1333,23 +1333,23 @@ O módulo `git_status` exibe o simbolo que representa o estado do repositório n
 
 ### Opções
 
-| Opções              | Padrão                                          | Descrição                          |
-| ------------------- | ----------------------------------------------- | ---------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status` |
-| `conflicted`        | `"="`                                           | Este braço tem conflitos.          |
-| `ahead`             | `"⇡"`                                           | O formato do `ahead`               |
-| `behind`            | `"⇣"`                                           | O formato do `behind`              |
-| `diverged`          | `"⇕"`                                           | O formato do `diverged`            |
-| `up_to_date`        | `""`                                            | O formato do `up_to_date`          |
-| `untracked`         | `"?"`                                           | O formato do `untracked`           |
-| `stashed`           | `"$"`                                           | O formato do `stashed`             |
-| `modified`          | `"!"`                                           | O formato do `modified`            |
-| `staged`            | `"+"`                                           | O formato do `staged`              |
-| `renamed`           | `"»"`                                           | O formato do `renamed`             |
-| `deleted`           | `"✘"`                                           | O formato do `deleted`             |
-| `style`             | `"bold red"`                                    | O estilo do módulo.                |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.      |
-| `disabled`          | `false`                                         | Disables the `git_status` module.  |
+| Opções              | Padrão                                          | Descrição                           |
+| ------------------- | ----------------------------------------------- | ----------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`  |
+| `conflicted`        | `"="`                                           | Este braço tem conflitos.           |
+| `ahead`             | `"⇡"`                                           | O formato do `ahead`                |
+| `behind`            | `"⇣"`                                           | O formato do `behind`               |
+| `diverged`          | `"⇕"`                                           | O formato do `diverged`             |
+| `up_to_date`        | `""`                                            | O formato do `up_to_date`           |
+| `untracked`         | `"?"`                                           | O formato do `untracked`            |
+| `stashed`           | `"$"`                                           | O formato do `stashed`              |
+| `modified`          | `"!"`                                           | O formato do `modified`             |
+| `staged`            | `"+"`                                           | O formato do `staged`               |
+| `renamed`           | `"»"`                                           | O formato do `renamed`              |
+| `deleted`           | `"✘"`                                           | O formato do `deleted`              |
+| `style`             | `"bold red"`                                    | O estilo do módulo.                 |
+| `ignore_submodules` | `false`                                         | Ignora as alterações de submódulos. |
+| `disabled`          | `false`                                         | Desabilita o módulo `git_status`.   |
 
 ### Variáveis
 
