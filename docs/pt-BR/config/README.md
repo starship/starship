@@ -1985,14 +1985,14 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Opções
 
-| Opções       | Padrão                                         | Descrição                                             |
-| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | O formato do módulo.                                  |
-| `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
-| `style`      | `"bold blue"`                                  | O estilo do módulo.                                   |
-| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
-| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+| Opções       | Padrão                                         | Descrição                                         |
+| ------------ | ---------------------------------------------- | ------------------------------------------------- |
+| `format`     | `'via [$symbol$state( \($name\))]($style) '` | O formato do módulo.                              |
+| `symbol`     | `"❄️ "`                                        | Uma string que representa o simbolo do nix-shell. |
+| `style`      | `"bold blue"`                                  | O estilo do módulo.                               |
+| `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.   |
+| `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.     |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                  |
 
 ### Variáveis
 
