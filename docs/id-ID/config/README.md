@@ -425,7 +425,7 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ::: peringatan
 
-`error_symbol` tidak didukung pada elvish dan nu shell.
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2782,7 +2782,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: warning This module is not supported on nu shell. :::
 
 ### Opsi
 
