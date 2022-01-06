@@ -3279,14 +3279,14 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 | Opções        | Padrão                          | Descrição                                                                                                                                                                        |
 | ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                    |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                       |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                               |
-| `descrição`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                     |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                            |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                      |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                       |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                            |
+| `command`     | `""`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                           |
+| `when`        |                                 | Um comando de shell usado como condição para exibir o módulo. O módulo será exibido se o comando retornar `0` como código de status.                                             |
+| `shell`       |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                             |
+| `descrição`   | `"<custom module>"`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                     |
+| `files`       | `[]`                            | Os arquivos que serão buscados por correspondência no diretório atual.                                                                                                           |
+| `directories` | `[]`                            | Os diretórios que serão buscados por correspondência no diretório atual.                                                                                                         |
+| `extensions`  | `[]`                            | As extensões que serão buscadas por correspondência no diretório atual.                                                                                                          |
+| `symbol`      | `""`                            | O simbolo usado antes de exibir a saída do comando.                                                                                                                              |
 | `style`       | `"bold green"`                  | O estilo do módulo.                                                                                                                                                              |
 | `format`      | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                             |
 | `disabled`    | `false`                         | Desabilita este módulo `custom`.                                                                                                                                                 |
@@ -3304,24 +3304,24 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 #### Comandos personalizados de shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` aceita uma lista não vazia de string, onde:
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+- A primeira string é o caminho para o shell que executará o comando.
+- Outros argumentos que serão passados para o shell.
 
-If unset, it will fallback to STARSHIP_SHELL and then to "sh" on Linux, and "cmd /C" on Windows.
+Se não definido, ele retornará para o STARSHIP_SHELl e então para o "sh" no Linux e "cmd/C" no Windows.
 
-The `command` will be passed in on stdin.
+O `command` será passado no stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Se o `shell` não for dado ou apenas conter um elemento e o Starship detectar PowerShell ele será usado, os seguintes argumentos serão automaticamente adicionados: `-NoProfile -Command -`. Este comportamento pode ser evitado passando explicitamente argumento para o shell, ex.
 
 ```toml
 shell = ["pwsh", "-Command", "-"]
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning Tenha certeza que tenha uma configuração de shell
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Se você definir um comando personalizado, tenha certeza que o shell padrão usado pelo starship execute este comando com uma saída graciosa (via the `shell` option).
 
 For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
 
