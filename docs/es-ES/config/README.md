@@ -425,7 +425,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ::: aviso
 
-`error_symbol` no es compatible con el intérprete de comandos Elvish y Nu.
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2782,7 +2782,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: advertencia Este módulo no es compatible con los intérpretes de comandos Elvish y Nu. :::
+::: warning This module is not supported on nu shell. :::
 
 ### Opciones
 
