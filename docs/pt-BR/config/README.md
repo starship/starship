@@ -3263,15 +3263,15 @@ A ordem em que o módulo custom é exibido pode ser definido individualmente inc
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+A [Issue #1252](https://github.com/starship/starship/discussions/1252) contém exemplos de módulos personalizados. Se você tem um exemplo interessante que não esta coberto lá, sinta-se livre para compartilha-lo!
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning A saída do comando é exibido unescaped no prompt
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Seja qual for a saída o comando irá gerar uma saída sem modificações no prompt. Isto siguinifica que a saída tenha sequencias especiais estas serão interpretadas pelo seu shell, elas serão expandidas quando exibidas. Estas sequencias especiais são especificas da shell, ex: você pode escrever um módulo de comando que escreve uma sequencia de bash, ex:. `\h`, mas este módulo não irá funcionar no shell fish ou zsh.
 
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Strings de formatação também podem conter sequencias de prompt especificas de shell, ex: [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
