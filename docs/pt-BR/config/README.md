@@ -2628,9 +2628,9 @@ format = "via [⚙️ $version](red bold)"
 
 O módulo `scala` exibe a versão atual instalada do [Scala](https://www.scala-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- O diretório atual contem um arquivo `build.sbt`, `.scalaenv` ou `.sbtenv`
+- O diretório atual tenha um arquivo com a extensão `.scala` ou `.sbt`
+- O diretório atual tenha um diretório chamado `.metals`
 
 ### Opções
 
@@ -2638,18 +2638,18 @@ O módulo `scala` exibe a versão atual instalada do [Scala](https://www.scala-l
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [${symbol}(${version} )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                              | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["sbt", "scala"]`                       | Quais extensões devem ativar este módulo.                                            |
+| `detect_extensions` | `["sbt", "escala"]`                      | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[".metals"]`                            | Quais pastas devem ativar este módulo.                                               |
-| `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                                    |
+| `symbol`            | `"🆂 "`                                   | Uma string que representa o simbolo do Scala.                                        |
 | `style`             | `"red dimmed"`                           | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                                         |
+| `disabled`          | `false`                                  | Desabilita o módulo `scala`.                                                         |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `2.13.5` | The version of `scala`             |
+| version   | `2.13.5` | A versão do `scala`                |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -2676,28 +2676,28 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 ### Opções
 
-| Opções                 | Padrão                    | Descrição                                                    |
-| ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`                     | Uma string para representar o bash.                          |
-| `fish_indicator`       | `fsh`                     | Uma string usada para representar o fish.                    |
-| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
-| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
-| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
-| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
-| `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
-| `format`               | `"[$indicator]($style) "` | O formato do módulo.                                         |
-| `style`                | `"white bold"`            | O estilo do módulo.                                          |
-| `disabled`             | `true`                    | Disables the `shell` module.                                 |
+| Opções                 | Padrão                    | Descrição                                               |
+| ---------------------- | ------------------------- | ------------------------------------------------------- |
+| `bash_indicator`       | `bsh`                     | Uma string para representar o bash.                     |
+| `fish_indicator`       | `fsh`                     | Uma string usada para representar o fish.               |
+| `zsh_indicator`        | `zsh`                     | Uma string usada para representar o zsh.                |
+| `powershell_indicator` | `psh`                     | Uma string usada para representar o powershell.         |
+| `ion_indicator`        | `ion`                     | Uma string usada para representar o ion.                |
+| `elvish_indicator`     | `esh`                     | Uma string usada para representar o elvish.             |
+| `tcsh_indicator`       | `tsh`                     | Uma string usada para representar o tcsh.               |
+| `xonsh_indicator`      | `xsh`                     | Uma string usada para representar o xonsh.              |
+| `nu_indicator`         | `nu`                      | Uma string usada para representar o nu.                 |
+| `unknown_indicator`    |                           | Valor padrão para exibir quando o shell é desconhecido. |
+| `format`               | `"[$indicator]($style) "` | O formato do módulo.                                    |
+| `style`                | `"white bold"`            | O estilo do módulo.                                     |
+| `disabled`             | `true`                    | Desabilita o módulo `shell`.                            |
 
 ### Variáveis
 
-| Variável  | Padrão | Descrição                                                  |
-| --------- | ------ | ---------------------------------------------------------- |
-| indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Espelha o valor da opção `style`.                          |
+| Variável  | Padrão | Descrição                                                     |
+| --------- | ------ | ------------------------------------------------------------- |
+| indicator |        | Espelha o valor do `indicator` para o shell usado atualmente. |
+| style\* |        | Espelha o valor da opção `style`.                             |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
 
@@ -2716,15 +2716,15 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+O módulo `shlvl` exibe o atual [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") variável de ambiente, se estiver definido um número e coincidir ou exceder o limite especificado.
 
 ### Opções
 
 | Opções      | Padrão                       | Descrição                                                     |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                            |
+| `threshold` | `2`                          | Limite de exibição.                                           |
 | `format`    | `"[$symbol$shlvl]($style) "` | O formato do módulo.                                          |
-| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️  "`                     | O simbolo usado para representar o `SHLVL`.                   |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | O estilo do módulo.                                           |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
