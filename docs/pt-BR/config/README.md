@@ -772,11 +772,11 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
 
-| Advanced Option             | Padrão | Descrição                                                                                                                                                              |
-| --------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |        | A table of substitutions to be made to the path.                                                                                                                       |
-| `fish_style_pwd_dir_length` | `0`    | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
-| `use_logical_path`          | `true` | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| Opções Avançadas            | Padrão | Descrição                                                                                                                                                             |
+| --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substituições`             |        | Uma tabela de substituições para fazer no path.                                                                                                                       |
+| `fish_style_pwd_dir_length` | `0`    | O número de caracteres para usar quando aplicado no path logico do fish shell pwd.                                                                                    |
+| `use_logical_path`          | `true` | Se `true` exibe um caminho lógico originado do shell via `PWD` ou`--logical-path`. Se `false` em vez disso, exibe o caminho do filesystem com os symlinks resolvidos. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
@@ -3159,26 +3159,16 @@ format = "via [V $version](blue bold) "
 
 ## VCSH
 
-O módulo `vcsh<0> exibe o repositório <a href="https://github.com/RichiH/vcsh">VCSH</a> atual ativo.
-O módulo vai ser exibido apenas se um repositório estiver em uso.</p>
+O módulo `vcsh` exibe o repositório [VCSH](https://github.com/RichiH/vcsh) atual ativo. O módulo vai ser exibido apenas se um repositório estiver em uso.
 
-<h3 spaces-before="0">Opções</h3>
+### Opções
 
-<table spaces-before="0">
-<thead>
-<tr>
-  <th>Opções</th>
-  <th>Padrão</th>
-  <th>Descrição</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td><code>symbol`</td> 
-
-</tr> 
-
-</tbody> </table>
+| Opções     | Padrão                           | Descrição                                              |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbol`   |                                  | O simbolo usado antes de exibir o nome do repositório. |
+| `style`    | `"bold yellow"`                  | O estilo do módulo.                                    |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | O formato do módulo.                                   |
+| `disabled` | `false`                          | Desabilita o módulo `vcsh`.                            |
 
 ### Variáveis
 
