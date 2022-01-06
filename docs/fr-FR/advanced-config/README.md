@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Commandes pré-invite et pré-exécution personnalisées dans PowerShell
 
-Powershell n'a pas de système de préexec/précmd officiel comme la plupart des autres shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
+Powershell n'a pas de système de préexec/précmd officiel comme la plupart des autres shells. C'est pourquoi il est difficile de fournir des hooks entièrement personnalisables dans `powershell`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
 
 Créez une fonction nommée `Invoke-Starship-PreCommand`
 
@@ -97,7 +97,7 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh.
+`right_format` est actuellement supporté pour les shells suivants : elvish, fish, zsh, xonsh.
 
 ### Exemple
 
@@ -117,7 +117,7 @@ Génère l’invite suivante:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Continuation Prompt
+## Invite de continuation
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
@@ -156,12 +156,12 @@ Les chaines de style sont une liste de mots séparés par des espaces. Les mots 
 
 où `<color>` spécifie une couleur (voir ci-dessous). `fg:<color>` and `<color>` font la même chose actuellement, mais cela pourrait changer dans le futur. `inverted` inverse les couleurs d’arrière-plan et d’avant-plan. L’ordre des mots dans la chaine n’a pas d’importance.
 
-La valeur `none` écrase toutes les autres dans une chaine si elle ne fait pas partie d’une déclaration `bg:`, donc par exemple `fg:red none fg:blue` va créer une chaine sans style. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+La valeur `none` écrase toutes les autres dans une chaine si elle ne fait pas partie d’une déclaration `bg:`, donc par exemple `fg:red none fg:blue` va créer une chaine sans style. `bg:none` définit comme arrière-plan la couleur par défaut donc `fg:red bg:none` équivaut à `red` ou `fg:red` et `bg:green fg:red bg:none` équivaut aussi à `fg:red` or `red`. Cela pourrait devenir une erreur d’utiliser `none` avec d’autres mots dans le futur.
 
-A color specifier can be one of the following:
+Une spécification de couleur peut être :
 
- - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
- - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+ - Une des couleurs de terminal standard: `black` (noir), `red` (rouge), `green` (vert), `blue` (bleu), `yellow` (jaune), `purple` (violet), `cyan` (cyan), `white` (blanc). Vous pouvez préfixer ces couleurs avec `bright-` pour en obtenir la version claire (par ex. `bright-white`).
+ - Un `#` suivi d’un nombre hexadécimal de 6 chiffres. Cela spécifie un [code de couleur RGB hexadécimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - Un nombre entre 0 et 255. Cela spécifie un [code couleur ANSI 8-bit](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Si plusieurs couleurs sont définies pour l’avant-plan/arrière-plan, la dernière dans le chaine sera prioritaire.
