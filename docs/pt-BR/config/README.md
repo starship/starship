@@ -3243,11 +3243,11 @@ O módulo `custom` exibe a saída de alguns comandos arbitrários.
 
 Este módulo vai ser exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a file whose name is in `files`
-- The current directory contains a directory whose name is in `directories`
-- The current directory contains a file whose extension is in `extensions`
-- The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- O diretório atual tenha um arquivo cujo o nome esta em `files`
+- O diretório atual tenha um diretório cujo o nome esta em `directories`
+- O diretório atual tenha um arquivo com extensão que esteja em `extensions`
+- O comando `when` retorna 0
+- O sistema operacional (std::env::consts::OS) corresponde com o `os` se definido.
 
 ::: tip
 
@@ -3257,7 +3257,7 @@ Vários módulos personalizados podem ser definidos usando `.`.
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+A ordem em que o módulo custom é exibido pode ser definido individualmente incluindo `${custom.foo}` em nilve superior `format` (pois inclui um ponto, você precisa usar `${...}`). Por padrão, o módulo `custom` mostrará todos os módulos personalizados na ordem em que eles foram definidos.
 
 :::
 
