@@ -2515,12 +2515,12 @@ By default the `red` module shows the currently installed version of [Red](https
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                                      |
+| `symbol`            | `"🔺 "`                               | Uma string que representa o simbolo do Red.                                          |
 | `detect_extensions` | `["red"]`                            | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"red bold"`                         | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `red` module.                                                           |
+| `disabled`          | `false`                              | Desabilita o módulo `red`.                                                           |
 
 ### Variáveis
 
