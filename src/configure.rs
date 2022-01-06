@@ -73,7 +73,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     Ok(())
 }
 
-pub fn print_configuration(use_default: bool, paths: &[&str]) {
+pub fn print_configuration(use_default: bool, paths: &[String]) {
     let config = if use_default {
         // Get default config
         let default_config = crate::configs::FullConfig::default();
@@ -94,7 +94,7 @@ pub fn print_configuration(use_default: bool, paths: &[&str]) {
     if paths.is_empty()
         || paths
             .iter()
-            .any(|&path| path == "format" || path == "right_format")
+            .any(|path| path == "format" || path == "right_format")
     {
         println!(
             "# $all is shorthand for {}",
@@ -128,7 +128,7 @@ pub fn print_configuration(use_default: bool, paths: &[&str]) {
     println!("{}", string_config);
 }
 
-fn extract_toml_paths(mut config: toml::Value, paths: &[&str]) -> toml::Value {
+fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
     // Extract all the requested sections into a new configuration.
     let mut subset = toml::value::Table::new();
     let config = if let Some(config) = config.as_table_mut() {
@@ -138,7 +138,7 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[&str]) -> toml::Value {
         return toml::Value::Table(subset);
     };
 
-    'paths: for &path in paths {
+    'paths: for path in paths {
         let path_segments: Vec<_> = path.split('.').collect();
         let (&end, parents) = path_segments.split_last().unwrap_or((&"", &[]));
 
@@ -414,9 +414,9 @@ mod tests {
         let actual_config = extract_toml_paths(
             config,
             &[
-                "extract_root",
-                "extract_section",
-                "extract_subsection.extracted",
+                "extract_root".to_owned(),
+                "extract_section".to_owned(),
+                "extract_subsection.extracted".to_owned(),
             ],
         );
 

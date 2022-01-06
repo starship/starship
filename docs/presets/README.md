@@ -227,7 +227,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [sudo]
-format = '\[[as $symbol]\]
+format = '\[[as $symbol]\]'
 
 [swift]
 format = '\[[$symbol($version)]($style)\]'

@@ -268,7 +268,7 @@ enum RustupRunRustcVersionOutcome {
 
 #[cfg(test)]
 mod tests {
-    use crate::context::Shell;
+    use crate::context::{Shell, Target};
     use once_cell::sync::Lazy;
     use std::io;
     use std::process::{ExitStatus, Output};
@@ -424,6 +424,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -444,6 +445,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -464,6 +466,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -486,6 +489,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             child_dir_path.clone(),
             child_dir_path,
         );
@@ -505,6 +509,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -522,6 +527,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -542,6 +548,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -564,6 +571,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             child_dir_path.clone(),
             child_dir_path,
         );

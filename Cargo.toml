@@ -30,13 +30,14 @@ battery = ["starship-battery"]
 tls-vendored = ["native-tls/vendored"]
 
 [dependencies]
-clap = "2.34.0"
+clap = { version = "3.0.5", features = ["derive", "cargo", "unicode"] }
+clap_complete = "3.0.2"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
 git2 = { version = "0.13.25", default-features = false }
 toml = { version = "0.5.8", features = ["preserve_order"] }
 rust-ini = "0.17.0"
-serde_json = "1.0.73"
+serde_json = "1.0.74"
 rayon = "1.5.1"
 log = { version = "0.4.14", features = ["std"] }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -61,7 +62,7 @@ unicode-width = "0.1.9"
 terminal_size = "0.1.17"
 quick-xml = "0.22.0"
 rand = "0.8.4"
-serde = { version = "1.0.132", features = ["derive"] }
+serde = { version = "1.0.133", features = ["derive"] }
 indexmap = { version ="1.7.0", features = ["serde"] }
 notify-rust = { version = "4.5.5", optional = true }
 semver = "1.0.4"
@@ -70,9 +71,9 @@ shadow-rs = "0.8.1"
 versions = "3.0.3"
 strsim = "0.10.0"
 sha-1 = "0.10.0"
-toml_edit = "0.12.2"
+toml_edit = "0.12.3"
 
-process_control = { version = "3.1.0", features = ["crossbeam-channel"] }
+process_control = { version = "3.2.0", features = ["crossbeam-channel"] }
 
 # Optional/http:
 attohttpc = { version = "0.18.0", optional = true, default-features = false, features = ["tls", "form"] }
