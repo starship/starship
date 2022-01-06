@@ -2940,13 +2940,13 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Por padrão a versão do Terraform não é exibida, desde que é lento recuperar a versão atual quando muitos plugins estão em uso. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
 
 :::
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `.terraform` folder
+- O diretório atual tenha uma pasta `.terraform`
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Opções
@@ -2955,19 +2955,19 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol$workspace]($style) "` | A string de formato do módulo.                                                       |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                                |
+| `symbol`            | `"💠"`                                | Uma string que é exibida antes do workspace terraform.                               |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[".terraform"]`                     | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold 105"`                         | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                                     |
+| `disabled`          | `false`                              | Desabilita o módulo `terraform`.                                                     |
 
 ### Variáveis
 
 | Variável  | Exemplo    | Descrição                          |
 | --------- | ---------- | ---------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`         |
-| workspace | `default`  | The current Terraform workspace    |
+| version   | `v0.12.24` | A versão do `terraform`            |
+| workspace | `default`  | O workspace atual do Terraform     |
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
@@ -2975,7 +2975,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### With Terraform Version
+#### Com a versão do Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -2984,7 +2984,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Without Terraform version
+#### Sem a versão do Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -2995,7 +2995,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Horário
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+O módulo `time` exibe a hora **local** atual. A configuração de `format` é usada pelo [`chrono`](https://crates.io/crates/chrono) para controlar qual hora é exibida. Dê uma olhada na [documentação do chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver quais opções estão disponíveis.
 
 ::: tip
 
@@ -3005,17 +3005,17 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 ### Opções
 
-| Opções            | Padrão                  | Descrição                                                                                                                          |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | A string de formato do módulo.                                                                                                     |
-| `use_12hr`        | `false`                 | Habilita a formatação de 12 horas                                                                                                  |
-| `time_format`     | veja abaixo             | A string [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) usada para formatar a hora.        |
-| `style`           | `"bold yellow"`         | O estilo do módulo time                                                                                                            |
-| `utc_time_offset` | `"local"`               | Define o UTC a ser usado. Intervalo de -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Opções            | Padrão                  | Descrição                                                                                                                   |
+| ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | A string de formato do módulo.                                                                                              |
+| `use_12hr`        | `false`                 | Habilita a formatação de 12 horas                                                                                           |
+| `time_format`     | veja abaixo             | A string [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) usada para formatar a hora. |
+| `style`           | `"bold yellow"`         | O estilo do módulo time                                                                                                     |
+| `utc_time_offset` | `"local"`               | Define o UTC a ser usado. Intervalo de -24 &lt; x &lt; 24. Aceita floats para acomodar timezones 30/45.         |
+| `disabled`        | `true`                  | Desabilita o módulo `time`.                                                                                                 |
+| `time_range`      | `"-"`                   | Define o intervalo de tempo o qual o módulo será exibido. O horário deve ser especificado no formato de 24-hours            |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+Se `use_12hr` é `true`, então `time_format` tem o padrão `"%r"`. Caso contrário, o padrão é `"%T"`. Ajustes manuais no `time_format` irão sobrescrever a configuração `use_12hr`.
 
 ### Variáveis
 
