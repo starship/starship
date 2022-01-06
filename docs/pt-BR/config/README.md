@@ -3323,11 +3323,11 @@ shell = ["pwsh", "-Command", "-"]
 
 Se você definir um comando personalizado, tenha certeza que o shell padrão usado pelo starship execute este comando com uma saída graciosa (via the `shell` option).
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Por exemplo, PowerShell requer o parâmetro `-Command` para executar um liner. Omitindo este parâmetro pode ser que o starship entre em um loop recursivo, onde o shell tente carrega um ambiente completo de perfil com o próprio starship novamente e portanto execute novamente o comando, entrando em um loop sem fim.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Parâmetros similares ao `-NoProfile` no PowerShell são recomendados para outras shells, bem como para evitar um tempo de carregamento maior toda vez que o starship for chamado.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+Detecção automática de shell e adição de parâmetros estão sendo implementados atualmente, mas é possível que nem todas as shells sejam cobertas. [Por favor abra uma issue](https://github.com/starship/starship/issues/new/choose) com detalhes do shell e configurações do starship se você acertar algum cenário.
 
 :::
 
