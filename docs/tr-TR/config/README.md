@@ -425,7 +425,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: uyarı
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2782,7 +2782,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: warning This module is not supported on nu shell. :::
 
 ### Options
 
