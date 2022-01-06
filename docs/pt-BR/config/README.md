@@ -2505,9 +2505,9 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+Por padrão o módulo `red` exibe a versão atual instalada do [Red](https://www.red-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- O diretório atual contenha um arquivo com a extensão `.red` or `.reds`
 
 ### Opções
 
@@ -2526,7 +2526,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v2.5.1` | The version of `red`               |
+| version   | `v2.5.1` | A versão do `red`                  |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -2543,14 +2543,14 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+Por padrão o módulo `ruby` vai exibir a versão atual instalada do [Ruby](https://www.ruby-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+- O diretório atual tenha um arquivo `Gemfile`
+- O diretório atual contém um arquivo `.ruby-version`
+- O diretório atual contem um arquivo `.rb`
+- As variáveis de ambiente `RUBY_VERSION` ou `RBENV_VERSION` estão definidas
 
-Starship gets the current Ruby version by running `ruby -v`.
+O Starship pega a versão atual do Ruby rodando `ruby -v`.
 
 ### Opções
 
@@ -2558,19 +2558,19 @@ Starship gets the current Ruby version by running `ruby -v`.
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                                     |
+| `symbol`            | `"💎 "`                               | Uma string que representa o simbolo do Ruby.                                         |
 | `detect_extensions` | `["rb"]`                             | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
-| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                              |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Quais variáveis de ambiente devem ativar este módulo.                                |
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                                          |
+| `disabled`          | `false`                              | Desabilita o módulo `ruby`.                                                          |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`              |
+| version   | `v2.5.1` | A versão do `ruby`                 |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -2587,10 +2587,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](https://www.rust-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- O diretório atual contem um arquivo `Cargo.toml`
+- O diretório atual tenha um arquivo com a extensão `.rs`
 
 ### Opções
 
@@ -2598,18 +2598,18 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                                      |
+| `symbol`            | `"🦀 "`                               | Uma string que representa o simbolo do Rust                                          |
 | `detect_extensions` | `["rs"]`                             | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["Cargo.toml"]`                     | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `rust` module.                                                          |
+| `disabled`          | `false`                              | Desabilita o módulo `rust`.                                                          |
 
 ### Variáveis
 
 | Variável  | Exemplo           | Descrição                          |
 | --------- | ----------------- | ---------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`             |
+| version   | `v1.43.0-nightly` | A versão do `rustc`                |
 | symbol    |                   | Espelha o valor da opção `símbolo` |
 | style\* |                   | Espelha o valor da opção `style`   |
 
@@ -2626,7 +2626,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `scala` exibe a versão atual instalada do [Scala](https://www.scala-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
 - The current directory contains a file with the `.scala` or `.sbt` extension
@@ -2897,7 +2897,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3041,7 +3041,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. O módulo vai exibir se algumas das condições a seguir for atendida:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
