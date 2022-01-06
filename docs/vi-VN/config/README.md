@@ -425,7 +425,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ::: cảnh báo
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2782,7 +2782,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: warning This module is not supported on nu shell. :::
 
 ### Các tuỳ chọn
 
