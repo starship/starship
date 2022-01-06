@@ -33,7 +33,7 @@ eval $(starship init bash)
 
 ## Commandes pré-invite et pré-exécution personnalisées dans PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
+Powershell n'a pas de système de préexec/précmd officiel comme la plupart des autres shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
 
 Créez une fonction nommée `Invoke-Starship-PreCommand`
 
@@ -104,14 +104,14 @@ Note: The right prompt is a single line following the input location. To right a
 ```toml
 # ~/.config/starship.toml
 
-# A minimal left prompt
+# Une invite minimale à gauche
 format = """$character"""
 
-# move the rest of the prompt to the right
+# déplace le reste de l’invite à droite
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+Génère l’invite suivante:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
