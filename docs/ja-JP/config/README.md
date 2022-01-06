@@ -426,7 +426,7 @@ discharging_symbol = "💦"
 
 ::: warning
 
-`error_symbol`はelvishとnu shellでサポートされていません。
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2784,7 +2784,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: warning This module is not supported on nu shell. :::
 
 ### オプション
 
