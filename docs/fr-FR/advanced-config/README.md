@@ -31,11 +31,11 @@ trap blastoff DEBUG     # Pièger DEBUG *avant* l'initialisation de starship
 eval $(starship init bash)
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## Commandes pré-invite et pré-exécution personnalisées dans PowerShell
 
 PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
 
-Create a function named `Invoke-Starship-PreCommand`
+Créez une fonction nommée `Invoke-Starship-PreCommand`
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -91,7 +91,7 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## Mettre l’invite à droite
 
 Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
 
