@@ -2720,20 +2720,20 @@ O módulo `shlvl` exibe o atual [`SHLVL`](https://tldp.org/LDP/abs/html/internal
 
 ### Opções
 
-| Opções      | Padrão                       | Descrição                                                     |
-| ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Limite de exibição.                                           |
-| `format`    | `"[$symbol$shlvl]($style) "` | O formato do módulo.                                          |
-| `symbol`    | `"↕️  "`                     | O simbolo usado para representar o `SHLVL`.                   |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
-| `style`     | `"bold yellow"`              | O estilo do módulo.                                           |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
+| Opções      | Padrão                       | Descrição                                                         |
+| ----------- | ---------------------------- | ----------------------------------------------------------------- |
+| `threshold` | `2`                          | Limite de exibição.                                               |
+| `format`    | `"[$symbol$shlvl]($style) "` | O formato do módulo.                                              |
+| `symbol`    | `"↕️  "`                     | O simbolo usado para representar o `SHLVL`.                       |
+| `repeat`    | `false`                      | Caso o `symbol` deva se repetir de acordo com o total do `SHLVL`. |
+| `style`     | `"bold yellow"`              | O estilo do módulo.                                               |
+| `disabled`  | `true`                       | Desabilita o módulo `shlvl`.                                      |
 
 ### Variáveis
 
 | Variável  | Exemplo | Descrição                          |
 | --------- | ------- | ---------------------------------- |
-| shlvl     | `3`     | The current value of `SHLVL`       |
+| shlvl     | `3`     | O valor atual do `SHLVL`           |
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
@@ -2752,22 +2752,22 @@ threshold = 3
 
 ## Singularidade
 
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
+O módulo `singularity` exibe a imagem atual do [Singularity](https://sylabs.io/singularity/), se dentro de um contêiner e definido `$SINGULARITY_NAME`.
 
 ### Opções
 
-| Opções     | Padrão                           | Descrição                                        |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | O formato do módulo.                             |
-| `symbol`   | `""`                             | A format string displayed before the image name. |
-| `style`    | `"bold dimmed blue"`             | O estilo do módulo.                              |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| Opções     | Padrão                           | Descrição                                   |
+| ---------- | -------------------------------- | ------------------------------------------- |
+| `format`   | `'[$symbol\[$env\]]($style) '` | O formato do módulo.                        |
+| `symbol`   | `""`                             | Uma string exibida antes do nome da imagem. |
+| `style`    | `"bold dimmed blue"`             | O estilo do módulo.                         |
+| `disabled` | `false`                          | Desabilita o módulo `singularity`.          |
 
 ### Variáveis
 
 | Variável  | Exemplo      | Descrição                          |
 | --------- | ------------ | ---------------------------------- |
-| env       | `centos.img` | The current Singularity image      |
+| env       | `centos.img` | A imagem atual do Singularity      |
 | symbol    |              | Espelha o valor da opção `símbolo` |
 | style\* |              | Espelha o valor da opção `style`   |
 
@@ -2784,7 +2784,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`.
+O módulo `status` exibe o código de saída do comando anterior. O módulo será exibido apenas se o código de saída não for `0`.
 
 ::: tip
 
