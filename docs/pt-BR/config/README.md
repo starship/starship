@@ -2792,7 +2792,7 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 :::
 
-::: warning This module is not supported on elvish and nu shell. :::
+::: warning Este módulo não é suportado no elvish e nu shell. :::
 
 ### Opções
 
@@ -3008,10 +3008,10 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 | Opções            | Padrão                  | Descrição                                                                                                                          |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | A string de formato do módulo.                                                                                                     |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `use_12hr`        | `false`                 | Habilita a formatação de 12 horas                                                                                                  |
+| `time_format`     | veja abaixo             | A string [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) usada para formatar a hora.        |
+| `style`           | `"bold yellow"`         | O estilo do módulo time                                                                                                            |
+| `utc_time_offset` | `"local"`               | Define o UTC a ser usado. Intervalo de -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
 | `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
@@ -3021,7 +3021,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variável  | Exemplo    | Descrição                        |
 | --------- | ---------- | -------------------------------- |
-| horário   | `13:08:10` | The current time.                |
+| horário   | `13:08:10` | A hora atual.                    |
 | style\* |            | Espelha o valor da opção `style` |
 
 \*: Essa variável só pode ser usada como parte de uma string de estilo
@@ -3041,35 +3041,35 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. O módulo vai exibir se algumas das condições a seguir for atendida:
+O módulo `username` exibe o username do usuário ativo. O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current user is root
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- O usuário atual é root
+- O usuário atual não é o mesmo que está logado
+- O usuário atual esta conectado em uma sessão SSH
+- A variável `show_always` esta definida como true
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. Se seu host SSH não tem estas variáveis configuradas, uma alternativa é definir uma delas com valor burro.
 
 :::
 
 ### Opções
 
-| Opções        | Padrão                  | Descrição                             |
-| ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | O formato do módulo.                  |
-| `show_always` | `false`                 | Always shows the `username` module.   |
-| `disabled`    | `false`                 | Disables the `username` module.       |
+| Opções        | Padrão                  | Descrição                               |
+| ------------- | ----------------------- | --------------------------------------- |
+| `style_root`  | `"bold red"`            | O estilo usado quando o usuário é root. |
+| `style_user`  | `"bold yellow"`         | O estilo usado para usuários não root.  |
+| `format`      | `"[$user]($style) in "` | O formato do módulo.                    |
+| `show_always` | `false`                 | Sempre exibe o módulo `username`.       |
+| `disabled`    | `false`                 | Desabilita o módulo `username`.         |
 
 ### Variáveis
 
-| Variável | Exemplo      | Descrição                                                                                   |
-| -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
+| Variável | Exemplo      | Descrição                                                                              |
+| -------- | ------------ | -------------------------------------------------------------------------------------- |
+| `style`  | `"red bold"` | Espelha o valor da opção `style_root` quando o root esta logado e `style_user` se não. |
+| `user`   | `"matchai"`  | O ID do usuário logado atualmente.                                                     |
 
 ### Exemplo
 
