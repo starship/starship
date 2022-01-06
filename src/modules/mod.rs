@@ -12,6 +12,7 @@ mod dart;
 mod deno;
 mod directory;
 mod docker_context;
+mod dolt_branch;
 mod dotnet;
 mod elixir;
 mod elm;
@@ -97,6 +98,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "deno" => deno::module(context),
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context),
+            "dolt_branch" => dolt_branch::module(context),
             "dotnet" => dotnet::module(context),
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
@@ -187,6 +189,7 @@ pub fn description(module: &str) -> &'static str {
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",
+        "dolt_branch" => "The active branch of the dolt repo.",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "elixir" => "The currently installed versions of Elixir and OTP",
         "elm" => "The currently installed version of Elm",

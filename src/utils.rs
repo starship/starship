@@ -138,6 +138,10 @@ Default target: x86_64-apple-macosx\n",
             stdout: String::from("deno 1.8.3\n"),
             stderr: String::default()
         }),
+        "dolt branch --show-current" => Some(CommandOutput {
+            stdout: String::from("main"),
+            stderr: String::default(),
+        }),
         "dummy_command" => Some(CommandOutput {
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
