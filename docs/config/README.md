@@ -448,7 +448,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`error_symbol` is not supported on elvish and nu shell.
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2955,7 +2955,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 :::
 
 ::: warning
-This module is not supported on elvish and nu shell.
+This module is not supported on nu shell.
 :::
 
 ### Options
