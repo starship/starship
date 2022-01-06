@@ -2847,7 +2847,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+O módulo `sudo` é exibido se uma credencial sudo estiver em cache. The module will only be shown if credentials are cached.
 
 ::: tip
 
@@ -2857,13 +2857,13 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 ### Opções
 
-| Opções          | Padrão                  | Descrição                                               |
-| --------------- | ----------------------- | ------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | The format of the module                                |
-| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
-| `style`         | `"bold blue"`           | O estilo do módulo.                                     |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+| Opções          | Padrão                  | Descrição                                                                  |
+| --------------- | ----------------------- | -------------------------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | O formato do módulo                                                        |
+| `symbol`        | `"🧙 "`                  | O simbolo exibido quando as credenciais estão em cache                     |
+| `style`         | `"bold blue"`           | O estilo do módulo.                                                        |
+| `allow_windows` | `false`                 | Desde que o Windows não tem um padrão sudo, o valor padrão é desabilitado. |
+| `disabled`      | `true`                  | Desabilita o módulo `sudo`.                                                |
 
 ### Variáveis
 
@@ -2897,10 +2897,10 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+Por padrão o módulo `swift` vai exibir a versão atual instalada do [Swift](https://swift.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- O diretório atual tenha um arquivo `Package.swift`
+- O diretório atual tenha um arquivo com a extensão `.swift`
 
 ### Opções
 
@@ -2908,18 +2908,18 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                                     |
+| `symbol`            | `"🐦 "`                               | Uma string que representa o simbolo do Swift                                         |
 | `detect_extensions` | `["swift"]`                          | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["Package.swift"]`                  | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold 202"`                         | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                              | Disables the `swift` module.                                                         |
+| `disabled`          | `false`                              | Desabilita o módulo `swift`.                                                         |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                          |
 | --------- | -------- | ---------------------------------- |
-| version   | `v5.2.4` | The version of `swift`             |
+| version   | `v5.2.4` | A versão do `swift`                |
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
@@ -2936,7 +2936,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+O módulo `terraform` exibe o [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) selecionado e sua versão.
 
 ::: tip
 
@@ -2947,7 +2947,7 @@ Por padrão a versão do Terraform não é exibida, desde que é lento recuperar
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual tenha uma pasta `.terraform`
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+- O diretório atual tenha arquivos com as extensões `.tf`, `.tfplan` or `.tfstate`
 
 ### Opções
 
