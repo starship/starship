@@ -425,7 +425,7 @@ Par défaut, il ne change que la couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`error_symbol` n’est pas supporté sur elvish et nu shell.
+`error_symbol` is not supported on nu shell.
 
 :::
 
@@ -2783,7 +2783,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 :::
 
-::: warning Ce module n’est pas supporté sur elvish et nu shell. :::
+::: warning This module is not supported on nu shell. :::
 
 ### Options
 
