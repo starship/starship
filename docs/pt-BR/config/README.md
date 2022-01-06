@@ -3239,9 +3239,9 @@ symbol = "⚡️ "
 
 ## Comandos Personalizados
 
-The `custom` modules show the output of some arbitrary commands.
+O módulo `custom` exibe a saída de alguns comandos arbitrários.
 
-These modules will be shown if any of the following conditions are met:
+Este módulo vai ser exibir se algumas das condições a seguir for atendida:
 
 - The current directory contains a file whose name is in `files`
 - The current directory contains a directory whose name is in `directories`
