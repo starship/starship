@@ -143,5 +143,5 @@ If Starship was installed using the install script, the following command will d
 
 ```sh
 # Locate and delete the starship binary
-sh -c 'rm "$(which starship)"'
+sh -c 'rm "$(command -v 'starship')"'
 ```
