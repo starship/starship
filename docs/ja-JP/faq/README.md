@@ -117,6 +117,6 @@ Starship がパッケージマネージャを使用してインストールさ�
 Starship をインストールスクリプトを使用してインストールした場合、次のコマンドでバイナリが削除されます。
 
 ```sh
-# starshipバイナリを見つけて削除
-sh -c 'rm "$(which starship)"''
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```
