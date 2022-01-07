@@ -117,6 +117,6 @@ echo -e "\xee\x82\xa0"
 如果你是透過安裝腳本來安裝 Starship 的，可以執行以下的命令來移除執行檔。
 
 ```sh
-# 定位並且刪除 starship 執行檔
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```
