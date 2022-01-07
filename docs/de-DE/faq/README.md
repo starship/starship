@@ -117,6 +117,6 @@ If Starship was installed using a package manager, please refer to their docs fo
 Wenn Starship mit Hilfe des Installationsscripts installiert wurde, entfernt der folgende Befehl Starship:
 
 ```sh
-# Starship binary suchen und löschen
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```
