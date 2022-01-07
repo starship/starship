@@ -117,6 +117,6 @@ Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a s
 Si Starship fue instalado usando el guión de instalación, el siguiente comando eliminará el binario:
 
 ```sh
-# Localiza y elimina el binario de starship
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```
