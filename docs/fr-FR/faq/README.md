@@ -117,6 +117,6 @@ Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez v
 Si Starship a été installé en utilisant le script d'installation, la commande suivante supprimera l'exécutable :
 
 ```sh
-# Trouver et supprimer l'exécutable starship
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```
