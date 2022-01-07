@@ -118,5 +118,5 @@ Starship 的卸载过程与安装过程一样简单。
 
 ```sh
 # Locate and delete the starship binary
-sh -c 'rm "$(which starship)"'
+sh -c 'rm "$(command -v 'starship')"'
 ```
