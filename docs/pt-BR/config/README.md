@@ -425,7 +425,7 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ::: warning
 
-`error_symbol` is not supported on nu shell.
+`error_symbol` não é suportado pelo nu shell.
 
 :::
 
@@ -2792,7 +2792,7 @@ Este módulo é desativado por padrão. Para ativa-lo, defina `disabled` para `f
 
 :::
 
-::: warning This module is not supported on nu shell. :::
+::: warning Este módulo não é suportado pelo nu shell. :::
 
 ### Opções
 
