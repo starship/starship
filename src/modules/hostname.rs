@@ -40,16 +40,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         host.as_ref()
     };
-    let (_choose_style, choose_config) = if ssh_connection.is_some() {
-        ("ssh_style", config.ssh_style)
-    } else {
-        ("style", config.style)
-    };
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                _choose_style => Some(Ok(choose_config)),
+                "ssh_style" if ssh_connection.is_some() => Some(Ok(config.ssh_style)),
+                "ssh_style" if ssh_connection.is_none() => Some(Ok(config.style)),
+                "style" => Some(Ok(config.style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -133,7 +129,7 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
-
+   
     #[test]
     fn no_trim_at() {
         let hostname = get_hostname!();
