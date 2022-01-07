@@ -83,14 +83,14 @@ the `rust` module you could run the following command to get the trace
 logs and output from the module.
 
 ```sh
-env STARHIP_LOG=trace starship module rust
+env STARSHIP_LOG=trace starship module rust
 ```
 
 If starship is being slow you can try using the `timings` command to see if
 there is a particular module or command that to blame.
 
 ```sh
-env STARHIP_LOG=trace starship timings
+env STARSHIP_LOG=trace starship timings
 ```
 
 This will output the trace log and a breakdown of all modules that either took

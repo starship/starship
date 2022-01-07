@@ -60,9 +60,9 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout` key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
-## I see symbols I don't understand or expect, what do they mean?
+## 我發現一些看不懂或意料外的符號，那是代表什麼意思？
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+如果你看見了一些不認得的符號，你可以使用 `starship explain` 來列出當下顯示出的 modules 的解釋。
 
 ## Starship is doing something unexpected, how can I debug it?
 
@@ -86,37 +86,37 @@ Finally if you find a bug you can use the `bug-report` command to create a Githu
 starship bug-report
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## 為什麼我無法在我的提示字元中看到字形符號？
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+會導致這種狀況，通常是因為系統配置錯誤。 有些 Linux 發行版不支援隨開隨用的字體。 你需要確保：
 
 - 你的當地語言設置為 UTF-8，如 `de_DE.UTF-8` 或 `ja_JP.UTF-8`。 如果 `LC_ALL` 不是 UTF-8，[你會需要改變他](https://www.tecmint.com/set-system-locales-in-linux/)。
 - 你已經安裝一個表情符號字體。 大多數的系統在預設情況下皆有支持表情符號字體，然後有些（尤其 Arch Linux）沒有。 你通常可以透過系統的套件管理器安裝一個表情符號字體 —— [noto emoji](https://www.google.com/get/noto/help/emoji/) 是個受歡迎的選擇。
 - 你正在使用 [Nerd Font](https://www.nerdfonts.com/)。
 
-To test your system, run the following commands in a terminal:
+要測試你的系統，你可以在終端中執行以下指令：
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+第一行指令應該會顯示一個 [snake emoji](https://emojipedia.org/snake/)，同時，第二行指令應該顯示 [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)。
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+如果任何一個符號顯示錯誤，代表你的系統配置仍然是錯誤的。 不幸的是，正確的設置字體有時候是件困難的事。 Discord 上的使用者可能可以提供協助。 如果兩種符號皆正確顯示，但你仍然無法在 starship 中看到他們，請[發送 bug 回報](https://github.com/starship/starship/issues/new/choose)！
 
-## How do I uninstall Starship?
+## 我要如何從電腦中移除 Starship？
 
-Starship is just as easy to uninstall as it is to install in the first place.
+移除 Starship 的過程與安裝過程一樣簡單。
 
 1. 刪除 Shell 的設定檔案 (比如 `~/.bashrc`) 中用來初始化 Starship 的部分。
 1. 刪除 Starship 的執行檔
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+如果你是透過套件管理器安裝 Starship 的，請到套件管理器的文件中尋找相關的移除步驟指示。
 
-If Starship was installed using the install script, the following command will delete the binary:
+如果你是透過安裝腳本來安裝 Starship 的，可以執行以下的命令來移除執行檔。
 
 ```sh
-# Locate and delete the starship binary
+# 定位並且刪除 starship 執行檔
 sh -c 'rm "$(which starship)"'
 ```

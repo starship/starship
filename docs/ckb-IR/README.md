@@ -143,7 +143,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning This will change in the future. تەنها وەشانی v0.33 یان بەرزتری nu پشتگیریکراوە. ::: Add the following to your nu config file. ئەتوانی شوێنی ئەم پەڕگەیە بپشکنی بە جێبەجێکردنی `config path` لە nu دا.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   ئەمەی دێت زیادبکە بۆ کۆتایی پەڕگەی `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc

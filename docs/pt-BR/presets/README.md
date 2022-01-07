@@ -1,6 +1,6 @@
-# Predefinições
+# Configurações
 
-Aqui tem uma coleção de predefinições de configuração criadas pela comunidade de Starship. Se você tem uma predefinição para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
+Aqui tem uma coleção de predefinições de configuração criadas pela comunidade de Starship. Se você tem uma configuração para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
 
 ## Símbolos Nerd Font
 
@@ -223,6 +223,9 @@ format = '\[[$symbol($version)]($style)\]'
 [scala]
 format = '\[[$symbol($version)]($style)\]'
 
+[sudo]
+format = '\[[as $symbol]\]
+
 [swift]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -371,6 +374,9 @@ symbol = "rs "
 [scala]
 symbol = "scala "
 
+[sudo]
+symbol = "sudo "
+
 [swift]
 symbol = "swift "
 ```
@@ -474,9 +480,9 @@ format = 'via [$symbol]($style)'
 
 ## Pure
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Essa configuração simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/pure-prompt.png)
+![Captura de tela da configuração emulando Pure](/presets/pure-prompt.png)
 
 ### Configuração
 

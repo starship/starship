@@ -74,6 +74,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::{Color, Style};
+    use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
         () => {
@@ -151,7 +152,9 @@ mod tests {
     #[test]
     fn trim_at() {
         let hostname = get_hostname!();
-        let (remainder, trim_at) = hostname.split_at(1);
+        let mut hostname_iter = hostname.graphemes(true);
+        let remainder = hostname_iter.next().unwrap_or_default();
+        let trim_at = hostname_iter.collect::<String>();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
                 [hostname]

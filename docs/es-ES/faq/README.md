@@ -60,9 +60,9 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout` key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
-## I see symbols I don't understand or expect, what do they mean?
+## Veo símbolos que no entiendo ni espero, ¿qué significan?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Si ves símbolos que no reconoces, puedes usar `starship explain` para explicar los módulos que se muestran actualmente.
 
 ## Starship is doing something unexpected, how can I debug it?
 
@@ -86,37 +86,37 @@ Finally if you find a bug you can use the `bug-report` command to create a Githu
 reporte de error starship
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## ¿Por qué no veo un símbolo de glifo en mi prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+La causa más común de esto es la mala configuración del sistema. Algunas distribuciones de Linux en particular no vienen con soporte de fuentes listos para usarse. Tienes que garantizar que:
 
 - Tu configuración regional está establecida con un valor UTF-8, como `de_DE.UTF-8` o `ja_JP.UTF-8`. Si `LC_ALL` no es un valor UTF-8, [necesitarás cambiarlo](https://www.tecmint.com/set-system-locales-in-linux/).
 - Tienes una fuente emoji instalada. La mayoría de los sistemas vienen con una fuente emoji por defecto, pero algunos (notablemente Arch Linux) no. Generalmente puedes instalar uno a través del gestor de paquetes del sistema --[noto emoji](https://www.google.com/get/noto/help/emoji/) es una elección popular.
 - Estás usando un [Nerd Font](https://www.nerdfonts.com/).
 
-To test your system, run the following commands in a terminal:
+Para probar tu sistema, ejecua los siguientes comandos en un terminal:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+La primera línea debe producir un [emoji snake](https://emojipedia.org/snake/), mientras que la segunda debe producir un [símbolo de rama de Powerline(e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Si cualquiera de los dos símbolos no se puede mostrar correctamente, su sistema todavía está mal configurado. Desafortunadamente, obtener la configuración correcta de las fuentes es a veces difícil. Los usuarios en el Discord pueden ayudar. Si ambos símbolos se muestran correctamente, pero todavía no los ves en Starship, [¡envía un informe de error!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## ¿Cómo puedo desinstalar Starship?
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship es tan fácil de desinstalar como de instalar en primer lugar.
 
 1. Elimina cualquier línea de tu configuración de intérprete de comandos (por ejemplo, `~/.bashrc`) usada para inicializar Starship.
 1. Elimina el binario de Starship.
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a sus documentos para instrucciones de desinstalación.
 
-If Starship was installed using the install script, the following command will delete the binary:
+Si Starship fue instalado usando el guión de instalación, el siguiente comando eliminará el binario:
 
 ```sh
-# Locate and delete the starship binary
+# Localiza y elimina el binario de starship
 sh -c 'rm "$(which starship)"'
 ```

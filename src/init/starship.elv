@@ -2,42 +2,32 @@ set-env STARSHIP_SHELL "elvish"
 set-env STARSHIP_SESSION_KEY (::STARSHIP:: session)
 
 # Define Hooks
-local:cmd-start-time = 0
-local:cmd-end-time = 0
-local:cmd-duration = 0
+var cmd-status-code = 0
 
-fn starship-after-readline-hook [line]{
-    cmd-start-time = (::STARSHIP:: time)
-}
-
-fn starship-before-readline-hook {
-    cmd-end-time = (::STARSHIP:: time)
-    cmd-duration = (- $cmd-end-time $cmd-start-time)
+fn starship-after-command-hook {|m|
+    var error = $m[error]
+    if (is $error $nil) {
+        set cmd-status-code = 0
+    } else {
+        try {
+            set cmd-status-code = $error[reason][exit-status]
+        } except {
+            # The error is from the built-in commands and they have no status code.
+            set cmd-status-code = 1
+        }
+    }
 }
 
 # Install Hooks
-edit:after-readline = [ $@edit:after-readline $starship-after-readline-hook~ ]
-edit:before-readline = [ $@edit:before-readline $starship-before-readline-hook~ ]
+set edit:after-command = [ $@edit:after-command $starship-after-command-hook~ ]
 
 # Install starship
-edit:prompt = {
-    # Note:
-    # Elvish does not appear to support exit status codes (--status)
-
-    if (== $cmd-start-time 0) {
-        ::STARSHIP:: prompt --jobs=$num-bg-jobs
-    } else {
-        ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration
-    }
+set edit:prompt = {
+    var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
+    ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
 }
 
-edit:rprompt = {
-    # Note:
-    # Elvish does not appear to support exit status codes (--status)
-
-    if (== $cmd-start-time 0) {
-        ::STARSHIP:: prompt --right --jobs=$num-bg-jobs
-    } else {
-        ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration
-    }
+set edit:rprompt = {
+    var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
+    ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
 }

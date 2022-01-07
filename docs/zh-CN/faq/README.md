@@ -88,7 +88,7 @@ starship bug-report
 
 ## Why don't I see a glyph symbol in my prompt?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+最常见的原因是系统配置有问题。 有个别Linux发行版不自带对字体的支持。 请确保：
 
 - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
 - 安装了 emoji 字体。 大部分系统都会自带 emoji 字体，但有些系统（例如 Arch Linux）则没有。 字体一般可以用系统的包管理器安装，常见的字体有 [Noto emoji](https://www.google.com/get/noto/help/emoji/) 等。
@@ -101,20 +101,20 @@ echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+第一行应该显示出一个[蛇的 emoji](https://emojipedia.org/snake/)，第二行应该显示出 [powerline 的分支符号（e0a0）。](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
 If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
-## How do I uninstall Starship?
+## 如何卸载 Starship？
 
-Starship is just as easy to uninstall as it is to install in the first place.
+Starship 的卸载过程与安装过程一样简单。
 
 1. 将 shell 的配置文件（比如 `~/.bashrc`）中初始化 Starship 的部分全部删除。
 1. 删除 Starship 的二进制文件。
 
-If Starship was installed using a package manager, please refer to their docs for uninstallation instructions.
+如果 Starship 是用包管理器安装的，请到包管理器的文档中查找卸载的步骤。
 
-If Starship was installed using the install script, the following command will delete the binary:
+如果 Starship 是用安装脚本安装的，可以用以下命令删除二进制文件：
 
 ```sh
 # Locate and delete the starship binary
