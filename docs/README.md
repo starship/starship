@@ -56,6 +56,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```powershell
    scoop install starship
    ```
+   
+   With [Choco](https://chocolatey.org):
+
+   ```powershell
+   choco install starship
+   ```
 
 1. Add the init script to your shell's config file:
 
