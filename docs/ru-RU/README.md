@@ -60,6 +60,12 @@ description: Starship - минимальная, быстрая и бесконе
    ```powershell
    scoop install starship
    ```
+   
+   С [Choco](https://chocolatey.org):
+
+   ```powershell
+   choco install starship
+   ```
 
 1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 
