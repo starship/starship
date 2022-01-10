@@ -33,37 +33,49 @@ Für die Windows PowerShell diese Zeile zum `$PROFILE` hinzufügen:
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+```
+
 ### Protokollierung
 
-Standardmäßig protokolliert Starship Warnungen und Fehler in einer Datei names `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, wobei der session key zu der Instanz deines Terminals korrespondiert. Das kann jedoch durch die Nutzung der `STARSHIP_CACHE` Umgebungsvariable verändert werden:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Äquivalent ist in der Windows PowerShell diese Zeile zum `$PROFILE` hinzuzufügen:
+Für die Windows PowerShell diese Zeile zum `$PROFILE` hinzufügen:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
+```
+
 ### Terminologie
 
-**Modul**: Eine Komponente in der Eingabeaufforderung, welche Informationen basierend auf Kontextinformationen deines Betriebssystems angibt. Beispielsweise zeigt das "nodejs" Module die Version von Node.js, welches derzeitig auf deinem Computer installiert ist, an, falls dein derzeitiger Ordner ein Node.js Projekt ist.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
 
-**Variable**: Eine kleinere Unterkomponente, welche Information des Moduls enthält. Zum Beispiel enthält die Variable "version" im Modul "nodejs" die aktuelle Version von Node.js.
+**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
-Die meisten Module haben einen Präfix der standardmäßigen terminal-Farbe (z.B. `via` in "nodejs") und ein Leerzeichen als Suffix.
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
 ### Formatierte Strings
 
-Formatierte Strings sind das Format, mit dem ein Modul all seine Variablen ausgibt. Die meisten Module haben den Eintrag `format`, welcher das anzeige-Format des Moduls konfiguriert. Du kannst Texte, Variablen und Textgruppen in einem formatierten string benutzen.
+Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
 #### Variable
 
-Eine Variable besteht aus dem `$` Symbol und dem Namen der Variable. The name of a variable can only contain letters, numbers and `_`.
+A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-Hier sind ein paar Beispiele:
+For example:
 
 - `$version` ist ein formatierter string mit dem Namen `version`.
 - `$git_branch$git_commit` ist ein formatierter string mit zwei Variablen, nämlich `git_branch` und `git_commit`.
@@ -71,13 +83,13 @@ Hier sind ein paar Beispiele:
 
 #### Textgruppe
 
-Eine Textgruppe besteht aus zwei verschiedenen Teilen.
+A text group is made up of two different parts.
 
-Der erste Teil, welcher innerhalb eckiger Klammern `[]` ist, ist ein [formatierter string](#format-strings). Du kannst ihm Texte, Variablen oder sogar verschachtelte Textgruppen hinzufügen.
+The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
-Der zweite Teil ist innerhalb normaler Klammern `()` und ist ein[style string](#style-strings). Dies kann verwendet werden, um den ersten Teil zu gestalten.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-Hier sind ein paar Beispiele:
+For example:
 
 - `[on](red bold)` wird einen string `on` mit fettgedrucktem roten Text ausgeben.
 - `[⌘ $version](bold green)` wird ein Symbol `⌘` gefolgt von dem Inhalt der Variable `version` mit fettgedrucktem grünen Text ausgeben.
@@ -85,7 +97,7 @@ Hier sind ein paar Beispiele:
 
 #### Style-Strings
 
-Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies passiert meistens an einem bestimmten Eintrag (gewöhnlich `style` genannt), der einen String mit den Einstellungen darstellt. Es folgen ein paar Beispiele für solche Strings zusammen der mit Beschreibungen, was sie bewirken. Details zur vollen Syntax findest du im [Erweiterten Konfigurationshandbuch](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` setzt grünen Text auf einem blauen Hintergrund
 - `"bg:blue fg:bright-green"` setzt hell-grünen Text auf einen blauen Hintergrund
@@ -94,13 +106,13 @@ Die meisten Module in Starship lassen dich den Darstellungsstil verändern. Dies
 - `"bold italic fg:purple"` setzt lilane fett-kursive Schrift
 - `""` deaktiviert explizit jeden Stil
 
-Wie genau sich diese Konfiguration auswirkt liegt an deinem Terminal-Emulator. Einige Emulatoren zum Beispiel werden die Farben erhellen statt Text dick zu machen, und ein paar Farbthemen benutzen dieselben Werte für normale und helle Farben. Für kursiven Text muss dein Terminal Kursivschrift unterstützen.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Bedingte Formatierung
 
-Ein Formatierungszeichenkette (string) in `(` and `)` eingeklammert wird nicht ausgewertet wenn alle darin benutzten Variablen leer oder undefiniert sind.
+A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-Hier sind ein paar Beispiele:
+For example:
 
 - `(@$region)` ist die Variable `region` undefiniert (`None`) oder eine leere Zeichenkette (`""`) dann wird nichts angezeigt, ansonsten <0>@</0> gefolgt von dem Inhalt der Variablen.
 - `(some text)` zeigt nichts an, weil der Text in Klammern keine Variablen enthält.
@@ -108,11 +120,11 @@ Hier sind ein paar Beispiele:
 
 #### Spezielle Zeichen
 
-Die folgenden Zeichen habe eine spezielle Bedeutung in Formatstrings und müssen durch einen vorangestellten Backslash '\' besonders markiert werden (escaped): `$ \ [ ] ( )`.
+The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
-Wichtig: TOML hat sowohl Basis-Zeichenketten (basic strings, eingeschlossen in " ") und literale Zeichenketten (literal strings, eingeschlossenin ' '). Empfehlung ist nur literale Zeichenketten (in ' ') in der Konfigurationsdatei zu verwenden. Wenn man Basis-Zeichenketten (in " ") verwenden will, dann muss man den Backslash mit einem Backslash markieren (d.h. '\\' verwenden).
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
-Die folgenden Bespiele für eine Formatierungszeichenkette sind gleich, wenn man ein `$` Symbol in einer neuen Zeile ausgeben will:
+For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
 ```toml
 # with basic string
@@ -131,7 +143,7 @@ format = '''
 
 ## Prompt
 
-Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
+This is the list of prompt-wide configuration options.
 
 ### Optionen
 
@@ -149,22 +161,22 @@ Dies ist eine Liste mit Prompt-weiten Konfigurationsoptionen.
 ```toml
 # ~/.config/starship.toml
 
-# Verwende benutzerdefiniertes Format
+# Use custom format
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Warte 10 Millisekunden damit Starship die Dateien im aktuellen Ordner überprüfen kann.
+# Wait 10 milliseconds for starship to check files under the current directory.
 scan_timeout = 10
 
-# Deaktiviere die Leerzeile am Anfang der Eingabeaufforderung
+# Disable the blank line at the start of the prompt
 add_newline = false
 ```
 
 ### Vordefiniertes Aussehen des Prompts
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. Die Standardwerte sind folgende:
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
 format = "$all"
@@ -248,7 +260,7 @@ format="$all$directory$character"
 
 ## AWS
 
-Das `aws`-Modul zeigt das aktuelle AWS-Profil an. Dies basiert auf den Umgebungsvariablen: `AWS_REGION`, `AWS_DEFAULT_REGION`, `AWS_PROFILE` und der `~/.aws/config` Datei. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -347,7 +359,7 @@ style = "blue bold"
 
 ## Akkustand
 
-Das `battery` Modul zeigt, wie hoch der Akku des Geräts geladen ist und den aktuellen Ladestatus. Das Modul ist nur sichtbar, wenn der Akku des Geräts unter 10% geladen ist.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Optionen
 
@@ -375,7 +387,7 @@ discharging_symbol = "💀 "
 
 ### Anzeige des Akkustandes
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Wenn `display` nicht angegeben ist. Die Standardwerte sind folgende:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -387,7 +399,7 @@ The default value for the `charging_symbol` and `discharging_symbol` option is r
 
 #### Optionen
 
-Die `display`-Option beinhaltet ein Array mit den folgenden Werten.
+The `display` option is an array of the following table.
 
 | Option               | Standardwert | Beschreibung                                                                                              |
 | -------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
@@ -414,9 +426,9 @@ discharging_symbol = "💦"
 
 ## Zeichen
 
-Das `character` Modul zeigt ein Zeichen ( meistens einen Pfeil "❯") vor der Texteingabe an.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-Das Zeichen zeigt an ob der letzte Befehl erfolgreich war, oder einen Fehler erzeugt hat. It can do this in two ways:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - changing color (`red`/`green`)
 - changing shape (`❯`/`✖`)
@@ -431,7 +443,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: Warnung
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -544,15 +556,15 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Befehlsdauer
 
-Das `cmd_duration` Modul zeigt an wie lange der letzte Befehl ausgeführt wurde. Das Modul wird nur angezeigt wenn der letzte Befehl länger als zwei Sekunden ausgeführt wurde. Mit der `min_time` Option kann die Zeit eingestellt werden ab der <0>cmd_duration</0> angezeigt wird.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Nicht die DEBUG-trap in der Bash hooken
+::: warning Do not hook the DEBUG trap in Bash
 
-Ist `bash` die Konsole der Wahl, dann nicht die `DEBUG`-trap nach der Ausführung von `eval $(starship init $0)` hooken, andernfalls **wird** dieses Modul unweigerlich untergehen.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Bash Nutzer, die eine "preexec" ähnliche Funktion benötigen, können [rcaloras bash_preexec Framework](https://github.com/rcaloras/bash-preexec) verwenden. Definieren Sie einfach die Arrays `preexec_functions` und `precmd_functions` bevor sie `eval $(starship init $0)` ausführen, und fahren Sie dann wie gewohnt fort.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Optionen
 
@@ -597,7 +609,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ::: tip
 
-Hinweis: Dies unterdrückt nicht conda's eigenen Prompt-Modifikator, sie können jedoch conda mit `conda config --set changeps1 False` konfigurieren, um die Ausgabe von conda selbst auszuschalten.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -747,7 +759,7 @@ format = "via [🦕 $version](green bold) "
 
 ## Verzeichnis
 
-Das `directory` -Modul zeigt den Pfad zu Ihrem aktuellen Verzeichnis an, abgeschnitten auf drei übergeordnete Ordner. Your directory will also be truncated to the root of the git repo that you're currently in.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
@@ -770,7 +782,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
-<summary>Dieses Modul hat einige erweiterte Konfigurationsoptionen, welche die Darstellung von Verzeichnissen steuern.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Advanced Option             | Standardwert | Beschreibung                                                                                                                                                           |
 | --------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1175,7 +1187,7 @@ asia-northeast1 = "an1"
 
 ## Git-Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
@@ -1294,7 +1306,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1501,7 +1513,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
@@ -1724,7 +1736,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1786,7 +1798,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Zeilenumbruch
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
@@ -1846,13 +1858,13 @@ format = "via [🌕 $version](bold blue) "
 
 ## Speicherauslastung
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1971,7 +1983,7 @@ symbol = "🎣 "
 
 ## Nix-Shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
@@ -2135,7 +2147,7 @@ symbol = "☁️ "
 
 ## Paketversion
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2660,7 +2672,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2676,6 +2688,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | Das Format für das Modul.                                    |
@@ -2778,7 +2791,7 @@ The `status` module displays the exit code of the previous command. The module w
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2841,7 +2854,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2985,11 +2998,11 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Zeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3005,7 +3018,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                                               |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                       |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Ansonsten ist der Standardwert hierfür `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3031,7 +3044,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Benutzername
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `username` module shows active user's username. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - Der aktuelle Benutzer ist root
 - Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
