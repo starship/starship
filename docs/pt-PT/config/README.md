@@ -33,6 +33,12 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+```
+
 ### Logging
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
@@ -45,6 +51,12 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
+```
+
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 ```
 
 ### Terminology
@@ -431,7 +443,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -2676,6 +2688,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
