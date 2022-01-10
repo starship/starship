@@ -292,6 +292,7 @@ impl<'a> Context<'a> {
             "tcsh" => Shell::Tcsh,
             "nu" => Shell::Nu,
             "xonsh" => Shell::Xonsh,
+            "cmd" => Shell::Cmd,
             _ => Shell::Unknown,
         }
     }
@@ -561,6 +562,7 @@ pub enum Shell {
     Tcsh,
     Nu,
     Xonsh,
+    Cmd,
     Unknown,
 }
 
@@ -582,7 +584,7 @@ pub struct Properties {
     /// The status code of the previously run command
     #[clap(short = 's', long = "status")]
     pub status_code: Option<i32>,
-    /// Bash and Zsh support returning codes for each process in a pipeline.
+    /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
     #[clap(long)]
     pipestatus: Option<Vec<String>>,
     /// The width of the current interactive terminal.
@@ -598,7 +600,7 @@ pub struct Properties {
     /// The execution duration of the last command, in milliseconds
     #[clap(short = 'd', long)]
     pub cmd_duration: Option<String>,
-    /// The keymap of fish/zsh
+    /// The keymap of fish/zsh/cmd
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
     /// The number of currently running jobs
