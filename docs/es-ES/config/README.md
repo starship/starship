@@ -607,7 +607,7 @@ format = "underwent [$duration](bold yellow)"
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
+::: consejo
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
@@ -1304,7 +1304,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
+::: consejo
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1734,7 +1734,7 @@ kotlin_binary = "kotlinc"
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: consejo
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1862,7 +1862,7 @@ The `memory_usage` module shows current system memory and swap usage.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: consejo
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
