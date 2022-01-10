@@ -67,7 +67,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## Cambiar título de la ventana
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
@@ -178,15 +178,15 @@ continuation_prompt = "▶▶"
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
-  - `bold`
-  - `italic`
-  - `underline`
-  - `dimmed`
-  - `inverted`
+  - `negrita`
+  - `cursiva`
+  - `subrayado`
+  - `atenuado`
+  - `invertido`
   - `bg:<color>`
   - `fg:<color>`
   - `<color>`
-  - `none`
+  - `ninguno`
 
 where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
