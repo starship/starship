@@ -18,7 +18,7 @@ features:
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship : Invite Multi-Shell"
-description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh et PowerShell.
+description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
 
 <div class="center">
@@ -163,4 +163,15 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    # ~/.xonshrc
 
    execx($(starship init xonsh))
+   ```
+
+
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
    ```
