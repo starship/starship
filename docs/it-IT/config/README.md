@@ -33,9 +33,15 @@ Equivalentemente in PowerShell (Windows) potresti aggiungere questa riga al tuo 
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+```
+
 ### Logging
 
-Per impostazione predefinita, starship salva i warning e gli errori in un file chiamato `~/.cache/starship/session_${STARSHIP_SESSION_KEY}. og`, dove la chiave di sessione è corrispondente a un'istanza del tuo terminale. Questo, tuttavia, può essere modificato utilizzando la variabile di ambiente `STARSHIP_CACHE`:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -47,23 +53,29 @@ Equivalentemente in PowerShell (Windows) potresti aggiungere questa riga al tuo 
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
+```
+
 ### Terminologia
 
-**Modulo**: Un componente nel prompt che dà informazioni basate su informazioni contestuali dal tuo sistema operativo. Ad esempio, il modulo "nodejs" mostra la versione di Node.js attualmente installata sul computer, se la directory corrente è un progetto Node.js.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
 
-**Variable**: Sotto-componenti più piccoli che contengono informazioni fornite dal modulo. Per esempio, la variabile "version" nel modulo "nodejs" contiene la versione corrente di Node.js.
+**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
-Per convenzione, la maggior parte dei moduli ha un prefisso di colore predefinito del terminale (ad esempio `via` in "nodejs") e uno spazio vuoto come suffisso.
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
 ### Formato Stringhe
 
-Le stringhe di formato sono il formato con cui un modulo stampa tutte le sue variabili. La maggior parte dei moduli ha una voce chiamata `formato` che configura il formato di visualizzazione del modulo. È possibile utilizzare testi, variabili e gruppi di testo in una stringa di formato.
+Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
 #### Variable
 
-Una variabile contiene un simbolo `$` seguito dal nome della variabile. The name of a variable can only contain letters, numbers and `_`.
+A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-Per esempio:
+For example:
 
 - `$version` è una stringa di formato con una variabile chiamata `version`.
 - `$git_branch$git_commit` è una stringa di formato con due variabili denominate `git_branch` e `git_commit`.
@@ -71,13 +83,13 @@ Per esempio:
 
 #### Gruppo Testo
 
-Un gruppo di testo è composto da due parti diverse.
+A text group is made up of two different parts.
 
-La prima parte, che è racchiusa tra `[]`, è una [format string](#format-strings). È possibile aggiungere testi, variabili o anche gruppi annidati di testo.
+The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
-Nella seconda parte, che è racchiusa tra `()`, è presente una [style string](#style-strings). Questa può essere usata per modificare lo stile della prima parte.
+In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-Per esempio:
+For example:
 
 - `[on](rosso grassetto)` stamperà una stringa `on` con testo in grassetto di colore rosso.
 - `[⌘ $version](grassetto verde)` stamperà un simbolo `⌘` seguito dal contenuto della variabile `version`, con testo grassetto di colore verde.
@@ -85,7 +97,7 @@ Per esempio:
 
 #### Stile delle Stringhe
 
-La maggior parte dei moduli in starship ti permettono di configurare i loro stili di visualizzazione. Questo viene fatto con una voce (solitamente chiamata `style`) che è una stringa che specifica la configurazione. Ecco alcuni esempi di stringhe di stile per quello che fanno. Per maggiori dettagli sulla sintassi completa, consulta la [guida di configurazione avanzata](/advanced-config/).
+Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `"fg:green bg:blue"` imposta il testo verde su uno sfondo blu
 - `"bg:blue fg:bright-green"` imposta un testo verde brillante su uno sfondo blu
@@ -94,13 +106,13 @@ La maggior parte dei moduli in starship ti permettono di configurare i loro stil
 - `"bold italic fg:purple"` imposta il testo viola in corsivo e grassetto
 - `""` disabilita esplicitamente tutti gli stili
 
-Nota che quello che assomiglia allo stile sarà controllato dal tuo emulatore terminale. Ad esempio, alcuni emulatori di terminale renderanno luminosi i colori invece del testo in grassetto, e alcuni temi colorati useranno gli stessi valori per i colori normali e luminosi. Inoltre, per ottenere il testo in corsivo, il tuo terminale deve supportare il corsivo.
+Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
 
 #### Formattazione condizionale delle stringhe
 
-Una stringa di formato condizionale inserita in `(` e `)` non verrà presentata se tutte le variabili interne sono vuote.
+A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-Per esempio:
+For example:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -431,7 +443,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -2676,6 +2688,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
