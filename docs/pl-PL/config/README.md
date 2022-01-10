@@ -33,9 +33,15 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+```
+
 ### Logi
 
-Starship domyślnie loguje ostrzeżenia i błędy do pliku o nazwie`~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, gdzie klucz sesji odpowiada twojej instancji terminala. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -47,23 +53,29 @@ Odpowiednikiem dla PowerShell (Windows) jest dodanie następującej linii w twoi
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
+```
+
 ### Glosariusz
 
-**Moduł**: Komponent wiersza poleceń, który dostarcza informacji opartych na kontekście twojego systemu operacyjnego. Przykładowo, moduł "nodejs" pokazuje wersję Node.js, która jest obecnie zainstalowana na twoim komputerze, jeżeli znajdujesz się w folderze zawierającym projekt Node.js.
+**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
 
-**Zmienna**: Mniejszy podkomponent zawierający informacje dostarczane przez moduł. Przykładowo, zmienna "version" w module "nodejs" zawiera obecną wersję Node.js.
+**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
-W ramach konwencji większość modułów posiada przedrostek w domyślnym kolorze terminala (n.p. `via` w "nodejs") oraz pojedynczy odstęp za treścią modułu.
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
 ### Formatowanie
 
-Moduły wypisują swoje zmienne przy użyciu ciągów formatujących. Większość modułów posiada wpis o nazwie `format`, który konfiguruje format wyświetlania modułu. W ciągach formatujących można używać tekstu, zmiennych oraz grup tekstowych.
+Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
 #### Zmienne
 
-Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. The name of a variable can only contain letters, numbers and `_`.
+A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-Na przykład:
+For example:
 
 - `$version` to ciąg formatujący ze zmienną o nazwie `version`.
 - `$git_branch$git_commit` zawiera dwie zmienne: `git_branch` i `git_commit`.
@@ -71,13 +83,13 @@ Na przykład:
 
 #### Grupy tekstowe
 
-Grupa tekstowa składa się z dwóch oddzielnych części.
+A text group is made up of two different parts.
 
-Pierwsza część, otoczona `[]`, to [ciąg formatujący](#format-strings). You can add texts, variables, or even nested text groups in it.
+The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-Na przykład:
+For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +112,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-Na przykład:
+For example:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -431,7 +443,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -2676,6 +2688,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
