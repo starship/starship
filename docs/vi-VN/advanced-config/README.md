@@ -8,11 +8,35 @@ Các tùy chỉnh được mô tả trong phần này có thể sẽ thay đổi
 
 :::
 
-## Tùy chỉnh các hàm được thực thi trước prompt và các lệnh Linux mặc định của bash shell
+## Custom pre-prompt and pre-execution Commands in Cmd
 
-Bash không có một preexec/precmd framework chính thống giống như các shells khác. Do đó rất khó để cung cấp các hook với khả năng tuỳ biến hoàn toàn cho `bash` shell. Tuy nhiên, Starship cho phép bạn viết các hàm riêng của bạn để tùy biến việc render prompt:
+Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
-- Để thực thi một hàm custom trước khi prompt được render, ta cần định nghĩa một hàm mới và gán `starship_precmd_user_func` cho tên của hàm này. Ví dụ, để vẽ một tên lửa trước prompt
+- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+
+```lua
+function starship_preprompt_user_func(prompt)
+  print("🚀")
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+
+```lua
+function starship_precmd_user_func(line)
+  print("Executing: "..line)
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## Custom pre-prompt and pre-execution Commands in Bash
+
+Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. Tuy nhiên, Starship cho phép bạn viết các hàm riêng của bạn để tùy biến việc render prompt:
+
+- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -21,13 +45,13 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Để thực thi một hàm custom trước khi một câu lệnh Linux chạy, ta có thể sử dụng cơ chế bẫy tín hiệu [`DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Tuy nhiên, bạn **phải** đặt bẫy tín hiệu DEBUG *trước* khởi tạo Starship! Starship có thể giữ giá trị của DEBUG trap, nhưng nếu trap bị ghi đè sau khi starship khởi động, một vài chức năng sẽ không hoạt động.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Bẫy DEBUG *trước khi* starship chạy
+trap blastoff DEBUG     # Trap DEBUG *before* running starship
 eval $(starship init bash)
 ```
 
@@ -43,11 +67,11 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Thay đổi tên gọi trên cửa sổ của chương trình terminal
+## Change Window Title
 
-Một vài shell có khả năng tự động thay đổi tên hiển thị (chẳng hạn như tên của thư mục hiện thời) trên cửa số của trình mô phỏng terminal. Fish shell mặc định thực hiện thay đổi này. Tuy không được set mặc định trên Starship, chức năng này có thể được tích hợp dễ dàng trên `bash` shell và `zsh` shell.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
-Đầu tiên, ta cần định nghĩa một hàm thay đổi tiêu đề cửa sổ (dùng chung cho cả bash và zsh):
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
 function set_win_title(){
@@ -55,29 +79,39 @@ function set_win_title(){
 }
 ```
 
-Ta có thể sử dụng biến số để tuỳ chỉnh tên hiển thị này (`$USER`, `$HOSTNAME`, và `$PWD` là những biến số thường được dùng).
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-Với `bash` shell, set precmd của starship bằng tên của hàm này:
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-Với `zsh` shell, thêm hàm này vào mảng `precmd_functions`:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Nếu ta hài lòng với các tùy biến đã được thiết lập, thêm những dòng sau vào cấu hình shell (`~/.bashrc` hoặc `~/.zshrc`) để thực thi chúng mỗi khi ta khởi tạo một shell mới.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Ví dụ, nếu ta muốn hiển thị đường dẫn thư mục hiện tại trong tiêu đề của một terminal tab, thêm đoạn code sau vào `~/.bashrc` hoặc `~/.zshrc`:
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+
+```lua
+function starship_preprompt_user_func(prompt)
+  console.settitle(os.getenv('USERNAME').."@"..os.getenv('COMPUTERNAME')..": "..os.getcwd())
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
 ```
 
 You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
@@ -97,7 +131,7 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
 ### Ví dụ
 
