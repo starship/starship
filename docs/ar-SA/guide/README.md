@@ -299,9 +299,20 @@
    ```
 
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **تحذير** هذا سوف يتغير في المستقبل. فقط إصدار nu v0.33 أو أعلى مدعوم. أضف ما يلي إلى ملف تكوين nu الخاص بك. يمكنك التحقق من موقع هذا الملف عن طريق تشغيل `config path` في nu.
+   **Warning** This will change in the future. فقط إصدار nu v0.33 أو أعلى مدعوم. Add the following to your nu config file. يمكنك التحقق من موقع هذا الملف عن طريق تشغيل `config path` في nu.
 
    ```toml
    startup = [
