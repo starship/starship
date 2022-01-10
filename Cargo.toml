@@ -68,7 +68,7 @@ notify-rust = { version = "4.5.5", optional = true }
 semver = "1.0.4"
 which = "4.2.2"
 shadow-rs = "0.8.1"
-versions = "3.0.3"
+versions = "4.0.0"
 strsim = "0.10.0"
 sha-1 = "0.10.0"
 toml_edit = "0.12.4"
