@@ -3,7 +3,7 @@ use std::io::Write;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::{configs::custom::CustomConfig, formatter::StringFormatter, utils::create_command};
 
@@ -58,6 +58,11 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             })
             .map_no_escaping(|variable| match variable {
                 "output" => {
+                    if context.shell == Shell::Cmd && config.shell.0.is_empty() {
+                        log::error!("Executing custom commands with cmd shell is not currently supported. Please set a different shell with the \"shell\" option.");
+                        return None;
+                    }
+
                     let output = exec_command(config.command, &config.shell.0)?;
                     let trimmed = output.trim();
 
