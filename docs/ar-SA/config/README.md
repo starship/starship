@@ -33,6 +33,12 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 $ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+```
+
 ### Logging
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
@@ -45,6 +51,12 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
+```
+
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 ```
 
 ### Terminology
@@ -63,7 +75,7 @@ Format strings are the format that a module prints all its variables with. Most 
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-على سبيل المثال:
+For example:
 
 - `$version` is a format string with a variable named `version`.
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
@@ -77,7 +89,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-على سبيل المثال:
+For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -100,7 +112,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-على سبيل المثال:
+For example:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -431,7 +443,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: تحذير
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -2676,6 +2688,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
