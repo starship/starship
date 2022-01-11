@@ -30,7 +30,7 @@ battery = ["starship-battery"]
 tls-vendored = ["native-tls/vendored"]
 
 [dependencies]
-clap = { version = "3.0.5", features = ["derive", "cargo", "unicode"] }
+clap = { version = "3.0.6", features = ["derive", "cargo", "unicode"] }
 clap_complete = "3.0.2"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
