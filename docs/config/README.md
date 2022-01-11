@@ -2989,11 +2989,13 @@ The module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable | Example           | Description                          |
-| -------- | ----------------- | ------------------------------------ |
-| version  | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol   |                   | Mirrors the value of option `symbol` |
-| style\*  |                   | Mirrors the value of option `style`  |
+| Variable  | Example           | Description                                  |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Mirrors the value of option `symbol`         |
+| style\*   |                   | Mirrors the value of option `style`          |
 
 *: This variable can only be used as a part of a style string
 
