@@ -3,6 +3,7 @@ set-env STARSHIP_SESSION_KEY (::STARSHIP:: session)
 
 # Define Hooks
 var cmd-status-code = 0
+var cmd-duration = 0
 
 fn starship-after-command-hook {|m|
     var error = $m[error]
@@ -16,6 +17,7 @@ fn starship-after-command-hook {|m|
             set cmd-status-code = 1
         }
     }
+    set cmd-duration = (printf "%.0f" (* $m[duration] 1000))
 }
 
 # Install Hooks
@@ -23,11 +25,11 @@ set edit:after-command = [ $@edit:after-command $starship-after-command-hook~ ]
 
 # Install starship
 set edit:prompt = {
-    var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
     ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
+    set cmd-duration = 0
 }
 
 set edit:rprompt = {
-    var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
     ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
+    set cmd-duration = 0
 }
