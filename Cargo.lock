@@ -258,9 +258,9 @@ dependencies = [
 
 [[package]]
 name = "combine"
-version = "4.6.1"
+version = "4.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a909e4d93292cd8e9c42e189f61681eff9d67b6541f96b8a1a737f23737bd001"
+checksum = "50b727aacc797f9fc28e355d21f34709ac4fc9adecfe470ad07b8f4464f53062"
 dependencies = [
  "bytes",
  "memchr",
@@ -2002,9 +2002,9 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.12.4"
+version = "0.12.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30c244d60366ca501c0549e418cef09d581afbc7f18cd0b646b26484a9fae005"
+checksum = "94217a6d6a89fb646cbc9f28283cf4745f77eb0b04c4f680c4b3ae4450e3a473"
 dependencies = [
  "combine",
  "indexmap",
