@@ -23,11 +23,8 @@ is-it-maintained-open-issues = { repository = "starship/starship" }
 maintenance = { status = "actively-developed" }
 
 [features]
-default = ["battery", "http"]
-http = ["attohttpc"]
+default = ["battery"]
 battery = ["starship-battery"]
-# Vendor OpenSSL, use this if you have trouble cross-compiling starship
-tls-vendored = ["native-tls/vendored"]
 
 [dependencies]
 clap = { version = "3.0.5", features = ["derive", "cargo", "unicode"] }
@@ -75,9 +72,6 @@ toml_edit = "0.12.3"
 
 process_control = { version = "3.2.0", features = ["crossbeam-channel"] }
 
-# Optional/http:
-attohttpc = { version = "0.18.0", optional = true, default-features = false, features = ["tls", "form"] }
-native-tls = { version = "0.2.8", optional = true }
 shell-words = "1.0.0"
 
 [target.'cfg(windows)'.dependencies]
