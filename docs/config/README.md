@@ -611,7 +611,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ::: tip
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship
+Showing desktop notifications requires starship to be built with `notify-rust` support. You check if your starship
 supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
 
 :::
