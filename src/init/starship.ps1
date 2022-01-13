@@ -132,14 +132,6 @@ $null = New-Module starship {
 
     }
 
-    # Invoke Starship and set continuation prompt
-    Set-PSReadLineOption -ContinuationPrompt (
-        Invoke-Native -Executable ::STARSHIP:: -Arguments @(
-            "prompt",
-            "--continuation"
-        )
-    )
-
     # Disable virtualenv prompt, it breaks starship
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
 
@@ -147,6 +139,14 @@ $null = New-Module starship {
 
     # Set up the session key that will be used to store logs
     $ENV:STARSHIP_SESSION_KEY = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 16 | ForEach-Object { [char]$_ })
+
+    # Invoke Starship and set continuation prompt
+    Set-PSReadLineOption -ContinuationPrompt (
+        Invoke-Native -Executable ::STARSHIP:: -Arguments @(
+            "prompt",
+            "--continuation"
+        )
+    )
 
     Export-ModuleMember
 }
