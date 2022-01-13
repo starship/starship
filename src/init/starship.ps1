@@ -1,58 +1,26 @@
 #!/usr/bin/env pwsh
 
+# Create a new dynamic module so we don't pollute the global namespace with our functions and
+# variables
 $null = New-Module starship {
-    function Get-Arguments {
-        function Get-Cwd {
-            $cwd = Get-Location
-            $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
-            return @{
-                # Resolve the actual/physical path
-                # NOTE: ProviderPath is only a physical filesystem path for the "FileSystem" provider
-                # E.g. `Dev:\` -> `C:\Users\Joe Bloggs\Dev\`
-                Path = $cwd.ProviderPath;
-                # Resolve the provider-logical path
-                # NOTE: Attempt to trim any "provider prefix" from the path string.
-                # E.g. `Microsoft.PowerShell.Core\FileSystem::Dev:\` -> `Dev:\`
-                LogicalPath =
-                    if ($cwd.Path.StartsWith($provider_prefix)) {
-                        $cwd.Path.Substring($provider_prefix.Length)
-                    } else {
-                        $cwd.Path
-                    };
-            }
+    function Get-Cwd {
+        $cwd = Get-Location
+        $provider_prefix = "$($cwd.Provider.ModuleName)\$($cwd.Provider.Name)::"
+        return @{
+            # Resolve the actual/physical path
+            # NOTE: ProviderPath is only a physical filesystem path for the "FileSystem" provider
+            # E.g. `Dev:\` -> `C:\Users\Joe Bloggs\Dev\`
+            Path = $cwd.ProviderPath;
+            # Resolve the provider-logical path
+            # NOTE: Attempt to trim any "provider prefix" from the path string.
+            # E.g. `Microsoft.PowerShell.Core\FileSystem::Dev:\` -> `Dev:\`
+            LogicalPath =
+                if ($cwd.Path.StartsWith($provider_prefix)) {
+                    $cwd.Path.Substring($provider_prefix.Length)
+                } else {
+                    $cwd.Path
+                };
         }
-
-        # @ makes sure the result is an array even if single or no values are returned
-        $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
-
-        $cwd = Get-Cwd
-        $arguments = @(
-            "prompt"
-            "--path=$($cwd.Path)",
-            "--logical-path=$($cwd.LogicalPath)",
-            "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)",
-            "--jobs=$($jobs)"
-        )
-
-        # Whe start from the premise that the command executed correctly, which covers also the fresh console.
-        $lastExitCodeForPrompt = 0
-        if ($lastCmd = Get-History -Count 1) {
-            # In case we have a False on the Dollar hook, we know there's an error.
-            if (-not $origDollarQuestion) {
-                # We retrieve the InvocationInfo from the most recent error using $error[0]
-                $lastCmdletError = try { $error[0] |  Where-Object { $_ -ne $null } | Select-Object -ExpandProperty InvocationInfo } catch { $null }
-                # We check if the last command executed matches the line that caused the last error, in which case we know
-                # it was an internal Powershell command, otherwise, there MUST be an error code.
-                $lastExitCodeForPrompt = if ($null -ne $lastCmdletError -and $lastCmd.CommandLine -eq $lastCmdletError.Line) { 1 } else { $origLastExitCode }
-            }
-            $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
-
-            $arguments += "--cmd-duration=$($duration)"
-        }
-
-        $arguments += "--status=$($lastExitCodeForPrompt)"
-
-        return $arguments
     }
 
     function Invoke-Native {
@@ -107,8 +75,35 @@ $null = New-Module starship {
             }
         } catch {}
 
-        # Get arguments for starship prompt
-        $arguments = Get-Arguments
+        # @ makes sure the result is an array even if single or no values are returned
+        $jobs = @(Get-Job | Where-Object { $_.State -eq 'Running' }).Count
+
+        $cwd = Get-Cwd
+        $arguments = @(
+            "prompt"
+            "--path=$($cwd.Path)",
+            "--logical-path=$($cwd.LogicalPath)",
+            "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)",
+            "--jobs=$($jobs)"
+        )
+
+        # Whe start from the premise that the command executed correctly, which covers also the fresh console.
+        $lastExitCodeForPrompt = 0
+        if ($lastCmd = Get-History -Count 1) {
+            # In case we have a False on the Dollar hook, we know there's an error.
+            if (-not $origDollarQuestion) {
+                # We retrieve the InvocationInfo from the most recent error using $error[0]
+                $lastCmdletError = try { $error[0] |  Where-Object { $_ -ne $null } | Select-Object -ExpandProperty InvocationInfo } catch { $null }
+                # We check if the last command executed matches the line that caused the last error, in which case we know
+                # it was an internal Powershell command, otherwise, there MUST be an error code.
+                $lastExitCodeForPrompt = if ($null -ne $lastCmdletError -and $lastCmd.CommandLine -eq $lastCmdletError.Line) { 1 } else { $origLastExitCode }
+            }
+            $duration = [math]::Round(($lastCmd.EndExecutionTime - $lastCmd.StartExecutionTime).TotalMilliseconds)
+
+            $arguments += "--cmd-duration=$($duration)"
+        }
+
+        $arguments += "--status=$($lastExitCodeForPrompt)"
 
         # Invoke Starship
         Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
@@ -137,13 +132,13 @@ $null = New-Module starship {
 
     }
 
-    # Get arguments for starship continuation prompt
-    $arguments = Get-Arguments
-    $arguments += "--continuation"
-
     # Invoke Starship and set continuation prompt
-    $continuation = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
-    Set-PSReadLineOption -ContinuationPrompt $continuation
+    Set-PSReadLineOption -ContinuationPrompt (
+        Invoke-Native -Executable ::STARSHIP:: -Arguments @(
+            "prompt",
+            "--continuation"
+        )
+    )
 
     # Disable virtualenv prompt, it breaks starship
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
