@@ -6,9 +6,6 @@ use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
 
-#[cfg(feature = "http")]
-const GIT_IO_BASE_URL: &str = "https://git.io/";
-
 pub fn create() {
     println!("{}\n", shadow::version().trim());
     let os_info = os_info::get();
@@ -22,7 +19,6 @@ pub fn create() {
     };
 
     let link = make_github_issue_link(environment);
-    let short_link = shorten_link(&link);
 
     if open::that(&link).is_ok() {
         println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
@@ -31,22 +27,7 @@ pub fn create() {
         println!("Click this link to create a GitHub issue populated with your configuration:\n");
     }
 
-    println!(" {}", short_link.unwrap_or(link));
-}
-
-#[cfg(feature = "http")]
-fn shorten_link(link: &str) -> Option<String> {
-    attohttpc::post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
-        .form(&[("url", link)])
-        .ok()
-        .and_then(|r| r.send().ok())
-        .and_then(|r| r.text().ok())
-        .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
-}
-
-#[cfg(not(feature = "http"))]
-fn shorten_link(_url: &str) -> Option<String> {
-    None
+    println!("{}", link);
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";
