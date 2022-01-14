@@ -279,7 +279,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.tcshrc
@@ -290,7 +290,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.xonshrc
@@ -301,7 +301,7 @@
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 将以下文件添加到文件 `starship.lua` 中，并将此文件放置在 Clink脚本目录中：
 
    ```lua
    -- starship.lua
@@ -312,7 +312,7 @@
 
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **警告** 将来可能会改变。 仅支持 nu 版本 v0.33 或更高版本。 在您的 nu config 中添加以下内容： 您可以用 nu 运行 `config path` 来检查此 文件的位置。
 
    ```toml
    startup = [
@@ -327,7 +327,7 @@
 
 我们一直在寻找贡献者！**不论你的技能如何**你都可以参与贡献 。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果你能流利地使用非英语语种，我们非常感谢你帮助翻译我们的文件并将其更新到其他语言。 如果您想要帮助，可以在 [Starship Crowdin](https://translate.starship.rs/) 上贡献翻译。
 
 如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
