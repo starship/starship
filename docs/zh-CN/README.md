@@ -44,7 +44,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
 
 
    #### 通过软件包管理器安装
@@ -121,7 +121,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning Only elvish v0.17 or higher is supported. :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
 
    ```sh
    # ~/.elvish/rc.elv
