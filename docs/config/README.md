@@ -1,9 +1,9 @@
 # Configuration
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+To get started configuring starship, create the following file: `~/.starship/config.toml`.
 
 ```sh
-mkdir -p ~/.config && touch ~/.config/starship.toml
+mkdir -p ~/.starship && touch ~/.starship/config.toml
 ```
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
