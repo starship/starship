@@ -158,7 +158,7 @@
 - **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文档</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -171,7 +171,7 @@
 
 ### 开始安装
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**注意**: 由于平台众多，下面只显示支持的部分平台 找不到你的平台？ 查看 [额外的平台说明](https://starship.rs/installing/)。
 
 1. 安装 **starship** 二进制文件：
 
@@ -185,9 +185,9 @@
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **注意** - 可以覆盖安装脚本的默认值，请参阅内置帮助。
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -268,7 +268,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.17 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **警告** 只支持 elvish v0.17 及以上。 在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
 
    ```sh
    # ~/.elvish/rc.elv
