@@ -381,9 +381,9 @@ symbol = "sudo "
 symbol = "swift "
 ```
 
-## Hide Runtime Versions
+## 隐藏运行时版本
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+此预设隐藏语言运行时版本。 如果你在容器或虚拟环境中使用，这个适合你！
 
 ![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
 
@@ -478,9 +478,9 @@ format = 'via [$symbol]($style)'
 format = 'via [$symbol]($style)'
 ```
 
-## Pure
+## 纯色
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+此预设模拟 [Pure](https://github.com/sindresorhus/pure) 的外观和行为。
 
 ![Screenshot of Pure preset](/presets/pure-prompt.png)
 
