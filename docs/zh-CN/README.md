@@ -132,7 +132,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.tcshrc
@@ -168,7 +168,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 将以下文件添加到文件 `starship.lua` 中，并将此文件放置在 Clink脚本目录中：
 
    ```lua
    -- starship.lua
