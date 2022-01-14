@@ -1,10 +1,10 @@
-# 社区配置分享
+# 预设
 
-这里有一系列社区提供的 Starship 预设配置。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 来更新此文件！ 😊
+这里有一系列社区提供的 Starship 预设。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 来更新此文件！ 😊
 
-## Nerd Font Symbols
+## Nerd 字体符号
 
-除了每个组件使用的符号外，这套配置不会改变任何内容。 如果你不喜欢 emoji，这可能会吸引你的眼球！
+除了每个组件使用的符号外，这套配置不会改变任何内容。 如果你不喜欢 emoji，这可能能满足你！
 
 ![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
 
@@ -248,15 +248,15 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 ```
 
-## Plain Text Symbols
+## 纯文本符号
 
-This preset changes the symbols into plain text. If your terminal/font could not render the NerdFonts/emojis, maybe you could try this preset!
+此预设会将符号变成纯文本。 如果您的终端/字体无法渲染NerdFont/emojis，也许您可以尝试此预设！
 
-Before (default setting with Fixedsys font):
+前 (使用Fixedsys 字体的默认设置)：
 
 ![Screenshot of default Starship configuration with Fixedsys font](/presets/plain-text-symbols-before.png)
 
-After (Plain Text Symbols):
+之后(纯文本符号)：
 
 ![Screenshot of Plain Text Symbols preset](/presets/plain-text-symbols-after.png)
 
