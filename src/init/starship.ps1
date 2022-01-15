@@ -31,6 +31,7 @@ $null = New-Module starship {
             RedirectStandardError = $true;
             CreateNoWindow = $true;
             UseShellExecute = $false;
+            WorkingDirectory = $(Get-Cwd).Path;
         };
         if ($startInfo.ArgumentList.Add) {
             # PowerShell 6+ uses .NET 5+ and supports the ArgumentList property
