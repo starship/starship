@@ -279,6 +279,7 @@ impl<'a> Context<'a> {
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
             "powershell" => Shell::PowerShell,
+            "pwsh" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
