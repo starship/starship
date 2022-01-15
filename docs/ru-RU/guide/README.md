@@ -75,6 +75,22 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
@@ -138,8 +154,8 @@
 - **Настраиваемая:** настройте каждый элемент вашей командной строки.
 - **Универсальная:** работает с любой оболочкой, на любой операционной системе.
 - **Умная:** сразу показывает соответствующую информацию.
-- **Богатая функциями:** поддержка всех ваших любимых инструментов.
-- **Легкая:** быстро установить - начните использовать ее в считанные минуты.
+- **Много функций:** поддержка всех ваших любимых инструментов.
+- **Легкая:** быстрая установка - начните использовать ее в считанные минуты.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Изучите документацию Starship&nbsp;&nbsp;▶</strong></a>
@@ -149,13 +165,13 @@
 
 ## 🚀 Установка
 
-### Требования
+### Обязательные требования
 
 - Установленный и включённый [шрифт Powerline](https://www.nerdfonts.com/) (например, [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Начало работы
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**Примечание**: из-за распространения большого количества операционных систем,  список поддерживаемых указан ниже. Can't see yours? Ознакомьтесь с [дополнительными инструкциями по платформе](https://starship.rs/installing/).
 
 1. Установите двоичный файл **starship**:
 
@@ -252,7 +268,7 @@
 
    #### Elvish
 
-   **Внимание** Поддерживается только elvish v0.15 или выше. Добавьте следующую строку в конец `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -280,6 +296,17 @@
    # ~/.xonshrc
 
    execx($(starship init xonsh))
+   ```
+
+
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
    ```
 
 

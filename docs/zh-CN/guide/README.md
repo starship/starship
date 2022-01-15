@@ -75,6 +75,22 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
@@ -142,7 +158,7 @@
 - **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文档</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -155,7 +171,7 @@
 
 ### 开始安装
 
-**Note**: due to the proliferation of different platforms, only a subset of supported platforms are shown below. Can't see yours? Have a look at the [extra platform instructions](https://starship.rs/installing/).
+**注意**: 由于平台众多，下面只显示支持的部分平台 找不到你的平台？ 查看 [额外的平台说明](https://starship.rs/installing/)。
 
 1. 安装 **starship** 二进制文件：
 
@@ -169,9 +185,9 @@
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
 
-   **Note** - The defaults of the install script can be overridden see the built-in help.
+   **注意** - 可以覆盖安装脚本的默认值，请参阅内置帮助。
 
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
@@ -252,7 +268,7 @@
 
    #### Elvish
 
-   **Warning** Only elvish v0.15 or higher is supported. Add the following to the end of `~/.elvish/rc.elv`:
+   **警告** 只支持 elvish v0.17 及以上。 在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -263,7 +279,7 @@
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.tcshrc
@@ -274,7 +290,7 @@
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   在 `~/.bashhrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.xonshrc
@@ -283,9 +299,20 @@
    ```
 
 
+   #### Cmd
+
+   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 将以下文件添加到文件 `starship.lua` 中，并将此文件放置在 Clink脚本目录中：
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **Warning** This will change in the future. Only nu version v0.33 or higher is supported. Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   **警告** 将来可能会改变。 仅支持 nu 版本 v0.33 或更高版本。 在您的 nu config 中添加以下内容： 您可以用 nu 运行 `config path` 来检查此 文件的位置。
 
    ```toml
    startup = [
@@ -300,7 +327,7 @@
 
 我们一直在寻找贡献者！**不论你的技能如何**你都可以参与贡献 。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果你能流利地使用非英语语种，我们非常感谢你帮助翻译我们的文件并将其更新到其他语言。 如果您想要帮助，可以在 [Starship Crowdin](https://translate.starship.rs/) 上贡献翻译。
 
 如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
