@@ -24,19 +24,19 @@ disabled = true
 `STARSHIP_CONFIG` 環境変数を使用することによって、デフォルトの設定ファイルの場所を変更できます。
 
 ```sh
-export STARSHIP_CONFIG=~/.starship/config.toml
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
 PowerShell (Windows) で同様に `$PROFILE` にこの行を追加します。
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
 Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
 ### ロギング
