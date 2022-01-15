@@ -24,19 +24,19 @@ disabled = true
 Die voreingestellte Konfigurations-Datei kann mit der `STARSHIP_CONFIG` Umgebungsvariable verändert werden. Hier z. Bsp. für die BASH shell, hinzuzufügen zur ~/. bashrc:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship/config.toml
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
 Für die Windows PowerShell diese Zeile zum `$PROFILE` hinzufügen:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
 Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
 ### Protokollierung
