@@ -24,19 +24,19 @@ disabled = true
 Puedes cambiar la ubicación por defecto del archivo de configuración con la variable de entorno `STARSHIP_CONFIG`:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship/config.toml
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
 El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
 Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
 ### Registros
