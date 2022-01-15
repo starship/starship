@@ -24,19 +24,19 @@ disabled = true
 Bạn thay đổi địa chỉ tệp tin cấu hình mặc định bằng biến môi trường `STARSHIP_CONFIG`:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship/config.toml
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
 Tương đương trong PowerShell (Windows) sẽ được thêm dòng này vào `$PROFILE` của bạn:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
 Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 
 ```lua
-os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\.starship\\config.toml')
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
 ### Logging
