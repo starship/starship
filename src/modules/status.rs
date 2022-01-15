@@ -28,9 +28,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let exit_code = context.properties.status_code.unwrap_or_default();
+    let exit_code = context.properties.status_code.as_deref().unwrap_or("0");
 
-    let pipestatus_status = match &context.pipestatus {
+    let pipestatus_status = match &context.properties.pipestatus {
         None => PipeStatusStatus::Disabled,
         Some(ps) => match ps.len() > 1 {
             true => PipeStatusStatus::Pipe(ps),
@@ -44,7 +44,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // Exit code is zero and pipestatus is all zero or disabled/missing
-    if exit_code == 0
+    if exit_code == "0"
         && (match pipestatus_status {
             PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
             _ => true,
