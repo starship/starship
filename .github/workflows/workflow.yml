@@ -87,7 +87,7 @@ jobs:
 
   # Ensure that the project could be successfully compiled with no features enabled
   cargo_check_no_features:
-    name: Compile
+    name: Compile with no features enabled
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
@@ -108,7 +108,7 @@ jobs:
 
   # Ensure that the project could be successfully compiled with all features enabled
   cargo_check_all_features:
-    name: Compile
+    name: Compile with all features enabled
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
