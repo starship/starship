@@ -82,6 +82,9 @@ enum Commands {
         /// Print the continuation prompt (instead of the standard left prompt)
         #[clap(long, conflicts_with = "right")]
         continuation: bool,
+        /// Print the syntax error prompt (instead of the standard left prompt)
+        #[clap(long, conflicts_with_all = &["continuation", "right"])]
+        syntax_error: bool,
         #[clap(flatten)]
         properties: Properties,
     },
@@ -126,11 +129,13 @@ fn main() {
             properties,
             right,
             continuation,
+            syntax_error,
         } => {
-            let target = match (right, continuation) {
-                (true, _) => Target::Right,
-                (_, true) => Target::Continuation,
-                (_, _) => Target::Main,
+            let target = match (right, continuation, syntax_error) {
+                (true, _, _) => Target::Right,
+                (_, true, _) => Target::Continuation,
+                (_, _, true) => Target::SyntaxError,
+                (_, _, _) => Target::Main,
             };
             print::prompt(properties, target)
         }

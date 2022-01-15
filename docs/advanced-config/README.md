@@ -206,6 +206,15 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = "▶▶"
 ```
 
+## Syntax Error Prompt
+
+PowerShell supports a syntax error prompt along with the normal prompt. This prompt is rendered
+instead of the normal prompt when the user has entered an invalid statement.
+
+Starship can set the syntax error prompt using the `syntax_error_prompt` option. The default prompt is `[❯](bold purple) `.
+
+Note: `syntax_error_prompt` should be set to a literal string without any variables.
+
 ## Style Strings
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:

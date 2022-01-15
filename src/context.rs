@@ -564,6 +564,7 @@ pub enum Target {
     Main,
     Right,
     Continuation,
+    SyntaxError,
 }
 
 /// Properties as passed on from the shell as arguments

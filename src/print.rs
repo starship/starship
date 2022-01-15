@@ -417,6 +417,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     let lformatter = StringFormatter::new(&config.format);
     let rformatter = StringFormatter::new(&config.right_format);
     let cformatter = StringFormatter::new(&config.continuation_prompt);
+    let seformatter = StringFormatter::new(&config.syntax_error_prompt);
     if lformatter.is_err() {
         log::error!("Error parsing `format`")
     }
@@ -426,9 +427,12 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     if cformatter.is_err() {
         log::error!("Error parsing `continuation_prompt`")
     }
+    if seformatter.is_err() {
+        log::error!("Error parsing `syntax_error_prompt`")
+    }
 
-    match (lformatter, rformatter, cformatter) {
-        (Ok(lf), Ok(rf), Ok(cf)) => {
+    match (lformatter, rformatter, cformatter, seformatter) {
+        (Ok(lf), Ok(rf), Ok(cf), Ok(sef)) => {
             let mut modules: BTreeSet<String> = BTreeSet::new();
             if context.target != Target::Continuation {
                 modules.extend(lf.get_variables());
@@ -438,6 +442,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
                 Target::Main => (lf, modules),
                 Target::Right => (rf, modules),
                 Target::Continuation => (cf, modules),
+                Target::SyntaxError => (sef, modules),
             }
         }
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
