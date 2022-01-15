@@ -47,7 +47,7 @@ emerge app-shells/starship
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### バイナリの取得
 
 #### Imperatively
 
@@ -57,14 +57,14 @@ nix-env -iA nixos.starship
 
 #### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+`home.nix`ファイルで`programs.starship`を有効にして、設定を追加してください。
 
 ```nix
 {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # Configuration written to ~/.config/starship.toml
+    # ~/.config/starship.toml に書き込まれる設定
     settings = {
       # add_newline = false;
 
@@ -79,7 +79,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+そして、次を実行してください
 
 ```sh
 home-manager switch
@@ -87,7 +87,7 @@ home-manager switch
 
 #### Declarative, system-wide, with NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+`configuration.nix`で`environment.systemPackages`に`pkgs.starship`を追加して、次を実行してください
 
 ```sh
 sudo nixos-rebuild switch

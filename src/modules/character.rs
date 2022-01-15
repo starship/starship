@@ -22,9 +22,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: CharacterConfig = CharacterConfig::try_load(module.config);
 
     let props = &context.properties;
-    let exit_code = props.get("status_code").map_or("0", String::as_str);
-    let keymap = props.get("keymap").map_or("viins", String::as_str);
-    let exit_success = exit_code == "0";
+    let exit_code = props.status_code;
+    let keymap = props.keymap.as_str();
+    let exit_success = exit_code.unwrap_or_default() == 0;
 
     // Match shell "keymap" names to normalized vi modes
     // NOTE: in vi mode, fish reports normal mode as "default".
@@ -32,7 +32,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // We do some environment detection in src/init.rs to translate.
     // The result: in non-vi fish, keymap is always reported as "insert"
     let mode = match (&context.shell, keymap) {
-        (Shell::Fish, "default") | (Shell::Zsh, "vicmd") => ShellEditMode::Normal,
+        (Shell::Fish, "default") | (Shell::Zsh, "vicmd") | (Shell::Cmd, "vi") => {
+            ShellEditMode::Normal
+        }
         _ => ASSUMED_MODE,
     };
 
@@ -189,6 +191,38 @@ mod test {
         // fish keymap is other
         let actual = ModuleRenderer::new("character")
             .shell(Shell::Fish)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+    }
+
+    #[test]
+    fn cmd_keymap() {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // cmd keymap is vi
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Cmd)
+            .keymap("vi")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::Cmd)
+            .keymap("vi")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // cmd keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Cmd)
             .keymap("visual")
             .collect();
         assert_eq!(expected_other, actual);

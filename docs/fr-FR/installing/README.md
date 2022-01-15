@@ -47,7 +47,7 @@ emerge app-shells/starship
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Obtention du binaire
 
 #### Impératif
 
@@ -57,14 +57,14 @@ nix-env -iA nixos.starship
 
 #### Déclaration, utilisateur unique, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Activez le module `programs.starship` dans votre fichier `home.nix`, et ajoutez vos paramètres
 
 ```nix
 {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuration écrite dans ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
@@ -79,7 +79,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+puis lancez
 
 ```sh
 home-manager switch
@@ -87,7 +87,7 @@ home-manager switch
 
 #### Déclaration, au niveau du système, avec NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Ajoutez `pkgs.starship` à `environment.systemPackages` dans votre `configuration.nix`, puis exécutez
 
 ```sh
 sudo nixos-rebuild switch

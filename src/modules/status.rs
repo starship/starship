@@ -28,10 +28,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let exit_code = context
-        .properties
-        .get("status_code")
-        .map_or("0", String::as_str);
+    let exit_code = context.properties.status_code.unwrap_or_default();
 
     let pipestatus_status = match &context.pipestatus {
         None => PipeStatusStatus::Disabled,
@@ -47,7 +44,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // Exit code is zero and pipestatus is all zero or disabled/missing
-    if exit_code == "0"
+    if exit_code == 0
         && (match pipestatus_status {
             PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
             _ => true,
@@ -79,7 +76,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
+    let parsed = format_exit_code(
+        &exit_code.to_string(),
+        main_format,
+        Some(&pipestatus),
+        &config,
+        context,
+    );
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -105,6 +108,11 @@ fn format_exit_code<'a>(
             return Ok(Vec::new());
         }
     };
+
+    let hex_status = exit_code
+        .parse::<i32>()
+        .ok()
+        .map(|code| format!("0x{:X}", code));
 
     let common_meaning = status_common_meaning(exit_code_int);
 
@@ -148,6 +156,7 @@ fn format_exit_code<'a>(
             })
             .map(|variable| match variable {
                 "status" => Some(Ok(exit_code)),
+                "hex_status" => Ok(hex_status.as_deref().or(Some(exit_code))).transpose(),
                 "int" => Some(Ok(exit_code)),
                 "maybe_int" => Ok(maybe_exit_code_number).transpose(),
                 "common_meaning" => Ok(common_meaning).transpose(),
@@ -274,6 +283,29 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+    }
+
+    #[test]
+    fn failure_hex_status() {
+        let exit_values = [1, 2, 130, -2147467260];
+        let string_values = ["0x1", "0x2", "0x82", "0x80004004"];
+
+        for (exit_value, string_value) in exit_values.iter().zip(string_values) {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red.bold().paint(format!("✖{}", string_value))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    symbol = "✖"
+                    disabled = false
+                    format = "[${symbol}${hex_status}]($style) "
+                })
+                .status(*exit_value)
                 .collect();
             assert_eq!(expected, actual);
         }

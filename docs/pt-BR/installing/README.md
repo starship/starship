@@ -47,7 +47,7 @@ emerge app-shells/starship
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Obtendo o Binário
 
 #### Imperativamente
 
@@ -57,7 +57,7 @@ nix-env -iA nixos.starship
 
 #### Declarativo, usuário único, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Ative o modulo `programs.starship` em seu arquivo `home.nix`, e adicione suas configurações
 
 ```nix
 {
@@ -79,7 +79,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+então execute
 
 ```sh
 home-manager switch
@@ -87,7 +87,7 @@ home-manager switch
 
 #### Declarativo, em todo o sistema com NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Adicione `pkgs.starship` em `environment.systemPackages` no arquivo `configuration.nix`, então execute
 
 ```sh
 sudo nixos-rebuild switch

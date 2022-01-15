@@ -317,7 +317,7 @@ print_install() {
         # shellcheck disable=SC2088
         config_file="~/.elvish/rc.elv"
         config_cmd="eval (starship init elvish)"
-        warning="${warning} Only elvish v0.15 or higher is supported."
+        warning="${warning} Only elvish v0.17 or higher is supported."
         ;;
       nushell )
         # shellcheck disable=SC2088
@@ -346,6 +346,11 @@ print_install() {
     "You can check the location of this file by querying the \$PROFILE variable in PowerShell.
   Typically the path is ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 or ~/.config/powershell/Microsoft.PowerShell_profile.ps1 on -Nix." \
     "Invoke-Expression (&starship init powershell)"
+
+  printf "  %s\n You need to use Clink (v1.2.30+) with Cmd. Add the following to a file %s and place this file in Clink scripts directory:\n\n\t%s\n\n" \
+    "${BOLD}${UNDERLINE}Cmd${NO_COLOR}" \
+    "${BOLD}starship.lua${NO_COLOR}" \
+    "load(io.popen('starship init cmd'):read(\"*a\"))()"
 
   printf "\n"
 }
