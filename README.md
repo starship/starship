@@ -383,7 +383,7 @@ prompt = "starship_prompt"
 
 </details>
 
-### Setup 3. Configure Starship
+### Step 3. Configure Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt.
 If you're happy with the defaults, enjoy!
