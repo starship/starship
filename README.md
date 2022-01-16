@@ -189,8 +189,6 @@ Install Starship using any of the following package managers:
 
 Install Starship using any of the following package managers:
 
-#### Install via package manager
-
 | Distribution | Repository      | Instructions             |
 | ------------ | --------------- | ------------------------ |
 | **_Any_**    | **[crates.io]** | `cargo install starship` |
