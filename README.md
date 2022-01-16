@@ -424,6 +424,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
 [arch linux community]: https://archlinux.org/packages/community/x86_64/starship
+[chocolatey]: https://community.chocolatey.org/packages/starship
 [conda-forge]: https://anaconda.org/conda-forge/starship
 [copr]: https://copr.fedorainfracloud.org/coprs/atim/starship
 [crates.io]: https://crates.io/crates/starship
@@ -432,6 +433,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [gentoo packages]: https://packages.gentoo.org/packages/app-shells/starship
 [linuxbrew]: https://formulae.brew.sh/formula/starship
 [homebrew]: https://formulae.brew.sh/formula/starship
+[macports]: https://ports.macports.org/port/starship
 [nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix
 [pkgsrc]: https://pkgsrc.se/shells/starship
 [scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
