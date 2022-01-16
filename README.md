@@ -174,6 +174,32 @@
 Select your operating system from the list below to view installation instructions:
 
 <details>
+<summary>Android</summary>
+
+Install Starship using any of the following package managers:
+
+| Repository | Instructions           |
+| ---------- | ---------------------- |
+| [Termux]   | `pkg install starship` |
+
+</details>
+
+<details>
+<summary>BSD</summary>
+
+Install Starship using any of the following package managers:
+
+#### Install via package manager
+
+| Distribution | Repository      | Instructions             |
+| ------------ | --------------- | ------------------------ |
+| **_Any_**    | **[crates.io]** | `cargo install starship` |
+| FreeBSD      | [FreshPorts]    | `pkg install starship`   |
+| NetBSD       | [pkgsrc]        | `pkgin install starship` |
+
+</details>
+
+<details>
 <summary>Linux</summary>
 
 Install the latest version for your system:
@@ -235,32 +261,6 @@ Install Starship using any of the following package managers:
 
 </details>
 
-<details>
-<summary>BSD</summary>
-
-Install Starship using any of the following package managers:
-
-#### Install via package manager
-
-| Distribution | Repository      | Instructions             |
-| ------------ | --------------- | ------------------------ |
-| **_Any_**    | **[crates.io]** | `cargo install starship` |
-| FreeBSD      | [FreshPorts]    | `pkg install starship`   |
-| NetBSD       | [pkgsrc]        | `pkgin install starship` |
-
-</details>
-
-<details>
-<summary>Android</summary>
-
-Install Starship using any of the following package managers:
-
-| Repository | Instructions         |
-| ---------- | -------------------- |
-| [Termux]   | `pkg install zoxide` |
-
-</details>
-
 ### Step 2. Setup your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
@@ -277,34 +277,37 @@ eval "$(starship init bash)"
 </details>
 
 <details>
+<summary>Cmd</summary>
+
+You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.
+Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+
+```lua
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+</details>
+
+<details>
+<summary>Elvish</summary>
+
+Add the following to the end of `~/.elvish/rc.elv`:
+
+```sh
+eval (starship init elvish)
+```
+
+Note: Only Elvish v0.17+ is supported
+
+</details>
+
+<details>
 <summary>Fish</summary>
 
 Add the following to the end of `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
-```
-
-</details>
-
-<details>
-<summary>Zsh</summary>
-
-Add the following to the end of `~/.zshrc`:
-
-```sh
-eval "$(starship init zsh)"
-```
-
-</details>
-
-<details>
-<summary>PowerShell</summary>
-
-Add the following to the end of your PowerShell configuration (find it by running `echo $profile`):
-
-```powershell
-Invoke-Expression (&starship init powershell)
 ```
 
 </details>
@@ -321,15 +324,29 @@ eval $(starship init ion)
 </details>
 
 <details>
-<summary>Elvish</summary>
+<summary>Nushell</summary>
 
-Add the following to the end of `~/.elvish/rc.elv`:
+Add the following to the end of your Nushell configuration (find it by running `config path`):
 
-```sh
-eval (starship init elvish)
+```toml
+startup = [
+ "mkdir ~/.cache/starship",
+ "starship init nu | save ~/.cache/starship/init.nu",
+ "source ~/.cache/starship/init.nu"
+]
+prompt = "starship_prompt"
 ```
 
-Note: Only Elvish v0.17+ is supported
+</details>
+
+<details>
+<summary>PowerShell</summary>
+
+Add the following to the end of your PowerShell configuration (find it by running `echo $profile`):
+
+```powershell
+Invoke-Expression (&starship init powershell)
+```
 
 </details>
 
@@ -356,29 +373,12 @@ execx($(starship init xonsh))
 </details>
 
 <details>
-<summary>Cmd</summary>
+<summary>Zsh</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd.
-Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Add the following to the end of `~/.zshrc`:
 
-```lua
-load(io.popen('starship init cmd'):read("*a"))()
-```
-
-</details>
-
-<details>
-<summary>Nushell</summary>
-
-Add the following to the end of your Nushell configuration (find it by running `config path`):
-
-```toml
-startup = [
- "mkdir ~/.cache/starship",
- "starship init nu | save ~/.cache/starship/init.nu",
- "source ~/.cache/starship/init.nu"
-]
-prompt = "starship_prompt"
+```sh
+eval "$(starship init zsh)"
 ```
 
 </details>
