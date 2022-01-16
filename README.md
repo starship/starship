@@ -189,11 +189,11 @@ Install Starship using any of the following package managers:
 
 Install Starship using any of the following package managers:
 
-| Distribution | Repository      | Instructions             |
-| ------------ | --------------- | ------------------------ |
-| **_Any_**    | **[crates.io]** | `cargo install starship` |
-| FreeBSD      | [FreshPorts]    | `pkg install starship`   |
-| NetBSD       | [pkgsrc]        | `pkgin install starship` |
+| Distribution | Repository      | Instructions                      |
+| ------------ | --------------- | --------------------------------- |
+| **_Any_**    | **[crates.io]** | `cargo install starship --locked` |
+| FreeBSD      | [FreshPorts]    | `pkg install starship`            |
+| NetBSD       | [pkgsrc]        | `pkgin install starship`          |
 
 </details>
 
@@ -210,7 +210,7 @@ Alternatively, install Starship using any of the following package managers:
 
 | Distribution       | Repository              | Instructions                                                  |
 | ------------------ | ----------------------- | ------------------------------------------------------------- |
-| **_Any_**          | **[crates.io]**         | `cargo install starship`                                      |
+| **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
 | _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
 | _Any_              | [Linuxbrew]             | `brew install starship`                                       |
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
@@ -238,7 +238,7 @@ Alternatively, install Starship using any of the following package managers:
 
 | Repository      | Instructions                            |
 | --------------- | --------------------------------------- |
-| **[crates.io]** | `cargo install starship`                |
+| **[crates.io]** | `cargo install starship --locked`       |
 | [conda-forge]   | `conda install -c conda-forge starship` |
 | [Homebrew]      | `brew install starship`                 |
 | [MacPorts]      | `port install starship`                 |
@@ -252,7 +252,7 @@ Install Starship using any of the following package managers:
 
 | Repository      | Instructions                            |
 | --------------- | --------------------------------------- |
-| **[crates.io]** | `cargo install starship`                |
+| **[crates.io]** | `cargo install starship --locked`       |
 | [Chocolatey]    | `choco install starship`                |
 | [conda-forge]   | `conda install -c conda-forge starship` |
 | [Scoop]         | `scoop install starship`                |
