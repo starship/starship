@@ -28,7 +28,7 @@ battery = ["starship-battery"]
 
 [dependencies]
 clap = { version = "3.0.7", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.0.3"
+clap_complete = "3.0.4"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
 git2 = { version = "0.13.25", default-features = false }
