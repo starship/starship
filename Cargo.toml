@@ -70,7 +70,7 @@ strsim = "0.10.0"
 sha-1 = "0.10.0"
 toml_edit = "0.13.0"
 
-process_control = { version = "3.2.0", features = ["crossbeam-channel"] }
+process_control = { version = "3.2.1", features = ["crossbeam-channel"] }
 
 shell-words = "1.0.0"
 
