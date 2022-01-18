@@ -11,6 +11,7 @@ fn starship-after-command-hook {|m|
     } else {
         try {
             set cmd-status-code = $error[reason][exit-status]
+            set cmd-status-code = (- (% (+ $cmd-status-code 0x80000000) 0x100000000) 0x80000000)
         } except {
             # The error is from the built-in commands and they have no status code.
             set cmd-status-code = 1
@@ -24,10 +25,10 @@ set edit:after-command = [ $@edit:after-command $starship-after-command-hook~ ]
 # Install starship
 set edit:prompt = {
     var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
-    ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
+    ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status=$cmd-status-code
 }
 
 set edit:rprompt = {
     var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
-    ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
+    ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status=$cmd-status-code
 }
