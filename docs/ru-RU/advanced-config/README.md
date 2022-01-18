@@ -8,11 +8,35 @@
 
 :::
 
-## Пользовательские команды перед командной строкой и перед запуском Bash
+## Custom pre-prompt and pre-execution Commands in Cmd
 
-Bash не имеет формальной среды preexec/precmd, как и большинство других оболочек. Из-за этого трудно предоставить полностью настраиваемые хуки в `bash`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
+Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
-- Чтобы запустить пользовательскую функцию прямо перед отображением подсказки, определите новую функцию и затем назначьте ей имя `starship_precmd_user_func`. Например, чтобы нарисовать ракету перед появлением подсказки, сделайте
+- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+
+```lua
+function starship_preprompt_user_func(prompt)
+  print("🚀")
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+
+```lua
+function starship_precmd_user_func(line)
+  print("Executing: "..line)
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## Custom pre-prompt and pre-execution Commands in Bash
+
+Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
+
+- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -21,7 +45,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Тем не менее, вы **должны** поймать сигнал DEBUG *перед* инициализацией Starship! Starship может сохранить значение ловушки DEBUG, но если ловушка перезаписана после запуска Starship, некоторая функциональность сломается.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal *before* initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
@@ -43,11 +67,11 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Изменение заголовка окна
+## Change Window Title
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish даже делает это по умолчанию. Starship не делает этого, но достаточно легко добавить эту функциональность к `bash` или `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
-Сначала задайте функцию изменения заголовка окна (идентичную в bash и zsh):
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
 function set_win_title(){
@@ -55,15 +79,15 @@ function set_win_title(){
 }
 ```
 
-Вы можете использовать переменные для настройки этого заголовка (`$USER`, `$HOSTNAME`, и `$PWD` являются популярными вариантами).
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-В `bash`, установите эту функцию как функцию precmd в Starship:
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-В `zsh`, добавьте это в массив `precmd_functions`:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
@@ -71,13 +95,23 @@ precmd_functions+=(set_win_title)
 
 If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Например, если вы хотите отобразить ваш текущий каталог в заголовке вкладки терминала, добавьте следующие строки в `~/. bashrc` или `~/.zshrc`:
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
     echo -ne "\033]0; $(basename "$PWD") \007"
 }
 starship_precmd_user_func="set_win_title"
+```
+
+For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+
+```lua
+function starship_preprompt_user_func(prompt)
+  console.settitle(os.getenv('USERNAME').."@"..os.getenv('COMPUTERNAME')..": "..os.getcwd())
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
 ```
 
 You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
@@ -97,7 +131,7 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
 ### Пример
 
@@ -117,10 +151,32 @@ Produces a prompt like the following:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
+## Continuation Prompt
+
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+
+Note: `continuation_prompt` should be set to a literal string without any variables.
+
+Note: Continuation prompts are only available in the following shells:
+
+  - `bash`
+  - `zsh`
+  - `PowerShell`
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = "▶▶"
+```
 
 ## Строки стиля
 
-Строки стиля - это список слов, разделенных пробелами. Слова не чувствительны к регистру (то есть `bold` и `BoLd` считаются одной строкой). Каждое слово может быть одним из следующих:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
   - `bold`
   - `italic`
@@ -132,14 +188,14 @@ Produces a prompt like the following:
   - `<color>`
   - `none`
 
-где `<color>` является цветовым спецификатором (обсуждается ниже). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. Порядок слов в строке не имеет значения.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-Токен `none` переопределяет все остальные токены в строке, если он не является частью спецификатора `bg:` так, например, `fg:red none fg:blue` все равно создаст строку без стиля. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. Использование `none` в сочетании с другими токенами может стать ошибкой в будущем.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Цветовой спецификатор может быть одним из следующих:
+A color specifier can be one of the following:
 
- - Некоторые из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. Вы можете по желанию добавить префикс `bright-`, чтобы получить яркую версию (например, `bright-white`).
- - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
- - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
+ - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+ - A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+ - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
-Если для переднего плана/фона задано несколько цветов, то последняя из строк будет иметь приоритет.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.

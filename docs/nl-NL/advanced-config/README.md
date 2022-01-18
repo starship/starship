@@ -8,6 +8,30 @@ The configurations in this section are subject to change in future releases of S
 
 :::
 
+## Custom pre-prompt and pre-execution Commands in Cmd
+
+Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+
+- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+
+```lua
+function starship_preprompt_user_func(prompt)
+  print("🚀")
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+
+```lua
+function starship_precmd_user_func(line)
+  print("Executing: "..line)
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
 ## Custom pre-prompt and pre-execution Commands in Bash
 
 Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
@@ -45,7 +69,7 @@ function Invoke-Starship-PreCommand {
 
 ## Change Window Title
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash` or `zsh`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
 First, define a window title change function (identical in bash and zsh):
 
@@ -80,6 +104,16 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
+For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+
+```lua
+function starship_preprompt_user_func(prompt)
+  console.settitle(os.getenv('USERNAME').."@"..os.getenv('COMPUTERNAME')..": "..os.getcwd())
+end
+
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
 You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
 
 ```powershell
@@ -97,7 +131,7 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
 ### Example
 
@@ -117,6 +151,28 @@ Produces a prompt like the following:
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
+## Continuation Prompt
+
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+
+Note: `continuation_prompt` should be set to a literal string without any variables.
+
+Note: Continuation prompts are only available in the following shells:
+
+  - `bash`
+  - `zsh`
+  - `PowerShell`
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = "▶▶"
+```
 
 ## Style Strings
 
