@@ -169,177 +169,244 @@
 
 - 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
 
-### 入門
+### Step 1. Install Starship
 
-**備註：**由於不同平台的數量眾多，下方僅顯示部分已支持平台。 找不到你正在使用的平台？ 我想你可以來[額外平台說明](https://starship.rs/installing/)看看。
+Select your operating system from the list below to view installation instructions:
 
-1. 安裝 **starship** 執行檔：
+<details>
+<summary>Android</summary>
 
+Install Starship using any of the following package managers:
 
-   #### 安裝最新版本
+| Repository                                                                        | Instructions           |
+| --------------------------------------------------------------------------------- | ---------------------- |
+| [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
+</details>
 
-   ##### 從預構建的二進制包，並且使用 Shell 命令：
+<details>
+<summary>BSD</summary>
 
-   ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
-   ```
+Install Starship using any of the following package managers:
 
-   如果想更新已安裝的 Starship，請重新執行上述指令。 指令只會更新 Starship 執行檔本身，不會影響到任何已撰寫的設定檔。
+| Distribution | Repository                                               | Instructions                      |
+| ------------ | -------------------------------------------------------- | --------------------------------- |
+| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
-   **備註** —— 安裝腳本的預設值可以被覆蓋，請使用以下指令查看內置說明。
+</details>
 
-   ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --help
-   ```
+<details>
+<summary>Linux</summary>
 
+Install the latest version for your system:
 
-   #### 使用套件管理器安裝：
+```sh
+sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+```
 
+Alternatively, install Starship using any of the following package managers:
 
-   ##### 使用 [Homebrew](https://brew.sh/)：
+| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
+| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
+| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
+| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
+| Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
-   ```sh
-   brew install starship
-   ```
+</details>
 
+<details>
+<summary>macOS</summary>
 
-   ##### 使用 [Scoop](https://scoop.sh)：
+Install the latest version for your system:
 
-   ```powershell
-   scoop install starship
-   ```
+```sh
+sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+```
 
-2. 將初始化腳本 (script) 加入你的 shell 的設定檔：
+Alternatively, install Starship using any of the following package managers:
 
+| Repository                                               | Instructions                            |
+| -------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
+| [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
+| [Homebrew](https://formulae.brew.sh/formula/starship)    | `brew install starship`                 |
+| [MacPorts](https://ports.macports.org/port/starship)     | `port install starship`                 |
 
-   #### Bash
+</details>
 
-   將以下內容放到 `~/.bashrc` 的結尾：
+<details>
+<summary>Windows</summary>
 
-   ```sh
-   # ~/.bashrc
+Install Starship using any of the following package managers:
 
-   eval "$(starship init bash)"
-   ```
+| Repository                                                                       | Instructions                            |
+| -------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                         | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json) | `scoop install starship`                |
 
+</details>
 
-   #### Fish
+### Step 2. Setup your shell to use Starship
 
-   將以下內容放到 `~/.config/fish/config.fish` 的結尾：
+Configure your shell to initialize starship. Select yours from the list below:
 
-   ```sh
-   # ~/.config/fish/config.fish
+<details>
+<summary>Bash</summary>
 
-   starship init fish | source
-   ```
+將以下內容放到 `~/.bashrc` 的結尾：
 
+```sh
+eval "$(starship init bash)"
+```
 
-   #### Zsh
+</details>
 
-   將以下內容放到 `~/.zshrc` 的結尾：
+<details>
+<summary>Cmd</summary>
 
-   ```sh
-   # ~/.zshrc
+You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
-   eval "$(starship init zsh)"
-   ```
+```lua
+load(io.popen('starship init cmd'):read("*a"))()
+```
 
+</details>
 
-   #### PowerShell
+<details>
+<summary>Elvish</summary>
 
-   將以下內容放到 `Microsoft.PowerShell_profile.ps1` 的結尾。 你可以藉由在 PowerShell 查詢 `$PROFILE` 變數以取得這個檔案的位置。 一般來說，檔案會出現在 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`，若是在 -Nix 上，檔案則會出現在 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
+將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
-   ```powershell
-   Invoke-Expression (&starship init powershell)
-   ```
+```sh
+eval (starship init elvish)
+```
 
+Note: Only Elvish v0.17+ is supported
 
-   #### Ion
+</details>
 
-   將以下內容放到 `~/.config/ion/initrc` 的結尾：
+<details>
+<summary>Fish</summary>
 
-   ```sh
-   # ~/.config/ion/initrc
+將以下內容放到 `~/.config/fish/config.fish` 的結尾：
 
-   eval $(starship init ion)
-   ```
+```fish
+starship init fish | source
+```
 
+</details>
 
-   #### Elvish
+<details>
+<summary>Ion</summary>
 
-   **Warning** Only elvish v0.17 or higher is supported. 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
+將以下內容放到 `~/.config/ion/initrc` 的結尾：
 
-   ```sh
-   # ~/.elvish/rc.elv
+```sh
+eval $(starship init ion)
+```
 
-   eval (starship init elvish)
-   ```
+</details>
 
+<details>
+<summary>Nushell</summary>
 
-   #### Tcsh
+Add the following to the end of your Nushell configuration (find it by running `config path`):
 
-   將以下內容放到 `~/.tcshrc` 的結尾：
+```toml
+startup = [
+ "mkdir ~/.cache/starship",
+ "starship init nu | save ~/.cache/starship/init.nu",
+ "source ~/.cache/starship/init.nu"
+]
+prompt = "starship_prompt"
+```
 
-   ```sh
-   # ~/.tcshrc
+</details>
 
-   eval `starship init tcsh`
-   ```
+<details>
+<summary>PowerShell</summary>
 
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
-   #### Xonsh
+```powershell
+Invoke-Expression (&starship init powershell)
+```
 
-   將以下內容加到 `~/.xonshrc` 的結尾：
+</details>
 
-   ```sh
-   # ~/.xonshrc
+<details>
+<summary>Tcsh</summary>
 
-   execx($(starship init xonsh))
-   ```
+將以下內容放到 `~/.tcshrc` 的結尾：
 
+```sh
+eval `starship init tcsh`
+```
 
-   #### Cmd
+</details>
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+<details>
+<summary>Xonsh</summary>
 
-   ```lua
-   -- starship.lua
+將以下內容放到 `~/.xonshrc` 的結尾：
 
-   load(io.popen('starship init cmd'):read("*a"))()
-   ```
+```python
+execx($(starship init xonsh))
+```
 
+</details>
 
-   #### Nushell
+<details>
+<summary>Zsh</summary>
 
-   **Warning** This will change in the future. 只支援 nu v0.33 以上的版本。 Add the following to your nu config file. 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
+將以下內容放到 `~/.zshrc` 的結尾：
 
-   ```toml
-   startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
-   ]
-   prompt = "starship_prompt"
-   ```
+```sh
+eval "$(starship init zsh)"
+```
+
+</details>
+
+### Step 3. Configure Starship
+
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+
+If you're looking to further customize Starship:
+
+- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+
+- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
 
 ## 🤝 貢獻
 
-我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-如果您精通非英語語言，並能協助我們在文檔上的翻譯保持最新狀態，我們會非常感謝！ 如果你想要提供翻譯，可以到 [Starship Crowdin](https://translate.starship.rs/) 上提交您的翻譯。
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 發想來自
 
-請看之前這些幫助我們創造 Starship 的前任作品。 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 給太空人的 ZSH 提示。
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - 使用 Javascript 撰寫的跨 shell robbyrussell 主題。
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** - 一個跨 shell、可客製化、像 powerline 的圖案提示字元。
+- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
 
 <p align="center">
     <br>
@@ -348,4 +415,4 @@
 
 ## 📝 許可
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 這個專案使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 許可。
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
