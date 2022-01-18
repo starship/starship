@@ -1732,11 +1732,11 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+現在の[Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context)名を表示します。 kubeconfigファイルに設定されている場合は、namespaceも表示します。 namespaceはkubeconfigファイルで設定する必要があります。次のようにして行います。 `kubectl config set-context starship-cluster --namespace astronaut`. 環境変数`$KUBECONFIG`が設定されている場合、このモジュールはそれを利用し、`~/.kube/config`を利用しません。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
 :::
 
