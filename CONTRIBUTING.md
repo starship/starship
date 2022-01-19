@@ -95,12 +95,23 @@ cargo clippy --all-targets --all-features
 
 ## Formatting
 
-Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly), using the default configuration. Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
+Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly). Markdown and TOML files (among others) are formatted with [dprint](https://github.com/dprint/dprint). Unformatted code will fail the CI, so it is suggested that you run these tools locally.
+
+For rustfmt:
 
 ```sh
 rustup component add rustfmt
 cargo fmt
 ```
+
+For dprint:
+
+```sh
+cargo install dprint
+dprint fmt
+```
+
+Editor plugins/functionality may help you run these automatically so that you don't accidentally create a PR that fails.
 
 ## Testing
 
