@@ -122,7 +122,7 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    pub fn status(mut self, status: i32) -> Self {
+    pub fn status(mut self, status: i64) -> Self {
         self.context.properties.status_code = Some(status.to_string());
         self
     }
@@ -136,7 +136,7 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    pub fn pipestatus(mut self, status: &[i32]) -> Self {
+    pub fn pipestatus(mut self, status: &[i64]) -> Self {
         self.context.properties.pipestatus = Some(
             status
                 .iter()
