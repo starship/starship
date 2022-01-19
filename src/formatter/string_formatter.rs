@@ -26,7 +26,6 @@ impl<'a> Default for VariableValue<'a> {
         VariableValue::Plain(Cow::Borrowed(""))
     }
 }
-
 type VariableMapType<'a> =
     BTreeMap<String, Option<Result<VariableValue<'a>, StringFormatterError>>>;
 type StyleVariableMapType<'a> =
