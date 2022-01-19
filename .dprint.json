@@ -7,8 +7,8 @@
   },
   "toml": {},
   "includes": [
-    "docs/**/*.{ts,js,cjs,mjs,json}",
-    "**/*.{md,toml}"
+    "docs/**/*.{ts,js,cjs,mjs}",
+    "**/*.{md,toml,json}"
   ],
   "excludes": [
     "**/node_modules",
@@ -31,7 +31,8 @@
     "docs/tr-TR/**",
     "docs/vi-VN/**",
     "docs/zh-CN/**",
-    "docs/zh-TW/**"
+    "docs/zh-TW/**",
+    "target/"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.62.0.wasm",
