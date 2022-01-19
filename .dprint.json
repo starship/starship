@@ -15,8 +15,6 @@
     "**/*-lock.json",
     ".github/*",
     "docs/ar-SA/**",
-    "docs/-SA/**",
-    "docs/ar-SA/**",
     "docs/ckb-IR/**",
     "docs/de-DE/**",
     "docs/es-ES/**",
