@@ -233,10 +233,10 @@ writing new modules low, starship provides a lot of functionality for a module,
 which requires quite a few things be done. These are listed here to help
 everyone remember what they are. Don't worry: most of them are quite simple!
 
-- [ ] Add a section to `docs/config/README.md` describing the module, and 
+- [ ] Add a section to `docs/config/README.md` describing the module, and
       its configuration options/variables (more documentation is often
       appropriate--this is a bare minimum).
-- [ ] Add the variable to the appropriate location in the "Default Prompt 
+- [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
 - [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the

@@ -1,0 +1,44 @@
+{
+  "incremental": true,
+  "typescript": {},
+  "json": {},
+  "markdown": {
+    "lineWidth": 100
+  },
+  "toml": {},
+  "includes": [
+    "docs/**/*.{ts,js,cjs,mjs,json}",
+    "**/*.{md,toml}"
+  ],
+  "excludes": [
+    "**/node_modules",
+    "**/*-lock.json",
+    ".github/*",
+    "docs/ar-SA/**",
+    "docs/-SA/**",
+    "docs/ar-SA/**",
+    "docs/ckb-IR/**",
+    "docs/de-DE/**",
+    "docs/es-ES/**",
+    "docs/fr-FR/**",
+    "docs/id-ID/**",
+    "docs/it-IT/**",
+    "docs/ja-JP/**",
+    "docs/ko-KR/**",
+    "docs/nl-NL/**",
+    "docs/pl-PL/**",
+    "docs/pt-BR/**",
+    "docs/pt-PT/**",
+    "docs/ru-RU/**",
+    "docs/tr-TR/**",
+    "docs/vi-VN/**",
+    "docs/zh-CN/**",
+    "docs/zh-TW/**"
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.62.0.wasm",
+    "https://plugins.dprint.dev/json-0.14.0.wasm",
+    "https://plugins.dprint.dev/markdown-0.12.0.wasm",
+    "https://plugins.dprint.dev/toml-0.5.3.wasm"
+  ]
+}
