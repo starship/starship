@@ -99,7 +99,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
+    let mut path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
@@ -109,16 +109,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             if ((num_segments_after_root - 1) as i64) < config.truncation_length {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                vec![prefix + &before, root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                vec!["".to_string(), "".to_string(), prefix + &dir_string]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => vec!["".to_string(), "".to_string(), prefix + &dir_string],
     };
 
+    let mut dir_components = path_vec[2]
+        .split('/')
+        .map(|s| s.to_string())
+        .collect::<Vec<String>>();
+    if let Some(cwd_string) = dir_components.pop() {
+        if !dir_components.is_empty() {
+            dir_components.push("".to_string())
+        }
+        path_vec.append(&mut vec![dir_components.join("/"), cwd_string])
+    } else {
+        path_vec.append(&mut vec!["".to_string(), "".to_string()]);
+    }
+
     let path_vec = if config.use_os_path_sep {
-        path_vec.map(|i| convert_path_sep(&i))
+        path_vec.iter().map(|i| convert_path_sep(i)).collect()
     } else {
         path_vec
     };
@@ -130,6 +143,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.repo_root_format
     };
     let repo_root_style = config.repo_root_style.unwrap_or(config.style);
+    let cwd_style = config.cwd_style.unwrap_or(config.style);
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
@@ -137,9 +151,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 "repo_root_style" => Some(Ok(repo_root_style)),
+                "cwd_style" => Some(Ok(cwd_style)),
                 _ => None,
             })
             .map(|variable| match variable {
+                "cwd" => Some(Ok(&path_vec[4])),
+                "dirs" => Some(Ok(&path_vec[3])),
                 "path" => Some(Ok(&path_vec[2])),
                 "before_root_path" => Some(Ok(&path_vec[0])),
                 "repo_root" => Some(Ok(&path_vec[1])),
@@ -609,6 +626,87 @@ mod tests {
         ));
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn current_working_dir_custom_style() {
+        let actual = ModuleRenderer::new("directory")
+            .path(home_dir().unwrap().join("path/subpath"))
+            .config(toml::toml! {
+                [directory]
+                format= "[$dirs]($style)[$cwd]($cwd_style) "
+                cwd_style = "red italic"
+            })
+            .collect();
+        let expected = Some(format!(
+            "{}{} ",
+            Color::Cyan.bold().paint(convert_path_sep("~/path/")),
+            Color::Red.italic().paint(convert_path_sep("subpath"))
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[ignore]
+    fn current_working_dir_within_git_repo() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 5
+                truncate_to_repo = true
+                repo_root_style = "bold red"
+                cwd_style = "italic blue"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{}{} ",
+            Color::Cyan.bold().prefix(),
+            Color::Red.prefix(),
+            Color::Cyan.paint(convert_path_sep("/src/sub/")),
+            Color::Blue.italic().paint("path")
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn current_working_dir_is_git_repo() -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
+        fs::create_dir_all(&repo_dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                repo_root_format = "[$before_root_path]($style)[$repo_root]($repo_root_style)[$dirs]($style)[$cwd]($cwd_style) "
+                // Don't truncate the path at all.
+                truncation_length = 2
+                truncate_to_repo = false
+                cwd_style = "purple"
+                repo_root_style = "red"
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}rocket-controls{}{} ",
+            Color::Cyan.bold().paint(convert_path_sep("above-repo/")),
+            Color::Red.prefix(),
+            Color::Cyan.bold().paint(""),
+            Color::Purple.paint("")
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
     }
 
     #[test]
