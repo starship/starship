@@ -27,7 +27,7 @@ default = ["battery"]
 battery = ["starship-battery"]
 
 [dependencies]
-clap = { version = "3.0.9", features = ["derive", "cargo", "unicode"] }
+clap = { version = "3.0.10", features = ["derive", "cargo", "unicode"] }
 clap_complete = "3.0.4"
 ansi_term = "0.12.1"
 directories-next = "2.0.0"
