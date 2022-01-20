@@ -67,7 +67,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## Changer le titre de la fenêtre
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
