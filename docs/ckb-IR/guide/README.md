@@ -323,9 +323,9 @@ Add the following to the end of your Nushell configuration (find it by running `
 
 ```toml
 startup = [
- "mkdir ~/.cache/starship",
- "starship init nu | save ~/.cache/starship/init.nu",
- "source ~/.cache/starship/init.nu"
+  "mkdir ~/.cache/starship",
+  "starship init nu | save ~/.cache/starship/init.nu",
+  "source ~/.cache/starship/init.nu",
 ]
 prompt = "starship_prompt"
 ```
