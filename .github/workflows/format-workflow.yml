@@ -15,3 +15,12 @@ jobs:
         uses: actions/checkout@v2.4.0
       - name: Docs | Format
         uses: dprint/check@v2.0
+
+  # If this is not a Crowdin PR, block changes to translated documentation
+  block-crowdin:
+    name: Block Translated Changes
+    uses: xalvarez/prevent-file-change-action@v1.2.0
+    if: ${{ env.GITHUB_HEAD_REF != 'i18n_master' }}
+    with:
+      githubToken: ${{ secrets.GITHUB_TOKEN }}
+      pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
