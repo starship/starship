@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-#Insere uma linha vazia entre os prompts
+# Inserts a blank line between shell prompts
 add_newline = true
 
-# Substitui o simbolo "❯" do prompt por "➜"
-[character]                            # O nome do módulo que nos estamos configurando é "character"
-success_symbol = "[➜](bold green)"     # O seguimento do "success_symbol" é alterado para  "➜" com a cor  "bold green"
+# Replace the "❯" symbol in the prompt with "➜"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Desabilita o módulo de package, ocultando completamente do prompt
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
@@ -155,7 +155,6 @@ This is the list of prompt-wide configuration options.
 | `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos). |
 | `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                          |
 
-
 ### Exemplo
 
 ```toml
@@ -255,7 +254,7 @@ If you just want to extend the default format, you can use `$all`; modules you e
 
 ```toml
 # Move the directory to the second line
-format="$all$directory$character"
+format = "$all$directory$character"
 ```
 
 ## AWS
@@ -289,7 +288,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | symbol    |                  | Espelha o valor da opção `símbolo`   |
 | style\* |                  | Espelha o valor da opção `style`     |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplos
 
@@ -411,17 +410,16 @@ The `display` option is an array of the following table.
 #### Exemplo
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
-
 ```
 
 ## Caractere
@@ -522,7 +520,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | symbol    |           | Espelha o valor da opção `símbolo` |
 | style\* |           | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ## COBOL / GNUCOBOL
 
@@ -552,7 +550,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ## Tempo de execução do comando
 
@@ -591,7 +589,7 @@ Showing desktop notifications requires starship to be built with `notify-rust` s
 | duration  | `16m40s` | O tempo que levou para executar o comando |
 | style\* |          | Espelha o valor da opção `style`          |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -632,7 +630,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol      |              | Espelha o valor da opção `símbolo` |
 | style\*   |              | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -671,7 +669,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | Espelha o valor da opção `símbolo` |
 | style\* |           | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -711,7 +709,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -725,6 +723,7 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+
 - O diretório atual tenha um arquivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js`
 
 ### Opções
@@ -809,7 +808,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | path      | `"D:/Projects"`       | O caminho do diretório atual     |
 | style\* | `"black bold dimmed"` | Espelha o valor da opção `style` |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -846,7 +845,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | Espelha o valor da opção `símbolo` |
 | style\* |                | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -901,7 +900,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | Espelha o valor da opção `símbolo` |
 | style\* |                  | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -942,7 +941,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | Espelha o valor da opção `símbolo` |
 | style\*   |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -984,7 +983,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | Espelha o valor da opção `símbolo` |
 | style\* |           | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1002,16 +1001,17 @@ The `env_var` module displays the current value of a selected environment variab
 - A opção de configuração da `variable` corresponde a uma variável existente
 - A configuração `variable` não está definida, mas a `default` está
 
-
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
+
 ```toml
 # ~/.config/starship.toml
 
 [env_var.USER]
 default = "unknown user"
 ```
+
 :::
 
 ### Opções
@@ -1032,7 +1032,7 @@ default = "unknown user"
 | symbol    |                                             | Espelha o valor da opção `símbolo`      |
 | style\* | `black bold dimmed`                         | Espelha o valor da opção `style`        |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1045,6 +1045,7 @@ default = "unknown shell"
 ```
 
 Displaying multiple environmental variables:
+
 ```toml
 # ~/.config/starship.toml
 
@@ -1083,7 +1084,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | Espelha o valor da opção `símbolo` |
 | style\* |           | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1110,7 +1111,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ```toml
 # ~/.config/starship.toml
-format="AA $fill BB $fill CC"
+format = "AA $fill BB $fill CC"
 
 [fill]
 symbol = "-"
@@ -1121,7 +1122,6 @@ Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
-
 ```
 
 ## Google Cloud (`gcloud`)
@@ -1150,7 +1150,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | Espelha o valor da opção `símbolo`                                 |
 | style\* |               | Espelha o valor da opção `style`                                   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplos
 
@@ -1212,7 +1212,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Espelha o valor da opção `símbolo`                                                                |
 | style\*     |          | Espelha o valor da opção `style`                                                                  |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1248,7 +1248,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash      | `b703eb3` | A hash atual do git commit       |
 | style\* |           | Espelha o valor da opção `style` |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1288,7 +1288,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | O total do progresso da operação atual |
 | style\*        |            | Espelha o valor da opção `style`       |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1329,7 +1329,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |         | Espelha o valor da opção `added_style`  |
 | deleted_style\* |         | Espelha o valor da opção`deleted_style` |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1382,7 +1382,7 @@ The following variables can be used in `format`:
 | `deleted`      | Exibe `deleted` quando um arquivo deletado for adicionado na área de staging.                              |
 | style\*      | Espelha o valor da opção `style`                                                                           |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 The following variables can be used in `diverged`:
 
@@ -1461,7 +1461,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | symbol    |           | Espelha o valor da opção `símbolo` |
 | style\* |           | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1500,7 +1500,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1532,7 +1532,7 @@ The `hostname` module shows the system hostname.
 | hostname  | `computer` | O hostname do computador         |
 | style\* |            | Espelha o valor da opção `style` |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1541,7 +1541,7 @@ The `hostname` module shows the system hostname.
 
 [hostname]
 ssh_only = false
-format =  "on [$hostname](bold red) "
+format = "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -1574,7 +1574,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1587,7 +1587,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1609,18 +1609,16 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Opções
 
-| Opções             | Padrão                        | Descrição                                                                 |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------- |
-| `threshold`\*    | `1`                           | Exibe o número de jobs se excedido.                                       |
-| `symbol_threshold` | `1`                           | Exibe `symbol` se o número de jobs for ao menos `symbol_threshold`.       |
-| `number_threshold` | `2`                           | Exibe o número de jobs se o número de jobs é ao menos `number_threshold`. |
-| `format`           | `"[$symbol$number]($style) "` | O formato do módulo.                                                      |
-| `symbol`           | `"✦"`                         | A string usada para representar a variável `symbol`.                      |
-| `style`            | `"bold blue"`                 | O estilo do módulo.                                                       |
-| `disabled`         | `false`                       | Desabilita o módulo `jobs`.                                               |
- \*: This option is deprecated, please use the 
-
-`number_threshold` and `symbol_threshold` options instead.
+| Opções                                                                                                  | Padrão                        | Descrição                                                                 |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------- |
+| `threshold`*                                                                                            | `1`                           | Exibe o número de jobs se excedido.                                       |
+| `symbol_threshold`                                                                                      | `1`                           | Exibe `symbol` se o número de jobs for ao menos `symbol_threshold`.       |
+| `number_threshold`                                                                                      | `2`                           | Exibe o número de jobs se o número de jobs é ao menos `number_threshold`. |
+| `format`                                                                                                | `"[$symbol$number]($style) "` | O formato do módulo.                                                      |
+| `symbol`                                                                                                | `"✦"`                         | A string usada para representar a variável `symbol`.                      |
+| `style`                                                                                                 | `"bold blue"`                 | O estilo do módulo.                                                       |
+| `disabled`                                                                                              | `false`                       | Desabilita o módulo `jobs`.                                               |
+| *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead. |                               |                                                                           |
 
 ### Variáveis
 
@@ -1630,7 +1628,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1672,7 +1670,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1711,7 +1709,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | Espelha o valor da opção `símbolo` |
 | style\* |           | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1759,7 +1757,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | Espelha o valor da opção `símbolo`          |
 | style\* |                      | Espelha o valor da opção `style`            |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1845,7 +1843,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1901,7 +1899,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol           | `🐏`                                             | Espelha o valor da opção `símbolo`                                                                                                                                                                                                                                                                                                                                                                     |
 | style\*        |                                                 | Espelha o valor da opção `style`                                                                                                                                                                                                                                                                                                                                                                       |
 
-\*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
+*: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
 ### Exemplo
 
@@ -1938,7 +1936,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -1981,7 +1979,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2017,7 +2015,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2064,7 +2062,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2111,7 +2109,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Espelha o valor da opção `símbolo`                               |
 | style\*        |              | Espelha o valor da opção `style`                                 |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2144,7 +2142,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2199,7 +2197,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2279,7 +2277,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2324,7 +2322,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2344,7 +2342,6 @@ format = "[🛥 ($version )$stack]($style) "
 [pulumi]
 symbol = "🛥 "
 format = "[$symbol$stack]($style) "
-
 ```
 
 ## PureScript
@@ -2375,7 +2372,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2544,7 +2541,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2588,7 +2585,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2627,7 +2624,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Espelha o valor da opção `símbolo` |
 | style\* |                   | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2667,7 +2664,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2714,7 +2711,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |        | Espelha o valor do `indicator` para o shell usado atualmente. |
 | style\* |        | Espelha o valor da opção `style`.                             |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplos
 
@@ -2752,7 +2749,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2786,7 +2783,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | Espelha o valor da opção `símbolo` |
 | style\* |              | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2811,22 +2808,22 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opções
 
-| Opções                  | Padrão                                                                               | Descrição                                                    |
-| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| `format`                | `"[$symbol$status]($style) "`                                                        | O formato do módulo                                          |
-| `symbol`                | `"✖"`                                                                                | O simbolo exibido no erro de programa                        |
-| `success_symbol`        | `"✔️"`                                                                               | O simbolo exibido no sucesso de programa                     |
-| `not_executable_symbol` | `"🚫"`                                                                                | O simbolo exibido quando o arquivo não é executável          |
-| `not_found_symbol`      | `"🔍"`                                                                                | O simbolo exibido quando o comando não é encontrado          |
-| `sigint_symbol`         | `"🧱"`                                                                                | O simbolo exibido no SIGINT (Ctrl + c)                       |
-| `signal_symbol`         | `"⚡"`                                                                                | O simbolo exibido em qualquer sinal                          |
-| `style`                 | `"bold red"`                                                                         | O estilo do módulo.                                          |
-| `recognize_signal_code` | `true`                                                                               | Habilita o mapeamento de sinais para códigos de saída        |
-| `map_symbol`            | `false`                                                                              | Habilita o mapeamento de símbolos para códigos de saída      |
-| `pipestatus`            | `false`                                                                              | Habilita o relatório de pipestatus                           |
-| `pipestatus_separator`  | `|`                                                                                  | O simbolo que separa o pepe dos programas e códigos de saída |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | O formato do módulo quando o comando é um pipeline           |
-| `disabled`              | `true`                                                                               | Desabilita o módulo `status`.                                |
+| Opções                  | Padrão                                                                               | Descrição                                               |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "`                                                        | O formato do módulo                                     |
+| `symbol`                | `"✖"`                                                                                | O simbolo exibido no erro de programa                   |
+| `success_symbol`        | `"✔️"`                                                                               | O simbolo exibido no sucesso de programa                |
+| `not_executable_symbol` | `"🚫"`                                                                                | O simbolo exibido quando o arquivo não é executável     |
+| `not_found_symbol`      | `"🔍"`                                                                                | O simbolo exibido quando o comando não é encontrado     |
+| `sigint_symbol`         | `"🧱"`                                                                                | O simbolo exibido no SIGINT (Ctrl + c)                  |
+| `signal_symbol`         | `"⚡"`                                                                                | O simbolo exibido em qualquer sinal                     |
+| `style`                 | `"bold red"`                                                                         | O estilo do módulo.                                     |
+| `recognize_signal_code` | `true`                                                                               | Habilita o mapeamento de sinais para códigos de saída   |
+| `map_symbol`            | `false`                                                                              | Habilita o mapeamento de símbolos para códigos de saída |
+| `pipestatus`            | `false`                                                                              | Habilita o relatório de pipestatus                      |
+| `pipestatus_separator`  | `|`                                                                                  |                                                         |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | O formato do módulo quando o comando é um pipeline      |
+| `disabled`              | `true`                                                                               | Desabilita o módulo `status`.                           |
 
 ### Variáveis
 
@@ -2843,12 +2840,11 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | Espelha o valor da opção `símbolo`                                                                       |
 | style\*      |         | Espelha o valor da opção `style`                                                                         |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
 ```toml
-
 # ~/.config/starship.toml
 
 [status]
@@ -2857,7 +2853,6 @@ symbol = "🔴"
 format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
-
 ```
 
 ## Sudo
@@ -2887,12 +2882,11 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
 ```toml
-
 # ~/.config/starship.toml
 
 [sudo]
@@ -2938,7 +2932,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -2986,7 +2980,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -3039,7 +3033,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 | horário   | `13:08:10` | A hora atual.                    |
 | style\* |            | Espelha o valor da opção `style` |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -3126,7 +3120,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | Espelha o valor da opção `símbolo` |
 | style\* |                  | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -3140,6 +3134,7 @@ format = "via [⍱ $version](bold white) "
 ## V
 
 The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+
 - O diretório atual cotem qualquer arquivo com a extensão `.v`
 - O diretório atual contem um arquivo `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
@@ -3193,7 +3188,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | Espelha o valor da opção `símbolo` |
 | style\* | `black bold dimmed`                         | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -3231,7 +3226,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | Espelha o valor da opção `símbolo` |
 | style\* |          | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 ### Exemplo
 
@@ -3305,7 +3300,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | symbol    | Espelha o valor da opção `símbolo` |
 | style\* | Espelha o valor da opção `style`   |
 
-\*: Essa variável só pode ser usada como parte de uma string de estilo
+*: This variable can only be used as a part of a style string
 
 #### Comandos personalizados de shell
 
@@ -3342,13 +3337,13 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters but wildcards are not supported
+command = "echo foo" # shows output of command
+files = ["foo"] # can specify filters but wildcards are not supported
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"]  # filters *.pst files
+extensions = ["pst"] # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
