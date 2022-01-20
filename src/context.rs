@@ -576,11 +576,12 @@ pub enum Shell {
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Target {
     Main,
     Right,
     Continuation,
+    Profile(String),
 }
 
 /// Properties as passed on from the shell as arguments

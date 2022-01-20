@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use indexmap::IndexMap;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
@@ -12,6 +13,7 @@ pub struct StarshipRootConfig {
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    pub profiles: IndexMap<String, String>,
 }
 
 // List of default prompt order
@@ -104,6 +106,7 @@ impl<'a> Default for StarshipRootConfig {
             format: "$all".to_string(),
             right_format: "".to_string(),
             continuation_prompt: "[∙](bright-black) ".to_string(),
+            profiles: Default::default(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
