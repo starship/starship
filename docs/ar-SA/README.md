@@ -175,5 +175,3 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    load(io.popen('starship init cmd'):read("*a"))()
    ```
-
-This should break the workflow
