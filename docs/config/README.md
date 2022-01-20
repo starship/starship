@@ -3005,12 +3005,22 @@ This module is not supported on nu shell.
 
 ### Options
 
-# | Option | Default | Description || ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------- || `format` | `"[$symbol$status]($style) "` | The format of the module || `symbol` | `"✖"` | The symbol displayed on program error || `success_symbol` | `"✔️"` | The symbol displayed on program success || `not_executable_symbol` | `"🚫"` | The symbol displayed when file isn't executable || `not_found_symbol` | `"🔍"` | The symbol displayed when the command can't be found || `sigint_symbol` | `"🧱"` | The symbol displayed on SIGINT (Ctrl + c) || `signal_symbol` | `"⚡"` | The symbol displayed on any signal || `style` | `"bold red"` | The style for the module. || `recognize_signal_code` | `true` | Enable signal mapping from exit code || `map_symbol` | `false` | Enable symbols mapping from exit code || `pipestatus` | `false` | Enable pipestatus reporting |<<<<<<< HEAD| `pipestatus_separator` | `|` |
-
-| `pipestatus_separator` | `|` | The symbol that separate in pipe program exit codes |
->>>>>>> 7c1ac0c8 (feat(localip): add module to print the current ipv4 address)
-| `pipestatus_format` | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled` | `true` | Disables the `status` module. |
+| Option                  | Default                                                                       | Description                                             |
+| ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `format`                | `"[$symbol$status]($style) "`                                                 | The format of the module                                |
+| `symbol`                | `"✖"`                                                                         | The symbol displayed on program error                   |
+| `success_symbol`        | `"✔️"`                                                                        | The symbol displayed on program success                 |
+| `not_executable_symbol` | `"🚫"`                                                                         | The symbol displayed when file isn't executable         |
+| `not_found_symbol`      | `"🔍"`                                                                         | The symbol displayed when the command can't be found    |
+| `sigint_symbol`         | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                                                                         | The symbol displayed on any signal                      |
+| `style`                 | `"bold red"`                                                                  | The style for the module.                               |
+| `recognize_signal_code` | `true`                                                                        | Enable signal mapping from exit code                    |
+| `map_symbol`            | `false`                                                                       | Enable symbols mapping from exit code                   |
+| `pipestatus`            | `false`                                                                       | Enable pipestatus reporting                             |
+| `pipestatus_separator`  | `                                                                             | `                                                       |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
+| `disabled`              | `true`                                                                        | Disables the `status` module.                           |
 
 ### Variables
 
