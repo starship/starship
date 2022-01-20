@@ -9,12 +9,12 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
-# 在shell提示符插入新行
+# Inserts a blank line between shell prompts
 add_newline = true
 
-# 在提示处使用"➜"替换"❯"
-[character]                            # 配置的模块名：character
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Replace the "❯" symbol in the prompt with "➜"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -155,7 +155,6 @@ This is the list of prompt-wide configuration options.
 | `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                      |
 | `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                               |
 
-
 ### 示例
 
 ```toml
@@ -255,7 +254,7 @@ If you just want to extend the default format, you can use `$all`; modules you e
 
 ```toml
 # Move the directory to the second line
-format="$all$directory$character"
+format = "$all$directory$character"
 ```
 
 ## AWS
@@ -289,7 +288,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | symbol    |                  | `symbol`对应值                                 |
 | style\* |                  | `style`对应值                                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -411,17 +410,16 @@ The `display` option is an array of the following table.
 #### 示例
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
-
 ```
 
 ## Character
@@ -522,7 +520,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | symbol    |           | `symbol`对应值          |
 | style\* |           | `style`对应值           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ## COBOL / GNUCOBOL
 
@@ -552,7 +550,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | symbol    |            | `symbol`对应值            |
 | style\* |            | `style`对应值             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ## Command Duration
 
@@ -591,7 +589,7 @@ Showing desktop notifications requires starship to be built with `notify-rust` s
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | `style`对应值                              |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -632,7 +630,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol      |              | `symbol`对应值                   |
 | style\*   |              | `style`对应值                    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -671,7 +669,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | `symbol`对应值              |
 | style\* |           | `style`对应值               |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -711,7 +709,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -725,6 +723,7 @@ format = "via [🔰 $version](bold red) "
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
+
 - The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### 配置项
@@ -809,7 +808,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | path      | `"D:/Projects"`       | The current directory path |
 | style\* | `"black bold dimmed"` | `style`对应值                 |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -846,7 +845,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | `symbol`对应值                |
 | style\* |                | `style`对应值                 |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -901,7 +900,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | `symbol`对应值                                                        |
 | style\* |                  | `style`对应值                                                         |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -942,7 +941,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | `symbol`对应值                 |
 | style\*   |         | `style`对应值                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -984,7 +983,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | `symbol`对应值          |
 | style\* |           | `style`对应值           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1002,16 +1001,17 @@ The `env_var` module displays the current value of a selected environment variab
 - 设置的 `variable` 是一个已存在的环境变量
 - 未定义 `variable`，但定义了 `default`
 
-
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
+
 ```toml
 # ~/.config/starship.toml
 
 [env_var.USER]
 default = "unknown user"
 ```
+
 :::
 
 ### 配置项
@@ -1032,7 +1032,7 @@ default = "unknown user"
 | symbol    |                                             | `symbol`对应值                                |
 | style\* | `black bold dimmed`                         | `style`对应值                                 |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1045,6 +1045,7 @@ default = "unknown shell"
 ```
 
 Displaying multiple environmental variables:
+
 ```toml
 # ~/.config/starship.toml
 
@@ -1083,7 +1084,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | `symbol`对应值             |
 | style\* |           | `style`对应值              |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1110,7 +1111,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ```toml
 # ~/.config/starship.toml
-format="AA $fill BB $fill CC"
+format = "AA $fill BB $fill CC"
 
 [fill]
 symbol = "-"
@@ -1121,7 +1122,6 @@ Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
-
 ```
 
 ## Google Cloud (`gcloud`)
@@ -1150,7 +1150,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | `symbol`对应值                                                        |
 | style\* |               | `style`对应值                                                         |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -1212,7 +1212,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | `symbol`对应值                                                                                            |
 | style\*     |          | `style`对应值                                                                                             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1248,7 +1248,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash      | `b703eb3` | The current git commit hash |
 | style\* |           | `style`对应值                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1288,7 +1288,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | The total operation progress   |
 | style\*        |            | `style`对应值                     |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1329,7 +1329,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |     | Mirrors the value of option `added_style`   |
 | deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1382,7 +1382,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*      | `style`对应值                                                                                                    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 The following variables can be used in `diverged`:
 
@@ -1461,7 +1461,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | symbol    |           | `symbol`对应值         |
 | style\* |           | `style`对应值          |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1500,7 +1500,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1532,7 +1532,7 @@ The `hostname` module shows the system hostname.
 | hostname  | `computer` | The hostname of the computer |
 | style\* |            | `style`对应值                   |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1541,7 +1541,7 @@ The `hostname` module shows the system hostname.
 
 [hostname]
 ssh_only = false
-format =  "on [$hostname](bold red) "
+format = "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -1574,7 +1574,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |       | `symbol`对应值           |
 | style\* |       | `style`对应值            |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1587,7 +1587,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to *always* show the symbol and number of jobs, even if there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1609,18 +1609,16 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### 配置项
 
-| Option             | 默认值                           | 描述                                                                       |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`\*    | `1`                           | 如果超过此字段的值，显示任务数量。                                                        |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `"[$symbol$number]($style) "` | 组件格式化模板。                                                                 |
-| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `"bold blue"`                 | 此组件的样式。                                                                  |
-| `disabled`         | `false`                       | 禁用 `jobs` 组件。                                                            |
- \*: This option is deprecated, please use the 
-
-`number_threshold` and `symbol_threshold` options instead.
+| Option                                                                                                  | 默认值                           | 描述                                                                       |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`*                                                                                            | `1`                           | 如果超过此字段的值，显示任务数量。                                                        |
+| `symbol_threshold`                                                                                      | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold`                                                                                      | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`                                                                                                | `"[$symbol$number]($style) "` | 组件格式化模板。                                                                 |
+| `symbol`                                                                                                | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`                                                                                                 | `"bold blue"`                 | 此组件的样式。                                                                  |
+| `disabled`                                                                                              | `false`                       | 禁用 `jobs` 组件。                                                            |
+| *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead. |                               |                                                                          |
 
 ### Variables
 
@@ -1630,7 +1628,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |     | `symbol`对应值        |
 | style\* |     | `style`对应值         |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1672,7 +1670,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1711,7 +1709,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | `symbol`对应值             |
 | style\* |           | `style`对应值              |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1759,7 +1757,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | `symbol`对应值                              |
 | style\* |                      | `style`对应值                               |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1845,7 +1843,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1889,7 +1887,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol           | `🐏`           | `symbol`对应值                                                        |
 | style\*        |               | `style`对应值                                                         |
 
-\*: This variable can only be used as a part of a style string \*\*: The SWAP file information is only displayed if detected on the current system
+*: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
 ### 示例
 
@@ -1926,7 +1924,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | `symbol`对应值                 |
 | style\* |          | `style`对应值                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -1969,7 +1967,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2005,7 +2003,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | `symbol`对应值                |
 | style\* |         | `style`对应值                 |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2052,7 +2050,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | `symbol`对应值           |
 | style\* |            | `style`对应值            |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2099,7 +2097,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | `symbol`对应值                                                       |
 | style\*        |              | `style`对应值                                                        |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2132,7 +2130,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |        | `symbol`对应值                   |
 | style\* |        | `style`对应值                    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2187,7 +2185,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | `symbol`对应值                 |
 | style\* |          | `style`对应值                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2267,7 +2265,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2312,7 +2310,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol    |            | `symbol`对应值              |
 | style\* |            | `style`对应值               |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2332,7 +2330,6 @@ format = "[🛥 ($version )$stack]($style) "
 [pulumi]
 symbol = "🛥 "
 format = "[$symbol$stack]($style) "
-
 ```
 
 ## PureScript
@@ -2363,7 +2360,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | `symbol`对应值                 |
 | style\* |          | `style`对应值                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2532,7 +2529,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2576,7 +2573,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol    |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2615,7 +2612,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | `symbol`对应值            |
 | style\* |                   | `style`对应值             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2655,7 +2652,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2702,7 +2699,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |     | Mirrors the value of `indicator` for currently used shell. |
 | style\* |     | `style`对应值.                                                |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -2740,7 +2737,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |     | `symbol`对应值                  |
 | style\* |     | `style`对应值                   |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2774,7 +2771,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | `symbol`对应值                   |
 | style\* |              | `style`对应值                    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2812,7 +2809,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
 | `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
 | `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
-| `pipestatus_separator`  | `|`                                                                                  | The symbol that separate in pipe program exit codes     |
+| `pipestatus_separator`  | `|`                                                                                  |                                                         |
 | `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
 | `disabled`              | `true`                                                                               | Disables the `status` module.                           |
 
@@ -2831,12 +2828,11 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | `symbol`对应值                                                                                 |
 | style\*      |         | `style`对应值                                                                                  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
 ```toml
-
 # ~/.config/starship.toml
 
 [status]
@@ -2845,7 +2841,6 @@ symbol = "🔴"
 format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
-
 ```
 
 ## Sudo
@@ -2875,12 +2870,11 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |    | `symbol`对应值 |
 | style\* |    | `style`对应值  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
 ```toml
-
 # ~/.config/starship.toml
 
 [sudo]
@@ -2926,7 +2920,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -2974,7 +2968,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol    |            | `symbol`对应值                     |
 | style\* |            | `style`对应值                      |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -3027,7 +3021,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 | time      | `13:08:10` | The current time. |
 | style\* |            | `style`对应值        |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -3114,7 +3108,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | `symbol`对应值              |
 | style\* |                  | `style`对应值               |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -3128,6 +3122,7 @@ format = "via [⍱ $version](bold white) "
 ## V
 
 The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
+
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
@@ -3181,7 +3176,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | `symbol`对应值                |
 | style\* | `black bold dimmed`                         | `style`对应值                 |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -3219,7 +3214,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 示例
 
@@ -3293,7 +3288,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | symbol    | `symbol`对应值                            |
 | style\* | `style`对应值                             |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 #### Custom command shell
 
@@ -3330,13 +3325,13 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters but wildcards are not supported
+command = "echo foo" # shows output of command
+files = ["foo"] # can specify filters but wildcards are not supported
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"]  # filters *.pst files
+extensions = ["pst"] # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
