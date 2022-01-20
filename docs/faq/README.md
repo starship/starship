@@ -63,8 +63,7 @@ prompt, for example the version of a program or the current git status. To make
 sure starship doesn't hang while trying to execute these commands we set a time
 limit, if a command takes longer than this limit starship will stop the
 execution of the command and output the above warning, this is expected
-behaviour. This time limit is configurable using the [`command_timeout`
-key](/config/#prompt) so if you want you can increase the time limit. You can
+behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can
 also follow the debugging steps below to see which command is being slow and
 see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to
 `error` to hide these warnings.
