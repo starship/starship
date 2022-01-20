@@ -19,8 +19,11 @@ jobs:
   # If this is not a Crowdin PR, block changes to translated documentation
   block-crowdin:
     name: Block Translated Changes
-    uses: xalvarez/prevent-file-change-action@v1.2.0
-    if: ${{ env.GITHUB_HEAD_REF != 'i18n_master' }}
-    with:
-      githubToken: ${{ secrets.GITHUB_TOKEN }}
-      pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prevent File Change
+        uses: xalvarez/prevent-file-change-action@v1.2.0
+        if: ${{ env.GITHUB_HEAD_REF != 'i18n_master' }}
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
