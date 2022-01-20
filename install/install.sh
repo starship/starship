@@ -41,7 +41,7 @@ has() {
 }
 
 # Make sure user is not using zsh or non-POSIX-mode bash, which can cause issues
-check_posix_shell() {
+verify_shell_is_posix_or_exit() {
   if [ -n "${ZSH_VERSION+x}" ]; then
     error "Running installation script with \`zsh\` is known to cause errors."
     error "Please use \`sh\` instead."
@@ -370,7 +370,6 @@ print_install() {
   printf "\n"
 }
 
-
 is_build_available() {
   arch="$1"
   platform="$2"
@@ -414,8 +413,8 @@ if [ -z "${BASE_URL-}" ]; then
   BASE_URL="https://github.com/starship/starship/releases"
 fi
 
-# Check that the shell is POSIX compliant before continuing to avoid errors
-check_posix_shell
+# Non-POSIX shells can break once executing code due to semantic differences
+verify_shell_is_posix_or_exit
 
 # parse argv variables
 while [ "$#" -gt 0 ]; do
