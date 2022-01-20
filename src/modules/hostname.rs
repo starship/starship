@@ -40,7 +40,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     } else {
         host.as_ref()
     };
-    let parsed = StringFormatter::new( if ssh_connection.is_none() {config.format} else {config.ssh_format}).and_then(|formatter| {
+    let parsed = StringFormatter::new(if ssh_connection.is_none() {
+        config.format
+    } else {
+        config.ssh_format
+    })
+    .and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
                 "ssh_style" if ssh_connection.is_some() => Some(Ok(config.ssh_style)),
@@ -130,7 +135,7 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
-   
+
     #[test]
     fn no_trim_at() {
         let hostname = get_hostname!();
