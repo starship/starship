@@ -95,12 +95,23 @@ cargo clippy --all-targets --all-features
 
 ## Formatting
 
-Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly), using the default configuration. Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
+Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly). Markdown and TOML files (among others) are formatted with [dprint](https://github.com/dprint/dprint). Unformatted code will fail the CI, so it is suggested that you run these tools locally.
+
+For rustfmt:
 
 ```sh
 rustup component add rustfmt
 cargo fmt
 ```
+
+For dprint:
+
+```sh
+cargo install dprint
+dprint fmt
+```
+
+Editor plugins/functionality may help you run these automatically so that you don't accidentally create a PR that fails.
 
 ## Testing
 
@@ -233,10 +244,10 @@ writing new modules low, starship provides a lot of functionality for a module,
 which requires quite a few things be done. These are listed here to help
 everyone remember what they are. Don't worry: most of them are quite simple!
 
-- [ ] Add a section to `docs/config/README.md` describing the module, and 
+- [ ] Add a section to `docs/config/README.md` describing the module, and
       its configuration options/variables (more documentation is often
       appropriate--this is a bare minimum).
-- [ ] Add the variable to the appropriate location in the "Default Prompt 
+- [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
 - [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
