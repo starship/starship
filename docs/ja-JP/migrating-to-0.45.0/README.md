@@ -109,7 +109,7 @@ v0.45.0 のリリースでは、ステータスコードがゼロでないとき
 error_symbol = "[✖](bold red)"
 ```
 
-*注意:* `character` 要素は自動的にスペースを後ろに追加するため、他の `format` 文字列とは異なり、上記の例では特にスペースを追加していません。
+_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Command Duration
 
