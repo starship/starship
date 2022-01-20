@@ -746,23 +746,6 @@ format = "via [🔰 $version](bold red) "
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/).
 By default the module will be shown if any of the following conditions are met:
-<<<<<<< .merge_file_DJdslb
-
-- The current directory contains a `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
-
-### Options
-
-| Option              | Default                                      | Description                                                               |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                      | A format string representing the symbol of Deno                           |
-| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
-| `detect_files`      | `["mod.ts", "mod.js", "deps.ts", "deps.js"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                                 |
-| `style`             | `"green bold"`                               | The style for the module.                                                 |
-| `disabled`          | `false`                                      | Disables the `deno` module.                                               |
-=======
 - The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
 ### Options
@@ -777,7 +760,6 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_folders`    | `[]`                                                                    | Which folders should trigger this module.                                 |
 | `style`             | `"green bold"`                                                          | The style for the module.                                                 |
 | `disabled`          | `false`                                                                 | Disables the `deno` module.                                               |
->>>>>>> .merge_file_OHq5lH
 
 ### Variables
 
@@ -812,20 +794,6 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-<<<<<<< .merge_file_DJdslb
-| Option              | Default                                            | Description                                                                            |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.        |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in.       |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                             |
-| `style`             | `"bold cyan"`                                      | The style for the module.                                                              |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                       |
-| `read_only`         | `"🔒"`                                             | The symbol indicating current directory is read only.                                  |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                                    |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                      |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
-=======
 | Option              | Default                                            | Description                                                                      |
 | ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.  |
@@ -839,7 +807,6 @@ it would have been `nixpkgs/pkgs`.
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.|
 | `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                            |
 | `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
->>>>>>> .merge_file_OHq5lH
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -2978,19 +2945,6 @@ This module is not supported on nu shell.
 
 ### Variables
 
-<<<<<<< .merge_file_DJdslb
-| Variable       | Example | Description                                                                                 |
-| -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
-| int            | `127`   | The exit code of the last command                                                           |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
-| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbol         |         | Mirrors the value of option `symbol`                                                        |
-| style\*        |         | Mirrors the value of option `style`                                                         |
-=======
 | Variable                | Example | Description                                                             |
 | ----------------------- | ------- | ----------------------------------------------------------------------- |
 | status                  | `127`   | The exit code of the last command                                       |
@@ -3003,7 +2957,6 @@ This module is not supported on nu shell.
 | pipestatus              |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
 | symbol                  |         | Mirrors the value of option `symbol`                                    |
 | style\*                 |         | Mirrors the value of option `style`                                     |
->>>>>>> .merge_file_OHq5lH
 
 \*: This variable can only be used as a part of a style string
 
