@@ -109,7 +109,7 @@ Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true
 error_symbol = "[✖](bold red)"
 ```
 
-*Note:* L'élément `character` est automatiquement suivi d'un espace, donc à la différence des autres valeurs `format`, nous n'en ajoutons pas dans les exemples précédents.
+_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Temps d'exécution
 
