@@ -56,31 +56,31 @@ Se você está tendo um erro como "_version 'GLIBC_2.18' not found (required by 
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## Porque eu vejo alertas de `Executing command "..." timed out.`?
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout` key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando o [`command_timeout` key](/config/#prompt) então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
 
 ## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
 Se você vê símbolos que não reconhece você pode usar `starship explain` para exibir os módulos que estão sendo mostrados no momento.
 
-## Starship is doing something unexpected, how can I debug it?
+## O Starship esta fazendo algo inesperado, como eu posso debugar?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
-
-```sh
-env STARHIP_LOG=trace starship module rust
-```
-
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+Você pode ativar os logs de debug usando a variavel de ambiente `STARSHIP_LOG`. Este logs podem ser bastantes verboso então é bastante útil usar o comando `module` se você esta tentando debugar um modulo em particular, por exemplo, se você esta tentando debugar o modulo `rust` você pode executar o seguinte comando para rastrear logs e saídas do modulo.
 
 ```sh
-env STARHIP_LOG=trace starship timings
+env STARSHIP_LOG=trace starship module rust
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+Se o starship começa a ficar lento você pode tentar usar o comando `timings` para ver se tem um modulo ou comando para culpar.
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+```sh
+env STARSHIP_LOG=trace starship timings
+```
+
+Isto vai retornar o rastreamento do log e um detalhamento de todos os módulos que levam mais que 1ms para executar ou produzir alguma saída.
+
+Finalmente se você quer procurar um bug você pode usar o comando `bug-report` para criar uma issue no Github.
 
 ```sh
 starship bug-report
@@ -117,6 +117,6 @@ Se o Starship foi instalando usando algum gerenciador de pacotes, por favor cons
 Se o Starship foi instalado usando o script de instalação, o comando abaixo irá remover o binário:
 
 ```sh
-# Localiza e deleta o binario do starship
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```

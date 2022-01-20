@@ -75,6 +75,22 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
@@ -252,7 +268,7 @@
 
    #### Elvish
 
-   **Atenção** Apenas a versão v0.15 ou superior do elvish é suportada. Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
+   **Atenção** Apenas a versão elvish v0.17 ou superior é suportada. Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -283,9 +299,20 @@
    ```
 
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **Atenção** Isto vai mudar no futuro. Apenas a versão v0.33 do nu ou superior é suportada. Adicione o seguinte no seu arquivo de configuração do nu. Você pode verificar o local deste arquivo rodando `config path` in nu.
+   **Warning** This will change in the future. Apenas a versão v0.33 do nu ou superior é suportada. Add the following to your nu config file. Você pode verificar o local deste arquivo rodando `config path` in nu.
 
    ```toml
    startup = [

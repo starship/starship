@@ -13,8 +13,8 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 add_newline = true
 
 # Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -24,13 +24,19 @@ disabled = true
 You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
-export STARSHIP_CONFIG=~/.starship/config.toml
+export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
 Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
 
 ```powershell
-$ENV:STARSHIP_CONFIG = "$HOME\.starship\config.toml"
+$ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
+```
+
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
 ### Logging
@@ -48,13 +54,19 @@ Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
+Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+
+```lua
+os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
+```
+
 ### Terminology
 
 **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via ` in "nodejs") and an empty space as a suffix.
+By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
 ### Format Strings
 
@@ -85,7 +97,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 For example:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘ ` followed by the content of variable `version`, with bold text colored green.
+- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### Style Strings
@@ -109,7 +121,7 @@ For example:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$all` is a shortcut for `\[$a$b\] `, `($all)` will show nothing only if `$a` and `$b` are both `None`.
+- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `(\[$a$b\] )`.
 
 #### Special characters
@@ -251,7 +263,7 @@ modules you explicitly add to the format will not be duplicated. Eg.
 
 ```toml
 # Move the directory to the second line
-format="$all$directory$character"
+format = "$all$directory$character"
 ```
 
 ## AWS
@@ -293,7 +305,7 @@ date is read from the `AWSUME_EXPIRATION` env var.
 | symbol   |                  | Mirrors the value of option `symbol`        |
 | style\*  |                  | Mirrors the value of option `style`         |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -342,12 +354,12 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Options
 
-| Variable          | Default                                  | Description                                |
-| ----------------- | ---------------------------------------- | ------------------------------------------ |
-| `format`          | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`          | `"ﴃ "`                                   | The symbol used in the format.             |
-| `style`           | `"blue bold"`                            | The style used in the format.              |
-| `disabled`        | `true`                                  | Disables the `azure` module.               |
+| Variable   | Default                                  | Description                                |
+| ---------- | ---------------------------------------- | ------------------------------------------ |
+| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
+| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `style`    | `"blue bold"`                            | The style used in the format.              |
+| `disabled` | `true`                                   | Disables the `azure` module.               |
 
 ### Example
 
@@ -417,17 +429,16 @@ The `display` option is an array of the following table.
 #### Example
 
 ```toml
-[[battery.display]]  # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]]  # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
-
 ```
 
 ## Character
@@ -452,7 +463,7 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`vicmd_symbol` is only supported in fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -532,7 +543,7 @@ the module will be activated if any of the following conditions are met:
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ## COBOL / GNUCOBOL
 
@@ -563,7 +574,7 @@ By default, the module will be shown if any of the following conditions are met:
 | symbol   |            | Mirrors the value of option `symbol` |
 | style\*  |            | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ## Command Duration
 
@@ -597,7 +608,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ::: tip
 
-Showing desktop notifications requires starship to be built with `rust-notify` support. You check if your starship
+Showing desktop notifications requires starship to be built with `notify-rust` support. You check if your starship
 supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
 
 :::
@@ -609,7 +620,7 @@ supports notifications by running `STARSHIP_LOG=debug starship module cmd_durati
 | duration | `16m40s` | The time it took to execute the command |
 | style\*  |          | Mirrors the value of option `style`     |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -650,7 +661,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol      |              | Mirrors the value of option `symbol` |
 | style\*     |              | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -690,7 +701,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -731,7 +742,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -841,7 +852,7 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 | path     | `"D:/Projects"`       | The current directory path          |
 | style\*  | `"black bold dimmed"` | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -866,7 +877,7 @@ the context in use).
 | Option              | Default                                                       | Description                                                                       |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$context]($style) "`                            | The format for the module.                                                        |
-| `symbol`            | `"🐳 "`                                                       | The symbol used before displaying the Docker context.                             |
+| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
 | `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
 | `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
 | `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
@@ -882,7 +893,7 @@ the context in use).
 | symbol   |                | Mirrors the value of option `symbol` |
 | style\*  |                | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -926,7 +937,7 @@ when there is a csproj file in the current directory.
 
 | Option              | Default                                                                                                 | Description                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                          | The format for the module.                                                |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                  |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
@@ -945,7 +956,7 @@ when there is a csproj file in the current directory.
 | symbol   |                  | Mirrors the value of option `symbol`                               |
 | style\*  |                  | Mirrors the value of option `style`                                |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -971,7 +982,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
 | `version_format`    | `"v${raw}"`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                   | The symbol used before displaying the version of Elixir/Erlang.           |
+| `symbol`            | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `["mix.exs"]`                                             | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                      | Which folders should trigger this modules.                                |
@@ -987,7 +998,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol      |         | Mirrors the value of option `symbol` |
 | style\*     |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1030,7 +1041,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1082,7 +1093,7 @@ default = "unknown user"
 | symbol    |                                             | Mirrors the value of option `symbol`       |
 | style\*   | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1135,7 +1146,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1164,7 +1175,7 @@ other modules.
 
 ```toml
 # ~/.config/starship.toml
-format="AA $fill BB $fill CC"
+format = "AA $fill BB $fill CC"
 
 [fill]
 symbol = "-"
@@ -1175,7 +1186,6 @@ Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
-
 ```
 
 ## Google Cloud (`gcloud`)
@@ -1188,7 +1198,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | Option           | Default                                                  | Description                                                     |
 | ---------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
 | `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️ "`                                                  | The symbol used before displaying the current GCP profile.      |
+| `symbol`         | `"☁️ "`                                                   | The symbol used before displaying the current GCP profile.      |
 | `region_aliases` |                                                          | Table of region aliases to display in addition to the GCP name. |
 | `style`          | `"bold blue"`                                            | The style for the module.                                       |
 | `disabled`       | `false`                                                  | Disables the `gcloud` module.                                   |
@@ -1205,7 +1215,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | symbol   |               | Mirrors the value of option `symbol`                               |
 | style\*  |               | Mirrors the value of option `style`                                |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -1267,7 +1277,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Mirrors the value of option `symbol`                                                                   |
 | style\*       |          | Mirrors the value of option `style`                                                                    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1303,7 +1313,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash     | `b703eb3` | The current git commit hash         |
 | style\*  |           | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1346,7 +1356,7 @@ that information will be shown too.
 | progress_total   | `2`        | The total operation progress        |
 | style\*          |            | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1389,7 +1399,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1443,7 +1453,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*        | Mirrors the value of option `style`                                                                           |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 The following variables can be used in `diverged`:
 
@@ -1523,7 +1533,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1563,7 +1573,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1591,12 +1601,12 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable | Example    | Description                          |
-| -------- | ---------- | ------------------------------------ |
-| hostname | `computer` | The hostname of the computer         |
-| style\*  |            | Mirrors the value of option `style`  |
+| Variable | Example    | Description                         |
+| -------- | ---------- | ----------------------------------- |
+| hostname | `computer` | The hostname of the computer        |
+| style\*  |            | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1605,7 +1615,7 @@ The `hostname` module shows the system hostname.
 
 [hostname]
 ssh_only = false
-format =  "on [$hostname](bold red) "
+format = "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -1627,7 +1637,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Which extensions should trigger this module.                              |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
-| `symbol`            | `"☕ "`                                                                                                   | A format string representing the symbol of Java                           |
+| `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
 | `style`             | `"red dimmed"`                                                                                            | The style for the module.                                                 |
 | `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
 
@@ -1639,7 +1649,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1704,7 +1714,7 @@ then the module will also show when there are 0 jobs running.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1747,7 +1757,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1787,7 +1797,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |           | Mirrors the value of option `symbol` |
 | style\*  |           | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1839,7 +1849,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | symbol    |                      | Mirrors the value of option `symbol`     |
 | style\*   |                      | Mirrors the value of option `style`      |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1930,7 +1940,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -1960,7 +1970,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ----------- | ---------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
 | `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | The format for the module.                               |
-| `symbol`    | `"🐏"`                                         | The symbol used before displaying the memory usage.      |
+| `symbol`    | `"🐏"`                                          | The symbol used before displaying the memory usage.      |
 | `style`     | `"bold dimmed white"`                          | The style for the module.                                |
 | `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
 
@@ -1972,11 +1982,11 @@ To enable it, set `disabled` to `false` in your configuration file.
 | ram_pct      | `48%`         | The percentage of the current system memory.                       |
 | swap\*\*     | `1GiB/4GiB`   | The swap memory size of the current system swap memory file.       |
 | swap_pct\*\* | `77%`         | The swap memory percentage of the current system swap memory file. |
-| symbol       | `🐏`          | Mirrors the value of option `symbol`                               |
+| symbol       | `🐏`           | Mirrors the value of option `symbol`                               |
 | style\*      |               | Mirrors the value of option `style`                                |
 
-\*: This variable can only be used as a part of a style string
-\*\*: The SWAP file information is only displayed if detected on the current system
+*: This variable can only be used as a part of a style string
+*\*: The SWAP file information is only displayed if detected on the current system
 
 ### Example
 
@@ -2013,7 +2023,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2057,7 +2067,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2094,7 +2104,7 @@ The module will be shown when inside a nix-shell environment.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2142,7 +2152,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |            | Mirrors the value of option `symbol` |
 | style\*  |            | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2190,7 +2200,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol           |              | Mirrors the value of option `symbol`                              |
 | style\*          |              | Mirrors the value of option `style`                               |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2226,7 +2236,7 @@ to fetch the current project in use.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2287,7 +2297,7 @@ package, and shows its current version. The module currently supports `npm`, `ni
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2315,7 +2325,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐪 "`                                                                                                  | The symbol used before displaying the version of Perl                     |
+| `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl                     |
 | `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                                 |
@@ -2354,7 +2364,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐘 "`                              | The symbol used before displaying the version of PHP.                     |
+| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                     |
 | `detect_extensions` | `["php"]`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `["composer.json", ".php-version"]`  | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
@@ -2369,7 +2379,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2415,7 +2425,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |            | Mirrors the value of option `symbol` |
 | style\*  |            | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2435,7 +2445,6 @@ format = "[🛥 ($version )$stack]($style) "
 [pulumi]
 symbol = "🛥 "
 format = "[$symbol$stack]($style) "
-
 ```
 
 ## PureScript
@@ -2467,7 +2476,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2504,7 +2513,7 @@ By default the module will be shown if any of the following conditions are met:
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                    | The format for the module.                                                             |
 | `version_format`     | `"v${raw}"`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
-| `symbol`             | `"🐍 "`                                                                                                      | A format string representing the symbol of Python                                      |
+| `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv `                                                                                                     | Prefix before pyenv version display, only used if pyenv is used                        |
@@ -2537,7 +2546,7 @@ Python version 2, see example below.
 | Variable     | Example         | Description                                |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `"v3.8.1"`      | The version of `python`                    |
-| symbol       | `"🐍 "`         | Mirrors the value of option `symbol`       |
+| symbol       | `"🐍 "`          | Mirrors the value of option `symbol`       |
 | style        | `"yellow bold"` | Mirrors the value of option `style`        |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `"venv"`        | The current `virtualenv` name              |
@@ -2635,7 +2644,7 @@ The module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🔺 "`                              | A format string representing the symbol of Red.                           |
+| `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.                           |
 | `detect_extensions` | `["red"]`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
@@ -2650,7 +2659,7 @@ The module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2679,7 +2688,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💎 "`                              | A format string representing the symbol of Ruby.                          |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.                          |
 | `detect_extensions` | `["rb"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
@@ -2695,7 +2704,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2720,7 +2729,7 @@ The module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦀 "`                              | A format string representing the symbol of Rust                           |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust                           |
 | `detect_extensions` | `["rs"]`                             | Which extensions should trigger this module.                              |
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
@@ -2735,7 +2744,7 @@ The module will be shown if any of the following conditions are met:
 | symbol   |                   | Mirrors the value of option `symbol` |
 | style\*  |                   | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2776,7 +2785,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2810,6 +2819,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
@@ -2823,7 +2833,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | indicator |         | Mirrors the value of `indicator` for currently used shell. |
 | style\*   |         | Mirrors the value of option `style`.                       |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Examples
 
@@ -2862,7 +2872,7 @@ set to a number and meets or exceeds the specified threshold.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2897,7 +2907,7 @@ and `$SINGULARITY_NAME` is set.
 | symbol   |              | Mirrors the value of option `symbol` |
 | style\*  |              | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -2958,12 +2968,11 @@ This module is not supported on nu shell.
 | symbol                  |         | Mirrors the value of option `symbol`                                    |
 | style\*                 |         | Mirrors the value of option `style`                                     |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
 ```toml
-
 # ~/.config/starship.toml
 
 [status]
@@ -2972,7 +2981,6 @@ symbol = "🔴"
 format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
-
 ```
 
 ## Sudo
@@ -2989,27 +2997,26 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option         | Default                 | Description                                                  |
-| -------------- | ----------------------- | ------------------------------------------------------------ |
-| `format`       | `[as $symbol]($style)"` | The format of the module                                     |
-| `symbol`       | `"🧙 "`                 | The symbol displayed when credentials are cached             |
-| `style`        | `"bold blue"`           | The style for the module.                                    |
-| `allow_windows`| `false`                 | Since windows has no default sudo, default is disabled.      |
-| `disabled`     | `true`                  | Disables the `sudo` module.                                  |
+| Option          | Default                 | Description                                             |
+| --------------- | ----------------------- | ------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | The format of the module                                |
+| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
+| `style`         | `"bold blue"`           | The style for the module.                               |
+| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
+| `disabled`      | `true`                  | Disables the `sudo` module.                             |
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\*   |         | Mirrors the value of option `style`  |
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
 ```toml
-
 # ~/.config/starship.toml
 
 [sudo]
@@ -3056,7 +3063,7 @@ The module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -3089,7 +3096,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💠"`                               | A format string shown before the terraform workspace.                     |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.                     |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
@@ -3105,7 +3112,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\*   |            | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -3161,7 +3168,7 @@ Manually setting `time_format` will override the `use_12hr` setting.
 | time     | `13:08:10` | The current time.                   |
 | style\*  |            | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -3252,7 +3259,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol   |                  | Mirrors the value of option `symbol` |
 | style\*  |                  | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -3322,7 +3329,7 @@ The module will be shown only if a repository is currently in use.
 | symbol   |                                             | Mirrors the value of option `symbol` |
 | style\*  | `black bold dimmed`                         | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -3361,7 +3368,7 @@ The module will be shown if any of the following conditions are met:
 | symbol   |          | Mirrors the value of option `symbol` |
 | style\*  |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
@@ -3443,7 +3450,7 @@ Format strings can also contain shell specific prompt sequences, e.g.
 | symbol   | Mirrors the value of option `symbol`   |
 | style\*  | Mirrors the value of option `style`    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 #### Custom command shell
 
@@ -3493,13 +3500,13 @@ with shell details and starship configuration if you hit such scenario.
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo"  # shows output of command
-files = ["foo"]       # can specify filters but wildcards are not supported
+command = "echo foo" # shows output of command
+files = ["foo"] # can specify filters but wildcards are not supported
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"]  # filters *.pst files
+extensions = ["pst"] # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```

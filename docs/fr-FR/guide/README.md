@@ -63,7 +63,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-es.png"
-      alt="Espagnol"
+      alt="Español"
  /></a>
   &nbsp;
   <a
@@ -72,6 +72,22 @@
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-fr.png"
       alt="Français"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
  /></a>
   &nbsp;
   <a
@@ -252,7 +268,7 @@
 
    #### Elvish
 
-   **Avertissement** Seul elvish v0.15 ou supérieur est pris en charge. Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
+   **Attention** Seul elvish v0.17 et supérieur est pris en charge. Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -283,9 +299,20 @@
    ```
 
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **Avertissement** Cela changera dans le futur. Seule la version nu v0.33 ou supérieure est prise en charge. Ajoutez ce qui suit à votre fichier de configuration 'nu'. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
+   **Warning** This will change in the future. Seule la version nu v0.33 ou supérieure est prise en charge. Add the following to your nu config file. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
 
    ```toml
    startup = [
