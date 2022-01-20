@@ -147,9 +147,9 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ```toml
    startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
+     "mkdir ~/.cache/starship",
+     "starship init nu | save ~/.cache/starship/init.nu",
+     "source ~/.cache/starship/init.nu",
    ]
    prompt = "starship_prompt"
    ```
