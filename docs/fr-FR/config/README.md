@@ -288,7 +288,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | symbol    |                  | Reflète la valeur de l'option `symbol`         |
 | style\* |                  | Reflète la valeur de l'option `style`          |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemples
 
@@ -520,7 +520,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ## COBOL / GNUCOBOL
 
@@ -550,7 +550,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ## Temps d'exécution
 
@@ -589,7 +589,7 @@ Showing desktop notifications requires starship to be built with `notify-rust` s
 | duration  | `16m40s` | Le temps nécessaire pour exécuter la commande |
 | style\* |          | Reflète la valeur de l'option `style`         |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -630,7 +630,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | symbol        |              | Reflète la valeur de l'option `symbol` |
 | style\*     |              | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -669,7 +669,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -709,7 +709,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -808,7 +808,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | path      | `"D:/Projects"`       | Le chemin du répertoire courant       |
 | style\* | `"black bold dimmed"` | Reflète la valeur de l'option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -845,7 +845,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | Reflète la valeur de l'option `symbol` |
 | style\* |                | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -900,7 +900,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | Reflète la valeur de l'option `symbol`                             |
 | style\* |                  | Reflète la valeur de l'option `style`                              |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -941,7 +941,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | Reflète la valeur de l'option `symbol` |
 | style\*   |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -983,7 +983,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1032,7 +1032,7 @@ default = "unknown user"
 | symbol    |                                          | Reflète la valeur de l'option `symbol`           |
 | style\* | `black bold dimmed`                      | Reflète la valeur de l'option `style`            |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1084,7 +1084,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1150,7 +1150,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | Reflète la valeur de l'option `symbol`                                        |
 | style\* |               | Reflète la valeur de l'option `style`                                         |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemples
 
@@ -1212,7 +1212,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Reflète la valeur de l'option `symbol`                                                                               |
 | style\*     |          | Reflète la valeur de l'option `style`                                                                                |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1248,7 +1248,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash      | `b703eb3` | Le hash du commit git actuel          |
 | style\* |           | Reflète la valeur de l'option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1288,7 +1288,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | Progression maximale de l'opération   |
 | style\*        |            | Reflète la valeur de l'option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1329,7 +1329,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1382,7 +1382,7 @@ The following variables can be used in `format`:
 | `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation.                  |
 | style\*      | Reflète la valeur de l'option `style`                                                                         |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 The following variables can be used in `diverged`:
 
@@ -1461,7 +1461,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1500,7 +1500,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1532,7 +1532,7 @@ The `hostname` module shows the system hostname.
 | hostname  | `computer` | The hostname of the computer          |
 | style\* |            | Reflète la valeur de l'option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1574,7 +1574,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1628,7 +1628,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1670,7 +1670,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1709,7 +1709,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1757,7 +1757,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | Reflète la valeur de l'option `symbol`           |
 | style\* |                      | Reflète la valeur de l'option `style`            |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1843,7 +1843,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1924,7 +1924,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -1967,7 +1967,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2003,7 +2003,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2050,7 +2050,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2097,7 +2097,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Reflète la valeur de l'option `symbol`                            |
 | style\*        |              | Reflète la valeur de l'option `style`                             |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2130,7 +2130,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2185,7 +2185,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2265,7 +2265,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2310,7 +2310,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2360,7 +2360,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2529,7 +2529,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2573,7 +2573,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2612,7 +2612,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Reflète la valeur de l'option `symbol` |
 | style\* |                   | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2652,7 +2652,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2699,7 +2699,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
 | style\* |        | Reflète la valeur de l'option `style`.                     |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemples
 
@@ -2737,7 +2737,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2771,7 +2771,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | Reflète la valeur de l'option `symbol` |
 | style\* |              | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2828,7 +2828,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | Reflète la valeur de l'option `symbol`                                                      |
 | style\*      |         | Reflète la valeur de l'option `style`                                                       |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2870,7 +2870,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2920,7 +2920,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -2968,7 +2968,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -3021,7 +3021,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 | time      | `13:08:10` | The current time.                     |
 | style\* |            | Reflète la valeur de l'option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -3108,7 +3108,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | Reflète la valeur de l'option `symbol` |
 | style\* |                  | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -3176,7 +3176,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                                 | Reflète la valeur de l'option `symbol` |
 | style\* | `black bold dimmed`                             | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -3214,7 +3214,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
@@ -3288,7 +3288,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | symbol    | Reflète la valeur de l'option `symbol` |
 | style\* | Reflète la valeur de l'option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Cette variable peut uniquement être utilisée dans une chaine de style
 
 #### Commandes shell personnalisées
 
