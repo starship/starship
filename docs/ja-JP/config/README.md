@@ -646,7 +646,6 @@ format = "[$symbol$environment](dimmed green) "
 
 The `container` module displays a symbol and container name, if inside a container.
 
-
 ### オプション
 
 | オプション      | デフォルト                                | 説明                                        |
@@ -656,7 +655,6 @@ The `container` module displays a symbol and container name, if inside a contain
 | `format`   | "[$symbol \\[$name\\]]($style) " | moduleのフォーマットです。                          |
 | `disabled` | `false`                              | Disables the `container` module.          |
 
-
 ### 変数
 
 | 変数        | 設定例                 | 説明                        |
@@ -665,7 +663,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | symbol    |                     | オプション `記号` の値をミラーする       |
 | style\* |                     | オプション `style` の値をミラーする    |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### 設定例
 
