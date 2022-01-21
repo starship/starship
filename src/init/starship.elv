@@ -1,5 +1,5 @@
 set-env STARSHIP_SHELL "elvish"
-set-env STARSHIP_SESSION_KEY (::STARSHIP:: session)
+set-env STARSHIP_SESSION_KEY (to-string (randint 10000000000000 10000000000000000))
 
 # Define Hooks
 var cmd-status-code = 0
