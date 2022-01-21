@@ -17,6 +17,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cmd_duration",
     "cobol",
     "conda",
+    "container",
     "crystal",
     "dart",
     "deno",
