@@ -1,9 +1,10 @@
+---
 name: Format + Docs Workflow
 on:
   push:
-    paths: ["docs/**","**.md","**.toml","**.js","**.json","**.ts"]
+    paths: ["docs/**", "**.md", "**.toml", "**.js", "**.json", "**.ts"]
   pull_request:
-    paths: ["docs/**","**.md","**.toml","**.js","**.json","**.ts"]
+    paths: ["docs/**", "**.md", "**.toml", "**.js", "**.json", "**.ts"]
 
 jobs:
   # Run the dprint code formatter for documentation
@@ -20,6 +21,7 @@ jobs:
   block-crowdin:
     name: Block Translated Changes
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Prevent File Change
         uses: xalvarez/prevent-file-change-action@v1.2.0
