@@ -432,6 +432,33 @@ mod tests {
         remote_dir.close()
     }
 
+    #[test]
+    fn test_works_with_worktree_config() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["worktree", "add", "test"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["sparse-checkout", "init"])
+            .current_dir(repo_dir.path().join("test"))
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .path(&repo_dir.path().join("test"))
+            .collect();
+
+        let expected = Some(format!(
+            "on {} ",
+            Color::Purple.bold().paint(format!("\u{e0a0} {}", "test")),
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
     // This test is not possible until we switch to `git status --porcelain`
     // where we can mock the env for the specific git process. This is because
     // git2 does not care about our mocking and when we set the real `GIT_DIR`
