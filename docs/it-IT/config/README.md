@@ -199,6 +199,7 @@ $docker_context\
 $package\
 $cmake\
 $cobol\
+$container\
 $dart\
 $deno\
 $dotnet\
@@ -639,6 +640,40 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 [conda]
 format = "[$symbol$environment](dimmed green) "
+```
+
+## Container
+
+The `container` module displays a symbol and container name, if inside a container.
+
+
+### Opzioni
+
+| Opzione    | Default                              | Descrizione                               |
+| ---------- | ------------------------------------ | ----------------------------------------- |
+| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                  | Lo stile per il modulo.                   |
+| `format`   | "[$symbol \\[$name\\]]($style) " | The format for the module.                |
+| `disabled` | `false`                              | Disables the `container` module.          |
+
+
+### Variables
+
+| Variable  | Esempio             | Descrizione                          |
+| --------- | ------------------- | ------------------------------------ |
+| name      | `fedora-toolbox:35` | The name of the container            |
+| symbol    |                     | Mirrors the value of option `symbol` |
+| style\* |                     | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[container]
+format = "[$symbol \\[$name\\]]($style) "
 ```
 
 ## Crystal
@@ -2174,8 +2209,8 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                   |
 | `version_format`  | `"v${raw}"`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `style`           | `"bold 208"`                      | Lo stile per il modulo.                                                                      |
-| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.       |
-| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                              |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                    |
+| `disabled`        | `false`                           | Disables the `package` module.                                                               |
 
 ### Variables
 
@@ -3018,7 +3053,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3132,12 +3167,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                                 |
 | `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
 | `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                 |
 
 ### Variables
 
@@ -3270,7 +3305,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `descrizione` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
