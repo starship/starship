@@ -180,7 +180,7 @@ The default `format` is used to define the format of the prompt, if empty or no 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Ce qui est équivalent à
 format = """
 $username\
 $hostname\
