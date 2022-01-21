@@ -555,7 +555,7 @@ expiration={}
             )
             .collect();
 
-        // In principle, "30m" should be exact However, bad luck in scheduling
+        // In principle, "30m" should be correct. However, bad luck in scheduling
         // on shared runners may delay it. Allow for up to 2 seconds of delay.
         let possible_values = ["30m", "29m59s", "29m58s"];
         let possible_values = possible_values.map(|duration| {
