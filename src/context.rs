@@ -257,6 +257,10 @@ impl<'a> Context<'a> {
     /// Will lazily get repo root and branch when a module requests it.
     pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
         self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
+            // git2 matches the extensions in normalized lowercase versions
+            // In order to support `worktreeConfig` we must provide `worktreeconfig`
+            // SAFETY: OnceCell makes sure that this is called only once and never in parallel
+            unsafe { git2::opts::set_extensions(&["worktreeconfig"]) }?;
             let repository = if env::var("GIT_DIR").is_ok() {
                 Repository::open_from_env()
             } else {
