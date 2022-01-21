@@ -646,7 +646,6 @@ format = "[$symbol$environment](dimmed green) "
 
 The `container` module displays a symbol and container name, if inside a container.
 
-
 ### Options
 
 | Option     | Default                              | Description                               |
@@ -656,7 +655,6 @@ The `container` module displays a symbol and container name, if inside a contain
 | `format`   | "[$symbol \\[$name\\]]($style) " | The format for the module.                |
 | `disabled` | `false`                              | Disables the `container` module.          |
 
-
 ### Variables
 
 | گۆڕاو     | نموونە              | Description                          |
@@ -665,7 +663,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | symbol    |                     | Mirrors the value of option `symbol` |
 | style\* |                     | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### نموونە
 
