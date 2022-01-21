@@ -646,7 +646,6 @@ format = "[$symbol$environment](dimmed green) "
 
 The `container` module displays a symbol and container name, if inside a container.
 
-
 ### Các tuỳ chọn
 
 | Tuỳ chọn   | Mặc định                             | Mô tả                                     |
@@ -656,7 +655,6 @@ The `container` module displays a symbol and container name, if inside a contain
 | `format`   | "[$symbol \\[$name\\]]($style) " | Định dạng cho module.                     |
 | `disabled` | `false`                              | Disables the `container` module.          |
 
-
 ### Các biến
 
 | Biến      | Ví dụ               | Mô tả                            |
@@ -665,7 +663,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | symbol    |                     | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |                     | Giá trị ghi đè của `style`       |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Ví dụ
 
