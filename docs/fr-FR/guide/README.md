@@ -155,7 +155,7 @@
 - **Universel:** fonctionne avec n'importe quel shell, sur n'importe quel système d'exploitation.
 - **Intelligent:** affiche les informations utiles en un coup d'œil.
 - **Riche en fonctionnalités:** supporte tous vos outils favoris.
-- **Facile:** rapide à installer - commencez à l'utiliser en quelques minutes.
+- **Facile:** rapide à installer – commencez à l'utiliser en quelques minutes.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Consultez la documentation de Starship&nbsp;&nbsp;▶</strong></a>
@@ -169,16 +169,16 @@
 
 - Une police [Nerd Font](https://www.nerdfonts.com/) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Étape 1. Installer Starship
 
-Select your operating system from the list below to view installation instructions:
+Sélectionnez votre système d'exploitation dans la liste ci-dessous pour voir les instructions d'installation:
 
 <details>
 <summary>Android</summary>
 
 Install Starship using any of the following package managers:
 
-| Repository                                                                        | Instructions           |
+| Dépôt                                                                             | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 
 Install Starship using any of the following package managers:
 
-| Distribution | Repository                                               | Instructions                      |
+| Distribution | Dépôt                                                    | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
 | **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -208,7 +208,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Distribution       | Dépôt                                                                                           | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -236,7 +236,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
 Alternatively, install Starship using any of the following package managers:
 
-| Repository                                               | Instructions                            |
+| Dépôt                                                    | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -250,7 +250,7 @@ Alternatively, install Starship using any of the following package managers:
 
 Install Starship using any of the following package managers:
 
-| Repository                                                                       | Instructions                            |
+| Dépôt                                                                            | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
@@ -261,7 +261,7 @@ Install Starship using any of the following package managers:
 
 ### Étape 2. Configurer votre shell pour Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous :
 
 <details>
 <summary>Bash</summary>
@@ -277,7 +277,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Créez un fichier avec le chemin `%LocalAppData%\clink\starship.lua` et le contenu suivant:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -301,7 +301,7 @@ Note : Seul Elvish v0.17+ est supporté
 <details>
 <summary>Fish</summary>
 
-Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
+Ajoutez le code suivant à la fin de `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -323,7 +323,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Ajoutez le code suivant à la fin de votre configuration de Nushell (trouvez-la en exécutant `config path`) :
 
 ```toml
 startup = [
@@ -339,7 +339,7 @@ prompt = "starship_prompt"
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Ajoutez ce qui suit à la fin de votre configuration PowerShell (trouvez-la en exécutant `$PROFILE`) :
 
 ```powershell
 Invoke-Expression (&starship init powershell)
