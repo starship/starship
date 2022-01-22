@@ -122,6 +122,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
+    if context.get_env("credential_process").is_none() {
+        return None;
+    }
+
     let (aws_profile, aws_region) = get_aws_profile_and_region(context);
     if aws_profile.is_none() && aws_region.is_none() {
         return None;
@@ -193,6 +197,7 @@ mod tests {
     fn region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -206,6 +211,7 @@ mod tests {
     fn region_set_with_alias() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-southeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws.region_aliases]
                 ap-southeast-2 = "au"
@@ -221,6 +227,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -234,6 +241,7 @@ mod tests {
     fn profile_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -248,6 +256,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_VAULT", "astronauts-vault")
             .env("AWS_PROFILE", "astronauts-profile")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -262,6 +271,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWSU_PROFILE", "astronauts-awsu")
             .env("AWS_PROFILE", "astronauts-profile")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -276,6 +286,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWSUME_PROFILE", "astronauts-awsume")
             .env("AWS_PROFILE", "astronauts-profile")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -290,6 +301,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -344,12 +356,14 @@ region = us-east-1
 
 [profile astronauts]
 region = us-east-2
+credential_process = /opt/bin/awscreds-custom --username monty
 "
             .as_bytes(),
         )?;
 
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -379,6 +393,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .env("AWS_PROFILE", "astronauts")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws]
             })
@@ -397,6 +412,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -412,6 +428,7 @@ region = us-east-2
     fn profile_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -425,6 +442,7 @@ region = us-east-2
     fn region_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -439,6 +457,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$region]($style) "
@@ -457,6 +476,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$profile]($style) "
@@ -474,6 +494,7 @@ region = us-east-2
     fn region_set_with_display_profile() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$profile]($style) "
@@ -500,6 +521,7 @@ region = us-east-2
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .env(
                 "AWS_SESSION_EXPIRATION",
                 now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
@@ -549,6 +571,7 @@ expiration={}
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .env(
                 "AWS_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
@@ -575,6 +598,7 @@ expiration={}
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -605,6 +629,7 @@ expiration={}
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .env(
                 "AWS_SESSION_EXPIRATION",
                 now.to_rfc3339_opts(SecondsFormat::Secs, true),
