@@ -1624,13 +1624,14 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Option     | Default                     | Description                                                                                                                          |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`   | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
-| `style`    | `"bold dimmed green"`       | The style for the module.                                                                                                            |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Option           | Default                     | Description                                                                                                                          |
+| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`       | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
+| `container_only` | `false`                     | Only show hostname in a container.
+| `trim_at`        | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`         | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
+| `style`          | `"bold dimmed green"`       | The style for the module.                                                                                                            |
+| `disabled`       | `false`                     | Disables the `hostname` module.                                                                                                      |
 
 ### Variables
 

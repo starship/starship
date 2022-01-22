@@ -14,6 +14,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
 
+    use crate::utils::context_path;
+    let podman_env = context_path(context, "/run/.containerenv");
+    let docker_env = context_path(context, "/.dockerenv");
+
+    if config.container_only && !(podman_env.exists() || docker_env.exists()) {
+        return None;
+    }
+
     let ssh_connection = context.get_env("SSH_CONNECTION");
     if config.ssh_only && ssh_connection.is_none() {
         return None;
