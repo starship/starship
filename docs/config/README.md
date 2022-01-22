@@ -2440,13 +2440,13 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                          | Description                                                               |
-| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($username@)$stack]($style) "`     | The format string for the module.                                         |
-| `version_format`    | `"v${raw}"`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `" "`                                            | A format string shown before the Pulumi stack.                          |
-| `style`             | `"bold 5"`                                       | The style for the module.                                                 |
-| `disabled`          | `false`                                          | Disables the `pulumi` module.                                             |
+| Option           | Default                                      | Description                                                               |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                                         |
+| `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
+| `style`          | `"bold 5"`                                   | The style for the module.                                                 |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
 ### Variables
 
