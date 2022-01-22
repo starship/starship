@@ -10,6 +10,7 @@ use crate::formatter::StringFormatter;
 /// Will display the hostname if all of the following criteria are met:
 ///     - hostname.disabled is absent or false
 ///     - hostname.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - hostname.container_only is false OR the user is not in a containerized session
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
