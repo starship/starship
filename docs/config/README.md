@@ -270,21 +270,23 @@ format = "$all$directory$character"
 
 ## Ansible
 
-The `ansible` module shows the current Ansible version. This will only be displayed
-when a file with the name `ansible.cfg` is present in the current directory.
+The `ansible` module shows the current Ansible version. This will be displayed
+when a file with the name `ansible.cfg` or `galaxy-requirements.txt` is 
+present in the current directory. It will also be enabled when a directory
+named `host_vars` or `group_vars` exists in the current directory.
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `["ansible.cfg"]`                    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
-| `symbol`            | `"Ⓐ "`                              | A format string representing the symbol of Ansible.                       |
-| `style`             | `"bold white"`                       | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `julia` module.                                              |
+| Option              | Default                                      | Description                                                               |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
+| `detect_files`      | `["ansible.cfg", "galaxy-requirements.txt"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["group_vars", "host_vars"]`                | Which folders should trigger this modules.                                |
+| `symbol`            | `"Ⓐ "`                                      | A format string representing the symbol of Ansible.                       |
+| `style`             | `"bold white"`                               | The style for the module.                                                 |
+| `disabled`          | `false`                                      | Disables the `ansible` module.                                            |
 
 ### Variables
 
