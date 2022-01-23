@@ -106,6 +106,9 @@ After:
 ### Configuration
 
 ```toml
+[ansible]
+format = '\[[$symbol($version)]($style)\]'
+
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
@@ -281,6 +284,9 @@ behind = "<"
 diverged = "<>"
 renamed = "r"
 deleted = "x"
+
+[ansible]
+symbol = "ansible "
 
 [aws]
 symbol = "aws "
