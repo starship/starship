@@ -24,8 +24,8 @@ impl<'a> Default for AnsibleConfig<'a> {
             style: "bold white",
             disabled: false,
             detect_extensions: vec![],
-            detect_files: vec!["ansible.cfg"],
-            detect_folders: vec![],
+            detect_files: vec!["ansible.cfg", "galaxy-requirements.txt"],
+            detect_folders: vec!["group_vars", "host_vars"],
         }
     }
 }
