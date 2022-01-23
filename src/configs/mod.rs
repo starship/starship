@@ -3,6 +3,7 @@ use indexmap::IndexMap;
 use serde::{self, Serialize};
 use starship_module_config_derive::ModuleConfig;
 
+pub mod ansible;
 pub mod aws;
 pub mod azure;
 pub mod battery;
@@ -86,6 +87,7 @@ pub struct FullConfig<'a> {
     pub command_timeout: u64,
     pub add_newline: bool,
     // modules
+    ansible: ansible::AnsibleConfig<'a>,
     aws: aws::AwsConfig<'a>,
     azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
@@ -166,6 +168,7 @@ impl<'a> Default for FullConfig<'a> {
             command_timeout: 500,
             add_newline: true,
 
+            ansible: Default::default(),
             aws: Default::default(),
             azure: Default::default(),
             battery: Default::default(),
