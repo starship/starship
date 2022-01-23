@@ -20,7 +20,7 @@ impl <'a> Default for AnsibleConfig<'a> {
         AnsibleConfig {
             format: "via [$symbol($version )]($style) ",
             version_format: "v${raw}",
-            symbol: "💠 ",
+            symbol: "Ⓐ ",
             style: "bold white",
             disabled: false,
             detect_extensions: vec![],
