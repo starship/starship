@@ -1595,7 +1595,8 @@ The `hostname` module shows the system hostname.
 | `ssh_only`  | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
 | `trim_at`   | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`    | `"[$hostname]($style) in "` | The format for the module.                                                                                                           |
-| `ssh_style` | `"bold yellow"`             | The style for remote hostname in SSH connection.                                                                                     |
+| `ssh_format`| `"[$hostname]($ssh_style) in "` | The format for the module which use when SSH connection enabled or detected. |
+| `ssh_style` | `"bold yellow"`             | The style for remote hostname in SSH connection. Otherwise, this will fallback to default `style` if there's no ssh connection is detected                                                                                     |
 | `style`     | `"bold dimmed green"`       | The style for localhost.                                                                                                             |
 | `disabled`  | `false`                     | Disables the `hostname` module.                                                                                                      |
 
