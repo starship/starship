@@ -15,7 +15,7 @@ pub struct AnsibleConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl <'a> Default for AnsibleConfig<'a> {
+impl<'a> Default for AnsibleConfig<'a> {
     fn default() -> Self {
         AnsibleConfig {
             format: "via [$symbol($version )]($style) ",
