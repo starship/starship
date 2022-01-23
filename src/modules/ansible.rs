@@ -123,9 +123,6 @@ ansible [core 1.2.3]
     jinja version = 3.2.1
     libyaml = True";
 
-        assert_eq!(
-            parse_ansible_version(input),
-            Some("1.2.3".to_string())
-        );
+        assert_eq!(parse_ansible_version(input), Some("1.2.3".to_string()));
     }
 }
