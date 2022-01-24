@@ -118,16 +118,62 @@ fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
     }
 }
 
+fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
+    if let Some(cred_proc) = context.get_env("credential_process") {
+        return Some(cred_proc);
+    }
+
+    let contents = read_file(get_config_file_path(context)?).ok()?;
+
+    let profile_line = if let Some(aws_profile) = aws_profile {
+        format!("[{}]", aws_profile)
+    } else {
+        "[default]".to_string()
+    };
+
+    let cred_proc_line = contents
+        .lines()
+        .skip_while(|line| line != &profile_line)
+        .skip(1)
+        .take_while(|line| !line.starts_with('['))
+        .find(|line| line.starts_with("credential_process"))?;
+
+    let cred_proc = cred_proc_line.split('=').nth(1)?.trim();
+    Some(cred_proc.to_string())
+}
+
+fn get_defined_credentials(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
+    let contents = read_file(get_credentials_file_path(context)?).ok()?;
+
+    let profile_line = if let Some(aws_profile) = aws_profile {
+        format!("[{}]", aws_profile)
+    } else {
+        "[default]".to_string()
+    };
+
+    let aws_key_id_line = contents
+        .lines()
+        .skip_while(|line| line != &profile_line)
+        .skip(1)
+        .take_while(|line| !line.starts_with('['))
+        .find(|line| line.starts_with("aws_access_key_id"))?;
+    let aws_key_id = aws_key_id_line.split('=').nth(1)?.trim();
+    Some(aws_key_id.to_string())
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
 
-    if context.get_env("credential_process").is_none() {
+    let (aws_profile, aws_region) = get_aws_profile_and_region(context);
+    if aws_profile.is_none() && aws_region.is_none() {
         return None;
     }
 
-    let (aws_profile, aws_region) = get_aws_profile_and_region(context);
-    if aws_profile.is_none() && aws_region.is_none() {
+    // only display if profile has valid credentials or credential_process is defined
+    if get_credential_process(context, aws_profile.as_ref()).is_none()
+        && get_defined_credentials(context, aws_profile.as_ref()).is_none()
+    {
         return None;
     }
 
@@ -197,7 +243,6 @@ mod tests {
     fn region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -211,7 +256,6 @@ mod tests {
     fn region_set_with_alias() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-southeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws.region_aliases]
                 ap-southeast-2 = "au"
@@ -227,7 +271,6 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -324,6 +367,7 @@ mod tests {
                 "AWS_CREDENTIALS_FILE",
                 config_path.to_string_lossy().as_ref(),
             )
+            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect()
             .is_none());
 
