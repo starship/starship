@@ -1,16 +1,16 @@
 # Configuração avançada
 
-Ainda que Starship se`ja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo <code>starship.toml`. Esta página detalha algumas das configurações mais avançadas usadas em starship.
+Ainda que Starship seja um shell versátil, às vezes você precisará fazer algumas outras coisas além de editar o arquivo `starship.toml`. Esta página detalha algumas das técnicas de configuração avançadas utilizadas no starship.
 
-::: warning
+::: atenção
 
 As configurações nesta seção estão sujeitas a alterações em futuras versões do Starship.
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Cmd
+## Comandos personalizados de pré-prompt e pré-execução no Cmd
 
-Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+O Clink fornece APIs extremamente flexíveis para executar comandos pré-prompt e pré-execução em Cmd shell. É bastante simples de usar com o Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
 - To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
