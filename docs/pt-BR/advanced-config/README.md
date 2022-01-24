@@ -10,7 +10,7 @@ As configurações nesta seção estão sujeitas a alterações em futuras vers�
 
 ## Comandos personalizados de pré-prompt e pré-execução no Cmd
 
-O Clink fornece APIs extremamente flexíveis para executar comandos pré-prompt e pré-execução em Cmd shell. É bastante simples de usar com o Starship. Make the following changes to your `starship.lua` file as per your requirements:
+O Clink fornece APIs extremamente flexíveis para executar comandos pré-prompt e pré-execução em Cmd shell. É bastante simples de usar com o Starship. Faça as seguintes alterações no seu arquivo `starship.lua` conforme suas necessidades:
 
 - To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
@@ -69,7 +69,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## Alterar Título da Janela
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
@@ -127,7 +127,7 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## Ativando o Prompt Direito
 
 Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
 
@@ -180,17 +180,17 @@ continuation_prompt = "▶▶"
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
-- `bold`
-- `italic`
-- `underline`
-- `dimmed`
-- `inverted`
+- `negrito`
+- `itálico`
+- `sublinhado`
+- `escurecido`
+- `invertido`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
 - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+onde `<color>` é um especificador de cor (discutido abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, embora isso possa mudar no futuro. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
