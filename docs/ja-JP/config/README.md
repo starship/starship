@@ -2109,7 +2109,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 | オプション                     | デフォルト                                                                      | 説明                                                      |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                       |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | モジュールのフォーマット文字列。                                        |
 | `version_format`          | `"v${raw}"`                                                                | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。  |
 | `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml. |
 | `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch. |
@@ -2243,7 +2243,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | オプション               | デフォルト                                                                                                    | 説明                                                     |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                      |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | モジュールのフォーマット文字列。                                       |
 | `version_format`    | `"v${raw}"`                                                                                              | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl  |
 | `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | どの拡張子がこのモジュールをアクティブにするか                                |
@@ -2328,7 +2328,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 | オプション            | デフォルト                            | 説明                                                     |
 | ---------------- | -------------------------------- | ------------------------------------------------------ |
-| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                      |
+| `format`         | `"via [$symbol$stack]($style) "` | モジュールのフォーマット文字列。                                       |
 | `version_format` | `"v${raw}"`                      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`         | `" "`                           | A format string shown before the Pulumi stack.         |
 | `style`          | `"bold 5"`                       | モジュールのスタイルです。                                          |
@@ -2983,25 +2983,25 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                      |
+| `format`            | `"via [$symbol$workspace]($style) "` | モジュールのフォーマット文字列。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.  |
+| `symbol`            | `"💠"`                                | ワークスペースの前に表示されるフォーマット文字列。                              |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[".terraform"]`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold 105"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `terraform` module.                       |
+| `disabled`          | `false`                              | `terraform` モジュールを無効にします。                              |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                              |
-| --------- | ---------- | ------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`      |
-| workspace | `default`  | The current Terraform workspace |
-| symbol    |            | オプション `記号` の値をミラーする             |
-| style\* |            | オプション `style` の値をミラーする          |
+| 変数        | 設定例        | 説明                     |
+| --------- | ---------- | ---------------------- |
+| version   | `v0.12.24` | `terraform` のバージョン     |
+| workspace | `default`  | 現在のTerraformワークスペース    |
+| symbol    |            | オプション `記号` の値をミラーする    |
+| style\* |            | オプション `style` の値をミラーする |
 
-*: This variable can only be used as a part of a style string
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 ### 設定例
 
@@ -3037,7 +3037,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | オプション             | デフォルト                   | 説明                                                                                                                                 |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `format`          | `"at [$time]($style) "` | モジュールのフォーマット文字列。                                                                                                                   |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
