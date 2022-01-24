@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Prevent File Change
         uses: xalvarez/prevent-file-change-action@v1.2.0
-        if: ${{ env.GITHUB_HEAD_REF != 'i18n_master' }}
+        if: ${{ github.event.pull_request.head.ref != 'i18n_master' }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
