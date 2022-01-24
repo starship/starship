@@ -126,7 +126,7 @@ fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> O
     let contents = read_file(get_config_file_path(context)?).ok()?;
 
     let profile_line = if let Some(aws_profile) = aws_profile {
-        format!("[{}]", aws_profile)
+        format!("[profile {}]", aws_profile)
     } else {
         "[default]".to_string()
     };
@@ -170,7 +170,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    // only display if profile has valid credentials or credential_process is defined
+    // only display if credential_process is defined or has valid credentials
     if get_credential_process(context, aws_profile.as_ref()).is_none()
         && get_defined_credentials(context, aws_profile.as_ref()).is_none()
     {
@@ -243,6 +243,7 @@ mod tests {
     fn region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -256,6 +257,7 @@ mod tests {
     fn region_set_with_alias() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-southeast-2")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .config(toml::toml! {
                 [aws.region_aliases]
                 ap-southeast-2 = "au"
@@ -271,6 +273,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -284,7 +287,7 @@ mod tests {
     fn profile_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -299,7 +302,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_VAULT", "astronauts-vault")
             .env("AWS_PROFILE", "astronauts-profile")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -314,7 +317,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWSU_PROFILE", "astronauts-awsu")
             .env("AWS_PROFILE", "astronauts-profile")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -329,7 +332,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWSUME_PROFILE", "astronauts-awsume")
             .env("AWS_PROFILE", "astronauts-profile")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -344,7 +347,7 @@ mod tests {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -367,7 +370,6 @@ mod tests {
                 "AWS_CREDENTIALS_FILE",
                 config_path.to_string_lossy().as_ref(),
             )
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect()
             .is_none());
 
@@ -397,17 +399,16 @@ mod tests {
         file.write_all(
             "[default]
 region = us-east-1
+credential_process = /opt/bin/awscreds-retriever
 
 [profile astronauts]
 region = us-east-2
-credential_process = /opt/bin/awscreds-custom --username monty
 "
             .as_bytes(),
         )?;
 
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -430,6 +431,7 @@ region = us-east-1
 
 [profile astronauts]
 region = us-east-2
+credential_process = /opt/bin/awscreds-retriever
 "
             .as_bytes(),
         )?;
@@ -437,7 +439,6 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .env("AWS_PROFILE", "astronauts")
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .config(toml::toml! {
                 [aws]
             })
@@ -456,7 +457,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -472,7 +473,7 @@ region = us-east-2
     fn profile_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -486,7 +487,7 @@ region = us-east-2
     fn region_set_with_display_all() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-1")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -501,7 +502,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_DEFAULT_REGION", "ap-northeast-1")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$region]($style) "
@@ -520,7 +521,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-1")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$profile]($style) "
@@ -538,7 +539,7 @@ region = us-east-2
     fn region_set_with_display_profile() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_REGION", "ap-northeast-1")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .config(toml::toml! {
                 [aws]
                 format = "on [$symbol$profile]($style) "
@@ -565,7 +566,7 @@ region = us-east-2
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .env(
                 "AWS_SESSION_EXPIRATION",
                 now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
@@ -615,7 +616,6 @@ expiration={}
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
             .env(
                 "AWS_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
@@ -647,7 +647,7 @@ expiration={}
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .collect();
         let expected = Some(format!(
             "on {}",
@@ -678,7 +678,7 @@ expiration={}
             })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
-            .env("credential_process", "/opt/bin/awscreds-custom")
+            .env("credential_process", "/opt/bin/awscreds-retriever")
             .env(
                 "AWS_SESSION_EXPIRATION",
                 now.to_rfc3339_opts(SecondsFormat::Secs, true),
@@ -706,5 +706,92 @@ expiration={}
         let expected = None;
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn missing_any_credentials() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = us-east-1
+output = json
+
+[profile astronauts]
+region = us-east-2
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn access_key_credential_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let credentials_path = dir.path().join("credentials");
+        let mut file = File::create(&credentials_path)?;
+
+        file.write_all(
+            "[astronauts]
+aws_access_key_id=dummy
+aws_secret_access_key=dummy
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
+                "AWS_CREDENTIALS_FILE",
+                credentials_path.to_string_lossy().as_ref(),
+            )
+            .collect();
+
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint("☁️  astronauts (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn credential_process_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = ap-northeast-2
+credential_process = /opt/bin/awscreds-retriever
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }
