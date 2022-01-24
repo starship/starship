@@ -2966,18 +2966,18 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Terraformのバージョンはデフォルトでは表示されません。多くのプラグインが使用されている場合、現在のTerraformのバージョンでは遅くなるからです。 それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
 
 :::
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.terraform`フォルダが含まれている
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+- 現在のディレクトリに `.tf`, `.tfplan` または `.tfstate` のいずれかの拡張子を持つファイルがある。
 
 ### オプション
 
@@ -3005,7 +3005,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 ### 設定例
 
-#### With Terraform Version
+#### Terraform バージョン表示あり
 
 ```toml
 # ~/.config/starship.toml
@@ -3014,7 +3014,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Without Terraform version
+#### Terraform バージョン表示なし
 
 ```toml
 # ~/.config/starship.toml
