@@ -2311,7 +2311,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
@@ -2326,22 +2326,23 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| Option           | 默认值                              | 描述                                                                        |
-| ---------------- | -------------------------------- | ------------------------------------------------------------------------- |
-| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                                         |
-| `version_format` | `"v${raw}"`                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                            |
-| `style`          | `"bold 5"`                       | 此组件的样式。                                                                   |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                             |
+| Option           | 默认值                                          | 描述                                                                        |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                                         |
+| `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
+| `style`          | `"bold 5"`                                   | 此组件的样式。                                                                   |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
 ### Variables
 
-| 字段        | 示例         | 描述                       |
-| --------- | ---------- | ------------------------ |
-| version   | `v0.12.24` | The version of `pulumi`  |
-| stack     | `dev`      | The current Pulumi stack |
-| symbol    |            | `symbol`对应值              |
-| style\* |            | `style`对应值               |
+| 字段        | 示例         | 描述                          |
+| --------- | ---------- | --------------------------- |
+| version   | `v0.12.24` | The version of `pulumi`     |
+| stack     | `dev`      | The current Pulumi stack    |
+| username  | `alice`    | The current Pulumi username |
+| symbol    |            | `symbol`对应值                 |
+| style\* |            | `style`对应值                  |
 
 *: This variable can only be used as a part of a style string
 
