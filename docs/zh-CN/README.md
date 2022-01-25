@@ -30,7 +30,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- 安装并在终端中启用 [Nerd Font](https://www.nerdfonts.com/)
 
 ### 快速安装
 
@@ -119,7 +119,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning 仅支持 v0.17 或更高版本的 elvish。 :::
 
    在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
 
@@ -143,7 +143,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning 这在将来会发生改变。仅支持 v0.33 或更高版本的 Nu。::: 
+
+   在 nu 配置文件的最后加入以下内容。你可以通过 `config path` 获取配置文件的路径。
 
    ```toml
    startup = [
@@ -157,7 +159,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   在 `~/.xonshrc` 的末尾加入以下内容：
 
    ```sh
    # ~/.xonshrc
