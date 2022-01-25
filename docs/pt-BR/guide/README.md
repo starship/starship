@@ -169,7 +169,7 @@
 
 - Uma [Nerd Font](https://www.nerdfonts.com/) instalada e funcionando no seu terminal (por exemplo, experimente a [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Instalar o Starship
+### 1º passo. Instalar o Starship
 
 Selecione seu sistema operacional na lista abaixo para ver as instruções de instalação:
 
@@ -259,9 +259,9 @@ Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### 2º passo. Configure seu shell para usar o Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Configure seu shell para inicializar o starship. Selecione o seu na lista abaixo:
 
 <details>
 <summary>Bash</summary>
@@ -380,15 +380,15 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### 3º passo. Configurar o Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
 If you're looking to further customize Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configuração](https://starship.rs/config/)** – saiba como configurar o Starship para ajustar seu prompt ao seu gosto
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Predefinições](https://starship.rs/presets/)** - seja inspirado nas configurações pré-construídas pelos outros
 
 ## 🤝 Contribuindo
 
