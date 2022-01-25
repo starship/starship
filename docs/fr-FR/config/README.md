@@ -2311,7 +2311,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
@@ -2326,13 +2326,13 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ### Options
 
-| Option           | Défaut                           | Description                                                                                |
-| ---------------- | -------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`         | `"via [$symbol$stack]($style) "` | La chaîne de format pour le module.                                                        |
-| `version_format` | `"v${raw}"`                      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                             |
-| `style`          | `"bold 5"`                       | Le style du module.                                                                        |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                                              |
+| Option           | Défaut                                       | Description                                                                                |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | La chaîne de format pour le module.                                                        |
+| `version_format` | `"v${raw}"`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                             |
+| `style`          | `"bold 5"`                                   | Le style du module.                                                                        |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                              |
 
 ### Variables
 
@@ -2340,6 +2340,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | --------- | ---------- | -------------------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`                |
 | stack     | `dev`      | The current Pulumi stack               |
+| username  | `alice`    | The current Pulumi username            |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
