@@ -2311,7 +2311,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
@@ -2326,13 +2326,13 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 ### Opsi
 
-| Opsi             | Bawaan                           | Deskripsi                                                                           |
-| ---------------- | -------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                                                   |
-| `version_format` | `"v${raw}"`                      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                      |
-| `style`          | `"bold 5"`                       | Gaya penataan untuk modul.                                                          |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                                       |
+| Opsi             | Bawaan                                       | Deskripsi                                                                           |
+| ---------------- | -------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                                                   |
+| `version_format` | `"v${raw}"`                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                      |
+| `style`          | `"bold 5"`                                   | Gaya penataan untuk modul.                                                          |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                       |
 
 ### Variabel
 
@@ -2340,6 +2340,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | --------- | ---------- | --------------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`           |
 | stack     | `dev`      | The current Pulumi stack          |
+| username  | `alice`    | The current Pulumi username       |
 | symbol    |            | Menyalin nilai dari opsi `symbol` |
 | style\* |            | Menyalin nilai dari opsi `style`  |
 
