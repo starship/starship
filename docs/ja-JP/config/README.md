@@ -2311,7 +2311,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
@@ -2326,22 +2326,23 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 ### オプション
 
-| オプション            | デフォルト                            | 説明                                                     |
-| ---------------- | -------------------------------- | ------------------------------------------------------ |
-| `format`         | `"via [$symbol$stack]($style) "` | モジュールのフォーマット文字列。                                       |
-| `version_format` | `"v${raw}"`                      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.         |
-| `style`          | `"bold 5"`                       | モジュールのスタイルです。                                          |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                          |
+| オプション            | デフォルト                                        | 説明                                                     |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------ |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | モジュールのフォーマット文字列。                                       |
+| `version_format` | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.         |
+| `style`          | `"bold 5"`                                   | モジュールのスタイルです。                                          |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                          |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                       |
-| --------- | ---------- | ------------------------ |
-| version   | `v0.12.24` | The version of `pulumi`  |
-| stack     | `dev`      | The current Pulumi stack |
-| symbol    |            | オプション `記号` の値をミラーする      |
-| style\* |            | オプション `style` の値をミラーする   |
+| 変数        | 設定例        | 説明                          |
+| --------- | ---------- | --------------------------- |
+| version   | `v0.12.24` | The version of `pulumi`     |
+| stack     | `dev`      | The current Pulumi stack    |
+| username  | `alice`    | The current Pulumi username |
+| symbol    |            | オプション `記号` の値をミラーする         |
+| style\* |            | オプション `style` の値をミラーする      |
 
 *: This variable can only be used as a part of a style string
 
