@@ -30,8 +30,8 @@ battery = ["starship-battery"]
 ansi_term = "0.12.1"
 byte-unit = "4.0.13"
 chrono = "0.4.19"
-clap = { version = "3.0.10", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.0.4"
+clap = { version = "3.0.12", features = ["derive", "cargo", "unicode"] }
+clap_complete = "3.0.5"
 directories-next = "2.0.0"
 gethostname = "0.2.2"
 git2 = { version = "0.13.25", default-features = false }
@@ -51,7 +51,7 @@ regex = "1.5.4"
 rust-ini = "0.17.0"
 semver = "1.0.4"
 serde = { version = "1.0.135", features = ["derive"] }
-serde_json = "1.0.75"
+serde_json = "1.0.78"
 sha-1 = "0.10.0"
 shadow-rs = "0.8.1"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -67,7 +67,7 @@ unicode-segmentation = "1.8.0"
 unicode-width = "0.1.9"
 urlencoding = "2.1.0"
 versions = "4.0.0"
-which = "4.2.2"
+which = "4.2.4"
 yaml-rust = "0.4.5"
 
 process_control = { version = "3.2.1", features = ["crossbeam-channel"] }
