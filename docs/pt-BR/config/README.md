@@ -434,13 +434,13 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
+::: atenção
 
 `error_symbol` is not supported on nu shell.
 
 :::
 
-::: warning
+::: atenção
 
 `vicmd_symbol` is only supported in cmd, fish and zsh.
 
@@ -1628,13 +1628,13 @@ The default functionality is:
 - 1 job -> `symbol` é exibido.
 - 2 jobs or more -> `symbol` + `number` é exibido.
 
-::: warning
+::: atenção
 
 This module is not supported on tcsh and nu.
 
 :::
 
-::: warning
+::: atenção
 
 The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
@@ -2311,7 +2311,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
@@ -2326,13 +2326,13 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Opções
 
-| Opções           | Padrão                           | Descrição                                                                            |
-| ---------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`         | `"via [$symbol$stack]($style) "` | A string de formato do módulo.                                                       |
-| `version_format` | `"v${raw}"`                      | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                                       |
-| `style`          | `"bold 5"`                       | O estilo do módulo.                                                                  |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                                        |
+| Opções           | Padrão                                       | Descrição                                                                            |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | A string de formato do módulo.                                                       |
+| `version_format` | `"v${raw}"`                                  | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                       |
+| `style`          | `"bold 5"`                                   | O estilo do módulo.                                                                  |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                        |
 
 ### Variáveis
 
@@ -2340,6 +2340,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | --------- | ---------- | ---------------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`            |
 | stack     | `dev`      | The current Pulumi stack           |
+| username  | `alice`    | The current Pulumi username        |
 | symbol    |            | Espelha o valor da opção `símbolo` |
 | style\* |            | Espelha o valor da opção `style`   |
 
