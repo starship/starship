@@ -2311,7 +2311,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the currently selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) and version.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
@@ -2326,13 +2326,13 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                         | Mô tả                                                                     |
-| ---------------- | -------------------------------- | ------------------------------------------------------------------------- |
-| `format`         | `"via [$symbol$stack]($style) "` | The format string for the module.                                         |
-| `version_format` | `"v${raw}"`                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                           | A format string shown before the Pulumi stack.                            |
-| `style`          | `"bold 5"`                       | Kiểu cho module.                                                          |
-| `disabled`       | `false`                          | Disables the `pulumi` module.                                             |
+| Tuỳ chọn         | Mặc định                                     | Mô tả                                                                     |
+| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                                         |
+| `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
+| `style`          | `"bold 5"`                                   | Kiểu cho module.                                                          |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
 ### Các biến
 
@@ -2340,6 +2340,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | --------- | ---------- | -------------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`          |
 | stack     | `dev`      | The current Pulumi stack         |
+| username  | `alice`    | The current Pulumi username      |
 | symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |            | Giá trị ghi đè của `style`       |
 
