@@ -169,16 +169,16 @@
 
 - 安装一个 [Nerd Font](https://www.nerdfonts.com/) 的字体，并在终端启用（例如，可以尝试使用 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) 字体）。
 
-### Step 1. Install Starship
+### 步骤 1. 安装 Starship
 
-Select your operating system from the list below to view installation instructions:
+从下面的列表中选择您的操作系统以查看安装指令：
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+使用下列软件包管理器安装Starship：
 
-| Repository                                                                        | Instructions           |
+| 软件包来源                                                                             | 指令                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -187,9 +187,9 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+使用下列软件包管理器安装Starship：
 
-| Distribution | Repository                                               | Instructions                      |
+| Distribution | 软件包来源                                                    | 指令                                |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
 | **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -208,7 +208,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Distribution       | 软件包来源                                                                                           | 指令                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -237,7 +237,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 
 Alternatively, install Starship using any of the following package managers:
 
-| Repository                                               | Instructions                            |
+| 软件包来源                                                    | 指令                                      |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -249,9 +249,9 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+使用下列软件包管理器安装Starship：
 
-| Repository                                                                       | Instructions                            |
+| 软件包来源                                                                            | 指令                                      |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
@@ -381,7 +381,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### 步骤 3. 配置 StarShip
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
