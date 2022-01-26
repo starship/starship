@@ -12,6 +12,9 @@
 # drawn, and only start the timer if this flag is present. That way, timing is
 # for the entire command, and not just a portion of it.
 
+# A way to set '$?', since bash does not allow assigning to '$?' directly
+function _starship_set_return() { return "${1:-0}"; }
+
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
@@ -43,6 +46,10 @@ starship_precmd() {
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
 
+    # Set $? to the preserved value before running additional parts of the prompt
+    # command pipeline, which may rely on it.
+    _starship_set_return "$STARSHIP_CMD_STATUS"
+
     eval "$_PRESERVED_PROMPT_COMMAND"
 
     # Prepare the timer data, if needed.
@@ -55,9 +62,6 @@ starship_precmd() {
         PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
-
-    # Restore previous status for subsequent commands in the PROMPT_COMMAND pipeline.
-    return $STARSHIP_CMD_STATUS
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
