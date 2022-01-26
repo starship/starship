@@ -84,7 +84,7 @@ fn undistract_me<'a, 'b>(
             .summary("Command finished")
             .body(&body)
             .icon("utilities-terminal")
-            .timeout(Timeout::Milliseconds(750));
+            .timeout(Timeout::Milliseconds(config.notification_timeout as u32));
 
         if let Err(err) = notification.show() {
             log::trace!("Cannot show notification: {}", err);
