@@ -55,6 +55,9 @@ starship_precmd() {
         PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
+
+    # Restore previous status for subsequent commands in the PROMPT_COMMAND pipeline.
+    return $STARSHIP_CMD_STATUS
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
