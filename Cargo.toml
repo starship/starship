@@ -62,7 +62,7 @@ strsim = "0.10.0"
 sys-info = "0.9.1"
 terminal_size = "0.1.17"
 toml = { version = "0.5.8", features = ["preserve_order"] }
-toml_edit = "0.13.0"
+toml_edit = "0.13.1"
 unicode-segmentation = "1.8.0"
 unicode-width = "0.1.9"
 urlencoding = "2.1.0"
