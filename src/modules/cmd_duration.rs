@@ -79,24 +79,12 @@ fn undistract_me<'a, 'b>(
             unstyle(&ANSIStrings(&module.ansi_strings()))
         );
 
-        let timeout: u32 = match u32::try_from(config.notification_timeout) {
-            Ok(v) => v,
-            Err(_) => {
-                let v: u32 = CmdDurationConfig::default().notification_timeout as u32;
-                log::trace!(
-                    "Configured notification timeout not within bounds. Defaulting to {} ms",
-                    v
-                );
-                v
-            }
-        };
-
         let mut notification = Notification::new();
         notification
             .summary("Command finished")
             .body(&body)
             .icon("utilities-terminal")
-            .timeout(Timeout::Milliseconds(timeout));
+            .timeout(Timeout::Milliseconds(config.notification_timeout as u32));
 
         if let Err(err) = notification.show() {
             log::trace!("Cannot show notification: {}", err);
@@ -108,7 +96,6 @@ fn undistract_me<'a, 'b>(
 
 #[cfg(test)]
 mod tests {
-    use crate::configs::cmd_duration::CmdDurationConfig;
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
 
@@ -186,15 +173,5 @@ mod tests {
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
         assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn config_notification_timeout_within_bounds() {
-        assert!(
-            match u32::try_from(CmdDurationConfig::default().notification_timeout) {
-                Ok(_) => true,
-                Err(_) => false,
-            }
-        );
     }
 }
