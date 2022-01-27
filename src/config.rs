@@ -109,6 +109,23 @@ impl<'a> ModuleConfig<'a> for f64 {
     }
 }
 
+impl<'a> ModuleConfig<'a> for u32 {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::Integer(value) => {
+                // Converting i64 to u32
+                if *value > 0 && *value <= u32::MAX.into() {
+                    Some(*value as Self)
+                } else {
+                    None
+                }
+            }
+            Value::String(value) => value.parse::<Self>().ok(),
+            _ => None,
+        }
+    }
+}
+
 impl<'a> ModuleConfig<'a> for usize {
     fn from_config(config: &Value) -> Option<Self> {
         match config {
