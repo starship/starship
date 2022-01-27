@@ -52,6 +52,15 @@ fn get_pkg_branch_tag() -> &'static str {
 }
 
 fn make_github_issue_link(environment: Environment) -> String {
+    let shell_syntax = match environment.shell_info.name.as_ref() {
+        "powershell" => "pwsh",
+        "fish" => "fish",
+        "cmd" => "lua",
+        // GitHub does not seem to support elvish syntax highlighting.
+        "elvish" => "bash",
+        _ => "bash",
+    };
+
     let body = urlencoding::encode(&format!("#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
@@ -76,7 +85,7 @@ fn make_github_issue_link(environment: Environment) -> String {
 - Build Time: {build_time}
 #### Relevant Shell Configuration
 
-```bash
+```{shell_syntax}
 {shell_config}
 ```
 
@@ -100,6 +109,7 @@ fn make_github_issue_link(environment: Environment) -> String {
         rust_channel =  shadow::RUST_CHANNEL,
         build_rust_channel =  shadow::BUILD_RUST_CHANNEL,
         build_time =  shadow::BUILD_TIME,
+        shell_syntax = shell_syntax,
     ))
         .replace("%20", "+");
 
