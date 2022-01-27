@@ -12,7 +12,7 @@ pub struct CmdDurationConfig<'a> {
     pub disabled: bool,
     pub show_notifications: bool,
     pub min_time_to_notify: i64,
-    pub notification_timeout: u64,
+    pub notification_timeout: u32,
 }
 
 impl<'a> Default for CmdDurationConfig<'a> {
