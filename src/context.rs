@@ -569,7 +569,7 @@ pub enum Target {
 /// Properties as passed on from the shell as arguments
 #[derive(Parser, Debug)]
 pub struct Properties {
-    /// The status code of the previously run command, in unsigned or signed 32bit integer
+    /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status")]
     pub status_code: Option<String>,
     /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
