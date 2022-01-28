@@ -597,16 +597,16 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Option                 | Default                       | Description                                                                                          |
-| ---------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                |
-| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                           |
-| `format`               | `"took [$duration]($style) "` | The format for the module.                                                                           |
-| `style`                | `"bold yellow"`               | The style for the module.                                                                            |
-| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                  |
-| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                   |
-| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                |
-| `notification_timeout` | `750`                         | Duration to show notification for (in milliseconds). Not all notification daemons honor this option. |
+| Option                 | Default                       | Description                                                                                                                                                       |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
+| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
+| `format`               | `"took [$duration]($style) "` | The format for the module.                                                                                                                                        |
+| `style`                | `"bold yellow"`               | The style for the module.                                                                                                                                         |
+| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
+| `notification_timeout` | Unset                         | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
