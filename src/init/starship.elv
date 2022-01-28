@@ -24,10 +24,10 @@ set edit:after-command = [ $@edit:after-command $starship-after-command-hook~ ]
 # Install starship
 set edit:prompt = {
     var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
-    ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
+    ::STARSHIP:: prompt --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status=$cmd-status-code --logical-path=$pwd
 }
 
 set edit:rprompt = {
     var cmd-duration = (printf "%.0f" (* $edit:command-duration 1000))
-    ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status $cmd-status-code
+    ::STARSHIP:: prompt --right --jobs=$num-bg-jobs --cmd-duration=$cmd-duration --status=$cmd-status-code --logical-path=$pwd
 }
