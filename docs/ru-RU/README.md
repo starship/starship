@@ -30,7 +30,7 @@ description: Starship - минимальная, быстрая и бесконе
 
 ### Обязательные требования
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Установленный и включенный шрифт [Nerd Font](https://www.nerdfonts.com/) в вашем терминале.
 
 ### Быстрая установка
 
