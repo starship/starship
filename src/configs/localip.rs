@@ -17,7 +17,7 @@ impl<'a> Default for LocalipConfig<'a> {
             ssh_only: true,
             format: "[$localipv4]($style) ",
             style: "yellow bold",
-            disabled: false,
+            disabled: true,
         }
     }
 }
