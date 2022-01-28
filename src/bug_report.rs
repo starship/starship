@@ -53,7 +53,7 @@ fn get_pkg_branch_tag() -> &'static str {
 
 fn make_github_issue_link(environment: Environment) -> String {
     let shell_syntax = match environment.shell_info.name.as_ref() {
-        "powershell" => "pwsh",
+        "powershell" | "pwsh" => "pwsh",
         "fish" => "fish",
         "cmd" => "lua",
         // GitHub does not seem to support elvish syntax highlighting.
@@ -193,7 +193,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
             "ion" => Some(".config/ion/initrc"),
-            "powershell" => {
+            "powershell" | "pwsh" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
                 } else {
