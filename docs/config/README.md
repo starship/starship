@@ -270,10 +270,14 @@ format = "$all$directory$character"
 ## AWS
 
 The `aws` module shows the current AWS region and profile when
-valid credentials or a credential_process have been setup. This is based on
+credentials or a `credential_process` have been setup. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
 credentials.
+
+The module will display a profile only if its credentials are present in
+`~/.aws/credentials` or, alternatively, a `credential_process` is defined in
+`~/.aws/config`.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
