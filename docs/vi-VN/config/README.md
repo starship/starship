@@ -567,15 +567,16 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                      | Mô tả                                                                  |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Khoảng thời gian ngắn nhất để hiện thời gian (tính bằng milliseconds). |
-| `show_milliseconds`  | `false`                       | Hiện milliseconds.                                                     |
-| `format`             | `"took [$duration]($style) "` | Định dạng cho module.                                                  |
-| `style`              | `"bold yellow"`               | Kiểu cho module.                                                       |
-| `disabled`           | `false`                       | Vô hiệu module `cmd_duration`.                                         |
-| `show_notifications` | `false`                       | Hiện thông báo desktop khi câu lệnh hoàn thành.                        |
-| `min_time_to_notify` | `45_000`                      | Khoảng thời gian ngắn nhất để thông báo (tính bằng milliseconds).      |
+| Tuỳ chọn               | Mặc định                      | Mô tả                                                                                                                                                             |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Khoảng thời gian ngắn nhất để hiện thời gian (tính bằng milliseconds).                                                                                            |
+| `show_milliseconds`    | `false`                       | Hiện milliseconds.                                                                                                                                                |
+| `format`               | `"took [$duration]($style) "` | Định dạng cho module.                                                                                                                                             |
+| `style`                | `"bold yellow"`               | Kiểu cho module.                                                                                                                                                  |
+| `disabled`             | `false`                       | Vô hiệu module `cmd_duration`.                                                                                                                                    |
+| `show_notifications`   | `false`                       | Hiện thông báo desktop khi câu lệnh hoàn thành.                                                                                                                   |
+| `min_time_to_notify`   | `45_000`                      | Khoảng thời gian ngắn nhất để thông báo (tính bằng milliseconds).                                                                                                 |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
