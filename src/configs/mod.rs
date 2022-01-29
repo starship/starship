@@ -11,6 +11,7 @@ pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
 pub mod conda;
+pub mod container;
 pub mod crystal;
 pub mod custom;
 pub mod dart;
@@ -94,6 +95,7 @@ pub struct FullConfig<'a> {
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
     cobol: cobol::CobolConfig<'a>,
     conda: conda::CondaConfig<'a>,
+    container: container::ContainerConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
     deno: deno::DenoConfig<'a>,
@@ -174,6 +176,7 @@ impl<'a> Default for FullConfig<'a> {
             cmd_duration: Default::default(),
             cobol: Default::default(),
             conda: Default::default(),
+            container: Default::default(),
             crystal: Default::default(),
             dart: Default::default(),
             deno: Default::default(),

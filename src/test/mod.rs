@@ -8,7 +8,7 @@ use crate::{
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -68,6 +68,10 @@ impl<'a> ModuleRenderer<'a> {
         self.context.current_dir = path.into();
         self.context.logical_dir = self.context.current_dir.clone();
         self
+    }
+
+    pub fn root_path(&self) -> &Path {
+        self.context.root_dir.path()
     }
 
     pub fn logical_path<T>(mut self, path: T) -> Self
