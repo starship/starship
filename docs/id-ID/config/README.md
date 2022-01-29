@@ -567,15 +567,16 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Opsi
 
-| Opsi                 | Bawaan                        | Deskripsi                                                        |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------- |
-| `min_tim`            | `2_000`                       | Durasi terpendek untuk menampilkan waktu (dalam milidetik).      |
-| `show_milliseconds`  | `false`                       | Tampilkan milidetik sebagai ganti detik untuk durasinya.         |
-| `format`             | `"took [$duration]($style) "` | Format dari modul.                                               |
-| `style`              | `"bold yellow"`               | Gaya penataan untuk modul.                                       |
-| `disabled`           | `false`                       | Menonaktifkan modul `cmd_duration`.                              |
-| `show_notifications` | `false`                       | Menampilkan notifikasi layar ketika perintah selesai.            |
-| `min_time_to_notify` | `45_000`                      | Durasi terpendek untuk menampilkan notifikasi (dalam milidetik). |
+| Opsi                   | Bawaan                        | Deskripsi                                                                                                                                                         |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_tim`              | `2_000`                       | Durasi terpendek untuk menampilkan waktu (dalam milidetik).                                                                                                       |
+| `show_milliseconds`    | `false`                       | Tampilkan milidetik sebagai ganti detik untuk durasinya.                                                                                                          |
+| `format`               | `"took [$duration]($style) "` | Format dari modul.                                                                                                                                                |
+| `style`                | `"bold yellow"`               | Gaya penataan untuk modul.                                                                                                                                        |
+| `disabled`             | `false`                       | Menonaktifkan modul `cmd_duration`.                                                                                                                               |
+| `show_notifications`   | `false`                       | Menampilkan notifikasi layar ketika perintah selesai.                                                                                                             |
+| `min_time_to_notify`   | `45_000`                      | Durasi terpendek untuk menampilkan notifikasi (dalam milidetik).                                                                                                  |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
