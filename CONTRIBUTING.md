@@ -70,6 +70,47 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 If using `context.exec_cmd` isn't possible, please use `crate::utils::create_command` instead of `std::process::Command::new`.
 
+## Absolute Filenames
+
+To use absolute filenames in your module, use `crate::utils::context_path()` to create a `PathBuf` from an absolute pathname.
+In the test environment the root directory will be replaced with a `Tempdir`, which you can get via `ModuleRenderer::root_path()`.
+So, you can populate that mocked root directory with any files you want.
+
+```rust
+use crate::utils::context_path;
+
+pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    if !context_path(context, "/run/test/testfile").exists() {
+        return None
+    }
+    // ..
+}
+```
+
+```rust
+#[test]
+fn test_testfile() {
+    let renderer = ModuleRenderer::new("mymodule");
+
+    let root_path = renderer.root_path();
+
+    // This creates `$TEMPDIR/run/test/testfile`
+
+    let mut absolute_test_file = PathBuf::from(root_path);
+
+    absolute_test_file.push("run");
+    absolute_test_file.push("test");
+    std::fs::DirBuilder::new()
+        .recursive(true)
+        .create(&absolute_test_file)?;
+
+    absolute_test_file.push("testfile");
+    std::fs::File::create(&absolute_test_file)?;
+
+    // ...
+}
+```
+
 ## Logging
 
 Debug logging in starship is done with our custom logger implementation.
@@ -95,12 +136,23 @@ cargo clippy --all-targets --all-features
 
 ## Formatting
 
-Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly), using the default configuration. Rustfmt will be ran as part of CI. Unformatted code will fail a build, so it is suggested that you run rustfmt locally:
+Starship source files are formatted with [rustfmt](https://crates.io/crates/rustfmt-nightly). Markdown and TOML files (among others) are formatted with [dprint](https://github.com/dprint/dprint). Unformatted code will fail the CI, so it is suggested that you run these tools locally.
+
+For rustfmt:
 
 ```sh
 rustup component add rustfmt
 cargo fmt
 ```
+
+For dprint:
+
+```sh
+cargo install dprint
+dprint fmt
+```
+
+Editor plugins/functionality may help you run these automatically so that you don't accidentally create a PR that fails.
 
 ## Testing
 
@@ -233,10 +285,10 @@ writing new modules low, starship provides a lot of functionality for a module,
 which requires quite a few things be done. These are listed here to help
 everyone remember what they are. Don't worry: most of them are quite simple!
 
-- [ ] Add a section to `docs/config/README.md` describing the module, and 
+- [ ] Add a section to `docs/config/README.md` describing the module, and
       its configuration options/variables (more documentation is often
       appropriate--this is a bare minimum).
-- [ ] Add the variable to the appropriate location in the "Default Prompt 
+- [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
 - [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the

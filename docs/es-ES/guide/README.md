@@ -75,11 +75,27 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa indonesio"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
+      alt="Japonés"
  /></a>
   &nbsp;
   <a
@@ -87,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="Português (Brasil)"
  /></a>
   &nbsp;
   <a
@@ -95,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Ruso"
  /></a>
   &nbsp;
   <a
@@ -103,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamita"
  /></a>
   &nbsp;
   <a
@@ -111,7 +127,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Chino Mandarín"
  /></a>
   &nbsp;
   <a
@@ -119,7 +135,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Chino Tradicional"
  /></a>
 </p>
 
@@ -252,7 +268,7 @@
 
    #### Elvish
 
-   **Advertencia** Sólo se admite Elvish v0.15 o superior. Añade el siguiente código al final de `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -283,9 +299,20 @@
    ```
 
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **Advertencia** Esto cambiará en el futuro. Sólo se admite la versión nu v0.33 o superior. Añade lo siguiente a tu archivo de configuración nu. Puedes comprobar la ubicación de este archivo ejecutando `ruta de configuración` en nu.
+   **Warning** This will change in the future. Sólo se admite la versión nu v0.33 o superior. Add the following to your nu config file. Puedes comprobar la ubicación de este archivo ejecutando `ruta de configuración` en nu.
 
    ```toml
    startup = [

@@ -75,6 +75,22 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
@@ -252,7 +268,7 @@
 
    #### Elvish
 
-   **注意** 只支援 elvish v0.15 以上的版本。 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
+   **Warning** Only elvish v0.17 or higher is supported. 將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
    ```sh
    # ~/.elvish/rc.elv
@@ -283,9 +299,20 @@
    ```
 
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **警告：**此處設定在未來可能有所變動。 只支援 nu v0.33 以上的版本。 將以下內容放到 Nushell 設定檔的結尾。 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
+   **Warning** This will change in the future. 只支援 nu v0.33 以上的版本。 Add the following to your nu config file. 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
 
    ```toml
    startup = [

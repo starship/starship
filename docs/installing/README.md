@@ -17,7 +17,7 @@ out!
 
 ### Prerequisites
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey. 
+Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
 
 ### Installation
 

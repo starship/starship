@@ -8,7 +8,7 @@ use crate::{
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -70,6 +70,10 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn root_path(&self) -> &Path {
+        self.context.root_dir.path()
+    }
+
     pub fn logical_path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,
@@ -123,7 +127,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn status(mut self, status: i32) -> Self {
-        self.context.properties.status_code = Some(status);
+        self.context.properties.status_code = Some(status.to_string());
         self
     }
 
@@ -137,7 +141,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn pipestatus(mut self, status: &[i32]) -> Self {
-        self.context.pipestatus = Some(
+        self.context.properties.pipestatus = Some(
             status
                 .iter()
                 .map(std::string::ToString::to_string)
