@@ -567,15 +567,16 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Opciones
 
-| Opción               | Por defecto                   | Descripción                                                            |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos)  |
-| `show_milliseconds`  | `false`                       | Muestra la duración con precisión en milisegundos.                     |
-| `format`             | `"took [$duration]($style) "` | El formato del módulo.                                                 |
-| `style`              | `"bold yellow"`               | El estilo del módulo.                                                  |
-| `disabled`           | `false`                       | Desactiva el módulo `cmd_duration`.                                    |
-| `show_notifications` | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.    |
-| `min_time_to_notify` | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos). |
+| Opción                 | Por defecto                   | Descripción                                                                                                                                                       |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos)                                                                                             |
+| `show_milliseconds`    | `false`                       | Muestra la duración con precisión en milisegundos.                                                                                                                |
+| `format`               | `"took [$duration]($style) "` | El formato del módulo.                                                                                                                                            |
+| `style`                | `"bold yellow"`               | El estilo del módulo.                                                                                                                                             |
+| `disabled`             | `false`                       | Desactiva el módulo `cmd_duration`.                                                                                                                               |
+| `show_notifications`   | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.                                                                                               |
+| `min_time_to_notify`   | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos).                                                                                            |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
