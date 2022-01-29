@@ -1,4 +1,4 @@
-use crate::context::{Context, Shell};
+use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
     config::{RootModuleConfig, StarshipConfig},
@@ -8,7 +8,7 @@ use crate::{
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -34,8 +34,9 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
-        clap::ArgMatches::default(),
+        Default::default(),
         Shell::Unknown,
+        Target::Main,
         PathBuf::new(),
         PathBuf::new(),
     );
@@ -67,6 +68,10 @@ impl<'a> ModuleRenderer<'a> {
         self.context.current_dir = path.into();
         self.context.logical_dir = self.context.current_dir.clone();
         self
+    }
+
+    pub fn root_path(&self) -> &Path {
+        self.context.root_dir.path()
     }
 
     pub fn logical_path<T>(mut self, path: T) -> Self
@@ -103,15 +108,13 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    pub fn jobs(mut self, jobs: u64) -> Self {
-        self.context.properties.insert("jobs", jobs.to_string());
+    pub fn jobs(mut self, jobs: i64) -> Self {
+        self.context.properties.jobs = jobs;
         self
     }
 
     pub fn cmd_duration(mut self, duration: u64) -> Self {
-        self.context
-            .properties
-            .insert("cmd_duration", duration.to_string());
+        self.context.properties.cmd_duration = Some(duration.to_string());
         self
     }
 
@@ -119,14 +122,12 @@ impl<'a> ModuleRenderer<'a> {
     where
         T: Into<String>,
     {
-        self.context.properties.insert("keymap", keymap.into());
+        self.context.properties.keymap = keymap.into();
         self
     }
 
     pub fn status(mut self, status: i32) -> Self {
-        self.context
-            .properties
-            .insert("status_code", status.to_string());
+        self.context.properties.status_code = Some(status.to_string());
         self
     }
 
@@ -140,7 +141,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     pub fn pipestatus(mut self, status: &[i32]) -> Self {
-        self.context.pipestatus = Some(
+        self.context.properties.pipestatus = Some(
             status
                 .iter()
                 .map(std::string::ToString::to_string)

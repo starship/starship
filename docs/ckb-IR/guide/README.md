@@ -71,6 +71,22 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/id-ID/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
+      alt="Bahasa Indonesia"
+ /></a>
+  &nbsp;
+  <a
+    href="https://github.com/starship/starship/blob/master/docs/it-IT/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
+      alt="Italiano"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/ja-JP/guide/README.md"
     ><img
       height="20"
@@ -83,7 +99,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="پورتوگالیی بەڕازیل"
+      alt="Português do Brasil"
  /></a>
   &nbsp;
   <a
@@ -248,7 +264,7 @@
 
    #### Elvish
 
-   **ئاگادارکردنەوە** تەنها elvish v0.15 یان بەرزتر پشتگیری کراوە. ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
+   **Warning** Only elvish v0.17 or higher is supported. ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -279,9 +295,20 @@
    ```
 
 
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
+   ```
+
+
    #### Nushell
 
-   **ئاگادارکردنەوە** ئەمە لە داهاتوودا دەگۆڕێت. تەنها وەشانی v0.33 یان بەرزتری nu پشتگیریکراوە. ئەمەی خوارەوە زیادبکە بۆ پەڕگەی ڕێکخستنی nuـەکەت. ئەتوانی شوێنی ئەم پەڕگەیە بپشکنی بە جێبەجێکردنی `config path` لە nu دا.
+   **Warning** This will change in the future. تەنها وەشانی v0.33 یان بەرزتری nu پشتگیریکراوە. Add the following to your nu config file. ئەتوانی شوێنی ئەم پەڕگەیە بپشکنی بە جێبەجێکردنی `config path` لە nu دا.
 
    ```toml
    startup = [

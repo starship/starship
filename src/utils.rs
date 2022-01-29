@@ -1,4 +1,4 @@
-use process_control::{ChildExt, Timeout};
+use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
@@ -7,7 +7,31 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
+use crate::context::Context;
 use crate::context::Shell;
+
+/// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
+#[cfg(not(test))]
+#[inline]
+#[allow(dead_code)]
+pub fn context_path<S: AsRef<OsStr> + ?Sized>(_context: &Context, s: &S) -> PathBuf {
+    PathBuf::from(s)
+}
+
+/// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
+#[cfg(test)]
+#[allow(dead_code)]
+pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathBuf {
+    let requested_path = PathBuf::from(s);
+
+    if requested_path.is_absolute() {
+        let mut path = PathBuf::from(context.root_dir.path());
+        path.extend(requested_path.components().skip(1));
+        path
+    } else {
+        requested_path
+    }
+}
 
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
@@ -393,7 +417,12 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
             return None;
         }
     };
-    match process.with_output_timeout(time_limit).terminating().wait() {
+    match process
+        .controlled_with_output()
+        .time_limit(time_limit)
+        .terminate_for_timeout()
+        .wait()
+    {
         Ok(Some(output)) => {
             let stdout_string = match String::from_utf8(output.stdout) {
                 Ok(stdout) => stdout,

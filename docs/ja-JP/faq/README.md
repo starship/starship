@@ -69,13 +69,13 @@ Starship executes different commands to get information to display in the prompt
 You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
 ```sh
-env STARHIP_LOG=trace starship module rust
+env STARSHIP_LOG=trace starship module rust
 ```
 
 If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
 
 ```sh
-env STARHIP_LOG=trace starship timings
+env STARSHIP_LOG=trace starship timings
 ```
 
 This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
@@ -117,6 +117,6 @@ Starship がパッケージマネージャを使用してインストールさ�
 Starship をインストールスクリプトを使用してインストールした場合、次のコマンドでバイナリが削除されます。
 
 ```sh
-# starshipバイナリを見つけて削除
-sh -c 'rm "$(which starship)"''
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```

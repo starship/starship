@@ -86,6 +86,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "battery",
     "time",
     "status",
+    "container",
     "shell",
     "character",
 ];
@@ -96,7 +97,7 @@ impl<'a> Default for StarshipRootConfig {
         StarshipRootConfig {
             format: "$all".to_string(),
             right_format: "".to_string(),
-            continuation_prompt: "[❯](bold yellow)".to_string(),
+            continuation_prompt: "[∙](bright-black) ".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,

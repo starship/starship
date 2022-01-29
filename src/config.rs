@@ -551,7 +551,7 @@ mod tests {
 
         let config = toml::toml! {
             untracked.value = "x"
-            modified = { value = "•", style = "red" }
+            modified = { value = "∙", style = "red" }
         };
 
         let mut git_status_config = TestConfig {
@@ -576,7 +576,7 @@ mod tests {
         assert_eq!(
             git_status_config.modified,
             SegmentDisplayConfig {
-                value: "•",
+                value: "∙",
                 style: Color::Red.normal(),
             }
         );

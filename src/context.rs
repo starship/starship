@@ -5,14 +5,18 @@ use crate::utils::{create_command, exec_timeout, CommandOutput};
 
 use crate::modules;
 use crate::utils::{self, home_dir};
-use clap::ArgMatches;
+use clap::Parser;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
-use std::collections::{HashMap, HashSet};
+#[cfg(test)]
+use std::collections::HashMap;
+use std::collections::HashSet;
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fmt::Debug;
 use std::fs;
+use std::marker::PhantomData;
+use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
 use std::string::String;
 use std::time::{Duration, Instant};
@@ -37,10 +41,7 @@ pub struct Context<'a> {
     dir_contents: OnceCell<DirContents>,
 
     /// Properties to provide to modules.
-    pub properties: HashMap<&'a str, String>,
-
-    /// Pipestatus of processes in pipe
-    pub pipestatus: Option<Vec<String>>,
+    pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
@@ -48,11 +49,8 @@ pub struct Context<'a> {
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
-    /// Construct the right prompt instead of the left prompt
-    pub right: bool,
-
-    /// Construct the continuation prompt instead of the normal prompt
-    pub continuation: bool,
+    /// Which prompt to print (main, right, ...)
+    pub target: Target,
 
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
@@ -65,65 +63,77 @@ pub struct Context<'a> {
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
 
+    /// a mock of the root directory
+    #[cfg(test)]
+    pub root_dir: tempfile::TempDir,
+
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
     /// Starship root config
     pub root_config: StarshipRootConfig,
+
+    /// Avoid issues with unused lifetimes when features are disabled
+    _marker: PhantomData<&'a ()>,
 }
 
 impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
     /// for it. "logical-path" is used when a shell allows the "current working directory"
     /// to be something other than a file system path (like powershell provider specific paths).
-    pub fn new(arguments: ArgMatches) -> Context {
+    pub fn new(arguments: Properties, target: Target) -> Context<'a> {
         let shell = Context::get_shell();
 
         // Retrieve the "current directory".
         // If the path argument is not set fall back to the OS current directory.
         let path = arguments
-            .value_of("path")
-            .map(PathBuf::from)
+            .path
+            .clone()
             .or_else(|| env::current_dir().ok())
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
-            .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
+            .or_else(|| arguments.logical_path.clone())
             .unwrap_or_default();
 
         // Retrieve the "logical directory".
         // If the path argument is not set fall back to the PWD env variable set by many shells
         // or to the other path.
         let logical_path = arguments
-            .value_of("logical_path")
-            .map(PathBuf::from)
+            .logical_path
+            .clone()
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(arguments, shell, path, logical_path)
+        Context::new_with_shell_and_path(arguments, shell, target, path, logical_path)
     }
 
     /// Create a new instance of Context for the provided directory
     pub fn new_with_shell_and_path(
-        arguments: ArgMatches,
+        mut properties: Properties,
         shell: Shell,
+        target: Target,
         path: PathBuf,
         logical_path: PathBuf,
-    ) -> Context {
+    ) -> Context<'a> {
         let config = StarshipConfig::initialize();
 
-        // Unwrap the clap arguments into a simple hashtable
-        let properties: HashMap<&str, std::string::String> = arguments
-            .args
-            .iter()
-            .filter(|(_, v)| !v.vals.is_empty())
-            .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
-            .collect();
+        // If the vector is zero-length, we should pretend that we didn't get a
+        // pipestatus at all (since this is the input `--pipestatus=""`)
+        if properties
+            .pipestatus
+            .as_deref()
+            .map_or(false, |p| p.len() == 1 && p[0].is_empty())
+        {
+            properties.pipestatus = None;
+        }
+        log::trace!(
+            "Received completed pipestatus of {:?}",
+            properties.pipestatus
+        );
 
-        let pipestatus = arguments
-            .values_of("pipestatus")
-            .map(Context::get_and_flatten_pipestatus)
-            .flatten();
-
-        log::trace!("Received completed pipestatus of {:?}", pipestatus);
+        // If status-code is empty, set it to None
+        if matches!(properties.status_code.as_deref(), Some("")) {
+            properties.status_code = None;
+        }
 
         // Canonicalize the current path to resolve symlinks, etc.
         // NOTE: On Windows this converts the path to extended-path syntax.
@@ -136,27 +146,20 @@ impl<'a> Context<'a> {
             .as_ref()
             .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
-        let right = arguments.is_present("right");
-        let continuation = arguments.is_present("continuation");
-
-        let width = arguments
-            .value_of("terminal_width")
-            .and_then(|w| w.parse().ok())
-            .or_else(|| terminal_size().map(|(w, _)| w.0 as usize))
-            .unwrap_or(80);
+        let width = properties.terminal_width;
 
         Context {
             config,
             properties,
-            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
-            right,
-            continuation,
+            target,
             width,
+            #[cfg(test)]
+            root_dir: tempfile::TempDir::new().unwrap(),
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
@@ -164,6 +167,7 @@ impl<'a> Context<'a> {
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
             root_config,
+            _marker: PhantomData,
         }
     }
 
@@ -209,26 +213,6 @@ impl<'a> Context<'a> {
             return utils::home_dir().unwrap().join(without_home);
         }
         dir
-    }
-
-    /// Reads and appropriately flattens multiple args for pipestatus
-    pub fn get_and_flatten_pipestatus(args: clap::Values) -> Option<Vec<String>> {
-        // Due to shell differences, we can potentially receive individual or space
-        // separated inputs, e.g. "0","1","2","0" is the same as "0 1 2 0" and
-        // "0 1", "2 0". We need to accept all these formats and return a Vec<String>
-        let parsed_vals = args
-            .into_iter()
-            .map(|x| x.split_ascii_whitespace())
-            .flatten()
-            .map(|x| x.to_string())
-            .collect::<Vec<String>>();
-        // If the vector is zero-length, we should pretend that we didn't get a
-        // pipestatus at all (since this is the input `--pipestatus=""`)
-        if parsed_vals.is_empty() {
-            None
-        } else {
-            Some(parsed_vals)
-        }
     }
 
     /// Create a new module
@@ -309,18 +293,23 @@ impl<'a> Context<'a> {
             "bash" => Shell::Bash,
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
-            "powershell" => Shell::PowerShell,
+            "powershell" | "pwsh" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
             "nu" => Shell::Nu,
             "xonsh" => Shell::Xonsh,
+            "cmd" => Shell::Cmd,
             _ => Shell::Unknown,
         }
     }
 
+    // TODO: This should be used directly by clap parse
     pub fn get_cmd_duration(&self) -> Option<u128> {
-        self.properties.get("cmd_duration")?.parse::<u128>().ok()
+        self.properties
+            .cmd_duration
+            .as_deref()
+            .and_then(|cd| cd.parse::<u128>().ok())
     }
 
     /// Execute a command and return the output on stdout and stderr if successful
@@ -580,7 +569,76 @@ pub enum Shell {
     Tcsh,
     Nu,
     Xonsh,
+    Cmd,
     Unknown,
+}
+
+/// Which kind of prompt target to print (main prompt, rprompt, ...)
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Target {
+    Main,
+    Right,
+    Continuation,
+}
+
+/// Properties as passed on from the shell as arguments
+#[derive(Parser, Debug)]
+pub struct Properties {
+    /// The status code of the previously run command
+    #[clap(short = 's', long = "status")]
+    pub status_code: Option<String>,
+    /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
+    #[clap(long, value_delimiter = ' ')]
+    pub pipestatus: Option<Vec<String>>,
+    /// The width of the current interactive terminal.
+    #[clap(short = 'w', long, default_value_t=default_width(), parse(try_from_str=parse_width))]
+    terminal_width: usize,
+    /// The path that the prompt should render for.
+    #[clap(short, long)]
+    path: Option<PathBuf>,
+    /// The logical path that the prompt should render for.
+    /// This path should be a virtual/logical representation of the PATH argument.
+    #[clap(short = 'P', long)]
+    logical_path: Option<PathBuf>,
+    /// The execution duration of the last command, in milliseconds
+    #[clap(short = 'd', long)]
+    pub cmd_duration: Option<String>,
+    /// The keymap of fish/zsh/cmd
+    #[clap(short = 'k', long, default_value = "viins")]
+    pub keymap: String,
+    /// The number of currently running jobs
+    #[clap(short, long, default_value_t, parse(try_from_str=parse_jobs))]
+    pub jobs: i64,
+}
+
+impl Default for Properties {
+    fn default() -> Self {
+        Properties {
+            status_code: None,
+            pipestatus: None,
+            terminal_width: default_width(),
+            path: None,
+            logical_path: None,
+            cmd_duration: None,
+            keymap: "viins".to_string(),
+            jobs: 0,
+        }
+    }
+}
+
+fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
+    jobs.trim().parse::<i64>()
+}
+
+fn default_width() -> usize {
+    terminal_size().map_or(80, |(w, _)| w.0 as usize)
+}
+
+fn parse_width(width: &str) -> Result<usize, ParseIntError> {
+    if width.is_empty() {
+        return Ok(default_width());
+    }
+    width.trim().parse::<usize>()
 }
 
 #[cfg(test)]
@@ -669,8 +727,9 @@ mod tests {
         // Mock navigation into the symlink path
         let test_path = path_symlink.join("yyy");
         let context = Context::new_with_shell_and_path(
-            ArgMatches::default(),
+            Default::default(),
             Shell::Unknown,
+            Target::Main,
             test_path.clone(),
             test_path.clone(),
         );
@@ -694,8 +753,9 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            ArgMatches::default(),
+            Default::default(),
             Shell::Unknown,
+            Target::Main,
             test_path.clone(),
             test_path.clone(),
         );
@@ -714,8 +774,9 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            ArgMatches::default(),
+            Default::default(),
             Shell::Unknown,
+            Target::Main,
             test_path.clone(),
             test_path.clone(),
         );

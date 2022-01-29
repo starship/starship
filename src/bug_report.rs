@@ -6,9 +6,6 @@ use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
 
-#[cfg(feature = "http")]
-const GIT_IO_BASE_URL: &str = "https://git.io/";
-
 pub fn create() {
     println!("{}\n", shadow::version().trim());
     let os_info = os_info::get();
@@ -22,7 +19,6 @@ pub fn create() {
     };
 
     let link = make_github_issue_link(environment);
-    let short_link = shorten_link(&link);
 
     if open::that(&link).is_ok() {
         println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
@@ -31,22 +27,7 @@ pub fn create() {
         println!("Click this link to create a GitHub issue populated with your configuration:\n");
     }
 
-    println!(" {}", short_link.unwrap_or(link));
-}
-
-#[cfg(feature = "http")]
-fn shorten_link(link: &str) -> Option<String> {
-    attohttpc::post(&format!("{}{}", GIT_IO_BASE_URL, "create"))
-        .form(&[("url", link)])
-        .ok()
-        .and_then(|r| r.send().ok())
-        .and_then(|r| r.text().ok())
-        .map(|slug| format!("{}{}", GIT_IO_BASE_URL, slug))
-}
-
-#[cfg(not(feature = "http"))]
-fn shorten_link(_url: &str) -> Option<String> {
-    None
+    println!("{}", link);
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";
@@ -71,6 +52,15 @@ fn get_pkg_branch_tag() -> &'static str {
 }
 
 fn make_github_issue_link(environment: Environment) -> String {
+    let shell_syntax = match environment.shell_info.name.as_ref() {
+        "powershell" | "pwsh" => "pwsh",
+        "fish" => "fish",
+        "cmd" => "lua",
+        // GitHub does not seem to support elvish syntax highlighting.
+        "elvish" => "bash",
+        _ => "bash",
+    };
+
     let body = urlencoding::encode(&format!("#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
@@ -95,7 +85,7 @@ fn make_github_issue_link(environment: Environment) -> String {
 - Build Time: {build_time}
 #### Relevant Shell Configuration
 
-```bash
+```{shell_syntax}
 {shell_config}
 ```
 
@@ -119,6 +109,7 @@ fn make_github_issue_link(environment: Environment) -> String {
         rust_channel =  shadow::RUST_CHANNEL,
         build_rust_channel =  shadow::BUILD_RUST_CHANNEL,
         build_time =  shadow::BUILD_TIME,
+        shell_syntax = shell_syntax,
     ))
         .replace("%20", "+");
 
@@ -202,7 +193,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
             "ion" => Some(".config/ion/initrc"),
-            "powershell" => {
+            "powershell" | "pwsh" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
                 } else {
@@ -213,6 +204,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "elvish" => Some(".elvish/rc.elv"),
             "tcsh" => Some(".tcshrc"),
             "xonsh" => Some(".xonshrc"),
+            "cmd" => Some("AppData/Local/clink/starship.lua"),
             _ => None,
         }
         .map(|path| home_dir.join(path))

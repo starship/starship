@@ -56,31 +56,31 @@ Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## Pourquoi je vois des avertissements `Executing command "..." timed out.`?
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout` key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship exécute différentes commandes pour obtenir les informations à afficher dans l'invite, par exemple la version d'un programme ou l'état actuel de git. Pour s’assurer que starship ne soit pas bloqué par l’exécution de ces commandes, nous mettons une limite de temps. Si une commande dépasse cette limite, starship va arrêter l’exécution de la commande et afficher l’avertissement ci-dessus, c’est un comportement attendu. Cette limite de temps est configurable en utilisant la [clé `command_timeout`](/config/#prompt) si vous souhaitez l’augmenter. Vous pouvez également suivre les étapes de débogage ci-dessous pour voir quelle commande est lente et voir si vous pouvez l’optimiser. Enfin, vous pouvez définir la variable `STARSHIP_LOG` à `error` pour masquer ces avertissements.
 
 ## Je vois des symboles que je ne comprends pas et auxquels je ne m'attendais pas, que signifient-t-ils ?
 
 Si vous voyez des symboles que vous ne reconnaissez pas, vous pouvez utiliser `starship explain` pour obtenir des explications concernant les modules actuellement affichés.
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship fait quelque chose d’inattendu, comment puis-je le déboguer ?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
-
-```sh
-env STARHIP_LOG=trace starship module rust
-```
-
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+Vous pouvez activer les journaux de débogage en utilisant la variable d’environnement `STARSHIP_LOG`. Ces journaux peuvent être très verbeux, donc il est souvent utile d'utiliser la commande `module` si vous essayez de déboguer un module particulier ; par exemple, si vous essayez de déboguer le module `rust`, vous pouvez exécuter la commande suivante pour récupérer les journaux de suivi et les sorties du module.
 
 ```sh
-env STARHIP_LOG=trace starship timings
+env STARSHIP_LOG=trace starship module rust
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+Si starship est lent, vous pouvez essayer d’utiliser la commande `timings` pour voir si un module ou une commande particulière est à blâmer.
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+```sh
+env STARSHIP_LOG=trace starship timings
+```
+
+Cela affichera le journal de suivi et un détail de tous les modules qui ont soit pris plus d’1ms pour s’exécuter, soit affiché quelque chose.
+
+Finalement, si vous trouvez un bug, vous pouvez utiliser la commande `bug-report` pour créer un ticket GitHub.
 
 ```sh
 starship bug-report
@@ -117,6 +117,6 @@ Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez v
 Si Starship a été installé en utilisant le script d'installation, la commande suivante supprimera l'exécutable :
 
 ```sh
-# Trouver et supprimer l'exécutable starship
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```
