@@ -567,15 +567,16 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Опции
 
-| Параметр             | По умолчанию                  | Описание                                                             |
-| -------------------- | ----------------------------- | -------------------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Кратчайшая продолжительность для показа времени (в миллисекундах).   |
-| `show_milliseconds`  | `false`                       | Показывать миллисекунды в дополнение к секундам в продолжительности. |
-| `format`             | `"took [$duration]($style) "` | Формат модуля.                                                       |
-| `style`              | `"bold yellow"`               | Стиль модуля.                                                        |
-| `disabled`           | `false`                       | Отключает модуль `cmd_duration`.                                     |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.                   |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).                |
+| Параметр               | По умолчанию                  | Описание                                                                                                                                                          |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Кратчайшая продолжительность для показа времени (в миллисекундах).                                                                                                |
+| `show_milliseconds`    | `false`                       | Показывать миллисекунды в дополнение к секундам в продолжительности.                                                                                              |
+| `format`               | `"took [$duration]($style) "` | Формат модуля.                                                                                                                                                    |
+| `style`                | `"bold yellow"`               | Стиль модуля.                                                                                                                                                     |
+| `disabled`             | `false`                       | Отключает модуль `cmd_duration`.                                                                                                                                  |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
