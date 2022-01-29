@@ -567,15 +567,16 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### オプション
 
-| オプション                | デフォルト                         | 説明                          |
-| -------------------- | ----------------------------- | --------------------------- |
-| `min_time`           | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。     |
-| `show_milliseconds`  | `false`                       | 実行時間の秒に加えてミリ秒を表示します。        |
-| `format`             | `"took [$duration]($style) "` | moduleのフォーマットです。            |
-| `style`              | `"bold yellow"`               | モジュールのスタイルです。               |
-| `disabled`           | `false`                       | `cmd_duration`モジュールを無効にします。 |
-| `show_notifications` | `false`                       | コマンドが完了したらデスクトップ通知を表示します。   |
-| `min_time_to_notify` | `45_000`                      | 通知を持続する最短期間(ミリ秒単位)          |
+| オプション                  | デフォルト                         | 説明                                                                                                                                                                |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                                                                                           |
+| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                                                                                              |
+| `format`               | `"took [$duration]($style) "` | moduleのフォーマットです。                                                                                                                                                  |
+| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                                                                                     |
+| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                                                                                       |
+| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                                                                                         |
+| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間(ミリ秒単位)                                                                                                                                                |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
