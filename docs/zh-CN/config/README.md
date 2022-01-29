@@ -567,15 +567,16 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### 配置项
 
-| Option               | 默认值                           | 描述                                                    |
-| -------------------- | ----------------------------- | ----------------------------------------------------- |
-| `min_time`           | `2_000`                       | 显示此组件所需的最短执行时长（单位：毫秒）。                                |
-| `show_milliseconds`  | `false`                       | 除了秒数外在执行时长中额外显示毫秒。                                    |
-| `format`             | `"took [$duration]($style) "` | 组件格式化模板。                                              |
-| `style`              | `"bold yellow"`               | 此组件的样式。                                               |
-| `disabled`           | `false`                       | 禁用 `cmd_duration` 组件。                                 |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.    |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds). |
+| Option                 | 默认值                           | 描述                                                                                                                                                                |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | 显示此组件所需的最短执行时长（单位：毫秒）。                                                                                                                                            |
+| `show_milliseconds`    | `false`                       | 除了秒数外在执行时长中额外显示毫秒。                                                                                                                                                |
+| `format`               | `"took [$duration]($style) "` | 组件格式化模板。                                                                                                                                                          |
+| `style`                | `"bold yellow"`               | 此组件的样式。                                                                                                                                                           |
+| `disabled`             | `false`                       | 禁用 `cmd_duration` 组件。                                                                                                                                             |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ::: tip
 
