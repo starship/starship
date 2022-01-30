@@ -2068,7 +2068,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
 | `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch`          |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
+| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quali estensioni dovrebbero attivare questo modulo.                                                   |
 | `detect_files`      | `["package.json", ".node-version"]`  | Quali nomi di file dovrebbero attivare questo modulo.                                                 |
 | `detect_folders`    | `["node_modules"]`                   | Quali cartelle dovrebbero attivare questo modulo.                                                     |
