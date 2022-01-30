@@ -184,6 +184,7 @@ format = "$all"
 format = """
 $username\
 $hostname\
+$localip\
 $shlvl\
 $singularity\
 $kubernetes\
@@ -1643,16 +1644,17 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Opções
 
-| Opções                                                                                                  | Padrão                        | Descrição                                                                |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*                                                                                            | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold`                                                                                      | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold`                                                                                      | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`                                                                                                | `"[$symbol$number]($style) "` | O formato do módulo.                                                     |
-| `symbol`                                                                                                | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`                                                                                                 | `"bold blue"`                 | O estilo do módulo.                                                      |
-| `disabled`                                                                                              | `false`                       | Disables the `jobs` module.                                              |
-| *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead. |                               |                                                                          |
+| Opções             | Padrão                        | Descrição                                                                |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | O formato do módulo.                                                     |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | O estilo do módulo.                                                      |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+
+*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variáveis
 
@@ -1713,6 +1715,39 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 [julia]
 symbol = "∴ "
+```
+
+## localip
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Opções
+
+| Opções     | Padrão                    | Descrição                                              |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | O formato do módulo.                                   |
+| `style`    | `"bold yellow"`           | O estilo do módulo.                                    |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variáveis
+
+| Variável  | Exemplo      | Descrição                         |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | Espelha o valor da opção `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Kotlin
