@@ -45,6 +45,7 @@ pub const ALL_MODULES: &[&str] = &[
     "kotlin",
     "kubernetes",
     "line_break",
+    "localip",
     "lua",
     "memory_usage",
     "nim",

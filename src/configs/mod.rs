@@ -40,6 +40,7 @@ pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
 pub mod line_break;
+pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod nim;
@@ -122,6 +123,7 @@ pub struct FullConfig<'a> {
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
     line_break: line_break::LineBreakConfig,
+    localip: localip::LocalipConfig<'a>,
     lua: lua::LuaConfig<'a>,
     memory_usage: memory_usage::MemoryConfig<'a>,
     nim: nim::NimConfig<'a>,
@@ -202,6 +204,7 @@ impl<'a> Default for FullConfig<'a> {
             kotlin: Default::default(),
             kubernetes: Default::default(),
             line_break: Default::default(),
+            localip: Default::default(),
             lua: Default::default(),
             memory_usage: Default::default(),
             nim: Default::default(),
