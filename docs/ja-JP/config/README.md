@@ -184,6 +184,7 @@ format = "$all"
 format = """
 $username\
 $hostname\
+$localip\
 $shlvl\
 $singularity\
 $kubernetes\
@@ -1643,16 +1644,17 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### オプション
 
-| オプション                                                                                                   | デフォルト                         | 説明                                                                       |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*                                                                                            | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold`                                                                                      | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold`                                                                                      | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`                                                                                                | `"[$symbol$number]($style) "` | moduleのフォーマットです。                                                         |
-| `symbol`                                                                                                | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`                                                                                                 | `"bold blue"`                 | モジュールのスタイルです。                                                            |
-| `disabled`                                                                                              | `false`                       | Disables the `jobs` module.                                              |
-| *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead. |                               |                                                                          |
+| オプション              | デフォルト                         | 説明                                                                       |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | moduleのフォーマットです。                                                         |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | モジュールのスタイルです。                                                            |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+
+*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### 変数
 
@@ -1713,6 +1715,39 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 [julia]
 symbol = "∴ "
+```
+
+## localip
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### オプション
+
+| オプション      | デフォルト                     | 説明                                                     |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | moduleのフォーマットです。                                       |
+| `style`    | `"bold yellow"`           | モジュールのスタイルです。                                          |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### 変数
+
+| 変数        | 設定例          | 説明                                |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | オプション `style` の値をミラーする            |
+
+*: This variable can only be used as a part of a style string
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Kotlin
@@ -2968,11 +3003,11 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-Terraformのバージョンはデフォルトでは表示されません。多くのプラグインが使用されている場合、現在のTerraformのバージョンでは遅くなるからです。 それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
@@ -2987,23 +3022,23 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `"via [$symbol$workspace]($style) "` | モジュールのフォーマット文字列。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"💠"`                                | ワークスペースの前に表示されるフォーマット文字列。                              |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.  |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[".terraform"]`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold 105"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `terraform` モジュールを無効にします。                              |
+| `disabled`          | `false`                              | Disables the `terraform` module.                       |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                     |
-| --------- | ---------- | ---------------------- |
-| version   | `v0.12.24` | `terraform` のバージョン     |
-| workspace | `default`  | 現在のTerraformワークスペース    |
-| symbol    |            | オプション `記号` の値をミラーする    |
-| style\* |            | オプション `style` の値をミラーする |
+| 変数        | 設定例        | 説明                              |
+| --------- | ---------- | ------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`      |
+| workspace | `default`  | The current Terraform workspace |
+| symbol    |            | オプション `記号` の値をミラーする             |
+| style\* |            | オプション `style` の値をミラーする          |
 
-*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+*: This variable can only be used as a part of a style string
 
 ### 設定例
 
