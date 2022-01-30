@@ -60,6 +60,9 @@ symbol = " "
 [nix_shell]
 symbol = " "
 
+[nodejs]
+symbol = " "
+
 [package]
 symbol = " "
 
