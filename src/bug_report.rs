@@ -142,10 +142,7 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500)).map_or_else(
-        || UNKNOWN_VERSION.to_string(),
-        |output| output.stdout.trim().to_string(),
-    );
+    let version = get_shell_version(&shell);
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())
@@ -223,6 +220,22 @@ fn get_starship_config() -> String {
         })
         .and_then(|config_path| fs::read_to_string(config_path).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+}
+
+fn get_shell_version(shell: &str) -> String {
+    let time_limit = Duration::from_millis(500);
+    match shell {
+        "powershell" => exec_cmd(
+            &shell,
+            &["Get-Host", "|", "Select-Object Version"],
+            time_limit,
+        ),
+        _ => exec_cmd(&shell, &["--version"], time_limit),
+    }
+    .map_or_else(
+        || UNKNOWN_VERSION.to_string(),
+        |output| output.stdout.trim().to_string(),
+    )
 }
 
 #[cfg(test)]
