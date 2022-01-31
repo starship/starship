@@ -188,7 +188,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("ﴃ Subscription 1")
+            Color::Blue.bold().paint("🅰 Subscription 1")
         ));
         assert_eq!(actual, expected);
         dir.close()

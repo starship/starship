@@ -359,7 +359,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Variable   | Default                                  | Description                                |
 | ---------- | ---------------------------------------- | ------------------------------------------ |
 | `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
+| `symbol`   | `"🅰 "`                                   | The symbol used in the format.             |
 | `style`    | `"blue bold"`                            | The style used in the format.              |
 | `disabled` | `true`                                   | Disables the `azure` module.               |
 
@@ -384,11 +384,11 @@ The module is only visible when the device's battery is below 10%.
 
 | Option               | Default                           | Description                                         |
 | -------------------- | --------------------------------- | --------------------------------------------------- |
-| `full_symbol`        | `" "`                            | The symbol shown when the battery is full.          |
-| `charging_symbol`    | `" "`                            | The symbol shown when the battery is charging.      |
-| `discharging_symbol` | `" "`                            | The symbol shown when the battery is discharging.   |
-| `unknown_symbol`     | `" "`                            | The symbol shown when the battery state is unknown. |
-| `empty_symbol`       | `" "`                            | The symbol shown when the battery state is empty.   |
+| `full_symbol`        | `"• "`                            | The symbol shown when the battery is full.          |
+| `charging_symbol`    | `"⇡ "`                            | The symbol shown when the battery is charging.      |
+| `discharging_symbol` | `"⇣ "`                            | The symbol shown when the battery is discharging.   |
+| `unknown_symbol`     | `"❓ "`                            | The symbol shown when the battery state is unknown. |
+| `empty_symbol`       | `"❗ "`                            | The symbol shown when the battery state is empty.   |
 | `format`             | `"[$symbol$percentage]($style) "` | The format for the module.                          |
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
@@ -1167,7 +1167,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang.                  |
+| `symbol`            | `"e "`                               | The symbol used before displaying the version of erlang.                  |
 | `style`             | `"bold red"`                         | The style for the module.                                                 |
 | `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Which filenames should trigger this module.                               |
@@ -2204,7 +2204,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
+| `symbol`            | `"⬢ "`                               | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
@@ -2480,7 +2480,7 @@ By default the module will be shown if any of the following conditions are met:
 | ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                                         |
 | `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
+| `symbol`         | `"⠿ "`                                       | A format string shown before the Pulumi stack.                            |
 | `style`          | `"bold 5"`                                   | The style for the module.                                                 |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 

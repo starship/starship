@@ -324,7 +324,7 @@ mod tests {
             .collect();
         let expected = format!(
             "via {} ",
-            Color::Fixed(5).bold().paint(" test-user@launch")
+            Color::Fixed(5).bold().paint("⠿ test-user@launch")
         );
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
@@ -384,7 +384,7 @@ mod tests {
             })
             .env("HOME", root.to_str().unwrap())
             .collect();
-        let expected = format!("via {} ", Color::Fixed(5).bold().paint(" launch"));
+        let expected = format!("via {} ", Color::Fixed(5).bold().paint("⠿ launch"));
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())
@@ -404,7 +404,7 @@ mod tests {
                 format = "in [$symbol($stack)]($style) "
             })
             .collect();
-        let expected = format!("in {} ", Color::Fixed(5).bold().paint(" "));
+        let expected = format!("in {} ", Color::Fixed(5).bold().paint("⠿ "));
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())

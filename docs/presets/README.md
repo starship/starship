@@ -20,6 +20,16 @@ If emojis aren't your thing, this might catch your eye!
 [aws]
 symbol = "  "
 
+[azure]
+symbol = "ﴃ "
+
+[battery]
+full_symbol = " "
+charging_symbol = " "
+discharging_symbol = " "
+unknown_symbol = " "
+empty_symbol = " "
+
 [conda]
 symbol = " "
 
@@ -73,6 +83,9 @@ symbol = " "
 
 [php]
 symbol = " "
+
+[pulumi]
+symbol = " "
 
 [python]
 symbol = " "
