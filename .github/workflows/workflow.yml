@@ -26,9 +26,6 @@ jobs:
           profile: minimal
           components: rustfmt
 
-      - name: Setup | libdbus (ubuntu)
-        run: sudo apt-get install libdbus-1-dev
-
       - name: Build | Format
         run: cargo fmt --all -- --check
 
@@ -45,10 +42,6 @@ jobs:
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1
-
-      - name: Setup | libdbus (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install libdbus-1-dev
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -143,10 +136,6 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2.4.0
-
-      - name: Setup | libdbus (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install libdbus-1-dev
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1

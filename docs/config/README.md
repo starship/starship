@@ -609,11 +609,6 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
-::: tip
-
-Showing desktop notifications requires starship to be built with `notify-rust` support. You check if your starship
-supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
-
 :::
 
 ### Variables
