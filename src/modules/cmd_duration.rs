@@ -51,20 +51,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(undistract_me(module, &config, elapsed))
 }
 
-#[cfg(not(feature = "notify-rust"))]
-fn undistract_me<'a, 'b>(
-    module: Module<'a>,
-    config: &'b CmdDurationConfig,
-    _elapsed: u128,
-) -> Module<'a> {
-    if config.show_notifications {
-        log::debug!("This version of starship was built without notification support.");
-    }
-
-    module
-}
-
-#[cfg(feature = "notify-rust")]
 fn undistract_me<'a, 'b>(
     module: Module<'a>,
     config: &'b CmdDurationConfig,
