@@ -227,7 +227,7 @@ fn get_shell_version(shell: &str) -> String {
     match shell {
         "powershell" => exec_cmd(
             &shell,
-            &["Get-Host", "|", "Select-Object Version"],
+            &["(Get-Host | Select Version | Format-Table -HideTableHeaders | Out-String).trim()"],
             time_limit,
         ),
         _ => exec_cmd(&shell, &["--version"], time_limit),
