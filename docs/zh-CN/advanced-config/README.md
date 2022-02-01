@@ -12,7 +12,7 @@
 
 Clink 提供了很灵活的 API，能在 Cmd shell 中运行预提示和执行前命令。 在 Starship 中使用这些 API 很容易。 对你的 `starship.lua` 按需做出如下修改：
 
-- 为了在提示符显示前运行一个自定义函数，你需要定义一个名为 `starship_preprompt_user_func` 的函数。 这个函数接受当前的提示符字符串作为参数，你可以在函数中使用它。 For example, to draw a rocket before the prompt, you would do
+- 为了在提示符显示前运行一个自定义函数，你需要定义一个名为 `starship_preprompt_user_func` 的函数。 这个函数接受当前的提示符作为字符串参数，你可以在函数中使用它。 例如，如果想在提示符前绘制一个火箭，可以这样写：
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -22,7 +22,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+- 为了在命令执行前运行一个自定义函数，你需要定义一个名为 `starship_precmd_user_func` 的函数。 这个函数接受当前的命令行内容作为字符串参数，同样，你可以在函数中使用它。 例如，要打印即将被执行的命令，可以这样写：
 
 ```lua
 function starship_precmd_user_func(line)
@@ -32,7 +32,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## 在 Cmd 中自定义预提示和执行前命令
 
 Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
 
