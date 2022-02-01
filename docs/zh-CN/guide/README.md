@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship：可用于各种 Shell 的提示符"
  />
 </p>
 
@@ -10,17 +10,17 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions workflow status"
+      alt="GitHub Actions 工作流状态"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="Crates.io 版本"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Packaging status" /></a
+      alt="打包状态" /></a
 ><br />
   <a href="https://discord.gg/starship"
     ><img
@@ -30,7 +30,7 @@
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="在 Twitter 上关注 @Starshipmpt"
  /></a>
 </p>
 
