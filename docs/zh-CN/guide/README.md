@@ -260,9 +260,9 @@ Alternatively, install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### 步骤 2. 设置你的终端以使用 Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+配置你的终端来初始化 starship。 请从下面列表选择你的终端：
 
 <details>
 <summary>Bash</summary>
