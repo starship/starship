@@ -28,7 +28,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### Prerequisites
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- A [Powerline Font](https://github.com/powerline/fonts) installed and enabled in your terminal.
+  Many coding fonts already include Powerline symbols or have official variants with them included.
+  (For example [Fira Code](https://github.com/tonsky/FiraCode) or [Cascadia Code/Mono PL](https://github.com/microsoft/cascadia-code/releases))
+
+  You can also use a [Nerd Font](https://www.nerdfonts.com/). (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+  Checkout [Presets](https://starship.rs/presets/#nerd-font-symbols) for a configuration that uses
+  Nerd Font symbols.
 
 ### Quick Install
 
