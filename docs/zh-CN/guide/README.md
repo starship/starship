@@ -395,9 +395,9 @@ eval "$(starship init zsh)"
 
 我们期待着 **所有技能等级** 的参与者！ 如果你想让自己参与项目的路径轻松一些，可以先试试某个 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果你熟练掌握某个非英语语言，我们非常感谢任何帮助翻译与同步文档到其他语言的贡献。 如果你想要帮忙，可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与。
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+如果你有兴趣贡献 Starship 这个项目，请先看看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭该项目受以下项目启发
 
