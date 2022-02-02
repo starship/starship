@@ -497,7 +497,7 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 format = """
 [╭─](bold white)$hostname$kubernetes$directory$git_branch$git_commit$git_state$git_status$docker_context$package$golang$helm$java$cmake$julia$kotlin$lua$nim$nodejs$python$ruby$rust$swift$terraform$aws$gcloud$azure $battery               
 [╰─❯](bold white)"""
- 
+
 right_format = """$cmd_duration"""
 
 # Replace the "❯" symbol in the prompt with "➜"
