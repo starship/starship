@@ -495,95 +495,46 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ```toml
 format = """
-$username\
-$hostname\
-$directory\
-$git_branch\
-$git_state\
-$git_status\
-$cmd_duration\
-$line_break\
-$python\
-$character"""
-
-[directory]
-style = "blue"
-
-[character]
-success_symbol = "[❯](purple)"
-error_symbol = "[❯](red)"
-vicmd_symbol = "[❮](green)"
-
-[git_branch]
-format = "[$branch]($style)"
-style = "bright-black"
-
-[git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
-style = "cyan"
-conflicted = "​"
-untracked = "​"
-modified = "​"
-staged = "​"
-renamed = "​"
-deleted = "​"
-stashed = "≡"
-
-[git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\) '
-style = "bright-black"
-
-[cmd_duration]
-format = "[$duration]($style) "
-style = "yellow"
-
-[python]
-format = "[$virtualenv]($style) "
-style = "bright-black"
-```
-
-## Stylish
-
-Fast and makes your terminal look [cool](https://github.com/EvilSeal1980/Starship-Prompt).
-
-![Screenshot of Stylish preset](https://github.com/EvilSeal1980/Starship-Prompt/blob/main/Screenshot.png)
-
-### Configuration
-
-```toml
-format = """
 [╭─](bold white)$hostname$kubernetes$directory$git_branch$git_commit$git_state$git_status$docker_context$package$golang$helm$java$cmake$julia$kotlin$lua$nim$nodejs$python$ruby$rust$swift$terraform$aws$gcloud$azure $battery               
 [╰─❯](bold white)"""
  
-right_format="""$cmd_duration"""
+right_format = """$cmd_duration"""
+
 # Replace the "❯" symbol in the prompt with "➜"
-[character]                            # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+character]·#·The·name·of·the·module·we·are·configuring·is·"character"
+success_symbol·=·"[➜](bold·green)"·#·The·"success_symbol"·segment·is·being·set·to·"➜"·with·the·color·"bold·green"
+
 [cmd_duration]
 min_time = 0
 show_milliseconds = true
-format='[$duration]($style)'
-style="bold yellow"
+format = '[$duration]($style)'
+style = "bold yellow"
+
 [java]
 symbol = "☕"
-style="red"
-format="via [${symbol} (${version} )](208)($style)"
+format = '[$duration]($style)'
+style = "bold yellow"
+
 [lua]
-style="#7FFFD4"
+style = "#7FFFD4"
+
 [cmake]
 symbol = "🌕"
-format="via [${symbol} (${version} )]($style)"
+format = "via [${symbol} (${version} )]($style)"
+
 [kubernetes]
 format = 'context: [⎈ $context \($namespace\)](bold cyan) '
 disabled = false
 # [kubernetes.context_aliases]
 # "dev.local.cluster.k8s" = "dev"
+
 [memory_usage]
 format = "with$symbol [${ram} ${ram_pct}( | ${swap} ${swap_pct})]($style) "
 disabled = false
 threshold = -1
 symbol = " "
 style = "bold dimmed green"
+
 [gcloud]
 style = "blue"
 format = '[$symbol$account(\($project\))]($style) '
@@ -591,6 +542,7 @@ symbol = "️G⅁:☁️"
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+
 [aws]
 format = '[$symbol$profile(\($region\))]($style) '
 style = "bold yellow"
@@ -598,36 +550,45 @@ symbol = "∀⍵₷☁️☁️ "
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+
 [package]
 format = "on [🎁 $version](208 bold) "
+
 [docker_context]
 format = "docker: [🐋 $context](blue bold)"
 disabled = false
+
 [directory]
 truncation_length = 7
 truncation_symbol = "…/"
+
 [username]
 style_user = "blue bold"
 style_root = "red bold"
 format = "user: [$user]($style) "
 disabled = false
 show_always = true
+
 [time]
 disabled = false
 format = '[\[ $time \]]($style) '
+
 [hostname]
 ssh_only = false
 format = '[$hostname](red) '
 trim_at = "."
 disabled = false
+
 [status]
 style = "red"
 symbol = "💥 "
 format = '[\[$symbol$status\]]($style) '
 disabled = false
+
 [git_branch]
 always_show_remote = true
 style = "bold blue"
+
 [git_status]
 ahead = "⇡🏎💨${count}"
 diverged = "⇕⇡😵${ahead_count}⇣${behind_count}"
@@ -638,29 +599,38 @@ stashed = "📦"
 modified = "📝"
 staged = '[++\($count\)](green)'
 renamed = "👅"
-deleted ="🗑 "
+deleted = "🗑 "
+
 [rust]
-format ="via [${symbol}(${version} )](208)($style)"
+format = "via [${symbol}(${version} )](208)($style)"
+
 [golang]
 format = "go: [🏎💨 $version](bold cyan) "
+
 [helm]
 format = "helm: [⎈ $version](bold white) "
+
 [jobs]
 symbol = "+ "
 threshold = 4
 format = "background [$symbol$number]($style) "
+
 [terraform]
 format = "[🏎💨 $version$workspace]($style) "
+
 [battery]
 full_symbol = "🔋"
 charging_symbol = "🔌 "
 discharging_symbol = "⚡️"
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+
+[[battery.display]] # "bold red" style when capacity is between 0% and 10%
 threshold = 10
 style = "bold red"
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+
+[[battery.display]] # "bold yellow" style when capacity is between 10% and 30%
 threshold = 30
 style = "bold yellow"
+
 [[battery.display]]
 threshold = 100
 style = "bold green"
