@@ -30,7 +30,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- 安装并在你的终端启用一种 [Nerd Font](https://www.nerdfonts.com/) 。
 
 ### 快速安装
 
