@@ -501,8 +501,8 @@ format = """
 right_format = """$cmd_duration"""
 
 # Replace the "❯" symbol in the prompt with "➜"
-character]·#·The·name·of·the·module·we·are·configuring·is·"character"
-success_symbol·=·"[➜](bold·green)"·#·The·"success_symbol"·segment·is·being·set·to·"➜"·with·the·color·"bold·green"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
 [cmd_duration]
 min_time = 0
