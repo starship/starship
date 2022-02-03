@@ -158,7 +158,7 @@
 - **Easy:** quick to install – start using it in minutes.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -383,13 +383,13 @@ eval "$(starship init zsh)"
 
 ### Step 3. Starship 설정하기
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+새로운 쉘 인스턴스를 시작하면 아름다운 새 쉘 프롬프트를 볼 수 있습니다. 기본 설정에 만족한다면, 즐기세요!
 
-If you're looking to further customize Starship:
+Starship을 추가로 커스터마이징 하고싶다면:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configuration](https://starship.rs/config/)** – 원하는대로 프롬프트를 수정할 수 있도록 Starship 설정을 배울 수 있습니다.
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Presets](https://starship.rs/presets/)** – 다른 사람들이 만들어둔 설정들을 보고 영감을 받을 수 있습니다.
 
 ## 🤝 기여
 
