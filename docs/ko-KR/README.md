@@ -28,11 +28,11 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### 준비 사항
 
 - 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다.
 
-### Quick Install
+### 빠른 설치
 
 1. **starship** 바이너리 설치:
 
