@@ -165,13 +165,13 @@
 
 ## 🚀 설치
 
-### Prerequisites
+### 준비 사항
 
 - 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다. (ex. [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads))
 
 ### Step 1. Starship 설치하기
 
-Select your operating system from the list below to view installation instructions:
+아래의 목록 중 해당하는 운영체제를 골라 설치 지침을 확인하세요:
 
 <details>
 <summary>Android</summary>
@@ -260,9 +260,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Step 2. 쉘에 Starship 적용하기
 
-Configure your shell to initialize starship. Select yours from the list below:
+쉘에 Starship 초기 설정을 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
 
 <details>
 <summary>Bash</summary>
@@ -338,7 +338,7 @@ prompt = "starship_prompt"
 </details>
 
 <details>
-<summary>파워셀</summary>
+<summary>Powershell</summary>
 
 Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
@@ -381,7 +381,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Step 3. Starship 설정하기
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
