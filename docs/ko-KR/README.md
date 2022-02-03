@@ -34,7 +34,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### 빠른 설치
 
-1. **starship** 바이러니 설치:
+1. **starship** 바이너리 설치:
 
 
    #### 최근 버전 설치
@@ -44,7 +44,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Starship을 업데이트하고 싶은 경우에도 위의 스크립트를 실행시키면 됩니다. It will replace the current version without touching Starship's configuration.
 
 
    #### 패키지 매니저를 이용한 설치
