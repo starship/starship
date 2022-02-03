@@ -108,7 +108,23 @@ fn main() {
     let _ = ansi_term::enable_ansi_support();
     logger::init();
 
-    let args = Cli::parse();
+    let args = match Cli::try_parse() {
+        Ok(args) => args,
+        Err(e) => {
+            // print the error
+            e.print().expect("error while writing error");
+            // print the arguments
+            eprintln!(
+                "\nNOTE:\n    passed arguments: {:?}",
+                // collect into a vec to format args as a slice
+                std::env::args().skip(1).collect::<Vec<_>>()
+            );
+
+            // clap exits with status 2 on error: 
+            //  https://docs.rs/clap/latest/clap/struct.Error.html#method.exit
+            std::process::exit(2);
+        }
+    };
     log::trace!("Parsed arguments: {:#?}", args);
 
     match args.command {
