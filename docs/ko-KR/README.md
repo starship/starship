@@ -30,9 +30,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### Prerequisites
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다.
 
-### 빠른 설치
+### Quick Install
 
 1. **starship** 바이너리 설치:
 
@@ -66,7 +66,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   `~/.bashrc`에 아래 라인을 추가
+   `~/.bashrc`의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   `~/.config/fish/config.fish`에 아래 라인을 추가
+   `~/.config/fish/config.fish`의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   `~/.zshrc`에 아래 라인을 추가
+   `~/.zshrc`의 끝부분에 아래 라인을 추가
 
    ```sh
    # ~/.zshrc
@@ -99,7 +99,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 위치.
+   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가합니다. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능합니다. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 있습니다.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   아래의 라인을 `~/.config/ion/initrc` 마지막에 추가:
+   `~/.config/ion/initrc` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.config/ion/initrc
@@ -121,7 +121,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning Only elvish v0.17 or higher is supported. :::
 
-   아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
+   `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -143,7 +143,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: 주의 이는 추후 변경될 예정입니다. 버전 v0.33 이상에서만 지원됩니다. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
 
    ```toml
    startup = [
@@ -157,7 +157,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   `~/.xonshrc` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.xonshrc
