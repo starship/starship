@@ -150,12 +150,12 @@
 
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- ** Fast:** 빨라요 – _엄청 엄청_ 빠릅니다! 🚀
+- ** Customizable:** 프롬프트의 모든 측면을 커스텀 가능합니다.
+- **Universal:** 어떤 쉘 위에서도, 어떤 운영체제 위에서도 동작합니다.
+- **Intelligent:** 관련 정보를 한눈에 보여줍니다.
+- **Feature rich:** 원하는 모든 도구를 지원합니다.
+- **Easy:** 빠른 설치 - 몇 분 안에 사용할 수 있습니다.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
