@@ -111,18 +111,31 @@ fn main() {
     let args = match Cli::try_parse() {
         Ok(args) => args,
         Err(e) => {
+            let is_info_only = matches!(
+                e.kind,
+                clap::ErrorKind::DisplayHelpOnMissingArgumentOrSubcommand
+                    | clap::ErrorKind::DisplayHelp
+                    | clap::ErrorKind::DisplayVersion
+            );
             // print the error
             e.print().expect("error while writing error");
-            // print the arguments
-            eprintln!(
-                "\nNOTE:\n    passed arguments: {:?}",
-                // collect into a vec to format args as a slice
-                std::env::args().skip(1).collect::<Vec<_>>()
-            );
+            // if there was no mistake by the user and we're only going to display information,
+            // we won't put arguments or exit
+            let exit_code = if is_info_only {
+                0
+            } else {
+                // print the arguments
+                eprintln!(
+                    "\nNOTE:\n    passed arguments: {:?}",
+                    // collect into a vec to format args as a slice
+                    std::env::args().skip(1).collect::<Vec<_>>()
+                );
+                2
+            };
 
-            // clap exits with status 2 on error: 
+            // clap exits with status 2 on error:
             //  https://docs.rs/clap/latest/clap/struct.Error.html#method.exit
-            std::process::exit(2);
+            std::process::exit(exit_code);
         }
     };
     log::trace!("Parsed arguments: {:#?}", args);
