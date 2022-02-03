@@ -143,7 +143,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: 주의 이는 추후 변경될 예정입니다. 버전 v0.33 이상에서만 지원됩니다. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: 주의 이는 추후 변경될 예정입니다. 버전 v0.33 이상에서만 지원됩니다. ::: 새로운 설정 파일에 아래의 내용을 추가하세요. `config path`를 실행시키면 파일의 위치를 확인할 수 있습니다.
 
    ```toml
    startup = [
@@ -168,7 +168,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
