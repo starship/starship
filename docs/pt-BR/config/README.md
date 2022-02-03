@@ -579,8 +579,6 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `min_time_to_notify`   | `45_000`                      | Tempo minimo para notificação (em milissegundos).                                                                                                                 |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
-:::
-
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                                 |
@@ -2570,7 +2568,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual contenha um arquivo com a extensão `.red` or `.reds`
 
@@ -2608,7 +2606,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `Gemfile`
 - O diretório atual contém um arquivo `.ruby-version`
@@ -2652,7 +2650,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `Cargo.toml`
 - O diretório atual tenha um arquivo com a extensão `.rs`
@@ -2960,7 +2958,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `Package.swift`
 - O diretório atual tenha um arquivo com a extensão `.swift`
@@ -3104,7 +3102,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. O módulo vai exibir se algumas das condições a seguir for atendida:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - O usuário atual é root
 - O usuário atual não é o mesmo que está logado
@@ -3255,7 +3253,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual contém arquivo com a extensão `.zig`
 
