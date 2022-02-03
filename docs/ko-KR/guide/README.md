@@ -167,9 +167,9 @@
 
 ### Prerequisites
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다. (ex. [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads))
 
-### Step 1. Install Starship
+### Step 1. Starship 설치하기
 
 Select your operating system from the list below to view installation instructions:
 
@@ -351,7 +351,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-아래의 라인을 `~/.tcshrc` 마지막에 추가:
+`~/.tcshrc` 의 끝부분에 아래 라인을 추가:
 
 ```sh
 eval `starship init tcsh`
