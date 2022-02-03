@@ -44,7 +44,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   Starship을 업데이트하고 싶은 경우에도 위의 스크립트를 실행시키면 됩니다. It will replace the current version without touching Starship's configuration.
+   Starship을 업데이트하고 싶은 경우에도 위의 스크립트를 실행시키면 됩니다. Starship의 설정은 변경되지 않고 버전만 최근 버전으로 대체될 것입니다.
 
 
    #### 패키지 매니저를 이용한 설치
@@ -55,13 +55,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   [Scoop](https://scoop.sh)을 통한 설치:
 
    ```powershell
    scoop install starship
    ```
 
-1. 쉘 설정에 시동 스크립트를 추가:
+1. 쉘 설정 파일에 init 스크립트 추가:
 
 
    #### Bash
