@@ -23,8 +23,13 @@ else
     }
 fi
 
-# Will be run before every prompt draw
-starship_precmd() {
+
+# The two functions below follow the naming convention `prompt_<theme>_<hook>`
+# for compatibility with Zsh's prompt system. See
+# https://github.com/zsh-users/zsh/blob/2876c25a28b8052d6683027998cc118fc9b50157/Functions/Prompts/promptinit#L155
+
+# Runs before each new command line.
+prompt_starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${pipestatus[@]})
 
@@ -41,23 +46,26 @@ starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
 }
-starship_preexec() {
+
+# Runs after the user submits the command line, but before it is executed.
+prompt_starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 }
 
+
 # If precmd/preexec arrays are not already set, set them. If we don't do this,
-# the code to detect whether starship_precmd is already in precmd_functions will
-# fail because the array doesn't exist (and same for starship_preexec)
+# the code to detect whether prompt_starship_precmd is already in precmd_functions will
+# fail because the array doesn't exist (and same for prompt_starship_preexec)
 (( ! ${+precmd_functions} )) && precmd_functions=()
 (( ! ${+preexec_functions} )) && preexec_functions=()
 
 # If starship precmd/preexec functions are already hooked, don't double-hook them
 # to avoid unnecessary performance degradation in nested shells
-if [[ -z ${precmd_functions[(re)starship_precmd]} ]]; then
-    precmd_functions+=(starship_precmd)
+if [[ -z ${precmd_functions[(re)prompt_starship_precmd]} ]]; then
+    precmd_functions+=(prompt_starship_precmd)
 fi
-if [[ -z ${preexec_functions[(re)starship_preexec]} ]]; then
-    preexec_functions+=(starship_preexec)
+if [[ -z ${preexec_functions[(re)prompt_starship_preexec]} ]]; then
+    preexec_functions+=(prompt_starship_preexec)
 fi
 
 # Set up a function to redraw the prompt if the user switches vi modes
