@@ -267,7 +267,7 @@ Configure your shell to initialize starship. Select yours from the list below:
 <details>
 <summary>Bash</summary>
 
-`~/.bashrc`에 아래 라인을 추가
+`~/.bashrc`의 끝부분에 아래 라인을 추가:
 
 ```sh
 eval "$(starship init bash)"
@@ -289,7 +289,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
+`~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
 ```sh
 eval (starship init elvish)
@@ -302,7 +302,7 @@ Note: Only Elvish v0.17+ is supported
 <details>
 <summary>Fish</summary>
 
-`~/.config/fish/config.fish`에 아래 라인을 추가
+`~/.config/fish/config.fish`의 끝부분에 아래 라인을 추가:
 
 ```fish
 starship init fish | source
@@ -313,7 +313,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-아래의 라인을 `~/.config/ion/initrc` 마지막에 추가:
+`~/.config/ion/initrc` 의 끝부분에 아래 라인을 추가:
 
 ```sh
 eval $(starship init ion)
@@ -362,7 +362,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-Add the following to the end of `~/.xonshrc`:
+`~/.xonshrc` 의 끝부분에 아래 라인을 추가:
 
 ```python
 execx($(starship init xonsh))
@@ -373,7 +373,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-`~/.zshrc`에 아래 라인을 추가
+`~/.zshrc`의 끝부분에 아래 라인을 추가
 
 ```sh
 eval "$(starship init zsh)"
