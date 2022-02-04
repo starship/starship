@@ -117,15 +117,19 @@ fn main() {
                     | clap::ErrorKind::DisplayHelp
                     | clap::ErrorKind::DisplayVersion
             );
-            // print the error
-            e.print().expect("error while writing error");
+            // print the error and avoid panicking in case of stdout/stderr closing unexpectedly
+            let _ = e.print();
             // if there was no mistake by the user and we're only going to display information,
             // we won't put arguments or exit
             let exit_code = if is_info_only {
                 0
             } else {
                 // print the arguments
-                eprintln!(
+                // avoid panicking in case of stderr closing
+                let mut stderr = io::stderr();
+                use io::Write;
+                let _ = writeln!(
+                    stderr,
                     "\nNOTE:\n    passed arguments: {:?}",
                     // collect into a vec to format args as a slice
                     std::env::args().skip(1).collect::<Vec<_>>()
