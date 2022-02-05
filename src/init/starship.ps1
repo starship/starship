@@ -106,7 +106,13 @@ $null = New-Module starship {
         $arguments += "--status=$($lastExitCodeForPrompt)"
 
         # Invoke Starship
-        Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+        $promptText = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+
+        # Set the number of extra lines in the prompt for PSReadLine prompt redraw.
+        Set-PSReadLineOption -ExtraPromptLineCount ($promptText.Split("`n").Length - 1)
+
+        # Return the prompt
+        $promptText
 
         # Propagate the original $LASTEXITCODE from before the prompt function was invoked.
         $global:LASTEXITCODE = $origLastExitCode
