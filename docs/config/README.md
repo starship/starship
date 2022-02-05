@@ -276,8 +276,10 @@ credentials or a `credential_process` have been setup. This is based on
 credentials.
 
 The module will display a profile only if its credentials are present in
-`~/.aws/credentials` or, alternatively, a `credential_process` is defined in
-`~/.aws/config`.
+`~/.aws/credentials` or a `credential_process` is defined in
+`~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
+also suffice.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date

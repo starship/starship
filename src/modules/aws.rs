@@ -143,6 +143,20 @@ fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> O
 }
 
 fn get_defined_credentials(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
+    let valid_env_vars = vec![
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_SESSION_TOKEN",
+    ];
+
+    // accept if set through environment variable
+    if let Some(aws_identity_cred) = valid_env_vars
+        .iter()
+        .find_map(|env_var| context.get_env(env_var))
+    {
+        return Some(aws_identity_cred);
+    }
+
     let contents = read_file(get_credentials_file_path(context)?).ok()?;
 
     let profile_line = if let Some(aws_profile) = aws_profile {
@@ -793,5 +807,47 @@ credential_process = /opt/bin/awscreds-retriever
 
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn access_key_env_var_set() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn secret_access_key_env_var_set() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_SECRET_ACCESS_KEY", "dummy")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn session_token_env_var_set() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_SESSION_TOKEN", "dummy")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
     }
 }
