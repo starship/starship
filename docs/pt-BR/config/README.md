@@ -2206,9 +2206,9 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Package Version
+## Versionamento de Pacotes
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+O módulo `package` é mostrado quando o diretório atual é o repositório de um pacote e mostra sua versão atual. O módulo atualmente suporta pacotes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – O versionamento de pacotes `npm` é extraído do `package.json` presente no diretório atual
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
