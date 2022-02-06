@@ -157,11 +157,11 @@ Produz um prompt como o seguinte:
 
 Alguns shells suportam um prompt de continuação junto com o prompt normal. Esse prompt é renderizado em vez do prompt normal quando o usuário insere uma instrução incompleta (como um único parêntese esquerdo ou aspas).
 
-Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. The default prompt is `"[∙](bright-black) "`.
+Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. O prompt padrão é `"[∙](bright-black) "`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Nota: `continuation_prompt` deve ser definido como uma string literal sem nenhuma variável.
 
-Note: Continuation prompts are only available in the following shells:
+Nota: os prompts de continuação estão disponíveis apenas nos seguintes shells:
 
 - `bash`
 - `zsh`
@@ -178,26 +178,26 @@ continuation_prompt = "▶▶"
 
 ## Estilo dos textos
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+As strings de estilo são uma lista de palavras, separadas por espaços em branco. As palavras não diferenciam maiúsculas de minúsculas (ou seja, `bold` e `BoLd` são considerados a mesma string). Cada palavra pode ser uma das seguintes:
 
-- `negrito`
-- `itálico`
-- `sublinhado`
-- `escurecido`
-- `invertido`
+- `bold`
+- `italic`
+- `underline`
+- `dimmed`
+- `inverted`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
 - `none`
 
-onde `<color>` é um especificador de cor (discutido abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, embora isso possa mudar no futuro. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+onde `<color>` é um especificador de cor (discutido abaixo). `fg:<color>` e `<color>` atualmente fazem a mesma coisa, embora isso possa mudar no futuro. `inverted` troca as cores de fundo e primeiro plano. A ordem das palavras na string não importa.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+O token `none` substitui todos os outros tokens em uma string se não fizer parte de um especificador `bg:`, de modo que, ex., `fg:red none fg:blue` ainda criará uma string sem estilo. `bg:none` define o plano de fundo para a cor padrão para que `fg:red bg:none` seja equivalente a `red` ou `fg:red` e `bg:green fg:red bg:none` também é equivalente a `fg:red` ou `red`. Pode ser um erro usar `none` em conjunto com outros tokens no futuro.
 
-A color specifier can be one of the following:
+Um especificador de cor pode ser um dos seguintes:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
-- A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- Uma das cores padrão do terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Você pode, opcionalmente, prefixar esses com `bright-` para obter a versão brilhante/clara (por exemplo, `bright-white`).
+- Um `#` seguido por um número hexadecimal de seis dígitos. Especifica um [Código hexadecimal de cor RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+- Um número entre 0-255. Especifica um [Código de cores ANSI de 8 bits](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Se várias cores forem especificadas para primeiro plano/plano de fundo, a última na string terá prioridade.
