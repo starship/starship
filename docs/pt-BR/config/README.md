@@ -2501,7 +2501,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Use apenas o binário `python3` para obter a versão.
 python_binary = "python3"
 ```
 
@@ -2509,7 +2509,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Não acione para arquivos com a extensão py
 detect_extensions = []
 ```
 
@@ -2517,16 +2517,16 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Exibe a versão do python de dentro de um venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Note que isso só funcionará quando o venv estiver dentro do projeto e só
+# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-project.org/). O módulo será mostrado se qualquer uma das seguintes condições for atendida:
 
 - O diretório atual tenha um arquivo com a extensão `.R`.
 - O diretório atual tenha um arquivo com a extensão `.Rd`.
