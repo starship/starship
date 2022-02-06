@@ -52,21 +52,10 @@ prompt_starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 }
 
-
-# If precmd/preexec arrays are not already set, set them. If we don't do this,
-# the code to detect whether prompt_starship_precmd is already in precmd_functions will
-# fail because the array doesn't exist (and same for prompt_starship_preexec)
-(( ! ${+precmd_functions} )) && precmd_functions=()
-(( ! ${+preexec_functions} )) && preexec_functions=()
-
-# If starship precmd/preexec functions are already hooked, don't double-hook them
-# to avoid unnecessary performance degradation in nested shells
-if [[ -z ${precmd_functions[(re)prompt_starship_precmd]} ]]; then
-    precmd_functions+=(prompt_starship_precmd)
-fi
-if [[ -z ${preexec_functions[(re)prompt_starship_preexec]} ]]; then
-    preexec_functions+=(prompt_starship_preexec)
-fi
+# Add hook functions
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd prompt_starship_precmd
+add-zsh-hook preexec prompt_starship_preexec
 
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
