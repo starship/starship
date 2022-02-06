@@ -85,9 +85,9 @@ Por exemplo:
 
 Um grupo de texto é composto de duas partes diferentes.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+A primeira parte, que está entre um `[]`, é uma [string de formato](#format-strings). Você pode adicionar textos, variáveis ou até mesmo grupos de texto aninhados nele.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
+Na segunda parte, que está dentro de um `()`, está uma [string de estilo](#style-strings). Isso pode ser usado para estilizar a primeira parte.
 
 Por exemplo:
 
@@ -97,7 +97,7 @@ Por exemplo:
 
 #### Estilo dos textos
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para obter detalhes sobre a sintaxe completa, consulte o [guia de configuração avançada](/advanced-config/).
 
 - `"fg:green bg:blue"` deixa o texto verde com o fundo azul
 - `"bg:blue fg:bright-green"` deixa o texto verde brilhante com o fundo azul
@@ -106,11 +106,11 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bold italic fg:purple"` deixa o texto em negrito e itálico com a cor roxa
 - `""` desabilita explicitamente todos os estilos
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Observe que a aparência do estilo será controlada pelo emulador de terminal. Por exemplo, alguns emuladores de terminal irão clarear as cores em vez de colocar o texto em negrito, e alguns temas de cores usam os mesmos valores para as cores normais e brilhantes. Além disso, para obter texto em itálico, seu terminal deve suportar itálico.
 
 #### Formatação de String Condicional
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Uma string de formato condicional envolta de `(` e `)` não será renderizada se todas as variáveis internas estiverem vazias.
 
 Por exemplo:
 
@@ -120,22 +120,22 @@ Por exemplo:
 
 #### Caracteres Especiais
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+Os seguintes símbolos têm uso especial em uma string de formato e devem ser evitados: `$ \ [ ] ( )`.
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+Observe que o TOML tem [strings básicas e strings literais](https://toml.io/en/v1.0.0#string). É recomendado usar uma string literal (entre aspas simples) em seu config. Se você quiser usar uma string básica (entre aspas duplas), você deve escapar da própria barra invertida (ou seja, use `\\`).
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+Por exemplo, quando você deseja imprimir um símbolo `$` em uma nova linha, as seguintes configurações para `format` são equivalentes:
 
 ```toml
-# with basic string
+# com string básica
 format = "\n\\$"
 
-# with multiline basic string
+# com string básica multilinha
 format = """
 
 \\$"""
 
-# with literal string
+# com string literal
 format = '''
 
 \$'''
@@ -143,7 +143,7 @@ format = '''
 
 ## Prompt de Comando
 
-This is the list of prompt-wide configuration options.
+Esta é a lista de opções de configuração em todo o prompt.
 
 ### Opções
 
