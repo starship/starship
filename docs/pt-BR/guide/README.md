@@ -405,9 +405,9 @@ Por favor, confira esses trabalhos anteriores que ajudaram a inspirar a criaçã
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Um prompt ZSH para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Tema robbyrussell para prompt em JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – Um prompt personalizável com ícones do tipo powerline.
 
 <p align="center">
     <br>
