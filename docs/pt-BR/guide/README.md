@@ -189,7 +189,7 @@ Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
 Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
-| Distribution   | Repositório                                              | Instruções                        |
+| Distribuição   | Repositório                                              | Instruções                        |
 | -------------- | -------------------------------------------------------- | --------------------------------- |
 | **_Qualquer_** | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD        | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -200,15 +200,15 @@ Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+Instale a versão mais recente no seu sistema:
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Ou instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
-| Distribution       | Repositório                                                                                     | Instruções                                                                     |
+| Distribuição       | Repositório                                                                                     | Instruções                                                                     |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Qualquer_**     | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Qualquer_         | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -229,13 +229,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+Instale a versão mais recente no seu sistema:
 
 ```sh
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Ou instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
 | Repositório                                              | Instruções                              |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -278,7 +278,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Crie um arquivo neste caminho `%LocalAppData%\clink\starship.lua` com o seguinte conteúdo:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -295,7 +295,7 @@ Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Nota: Somente o Elvish v0.17 + é suportado
 
 </details>
 
@@ -324,7 +324,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Adicione o seguinte no final da sua configuração Nushell (encontre executando o `config path`):
 
 ```toml
 startup = [
@@ -340,7 +340,7 @@ prompt = "starship_prompt"
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Adicione o seguinte no final da sua configuração PowerShell (encontre executando `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
