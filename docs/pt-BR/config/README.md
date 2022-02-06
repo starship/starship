@@ -834,7 +834,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variável  | Exemplo               | Descrição                        |
 | --------- | --------------------- | -------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path       |
+| path      | `"D:/Projetos"`       | The current directory path       |
 | style\* | `"black bold dimmed"` | Espelha o valor da opção `style` |
 
 *: This variable can only be used as a part of a style string
@@ -1055,11 +1055,11 @@ default = "unknown user"
 
 ### Variáveis
 
-| Variável  | Exemplo                                     | Descrição                                  |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Espelha o valor da opção `símbolo`         |
-| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`           |
+| Variável  | Exemplo                                  | Descrição                                  |
+| --------- | ---------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (se _variable_ seria `$OS`) | The environment value of option `variable` |
+| symbol    |                                          | Espelha o valor da opção `símbolo`         |
+| style\* | `black bold dimmed`                      | Espelha o valor da opção `style`           |
 
 *: This variable can only be used as a part of a style string
 
@@ -1070,7 +1070,7 @@ default = "unknown user"
 
 [env_var]
 variable = "SHELL"
-default = "unknown shell"
+default = "shell desconhecido"
 ```
 
 Displaying multiple environmental variables:
