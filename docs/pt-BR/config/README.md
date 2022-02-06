@@ -69,11 +69,11 @@ Por convenção, a maioria dos módulos tem um prefixo de cor de terminal padrã
 
 ### Formatação de Strings
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+As strings de formato são o formato com o qual um módulo imprime todas as suas variáveis. A maioria dos módulos tem uma entrada chamada `format` que configura o formato de exibição do módulo. Você pode usar textos, variáveis e grupos de texto em uma string de formato.
 
 #### Variável
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
+Uma variável contém um símbolo `$` seguido pelo nome da variável. O nome de uma variável pode conter apenas letras, números e `_`.
 
 Por exemplo:
 
@@ -83,7 +83,7 @@ Por exemplo:
 
 #### Grupo de Texto
 
-A text group is made up of two different parts.
+Um grupo de texto é composto de duas partes diferentes.
 
 The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
 
