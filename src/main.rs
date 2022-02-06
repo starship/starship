@@ -111,16 +111,14 @@ fn main() {
     let args = match Cli::try_parse() {
         Ok(args) => args,
         Err(e) => {
-            let is_info_only = matches!(
-                e.kind,
-                clap::ErrorKind::DisplayHelpOnMissingArgumentOrSubcommand
-                    | clap::ErrorKind::DisplayHelp
-                    | clap::ErrorKind::DisplayVersion
-            );
-            // print the error and avoid panicking in case of stdout/stderr closing unexpectedly
+            // if the error is not printed to stderr, this means it was not really
+            // an error but rather some information is going to be listed, therefore
+            // we won't print the arguments passed
+            let is_info_only = !e.use_stderr();
+            // print the error and void panicking in case of stdout/stderr closing unexpectedly
             let _ = e.print();
             // if there was no mistake by the user and we're only going to display information,
-            // we won't put arguments or exit
+            // we won't put arguments or exit with non-zero code
             let exit_code = if is_info_only {
                 0
             } else {
@@ -134,11 +132,11 @@ fn main() {
                     // collect into a vec to format args as a slice
                     std::env::args().skip(1).collect::<Vec<_>>()
                 );
+                // clap exits with status 2 on error:
+                //  https://docs.rs/clap/latest/clap/struct.Error.html#method.exit
                 2
             };
 
-            // clap exits with status 2 on error:
-            //  https://docs.rs/clap/latest/clap/struct.Error.html#method.exit
             std::process::exit(exit_code);
         }
     };
