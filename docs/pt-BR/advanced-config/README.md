@@ -32,7 +32,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Comandos personalizados de pré-prompt e pré-execução no Bash
 
 Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
@@ -51,17 +51,17 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # Captura o DEBUG *antes* de executar a nave estelar
 set -o functrace
 eval $(starship init bash)
 set +o functrace
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## Comandos personalizados de pré-prompt e pré-execução no PowerShell
 
 PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. No entanto, Starship te oferece uma capacidade limitada de inserir suas próprias funções na processo de prompt-rendering:
 
-Create a function named `Invoke-Starship-PreCommand`
+Crie uma função chamada `Invoke-Starship-PreCommand`
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -119,12 +119,12 @@ load(io.popen('starship init cmd'):read("*a"))()
 You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
 
 ```powershell
-# edit $PROFILE
+# editar $PROFILE
 function Invoke-Starship-PreCommand {
-  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+   $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
 }
 
-Invoke-Expression (&starship init powershell)
+Invoke-Expression (& starship init powershell)
 ```
 
 ## Ativando o Prompt Direito
@@ -140,10 +140,10 @@ Note: The right prompt is a single line following the input location. To right a
 ```toml
 # ~/.config/starship.toml
 
-# A minimal left prompt
+# Um prompt mínimo à esquerda
 format = """$character"""
 
-# move the rest of the prompt to the right
+# movw o restante do prompt para a direita
 right_format = """$all"""
 ```
 
@@ -172,7 +172,7 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Um prompt de continuação que exibe duas setas preenchidas
 continuation_prompt = "▶▶"
 ```
 
