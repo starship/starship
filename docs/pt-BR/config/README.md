@@ -9,14 +9,14 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Inserts a blank line between shell prompts
+# Insere uma quebra de linha entre os prompts do shell
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Substitui o símbolo "❯" no prompt por "➜"
+[character] # O nome do módulo que estamos configurando é "character"
+success_symbol = "[➜](bold green)" # O segmento "success_symbol" está sendo definido como "➜" com a cor "verde em negrito"
 
-# Disable the package module, hiding it from the prompt completely
+# Desativa o módulo do pacote, ocultando-o completamente do prompt
 [package]
 disabled = true
 ```
@@ -595,7 +595,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 [cmd_duration]
 min_time = 500
-format = "underwent [$duration](bold yellow)"
+format = "levou [$duration](bold yellow)"
 ```
 
 ## Conda
@@ -2201,7 +2201,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 # ~/.config/starship.toml
 
 [openstack]
-format = "on [$symbol$cloud(\\($project\\))]($style) "
+format = "em [$symbol$cloud(\\($project\\))]($style) "
 style = "bold yellow"
 symbol = "☁️ "
 ```
@@ -2563,7 +2563,7 @@ O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-pro
 # ~/.config/starship.toml
 
 [rlang]
-format = "with [📐 $version](blue bold) "
+format = "com [📐 $version](blue bold) "
 ```
 
 ## Red
