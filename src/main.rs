@@ -108,7 +108,38 @@ fn main() {
     let _ = ansi_term::enable_ansi_support();
     logger::init();
 
-    let args = Cli::parse();
+    let args = match Cli::try_parse() {
+        Ok(args) => args,
+        Err(e) => {
+            // if the error is not printed to stderr, this means it was not really
+            // an error but rather some information is going to be listed, therefore
+            // we won't print the arguments passed
+            let is_info_only = !e.use_stderr();
+            // print the error and void panicking in case of stdout/stderr closing unexpectedly
+            let _ = e.print();
+            // if there was no mistake by the user and we're only going to display information,
+            // we won't put arguments or exit with non-zero code
+            let exit_code = if is_info_only {
+                0
+            } else {
+                // print the arguments
+                // avoid panicking in case of stderr closing
+                let mut stderr = io::stderr();
+                use io::Write;
+                let _ = writeln!(
+                    stderr,
+                    "\nNOTE:\n    passed arguments: {:?}",
+                    // collect into a vec to format args as a slice
+                    std::env::args().skip(1).collect::<Vec<_>>()
+                );
+                // clap exits with status 2 on error:
+                //  https://docs.rs/clap/latest/clap/struct.Error.html#method.exit
+                2
+            };
+
+            std::process::exit(exit_code);
+        }
+    };
     log::trace!("Parsed arguments: {:#?}", args);
 
     match args.command {
