@@ -1787,7 +1787,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# Usa o binário do compilador Kotlin para obter a versão instalada
 kotlin_binary = "kotlinc"
 ```
 
@@ -1846,20 +1846,20 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ```toml
 [kubernetes.context_aliases]
-# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
+# Os contextos OpenShift carregam o namespace e o usuário no contexto kube: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
-# Or better, to rename every OpenShift cluster at once:
+# Ou melhor, renomear todos os clusters do OpenShift de uma só vez:
 ".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
 
-# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
-# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
-# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+# Contextos do GKE, AWS e outros provedores de nuvem geralmente carregam informações adicionais, como a região/zona.
+# A entrada a seguir corresponde ao formato do GKE (`gke_projectname_zone_cluster-name`)
+# e renomeia cada contexto kube correspondente em um formato mais legível (`gke-cluster-name`):
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-## Line Break
+## Quebra de Linha
 
-The `line_break` module separates the prompt into two lines.
+O módulo `line_break` separa o prompt em duas linhas.
 
 ### Opções
 
@@ -1917,9 +1917,9 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Memory Usage
+## Uso de Memória
 
-The `memory_usage` module shows current system memory and swap usage.
+O módulo `memory_usage` mostra a memória atual do sistema e o uso de troca.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
