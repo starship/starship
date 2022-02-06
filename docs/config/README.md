@@ -1881,7 +1881,7 @@ kotlin_binary = "kotlinc"
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file.
 The namespace needs to be set in the kubeconfig file, this can be done via
-`kubectl config set-context starship-context --namespace astronaut`. 
+`kubectl config set-context starship-context --namespace astronaut`.
 Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
@@ -1904,14 +1904,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Variables
 
-| Variable  | Example                 | Description                              |
-| --------- | ----------------------- | ---------------------------------------- |
-| context   | `starship-context`      | The current kubernetes context name      |
-| namespace | `starship-namespace`    | If set, the current kubernetes namespace |
-| user      | `starship-user`         | If set, the current kubernetes user      |
-| cluster   | `starship-cluster`      | If set, the current kubernetes cluster   |
-| symbol    |                         | Mirrors the value of option `symbol`     |
-| style\*   |                         | Mirrors the value of option `style`      |
+| Variable  | Example              | Description                              |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-context`   | The current kubernetes context name      |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| user      | `starship-user`      | If set, the current kubernetes user      |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
+| symbol    |                      | Mirrors the value of option `symbol`     |
+| style\*   |                      | Mirrors the value of option `style`      |
 
 *: This variable can only be used as a part of a style string
 
