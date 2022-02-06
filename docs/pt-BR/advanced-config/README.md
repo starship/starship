@@ -71,7 +71,7 @@ function Invoke-Starship-PreCommand {
 
 ## Alterar Título da Janela
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish ainda faz isso por padrão. Starship não faz isso, mas é bastante simples adicionar essa funcionalidade para `bash`, `zsh`, `cmd` ou `powershell`.
+Alguns prompts do shell alterarão automaticamente o título da janela para você (ex., para refletir no seu diretório de trabalho). Fish ainda faz isso por padrão. Starship não faz isso, mas é bastante simples adicionar essa funcionalidade para `bash`, `zsh`, `cmd` ou `powershell`.
 
 Primeiro, defina uma função de mudança de título da janela (idêntica em bash e zsh):
 
@@ -89,15 +89,15 @@ No `bash`, defina esta função como a função precmd da nave estelar:
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+No `zsh`, adicione isso ao array `precmd_functions`:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+Se você gostar do resultado, adicione estas linhas ao seu arquivo de configuração do shell (`~/.bashrc` ou `~/.zshrc`) para torná-lo permanente.
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+Por exemplo, se você deseja exibir seu diretório atual no título da guia do terminal, adicione o seguinte trecho ao seu `~/.bashrc` ou `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -106,7 +106,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+Para Cmd, você pode alterar o título da janela usando a função `starship_preprompt_user_func`.
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -116,7 +116,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+Você também pode definir uma saída semelhante com o PowerShell criando uma função chamada `Invoke-Starship-PreCommand`.
 
 ```powershell
 # editar $PROFILE
@@ -129,11 +129,11 @@ Invoke-Expression (& starship init powershell)
 
 ## Ativando o Prompt Direito
 
-Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+Alguns shells suportam um prompt direito que é renderizado na mesma linha que a entrada. Starship pode definir o conteúdo do prompt correto usando a opção `right_format`. Qualquer módulo que pode ser usado no `format` também é compatível com `right_format`. A variável `$all` conterá apenas módulos não usado explicitamente em `format` ou `right_format`.
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+Nota: O prompt direito é uma única linha após o local de entrada. Para alinhar à direita os módulos acima a linha de entrada em um prompt de várias linhas, consulte o [módulo fill](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` é atualmente compatível com os seguintes shells: elvish, fish, zsh, xonsh, cmd.
 
 ### Exemplo
 
@@ -147,17 +147,17 @@ format = """$character"""
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+Produz um prompt como o seguinte:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Continuation Prompt
+## Prompt de Continuação
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+Alguns shells suportam um prompt de continuação junto com o prompt normal. Esse prompt é renderizado em vez do prompt normal quando o usuário insere uma instrução incompleta (como um único parêntese esquerdo ou aspas).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. The default prompt is `"[∙](bright-black) "`.
 
 Note: `continuation_prompt` should be set to a literal string without any variables.
 
