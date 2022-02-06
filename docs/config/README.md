@@ -1879,9 +1879,10 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file.
 The namespace needs to be set in the kubeconfig file, this can be done via
-`kubectl config set-context starship-cluster --namespace astronaut`.
+`kubectl config set-context starship-context --namespace astronaut`. 
+Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
@@ -1903,12 +1904,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Variables
 
-| Variable  | Example              | Description                              |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| symbol    |                      | Mirrors the value of option `symbol`     |
-| style\*   |                      | Mirrors the value of option `style`      |
+| Variable  | Example                 | Description                              |
+| --------- | ----------------------- | ---------------------------------------- |
+| context   | `starship-context`      | The current kubernetes context name      |
+| namespace | `starship-namespace`    | If set, the current kubernetes namespace |
+| user      | `starship-user`         | If set, the current kubernetes user      |
+| cluster   | `starship-cluster`      | If set, the current kubernetes cluster   |
+| symbol    |                         | Mirrors the value of option `symbol`     |
+| style\*   |                         | Mirrors the value of option `style`      |
 
 *: This variable can only be used as a part of a style string
 
@@ -1918,12 +1921,12 @@ To enable it, set `disabled` to `false` in your configuration file.
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'on [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 #### Regex Matching
@@ -1943,12 +1946,12 @@ and shortened using regular expressions:
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
 # Or better, to rename every OpenShift cluster at once:
-".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 ## Line Break
