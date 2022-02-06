@@ -75,7 +75,7 @@ Format strings are the format that a module prints all its variables with. Most 
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-For example:
+Por exemplo:
 
 - `$version` é uma formatação de string com uma variável chamada `version`.
 - `$git_branch$git_commit` é uma formatação de string com duas variáveis chamadas `git_branch` e `git_commit`.
@@ -89,7 +89,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-For example:
+Por exemplo:
 
 - `[on](red bold)` vai imprimir uma string `on` com texto em negrito e com a cor vermelha.
 - `[⌘ $version](bold green)` vai imprimir o simbolo `⌘` seguido pela variável `version`, com o texto em negrito e na cor verde.
@@ -112,7 +112,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Por exemplo:
 
 - `(@$region)` não vai exibir nada caso a variável `region` seja `None` ou vazia, caso contrario vai exibir `@` seguido pelo valor da variável region.
 - `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
@@ -3168,7 +3168,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 | Variável  | Exemplo          | Descrição                          |
 | --------- | ---------------- | ---------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`           |
+| version   | `Vagrant 2.2.10` | A versão do `Vagrant`              |
 | symbol    |                  | Espelha o valor da opção `símbolo` |
 | style\* |                  | Espelha o valor da opção `style`   |
 
@@ -3207,7 +3207,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 | Variável  | Exemplo | Descrição                          |
 | --------- | ------- | ---------------------------------- |
-| version   | `v0.2`  | The version of `v`                 |
+| version   | `v0.2`  | A versão do `v`                    |
 | symbol    |         | Espelha o valor da opção `símbolo` |
 | style\* |         | Espelha o valor da opção `style`   |
 
@@ -3272,11 +3272,11 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v0.6.0` | The version of `zig`               |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v0.6.0` | A versão do `zig`                 |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: This variable can only be used as a part of a style string
 
