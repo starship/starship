@@ -1649,6 +1649,7 @@ dependencies = [
  "toml_edit",
  "unicode-segmentation",
  "unicode-width",
+ "url",
  "urlencoding",
  "versions",
  "which",

@@ -37,6 +37,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_status",
     "golang",
     "helm",
+    "heroku",
     "hg_branch",
     "hostname",
     "java",

@@ -74,6 +74,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "memory_usage",
     "aws",
     "gcloud",
+    "heroku",
     "openstack",
     "azure",
     "env_var",

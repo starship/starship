@@ -32,6 +32,7 @@ pub mod git_state;
 pub mod git_status;
 pub mod go;
 pub mod helm;
+pub mod heroku;
 pub mod hg_branch;
 pub mod hostname;
 pub mod java;
@@ -117,6 +118,7 @@ pub struct FullConfig<'a> {
     helm: helm::HelmConfig<'a>,
     hg_branch: hg_branch::HgBranchConfig<'a>,
     hostname: hostname::HostnameConfig<'a>,
+    heroku: heroku::HerokuConfig<'a>,
     java: java::JavaConfig<'a>,
     jobs: jobs::JobsConfig<'a>,
     julia: julia::JuliaConfig<'a>,
@@ -198,6 +200,7 @@ impl<'a> Default for FullConfig<'a> {
             helm: Default::default(),
             hg_branch: Default::default(),
             hostname: Default::default(),
+            heroku: Default::default(),
             java: Default::default(),
             jobs: Default::default(),
             julia: Default::default(),
