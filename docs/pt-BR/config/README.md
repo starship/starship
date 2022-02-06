@@ -166,10 +166,10 @@ format = """
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Wait 10 milliseconds for starship to check files under the current directory.
+# Espera 10 milliseconds para que o starship verifique os arquivos no diretório atual.
 scan_timeout = 10
 
-# Disable the blank line at the start of the prompt
+# Remove a quebra de linha no início do prompt
 add_newline = false
 ```
 
@@ -180,7 +180,7 @@ The default `format` is used to define the format of the prompt, if empty or no 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Equivalente a
 format = """
 $username\
 $hostname\
@@ -252,10 +252,10 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Ex.
 
 ```toml
-# Move the directory to the second line
+# Move o diretório para a segunda linha
 format = "$all$directory$character"
 ```
 
