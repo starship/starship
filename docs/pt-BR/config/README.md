@@ -602,7 +602,7 @@ format = "underwent [$duration](bold yellow)"
 
 The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
-::: tip
+::: dica
 
 This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
@@ -1030,7 +1030,7 @@ The `env_var` module displays the current value of a selected environment variab
 - A opção de configuração da `variable` corresponde a uma variável existente
 - A configuração `variable` não está definida, mas a `default` está
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: dica Múltiplas variáveis de ambiente podem ser exibidas usando um `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
 
@@ -1333,7 +1333,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1795,7 +1795,7 @@ kotlin_binary = "kotlinc"
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -1923,7 +1923,7 @@ O módulo `memory_usage` mostra a memória atual do sistema e o uso de troca.
 
 By default the swap usage is displayed if the total system swap is non-zero.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2343,7 +2343,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
-::: tip
+::: dica
 
 By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
@@ -2469,7 +2469,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                  |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
-::: tip
+::: dica
 
 The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
@@ -2731,7 +2731,7 @@ symbol = "🌟 "
 
 The `shell` module shows an indicator for currently used shell.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2850,7 +2850,7 @@ format = '[📦 \[$env\]]($style) '
 
 The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2911,7 +2911,7 @@ disabled = false
 
 The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -2999,7 +2999,7 @@ format = "via [🏎  $version](red bold)"
 
 The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
-::: tip
+::: dica
 
 By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
@@ -3058,7 +3058,7 @@ format = "[🏎💨 $workspace]($style) "
 
 The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
-::: tip
+::: dica
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
@@ -3109,7 +3109,7 @@ The `username` module shows active user's username. The module will be shown if 
 - O usuário atual esta conectado em uma sessão SSH
 - A variável `show_always` esta definida como true
 
-::: tip
+::: dica
 
 SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
@@ -3301,19 +3301,19 @@ These modules will be shown if any of the following conditions are met:
 - O comando `when` retorna 0
 - O sistema operacional (std::env::consts::OS) corresponde com o `os` se definido.
 
-::: tip
+::: dica
 
 Multiple custom modules can be defined by using a `.`.
 
 :::
 
-::: tip
+::: dica
 
 The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
-::: tip
+::: dica
 
 [Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
