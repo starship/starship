@@ -1080,9 +1080,9 @@ Displaying multiple environmental variables:
 
 [env_var.SHELL]
 variable = "SHELL"
-default = "unknown shell"
+default = "shell desconhecido"
 [env_var.USER]
-default = "unknown user"
+default = "user desconhecido"
 ```
 
 ## Erlang
