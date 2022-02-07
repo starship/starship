@@ -35,11 +35,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs">Situs Web</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">Pemasangan</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Konfigurasi</a>
 </p>
 
 <p align="center">
@@ -150,26 +150,26 @@
 
 **Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
+- **Cepat:** Starship itu cepat – _sangat sangat_ cepat! 🚀
 - **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Universal:** bekerja pada shell apapun, pada sistem operasi apa saja.
+- **Cerdas:** menampilkan sekilas informasi yang relevan.
+- **Kaya akan fitur:** dukungan untuk semua alat favoritmu.
+- **Mudah:** pemasangan singkat – mulai menggunakannya dalam hitungan menit.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Jelajahi dokumentasi Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Pemasangan
 
 ### Prasyarat
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Sebuah [Nerd Font](https://www.nerdfonts.com/) terpasang dan aktif pada terminal (contohnya, coba [Nerd Font Fira Code](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Langkah 1. Pasang Starship
 
 Select your operating system from the list below to view installation instructions:
 
