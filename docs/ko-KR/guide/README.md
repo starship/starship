@@ -411,7 +411,7 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 로켓 아이콘">
 </p>
 
 ## 📝라이선스
