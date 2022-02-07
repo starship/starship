@@ -393,15 +393,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 المساهمة
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+نبحث دائماً عن مساهمين من **جميع المستويات**! إذا كنت تتطلع إلى تسهيل طريقك إلى المشروع، جرب [إنشاء اول مشكلة](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+إذا كنت تتحدث بطلاقة بلغة غير إنجليزية، فإننا نقدر أي مساعدة للحفاظ على ترجمة المستندات وتحديثها بلغات أخرى. إذا كنت ترغب في المساعدة، يمكن المساهمة بالترجمة على [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+إذا كنت مهتما بالمساهمة في starship، يرجى إلقاء نظرة على [دليل المساهمة](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) لدينا. أيضا، لا تتردد في أن تنضم لنا في [Discord](https://discord.gg/8Jzqu3T) وقُل مرحبا. 👋
 
 ## 💭 مستوحاة من قبل
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+يرجى التحقق من هذه الأعمال السابقة التي ساعدت على إنشاء starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
