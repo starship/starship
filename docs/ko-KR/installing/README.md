@@ -11,7 +11,7 @@ There are so many platforms out there that they didn't fit into the main README.
 
 ## [Chocolatey](https://chocolatey.org)
 
-### Prerequisites
+### 준비 사항
 
 Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
 
@@ -23,7 +23,7 @@ choco install starship
 
 ## [termux](https://termux.com)
 
-### Prerequisites
+### 준비 사항
 
 ```sh
 pkg install getconf

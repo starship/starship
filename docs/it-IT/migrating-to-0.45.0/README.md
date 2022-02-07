@@ -109,7 +109,7 @@ Per configurare il prompt al fine di usare la vecchia configurazione `use_symbol
 error_symbol = "[✖](bold red)"
 ```
 
-*Nota:* L'elemento `carattere` aggiunge dopo automaticamente uno spazio, quindi a differenza delle altre stringhe `formato`, non ne aggiungiamo uno specificamente agli esempi di cui sopra.
+_Nota:_ L'elemento `carattere` aggiunge dopo automaticamente uno spazio, quindi a differenza delle altre stringhe `formato`, non ne aggiungiamo uno specificamente agli esempi di cui sopra.
 
 #### Durata del comando
 
