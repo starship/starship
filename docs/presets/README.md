@@ -544,7 +544,8 @@ style = "bright-black"
 
 ## M365Princess
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship. 
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
+It also shows how path substitution works in starship. 
 
 ![Screenshot of M365Princess preset](/presets/M365Princess-prompt.png)
 
@@ -572,7 +573,7 @@ $time\
 """
 
 # Disable the blank line at the start of the prompt
-#add_newline = false
+# add_newline = false
 
 # You can also replace your username with a neat symbol like  to save some space
 [username]
@@ -596,7 +597,7 @@ truncation_symbol = "…/"
 "Music" = " "
 "Pictures" = " "
 # Keep in mind that the order matters. For example:
-# "Important Documents" = "  " 
+# "Important Documents" = "  "
 # will not be replaced, because "Documents" was already substituted before.
 # So either put "Important Documents" before "Documents" or use the substituted version:
 # "Important  " = "  "
