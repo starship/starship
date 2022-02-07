@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship – Prompt antar-shell"
  />
 </p>
 
@@ -10,12 +10,12 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="GitHub Actions workflow status"
+      alt="Status alur kerja GitHub Actions"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io version"
+      alt="Versi Crates.io"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
@@ -25,12 +25,12 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="Chat on Discord"
+      alt="Mengobrol di Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
-      alt="Follow @StarshipPrompt on Twitter"
+      alt="Ikuti @StarshipPrompt di Twitter"
  /></a>
 </p>
 
@@ -260,7 +260,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Langkah 2. Setup your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
@@ -381,25 +381,25 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Langkah 3. Konfigurasi Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-If you're looking to further customize Starship:
+Jika kamu ingin mengkustomisasi Starship lebih jauh:
 
 - **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
 
 - **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
 
-## 🤝 Contributing
+## 🤝 Berkontribusi
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Jika kamu tertarik untuk membantu berkontribusi ke starship, silakan lihat [Pedoman Berkontribusi](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) kami. Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
-## 💭 Inspired By
+## 💭 Terinspirasi Oleh
 
 Please check out these previous works that helped inspire the creation of starship. 🙏
 
@@ -414,6 +414,6 @@ Please check out these previous works that helped inspire the creation of starsh
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Lisensi
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
