@@ -545,7 +545,7 @@ style = "bright-black"
 ## M365Princess
 
 This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
-It also shows how path substitution works in starship. 
+It also shows how path substitution works in starship.
 
 ![Screenshot of M365Princess preset](/presets/M365Princess-prompt.png)
 
