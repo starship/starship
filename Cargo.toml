@@ -73,7 +73,7 @@ yaml-rust = "0.4.5"
 
 process_control = { version = "3.2.1", features = ["crossbeam-channel"] }
 
-shell-words = "1.0.0"
+shell-words = "1.1.0"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winuser", "securitybaseapi", "processthreadsapi", "handleapi", "impl-default"] }
