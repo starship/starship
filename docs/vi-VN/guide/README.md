@@ -95,7 +95,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="日本語"
+      alt="Tiếng Nhật"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Tiếng Nga"
  /></a>
   &nbsp;
   <a
@@ -127,7 +127,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Tiếng Trung giản thể"
  /></a>
   &nbsp;
   <a
@@ -135,7 +135,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Tiếng Trung hiện đại"
  /></a>
 </p>
 
@@ -393,15 +393,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 Đóng góp
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! Nếu bạn đang tìm kiếm cách dễ dàng để tham gia vào dự án, thử một [good issue đầu tiên](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin hãy xem [Hướng dẫn đóng góp](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) của chúng tôi. Ngoài ra, vui lòng truy cập vào [máy chủ Discord](https://discord.gg/8Jzqu3T) và nói xin chào. 👋
 
 ## Cảm hứng
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Xin hãy xem qua những công việc này trước đây, những thứ đã giúp truyền cảm hứng để tạo ra starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -416,4 +416,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 Giấy phép
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Bản quyền © 2019-nay, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Dự án này được [ISC](https://github.com/starship/starship/blob/master/LICENSE) cấp phép.
