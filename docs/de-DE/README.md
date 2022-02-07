@@ -119,7 +119,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning Nur elvish v0.17 oder höher ist unterstützt. :::
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
@@ -147,9 +147,9 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    ```toml
    startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
+     "mkdir ~/.cache/starship",
+     "starship init nu | save ~/.cache/starship/init.nu",
+     "source ~/.cache/starship/init.nu",
    ]
    prompt = "starship_prompt"
    ```

@@ -109,7 +109,7 @@ Para configurar el prompt para usar la configuración anterior `use_symbol_for_s
 error_symbol = "[✖](bold red)"
 ```
 
-*Nota:* El elemento `character` añade automáticamente un espacio, así que a diferencia del otras cadenas `format`, no añadimos uno en los ejemplos anteriores.
+_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Tiempo de Ejecución
 
