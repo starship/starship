@@ -119,7 +119,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning 只有 elvish v0.17 或以上版本才有支援 :::
 
    將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
