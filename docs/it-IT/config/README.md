@@ -41,7 +41,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Per impostazione predefinita, starship salva i warning e gli errori in un file chiamato `~/.cache/starship/session_${STARSHIP_SESSION_KEY}. og`, dove la chiave di sessione è corrispondente a un'istanza del tuo terminale. Questo, tuttavia, può essere modificato utilizzando la variabile di ambiente `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -61,21 +61,21 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### Terminologia
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Modulo**: Un componente nel prompt che dà informazioni basate su informazioni contestuali dal tuo sistema operativo. Ad esempio, il modulo "nodejs" mostra la versione di Node.js attualmente installata sul computer, se la directory corrente è un progetto Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Variable**: Sotto-componenti più piccoli che contengono informazioni fornite dal modulo. Per esempio, la variabile "version" nel modulo "nodejs" contiene la versione corrente di Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Per convenzione, la maggior parte dei moduli ha un prefisso di colore predefinito del terminale (ad esempio `via` in "nodejs") e uno spazio vuoto come suffisso.
 
 ### Formato Stringhe
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Le stringhe di formato sono il formato con cui un modulo stampa tutte le sue variabili. La maggior parte dei moduli ha una voce chiamata `formato` che configura il formato di visualizzazione del modulo. È possibile utilizzare testi, variabili e gruppi di testo in una stringa di formato.
 
 #### Variable
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
+Una variabile contiene un simbolo `$` seguito dal nome della variabile. The name of a variable can only contain letters, numbers and `_`.
 
-For example:
+Per esempio:
 
 - `$version` è una stringa di formato con una variabile chiamata `version`.
 - `$git_branch$git_commit` è una stringa di formato con due variabili denominate `git_branch` e `git_commit`.
@@ -83,13 +83,13 @@ For example:
 
 #### Gruppo Testo
 
-A text group is made up of two different parts.
+Un gruppo di testo è composto da due parti diverse.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+La prima parte, che è racchiusa tra `[]`, è una [format string](#format-strings). È possibile aggiungere testi, variabili o anche gruppi annidati di testo.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
+Nella seconda parte, che è racchiusa tra `()`, è presente una [style string](#style-strings). Questa può essere usata per modificare lo stile della prima parte.
 
-For example:
+Per esempio:
 
 - `[on](rosso grassetto)` stamperà una stringa `on` con testo in grassetto di colore rosso.
 - `[⌘ $version](grassetto verde)` stamperà un simbolo `⌘` seguito dal contenuto della variabile `version`, con testo grassetto di colore verde.
@@ -97,7 +97,7 @@ For example:
 
 #### Stile delle Stringhe
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+La maggior parte dei moduli in starship ti permettono di configurare i loro stili di visualizzazione. Questo viene fatto con una voce (solitamente chiamata `style`) che è una stringa che specifica la configurazione. Ecco alcuni esempi di stringhe di stile per quello che fanno. Per maggiori dettagli sulla sintassi completa, consulta la [guida di configurazione avanzata](/advanced-config/).
 
 - `"fg:green bg:blue"` imposta il testo verde su uno sfondo blu
 - `"bg:blue fg:bright-green"` imposta un testo verde brillante su uno sfondo blu
@@ -106,13 +106,13 @@ Most modules in starship allow you to configure their display styles. This is do
 - `"bold italic fg:purple"` imposta il testo viola in corsivo e grassetto
 - `""` disabilita esplicitamente tutti gli stili
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Nota che quello che assomiglia allo stile sarà controllato dal tuo emulatore terminale. Ad esempio, alcuni emulatori di terminale renderanno luminosi i colori invece del testo in grassetto, e alcuni temi colorati useranno gli stessi valori per i colori normali e luminosi. Inoltre, per ottenere il testo in corsivo, il tuo terminale deve supportare il corsivo.
 
 #### Formattazione condizionale delle stringhe
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+Una stringa di formato condizionale inserita in `(` e `)` non verrà presentata se tutte le variabili interne sono vuote.
 
-For example:
+Per esempio:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -2237,8 +2237,8 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                   |
 | `version_format`  | `"v${raw}"`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `style`           | `"bold 208"`                      | Lo stile per il modulo.                                                                      |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                    |
-| `disabled`        | `false`                           | Disables the `package` module.                                                               |
+| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.       |
+| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                              |
 
 ### Variables
 
@@ -3082,7 +3082,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| time      | `13:08:10` | The current time.                   |
+| ora       | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3196,12 +3196,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                                 |
+| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
 | `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
 | `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                 |
+| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
 
 ### Variables
 
@@ -3334,7 +3334,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `descrizione` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
