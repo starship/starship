@@ -119,7 +119,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: advertencia Solo se admite Elvish v0.17 o superior. :::
 
    Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
