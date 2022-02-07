@@ -41,7 +41,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logi
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Starship domyślnie loguje ostrzeżenia i błędy do pliku o nazwie`~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, gdzie klucz sesji odpowiada twojej instancji terminala. Można to zmienić za pomocą zmiennej środowiskowej `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -61,21 +61,21 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### Glosariusz
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Moduł**: Komponent wiersza poleceń, który dostarcza informacji opartych na kontekście twojego systemu operacyjnego. Przykładowo, moduł "nodejs" pokazuje wersję Node.js, która jest obecnie zainstalowana na twoim komputerze, jeżeli znajdujesz się w folderze zawierającym projekt Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Zmienna**: Mniejszy podkomponent zawierający informacje dostarczane przez moduł. Przykładowo, zmienna "version" w module "nodejs" zawiera obecną wersję Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+W ramach konwencji większość modułów posiada przedrostek w domyślnym kolorze terminala (n.p. `via` w "nodejs") oraz pojedynczy odstęp za treścią modułu.
 
 ### Formatowanie
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Moduły wypisują swoje zmienne przy użyciu ciągów formatujących. Większość modułów posiada wpis o nazwie `format`, który konfiguruje format wyświetlania modułu. W ciągach formatujących można używać tekstu, zmiennych oraz grup tekstowych.
 
 #### Zmienne
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
+Zmienna zawiera symbol `$`, po którym następuje nazwa zmiennej. The name of a variable can only contain letters, numbers and `_`.
 
-For example:
+Na przykład:
 
 - `$version` to ciąg formatujący ze zmienną o nazwie `version`.
 - `$git_branch$git_commit` zawiera dwie zmienne: `git_branch` i `git_commit`.
@@ -83,13 +83,13 @@ For example:
 
 #### Grupy tekstowe
 
-A text group is made up of two different parts.
+Grupa tekstowa składa się z dwóch oddzielnych części.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Pierwsza część, otoczona `[]`, to [ciąg formatujący](#format-strings). You can add texts, variables, or even nested text groups in it.
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-For example:
+Na przykład:
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
@@ -112,7 +112,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Na przykład:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
@@ -1048,7 +1048,7 @@ default = "unknown user"
 | Option     | Default                        | Description                                                                  |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
 | `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
+| `zmienne`  |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
 | `disabled` | `false`                        | Disables the `env_var` module.                                               |
