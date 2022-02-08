@@ -87,13 +87,13 @@ $null = New-Module starship {
             "--jobs=$($jobs)"
         )
 
-        # Whe start from the premise that the command executed correctly, which covers also the fresh console.
+        # We start from the premise that the command executed correctly, which covers also the fresh console.
         $lastExitCodeForPrompt = 0
         if ($lastCmd = Get-History -Count 1) {
             # In case we have a False on the Dollar hook, we know there's an error.
             if (-not $origDollarQuestion) {
-                # We retrieve the InvocationInfo from the most recent error using $error[0]
-                $lastCmdletError = try { $error[0] |  Where-Object { $_ -ne $null } | Select-Object -ExpandProperty InvocationInfo } catch { $null }
+                # We retrieve the InvocationInfo from the most recent error using $global:error[0]
+                $lastCmdletError = try { $global:error[0] |  Where-Object { $_ -ne $null } | Select-Object -ExpandProperty InvocationInfo } catch { $null }
                 # We check if the last command executed matches the line that caused the last error, in which case we know
                 # it was an internal Powershell command, otherwise, there MUST be an error code.
                 $lastExitCodeForPrompt = if ($null -ne $lastCmdletError -and $lastCmd.CommandLine -eq $lastCmdletError.Line) { 1 } else { $origLastExitCode }
