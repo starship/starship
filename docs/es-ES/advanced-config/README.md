@@ -157,11 +157,11 @@ Produce un prompt como el siguiente:
 
 Algunos intérpretes de comandos admiten un prompt de continuacion junto con el prompt normal. Este prompt es renderizado en lugar del prompt normal cuando el usuario ha introducido una orden incompleta (como solamente un paréntesis izquierdo o comilla).
 
-Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. The default prompt is `"[∙](bright-black) "`.
+Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. El prompt por defecto es `"[∙](bright-black) "`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Nota: `continuation_prompt` debe establecerse en una cadena literal sin ninguna variable.
 
-Note: Continuation prompts are only available in the following shells:
+Nota: Los prompts de continuación solo están disponibles en los siguientes intérpretes de comandos:
 
 - `bash`
 - `zsh`
@@ -172,7 +172,7 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Un prompt de continuación que muestra dos flechas rellenas
 continuation_prompt = "▶▶"
 ```
 
@@ -196,7 +196,7 @@ El token `none` anula todos los demás tokens en una cadena si no es parte de un
 
 Un especificador de color puede ser uno de los siguientes:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puede prefijar estos con `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
 - Un `#` seguido de un número hexadecimal de seis dígitos. Esto especifica un [código hexadecimal de color RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Un número entre 0-255. Esto especifica un [Código de color ANSI de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
