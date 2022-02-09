@@ -383,13 +383,13 @@ eval "$(starship init zsh)"
 
 ### Paso 3. Configurar Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Inicia una nueva instancia de shell, y deberías ver tu nuevo y hermoso prompt para shell. Si estás contento con los valores por defecto, ¡disfruta!
 
-If you're looking to further customize Starship:
+Si estás buscando personalizar Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configuración](https://starship.rs/config/)** – aprende a configurar Starship para ajustar el prompt a tu gusto
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Ajustes preestablecidos](https://starship.rs/presets/)** - inspírate en la configuración construida por otros
 
 ## 🤝 Colaborando
 
@@ -403,11 +403,11 @@ Si estás interesado en ayudar contribuyendo a starship, por favor échale un vi
 
 Por favor, revisa estos proyectos que inspiraron la creación de Starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Un prompt de ZSH para astronautas.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Tema multi shell robbyrussell escrito en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - Un prompt multi-intérprete de comandos personalizable basada en Powerline con iconos.
 
 <p align="center">
     <br>
