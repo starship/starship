@@ -1683,7 +1683,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Options
 
 | Option              | Default                              | Description                                        |
-|---------------------|--------------------------------------|----------------------------------------------------|
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
 | `symbol`            | `" "`                               | A format string representing the symbol of Haskell |
 | `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Which extensions should trigger this module.       |
@@ -1695,7 +1695,7 @@ By default the module will be shown if any of the following conditions are met:
 ### Variables
 
 | Variable     | Example     | Description                                                                             |
-|--------------|-------------|-----------------------------------------------------------------------------------------|
+| ------------ | ----------- | --------------------------------------------------------------------------------------- |
 | version      |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot     | `lts-18.12` | Currently selected Stack snapshot                                                       |
 | ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |

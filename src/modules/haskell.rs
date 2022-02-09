@@ -56,7 +56,7 @@ fn get_ghc_version(context: &Context) -> Option<String> {
             .exec_cmd("ghc", &["--numeric-version"])?
             .stdout
             .trim()
-            .to_string()
+            .to_string(),
     )
 }
 
@@ -66,7 +66,8 @@ fn get_snapshot(context: &Context) -> Option<String> {
     }
     let file_contents = utils::read_file(context.current_dir.join("stack.yaml")).ok()?;
     let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
-    let version = yaml.first()?["resolver"].as_str()
+    let version = yaml.first()?["resolver"]
+        .as_str()
         .or(yaml.first()?["snapshot"].as_str())
         .filter(|s| s.starts_with("lts") || s.starts_with("nightly") || s.starts_with("ghc"))
         .unwrap_or("<custom snapshot>");
@@ -74,8 +75,7 @@ fn get_snapshot(context: &Context) -> Option<String> {
 }
 
 fn get_version(context: &Context) -> Option<String> {
-    get_snapshot(context)
-        .or(get_ghc_version(context))
+    get_snapshot(context).or(get_ghc_version(context))
 }
 
 fn is_stack_project(context: &Context) -> bool {
@@ -108,8 +108,14 @@ mod tests {
             ("resolver: lts-18.12\n", "lts-18.12"),
             ("snapshot:\tnightly-2011-11-11", "nightly-2011-11-11"),
             ("snapshot: ghc-8.10.7", "ghc-8.10.7"),
-            ("snapshot: https://github.com/whatever/xxx.yaml\n", "<custom snapshot>"),
-            ("resolver:\n  url: https://github.com/whatever/xxx.yaml\n", "<custom snapshot>"),
+            (
+                "snapshot: https://github.com/whatever/xxx.yaml\n",
+                "<custom snapshot>",
+            ),
+            (
+                "resolver:\n  url: https://github.com/whatever/xxx.yaml\n",
+                "<custom snapshot>",
+            ),
         ];
         for (yaml, resolver) in &cases {
             let dir = tempfile::tempdir()?;
@@ -117,7 +123,10 @@ mod tests {
             file.write(yaml.as_bytes())?;
             file.sync_all()?;
             let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
-            let expected = Some(format!("via {}", Color::Purple.bold().paint(format!(" {} ", resolver))));
+            let expected = Some(format!(
+                "via {}",
+                Color::Purple.bold().paint(format!(" {} ", resolver))
+            ));
             assert_eq!(expected, actual);
             dir.close()?;
         }
