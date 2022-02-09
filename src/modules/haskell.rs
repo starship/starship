@@ -84,3 +84,57 @@ fn is_stack_project(context: &Context) -> bool {
         Err(_) => false,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+    use std::io::Write;
+
+    #[test]
+    fn folder_without_hs_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_stack() -> io::Result<()> {
+        let cases = vec![
+            ("resolver: lts-18.12\n", "lts-18.12"),
+            ("snapshot:\tnightly-2011-11-11", "nightly-2011-11-11"),
+            ("snapshot: ghc-8.10.7", "ghc-8.10.7"),
+            ("snapshot: https://github.com/whatever/xxx.yaml\n", "<custom snapshot>"),
+            ("resolver:\n  url: https://github.com/whatever/xxx.yaml\n", "<custom snapshot>"),
+        ];
+        for (yaml, resolver) in &cases {
+            let dir = tempfile::tempdir()?;
+            let mut file = File::create(dir.path().join("stack.yaml"))?;
+            file.write(yaml.as_bytes())?;
+            file.sync_all()?;
+            let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
+            let expected = Some(format!("via {}", Color::Purple.bold().paint(format!(" {} ", resolver))));
+            assert_eq!(expected, actual);
+            dir.close()?;
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn folder_cabal() -> io::Result<()> {
+        let should_trigger = vec!["a.hs", "b.hs-boot", "cabal.project"];
+        for hs_file in &should_trigger {
+            let dir = tempfile::tempdir()?;
+            File::create(dir.path().join(hs_file))?.sync_all()?;
+            let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
+            let expected = Some(format!("via {}", Color::Purple.bold().paint(" 9.2.1 ")));
+            assert_eq!(expected, actual);
+            dir.close()?;
+        }
+        Ok(())
+    }
+}
