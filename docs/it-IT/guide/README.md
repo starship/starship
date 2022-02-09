@@ -262,7 +262,7 @@ Install Starship using any of the following package managers:
 
 ### Fase 2. Imposta la tua shell a utilizzare Starship
 
-Configura la shell a inizializzare starship. Select yours from the list below:
+Configura la shell a inizializzare Starship. Seleziona la tua dalla lista qui sotto:
 
 <details>
 <summary>Bash</summary>
@@ -381,15 +381,15 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Fase 3. Configure Starship
+### Fase 3. Configura Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Inizia una nuova istanza del shell, e dovresti vedere il tuo bellissimo nuovo shell prompt. Se sei soddisfatto dei valori predefiniti, ottimo!
 
-If you're looking to further customize Starship:
+Se stai cercando di personalizzare ulteriormente Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configurazione](https://starship.rs/config/)** – impara come configurare Starship per modificare il tuo prompt a tuo piacimento
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Preset](https://starship.rs/presets/)** – ispirati dalla configurazione precostituita da altri
 
 ## 🤝 Contribuire
 
@@ -403,11 +403,11 @@ Se sei interessato ad aiutare a contribuire a Starship, dai un'occhiata alla nos
 
 Ti invito di controllare questi lavori precedenti che hanno contribuito a ispirare la creazione di Starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Un prompt ZSH per astronauti.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Multi-shell a tema robbyrussell scritto in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – Un prompt multi-shell personalizzabile come powerline con icone.
 
 <p align="center">
     <br>
