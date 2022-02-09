@@ -2137,7 +2137,7 @@ El módulo `ocaml` muestra la versión instalada de [OCaml](https://ocaml.org/).
 
 ### Opciones
 
-| Opción                    | Por defecto                                                                | Descripción                                                                             |
+| Opción                    | Predeterminado                                                             | Descripción                                                                             |
 | ------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | La cadena de formato para el módulo.                                                    |
 | `version_format`          | `"v${raw}"`                                                                | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -2177,7 +2177,7 @@ El módulo `openstack` muestra la nube OpenStack actual y el proyecto. El módul
 
 ### Opciones
 
-| Opción     | Por defecto                                         | Descripción                                                 |
+| Opción     | Predeterminado                                      | Descripción                                                 |
 | ---------- | --------------------------------------------------- | ----------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | El formato del módulo.                                      |
 | `symbol`   | `"☁️ "`                                             | El símbolo usado antes de mostrar la nube OpenStack actual. |
@@ -2225,13 +2225,13 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - La version del paquete `shards` se extrae del archivo `shard.yml` presente
 - [**V**](https://vlang.io) - La versión del paquete `vlang` se extrae del `v.mod` presente en el directorio actual
 - [**SBT**](https://scala-sbt.org) - La versión del paquete `sbt` se extrae del archivo `build.sbt` presente en el directorio actual
-- [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
+- [**Dart**](https://pub.dev/) - La versión del paquete `dart` se extrae del archivo `pubspec.yaml` presente en el directorio actual
 
 > ⚠️ La versión que se muestra es la del paquete cuyo código fuente está en tu directorio actual, no en tu gestor de paquetes.
 
 ### Opciones
 
-| Opción            | Por defecto                       | Descripción                                                                             |
+| Opción            | Predeterminado                    | Descripción                                                                             |
 | ----------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | El formato del módulo.                                                                  |
 | `symbol`          | `"📦 "`                            | El símbolo usado antes de mostrar la versión del paquete.                               |
@@ -2271,7 +2271,7 @@ El módulo `perl` muestra la versión instalada de [Perl](https://www.perl.org/)
 
 ### Opciones
 
-| Opción              | Por defecto                                                                                              | Descripción                                                                             |
+| Opción              | Predeterminado                                                                                           | Descripción                                                                             |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | La cadena de formato para el módulo.                                                    |
 | `version_format`    | `"v${raw}"`                                                                                              | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -2309,7 +2309,7 @@ El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). P
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                             |
+| Opción              | Predeterminado                       | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -2341,7 +2341,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
+El módulo `pulumi` muestra el nombre de usuario actual, [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/)seleccionado y la versión.
 
 ::: consejo
 
@@ -2356,7 +2356,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Opciones
 
-| Opción           | Por defecto                                  | Descripción                                                                             |
+| Opción           | Predeterminado                               | Descripción                                                                             |
 | ---------------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`         | `"via [$symbol($username@)$stack]($style) "` | La cadena de formato para el módulo.                                                    |
 | `version_format` | `"v${raw}"`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -2370,7 +2370,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | ----------------- | ---------- | -------------------------------------- |
 | version           | `v0.12.24` | La versión de `pulumi`                 |
 | stack             | `dev`      | La pila actual de Pulumi               |
-| nombre de usuario | `alice`    | The current Pulumi username            |
+| nombre de usuario | `alice`    | El usuario actual de Pulumi            |
 | symbol            |            | Refleja el valor de la opción `symbol` |
 | style\*         |            | Refleja el valor de la opción `style`  |
 
@@ -2611,9 +2611,9 @@ Por defecto, el módulo `ruby` muestra la versión actualmente instalada de [Rub
 - El directorio actual contiene un archivo `Gemfile`
 - El directorio actual contiene un archivo `.ruby-version`
 - El directorio actual contiene un archivo `.rb`
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+- Las variables de entorno `RUBY_VERSION` o `RBENV_VERSION` están configuradas
 
-Starship gets the current Ruby version by running `ruby -v`.
+Starship obtiene la versión actual de Ruby ejecutando `ruby -v`.
 
 ### Opciones
 
@@ -2625,7 +2625,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_extensions` | `["rb"]`                             | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
-| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                                 |
+| `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Qué variables de entorno deben activar este módulo.                                     |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
 | `disabled`          | `false`                              | Desactiva el módulo `ruby`.                                                             |
 
@@ -2749,8 +2749,8 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `elvish_indicator`     | `esh`                     | Una cadena de formato usada para representar Elvish.                 |
 | `tcsh_indicator`       | `tsh`                     | Una cadena de formato usada para representar tcsh.                   |
 | `xonsh_indicator`      | `xsh`                     | Una cadena de formato usada para representar xonsh.                  |
-| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                               |
-| `nu_indicator`         | `nu`                      | A format string used to represent nu.                                |
+| `cmd_indicator`        | `cmd`                     | Una cadena de formato usada para representar cmd.                    |
+| `nu_indicator`         | `nu`                      | Una cadena de formato usada para representar nu.                     |
 | `unknown_indicator`    |                           | El valor por defecto que se mostrará cuando se desconoce el comando. |
 | `format`               | `"[$indicator]($style) "` | El formato del módulo.                                               |
 | `style`                | `"white bold"`            | El estilo del módulo.                                                |
@@ -2848,7 +2848,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`. The status code will cast to a signed 32-bit integer.
+El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`. El código de estado se convertirá a un entero con signo de 32 bits.
 
 ::: consejo
 
@@ -2856,7 +2856,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 :::
 
-::: warning This module is not supported on nu shell. :::
+::: advertencia Este módulo no es compatible con el intérprete de comandos nu. :::
 
 ### Opciones
 
@@ -2882,7 +2882,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | Variable       | Ejemplo | Descripción                                                                                                        |
 | -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
 | status         | `127`   | El código de salida del último comando                                                                             |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                                           |
+| hex_status     | `0x7F`  | El código de salida del último comando en hexadecimal                                                              |
 | int            | `127`   | El código de salida del último comando                                                                             |
 | common_meaning | `ERROR` | Comprobación del código si no es una señal                                                                         |
 | signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada                                       |
@@ -2909,7 +2909,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+El módulo `sudo` muestra si las credenciales de sudo están actualmente en caché. El módulo solo se mostrará si las credenciales están guardadas en caché.
 
 ::: consejo
 
@@ -2919,13 +2919,13 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción          | Por defecto             | Descripción                                             |
-| --------------- | ----------------------- | ------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | El formato del módulo                                   |
-| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
-| `style`         | `"bold blue"`           | El estilo del módulo.                                   |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+| Opción          | Por defecto             | Descripción                                                          |
+| --------------- | ----------------------- | -------------------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | El formato del módulo                                                |
+| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales están guardadas en caché |
+| `style`         | `"bold blue"`           | El estilo del módulo.                                                |
+| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled.              |
+| `disabled`      | `true`                  | Disables the `sudo` module.                                          |
 
 ### Variables
 
