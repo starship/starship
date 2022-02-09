@@ -217,6 +217,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -1669,6 +1670,39 @@ By default the module will be shown if any of the following conditions are met:
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
 ```
+
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack resolver version.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current or any parent directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, or the current or any parent directory contains any `.cabal` file
+
+### Options
+
+| Option               | Default                              | Description                                        |
+|----------------------|--------------------------------------|----------------------------------------------------|
+| `format`             | `"via [$symbol($version )]($style)"` | The format for the module.                         |
+| `symbol`             | `" "`                               | A format string representing the symbol of Haskell |
+| `detect_extensions`  | `["hs", "cabal"]`                    | Which extensions should trigger this module.       |
+| `detect_files`       | `["Cargo.toml"]`                     | Which filenames should trigger this module.        |
+| `detect_folders`     | `[]`                                 | Which folders should trigger this module.          |
+| `style`              | `"purple"`                           | The style for the module.                          |
+| `disabled`           | `false`                              | Disables the `haskell` module.                     |
+
+### Variables
+
+| Variable          | Example     | Description                                                                                     |
+|-------------------|-------------|-------------------------------------------------------------------------------------------------|
+| version           |             | `ghc_version` or `resolver_version` depending on whether the current project is a Stack project |
+| resolver\_version | `lts-18.12` | Currently selected Stack resolver version                                                       |
+| ghc\_version      | `9.2.1`     | Currently installed GHC version                                                                 |
+| symbol            |             | Mirrors the value of option `symbol`                                                            |
+| style\*           |             | Mirrors the value of option `style`                                                             |
+
+*: This variable can only be used as a part of a style string
 
 ## Helm
 
