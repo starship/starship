@@ -120,7 +120,7 @@ mod tests {
         for (yaml, resolver) in &cases {
             let dir = tempfile::tempdir()?;
             let mut file = File::create(dir.path().join("stack.yaml"))?;
-            file.write(yaml.as_bytes())?;
+            file.write_all(yaml.as_bytes())?;
             file.sync_all()?;
             let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
             let expected = Some(format!(
