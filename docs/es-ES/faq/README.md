@@ -58,15 +58,15 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 ## ¿Por qué veo advertencias `Executing command"..." timed out.`?
 
-Starship ejecuta diferentes comandos para obtener la información que se muestra en el prompt, por ejemplo la versión de un programa o el estado actual de git. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship ejecuta diferentes comandos para obtener la información que se muestra en el prompt, por ejemplo la versión de un programa o el estado actual de git. Para asegurarse que starship no se quede congelado mientras trata de ejecutar estos comandos, establecimos un límite de tiempo, si un comando tarda más tiempo que este límite starship detendrá la ejecución del comando y mostrara la advertencia anterior, este es el comportamiento esperado. Este límite de tiempo es configurable usando la [llave `command_timeout`](/config/#prompt) así que si lo desea puede aumentar el límite de tiempo. También puedes seguir los pasos de depuración a continuación para ver qué comando está siendo lento y ver si puedes optimizarlo. Finalmente, puedes establecer la variable de entorno `STARSHIP_LOG` a `error` para ocultar estas advertencias.
 
 ## Veo símbolos que no entiendo ni espero, ¿qué significan?
 
 Si ves símbolos que no reconoces, puedes usar `starship explain` para explicar los módulos que se muestran actualmente.
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship está haciendo algo inesperado, ¿cómo puedo depurarlo?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+Puede habilitar los registros de depuración usando la variable de entorno `STARSHIP_LOG`. Estos registros pueden ser muy detallados así que a menudo es útil utilizar el comando `module` si estás intentando depurar un módulo en particular, por ejemplo, si está intentando depurar el módulo `rust` podrías ejecutar el siguiente comando para obtener los registros de seguimiento y salida del módulo.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
