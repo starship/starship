@@ -412,21 +412,21 @@ La opción `display` es un array de la siguiente tabla.
 #### Ejemplo
 
 ```toml
-[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # Estilo "rojo fuerte" y símbolo de descarga cuando la capacidad está entre 0% y 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # Estilo "amarillo fuerte" y símbolo 💦 cuando la capacidad está entre 10% y 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# cuando la capacidad está sobre el 30%, el indicador de batería no se visualizara
 ```
 
-## Character
+## Carácter
 
-El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
+El módulo `character` muestra un carácter (normalmente una flecha) al lado del texto que introduces en la terminal.
 
 El carácter te dirá si el último comando funcionó o no. Se puede hacer de dos maneras:
 
@@ -437,11 +437,11 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ::: aviso
 
-`error_symbol` is not supported on nu shell.
+`error_symbol` no es compatible con el intérprete de comandos nu.
 
 :::
 
-::: aviso
+::: advertencia
 
 `vicmd_symbol` is only supported in cmd, fish and zsh.
 
