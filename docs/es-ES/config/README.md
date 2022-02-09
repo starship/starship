@@ -443,7 +443,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ::: advertencia
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` solo es compatible con cmd, fish y zsh.
 
 :::
 
@@ -795,19 +795,19 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 ### Opciones
 
-| Opción              | Por defecto                                        | Descripción                                                                             |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | El número de directorios padre a los que se debe truncar el directorio actual.          |
-| `truncate_to_repo`  | `true`                                             | Trunca o no hasta la raíz del repositorio git en el que estés.                          |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                                  |
-| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                            | Desactiva el módulo `directory`.                                                        |
-| `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.                       |
-| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                              |
-| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. ej: "…/"                                   |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
-| `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio personal.                                           |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| Opción              | Predeterminado                                     | Descripción                                                                                                                 |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                | El número de directorios padre a los que se debe truncar el directorio actual.                                              |
+| `truncate_to_repo`  | `true`                                             | Trunca o no hasta la raíz del repositorio git en el que estés.                                                              |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | El formato del módulo.                                                                                                      |
+| `style`             | `"bold cyan"`                                      | El estilo del módulo.                                                                                                       |
+| `disabled`          | `false`                                            | Desactiva el módulo `directory`.                                                                                            |
+| `read_only`         | `"🔒"`                                              | El símbolo que indica si el directorio actual es de sólo lectura.                                                           |
+| `read_only_style`   | `"red"`                                            | El estilo para el símbolo de sólo lectura.                                                                                  |
+| `truncation_symbol` | `""`                                               | El símbolo a prefijar a las rutas truncadas. ej: "…/"                                                                       |
+| `repo_root_style`   | `None`                                             | El estilo para la raíz del repositorio git cuando la opción `truncate_to_repo` está establecida en false.                   |
+| `home_symbol`       | `"~"`                                              | El símbolo que indica el directorio personal.                                                                               |
+| `use_os_path_sep`   | `true`                                             | Utiliza el separador de ruta del sistema operativo específico en lugar de usar siempre `/` (por ejemplo, `\` en Windows) |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
@@ -1391,7 +1391,7 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 | `renamed`           | `"»"`                                           | El formato de `renamed`                  |
 | `deleted`           | `"✘"`                                           | El formato de `deleted`                  |
 | `style`             | `"bold red"`                                    | El estilo del módulo.                    |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.            |
+| `ignore_submodules` | `false`                                         | Ignorar cambios a los submódulos.        |
 | `disabled`          | `false`                                         | Desactiva el módulo `git_status`.        |
 
 ### Variables
@@ -1445,7 +1445,7 @@ renamed = "👅"
 deleted = "🗑"
 ```
 
-Mostrar el recuento delante/detrás de la rama que está siendo rastreada
+Muestra el conteo delante/detrás de la rama que está siendo rastreada
 
 ```toml
 # ~/.config/starship.toml
@@ -1558,7 +1558,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| hostname  | `computer` | The hostname of the computer          |
+| hostname  | `computer` | El nombre de host del ordenador       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
