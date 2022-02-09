@@ -68,14 +68,14 @@ fn get_snapshot(context: &Context) -> Option<String> {
     let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["resolver"]
         .as_str()
-        .or(yaml.first()?["snapshot"].as_str())
+        .or_else(|| yaml.first()?["snapshot"].as_str())
         .filter(|s| s.starts_with("lts") || s.starts_with("nightly") || s.starts_with("ghc"))
         .unwrap_or("<custom snapshot>");
     Some(version.to_string())
 }
 
 fn get_version(context: &Context) -> Option<String> {
-    get_snapshot(context).or(get_ghc_version(context))
+    get_snapshot(context).or_else(|| get_ghc_version(context))
 }
 
 fn is_stack_project(context: &Context) -> bool {
