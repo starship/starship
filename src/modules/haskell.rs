@@ -33,7 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => get_version(context).map(Ok),
                 "ghc_version" => get_ghc_version(context).map(Ok),
-                "resolver_version" => get_stack_resolver_version(context).map(Ok),
+                "snapshot" => get_snapshot(context).map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -60,7 +60,7 @@ fn get_ghc_version(context: &Context) -> Option<String> {
     )
 }
 
-fn get_stack_resolver_version(context: &Context) -> Option<String> {
+fn get_snapshot(context: &Context) -> Option<String> {
     if !is_stack_project(context) {
         return None;
     }
@@ -74,7 +74,7 @@ fn get_stack_resolver_version(context: &Context) -> Option<String> {
 }
 
 fn get_version(context: &Context) -> Option<String> {
-    get_stack_resolver_version(context)
+    get_snapshot(context)
         .or(get_ghc_version(context))
 }
 

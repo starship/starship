@@ -1673,7 +1673,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack resolver version.
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -1694,13 +1694,13 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable          | Example     | Description                                                                                     |
-|-------------------|-------------|-------------------------------------------------------------------------------------------------|
-| version           |             | `ghc_version` or `resolver_version` depending on whether the current project is a Stack project |
-| resolver\_version | `lts-18.12` | Currently selected Stack resolver version                                                       |
-| ghc\_version      | `9.2.1`     | Currently installed GHC version                                                                 |
-| symbol            |             | Mirrors the value of option `symbol`                                                            |
-| style\*           |             | Mirrors the value of option `style`                                                             |
+| Variable     | Example     | Description                                                                             |
+|--------------|-------------|-----------------------------------------------------------------------------------------|
+| version      |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot     | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol       |             | Mirrors the value of option `symbol`                                                    |
+| style\*      |             | Mirrors the value of option `style`                                                     |
 
 *: This variable can only be used as a part of a style string
 
