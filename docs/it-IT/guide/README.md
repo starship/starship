@@ -79,7 +79,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
-      alt="Bahasa Indonesia"
+      alt="Indonesiano"
  /></a>
   &nbsp;
   <a
@@ -169,9 +169,9 @@
 
 - Un [Nerd Font](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale (per esempio, prova [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Fase 1. Installa Starship
 
-Select your operating system from the list below to view installation instructions:
+Selezionare il sistema operativo dall'elenco qui sotto per visualizzare le istruzioni per l'installazione:
 
 <details>
 <summary>Android</summary>
@@ -260,9 +260,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Fase 2. Imposta la tua shell a utilizzare Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Configura la shell a inizializzare starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -381,7 +381,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Fase 3. Configure Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
