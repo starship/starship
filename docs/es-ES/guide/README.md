@@ -260,9 +260,9 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Paso 2. Configura tu shell para usar Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Configure su shell para inicializar starship. Selecciona el tuyo de la lista de abajo:
 
 <details>
 <summary>Bash</summary>
@@ -278,7 +278,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Crea un archivo en esta ruta `%LocalAppData%\clink\starship.lua` con el siguiente contenido:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -295,7 +295,7 @@ Añade el siguiente código al final de `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Nota: Solo se admite Elvish v0.17+
 
 </details>
 
@@ -324,7 +324,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecutando `config path`):
 
 ```toml
 startup = [
@@ -340,7 +340,7 @@ prompt = "starship_prompt"
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Añade lo siguiente al final de tu configuración de PowerShell (encuéntrala ejecutando `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -381,7 +381,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Paso 3. Configurar Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
