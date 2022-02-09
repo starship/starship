@@ -61,25 +61,21 @@ fn get_ghc_version(context: &Context) -> Option<String> {
 }
 
 fn get_stack_resolver_version(context: &Context) -> Option<String> {
+    if !is_stack_project(context) {
+        return None;
+    }
     let file_contents = utils::read_file(context.current_dir.join("stack.yaml")).ok()?;
     let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
-    let version = yaml.first()?["resolver"]
-        .as_str()
-        .or(yaml.first()?["snapshot"].as_str())?;
-    if version.starts_with("lts") || version.starts_with("nightly") || version.starts_with("ghc") {
-        return Some(version.trim().to_string());
-    } else {
-        return Some("<custom snapshot>".to_string());
-    }
+    let version = yaml.first()?["resolver"].as_str()
+        .or(yaml.first()?["snapshot"].as_str())
+        .filter(|s| s.starts_with("lts") || s.starts_with("nightly") || s.starts_with("ghc"))
+        .unwrap_or("<custom snapshot>");
+    Some(version.to_string())
 }
 
 fn get_version(context: &Context) -> Option<String> {
-    // Use cached `dir_contents` to avoid unnecessary fs accesses
-    if is_stack_project(context) {
-        return get_stack_resolver_version(context);
-    } else {
-        return get_ghc_version(context);
-    }
+    get_stack_resolver_version(context)
+        .or(get_ghc_version(context))
 }
 
 fn is_stack_project(context: &Context) -> bool {
