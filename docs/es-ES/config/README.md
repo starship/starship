@@ -33,7 +33,7 @@ El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+O para Cmd (Windows) añadiría esta línea a su `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -53,7 +53,7 @@ El equivalente en PowerShell (Windows) es añadir esta línea a tu `$PROFILE`:
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+O para Cmd (Windows) añadiría esta línea a su `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -554,7 +554,7 @@ El módulo `cobol` muestra la versión instalada de COBOL. Por defecto, el módu
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-## Tiempo de Ejecución
+## Tiempo de ejecución
 
 El módulo `cmd_duration` muestra cuánto tiempo tardó el último comando en ejecutarse. El módulo se mostrará solo si el comando llevó dos segundos o más, o el valor de `min_time`, si existe.
 
@@ -568,16 +568,16 @@ Los usuarios de bash que necesiten la funcionalidad preexec-like pueden usar el 
 
 ### Opciones
 
-| Opción                 | Por defecto                   | Descripción                                                                                                                                                       |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos)                                                                                             |
-| `show_milliseconds`    | `false`                       | Muestra la duración con precisión en milisegundos.                                                                                                                |
-| `format`               | `"took [$duration]($style) "` | El formato del módulo.                                                                                                                                            |
-| `style`                | `"bold yellow"`               | El estilo del módulo.                                                                                                                                             |
-| `disabled`             | `false`                       | Desactiva el módulo `cmd_duration`.                                                                                                                               |
-| `show_notifications`   | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.                                                                                               |
-| `min_time_to_notify`   | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos).                                                                                            |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| Opción                 | Por defecto                   | Descripción                                                                                                                                                                                                  |
+| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `min_time`             | `2_000`                       | Duración mínima para mostrar el tiempo de ejecución (en milisegundos)                                                                                                                                        |
+| `show_milliseconds`    | `false`                       | Muestra la duración con precisión en milisegundos.                                                                                                                                                           |
+| `format`               | `"took [$duration]($style) "` | El formato del módulo.                                                                                                                                                                                       |
+| `style`                | `"bold yellow"`               | El estilo del módulo.                                                                                                                                                                                        |
+| `disabled`             | `false`                       | Desactiva el módulo `cmd_duration`.                                                                                                                                                                          |
+| `show_notifications`   | `false`                       | Muestra notificaciones de escritorio cuando se complete el comando.                                                                                                                                          |
+| `min_time_to_notify`   | `45_000`                      | Duración mínima para mostrar el tiempo de ejecución (en milisegundos).                                                                                                                                       |
+| `notification_timeout` |                               | Duración para mostrar la notificación (en milisegundos). Si no se establece, el tiempo de espera para notificar será determinado por el demonio. No todos los demonios de notificaciones honran esta opción. |
 
 ### Variables
 
@@ -638,7 +638,7 @@ Esto no modifica el propio símbolo de sistema de Conda. En caso de querer supri
 format = "[$symbol$environment](dimmed green) "
 ```
 
-## Container
+## Contenedor
 
 The `container` module displays a symbol and container name, if inside a container.
 
