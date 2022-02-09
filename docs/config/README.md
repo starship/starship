@@ -1677,20 +1677,20 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current or any parent directory contains a `stack.yaml` file
-- The current directory contains any `.hs`, or the current or any parent directory contains any `.cabal` file
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
 
 ### Options
 
-| Option               | Default                              | Description                                        |
-|----------------------|--------------------------------------|----------------------------------------------------|
-| `format`             | `"via [$symbol($version )]($style)"` | The format for the module.                         |
-| `symbol`             | `" "`                               | A format string representing the symbol of Haskell |
-| `detect_extensions`  | `["hs", "cabal"]`                    | Which extensions should trigger this module.       |
-| `detect_files`       | `["Cargo.toml"]`                     | Which filenames should trigger this module.        |
-| `detect_folders`     | `[]`                                 | Which folders should trigger this module.          |
-| `style`              | `"purple"`                           | The style for the module.                          |
-| `disabled`           | `false`                              | Disables the `haskell` module.                     |
+| Option              | Default                              | Description                                        |
+|---------------------|--------------------------------------|----------------------------------------------------|
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
+| `symbol`            | `" "`                               | A format string representing the symbol of Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Which extensions should trigger this module.       |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Which filenames should trigger this module.        |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `style`             | `"purple"`                           | The style for the module.                          |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
 
 ### Variables
 

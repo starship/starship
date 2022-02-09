@@ -1,14 +1,8 @@
-use std::fs;
-use std::path::Path;
-use std::process::Output;
-
-use serde::Deserialize;
-
 use super::{Context, Module, RootModuleConfig};
 
 use crate::configs::haskell::HaskellConfig;
-use crate::formatter::{StringFormatter, VersionFormatter};
-use crate::utils::create_command;
+use crate::formatter::StringFormatter;
+use crate::utils;
 
 /// Creates a module with the current Haskell version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -37,9 +31,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_smart_version(context).map(Ok),
+                "version" => get_version(context).map(Ok),
                 "ghc_version" => get_ghc_version(context).map(Ok),
-                "resolver_version" => get_resolver_version(context).map(Ok),
+                "resolver_version" => get_stack_resolver_version(context).map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -57,22 +51,40 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_ghc_version(context: &Context) -> Option<String> {
-    Some(context.exec_cmd("ghc", &["--numeric-version"])?.stdout)
+    Some(
+        context
+            .exec_cmd("ghc", &["--numeric-version"])?
+            .stdout
+            .trim()
+            .to_string()
+    )
 }
 
-fn get_resolver_version(context: &Context) -> Option<String> {
-    todo!()
+fn get_stack_resolver_version(context: &Context) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("stack.yaml")).ok()?;
+    let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let version = yaml.first()?["resolver"]
+        .as_str()
+        .or(yaml.first()?["snapshot"].as_str())?;
+    if version.starts_with("lts") || version.starts_with("nightly") || version.starts_with("ghc") {
+        return Some(version.trim().to_string());
+    } else {
+        return Some("<custom snapshot>".to_string());
+    }
 }
 
-fn get_smart_version(context: &Context) -> Option<String> {
+fn get_version(context: &Context) -> Option<String> {
+    // Use cached `dir_contents` to avoid unnecessary fs accesses
     if is_stack_project(context) {
-        return get_resolver_version(context);
+        return get_stack_resolver_version(context);
     } else {
         return get_ghc_version(context);
     }
 }
 
 fn is_stack_project(context: &Context) -> bool {
-    // TODO
-    false
+    match context.dir_contents() {
+        Ok(dir) => dir.has_file_name("stack.yaml"),
+        Err(_) => false,
+    }
 }

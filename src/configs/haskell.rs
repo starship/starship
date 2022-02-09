@@ -18,13 +18,13 @@ pub struct HaskellConfig<'a> {
 impl<'a> Default for HaskellConfig<'a> {
     fn default() -> Self {
         HaskellConfig {
-            format: "via [$symbol($ghc_version )]($style)",
+            format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: " ",
             style: "purple",
             disabled: false,
-            detect_extensions: vec!["hs", "cabal"],
-            detect_files: vec!["stack.yaml"],
+            detect_extensions: vec!["hs", "cabal", "hs-boot"],
+            detect_files: vec!["stack.yaml", "cabal.project"],
             detect_folders: vec![],
         }
     }
