@@ -72,18 +72,18 @@ Puede habilitar los registros de depuración usando la variable de entorno `STAR
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+Si starship está siendo lento, puedes intentar usar el comando `timings` para ver si hay un módulo en particular o un comando a culpar.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+Esto producirá el registro de rastreo y un desglose de todos los módulos que tomaron más de 1 ms para ejecutarse o producir alguna salida.
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+Finalmente, si encuentras un error puedes usar el comando `bug-report` para crear un issue en Github.
 
 ```sh
-reporte de error starship
+starship bug-report
 ```
 
 ## ¿Por qué no veo un símbolo de glifo en mi prompt?
@@ -117,6 +117,6 @@ Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a s
 Si Starship fue instalado usando el guión de instalación, el siguiente comando eliminará el binario:
 
 ```sh
-# Locate and delete the starship binary
-sh -c 'rm "$(command -v 'starship')"'
+# Localiza y elimina el binario de starship
+sh -c 'rm "$(comando -v 'starship')"'
 ```
