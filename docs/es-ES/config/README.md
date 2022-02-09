@@ -499,7 +499,7 @@ vicmd_symbol = "[V](bold green) "
 El módulo `cmake` muestra la versión actualmente instalada de [CMake](https://cmake.org/). Por defecto el módulo se activará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `CMakeLists.txt`
-- The current directory contains a `CMakeCache.txt` file
+- El directorio actual contiene un archivo `CMakeCache.txt`
 
 ### Opciones
 
@@ -640,22 +640,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Contenedor
 
-The `container` module displays a symbol and container name, if inside a container.
+El módulo `container` muestra el símbolo y nombre del contenedor, si está dentro de un contenedor.
 
 ### Opciones
 
-| Opción     | Por defecto                          | Descripción                               |
-| ---------- | ------------------------------------ | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                  | El estilo del módulo.                     |
-| `format`   | "[$symbol \\[$name\\]]($style) " | El formato del módulo.                    |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| Opción     | Predeterminado                       | Descripción                                                      |
+| ---------- | ------------------------------------ | ---------------------------------------------------------------- |
+| `symbol`   | `"⬢"`                                | El símbolo mostrado, cuando se encuentra dentro de un contenedor |
+| `style`    | `"bold red dimmed"`                  | El estilo del módulo.                                            |
+| `format`   | "[$symbol \\[$name\\]]($style) " | El formato del módulo.                                           |
+| `disabled` | `false`                              | Deshabilita el módulo `container`.                               |
 
 ### Variables
 
 | Variable  | Ejemplo             | Descripción                            |
 | --------- | ------------------- | -------------------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container              |
+| name      | `fedora-toolbox:35` | El nombre del contenedor               |
 | symbol    |                     | Refleja el valor de la opción `symbol` |
 | style\* |                     | Refleja el valor de la opción `style`  |
 
@@ -753,7 +753,7 @@ format = "via [🔰 $version](bold red) "
 
 El módulo `deno` le muestra la versión instalada de [Deno](https://deno.land/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- El directorio actual contiene un archivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` o `deps.js`
 
 ### Opciones
 
