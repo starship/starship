@@ -1689,7 +1689,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Which extensions should trigger this module.       |
 | `detect_files`      | `["stack.yaml", "cabal.project"]`    | Which filenames should trigger this module.        |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
-| `style`             | `"purple"`                           | The style for the module.                          |
+| `style`             | `"bold purple"`                      | The style for the module.                          |
 | `disabled`          | `false`                              | Disables the `haskell` module.                     |
 
 ### Variables

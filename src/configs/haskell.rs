@@ -21,7 +21,7 @@ impl<'a> Default for HaskellConfig<'a> {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             symbol: " ",
-            style: "purple",
+            style: "bold purple",
             disabled: false,
             detect_extensions: vec!["hs", "cabal", "hs-boot"],
             detect_files: vec!["stack.yaml", "cabal.project"],
