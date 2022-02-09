@@ -2913,19 +2913,19 @@ El módulo `sudo` muestra si las credenciales de sudo están actualmente en cach
 
 ::: consejo
 
-Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` como `false` en tu archivo de configuración.
 
 :::
 
 ### Opciones
 
-| Opción          | Por defecto             | Descripción                                                          |
-| --------------- | ----------------------- | -------------------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | El formato del módulo                                                |
-| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales están guardadas en caché |
-| `style`         | `"bold blue"`           | El estilo del módulo.                                                |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled.              |
-| `disabled`      | `true`                  | Disables the `sudo` module.                                          |
+| Opción          | Por defecto             | Descripción                                                                                      |
+| --------------- | ----------------------- | ------------------------------------------------------------------------------------------------ |
+| `format`        | `[as $symbol]($style)"` | El formato del módulo                                                                            |
+| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales están guardadas en caché                             |
+| `style`         | `"bold blue"`           | El estilo del módulo.                                                                            |
+| `allow_windows` | `false`                 | Como Windows no tiene sudo de manera predeterminada, el valor predeterminado está deshabilitado. |
+| `disabled`      | `true`                  | Deshabilita el módulo `sudo`.                                                                    |
 
 ### Variables
 
@@ -3319,11 +3319,11 @@ El orden en el que se muestran los módulos personalizados se puede establecer i
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: advertencia la salida de comandos se imprime sin escapar al prompt
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Cualquiera que sea la salida que genere el comando se imprime sin modificar en el prompt. Esto significa que si la salida contiene secuencias especiales que son interpretadas por el intérprete, se expandirán cuando se muestre. Estas secuencias especiales son específicas del intérprete, por ejemplo, puedes escribir un módulo de comando que escribe secuencias de bash, por ejemplo, `\h`, pero este módulo no funcionará en el intérprete fish o zsh.
 
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Las cadenas de formato también pueden contener secuencias específicas del intérprete, por ejemplo, [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
@@ -3389,13 +3389,13 @@ La detección automática de shells y la adición adecuada de parámetros están
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo" # shows output of command
-files = ["foo"] # can specify filters but wildcards are not supported
+command = "echo foo" # muestra la salida del comando
+files = ["foo"] # puede especificar filtros pero no se admiten comodines 
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"] # filters *.pst files
+extensions = ["pst"] # filtra los archivos *.pst
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
