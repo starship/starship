@@ -4,7 +4,7 @@ Starship v0.45.0 es un lanzamiento que contiene cambios de ruptura, en preparaci
 
 Esta guía pretende guiarle a través de los cambios de ruptura.
 
-## `prompt_order` ha sido reemplazado por un "nivel raíz" `format`
+## `prompt_order` ha sido reemplazado por un `format` en el nivel raiz
 
 Anterioramente a v0.45.0, `prompt_order` aceptaría un arreglo de nombres de módulos en el orden que deberían ser renderizados por Starship.
 
@@ -109,9 +109,9 @@ Para configurar el prompt para usar la configuración anterior `use_symbol_for_s
 error_symbol = "[✖](bold red)"
 ```
 
-_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+_Nota:_ El elemento `character` añade automáticamente un espacio después, así que a diferencia de las otras cadenas de `format`, no añadimos uno en los ejemplos anteriores.
 
-#### Tiempo de Ejecución
+#### Tiempo de ejecución
 
 | Propiedad eliminada | Reemplazo |
 | ------------------- | --------- |
