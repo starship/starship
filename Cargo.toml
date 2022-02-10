@@ -83,6 +83,7 @@ nix = "0.23.1"
 
 [build-dependencies]
 shadow-rs = "0.8.1"
+embed-resource = "1.6.5"
 
 [dev-dependencies]
 mockall = "0.11"
