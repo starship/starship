@@ -259,7 +259,8 @@ impl<'a> Context<'a> {
             let repository = if env::var("GIT_DIR").is_ok() {
                 Repository::open_from_env()
             } else {
-                Repository::discover(&self.current_dir)
+                let dirs: [PathBuf; 0] = [];
+                Repository::open_ext(&self.current_dir, git2::RepositoryOpenFlags::FROM_ENV, dirs)
             }?;
             Ok(Repo {
                 branch: get_current_branch(&repository),
