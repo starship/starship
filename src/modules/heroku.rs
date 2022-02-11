@@ -354,6 +354,34 @@ mod tests {
     }
 
     #[test]
+    fn with_regex_app_aliases() {
+        let home_dir = tempfile::tempdir().unwrap();
+        create_netrc(
+            home_dir.path(),
+            "machine api.heroku.com \n login the_account \n ",
+        );
+
+        let actual = ModuleRenderer::new("heroku")
+            .env("HOME", home_dir.path().to_str().unwrap())
+            .env("HEROKU_APP", "app_something")
+            .config(toml::toml! {
+                [heroku.app_aliases]
+                "app_(?P<name>.*)" = "prefix $name"
+                [heroku.account_aliases]
+                the_account = "the_account_alias"
+            })
+            .collect();
+
+        assert_eq!(
+            Some(
+                "\u{1b}[34m \u{e77b}  on prefix something (via \u{f007} the_account_alias) \u{1b}[0m"
+                    .to_string()
+            ),
+            actual
+        );
+    }
+
+    #[test]
     fn test_default_prefixes() {
         let context = default_context();
 
