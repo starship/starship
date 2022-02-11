@@ -188,7 +188,7 @@ mod tests {
       // Here you setup the testing environment
       let tempdir = tempfile::tempdir()?;
       // Create some file needed to render the module
-      File::create(dir.path().join("YOUR_FILE"))?.sync_all()?;
+      File::create(tempdir.path().join("YOUR_FILE"))?.sync_all()?;
 
       // The output of the module
       let actual = ModuleRenderer::new("YOUR_MODULE_NAME")
