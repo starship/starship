@@ -319,7 +319,7 @@ mod tests {
 
         assert_eq!(
             Some(
-                "\u{1b}[34m \u{e77b}  on app_name (via \u{f007} the_account) \u{1b}[0m".to_string()
+                "\u{1b}[35m \u{e77b}  on app_name (via \u{f007} the_account) \u{1b}[0m".to_string()
             ),
             actual
         );
@@ -346,7 +346,7 @@ mod tests {
 
         assert_eq!(
             Some(
-                "\u{1b}[34m \u{e77b}  on the_app_alias (via \u{f007} the_account_alias) \u{1b}[0m"
+                "\u{1b}[35m \u{e77b}  on the_app_alias (via \u{f007} the_account_alias) \u{1b}[0m"
                     .to_string()
             ),
             actual
@@ -374,7 +374,7 @@ mod tests {
 
         assert_eq!(
             Some(
-                "\u{1b}[34m \u{e77b}  on prefix something (via \u{f007} the_account_alias) \u{1b}[0m"
+                "\u{1b}[35m \u{e77b}  on prefix something (via \u{f007} the_account_alias) \u{1b}[0m"
                     .to_string()
             ),
             actual
