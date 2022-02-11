@@ -2,282 +2,109 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::heroku::HerokuConfig;
 use crate::formatter::StringFormatter;
 use crate::utils::read_file;
+use git2::Repository;
+use regex::Regex;
+use url::Url;
 
-/// Read environment settings.
-/// mimics
-/// https://github.com/heroku/heroku-cli-command/blob/3e13ae899f64616c316dcf05398724fdd53c4d8a/src/vars.ts#L1-L48
-/// only the methods we use.
-mod heroku_vars {
-    use super::Context;
-    use url::Url;
+/// Read possible git remote prefixes based on environment settings.
+fn git_prefixes(context: &Context) -> [String; 3] {
+    // mimics
+    // https://github.com/heroku/heroku-cli-command/blob/3e13ae899f64616c316dcf05398724fdd53c4d8a/src/vars.ts#L1-L48
+    // only the methods we use.
 
-    fn host(context: &Context) -> String {
-        context
-            .get_env("HEROKU_HOST")
-            .unwrap_or_else(|| "heroku.com".to_string())
-    }
+    let host = context
+        .get_env("HEROKU_HOST")
+        .unwrap_or_else(|| "heroku.com".to_string());
 
-    fn env_git_host(context: &Context) -> Option<String> {
-        context.get_env("HEROKU_GIT_HOST")
-    }
+    let env_git_host = context.get_env("HEROKU_GIT_HOST");
 
-    fn git_host(context: &Context) -> String {
-        if let Some(env_git_host) = env_git_host(context) {
-            return env_git_host;
-        }
-
-        let host = host(context);
+    let get_host_if_url = |host: &str| -> Option<String> {
         if host.starts_with("http") {
-            if let Ok(url) = Url::parse(&host) {
+            if let Ok(url) = Url::parse(host) {
                 if let Some(host) = url.host_str() {
-                    return host.to_string();
+                    return Some(host.to_string());
                 }
             }
         }
-        host
-    }
+        None
+    };
 
-    fn http_git_host(context: &Context) -> String {
-        if let Some(git_host) = env_git_host(context) {
-            return git_host;
+    let git_host = if let Some(ref env_git_host) = env_git_host {
+        env_git_host.clone()
+    } else {
+        get_host_if_url(&host).unwrap_or_else(|| host.clone())
+    };
+
+    let http_git_host = if let Some(ref env_git_host) = env_git_host {
+        env_git_host.clone()
+    } else {
+        get_host_if_url(&host).map_or_else(|| format!("git.{}", host), |host| host)
+    };
+
+    [
+        format!("git@{}:", git_host),
+        format!("ssh://git@{}/", git_host),
+        format!("https://{}/", http_git_host),
+    ]
+}
+
+fn get_apps_in_git_remotes(
+    context: &Context,
+    repo: &Repository,
+    only_remote: Option<String>,
+) -> Result<Vec<String>, git2::Error> {
+    // https://github.com/heroku/heroku-cli-command/blob/3e13ae899f64616c316dcf05398724fdd53c4d8a/src/git.ts#L49-L71
+
+    let remote_regexes: Vec<Regex> = git_prefixes(context)
+        .iter()
+        .filter_map(|prefix| Regex::new(&format!(r"{}(.*)\.git", prefix)).ok())
+        .collect();
+
+    let mut apps_found = Vec::new();
+    for remote_name in repo.remotes()?.iter().flatten() {
+        if let Some(ref only_remote) = only_remote {
+            if remote_name != only_remote {
+                continue;
+            }
         }
-        let host = host(context);
-        if host.starts_with("http") {
-            if let Ok(url) = Url::parse(&host) {
-                if let Some(host) = url.host_str() {
-                    return host.to_string();
+
+        let remote = repo.find_remote(remote_name)?;
+
+        if let Some(url) = remote.url() {
+            for regex in &remote_regexes {
+                if let Some(capture) = regex.captures_iter(url).next() {
+                    apps_found.push(capture[1].to_string());
+                    break;
                 }
             }
         }
-        format!("git.{}", host)
     }
 
-    pub(super) fn git_prefixes(context: &Context) -> Vec<String> {
-        vec![
-            format!("git@{}:", git_host(context)),
-            format!("ssh://git@{}/", git_host(context)),
-            format!("https://{}/", http_git_host(context)),
-        ]
-    }
-
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-        use crate::test::default_context;
-
-        #[test]
-        fn test_default_prefixes() {
-            let context = default_context();
-
-            assert_eq!(
-                git_prefixes(&context),
-                vec![
-                    "git@heroku.com:",
-                    "ssh://git@heroku.com/",
-                    "https://git.heroku.com/",
-                ]
-            );
-        }
-
-        #[test]
-        fn test_git_heroku_host() {
-            let mut context = default_context();
-            context.env.insert("HEROKU_HOST", "will.be.ignored".into());
-            context
-                .env
-                .insert("HEROKU_GIT_HOST", "other.git.host".into());
-
-            assert_eq!(
-                git_prefixes(&context),
-                vec![
-                    "git@other.git.host:",
-                    "ssh://git@other.git.host/",
-                    "https://other.git.host/",
-                ]
-            );
-        }
-
-        #[test]
-        fn test_other_heroku_host() {
-            let mut context = default_context();
-            context.env.insert("HEROKU_HOST", "other.host".into());
-
-            assert_eq!(
-                git_prefixes(&context),
-                vec![
-                    "git@other.host:",
-                    "ssh://git@other.host/",
-                    "https://git.other.host/",
-                ]
-            );
-        }
-        #[test]
-        fn test_other_heroku_host_with_http() {
-            let mut context = default_context();
-            context
-                .env
-                .insert("HEROKU_HOST", "https://other.host".into());
-
-            assert_eq!(
-                git_prefixes(&context),
-                vec![
-                    "git@other.host:",
-                    "ssh://git@other.host/",
-                    "https://other.host/",
-                ]
-            );
-        }
-    }
+    Ok(apps_found)
 }
 
 /// find currently used Heroku app.
-/// Mimics:
-/// https://github.com/heroku/heroku-cli-command/blob/3e13ae899f64616c316dcf05398724fdd53c4d8a/src/flags/app.ts#L22-L40
-/// with
-/// https://github.com/heroku/heroku-cli-command/blob/5e13ae899f64616c316dcf05398724fdd53c4d8a/src/git.ts
-mod heroku_app {
-    use super::{heroku_vars, Context};
-    use git2::Repository;
-    use regex::Regex;
-
-    fn config_remote(repo: &Repository) -> Option<String> {
-        let config = repo.config().ok()?;
-        config.get_string("heroku.remote").ok()
+fn get_app(context: &Context) -> Option<String> {
+    // Mimics
+    // https://github.com/heroku/heroku-cli-command/blob/3e13ae899f64616c316dcf05398724fdd53c4d8a/src/flags/app.ts#L22-L40
+    if let Some(env_app) = context.get_env("HEROKU_APP") {
+        return Some(env_app);
     }
 
-    fn get_apps_in_git_remotes(
-        context: &Context,
-        repo: &Repository,
-        only_remote: Option<String>,
-    ) -> Result<Vec<String>, git2::Error> {
-        let prefixes = heroku_vars::git_prefixes(context);
-        let remote_regexes: Vec<Regex> = prefixes
-            .iter()
-            .filter_map(|prefix| {
-                let regex = format!(r"{}(.*)\.git", prefix);
+    let repository = context.get_repo().ok()?.open().ok()?;
+    let config_remote = repository.config().ok()?.get_string("heroku.remote").ok();
 
-                match Regex::new(&regex) {
-                    Ok(re) => Some(re),
-                    Err(err) => {
-                        log::debug!(
-                            "could not parse regex \"{}\" for Heroku remotes: {:?}",
-                            regex,
-                            err
-                        );
-                        None
-                    }
-                }
-            })
-            .collect();
-
-        let mut app_remotes = Vec::new();
-        for remote_name in repo.remotes()?.iter().flatten() {
-            if let Some(ref only_remote) = only_remote {
-                if remote_name != only_remote {
-                    continue;
-                }
-            }
-
-            let remote = repo.find_remote(remote_name)?;
-
-            if let Some(url) = remote.url() {
-                for regex in &remote_regexes {
-                    if let Some(capture) = regex.captures_iter(url).next() {
-                        app_remotes.push(capture[1].to_string());
-                        break;
-                    }
-                }
-            }
+    if let Ok(apps) = get_apps_in_git_remotes(context, &repository, config_remote) {
+        if apps.len() == 1 {
+            return Some(apps[0].clone());
         }
-
-        Ok(app_remotes)
+        // there can be more than one valid app, in more than one git remote.
+        // In Heroku commands you typically have to provide `--remote` to
+        // define which remote (and through that the app) to use.
+        // Here we don't show any app when there is more than one.
     }
 
-    pub(super) fn get_app(context: &Context) -> Option<String> {
-        if let Some(env_app) = context.get_env("HEROKU_APP") {
-            return Some(env_app);
-        }
-
-        let repository = context.get_repo().ok()?.open().ok()?;
-
-        if let Ok(apps) = get_apps_in_git_remotes(context, &repository, config_remote(&repository))
-        {
-            if apps.len() == 1 {
-                return Some(apps[0].clone());
-            }
-            // there can be more than one valid app, in more than one git remote.
-            // In Heroku commands you typically have to provide `--remote` to
-            // define which remote (and through that the app) to use.
-            // Here we don't show any app when there is more than one.
-        }
-
-        None
-    }
-
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-        use crate::{
-            test::{default_context, fixture_repo, FixtureProvider},
-            utils::create_command,
-        };
-        use std::io;
-        use tempfile::TempDir;
-
-        fn add_remote(repo_dir: &TempDir, name: &str, url: &str) -> io::Result<()> {
-            create_command("git")?
-                .args(&["remote", "add", name, url])
-                .current_dir(repo_dir.path())
-                .output()?;
-
-            Ok(())
-        }
-
-        #[test]
-        fn everything_empty() {
-            let context = default_context();
-            assert!(get_app(&context).is_none());
-        }
-
-        #[test]
-        fn from_env() {
-            let mut context = default_context();
-            context.env.insert("HEROKU_APP", "some_app".to_owned());
-            assert_eq!(get_app(&context).unwrap(), "some_app");
-        }
-
-        #[test]
-        fn from_remote() -> io::Result<()> {
-            let repo_dir = fixture_repo(FixtureProvider::Git)?;
-            let mut context = default_context();
-            context.current_dir = repo_dir.path().into();
-
-            add_remote(&repo_dir, "some_name", "git@heroku.com:some_app_name.git")?;
-            add_remote(&repo_dir, "some_other_name", "git@github.com:repo.git")?;
-
-            assert_eq!(get_app(&context).unwrap(), "some_app_name");
-
-            Ok(())
-        }
-
-        #[test]
-        fn multiple_apps() -> io::Result<()> {
-            let repo_dir = fixture_repo(FixtureProvider::Git)?;
-            let mut context = default_context();
-            context.current_dir = repo_dir.path().into();
-
-            add_remote(&repo_dir, "some_name", "git@heroku.com:some_app_name.git")?;
-            add_remote(
-                &repo_dir,
-                "some_other_name",
-                "https://git.heroku.com/other_app_name.git",
-            )?;
-
-            assert!(get_app(&context).is_none());
-
-            Ok(())
-        }
-    }
+    None
 }
 
 fn account_from_netrc_file(context: &Context) -> Option<String> {
@@ -313,7 +140,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("heroku");
     let config = HerokuConfig::try_load(module.config);
 
-    let app_name = heroku_app::get_app(context).map(|app| {
+    let app_name = get_app(context).map(|app| {
         config
             .app_aliases
             .get(&app)
@@ -359,12 +186,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{
+        test::{default_context, fixture_repo, FixtureProvider,ModuleRenderer},
+        utils::create_command,
+    };
     use std::fs;
     use std::io::{self, Write};
     use std::path::Path;
+    use tempfile::TempDir;
 
-    use crate::test::default_context;
-    use crate::test::ModuleRenderer;
+    fn add_remote(repo_dir: &TempDir, name: &str, url: &str) -> io::Result<()> {
+        create_command("git")?
+            .args(&["remote", "add", name, url])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        Ok(())
+    }
 
     fn with_temporary_home(f: impl FnOnce(&Context, &Path)) {
         let home_dir = tempfile::tempdir().unwrap();
@@ -496,5 +334,114 @@ mod tests {
             ),
             actual
         );
+    }
+
+    #[test]
+    fn test_default_prefixes() {
+        let context = default_context();
+
+        assert_eq!(
+            git_prefixes(&context),
+            [
+                "git@heroku.com:",
+                "ssh://git@heroku.com/",
+                "https://git.heroku.com/",
+            ]
+        );
+    }
+
+    #[test]
+    fn test_git_heroku_host() {
+        let mut context = default_context();
+        context.env.insert("HEROKU_HOST", "will.be.ignored".into());
+        context
+            .env
+            .insert("HEROKU_GIT_HOST", "other.git.host".into());
+
+        assert_eq!(
+            git_prefixes(&context),
+            [
+                "git@other.git.host:",
+                "ssh://git@other.git.host/",
+                "https://other.git.host/",
+            ]
+        );
+    }
+
+    #[test]
+    fn test_other_heroku_host() {
+        let mut context = default_context();
+        context.env.insert("HEROKU_HOST", "other.host".into());
+
+        assert_eq!(
+            git_prefixes(&context),
+            [
+                "git@other.host:",
+                "ssh://git@other.host/",
+                "https://git.other.host/",
+            ]
+        );
+    }
+
+    #[test]
+    fn test_other_heroku_host_with_http() {
+        let mut context = default_context();
+        context
+            .env
+            .insert("HEROKU_HOST", "https://other.host".into());
+
+        assert_eq!(
+            git_prefixes(&context),
+            [
+                "git@other.host:",
+                "ssh://git@other.host/",
+                "https://other.host/",
+            ]
+        );
+    }
+
+    #[test]
+    fn everything_empty() {
+        let context = default_context();
+        assert!(get_app(&context).is_none());
+    }
+
+    #[test]
+    fn from_env() {
+        let mut context = default_context();
+        context.env.insert("HEROKU_APP", "some_app".to_owned());
+        assert_eq!(get_app(&context).unwrap(), "some_app");
+    }
+
+    #[test]
+    fn from_remote() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        let mut context = default_context();
+        context.current_dir = repo_dir.path().into();
+
+        add_remote(&repo_dir, "some_name", "git@heroku.com:some_app_name.git")?;
+        add_remote(&repo_dir, "some_other_name", "git@github.com:repo.git")?;
+
+        assert_eq!(get_app(&context).unwrap(), "some_app_name");
+
+        Ok(())
+    }
+
+    #[test]
+    fn multiple_apps() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        let mut context = default_context();
+        context.current_dir = repo_dir.path().into();
+
+        add_remote(&repo_dir, "some_name", "git@heroku.com:some_app_name.git")?;
+        add_remote(
+            &repo_dir,
+            "some_other_name",
+            "https://git.heroku.com/other_app_name.git",
+        )?;
+
+        assert!(get_app(&context).is_none());
+
+        Ok(())
     }
 }
