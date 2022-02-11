@@ -4,6 +4,7 @@ use crate::formatter::StringFormatter;
 use crate::utils::read_file;
 use git2::Repository;
 use regex::Regex;
+use std::borrow::Cow;
 use url::Url;
 
 /// Read possible git remote prefixes based on environment settings.
@@ -136,22 +137,35 @@ fn account_from_netrc_file(context: &Context) -> Option<String> {
     None
 }
 
+fn get_aliased_app_name<'a>(config: &'a HerokuConfig, app_name: &'a str) -> Cow<'a, str> {
+    if let Some(val) = config.app_aliases.get(app_name) {
+        return Cow::Borrowed(val);
+    }
+
+    config
+        .app_aliases
+        .iter()
+        .find_map(|(k, v)| {
+            let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
+            match re.replace(app_name, *v) {
+                Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
+                _ => None,
+            }
+        })
+        .unwrap_or(Cow::Borrowed(app_name))
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("heroku");
     let config = HerokuConfig::try_load(module.config);
 
-    let app_name = get_app(context).map(|app| {
-        config
-            .app_aliases
-            .get(&app)
-            .map_or(app, |&app| app.to_string())
-    });
+    let app_name = get_app(context);
 
     let account = account_from_netrc_file(context).map(|account| {
         config
             .account_aliases
             .get(&account)
-            .map_or(account, |&account| account.to_string())
+            .map_or_else(|| Cow::Owned(account), |&account| Cow::Borrowed(account))
     });
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -165,8 +179,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "app_name" => app_name.as_ref().map(Ok),
-                "account" => account.as_ref().map(Ok),
+                "app_name" => app_name
+                    .as_ref()
+                    .map(|app| get_aliased_app_name(&config, app))
+                    .map(Ok),
+                "account" => account.clone().map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -187,7 +204,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use super::*;
     use crate::{
-        test::{default_context, fixture_repo, FixtureProvider,ModuleRenderer},
+        test::{default_context, fixture_repo, FixtureProvider, ModuleRenderer},
         utils::create_command,
     };
     use std::fs;
