@@ -18,7 +18,7 @@ impl<'a> Default for HerokuConfig<'a> {
         HerokuConfig {
             format: "[( $symbol on $app_name \\(via  $account\\) )]($style)",
             symbol: " ",
-            style: "blue",
+            style: "purple",
             disabled: false,
             app_aliases: HashMap::new(),
             account_aliases: HashMap::new(),
