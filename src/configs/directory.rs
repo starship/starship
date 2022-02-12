@@ -36,7 +36,7 @@ impl<'a> Default for DirectoryConfig<'a> {
             style: "cyan bold",
             repo_root_style: None,
             disabled: false,
-            read_only: "🔒",
+            read_only: "",
             read_only_style: "red",
             truncation_symbol: "",
             home_symbol: "~",
