@@ -1358,22 +1358,22 @@ The `git_tag` module shows the tags of the current commit of the repo in your cu
 
 ### Options
 
-| Option               | Default                                        | Description                                             |
-| -------------------- | ---------------------------------------------- | ------------------------------------------------------- |
-| `format`             | `"[\\($symbol$tags\\)]($style) "`              | The format for the module.                              |
-| `symbol`             | `"🏷 "`                                         | heg symbol prefixing the info shown                     |
-| `style`              | `"bold yellow"`                                | The style for the module.                               |
-| `separator`          | `" "`                                          | The style for the module.                               |
-| `disabled`           | `false`                                        | Disables the `git_commit` module.                       |
+| Option      | Default                           | Description                         |
+| ----------- | --------------------------------- | ----------------------------------- |
+| `format`    | `"[\\($symbol$tags\\)]($style) "` | The format for the module.          |
+| `symbol`    | `"🏷 "`                            | heg symbol prefixing the info shown |
+| `style`     | `"bold yellow"`                   | The style for the module.           |
+| `separator` | `" "`                             | The style for the module.           |
+| `disabled`  | `false`                           | Disables the `git_commit` module.   |
 
 ### Variables
 
-| Variable | Example   | Description                         |
-| -------- | --------- | ----------------------------------- |
-| tags     | `v1.0`    | The current git tag                 |
-| style\*  |           | Mirrors the value of option `style` |
+| Variable | Example | Description                         |
+| -------- | ------- | ----------------------------------- |
+| tags     | `v1.0`  | The current git tag                 |
+| style\*  |         | Mirrors the value of option `style` |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ### Example
 
