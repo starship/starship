@@ -79,8 +79,8 @@ enum Commands {
         /// Print the right prompt (instead of the standard left prompt)
         #[clap(long)]
         right: bool,
-        /// Print the continuation prompt (instead of the standard left prompt)
-        #[clap(long, conflicts_with = "right")]
+        /// Print the continuation prompt (instead of the standard left or right prompt)
+        #[clap(long)]
         continuation: bool,
         #[clap(flatten)]
         properties: Properties,
@@ -159,6 +159,7 @@ fn main() {
             continuation,
         } => {
             let target = match (right, continuation) {
+                (true, true) => Target::RightContinuation,
                 (true, _) => Target::Right,
                 (_, true) => Target::Continuation,
                 (_, _) => Target::Main,

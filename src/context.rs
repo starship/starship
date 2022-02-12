@@ -570,6 +570,7 @@ pub enum Target {
     Main,
     Right,
     Continuation,
+    RightContinuation,
 }
 
 /// Properties as passed on from the shell as arguments

@@ -113,7 +113,10 @@ pub fn get_prompt(context: Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
-    if config.add_newline && context.target != Target::Continuation {
+    if config.add_newline
+        && context.target != Target::Continuation
+        && context.target != Target::RightContinuation
+    {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
@@ -416,28 +419,34 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
 
     let lformatter = StringFormatter::new(&config.format);
     let rformatter = StringFormatter::new(&config.right_format);
-    let cformatter = StringFormatter::new(&config.continuation_prompt);
+    let lcformatter = StringFormatter::new(&config.continuation_prompt);
+    let rcformatter = StringFormatter::new(&config.right_continuation_prompt);
     if lformatter.is_err() {
         log::error!("Error parsing `format`")
     }
     if rformatter.is_err() {
         log::error!("Error parsing `right_format`")
     }
-    if cformatter.is_err() {
+    if lcformatter.is_err() {
         log::error!("Error parsing `continuation_prompt`")
     }
+    if rcformatter.is_err() {
+        log::error!("Error parsing `right_continuation_prompt`")
+    }
 
-    match (lformatter, rformatter, cformatter) {
-        (Ok(lf), Ok(rf), Ok(cf)) => {
+    match (lformatter, rformatter, lcformatter, rcformatter) {
+        (Ok(lf), Ok(rf), Ok(lcf), Ok(rcf)) => {
             let mut modules: BTreeSet<String> = BTreeSet::new();
-            if context.target != Target::Continuation {
+            if context.target != Target::Continuation && context.target != Target::RightContinuation
+            {
                 modules.extend(lf.get_variables());
                 modules.extend(rf.get_variables());
             }
             match context.target {
                 Target::Main => (lf, modules),
                 Target::Right => (rf, modules),
-                Target::Continuation => (cf, modules),
+                Target::Continuation => (lcf, modules),
+                Target::RightContinuation => (rcf, modules),
             }
         }
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
@@ -480,6 +489,22 @@ mod test {
         context.target = Target::Continuation;
 
         let expected = String::from("><>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn right_continuation_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_continuation_prompt="<><"
+            }),
+        };
+        context.root_config.right_continuation_prompt = "<><".to_string();
+        context.target = Target::RightContinuation;
+
+        let expected = String::from("<><");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
     }

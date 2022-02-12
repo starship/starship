@@ -208,6 +208,8 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = "▶▶"
 ```
 
+In addition, for `zsh` we also support a right version using the `right_continuation_prompt` prompt. The default prompt is `" [∙](bright-black)"`.
+
 ## Style Strings
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
