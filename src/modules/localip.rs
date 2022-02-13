@@ -92,6 +92,7 @@ mod tests {
             .config(toml::toml! {
                 [localip]
                 ssh_only = false
+                disabled = false
             })
             .collect();
         let expected = Some(format!("{} ", style().paint(localip)));
@@ -105,6 +106,7 @@ mod tests {
             .config(toml::toml! {
                 [localip]
                 ssh_only = true
+                disabled = false
             })
             .collect();
         let expected = None;
@@ -120,11 +122,22 @@ mod tests {
                 [localip]
                 ssh_only = true
                 trim_at = ""
+                disabled = false
             })
             .env("SSH_CONNECTION", "something")
             .collect();
         let expected = Some(format!("{} ", style().paint(localip)));
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_blank() {
+        let actual = ModuleRenderer::new("localip")
+            .env("SSH_CONNECTION", "something")
+            .collect();
+
+        let expected = None;
         assert_eq!(expected, actual);
     }
 
