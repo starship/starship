@@ -1159,13 +1159,14 @@ O módulo `gcloud` exibe a configuração atual para o [`gcloud`](https://cloud.
 
 ### Opções
 
-| Opções           | Padrão                                                     | Descrição                                                    |
-| ---------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                         |
-| `symbol`         | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.       |
-| `region_aliases` |                                                            | Tabela de aliases de região para exibir além do nome do GCP. |
-| `style`          | `"bold blue"`                                              | O estilo do módulo.                                          |
-| `disabled`       | `false`                                                    | Desabilita o módulo `gcloud`.                                |
+| Opções            | Padrão                                                     | Descrição                                                        |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                             |
+| `symbol`          | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.           |
+| `region_aliases`  |                                                            | Tabela de aliases de região para exibir além do nome do GCP.     |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                              | O estilo do módulo.                                              |
+| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
 ### Variáveis
 
@@ -1212,6 +1213,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -1570,7 +1582,7 @@ O módulo `hostname` exibe o nome do hostname.
 
 [hostname]
 ssh_only = false
-format = "em [$hostname](bold red) "
+format = "on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -1787,7 +1799,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Usa o binário do compilador Kotlin para obter a versão instalada
+# Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = "kotlinc"
 ```
 
@@ -1828,7 +1840,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'em [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
@@ -1836,7 +1848,7 @@ disabled = false
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-#### Correspondência Regex
+#### Regex Matching
 
 Adicional para aliasing simples, `context_aliases` também suporta correspondência estendida e renomeação usando expressão regular.
 
@@ -1846,14 +1858,14 @@ Nomes longos de clusters gerados automaticamente podem ser encurtados usando exp
 
 ```toml
 [kubernetes.context_aliases]
-# Os contextos OpenShift carregam o namespace e o usuário no contexto kube: `namespace/name/user`:
+# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
-# Ou melhor, renomear todos os clusters do OpenShift de uma só vez:
+# Or better, to rename every OpenShift cluster at once:
 ".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
 
-# Contextos do GKE, AWS e outros provedores de nuvem geralmente carregam informações adicionais, como a região/zona.
-# A entrada a seguir corresponde ao formato do GKE (`gke_projectname_zone_cluster-name`)
-# e renomeia cada contexto kube correspondente em um formato mais legível (`gke-cluster-name`):
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
@@ -1995,7 +2007,7 @@ O módulo `hg_branch` exibe o braço atual do repositório no diretório atual.
 # ~/.config/starship.toml
 
 [hg_branch]
-format = "em [🌱 $branch](bold purple)"
+format = "on [🌱 $branch](bold purple)"
 truncation_length = 4
 truncation_symbol = ""
 ```
@@ -2201,7 +2213,7 @@ O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas 
 # ~/.config/starship.toml
 
 [openstack]
-format = "em [$symbol$cloud(\\($project\\))]($style) "
+format = "on [$symbol$cloud(\\($project\\))]($style) "
 style = "bold yellow"
 symbol = "☁️ "
 ```
@@ -2378,7 +2390,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### Com a versão do Pulumi
+#### With Pulumi Version
 
 ```toml
 # ~/.config/starship.toml
@@ -2387,7 +2399,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = "[🛥 ($version )$stack]($style) "
 ```
 
-#### Sem a versão do Pulumi
+#### Without Pulumi version
 
 ```toml
 # ~/.config/starship.toml
@@ -2501,7 +2513,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Use apenas o binário `python3` para obter a versão.
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
@@ -2509,7 +2521,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Não acione para arquivos com a extensão py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -2517,10 +2529,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Exibe a versão do python de dentro de um venv local.
+# Display the version of python from inside a local venv.
 #
-# Note que isso só funcionará quando o venv estiver dentro do projeto e só
-# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
@@ -2563,7 +2575,7 @@ O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-pro
 # ~/.config/starship.toml
 
 [rlang]
-format = "com [📐 $version](blue bold) "
+format = "with [📐 $version](blue bold) "
 ```
 
 ## Red
@@ -2948,7 +2960,7 @@ disabled = false
 ```
 
 ```toml
-# No windows
+# On windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3036,7 +3048,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### Com a versão do Terraform
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3045,7 +3057,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Sem a versão do Terraform
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -3354,7 +3366,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-#### Comandos personalizados de shell
+#### Custom command shell
 
 `shell` aceita uma lista não vazia de string, onde:
 
