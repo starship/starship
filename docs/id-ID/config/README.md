@@ -1159,13 +1159,14 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Opsi
 
-| Opsi             | Bawaan                                                     | Deskripsi                                                       |
-| ---------------- | ---------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format dari modul.                                              |
-| `symbol`         | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                            | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                              | Gaya penataan untuk modul.                                      |
-| `disabled`       | `false`                                                    | Disables the `gcloud` module.                                   |
+| Opsi              | Bawaan                                                     | Deskripsi                                                        |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format dari modul.                                               |
+| `symbol`          | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.       |
+| `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                              | Gaya penataan untuk modul.                                       |
+| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
 ### Variabel
 
@@ -1212,6 +1213,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -3248,7 +3260,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "via [✨ $repo](bold blue) "
+format = "[🆅 $repo](bold blue) "
 ```
 
 ## Zig
