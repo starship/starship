@@ -18,6 +18,7 @@ use std::fs;
 use std::marker::PhantomData;
 use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use std::string::String;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
@@ -617,8 +618,17 @@ impl Default for Properties {
     }
 }
 
+/// Parse String, but treat empty strings as `None`
+fn parse_trim<F: FromStr>(value: &str) -> Option<Result<F, F::Err>> {
+    let value = value.trim();
+    if value.is_empty() {
+        return None;
+    }
+    Some(F::from_str(value))
+}
+
 fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
-    jobs.trim().parse::<i64>()
+    parse_trim(jobs).unwrap_or(Ok(0))
 }
 
 fn default_width() -> usize {
@@ -626,10 +636,7 @@ fn default_width() -> usize {
 }
 
 fn parse_width(width: &str) -> Result<usize, ParseIntError> {
-    if width.is_empty() {
-        return Ok(default_width());
-    }
-    width.trim().parse::<usize>()
+    parse_trim(width).unwrap_or_else(|| Ok(default_width()))
 }
 
 #[cfg(test)]
