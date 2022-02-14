@@ -807,7 +807,7 @@ format = "via [🦕 $version](green bold) "
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                       |
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
 | `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                   |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>此组件有几个高级配置选项来控制当前目录路径的显示方式。</summary>
