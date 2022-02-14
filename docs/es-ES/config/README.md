@@ -1723,7 +1723,7 @@ El módulo `julia` muestra la versión instalada de [Julia](https://julialang.or
 symbol = "∴ "
 ```
 
-## localip
+## Local IP
 
 El módulo `localip` muestra la dirección IPv4 de la interfaz de red principal.
 
