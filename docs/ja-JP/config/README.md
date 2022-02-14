@@ -808,7 +808,7 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. 例: "…/"                                        |
 | `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
 | `home_symbol`       | `"~"`                                              | ホームディレクトリを示すシンボルです。                                                                     |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
