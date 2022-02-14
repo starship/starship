@@ -1160,13 +1160,14 @@ AA -------------------------------------------- BB -----------------------------
 
 ### オプション
 
-| オプション            | デフォルト                                                      | 説明                            |
-| ---------------- | ---------------------------------------------------------- | ----------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | moduleのフォーマットです。              |
-| `symbol`         | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。 |
-| `region_aliases` |                                                            | GCP名に加えて表示するリージョンのエイリアスです。    |
-| `style`          | `"bold blue"`                                              | モジュールのスタイルです。                 |
-| `disabled`       | `false`                                                    | `gcloud`モジュールを無効にします。         |
+| オプション             | デフォルト                                                      | 説明                                                               |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | moduleのフォーマットです。                                                 |
+| `symbol`          | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。                                    |
+| `region_aliases`  |                                                            | GCP名に加えて表示するリージョンのエイリアスです。                                       |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                              | モジュールのスタイルです。                                                    |
+| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
 ### 変数
 
@@ -1213,6 +1214,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -1788,7 +1800,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Kotlinコンパイラバイナリを使用してバージョンを確認する
+# Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = "kotlinc"
 ```
 
@@ -3037,7 +3049,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 設定例
 
-#### Terraform バージョン表示あり
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3046,7 +3058,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Terraform バージョン表示なし
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
