@@ -1159,13 +1159,14 @@ Le module `gcloud` affiche la configuration actuelle pour [`gcloud`](https://clo
 
 ### Options
 
-| Option           | Défaut                                                     | Description                                                 |
-| ---------------- | ---------------------------------------------------------- | ----------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                           |
-| `symbol`         | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.              |
-| `region_aliases` |                                                            | Table des alias de région à afficher en plus du nom du GCP. |
-| `style`          | `"bold blue"`                                              | Le style du module.                                         |
-| `disabled`       | `false`                                                    | Désactive le module `gcloud`.                               |
+| Option            | Défaut                                                     | Description                                                      |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                                |
+| `symbol`          | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.                   |
+| `region_aliases`  |                                                            | Table des alias de région à afficher en plus du nom du GCP.      |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                              | Le style du module.                                              |
+| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
 ### Variables
 
@@ -1212,6 +1213,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Branche Git
@@ -2501,7 +2513,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# N'utilisez que le binaire `python3` pour obtenir la version.
+# Only use the `python3` binary to get the version.
 python_binary = "python3"
 ```
 
@@ -2509,7 +2521,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Ne pas déclencher pour les fichiers avec l'extension py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -2517,11 +2529,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Affiche la version de python depuis l'intérieur d'un venv local.
+# Display the version of python from inside a local venv.
 #
-# Notez que cela ne fonctionnera que lorsque le venv est à l'intérieur du projet,
-# et uniquement lorsque vous vous situez dans le répertoire contenant le dossier du venv
-# mais peut-être que c'est suffisant?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
@@ -2949,7 +2960,7 @@ disabled = false
 ```
 
 ```toml
-# Sous Windows
+# On windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3037,7 +3048,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ### Exemple
 
-#### Avec la version de Terraform
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3046,7 +3057,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 format = "[🏎💨 $version$workspace]($style) "
 ```
 
-#### Sans la version de Terraform
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -3355,7 +3366,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
-#### Commandes shell personnalisées
+#### Custom command shell
 
 `shell` accepte une liste de chaînes non vide, où:
 
