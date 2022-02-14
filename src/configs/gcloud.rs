@@ -10,6 +10,7 @@ pub struct GcloudConfig<'a> {
     pub style: &'a str,
     pub disabled: bool,
     pub region_aliases: HashMap<String, &'a str>,
+    pub project_aliases: HashMap<String, &'a str>,
 }
 
 impl<'a> Default for GcloudConfig<'a> {
@@ -20,6 +21,7 @@ impl<'a> Default for GcloudConfig<'a> {
             style: "bold blue",
             disabled: false,
             region_aliases: HashMap::new(),
+            project_aliases: HashMap::new(),
         }
     }
 }
