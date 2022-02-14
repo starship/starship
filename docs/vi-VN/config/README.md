@@ -1159,13 +1159,14 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                                   | Mô tả                                                             |
-| ---------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Định dạng cho module.                                             |
-| `symbol`         | `"☁️  "`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
-| `region_aliases` |                                                            | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
-| `style`          | `"bold blue"`                                              | Kiểu cho module.                                                  |
-| `disabled`       | `false`                                                    | Vô hiệu mô đun `gcloud`.                                          |
+| Tuỳ chọn          | Mặc định                                                   | Mô tả                                                             |
+| ----------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Định dạng cho module.                                             |
+| `symbol`          | `"☁️  "`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
+| `region_aliases`  |                                                            | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name.  |
+| `style`           | `"bold blue"`                                              | Kiểu cho module.                                                  |
+| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                     |
 
 ### Các biến
 
@@ -1212,6 +1213,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -1787,7 +1799,7 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Sử dụng Kitlin Compiler nhị phân để lấy phiên bản được cài đặt
+# Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = "kotlinc"
 ```
 
