@@ -1808,7 +1808,7 @@ By default the module will be shown if any of the following conditions are met:
 symbol = "∴ "
 ```
 
-## localip
+## Local IP
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
