@@ -1723,7 +1723,7 @@ Le module `julia` affiche la version actuellement installée de [Julia](https://
 symbol = "∴ "
 ```
 
-## localip
+## Local IP
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
