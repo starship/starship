@@ -1224,13 +1224,14 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Options
 
-| Option           | Default                                                  | Description                                                     |
-| ---------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                          | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                            | The style for the module.                                       |
-| `disabled`       | `false`                                                  | Disables the `gcloud` module.                                   |
+| Option            | Default                                                  | Description                                                      |
+| ----------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                       |
+| `symbol`          | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.       |
+| `region_aliases`  |                                                          | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` |                                                          | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                            | The style for the module.                                        |
+| `disabled`        | `false`                                                  | Disables the `gcloud` module.                                    |
 
 ### Variables
 
@@ -1277,6 +1278,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
