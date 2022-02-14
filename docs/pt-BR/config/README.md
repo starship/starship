@@ -807,7 +807,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 | `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                                      |
 | `repo_root_style`   | `None`                                             | O estilo para o repositório git root quando `truncate_to_repo` estiver definido como false. |
 | `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                                    |
-| `use_os_path_sep`   | `true`                                             | Use o separador especifico do SO em vez de sempre usar `/` (ex: `\` no Windows)          |
+| `use_os_path_sep`   | `true`                                             | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)     |
 
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
