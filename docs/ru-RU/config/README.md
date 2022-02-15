@@ -1723,39 +1723,6 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 symbol = "∴ "
 ```
 
-## Local IP
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Опции
-
-| Параметр   | По умолчанию              | Описание                                               |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | Формат модуля.                                         |
-| `style`    | `"bold yellow"`           | Стиль модуля.                                          |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Переменные
-
-| Переменная | Пример       | Описание                            |
-| ---------- | ------------ | ----------------------------------- |
-| localipv4  | 192.168.1.13 | Contains the primary IPv4 address   |
-| style\*  |              | Отражает значение параметра `style` |
-
-*: Эта переменная может использоваться только в качестве части строки style
-
-### Пример
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
@@ -1821,7 +1788,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Формат модуля.                                                        |
 | `style`           | `"cyan bold"`                                        | Стиль модуля.                                                         |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Отключает модуль `kubernetes`.                                        |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Переменные
 
@@ -1869,15 +1836,15 @@ Long and automatically generated cluster names can be identified and shortened u
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-## Перевод Строки
+## Line Break
 
-Модуль `line_break` разделяет командную строку на две строки.
+The `line_break` module separates the prompt into two lines.
 
 ### Опции
 
-| Параметр   | По умолчанию | Описание                                                                 |
-| ---------- | ------------ | ------------------------------------------------------------------------ |
-| `disabled` | `false`      | Отключает модуль `line_break`, отображая командную строку в одну строку. |
+| Параметр   | По умолчанию | Описание                                                           |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
 ### Пример
 
@@ -1886,6 +1853,39 @@ Long and automatically generated cluster names can be identified and shortened u
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Опции
+
+| Параметр   | По умолчанию              | Описание                                               |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | Формат модуля.                                         |
+| `style`    | `"bold yellow"`           | Стиль модуля.                                          |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Переменные
+
+| Переменная | Пример       | Описание                            |
+| ---------- | ------------ | ----------------------------------- |
+| localipv4  | 192.168.1.13 | Contains the primary IPv4 address   |
+| style\*  |              | Отражает значение параметра `style` |
+
+*: Эта переменная может использоваться только в качестве части строки style
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
