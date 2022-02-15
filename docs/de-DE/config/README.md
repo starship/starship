@@ -1723,39 +1723,6 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 symbol = "∴ "
 ```
 
-## Local IP
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Optionen
-
-| Option     | Standardwert              | Beschreibung                                           |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | Das Format für das Modul.                              |
-| `style`    | `"bold yellow"`           | Stil für dieses Modul.                                 |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Variables
-
-| Variable  | Beispiel     | Beschreibung                         |
-| --------- | ------------ | ------------------------------------ |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address    |
-| style\* |              | Spiegelt den Wert der Option `style` |
-
-*: This variable can only be used as a part of a style string
-
-### Beispiel
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
@@ -1821,7 +1788,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Das Format für das Modul.                                             |
 | `style`           | `"cyan bold"`                                        | Stil für dieses Modul.                                                |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Deaktiviert das `kubernetes`-Modul.                                   |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -1869,15 +1836,15 @@ Long and automatically generated cluster names can be identified and shortened u
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-## Zeilenumbruch
+## Line Break
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
-| Option     | Standardwert | Beschreibung                                                           |
-| ---------- | ------------ | ---------------------------------------------------------------------- |
-| `disabled` | `false`      | Deaktiviert das `line_break`-Modul, wodurch der Prompt einzeilig wird. |
+| Option     | Standardwert | Beschreibung                                                       |
+| ---------- | ------------ | ------------------------------------------------------------------ |
+| `disabled` | `false`      | Disables the `line_break` module, making the prompt a single line. |
 
 ### Beispiel
 
@@ -1886,6 +1853,39 @@ Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Optionen
+
+| Option     | Standardwert              | Beschreibung                                           |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | Das Format für das Modul.                              |
+| `style`    | `"bold yellow"`           | Stil für dieses Modul.                                 |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variables
+
+| Variable  | Beispiel     | Beschreibung                         |
+| --------- | ------------ | ------------------------------------ |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address    |
+| style\* |              | Spiegelt den Wert der Option `style` |
+
+*: This variable can only be used as a part of a style string
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
