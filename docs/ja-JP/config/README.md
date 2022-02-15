@@ -1724,66 +1724,33 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 symbol = "∴ "
 ```
 
-## Local IP
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### オプション
-
-| オプション      | デフォルト                     | 説明                                                     |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | moduleのフォーマットです。                                       |
-| `style`    | `"bold yellow"`           | モジュールのスタイルです。                                          |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### 変数
-
-| 変数        | 設定例          | 説明                                |
-| --------- | ------------ | --------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | オプション `style` の値をミラーする            |
-
-*: この変数は、スタイル文字列の一部としてのみ使用することができます。
-
-### 設定例
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
-`kotlin`モジュールは、現在インストールされている[Kotlin](https://kotlinlang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.kt`もしくは`.kts`ファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                     |
-| ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
-| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `detect_extensions` | `["kt", "kts"]`                      | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `"🅺 "`                               | Kotlinのシンボルを表すフォーマット文字列                                |
-| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                          |
-| `kotlin_binary`     | `"kotlin"`                           | Starshipがバージョンを取得するときに実行するkotlinバイナリを設定します。            |
-| `disabled`          | `false`                              | `kotlin`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                | 説明                                                                            |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                                              |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                        |
+| `detect_extensions` | `["kt", "kts"]`                      | どの拡張子がこのモジュールをアクティブにするか                                                       |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                                                     |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                                     |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                                                 |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                     |
-| --------- | --------- | ---------------------- |
-| version   | `v1.4.21` | `kotlin`のバージョン         |
-| symbol    |           | オプション `記号` の値をミラーする    |
-| style\* |           | オプション `style` の値をミラーする |
+| 変数        | 設定例       | 説明                      |
+| --------- | --------- | ----------------------- |
+| version   | `v1.4.21` | The version of `kotlin` |
+| symbol    |           | オプション `記号` の値をミラーする     |
+| style\* |           | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1806,7 +1773,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-現在の[Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context)名を表示します。 kubeconfigファイルに設定されている場合は、namespaceも表示します。 namespace は kubconfigで設定する必要があります。設定は、`kubectl config set-context starship-cluster --namespace astronaut` といったコマンド行えます。 `$KUBECONFIG` 環境変数が設定されている場合、このモジュールは環境変数を優先して使用し、`~/.kube/config` は使用しません。
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -1816,22 +1783,22 @@ kotlin_binary = "kotlinc"
 
 ### オプション
 
-| オプション             | デフォルト                                                | 説明                              |
-| ----------------- | ---------------------------------------------------- | ------------------------------- |
-| `symbol`          | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。 |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | moduleのフォーマットです。                |
-| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                   |
-| `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。        |
-| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。       |
+| オプション             | デフォルト                                                | 説明                                                                    |
+| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | moduleのフォーマットです。                                                      |
+| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                                                         |
+| `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### 変数
 
-| 変数        | 設定例                  | 説明                                     |
-| --------- | -------------------- | -------------------------------------- |
-| context   | `starship-cluster`   | 現在の Kubernetes のコンテキスト                 |
-| namespace | `starship-namespace` | 設定されている場合、現在の Kubernetes の namespace 名 |
-| symbol    |                      | オプション `記号` の値をミラーする                    |
-| style\* |                      | オプション `style` の値をミラーする                 |
+| 変数        | 設定例                  | 説明                                       |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-cluster`   | The current kubernetes context           |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| symbol    |                      | オプション `記号` の値をミラーする                      |
+| style\* |                      | オプション `style` の値をミラーする                   |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1872,13 +1839,13 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-`line_break`モジュールは、プロンプトを2行に分割します。
+The `line_break` module separates the prompt into two lines.
 
 ### オプション
 
-| オプション      | デフォルト   | 説明                                    |
-| ---------- | ------- | ------------------------------------- |
-| `disabled` | `false` | `line_break`モジュールを無効にして、プロンプトを1行にします。 |
+| オプション      | デフォルト   | 説明                                                                 |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### 設定例
 
@@ -1887,6 +1854,39 @@ Long and automatically generated cluster names can be identified and shortened u
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### オプション
+
+| オプション      | デフォルト                     | 説明                                                     |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | moduleのフォーマットです。                                       |
+| `style`    | `"bold yellow"`           | モジュールのスタイルです。                                          |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### 変数
+
+| 変数        | 設定例          | 説明                                |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | オプション `style` の値をミラーする            |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
