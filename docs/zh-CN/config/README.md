@@ -1723,39 +1723,6 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 symbol = "∴ "
 ```
 
-## Local IP
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### 配置项
-
-| Option     | 默认值                       | 描述                                                     |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | 组件格式化模板。                                               |
-| `style`    | `"bold yellow"`           | 此组件的样式。                                                |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Variables
-
-| 字段        | 示例           | 描述                                |
-| --------- | ------------ | --------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | `style`对应值                        |
-
-*: This variable can only be used as a part of a style string
-
-### 示例
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
@@ -1871,13 +1838,13 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-`line_break` 组件将提示分隔为两行。
+The `line_break` module separates the prompt into two lines.
 
 ### 配置项
 
-| Option     | 默认值     | 描述                          |
-| ---------- | ------- | --------------------------- |
-| `disabled` | `false` | 禁用 `line_break` 组件，使提示成为单行。 |
+| Option     | 默认值     | 描述                                                                 |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### 示例
 
@@ -1886,6 +1853,39 @@ Long and automatically generated cluster names can be identified and shortened u
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### 配置项
+
+| Option     | 默认值                       | 描述                                                     |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | 组件格式化模板。                                               |
+| `style`    | `"bold yellow"`           | 此组件的样式。                                                |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variables
+
+| 字段        | 示例           | 描述                                |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | `style`对应值                        |
+
+*: This variable can only be used as a part of a style string
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
